@@ -1,0 +1,7 @@
+// filepath: C:\Users\USER\Desktop\УЛУЧШЕННЫЙ КОД НЕЙРОЭКСПЕРТ\netlify.toml
+[build]
+  command = "npm install && npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "18"

@@ -1,7 +1,7 @@
-node_modules
-frontend/
+// filepath: C:\Users\USER\Desktop\УЛУЧШЕННЫЙ КОД НЕЙРОЭКСПЕРТ\.gitignore
 node_modules/
 .next/
+frontend/
 .venv/
 venv/
 .env

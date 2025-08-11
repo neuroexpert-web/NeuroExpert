@@ -1,7 +1,7 @@
 export default function HomePage() {
   return (
-    <div>
+    <div style={{ padding: '40px', textAlign: 'center' }}>
       <h1>NeuroExpert работает!</h1>
     </div>
-  )
+  );
 }
