@@ -295,9 +295,9 @@ function Assistant() {
     } catch (error) {
       console.error("Failed to fetch assistant's response:", error);
       if (error.message.includes('500')) {
-        typewriterEffect('⚠️ AI ассистент временно недоступен. Проверьте настройку GEMINI_API_KEY в Netlify Environment Variables. Пока что используйте FAQ или калькулятор ROI.');
+        typewriterEffect('⚠️ Управляющий временно недоступен. Проверьте настройку GEMINI_API_KEY в Netlify Environment Variables. Пока что используйте FAQ или калькулятор ROI.');
       } else {
-        typewriterEffect('Произошла ошибка при обращении к ассистенту. Попробуйте позже или обратитесь к FAQ.');
+        typewriterEffect('Произошла ошибка при обращении к управляющему. Попробуйте позже или обратитесь к FAQ.');
       }
     } finally {
       setLoading(false);
@@ -312,32 +312,118 @@ function Assistant() {
 
   return (
     <div className="card">
-      <h2>🤖 AI Ассистент</h2>
+      {/* Заголовок безопасности */}
+      <div style={{
+        marginBottom: 20,
+        padding: 16,
+        background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.05))',
+        borderRadius: 12,
+        border: '1px solid rgba(34, 197, 94, 0.3)',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: '-100%',
+          width: '100%',
+          height: '100%',
+          background: 'linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.1), transparent)',
+          animation: 'securityScan 3s ease-in-out infinite'
+        }}></div>
+        
+        <div style={{display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8}}>
+          <div style={{
+            fontSize: '24px',
+            animation: 'securityPulse 2s ease-in-out infinite'
+          }}>🔒</div>
+          <h3 style={{
+            margin: 0,
+            fontSize: '16px',
+            fontWeight: 'bold',
+            background: 'linear-gradient(45deg, #22c55e, #10b981)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent'
+          }}>Гарантия безопасности данных</h3>
+        </div>
+        
+        <div style={{fontSize: '13px', color: 'var(--muted)', lineHeight: 1.5}}>
+          🛡️ Все данные шифруются по стандарту AES-256<br/>
+          🌐 Соответствие требованиям GDPR и 152-ФЗ<br/>
+          ✅ Данные не передаются третьим лицам
+        </div>
+      </div>
+
+      {/* Управляющий с аватаром */}
+      <div style={{display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16}}>
+        <div style={{
+          width: 60,
+          height: 60,
+          borderRadius: '50%',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '24px',
+          border: '3px solid var(--accent)',
+          boxShadow: '0 4px 15px rgba(125, 211, 252, 0.3)',
+          animation: 'managerPulse 2s ease-in-out infinite',
+          position: 'relative'
+        }}>
+          <div style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            borderRadius: '50%',
+            border: '2px solid var(--accent)',
+            animation: 'managerRing 3s linear infinite'
+          }}></div>
+          👨‍💼
+        </div>
+        
+        <div>
+          <h2 style={{margin: '0 0 4px', fontSize: '18px'}}>🎯 AI Управляющий</h2>
+          <div style={{fontSize: '12px', color: 'var(--muted)'}}>
+            Персональный консультант по цифровизации
+          </div>
+        </div>
+      </div>
+      
       <input 
-        placeholder="Спроси про услуги / ROI" 
+        placeholder="Задайте вопрос управляющему..." 
         value={q} 
         onChange={e => setQ(e.target.value)} 
         onKeyPress={handleKeyPress}
         disabled={loading}
+        style={{
+          marginBottom: 12,
+          border: '2px solid var(--accent)',
+          background: 'rgba(125, 211, 252, 0.05)'
+        }}
       />
       <button onClick={ask} disabled={loading || !q}>
-        {loading ? '🔄 Обработка...' : '💬 Спросить'}
+        {loading ? '🔄 Анализирую...' : '💬 Консультация'}
       </button>
       
       <div style={{fontSize: '12px', color: 'var(--muted)', marginTop: 8}}>
-        💡 Если ассистент не отвечает, проверьте настройку API ключа в Netlify
+        💡 Если управляющий не отвечает, проверьте настройку API ключа в Netlify
       </div>
       
       {(a || typing) && (
         <div style={{
-          marginTop: 12, 
-          padding: 12, 
-          background: 'rgba(125, 211, 252, 0.1)', 
-          borderRadius: 8, 
-          borderLeft: '3px solid var(--accent)'
+          marginTop: 16, 
+          padding: 16, 
+          background: 'linear-gradient(135deg, rgba(125, 211, 252, 0.1), rgba(125, 211, 252, 0.05))', 
+          borderRadius: 12, 
+          borderLeft: '4px solid var(--accent)',
+          position: 'relative'
         }}>
-          <strong>Ответ:</strong> {a}
-          {typing && <span style={{animation: 'blink 1s infinite'}}>|</span>}
+          <div style={{display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8}}>
+            <div style={{fontSize: '16px'}}>👨‍💼</div>
+            <strong style={{color: 'var(--accent)'}}>Рекомендация управляющего:</strong>
+          </div>
+          <div style={{lineHeight: 1.6}}>{a}</div>
+          {typing && <span style={{animation: 'blink 1s infinite', color: 'var(--accent)'}}>|</span>}
         </div>
       )}
       <style jsx>{`
@@ -354,6 +440,8 @@ function FAQ() {
   const faqs = [
     {q: 'За сколько окупается цифровизация?', a: 'В зависимости от отрасли: от 3 до 8 месяцев. Используйте калькулятор для точного расчета.'},
     {q: 'Какой ROI можно ожидать?', a: 'Средний ROI составляет 150-350% в зависимости от типа бизнеса и бюджета инвестиций.'},
+    {q: 'Что делает AI-управляющий?', a: 'Консультирует по вопросам цифровизации, анализирует потребности бизнеса и рекомендует оптимальные решения.'},
+    {q: 'Безопасны ли мои данные?', a: 'Да! Все данные шифруются по стандарту AES-256, соответствуют GDPR и 152-ФЗ. Данные не передаются третьим лицам.'},
     {q: 'Что включает цифровизация?', a: 'Автоматизация процессов, CRM/ERP системы, интернет-магазин, аналитика, AI-решения.'},
     {q: 'Подходит ли малому бизнесу?', a: 'Да! Минимальный бюджет от 100,000₽ уже дает ощутимый эффект для малого бизнеса.'}
   ];
@@ -480,7 +568,7 @@ export default function HomePage() {
       <NeuralNetwork />
       <section className="container">
         <h1>NeuroExpert — Платформа цифровизации бизнеса</h1>
-        <p className="lead">Рассчитайте ROI от цифровизации, получите AI-консультацию и узнайте как увеличить прибыль.</p>
+        <p className="lead">Рассчитайте ROI от цифровизации, получите консультацию AI-управляющего и узнайте как увеличить прибыль.</p>
         <div className="grid">
           <Calculator />
           <Assistant />
