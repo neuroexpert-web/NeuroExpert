@@ -1,9 +1,123 @@
-import './globals.css';
 
-export default function RootLayout({ children }) {
-  return (
-    <html lang="ru">
-      <body>{children}</body>
-    </html>
-  );
+:root { 
+  --bg:#0b0f17; 
+  --card:#121826; 
+  --text:#e7ecf3; 
+  --accent:#7dd3fc; 
+  --muted:#90a4b4; 
+  --accent-hover:#5cb3e6;
+  --card-hover:#1a2033;
+}
+
+*{box-sizing:border-box} 
+html,body{height:100%}
+
+body{
+  margin:0;
+  background:linear-gradient(180deg,#0b0f17,#0e1422);
+  color:var(--text);
+  font:16px/1.6 system-ui,Segoe UI,Roboto,Arial
+}
+
+.app{
+  max-width:1100px;
+  margin:0 auto;
+  padding:32px;
+  animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+h1{
+  font-size:32px;
+  margin:0 0 8px;
+  background: linear-gradient(45deg, var(--accent), #fff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.lead{color:var(--muted);margin:0 0 24px}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px
+}
+
+.card{
+  background:var(--card);
+  border:1px solid #1f2937;
+  border-radius:14px;
+  padding:20px;
+  box-shadow:0 8px 30px rgba(0,0,0,.25);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.card:hover{
+  background:var(--card-hover);
+  transform: translateY(-4px);
+  box-shadow:0 20px 40px rgba(0,0,0,.4);
+  border-color: var(--accent);
+}
+
+button{
+  background:var(--accent);
+  color:#03101a;
+  border:0;
+  border-radius:10px;
+  padding:10px 14px;
+  font-weight:600;
+  cursor:pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+button:hover{
+  background:var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(125, 211, 252, 0.3);
+}
+
+button:active{
+  transform: translateY(0);
+}
+
+button:disabled{
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+input{
+  width:100%;
+  margin:6px 0 12px;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #253141;
+  background:#0c1320;
+  color:var(--text);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus{
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.1);
+}
+
+label{
+  font-size:13px;
+  color:#b6c2d0;
+  font-weight: 500;
+}
+
+@media (max-width:900px){
+  .grid{grid-template-columns:1fr}
+  .app{padding:20px}
 }
