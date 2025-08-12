@@ -38,8 +38,8 @@ class CRMAnalytics {
       id: sessionId,
       startTime,
       events: [],
-      userAgent: navigator.userAgent,
-      referrer: document.referrer,
+      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'Server',
+      referrer: typeof document !== 'undefined' ? document.referrer : '',
       isActive: true
     });
 

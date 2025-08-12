@@ -15,12 +15,16 @@ function VoiceFeedback() {
 
   // Проверка поддержки браузером
   useState(() => {
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    if (typeof navigator === 'undefined' || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       setIsSupported(false);
     }
   }, []);
 
   const startRecording = async () => {
+    if (typeof navigator === 'undefined' || !navigator.mediaDevices) {
+      return;
+    }
+    
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       

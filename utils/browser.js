@@ -146,11 +146,56 @@ export const safeWindowGlobal = {
   }
 };
 
+// Безопасное получение navigator
+export const getNavigator = () => {
+  if (isBrowser()) {
+    return navigator;
+  }
+  return null;
+};
+
+// Безопасное получение UserAgent
+export const getUserAgent = () => {
+  if (isBrowser() && navigator) {
+    return navigator.userAgent;
+  }
+  return 'Server';
+};
+
+// Безопасная проверка touch support
+export const hasTouchSupport = () => {
+  if (isBrowser()) {
+    return 'ontouchstart' in window || (navigator && navigator.maxTouchPoints > 0);
+  }
+  return false;
+};
+
+// Безопасное получение device memory
+export const getDeviceMemory = () => {
+  if (isBrowser() && navigator && navigator.deviceMemory) {
+    return navigator.deviceMemory;
+  }
+  return 'unknown';
+};
+
+// Безопасное получение connection
+export const getConnection = () => {
+  if (isBrowser() && navigator && navigator.connection) {
+    return navigator.connection.effectiveType || 'unknown';
+  }
+  return 'unknown';
+};
+
 export default {
   isBrowser,
   isServer,
   getWindow,
   getDocument,
+  getNavigator,
+  getUserAgent,
+  hasTouchSupport,
+  getDeviceMemory,
+  getConnection,
   safeAddEventListener,
   safeRemoveEventListener,
   getWindowSize,

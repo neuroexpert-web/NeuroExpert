@@ -1,19 +1,65 @@
 'use client';
 import { useState } from 'react';
-import BusinessShowcase from './components/BusinessShowcase';
-import VoiceFeedback from './components/VoiceFeedback';
-import SmartFAQ from './components/SmartFAQ';
-import PersonalizationModule from './components/PersonalizationModule';
-import LearningPlatform from './components/LearningPlatform';
-import NeuralNetworkBackground from './components/NeuralNetworkBackground';
-import { AnalyticsDashboard } from './components/CRMAnalytics';
-import AdminPanel from './components/AdminPanel';
-import { AutomationStatus } from './components/ContentAutomation';
-import UXTestingPanel from './components/UXTestingPanel';
-import MobileTestPanel from './components/MobileTestPanel';
-import SmokeTestPanel from './components/SmokeTestPanel';
-import PerformancePanel from './components/PerformancePanel';
-import ErrorLogPanel from './components/ErrorLogPanel';
+import dynamic from 'next/dynamic';
+
+// Динамически импортируем компоненты без SSR
+const BusinessShowcase = dynamic(() => import('./components/BusinessShowcase'), { 
+  ssr: false,
+  loading: () => <div>Загрузка...</div>
+});
+
+const VoiceFeedback = dynamic(() => import('./components/VoiceFeedback'), { 
+  ssr: false 
+});
+
+const SmartFAQ = dynamic(() => import('./components/SmartFAQ'), { 
+  ssr: false 
+});
+
+const PersonalizationModule = dynamic(() => import('./components/PersonalizationModule'), { 
+  ssr: false 
+});
+
+const LearningPlatform = dynamic(() => import('./components/LearningPlatform'), { 
+  ssr: false 
+});
+
+const NeuralNetworkBackground = dynamic(() => import('./components/NeuralNetworkBackground'), { 
+  ssr: false,
+  loading: () => <div className="neural-bg-placeholder" style={{height: '100vh', background: 'linear-gradient(45deg, #1a1a2e, #16213e)'}}></div>
+});
+
+const AnalyticsDashboard = dynamic(() => import('./components/CRMAnalytics').then(mod => ({ default: mod.AnalyticsDashboard })), { 
+  ssr: false 
+});
+
+const AdminPanel = dynamic(() => import('./components/AdminPanel'), { 
+  ssr: false 
+});
+
+const AutomationStatus = dynamic(() => import('./components/ContentAutomation').then(mod => ({ default: mod.AutomationStatus })), { 
+  ssr: false 
+});
+
+const UXTestingPanel = dynamic(() => import('./components/UXTestingPanel'), { 
+  ssr: false 
+});
+
+const MobileTestPanel = dynamic(() => import('./components/MobileTestPanel'), { 
+  ssr: false 
+});
+
+const SmokeTestPanel = dynamic(() => import('./components/SmokeTestPanel'), { 
+  ssr: false 
+});
+
+const PerformancePanel = dynamic(() => import('./components/PerformancePanel'), { 
+  ssr: false 
+});
+
+const ErrorLogPanel = dynamic(() => import('./components/ErrorLogPanel'), { 
+  ssr: false 
+});
 
 function Calculator() {
   const [investment, setInvestment] = useState(500000);

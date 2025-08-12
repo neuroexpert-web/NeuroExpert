@@ -75,6 +75,21 @@ class MobileTester {
   }
 
   detectDeviceCapabilities() {
+    // Проверяем, что мы в браузере
+    if (typeof window === 'undefined' || typeof navigator === 'undefined') {
+      return {
+        touchSupport: false,
+        devicePixelRatio: 1,
+        viewport: { width: 1920, height: 1080 },
+        orientation: 'unknown',
+        userAgent: 'Server',
+        memory: 'unknown',
+        connection: 'unknown',
+        battery: false,
+        deviceCategory: 'desktop'
+      };
+    }
+
     const capabilities = {
       touchSupport: 'ontouchstart' in window || navigator.maxTouchPoints > 0,
       devicePixelRatio: window.devicePixelRatio || 1,
@@ -82,7 +97,7 @@ class MobileTester {
         width: window.innerWidth,
         height: window.innerHeight
       },
-      orientation: screen.orientation?.type || 'unknown',
+      orientation: typeof screen !== 'undefined' && screen.orientation ? screen.orientation.type : 'unknown',
       userAgent: navigator.userAgent,
       memory: navigator.deviceMemory || 'unknown',
       connection: navigator.connection?.effectiveType || 'unknown',
