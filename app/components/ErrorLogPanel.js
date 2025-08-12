@@ -7,11 +7,17 @@ class ErrorLogger {
     this.errors = [];
     this.warnings = [];
     this.maxLogs = 100;
-    
-    this.initializeErrorHandling();
+    this.initialized = false;
   }
 
   initializeErrorHandling() {
+    // Проверяем, что мы в браузере
+    if (typeof window === 'undefined' || this.initialized) {
+      return;
+    }
+
+    this.initialized = true;
+
     // Глобальная обработка JavaScript ошибок
     window.addEventListener('error', (event) => {
       this.logError({
@@ -46,8 +52,8 @@ class ErrorLogger {
       originalError.apply(console, args);
     };
 
-    // Инициализируем глобальный массив ошибок
-    if (!window.consoleErrors) {
+    // Инициализируем глобальный массив ошибок (только в браузере)
+    if (typeof window !== 'undefined' && !window.consoleErrors) {
       window.consoleErrors = [];
     }
   }
@@ -56,8 +62,8 @@ class ErrorLogger {
     this.errors.unshift(errorData);
     this.errors = this.errors.slice(0, this.maxLogs);
     
-    // Добавляем в глобальный массив для совместимости
-    if (window.consoleErrors) {
+    // Добавляем в глобальный массив для совместимости (только в браузере)
+    if (typeof window !== 'undefined' && window.consoleErrors) {
       window.consoleErrors.unshift(errorData.message);
       window.consoleErrors = window.consoleErrors.slice(0, this.maxLogs);
     }
@@ -83,7 +89,7 @@ class ErrorLogger {
   clearLogs() {
     this.errors = [];
     this.warnings = [];
-    if (window.consoleErrors) {
+    if (typeof window !== 'undefined' && window.consoleErrors) {
       window.consoleErrors = [];
     }
   }
@@ -106,40 +112,69 @@ class ErrorLogger {
   }
 }
 
-// Инициализируем глобальный логгер ошибок
-const globalErrorLogger = new ErrorLogger();
+// Глобальный логгер ошибок (инициализируется только в браузере)
+let globalErrorLogger = null;
+
+// Функция для получения или создания логгера
+function getErrorLogger() {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+  
+  if (!globalErrorLogger) {
+    globalErrorLogger = new ErrorLogger();
+    globalErrorLogger.initializeErrorHandling();
+  }
+  
+  return globalErrorLogger;
+}
 
 // Функция для безопасного выполнения кода
 function safeExecute(fn, fallback = null, context = '') {
   try {
     return fn();
   } catch (error) {
-    globalErrorLogger.logError({
-      type: 'safe_execute',
-      message: `Error in ${context}: ${error.message}`,
-      stack: error.stack,
-      timestamp: Date.now()
-    });
+    const logger = getErrorLogger();
+    if (logger) {
+      logger.logError({
+        type: 'safe_execute',
+        message: `Error in ${context}: ${error.message}`,
+        stack: error.stack,
+        timestamp: Date.now()
+      });
+    }
     return fallback;
   }
 }
 
 // Функция для безопасного доступа к DOM элементам
-function safeQuerySelector(selector, parent = document) {
+function safeQuerySelector(selector, parent = null) {
+  if (typeof document === 'undefined') {
+    return null;
+  }
+  
   try {
-    return parent.querySelector(selector);
+    const targetParent = parent || document;
+    return targetParent.querySelector(selector);
   } catch (error) {
-    globalErrorLogger.logWarning({
-      type: 'dom_query',
-      message: `Invalid selector: ${selector}`,
-      timestamp: Date.now()
-    });
+    const logger = getErrorLogger();
+    if (logger) {
+      logger.logWarning({
+        type: 'dom_query',
+        message: `Invalid selector: ${selector}`,
+        timestamp: Date.now()
+      });
+    }
     return null;
   }
 }
 
 // Функция для безопасной работы с localStorage
 function safeLocalStorage(action, key, value = null) {
+  if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+    return null;
+  }
+  
   try {
     switch (action) {
       case 'get':
@@ -155,11 +190,14 @@ function safeLocalStorage(action, key, value = null) {
         return null;
     }
   } catch (error) {
-    globalErrorLogger.logWarning({
-      type: 'localStorage',
-      message: `LocalStorage ${action} error for key ${key}: ${error.message}`,
-      timestamp: Date.now()
-    });
+    const logger = getErrorLogger();
+    if (logger) {
+      logger.logWarning({
+        type: 'localStorage',
+        message: `LocalStorage ${action} error for key ${key}: ${error.message}`,
+        timestamp: Date.now()
+      });
+    }
     return null;
   }
 }
@@ -168,24 +206,33 @@ function safeLocalStorage(action, key, value = null) {
 function ErrorLogPanel() {
   const [isVisible, setIsVisible] = useState(false);
   const [errorSummary, setErrorSummary] = useState(null);
+  const [logger, setLogger] = useState(null);
 
   useEffect(() => {
-    const updateSummary = () => {
-      setErrorSummary(globalErrorLogger.getErrorSummary());
-    };
-
-    updateSummary();
-    const interval = setInterval(updateSummary, 5000);
+    // Инициализируем логгер только в браузере
+    const errorLogger = getErrorLogger();
+    setLogger(errorLogger);
     
-    return () => clearInterval(interval);
+    if (errorLogger) {
+      const updateSummary = () => {
+        setErrorSummary(errorLogger.getErrorSummary());
+      };
+
+      updateSummary();
+      const interval = setInterval(updateSummary, 5000);
+      
+      return () => clearInterval(interval);
+    }
   }, []);
 
   const clearAllLogs = () => {
-    globalErrorLogger.clearLogs();
-    setErrorSummary(globalErrorLogger.getErrorSummary());
+    if (logger) {
+      logger.clearLogs();
+      setErrorSummary(logger.getErrorSummary());
+    }
   };
 
-  if (!errorSummary) return null;
+  if (!errorSummary || !logger) return null;
 
   return (
     <>

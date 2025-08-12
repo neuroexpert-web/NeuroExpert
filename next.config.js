@@ -1,25 +1,61 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Оптимизация для Netlify
+  // Experimental optimizations
   experimental: {
-    esmExternals: true
+    serverActions: true,
   },
-  // Изображения
+  
+  // Настройки изображений для статики
   images: {
-    unoptimized: true
+    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
   },
-  // Быстрая сборка
+  
+  // Отключаем проверки для быстрой сборки
   eslint: {
     ignoreDuringBuilds: true,
   },
   typescript: {
     ignoreBuildErrors: true,
   },
+  
   // Оптимизация сборки
   swcMinify: true,
+  
+  // Webpack конфигурация для SSR совместимости
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      // Настройки для server-side
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        canvas: false,
+        encoding: false,
+        fs: false,
+      };
+    }
+    
+    // Исключаем модули, которые не должны обрабатываться webpack
+    config.externals = [...(config.externals || []), 'canvas'];
+    
+    return config;
+  },
+
+  // Настройки для production
   compiler: {
-    removeConsole: process.env.NODE_ENV === 'production'
-  }
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error', 'warn'],
+    } : false,
+  },
+  
+  // Настройки для Netlify
+  env: {
+    CUSTOM_KEY: process.env.GEMINI_API_KEY,
+  },
 }
 
 module.exports = nextConfig

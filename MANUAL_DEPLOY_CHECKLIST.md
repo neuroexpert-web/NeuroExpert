@@ -48,15 +48,19 @@ git push origin main
 2. Нажмите **"Add variable"**
 3. Добавьте:
 
-| Key | Value |
-|-----|-------|
-| `GEMINI_API_KEY` | `ВАШ_НОВЫЙ_GEMINI_API_KEY` |
+| Key | Value | Описание |
+|-----|-------|----------|
+| `GEMINI_API_KEY` | `ВАШ_GEMINI_API_KEY` | Google AI Studio API ключ для ИИ-функций |
+| `NODE_ENV` | `production` | Режим работы приложения |
+
+**⚠️ КРИТИЧНО:** GEMINI_API_KEY обязателен для работы AI Assistant!
 
 **Где взять API ключ:**
-1. Откройте [ai.google.dev](https://ai.google.dev/)
-2. Нажмите "Get API key"
-3. Создайте новый проект (если нужно)
-4. Скопируйте ключ
+1. Откройте [aistudio.google.com](https://aistudio.google.com/app/apikey)
+2. Войдите в Google аккаунт
+3. Нажмите "Create API key"
+4. Скопируйте ключ (начинается с `AIza...`)
+5. Вставьте в Netlify Environment Variables
 
 ---
 
