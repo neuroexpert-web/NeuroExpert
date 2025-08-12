@@ -1,140 +1,19 @@
 'use client';
 import { useState } from 'react';
-
-// Компонент анимированной нейросети
-function NeuralNetwork() {
-  return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      zIndex: -1,
-      pointerEvents: 'none',
-      overflow: 'hidden'
-    }}>
-      <svg
-        width="100%"
-        height="100%"
-        viewBox="0 0 1200 800"
-        style={{ position: 'absolute', top: 0, left: 0 }}
-      >
-        {/* Анимированные связи между нейронами */}
-        <defs>
-          <linearGradient id="connectionGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="rgba(125, 211, 252, 0.3)" />
-            <stop offset="100%" stopColor="rgba(125, 211, 252, 0.1)" />
-          </linearGradient>
-        </defs>
-        
-        {/* Горизонтальные связи */}
-        <line x1="150" y1="200" x2="450" y2="180" stroke="url(#connectionGrad)" strokeWidth="1">
-          <animate attributeName="opacity" values="0.2;0.8;0.2" dur="4s" repeatCount="indefinite" />
-        </line>
-        <line x1="150" y1="300" x2="450" y2="320" stroke="url(#connectionGrad)" strokeWidth="1">
-          <animate attributeName="opacity" values="0.8;0.2;0.8" dur="3s" repeatCount="indefinite" />
-        </line>
-        <line x1="150" y1="400" x2="450" y2="420" stroke="url(#connectionGrad)" strokeWidth="1">
-          <animate attributeName="opacity" values="0.3;0.9;0.3" dur="5s" repeatCount="indefinite" />
-        </line>
-        
-        <line x1="450" y1="180" x2="750" y2="160" stroke="url(#connectionGrad)" strokeWidth="1">
-          <animate attributeName="opacity" values="0.1;0.7;0.1" dur="6s" repeatCount="indefinite" />
-        </line>
-        <line x1="450" y1="320" x2="750" y2="300" stroke="url(#connectionGrad)" strokeWidth="1">
-          <animate attributeName="opacity" values="0.6;0.3;0.6" dur="4.5s" repeatCount="indefinite" />
-        </line>
-        <line x1="450" y1="420" x2="750" y2="440" stroke="url(#connectionGrad)" strokeWidth="1">
-          <animate attributeName="opacity" values="0.4;0.9;0.4" dur="3.8s" repeatCount="indefinite" />
-        </line>
-        
-        <line x1="750" y1="160" x2="1050" y2="250" stroke="url(#connectionGrad)" strokeWidth="1">
-          <animate attributeName="opacity" values="0.2;0.6;0.2" dur="5.2s" repeatCount="indefinite" />
-        </line>
-        <line x1="750" y1="300" x2="1050" y2="250" stroke="url(#connectionGrad)" strokeWidth="1">
-          <animate attributeName="opacity" values="0.7;0.4;0.7" dur="4.2s" repeatCount="indefinite" />
-        </line>
-        <line x1="750" y1="440" x2="1050" y2="250" stroke="url(#connectionGrad)" strokeWidth="1">
-          <animate attributeName="opacity" values="0.5;0.8;0.5" dur="3.5s" repeatCount="indefinite" />
-        </line>
-        
-        {/* Диагональные связи */}
-        <line x1="150" y1="200" x2="450" y2="320" stroke="url(#connectionGrad)" strokeWidth="0.8" opacity="0.4">
-          <animate attributeName="opacity" values="0.1;0.6;0.1" dur="7s" repeatCount="indefinite" />
-        </line>
-        <line x1="150" y1="300" x2="450" y2="180" stroke="url(#connectionGrad)" strokeWidth="0.8" opacity="0.3">
-          <animate attributeName="opacity" values="0.5;0.2;0.5" dur="6.5s" repeatCount="indefinite" />
-        </line>
-        <line x1="450" y1="180" x2="750" y2="440" stroke="url(#connectionGrad)" strokeWidth="0.8" opacity="0.2">
-          <animate attributeName="opacity" values="0.3;0.7;0.3" dur="8s" repeatCount="indefinite" />
-        </line>
-        <line x1="450" y1="420" x2="750" y2="160" stroke="url(#connectionGrad)" strokeWidth="0.8" opacity="0.3">
-          <animate attributeName="opacity" values="0.6;0.1;0.6" dur="5.8s" repeatCount="indefinite" />
-        </line>
-        
-        {/* Нейроны (узлы) */}
-        <circle cx="150" cy="200" r="6" fill="rgba(125, 211, 252, 0.8)">
-          <animate attributeName="r" values="6;8;6" dur="3s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.8;1;0.8" dur="3s" repeatCount="indefinite" />
-        </circle>
-        <circle cx="150" cy="300" r="5" fill="rgba(125, 211, 252, 0.6)">
-          <animate attributeName="r" values="5;7;5" dur="4s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.6;0.9;0.6" dur="4s" repeatCount="indefinite" />
-        </circle>
-        <circle cx="150" cy="400" r="6" fill="rgba(125, 211, 252, 0.7)">
-          <animate attributeName="r" values="6;9;6" dur="5s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.7;1;0.7" dur="5s" repeatCount="indefinite" />
-        </circle>
-        
-        <circle cx="450" cy="180" r="8" fill="rgba(125, 211, 252, 0.9)">
-          <animate attributeName="r" values="8;10;8" dur="3.5s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.9;1;0.9" dur="3.5s" repeatCount="indefinite" />
-        </circle>
-        <circle cx="450" cy="320" r="7" fill="rgba(125, 211, 252, 0.8)">
-          <animate attributeName="r" values="7;9;7" dur="4.2s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.8;1;0.8" dur="4.2s" repeatCount="indefinite" />
-        </circle>
-        <circle cx="450" cy="420" r="6" fill="rgba(125, 211, 252, 0.7)">
-          <animate attributeName="r" values="6;8;6" dur="3.8s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.7;0.95;0.7" dur="3.8s" repeatCount="indefinite" />
-        </circle>
-        
-        <circle cx="750" cy="160" r="7" fill="rgba(125, 211, 252, 0.8)">
-          <animate attributeName="r" values="7;9;7" dur="4.5s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.8;1;0.8" dur="4.5s" repeatCount="indefinite" />
-        </circle>
-        <circle cx="750" cy="300" r="8" fill="rgba(125, 211, 252, 0.9)">
-          <animate attributeName="r" values="8;11;8" dur="3.2s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.9;1;0.9" dur="3.2s" repeatCount="indefinite" />
-        </circle>
-        <circle cx="750" cy="440" r="6" fill="rgba(125, 211, 252, 0.7)">
-          <animate attributeName="r" values="6;8;6" dur="5.5s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.7;0.9;0.7" dur="5.5s" repeatCount="indefinite" />
-        </circle>
-        
-        <circle cx="1050" cy="250" r="10" fill="rgba(125, 211, 252, 1)">
-          <animate attributeName="r" values="10;14;10" dur="2.8s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="1;0.8;1" dur="2.8s" repeatCount="indefinite" />
-        </circle>
-        
-        {/* Дополнительные мелкие нейроны */}
-        <circle cx="300" cy="100" r="3" fill="rgba(125, 211, 252, 0.5)">
-          <animate attributeName="r" values="3;5;3" dur="6s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.5;0.8;0.5" dur="6s" repeatCount="indefinite" />
-        </circle>
-        <circle cx="600" cy="500" r="4" fill="rgba(125, 211, 252, 0.6)">
-          <animate attributeName="r" values="4;6;4" dur="7s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.6;0.9;0.6" dur="7s" repeatCount="indefinite" />
-        </circle>
-        <circle cx="900" cy="100" r="3" fill="rgba(125, 211, 252, 0.4)">
-          <animate attributeName="r" values="3;5;3" dur="8s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.4;0.7;0.4" dur="8s" repeatCount="indefinite" />
-        </circle>
-      </svg>
-    </div>
-  );
-}
+import BusinessShowcase from './components/BusinessShowcase';
+import VoiceFeedback from './components/VoiceFeedback';
+import SmartFAQ from './components/SmartFAQ';
+import PersonalizationModule from './components/PersonalizationModule';
+import LearningPlatform from './components/LearningPlatform';
+import NeuralNetworkBackground from './components/NeuralNetworkBackground';
+import { AnalyticsDashboard } from './components/CRMAnalytics';
+import AdminPanel from './components/AdminPanel';
+import { AutomationStatus } from './components/ContentAutomation';
+import UXTestingPanel from './components/UXTestingPanel';
+import MobileTestPanel from './components/MobileTestPanel';
+import SmokeTestPanel from './components/SmokeTestPanel';
+import PerformancePanel from './components/PerformancePanel';
+import ErrorLogPanel from './components/ErrorLogPanel';
 
 function Calculator() {
   const [investment, setInvestment] = useState(500000);
@@ -565,7 +444,8 @@ function Popup() {
 export default function HomePage() {
   return (
     <>
-      <NeuralNetwork />
+      <NeuralNetworkBackground />
+      <PersonalizationModule />
       <section className="container">
         <h1>NeuroExpert — Платформа цифровизации бизнеса</h1>
         <p className="lead">Рассчитайте ROI от цифровизации, получите консультацию AI-управляющего и узнайте как увеличить прибыль.</p>
@@ -573,9 +453,23 @@ export default function HomePage() {
           <Calculator />
           <Assistant />
         </div>
-        <FAQ />
+        <BusinessShowcase />
+        <SmartFAQ />
+        <LearningPlatform />
         <Popup />
       </section>
+      <VoiceFeedback />
+      <PersonalizationModule />
+      
+      {/* Системы мониторинга и управления */}
+      <AnalyticsDashboard />
+      <AutomationStatus />
+      <AdminPanel />
+      <UXTestingPanel />
+      <MobileTestPanel />
+      <SmokeTestPanel />
+      <PerformancePanel />
+      <ErrorLogPanel />
     </>
   );
 }

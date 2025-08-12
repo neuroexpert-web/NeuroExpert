@@ -1,20 +1,25 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Быстрая сборка для Netlify
-  output: 'export',
-  trailingSlash: false,
-  // Отключаем все медленные оптимизации
+  // Оптимизация для Netlify
+  experimental: {
+    esmExternals: true
+  },
+  // Изображения
   images: {
     unoptimized: true
   },
-  // Минимальная конфигурация ESLint
+  // Быстрая сборка
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // Отключаем TypeScript проверки для скорости
   typescript: {
     ignoreBuildErrors: true,
   },
+  // Оптимизация сборки
+  swcMinify: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production'
+  }
 }
 
 module.exports = nextConfig
