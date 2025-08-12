@@ -88,6 +88,8 @@ function NeuralNetworkBackground() {
     }
 
     draw(ctx, time) {
+      if (!ctx) return;
+      
       const opacity = 0.6 + Math.sin(time * 0.003 + this.pulsePhase) * 0.3;
       
       // Градиентное свечение
@@ -121,6 +123,8 @@ function NeuralNetworkBackground() {
     }
 
     draw(ctx, time) {
+      if (!ctx) return;
+      
       const distance = Math.sqrt(
         Math.pow(this.node2.x - this.node1.x, 2) + 
         Math.pow(this.node2.y - this.node1.y, 2)
@@ -231,6 +235,11 @@ function NeuralNetworkBackground() {
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      console.warn('Canvas 2D context not available');
+      return;
+    }
+    
     const nodes = [];
     const connections = [];
 
@@ -251,6 +260,8 @@ function NeuralNetworkBackground() {
     let startTime = Date.now();
 
     function render() {
+      if (!ctx) return;
+      
       const currentTime = Date.now();
       const time = currentTime - startTime;
 

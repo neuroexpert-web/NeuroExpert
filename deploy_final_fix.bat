@@ -1,6 +1,6 @@
 @echo off
 cd /d "c:\Users\USER\Desktop\УЛУЧШЕННЫЙ КОД НЕЙРОЭКСПЕРТ"
-echo 🔧 NAVIGATOR FIX - NeuroExpert v3.0 deployment...
+echo 🔧 CANVAS NULL FIX - NeuroExpert v3.0 deployment...
 echo.
 
 echo 🔍 Checking git status...
@@ -11,8 +11,8 @@ echo 📁 Adding all files...
 git add .
 echo.
 
-echo 💾 Committing NAVIGATOR + DYNAMIC IMPORTS fix...
-git commit -m "NAVIGATOR FIX: All components dynamic import with ssr:false, navigator checks added"
+echo 💾 Committing CANVAS NULL CHECKS fix...
+git commit -m "CANVAS FIX: Added null checks for canvas context in NeuralNetworkBackground"
 echo.
 
 echo 📤 Pushing to GitHub...
@@ -23,19 +23,19 @@ echo 🌐 Checking remote repositories...
 git remote -v
 echo.
 
-echo ✅ NAVIGATOR + DYNAMIC fix deployed!
+echo ✅ CANVAS NULL fix deployed!
 echo.
-echo 📋 This FINAL fix includes:
-echo - All components use dynamic import with ssr:false
-echo - Navigator object checks in all components  
-echo - VoiceFeedback, CRMAnalytics, MobileTestPanel fixed
-echo - No SSR for any browser-dependent components
+echo 📋 This CANVAS fix includes:
+echo - Canvas context null checks in render function
+echo - Canvas context null checks in Node.draw method  
+echo - Canvas context null checks in Connection.draw method
+echo - Protection against "Cannot set properties of null" errors
 echo.
-echo 📋 Netlify build should now SUCCEED:
-echo 1. No more "navigator is not defined" errors
-echo 2. No more "window is not defined" errors
-echo 3. Complete SSR/CSR separation
-echo 4. All 8 panels + ErrorLogPanel working
+echo 📋 Netlify deployment should now be ERROR-FREE:
+echo 1. No more canvas context null errors
+echo 2. No more "Cannot set properties of null (setting 'fillStyle')" errors
+echo 3. Neural network background animation safe
+echo 4. All 8 enterprise panels working without errors
 echo.
 echo Set GEMINI_API_KEY in Netlify environment variables!
 echo.
