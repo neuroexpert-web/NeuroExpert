@@ -1,0 +1,32 @@
+{
+  "name": "neuroexpert-showcase",
+  "version": "1.0.0",
+  "description": "A showcase of ready-made comprehensive services for businesses.",
+  "main": "src/app/page.tsx",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "test": "jest"
+  },
+  "keywords": [
+    "showcase",
+    "services",
+    "business",
+    "neuroexpert"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "tailwindcss": "latest"
+  },
+  "devDependencies": {
+    "eslint": "latest",
+    "jest": "latest",
+    "typescript": "latest"
+  }
+}
