@@ -2999,3 +2999,27 @@ label{
     text-align: center;
   }
 }
+
+/* Голосовая кнопка в контактах */
+.voice-method {
+  background: linear-gradient(135deg, var(--neural-purple-mist), var(--neural-aurora-green));
+  border: 1px solid rgba(0, 255, 163, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.voice-method:hover {
+  background: linear-gradient(135deg, var(--neural-aurora-green), var(--neural-ice-blue));
+  border-color: var(--neural-aurora-green);
+  box-shadow: 0 4px 20px var(--glow-aurora);
+  transform: translateY(-2px);
+}
+
+.voice-method .method-icon {
+  animation: microphonePulse 2s ease-in-out infinite;
+}
+
+@keyframes microphonePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}

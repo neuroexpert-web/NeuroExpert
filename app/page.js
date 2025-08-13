@@ -24,6 +24,10 @@ const NeuralParticles = dynamic(() => import('./components/NeuralParticles'), {
   ssr: false 
 });
 
+const SmartFloatingAI = dynamic(() => import('./components/SmartFloatingAI'), { 
+  ssr: false 
+});
+
 const PersonalizationModule = dynamic(() => import('./components/PersonalizationModule'), { 
   ssr: false 
 });
@@ -877,6 +881,17 @@ function ContactSection() {
                   <div className="method-value">hello@neuroexpert.ru</div>
                 </div>
               </a>
+              
+              <button 
+                className="contact-method voice-method"
+                onClick={() => setIsVoiceModalOpen(true)}
+              >
+                <span className="method-icon">🎤</span>
+                <div>
+                  <div className="method-title">Голосовое сообщение</div>
+                  <div className="method-value">Быстро и удобно</div>
+                </div>
+              </button>
             </div>
           </div>
           
@@ -1072,6 +1087,7 @@ function Popup() {
 
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState('main');
+  const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false);
 
   if (activeTab === 'main') {
     return (
@@ -1082,16 +1098,29 @@ export default function HomePage() {
         
         <main className="main-content">
           <QuickQuiz />
-          <BusinessShowcase />
+          <div id="showcase" data-section="showcase">
+            <BusinessShowcase />
+          </div>
           <Calculator />
           <ManagerSection />
-          <SmartFAQ />
+          <div id="faq" data-section="faq">
+            <SmartFAQ />
+          </div>
           <ContactSection />
         </main>
         
-        <VoiceFeedback />
+        <VoiceFeedbackModal 
+          isOpen={isVoiceModalOpen}
+          onClose={() => setIsVoiceModalOpen(false)}
+        />
         <AnalyticsTracker />
         <NeuralParticles />
+        <SmartFloatingAI onOpenManager={() => {
+          const managerSection = document.getElementById('manager');
+          if (managerSection) {
+            managerSection.scrollIntoView({ behavior: 'smooth' });
+          }
+        }} />
         
         {/* Админские функции скрыты в обычном режиме */}
         <div className="admin-access" style={{position: 'fixed', bottom: '10px', right: '10px', opacity: 0.1}}>
