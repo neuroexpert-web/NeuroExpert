@@ -20,6 +20,10 @@ const AnalyticsTracker = dynamic(() => import('./components/AnalyticsTracker'), 
   ssr: false 
 });
 
+const NeuralParticles = dynamic(() => import('./components/NeuralParticles'), { 
+  ssr: false 
+});
+
 const PersonalizationModule = dynamic(() => import('./components/PersonalizationModule'), { 
   ssr: false 
 });
@@ -1087,6 +1091,7 @@ export default function HomePage() {
         
         <VoiceFeedback />
         <AnalyticsTracker />
+        <NeuralParticles />
         
         {/* Админские функции скрыты в обычном режиме */}
         <div className="admin-access" style={{position: 'fixed', bottom: '10px', right: '10px', opacity: 0.1}}>
