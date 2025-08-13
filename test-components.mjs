@@ -11,7 +11,7 @@ async function testComponents() {
   // Проверяем файлы компонентов
   const components = [
     'BusinessShowcase.js',
-    'VoiceFeedback.js', 
+    'VoiceFeedbackModal.js', 
     'SmartFAQ.js',
     'PersonalizationModule.js',
     'LearningPlatform.js',
