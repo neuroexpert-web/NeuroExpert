@@ -61,124 +61,256 @@ const ErrorLogPanel = dynamic(() => import('./components/ErrorLogPanel'), {
   ssr: false 
 });
 
-function Calculator() {
-  const [investment, setInvestment] = useState(500000);
-  const [businessType, setBusinessType] = useState('retail');
-  
-  // Мультипликаторы эффективности по типам бизнеса
-  const multipliers = {
-    retail: { saving: 2.5, revenue: 1.8, payback: 4 },      // Розничная торговля
-    manufacturing: { saving: 3.2, revenue: 2.1, payback: 6 }, // Производство  
-    services: { saving: 2.8, revenue: 2.3, payback: 3 },    // Услуги
-    restaurant: { saving: 2.2, revenue: 1.9, payback: 5 },  // Ресторанный бизнес
-    logistics: { saving: 3.5, revenue: 2.0, payback: 8 }    // Логистика
+// Главный Hero-блок согласно ТЗ
+function HeroSection() {
+  const [animationEnabled, setAnimationEnabled] = useState(true);
+
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
-  const currentMultiplier = multipliers[businessType];
+  return (
+    <section className="hero-section">
+      <NeuralNetworkBackground animationEnabled={animationEnabled} />
+      
+      <div className="hero-content">
+        <div className="hero-text">
+          <h1 className="hero-title">
+            AI NeuroExpert — платформа цифровизации бизнеса и интеграции инструментов искусственного интеллекта
+          </h1>
+          
+          <p className="hero-subtitle">
+            Внедряем AI под ключ, оптимизируем процессы и ускоряем рост выручки за счет автоматизации, персонализации и данных.
+          </p>
+          
+          <div className="hero-cta">
+            <button 
+              className="cta-primary"
+              onClick={() => scrollToSection('showcase')}
+            >
+              📊 Посмотреть кейсы
+            </button>
+            <button 
+              className="cta-secondary"
+              onClick={() => scrollToSection('calculator')}
+            >
+              💰 Рассчитать выгоду
+            </button>
+            <button 
+              className="cta-tertiary"
+              onClick={() => scrollToSection('manager')}
+            >
+              💬 Спросить управляющего
+            </button>
+          </div>
+        </div>
+        
+        <div className="hero-controls">
+          <div className="animation-control">
+            <label className="animation-toggle">
+              <input
+                type="checkbox"
+                checked={animationEnabled}
+                onChange={(e) => setAnimationEnabled(e.target.checked)}
+              />
+              <span>🎬 Анимация</span>
+            </label>
+          </div>
+          
+          <div className="trust-indicators">
+            <div className="kpi-item">
+              <span className="kpi-value">200-1200%</span>
+              <span className="kpi-label">ROI</span>
+            </div>
+            <div className="kpi-item">
+              <span className="kpi-value">95%</span>
+              <span className="kpi-label">SLA</span>
+            </div>
+            <div className="kpi-item">
+              <span className="kpi-value">4.8/5</span>
+              <span className="kpi-label">NPS</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Calculator() {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [industry, setIndustry] = useState('');
+  const [investment, setInvestment] = useState(500000);
+  const [adBudget, setAdBudget] = useState(100000);
+  
+  // Мультипликаторы эффективности по отраслям (обновленные согласно ТЗ)
+  const multipliers = {
+    retail: { saving: 2.5, revenue: 1.8, payback: 4, name: '🛍️ Розничная торговля' },
+    manufacturing: { saving: 3.2, revenue: 2.1, payback: 6, name: '🏭 Производство' },
+    services: { saving: 2.8, revenue: 2.3, payback: 3, name: '💼 Услуги/Консалтинг' },
+    restaurant: { saving: 2.2, revenue: 1.9, payback: 5, name: '🍽️ Ресторанный бизнес' },
+    logistics: { saving: 3.5, revenue: 2.0, payback: 8, name: '🚚 Логистика/Доставка' },
+    finance: { saving: 3.8, revenue: 2.5, payback: 4, name: '💳 Финансовые услуги' },
+    healthcare: { saving: 3.0, revenue: 2.2, payback: 6, name: '🏥 Здравоохранение' },
+    education: { saving: 2.6, revenue: 1.7, payback: 5, name: '📚 Образование' }
+  };
+
+  const currentMultiplier = multipliers[industry];
   
   // Расчеты ROI для цифровизации
-  const annualSaving = investment * currentMultiplier.saving;     // Экономия в год
-  const additionalRevenue = investment * currentMultiplier.revenue; // Доп. выручка в год
+  const annualSaving = investment * (currentMultiplier?.saving || 0);
+  const additionalRevenue = investment * (currentMultiplier?.revenue || 0) + adBudget * 2.5;
   const totalBenefit = annualSaving + additionalRevenue;
-  const roi = ((totalBenefit - investment) / investment) * 100;
-  const paybackMonths = currentMultiplier.payback;
+  const roi = ((totalBenefit - investment - adBudget) / (investment + adBudget)) * 100;
+  const paybackMonths = currentMultiplier?.payback || 0;
   
   const formatNumber = (num) => {
     return new Intl.NumberFormat('ru-RU').format(Math.round(num));
   };
 
-  const businessTypes = {
-    retail: '🛍️ Розничная торговля',
-    manufacturing: '🏭 Производство',
-    services: '💼 Услуги/Консалтинг', 
-    restaurant: '🍽️ Ресторанный бизнес',
-    logistics: '🚚 Логистика/Доставка'
+  const nextStep = () => {
+    if (currentStep < 3) setCurrentStep(currentStep + 1);
+  };
+
+  const prevStep = () => {
+    if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
 
   return (
-    <div className="card">
-      <h2>💰 Калькулятор эффективности цифровизации</h2>
-      
-      <label>🏢 Тип вашего бизнеса</label>
-      <select 
-        value={businessType} 
-        onChange={e => setBusinessType(e.target.value)}
-        style={{
-          width: '100%',
-          margin: '6px 0 12px',
-          padding: '10px',
-          borderRadius: '8px',
-          border: '1px solid #253141',
-          background: '#0c1320',
-          color: 'var(--text)',
-          fontSize: '14px'
-        }}
-      >
-        {Object.entries(businessTypes).map(([key, label]) => (
-          <option key={key} value={key}>{label}</option>
-        ))}
-      </select>
-      
-      <label>💵 Бюджет на цифровизацию (руб.)</label>
-      <input 
-        type="number" 
-        value={investment} 
-        onChange={e => setInvestment(+e.target.value)} 
-        placeholder="Введите бюджет на внедрение"
-        step="50000"
-      />
-      
-      {/* Результаты расчета */}
-      <div style={{
-        marginTop: 20,
-        padding: 20,
-        background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05))',
-        borderRadius: 16,
-        border: '2px solid #22c55e'
-      }}>
-        <div style={{fontSize: '18px', fontWeight: 'bold', marginBottom: 16, textAlign: 'center'}}>
-          📊 Прогнозируемый эффект от инвестиций
-        </div>
+    <section id="calculator" className="calculator-section">
+      <div className="container">
+        <h2>💰 ROI‑калькулятор эффективности цифровизации</h2>
         
-        <div style={{display: 'grid', gap: '12px'}}>
-          <div style={{display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.1)'}}>
-            <span>💾 Экономия на автоматизации:</span>
-            <strong style={{color: '#22c55e'}}>+{formatNumber(annualSaving)}₽/год</strong>
+        <div className="calculator-steps">
+          <div className="step-indicator">
+            {[1, 2, 3].map(step => (
+              <div key={step} className={`step ${currentStep >= step ? 'active' : ''}`}>
+                {step}
+              </div>
+            ))}
           </div>
           
-          <div style={{display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.1)'}}>
-            <span>📈 Дополнительная выручка:</span>
-            <strong style={{color: '#22c55e'}}>+{formatNumber(additionalRevenue)}₽/год</strong>
-          </div>
+          {currentStep === 1 && (
+            <div className="step-content">
+              <h3>Шаг 1: Выберите отрасль</h3>
+              <div className="industry-grid">
+                {Object.entries(multipliers).map(([key, data]) => (
+                  <button
+                    key={key}
+                    className={`industry-card ${industry === key ? 'selected' : ''}`}
+                    onClick={() => setIndustry(key)}
+                  >
+                    {data.name}
+                  </button>
+                ))}
+              </div>
+              {industry && (
+                <button className="step-btn" onClick={nextStep}>
+                  Далее →
+                </button>
+              )}
+            </div>
+          )}
           
-          <div style={{display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.1)'}}>
-            <span>💎 Общая выгода в год:</span>
-            <strong style={{color: '#22c55e', fontSize: '18px'}}>+{formatNumber(totalBenefit)}₽</strong>
-          </div>
+          {currentStep === 2 && (
+            <div className="step-content">
+              <h3>Шаг 2: Инвестиции</h3>
+              
+              <div className="input-group">
+                <label>Сумма вложений в цифровизацию:</label>
+                <input
+                  type="range"
+                  min="50000"
+                  max="5000000"
+                  step="50000"
+                  value={investment}
+                  onChange={(e) => setInvestment(Number(e.target.value))}
+                />
+                <span className="value">{formatNumber(investment)} ₽</span>
+              </div>
+              
+              <div className="input-group">
+                <label>Бюджет на рекламу (месячный):</label>
+                <input
+                  type="range"
+                  min="10000"
+                  max="500000"
+                  step="10000"
+                  value={adBudget}
+                  onChange={(e) => setAdBudget(Number(e.target.value))}
+                />
+                <span className="value">{formatNumber(adBudget)} ₽</span>
+              </div>
+              
+              <div className="step-navigation">
+                <button className="step-btn secondary" onClick={prevStep}>
+                  ← Назад
+                </button>
+                <button className="step-btn" onClick={nextStep}>
+                  Рассчитать →
+                </button>
+              </div>
+            </div>
+          )}
           
-          <div style={{display: 'flex', justifyContent: 'space-between', padding: '12px 0'}}>
-            <span style={{fontSize: '16px'}}>🎯 ROI (рентабельность):</span>
-            <strong style={{color: '#22c55e', fontSize: '24px'}}>{roi.toFixed(0)}%</strong>
-          </div>
-        </div>
-        
-        <div style={{
-          marginTop: 16,
-          padding: 12,
-          background: 'rgba(125, 211, 252, 0.1)',
-          borderRadius: 8,
-          textAlign: 'center',
-          fontSize: '14px'
-        }}>
-          ⏱️ <strong>Окупаемость: {paybackMonths} месяцев</strong><br/>
-          💰 Чистая прибыль за год: <strong style={{color: '#22c55e'}}>+{formatNumber(totalBenefit - investment)}₽</strong>
+          {currentStep === 3 && currentMultiplier && (
+            <div className="step-content">
+              <h3>Шаг 3: Результат</h3>
+              
+              <div className="results-grid">
+                <div className="result-card">
+                  <h4>💸 Экономия на автоматизации</h4>
+                  <div className="result-value">{formatNumber(annualSaving)} ₽/год</div>
+                </div>
+                
+                <div className="result-card">
+                  <h4>📈 Потенциальная доп. прибыль</h4>
+                  <div className="result-value">{formatNumber(additionalRevenue)} ₽/год</div>
+                </div>
+                
+                <div className="result-card highlight">
+                  <h4>🎯 Общая прибыль/эффект</h4>
+                  <div className="result-value">{formatNumber(totalBenefit)} ₽/год</div>
+                </div>
+                
+                <div className="result-card">
+                  <h4>⚡ ROI</h4>
+                  <div className="result-value">{Math.round(roi)}%</div>
+                </div>
+                
+                <div className="result-card">
+                  <h4>⏰ Срок окупаемости</h4>
+                  <div className="result-value">{paybackMonths} мес.</div>
+                </div>
+              </div>
+              
+              <div className="roi-explanation">
+                <details>
+                  <summary>❓ Как считается ROI?</summary>
+                  <p>
+                    ROI рассчитывается по формуле: (Общая выгода - Инвестиции) / Инвестиции × 100%.
+                    Учитываются экономия от автоматизации процессов, увеличение выручки от 
+                    оптимизации рекламы и улучшения конверсии сайта.
+                  </p>
+                </details>
+              </div>
+              
+              <div className="step-navigation">
+                <button className="step-btn secondary" onClick={prevStep}>
+                  ← Изменить данные
+                </button>
+                <button className="step-btn primary">
+                  📞 Получить детальный расчет и консультацию
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-      
-      <div style={{marginTop: 12, fontSize: '12px', color: 'var(--muted)', textAlign: 'center'}}>
-        💡 Расчет основан на средних показателях цифровизации для {businessTypes[businessType].toLowerCase()}
-      </div>
-    </div>
+    </section>
   );
 }
 
@@ -488,34 +620,69 @@ function Popup() {
 }
 
 export default function HomePage() {
-  return (
-    <>
-      <NeuralNetworkBackground />
-      <PersonalizationModule />
-      <section className="container">
-        <h1>NeuroExpert — Платформа цифровизации бизнеса</h1>
-        <p className="lead">Рассчитайте ROI от цифровизации, получите консультацию AI-управляющего и узнайте как увеличить прибыль.</p>
-        <div className="grid">
+  const [activeTab, setActiveTab] = useState('main');
+
+  if (activeTab === 'main') {
+    return (
+      <div className="app">
+        <HeroSection />
+        
+        <main className="main-content">
+          <BusinessShowcase />
           <Calculator />
-          <Assistant />
-        </div>
-        <BusinessShowcase />
-        <SmartFAQ />
-        <LearningPlatform />
-        <Popup />
-      </section>
-      <VoiceFeedback />
-      <PersonalizationModule />
-      
-      {/* Системы мониторинга и управления */}
-      <AnalyticsDashboard />
-      <AutomationStatus />
-      <AdminPanel />
-      <UXTestingPanel />
-      <MobileTestPanel />
-      <SmokeTestPanel />
-      <PerformancePanel />
-      <ErrorLogPanel />
-    </>
-  );
+          <SmartFAQ />
+          <PersonalizationModule />
+          <LearningPlatform />
+        </main>
+        
+        <VoiceFeedback />
+        
+        <nav className="admin-nav">
+          <button onClick={() => setActiveTab('admin')}>⚙️ Админка</button>
+          <button onClick={() => setActiveTab('analytics')}>📊 Аналитика</button>
+          <button onClick={() => setActiveTab('testing')}>🧪 Тестирование</button>
+        </nav>
+      </div>
+    );
+  }
+
+  if (activeTab === 'admin') {
+    return (
+      <div className="admin-app">
+        <AdminPanel />
+        <button className="back-btn" onClick={() => setActiveTab('main')}>
+          ← Вернуться на сайт
+        </button>
+      </div>
+    );
+  }
+
+  if (activeTab === 'analytics') {
+    return (
+      <div className="analytics-app">
+        <AnalyticsDashboard />
+        <AutomationStatus />
+        <button className="back-btn" onClick={() => setActiveTab('main')}>
+          ← Вернуться на сайт
+        </button>
+      </div>
+    );
+  }
+
+  if (activeTab === 'testing') {
+    return (
+      <div className="testing-app">
+        <UXTestingPanel />
+        <MobileTestPanel />
+        <SmokeTestPanel />
+        <PerformancePanel />
+        <ErrorLogPanel />
+        <button className="back-btn" onClick={() => setActiveTab('main')}>
+          ← Вернуться на сайт
+        </button>
+      </div>
+    );
+  }
+
+  return null;
 }

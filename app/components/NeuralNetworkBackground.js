@@ -2,7 +2,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 
-function NeuralNetworkBackground() {
+function NeuralNetworkBackground({ animationEnabled = true }) {
   const canvasRef = useRef(null);
   const animationRef = useRef(null);
   const [webglSupported, setWebglSupported] = useState(true);
@@ -72,6 +72,9 @@ function NeuralNetworkBackground() {
     }
 
     update(canvas, time) {
+      // Если анимация отключена, не двигаем узлы
+      if (!animationEnabled) return;
+      
       this.x += this.vx;
       this.y += this.vy;
 
@@ -90,7 +93,9 @@ function NeuralNetworkBackground() {
     draw(ctx, time) {
       if (!ctx) return;
       
-      const opacity = 0.6 + Math.sin(time * 0.003 + this.pulsePhase) * 0.3;
+      const opacity = animationEnabled 
+        ? 0.6 + Math.sin(time * 0.003 + this.pulsePhase) * 0.3
+        : 0.4; // Статичная прозрачность если анимация отключена
       
       // Градиентное свечение
       const gradient = ctx.createRadialGradient(
@@ -98,16 +103,16 @@ function NeuralNetworkBackground() {
         this.x, this.y, this.currentSize * 3
       );
       gradient.addColorStop(0, `rgba(125, 211, 252, ${opacity})`);
-      gradient.addColorStop(0.5, `rgba(139, 92, 246, ${opacity * 0.7})`);
-      gradient.addColorStop(1, 'rgba(139, 92, 246, 0)');
-
+      gradient.addColorStop(0.5, `rgba(59, 130, 246, ${opacity * 0.6})`);
+      gradient.addColorStop(1, `rgba(37, 99, 235, 0)`);
+      
       ctx.fillStyle = gradient;
       ctx.beginPath();
-      ctx.arc(this.x, this.y, this.currentSize * 3, 0, Math.PI * 2);
+      ctx.arc(this.x, this.y, this.currentSize * 2, 0, Math.PI * 2);
       ctx.fill();
-
-      // Центральная точка
-      ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+      
+      // Основной узел
+      ctx.fillStyle = `rgba(125, 211, 252, ${opacity})`;
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.currentSize, 0, Math.PI * 2);
       ctx.fill();
@@ -386,7 +391,7 @@ function NeuralNetworkBackground() {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [nodeCount, connectionStrength, webglSupported]);
+  }, [nodeCount, connectionStrength, webglSupported, animationEnabled]);
 
   return (
     <>
