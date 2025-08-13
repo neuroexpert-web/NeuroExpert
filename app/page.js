@@ -8,7 +8,7 @@ const BusinessShowcase = dynamic(() => import('./components/BusinessShowcase'), 
   loading: () => <div>Загрузка...</div>
 });
 
-const VoiceFeedback = dynamic(() => import('./components/VoiceFeedback'), { 
+const VoiceFeedbackModal = dynamic(() => import('./components/VoiceFeedbackModal'), { 
   ssr: false 
 });
 

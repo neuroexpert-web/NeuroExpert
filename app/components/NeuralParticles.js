@@ -43,15 +43,15 @@ function NeuralParticles() {
       particlesRef.current = particles;
     };
 
-    // Получение случайного нейронного цвета
+    // Получение случайного цвета полярной ночи
     const getRandomNeuralColor = () => {
       const colors = [
-        '#00d4ff',
-        '#7c3aed', 
-        '#06b6d4',
-        '#3b82f6',
-        '#8b5cf6',
-        '#ec4899'
+        '#00ffa3', // aurora green
+        '#4dd8ff', // ice blue
+        '#1a4f7a', // deep blue
+        '#6366f1', // purple mist
+        '#f0f9ff', // frost white
+        '#0ea5e9'  // arctic cyan
       ];
       return colors[Math.floor(Math.random() * colors.length)];
     };

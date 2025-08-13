@@ -159,11 +159,15 @@ function VoiceFeedback() {
   }
 
   return (
-    <div className="voice-feedback">
-      <h3>🎤 Отправить голосовое сообщение</h3>
-      <p className="voice-subtitle">
-        Расскажите о ваших потребностях голосом — это быстро и удобно!
-      </p>
+    <div className="voice-feedback-overlay" onClick={handleOverlayClick}>
+      <div className="voice-feedback" onClick={(e) => e.stopPropagation()}>
+        <div className="voice-header">
+          <h3>🎤 Отправить голосовое сообщение</h3>
+          <button className="close-voice-btn" onClick={() => setIsOpen(false)}>✕</button>
+        </div>
+        <p className="voice-subtitle">
+          Расскажите о ваших потребностях голосом — это быстро и удобно!
+        </p>
       
       <div className="recording-section">
         {!audioURL ? (

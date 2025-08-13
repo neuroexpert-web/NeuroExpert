@@ -1,25 +1,27 @@
 :root { 
-  --bg:#0a0a0f; 
-  --card:#0f1419; 
-  --text:#e7ecf3; 
-  --accent:#00d4ff; 
-  --muted:#90a4b4; 
-  --accent-hover:#0ea5e9;
-  --card-hover:#1a2033;
+  --bg:#050810; 
+  --card:#0a0f1a; 
+  --text:#e1e8f5; 
+  --accent:#1a4f7a; 
+  --muted:#6b7b8f; 
+  --accent-hover:#2563a8;
+  --card-hover:#111827;
   
-  /* Нейросетевые цвета */
-  --neural-blue: #00d4ff;
-  --neural-purple: #7c3aed;
-  --neural-cyan: #06b6d4;
-  --neural-indigo: #3b82f6;
-  --neural-violet: #8b5cf6;
-  --neural-pink: #ec4899;
+  /* Полярная ночь - Нейросетевые цвета */
+  --neural-aurora-green: #00ffa3;
+  --neural-ice-blue: #4dd8ff;
+  --neural-deep-blue: #1a4f7a;
+  --neural-purple-mist: #6366f1;
+  --neural-frost-white: #f0f9ff;
+  --neural-arctic-cyan: #0ea5e9;
+  --neural-midnight: #1e293b;
   
-  /* Эффекты свечения */
-  --glow-blue: rgba(0, 212, 255, 0.4);
-  --glow-purple: rgba(124, 58, 237, 0.4);
-  --glow-cyan: rgba(6, 182, 212, 0.4);
-  --glow-pink: rgba(236, 72, 153, 0.3);
+  /* Эффекты северного сияния */
+  --glow-aurora: rgba(0, 255, 163, 0.4);
+  --glow-ice: rgba(77, 216, 255, 0.4);
+  --glow-frost: rgba(240, 249, 255, 0.3);
+  --glow-deep: rgba(26, 79, 122, 0.6);
+  --glow-purple: rgba(99, 102, 241, 0.4);
 }
 
 *{box-sizing:border-box} 
@@ -28,15 +30,17 @@ html,body{height:100%}
 body{
   margin:0;
   background: 
-    radial-gradient(ellipse at top, #0a0a0f 0%, #000000 100%),
-    linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0a0a0f 100%);
+    radial-gradient(ellipse at top, #050810 0%, #000205 100%),
+    linear-gradient(135deg, #050810 0%, #0f172a 30%, #1e293b 70%, #050810 100%),
+    linear-gradient(45deg, transparent 70%, rgba(0, 255, 163, 0.03) 100%);
   color:var(--text);
   font:16px/1.6 system-ui,Segoe UI,Roboto,Arial;
   position: relative;
   overflow-x: hidden;
+  min-height: 100vh;
 }
 
-/* Многослойный нейросетевой фон */
+/* Полярная ночь - нейросетевой фон */
 body::before {
   content: '';
   position: fixed;
@@ -46,24 +50,26 @@ body::before {
   height: 100%;
   z-index: -3;
   
-  /* Сложный градиент с нейронными узлами */
+  /* Северное сияние с нейронными узлами */
   background: 
-    /* Основные нейронные узлы */
-    radial-gradient(circle at 15% 25%, var(--glow-blue) 0%, transparent 35%),
-    radial-gradient(circle at 85% 20%, var(--glow-purple) 0%, transparent 40%),
-    radial-gradient(circle at 70% 75%, var(--glow-cyan) 0%, transparent 30%),
-    radial-gradient(circle at 30% 80%, var(--glow-pink) 0%, transparent 35%),
-    radial-gradient(circle at 60% 45%, var(--glow-blue) 0%, transparent 25%),
+    /* Основные узлы северного сияния */
+    radial-gradient(circle at 20% 20%, var(--glow-aurora) 0%, transparent 40%),
+    radial-gradient(circle at 80% 30%, var(--glow-ice) 0%, transparent 45%),
+    radial-gradient(circle at 15% 70%, var(--glow-purple) 0%, transparent 35%),
+    radial-gradient(circle at 75% 80%, var(--glow-deep) 0%, transparent 50%),
+    radial-gradient(circle at 50% 40%, var(--glow-frost) 0%, transparent 30%),
+    radial-gradient(circle at 90% 60%, var(--glow-aurora) 0%, transparent 25%),
     
-    /* Дополнительные связи */
-    radial-gradient(ellipse 300px 100px at 40% 60%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(ellipse 200px 150px at 80% 30%, rgba(124, 58, 237, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse 250px 80px at 20% 70%, rgba(6, 182, 212, 0.12) 0%, transparent 50%);
+    /* Глубинные связи */
+    radial-gradient(ellipse 400px 120px at 30% 50%, rgba(0, 255, 163, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 300px 180px at 70% 25%, rgba(77, 216, 255, 0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 350px 90px at 10% 80%, rgba(26, 79, 122, 0.12) 0%, transparent 65%),
+    radial-gradient(ellipse 200px 200px at 95% 15%, rgba(99, 102, 241, 0.07) 0%, transparent 50%);
     
-  animation: neuralNetworkPulse 6s ease-in-out infinite alternate;
+  animation: arcticAurora 8s ease-in-out infinite alternate;
 }
 
-/* Дополнительные нейронные связи */
+/* Кристаллические связи полярной ночи */
 body::after {
   content: '';
   position: fixed;
@@ -74,60 +80,76 @@ body::after {
   z-index: -2;
   
   background: 
-    /* Линии связей между нейронами */
-    linear-gradient(45deg, transparent 48%, rgba(0, 212, 255, 0.03) 49%, rgba(0, 212, 255, 0.06) 50%, rgba(0, 212, 255, 0.03) 51%, transparent 52%),
-    linear-gradient(-45deg, transparent 48%, rgba(124, 58, 237, 0.04) 49%, rgba(124, 58, 237, 0.08) 50%, rgba(124, 58, 237, 0.04) 51%, transparent 52%),
-    linear-gradient(135deg, transparent 48%, rgba(6, 182, 212, 0.02) 49%, rgba(6, 182, 212, 0.05) 50%, rgba(6, 182, 212, 0.02) 51%, transparent 52%);
+    /* Ледяные кристаллические связи */
+    linear-gradient(45deg, transparent 47%, rgba(0, 255, 163, 0.04) 49%, rgba(0, 255, 163, 0.08) 50%, rgba(0, 255, 163, 0.04) 51%, transparent 53%),
+    linear-gradient(-45deg, transparent 47%, rgba(77, 216, 255, 0.03) 49%, rgba(77, 216, 255, 0.06) 50%, rgba(77, 216, 255, 0.03) 51%, transparent 53%),
+    linear-gradient(135deg, transparent 47%, rgba(26, 79, 122, 0.02) 49%, rgba(26, 79, 122, 0.05) 50%, rgba(26, 79, 122, 0.02) 51%, transparent 53%),
+    linear-gradient(90deg, transparent 48%, rgba(99, 102, 241, 0.02) 49%, rgba(99, 102, 241, 0.04) 50%, rgba(99, 102, 241, 0.02) 51%, transparent 52%);
     
-  background-size: 120px 120px, 100px 100px, 80px 80px;
-  animation: neuralConnection 8s linear infinite;
+  background-size: 140px 140px, 110px 110px, 85px 85px, 95px 95px;
+  animation: crystalFlow 12s linear infinite;
 }
 
-/* Анимация основных нейронных узлов */
-@keyframes neuralNetworkPulse {
+/* Анимация северного сияния */
+@keyframes arcticAurora {
   0% { 
-    opacity: 0.4;
+    opacity: 0.3;
     transform: scale(1) rotate(0deg);
+    filter: hue-rotate(0deg) brightness(1);
   }
-  25% {
+  20% {
     opacity: 0.7;
-    transform: scale(1.05) rotate(1deg);
+    transform: scale(1.03) rotate(0.5deg);
+    filter: hue-rotate(10deg) brightness(1.1);
   }
-  50% {
-    opacity: 0.6;
-    transform: scale(1.1) rotate(0deg);
+  40% {
+    opacity: 0.5;
+    transform: scale(1.08) rotate(-0.3deg);
+    filter: hue-rotate(-5deg) brightness(0.9);
   }
-  75% {
+  60% {
     opacity: 0.8;
-    transform: scale(1.03) rotate(-1deg);
+    transform: scale(1.02) rotate(0.8deg);
+    filter: hue-rotate(15deg) brightness(1.2);
+  }
+  80% {
+    opacity: 0.6;
+    transform: scale(1.06) rotate(-0.2deg);
+    filter: hue-rotate(-8deg) brightness(1);
   }
   100% { 
-    opacity: 0.5;
-    transform: scale(1.08) rotate(0.5deg);
+    opacity: 0.4;
+    transform: scale(1.04) rotate(0.3deg);
+    filter: hue-rotate(5deg) brightness(1.05);
   }
 }
 
-/* Анимация нейронных связей */
-@keyframes neuralConnection {
+/* Анимация кристаллических потоков */
+@keyframes crystalFlow {
   0% { 
-    background-position: 0% 0%, 0% 0%, 0% 0%;
-    opacity: 0.3;
+    background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+    opacity: 0.2;
+    filter: brightness(1);
   }
   25% {
-    background-position: 25% 25%, -25% 25%, 25% -25%;
-    opacity: 0.6;
+    background-position: 25% 25%, -25% 25%, 25% -25%, 25% 0%;
+    opacity: 0.5;
+    filter: brightness(1.1);
   }
   50% {
-    background-position: 50% 50%, -50% 50%, 50% -50%;
-    opacity: 0.4;
+    background-position: 50% 50%, -50% 50%, 50% -50%, 50% 0%;
+    opacity: 0.3;
+    filter: brightness(0.9);
   }
   75% {
-    background-position: 75% 75%, -75% 75%, 75% -75%;
-    opacity: 0.7;
+    background-position: 75% 75%, -75% 75%, 75% -75%, 75% 0%;
+    opacity: 0.6;
+    filter: brightness(1.2);
   }
   100% { 
-    background-position: 100% 100%, -100% 100%, 100% -100%;
-    opacity: 0.3;
+    background-position: 100% 100%, -100% 100%, 100% -100%, 100% 0%;
+    opacity: 0.2;
+    filter: brightness(1);
   }
 }
 
@@ -373,92 +395,150 @@ label{
   margin-bottom: 1.5rem;
   position: relative;
   
-  /* Анимированный градиент нейросети */
+  /* Полярная ночь - анимированный градиент */
   background: linear-gradient(
-    45deg,
-    #00d4ff,
-    #7c3aed,
-    #0ea5e9,
-    #3b82f6,
-    #8b5cf6,
-    #06b6d4,
-    #0891b2
+    110deg,
+    var(--neural-aurora-green),
+    var(--neural-ice-blue),
+    var(--neural-deep-blue),
+    var(--neural-purple-mist),
+    var(--neural-frost-white),
+    var(--neural-arctic-cyan),
+    var(--neural-aurora-green)
   );
-  background-size: 400% 400%;
+  background-size: 300% 300%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   
-  /* Эффект светящегося текста */
-  filter: drop-shadow(0 0 20px rgba(125, 211, 252, 0.4));
+  /* Северное сияние эффект */
+  filter: drop-shadow(0 0 30px var(--glow-aurora))
+          drop-shadow(0 0 60px var(--glow-ice));
   
-  /* Анимация градиента */
-  animation: neuralPulse 3s ease-in-out infinite,
-             neuralGlow 4s ease-in-out infinite alternate;
+  /* Комплексная анимация движения */
+  animation: arcticTitleFlow 6s ease-in-out infinite,
+             auroraDance 8s ease-in-out infinite alternate,
+             titleFloating 4s ease-in-out infinite alternate;
 }
 
-/* Анимация нейронных импульсов в тексте */
-@keyframes neuralPulse {
+/* Анимация арктического потока заголовка */
+@keyframes arcticTitleFlow {
   0%, 100% {
     background-position: 0% 50%;
-    filter: drop-shadow(0 0 20px rgba(125, 211, 252, 0.4));
+    filter: drop-shadow(0 0 30px var(--glow-aurora))
+            drop-shadow(0 0 60px var(--glow-ice));
   }
   25% {
-    background-position: 100% 50%;
-    filter: drop-shadow(0 0 30px rgba(139, 92, 246, 0.6));
+    background-position: 100% 75%;
+    filter: drop-shadow(0 0 40px var(--glow-ice))
+            drop-shadow(0 0 80px var(--glow-deep));
   }
   50% {
     background-position: 50% 100%;
-    filter: drop-shadow(0 0 25px rgba(6, 182, 212, 0.5));
+    filter: drop-shadow(0 0 35px var(--glow-purple))
+            drop-shadow(0 0 70px var(--glow-frost));
   }
   75% {
-    background-position: 0% 100%;
-    filter: drop-shadow(0 0 35px rgba(14, 165, 233, 0.7));
+    background-position: 25% 25%;
+    filter: drop-shadow(0 0 45px var(--glow-deep))
+            drop-shadow(0 0 90px var(--glow-aurora));
   }
 }
 
-/* Дополнительное свечение */
-@keyframes neuralGlow {
+/* Танец северного сияния */
+@keyframes auroraDance {
   0% {
     text-shadow: 
-      0 0 10px rgba(125, 211, 252, 0.3),
-      0 0 20px rgba(125, 211, 252, 0.2),
-      0 0 30px rgba(125, 211, 252, 0.1);
+      0 0 20px var(--glow-aurora),
+      0 0 40px var(--glow-ice),
+      0 0 60px var(--glow-frost);
+    transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+  }
+  33% {
+    text-shadow: 
+      0 0 30px var(--glow-ice),
+      0 0 50px var(--glow-purple),
+      0 0 80px var(--glow-deep);
+    transform: perspective(1000px) rotateX(2deg) rotateY(-1deg);
+  }
+  66% {
+    text-shadow: 
+      0 0 25px var(--glow-deep),
+      0 0 45px var(--glow-aurora),
+      0 0 70px var(--glow-frost);
+    transform: perspective(1000px) rotateX(-1deg) rotateY(2deg);
   }
   100% {
     text-shadow: 
-      0 0 20px rgba(139, 92, 246, 0.4),
-      0 0 30px rgba(139, 92, 246, 0.3),
-      0 0 40px rgba(139, 92, 246, 0.2);
+      0 0 35px var(--glow-frost),
+      0 0 55px var(--glow-ice),
+      0 0 85px var(--glow-aurora);
+    transform: perspective(1000px) rotateX(1deg) rotateY(-0.5deg);
   }
 }
 
-/* Псевдо-элемент для дополнительных эффектов */
+/* Плавающее движение заголовка */
+@keyframes titleFloating {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px) scale(1);
+  }
+  25% {
+    transform: translateY(-8px) translateX(3px) scale(1.02);
+  }
+  50% {
+    transform: translateY(0px) translateX(-2px) scale(1.01);
+  }
+  75% {
+    transform: translateY(6px) translateX(4px) scale(1.015);
+  }
+}
+
+/* Псевдо-элемент полярного сияния */
 .hero-title::before {
   content: '';
   position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background: linear-gradient(45deg, 
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  background: linear-gradient(60deg, 
     transparent,
-    rgba(125, 211, 252, 0.1),
+    var(--glow-aurora),
     transparent,
-    rgba(139, 92, 246, 0.1),
+    var(--glow-ice),
+    transparent,
+    var(--glow-frost),
     transparent
   );
-  background-size: 200% 200%;
-  animation: neuralBorder 2s linear infinite;
-  border-radius: 8px;
+  background-size: 250% 250%;
+  animation: arcticBorder 3s ease-in-out infinite;
+  border-radius: 12px;
   z-index: -1;
-  opacity: 0.6;
+  opacity: 0.4;
+  filter: blur(2px);
 }
 
-@keyframes neuralBorder {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+@keyframes arcticBorder {
+  0% { 
+    background-position: 0% 50%; 
+    opacity: 0.3;
+  }
+  25% {
+    background-position: 100% 25%;
+    opacity: 0.6;
+  }
+  50% { 
+    background-position: 50% 100%; 
+    opacity: 0.4;
+  }
+  75% {
+    background-position: 25% 0%;
+    opacity: 0.7;
+  }
+  100% { 
+    background-position: 0% 50%; 
+    opacity: 0.3;
+  }
 }
 
 .hero-subtitle {
@@ -498,10 +578,10 @@ label{
 }
 
 .cta-primary {
-  background: linear-gradient(135deg, var(--neural-blue), var(--neural-cyan));
+  background: linear-gradient(135deg, var(--neural-aurora-green), var(--neural-ice-blue));
   color: white;
-  box-shadow: 0 4px 15px var(--glow-blue);
-  border: 1px solid rgba(0, 212, 255, 0.3);
+  box-shadow: 0 4px 15px var(--glow-aurora);
+  border: 1px solid rgba(0, 255, 163, 0.4);
   position: relative;
   overflow: hidden;
 }
@@ -519,8 +599,8 @@ label{
 
 .cta-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px var(--glow-blue);
-  background: linear-gradient(135deg, var(--neural-cyan), var(--neural-blue));
+  box-shadow: 0 8px 25px var(--glow-aurora);
+  background: linear-gradient(135deg, var(--neural-ice-blue), var(--neural-aurora-green));
 }
 
 .cta-primary:hover::before {
@@ -528,10 +608,10 @@ label{
 }
 
 .cta-secondary {
-  background: linear-gradient(135deg, var(--neural-purple), var(--neural-violet));
+  background: linear-gradient(135deg, var(--neural-deep-blue), var(--neural-purple-mist));
   color: white;
-  box-shadow: 0 4px 15px var(--glow-purple);
-  border: 1px solid rgba(124, 58, 237, 0.3);
+  box-shadow: 0 4px 15px var(--glow-deep);
+  border: 1px solid rgba(26, 79, 122, 0.4);
   position: relative;
   overflow: hidden;
 }
