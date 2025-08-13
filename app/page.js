@@ -560,6 +560,196 @@ function Calculator() {
   );
 }
 
+// Улучшенная секция AI-управляющего
+function ManagerSection() {
+  const [q, setQ] = useState('');
+  const [a, setA] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [typing, setTyping] = useState(false);
+  const [chatHistory, setChatHistory] = useState([]);
+
+  const typewriterEffect = (text) => {
+    setA('');
+    setTyping(true);
+    let i = 0;
+    const timer = setInterval(() => {
+      setA(prev => prev + text.charAt(i));
+      i++;
+      if (i >= text.length) {
+        clearInterval(timer);
+        setTyping(false);
+      }
+    }, 30);
+  };
+
+  const ask = async () => {
+    if (!q || loading) return;
+    
+    const userQuestion = q;
+    setQ('');
+    setLoading(true);
+    setA('');
+    
+    // Добавляем вопрос пользователя в историю
+    setChatHistory(prev => [...prev, { type: 'user', text: userQuestion }]);
+    
+    try {
+      const res = await fetch('/.netlify/functions/assistant', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question: userQuestion }),
+      });
+      
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      
+      const data = await res.json();
+      typewriterEffect(data.answer);
+      
+      // Добавляем ответ в историю после завершения печатания
+      setTimeout(() => {
+        setChatHistory(prev => [...prev, { type: 'assistant', text: data.answer }]);
+      }, data.answer.length * 30 + 100);
+      
+    } catch (error) {
+      console.error("Failed to fetch assistant's response:", error);
+      const errorMessage = error.message.includes('500') 
+        ? '⚠️ Управляющий временно недоступен. Проверьте настройку GEMINI_API_KEY в Netlify. Пока используйте FAQ или калькулятор.'
+        : 'Произошла ошибка. Попробуйте позже или воспользуйтесь FAQ.';
+      
+      typewriterEffect(errorMessage);
+      setChatHistory(prev => [...prev, { type: 'assistant', text: errorMessage }]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !loading && q.trim()) {
+      ask();
+    }
+  };
+
+  const quickQuestions = [
+    "Сколько стоит цифровизация моего бизнеса?",
+    "Какой ROI я могу ожидать?",
+    "Сколько времени займет внедрение?",
+    "Какие услуги подходят малому бизнесу?",
+    "Как начать цифровую трансформацию?"
+  ];
+
+  return (
+    <section id="manager" className="manager-section">
+      <div className="container">
+        <div className="manager-content">
+          <div className="manager-header">
+            <div className="manager-avatar">
+              <div className="avatar-ring"></div>
+              <span className="avatar-emoji">👨‍💼</span>
+              <div className="online-status">●</div>
+            </div>
+            
+            <div className="manager-info">
+              <h2>🎯 AI Управляющий NeuroExpert</h2>
+              <p>Персональный консультант по цифровизации бизнеса</p>
+              <div className="manager-stats">
+                <span className="stat">📊 500+ проектов</span>
+                <span className="stat">⚡ Отвечает за 30 сек</span>
+                <span className="stat">🎯 95% точность</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="chat-interface">
+            {/* История чата */}
+            {chatHistory.length > 0 && (
+              <div className="chat-history">
+                {chatHistory.map((message, index) => (
+                  <div key={index} className={`chat-message ${message.type}`}>
+                    <div className="message-avatar">
+                      {message.type === 'user' ? '👤' : '👨‍💼'}
+                    </div>
+                    <div className="message-content">
+                      {message.text}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Текущий ответ */}
+            {(a || typing) && (
+              <div className="current-response">
+                <div className="response-header">
+                  <span className="response-avatar">👨‍💼</span>
+                  <span className="response-title">Рекомендация управляющего:</span>
+                </div>
+                <div className="response-content">
+                  {a}
+                  {typing && <span className="typing-cursor">|</span>}
+                </div>
+              </div>
+            )}
+
+            {/* Быстрые вопросы */}
+            <div className="quick-questions">
+              <h4>💡 Популярные вопросы:</h4>
+              <div className="questions-grid">
+                {quickQuestions.map((question, index) => (
+                  <button
+                    key={index}
+                    className="quick-question"
+                    onClick={() => setQ(question)}
+                    disabled={loading}
+                  >
+                    {question}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Поле ввода */}
+            <div className="input-section">
+              <div className="input-wrapper">
+                <input
+                  type="text"
+                  placeholder="Задайте вопрос управляющему..."
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  disabled={loading}
+                  className="question-input"
+                />
+                <button
+                  onClick={ask}
+                  disabled={loading || !q.trim()}
+                  className="ask-button"
+                >
+                  {loading ? '🔄' : '💬'}
+                </button>
+              </div>
+              
+              <div className="input-help">
+                💡 Спросите о цифровизации, ROI, сроках или подходящих решениях
+              </div>
+            </div>
+
+            {/* Безопасность */}
+            <div className="security-notice">
+              <div className="security-icon">🔒</div>
+              <div className="security-text">
+                <strong>Гарантия безопасности данных</strong>
+                <div>Все данные шифруются AES-256 • GDPR • 152-ФЗ</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // Секция контактов
 function ContactSection() {
   const [formData, setFormData] = useState({
@@ -682,185 +872,6 @@ function ContactSection() {
         </div>
       </div>
     </section>
-  );
-}
-
-function Assistant() {
-  const [q, setQ] = useState('');
-  const [a, setA] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [typing, setTyping] = useState(false);
-
-  const typewriterEffect = (text) => {
-    setA('');
-    setTyping(true);
-    let i = 0;
-    const timer = setInterval(() => {
-      setA(prev => prev + text.charAt(i));
-      i++;
-      if (i >= text.length) {
-        clearInterval(timer);
-        setTyping(false);
-      }
-    }, 30);
-  };
-
-  const ask = async () => {
-    if (!q || loading) return;
-    setLoading(true);
-    setA('');
-    try {
-      const res = await fetch('/.netlify/functions/assistant', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: q }),
-      });
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-      const data = await res.json();
-      typewriterEffect(data.answer);
-    } catch (error) {
-      console.error("Failed to fetch assistant's response:", error);
-      if (error.message.includes('500')) {
-        typewriterEffect('⚠️ Управляющий временно недоступен. Проверьте настройку GEMINI_API_KEY в Netlify Environment Variables. Пока что используйте FAQ или калькулятор ROI.');
-      } else {
-        typewriterEffect('Произошла ошибка при обращении к управляющему. Попробуйте позже или обратитесь к FAQ.');
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !loading) {
-      ask();
-    }
-  };
-
-  return (
-    <div className="card">
-      {/* Заголовок безопасности */}
-      <div style={{
-        marginBottom: 20,
-        padding: 16,
-        background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.05))',
-        borderRadius: 12,
-        border: '1px solid rgba(34, 197, 94, 0.3)',
-        position: 'relative',
-        overflow: 'hidden'
-      }}>
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: '-100%',
-          width: '100%',
-          height: '100%',
-          background: 'linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.1), transparent)',
-          animation: 'securityScan 3s ease-in-out infinite'
-        }}></div>
-        
-        <div style={{display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8}}>
-          <div style={{
-            fontSize: '24px',
-            animation: 'securityPulse 2s ease-in-out infinite'
-          }}>🔒</div>
-          <h3 style={{
-            margin: 0,
-            fontSize: '16px',
-            fontWeight: 'bold',
-            background: 'linear-gradient(45deg, #22c55e, #10b981)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
-          }}>Гарантия безопасности данных</h3>
-        </div>
-        
-        <div style={{fontSize: '13px', color: 'var(--muted)', lineHeight: 1.5}}>
-          🛡️ Все данные шифруются по стандарту AES-256<br/>
-          🌐 Соответствие требованиям GDPR и 152-ФЗ<br/>
-          ✅ Данные не передаются третьим лицам
-        </div>
-      </div>
-
-      {/* Управляющий с аватаром */}
-      <div style={{display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16}}>
-        <div style={{
-          width: 60,
-          height: 60,
-          borderRadius: '50%',
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '24px',
-          border: '3px solid var(--accent)',
-          boxShadow: '0 4px 15px rgba(125, 211, 252, 0.3)',
-          animation: 'managerPulse 2s ease-in-out infinite',
-          position: 'relative'
-        }}>
-          <div style={{
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-            borderRadius: '50%',
-            border: '2px solid var(--accent)',
-            animation: 'managerRing 3s linear infinite'
-          }}></div>
-          👨‍💼
-        </div>
-        
-        <div>
-          <h2 style={{margin: '0 0 4px', fontSize: '18px'}}>🎯 AI Управляющий</h2>
-          <div style={{fontSize: '12px', color: 'var(--muted)'}}>
-            Персональный консультант по цифровизации
-          </div>
-        </div>
-      </div>
-      
-      <input 
-        placeholder="Задайте вопрос управляющему..." 
-        value={q} 
-        onChange={e => setQ(e.target.value)} 
-        onKeyPress={handleKeyPress}
-        disabled={loading}
-        style={{
-          marginBottom: 12,
-          border: '2px solid var(--accent)',
-          background: 'rgba(125, 211, 252, 0.05)'
-        }}
-      />
-      <button onClick={ask} disabled={loading || !q}>
-        {loading ? '🔄 Анализирую...' : '💬 Консультация'}
-      </button>
-      
-      <div style={{fontSize: '12px', color: 'var(--muted)', marginTop: 8}}>
-        💡 Если управляющий не отвечает, проверьте настройку API ключа в Netlify
-      </div>
-      
-      {(a || typing) && (
-        <div style={{
-          marginTop: 16, 
-          padding: 16, 
-          background: 'linear-gradient(135deg, rgba(125, 211, 252, 0.1), rgba(125, 211, 252, 0.05))', 
-          borderRadius: 12, 
-          borderLeft: '4px solid var(--accent)',
-          position: 'relative'
-        }}>
-          <div style={{display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8}}>
-            <div style={{fontSize: '16px'}}>👨‍💼</div>
-            <strong style={{color: 'var(--accent)'}}>Рекомендация управляющего:</strong>
-          </div>
-          <div style={{lineHeight: 1.6}}>{a}</div>
-          {typing && <span style={{animation: 'blink 1s infinite', color: 'var(--accent)'}}>|</span>}
-        </div>
-      )}
-      <style jsx>{`
-        @keyframes blink {
-          0%, 50% { opacity: 1; }
-          51%, 100% { opacity: 0; }
-        }
-      `}</style>
-    </div>
   );
 }
 
@@ -1004,6 +1015,7 @@ export default function HomePage() {
           <QuickQuiz />
           <BusinessShowcase />
           <Calculator />
+          <ManagerSection />
           <SmartFAQ />
           <ContactSection />
         </main>
