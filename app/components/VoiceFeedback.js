@@ -98,15 +98,27 @@ function VoiceFeedback() {
         setPhone('');
         
         // Отслеживание в аналитике
-        if (typeof window !== 'undefined' && window.gtag) {
-          window.gtag('event', 'voice_message_submit', {
-            event_category: 'engagement',
-            event_label: 'voice_form',
-            custom_parameters: {
+        if (typeof window !== 'undefined') {
+          // Google Analytics
+          if (window.gtag) {
+            window.gtag('event', 'voice_message_submit', {
+              event_category: 'engagement',
+              event_label: 'voice_form',
+              form_type: 'voice',
+              sentiment: data.analysis?.sentiment,
+              urgency: data.analysis?.urgency,
+              value: 2
+            });
+          }
+          
+          // Яндекс.Метрика
+          if (window.ym) {
+            window.ym(process.env.NEXT_PUBLIC_YANDEX_METRICA_ID, 'reachGoal', 'voice_form_submit', {
+              form_type: 'voice',
               sentiment: data.analysis?.sentiment,
               urgency: data.analysis?.urgency
-            }
-          });
+            });
+          }
         }
       } else {
         // Ошибка валидации или сервера

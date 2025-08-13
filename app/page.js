@@ -16,6 +16,10 @@ const SmartFAQ = dynamic(() => import('./components/SmartFAQ'), {
   ssr: false 
 });
 
+const AnalyticsTracker = dynamic(() => import('./components/AnalyticsTracker'), { 
+  ssr: false 
+});
+
 const PersonalizationModule = dynamic(() => import('./components/PersonalizationModule'), { 
   ssr: false 
 });
@@ -185,12 +189,14 @@ function HeroSection() {
             <button 
               className="cta-primary"
               onClick={() => scrollToSection('quiz')}
+              data-track='{"label":"hero_quiz_btn","action":"scroll_to_quiz"}'
             >
               🎯 Узнать свою выгоду за 2 минуты
             </button>
             <button 
               className="cta-secondary"
               onClick={() => scrollToSection('showcase')}
+              data-track='{"label":"hero_showcase_btn","action":"scroll_to_showcase"}'
             >
               📊 Примеры работ
             </button>
@@ -783,12 +789,26 @@ function ContactSection() {
         alert(data.message);
         setFormData({ name: '', phone: '', company: '', message: '' });
         
-        // Отслеживание в аналитике (если доступно)
-        if (typeof window !== 'undefined' && window.gtag) {
-          window.gtag('event', 'form_submit', {
-            event_category: 'engagement',
-            event_label: 'contact_form'
-          });
+        // Отслеживание в аналитике
+        if (typeof window !== 'undefined') {
+          // Google Analytics
+          if (window.gtag) {
+            window.gtag('event', 'form_submit', {
+              event_category: 'engagement',
+              event_label: 'contact_form',
+              form_type: 'contact',
+              has_company: !!formData.company,
+              value: 1
+            });
+          }
+          
+          // Яндекс.Метрика
+          if (window.ym) {
+            window.ym(process.env.NEXT_PUBLIC_YANDEX_METRICA_ID, 'reachGoal', 'contact_form_submit', {
+              form_type: 'contact',
+              has_company: !!formData.company
+            });
+          }
         }
       } else {
         // Ошибка валидации или сервера
@@ -900,7 +920,12 @@ function ContactSection() {
                 />
               </div>
               
-              <button type="submit" className="submit-btn" disabled={isSubmitting}>
+              <button 
+                type="submit" 
+                className="submit-btn" 
+                disabled={isSubmitting}
+                data-track='{"label":"contact_form_submit","action":"form_submission"}'
+              >
                 {isSubmitting ? '📤 Отправляем...' : '📞 Получить консультацию бесплатно'}
               </button>
               
@@ -1061,6 +1086,7 @@ export default function HomePage() {
         </main>
         
         <VoiceFeedback />
+        <AnalyticsTracker />
         
         {/* Админские функции скрыты в обычном режиме */}
         <div className="admin-access" style={{position: 'fixed', bottom: '10px', right: '10px', opacity: 0.1}}>
