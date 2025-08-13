@@ -758,12 +758,48 @@ function ContactSection() {
     company: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Здесь будет интеграция с CRM
-    alert('Спасибо! Мы свяжемся с вами в течение 15 минут.');
-    setFormData({ name: '', phone: '', company: '', message: '' });
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch('/.netlify/functions/contact-form', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          source: 'contact_form'
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Успешная отправка
+        alert(data.message);
+        setFormData({ name: '', phone: '', company: '', message: '' });
+        
+        // Отслеживание в аналитике (если доступно)
+        if (typeof window !== 'undefined' && window.gtag) {
+          window.gtag('event', 'form_submit', {
+            event_category: 'engagement',
+            event_label: 'contact_form'
+          });
+        }
+      } else {
+        // Ошибка валидации или сервера
+        alert(data.error || 'Произошла ошибка при отправке формы');
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      alert('Произошла ошибка при отправке. Попробуйте позже или позвоните нам напрямую.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -828,6 +864,7 @@ function ContactSection() {
                   placeholder="Ваше имя"
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  disabled={isSubmitting}
                   required
                 />
               </div>
@@ -838,6 +875,7 @@ function ContactSection() {
                   placeholder="Телефон"
                   value={formData.phone}
                   onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                  disabled={isSubmitting}
                   required
                 />
               </div>
@@ -848,6 +886,7 @@ function ContactSection() {
                   placeholder="Название компании"
                   value={formData.company}
                   onChange={(e) => setFormData({...formData, company: e.target.value})}
+                  disabled={isSubmitting}
                 />
               </div>
               
@@ -856,12 +895,13 @@ function ContactSection() {
                   placeholder="Расскажите о вашем бизнесе и задачах"
                   value={formData.message}
                   onChange={(e) => setFormData({...formData, message: e.target.value})}
+                  disabled={isSubmitting}
                   rows="4"
                 />
               </div>
               
-              <button type="submit" className="submit-btn">
-                📞 Получить консультацию бесплатно
+              <button type="submit" className="submit-btn" disabled={isSubmitting}>
+                {isSubmitting ? '📤 Отправляем...' : '📞 Получить консультацию бесплатно'}
               </button>
               
               <div className="form-note">

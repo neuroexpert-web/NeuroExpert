@@ -71,17 +71,50 @@ function VoiceFeedback() {
     setIsSubmitting(true);
     
     try {
-      // Имитация отправки данных
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      alert(`Спасибо! Ваше сообщение получено. Мы свяжемся с вами по номеру ${phone} в течение 2 часов.`);
-      
-      // Очистка формы
-      setAudioURL(null);
-      setTranscription('');
-      setPhone('');
+      // Отправка данных в Netlify Function
+      const response = await fetch('/.netlify/functions/voice-form', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          phone: phone,
+          transcription: transcription,
+          audioUrl: audioURL,
+          duration: audioURL ? Math.floor(Math.random() * 60) + 10 : 0, // Имитация длительности
+          source: 'voice_form'
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Успешная отправка
+        alert(data.message);
+        
+        // Очистка формы
+        setAudioURL(null);
+        setTranscription('');
+        setPhone('');
+        
+        // Отслеживание в аналитике
+        if (typeof window !== 'undefined' && window.gtag) {
+          window.gtag('event', 'voice_message_submit', {
+            event_category: 'engagement',
+            event_label: 'voice_form',
+            custom_parameters: {
+              sentiment: data.analysis?.sentiment,
+              urgency: data.analysis?.urgency
+            }
+          });
+        }
+      } else {
+        // Ошибка валидации или сервера
+        alert(data.error || 'Произошла ошибка при отправке голосового сообщения');
+      }
     } catch (error) {
-      alert('Ошибка отправки. Попробуйте еще раз.');
+      console.error('Voice form submission error:', error);
+      alert('Произошла ошибка при отправке. Попробуйте позже или позвоните нам напрямую.');
     } finally {
       setIsSubmitting(false);
     }
