@@ -1,9 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Experimental optimizations
-  experimental: {
-    serverActions: true,
-  },
+  // Server Actions включены по умолчанию в Next.js 14+
   
   // Настройки изображений для статики
   images: {
