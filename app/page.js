@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 
 // Динамически импортируем компоненты без SSR
@@ -61,7 +61,82 @@ const ErrorLogPanel = dynamic(() => import('./components/ErrorLogPanel'), {
   ssr: false 
 });
 
-// Главный Hero-блок согласно ТЗ
+// Навигационная шапка
+function Navigation() {
+  const [currentSection, setCurrentSection] = useState('hero');
+
+  const menuItems = [
+    { id: 'hero', label: 'Главная', icon: '🏠' },
+    { id: 'showcase', label: 'Услуги', icon: '🎯' },
+    { id: 'calculator', label: 'Калькулятор', icon: '💰' },
+    { id: 'faq', label: 'Вопросы', icon: '❓' },
+    { id: 'contact', label: 'Контакты', icon: '📞' }
+  ];
+
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      setCurrentSection(id);
+    }
+  };
+
+  return (
+    <nav className="main-navigation">
+      <div className="nav-container">
+        <div className="logo">
+          <span className="logo-icon">🧠</span>
+          <span className="logo-text">NeuroExpert</span>
+        </div>
+        
+        <div className="nav-menu">
+          {menuItems.map(item => (
+            <button
+              key={item.id}
+              className={`nav-item ${currentSection === item.id ? 'active' : ''}`}
+              onClick={() => scrollToSection(item.id)}
+            >
+              <span className="nav-icon">{item.icon}</span>
+              <span className="nav-label">{item.label}</span>
+            </button>
+          ))}
+        </div>
+        
+        <div className="nav-actions">
+          <button className="nav-phone">📞 +7 (800) 555-35-35</button>
+          <button className="nav-cta">Бесплатная консультация</button>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+// Индикатор прогресса
+function ProgressIndicator() {
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (window.scrollY / totalHeight) * 100;
+      setScrollProgress(Math.min(progress, 100));
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <div className="progress-indicator">
+      <div 
+        className="progress-bar" 
+        style={{ width: `${scrollProgress}%` }}
+      />
+    </div>
+  );
+}
+
+// Упрощенный Hero-блок
 function HeroSection() {
   const [animationEnabled, setAnimationEnabled] = useState(true);
 
@@ -73,65 +148,236 @@ function HeroSection() {
   };
 
   return (
-    <section className="hero-section">
+    <section id="hero" className="hero-section">
       <NeuralNetworkBackground animationEnabled={animationEnabled} />
       
       <div className="hero-content">
+        <div className="hero-badge">
+          🚀 #1 Платформа цифровизации в России
+        </div>
+        
         <div className="hero-text">
           <h1 className="hero-title">
-            AI NeuroExpert — платформа цифровизации бизнеса и интеграции инструментов искусственного интеллекта
+            Увеличиваем прибыль вашего бизнеса с помощью ИИ
           </h1>
           
           <p className="hero-subtitle">
-            Внедряем AI под ключ, оптимизируем процессы и ускоряем рост выручки за счет автоматизации, персонализации и данных.
+            Автоматизируем процессы, настраиваем аналитику и внедряем умные решения. 
+            Результат уже через 30 дней.
           </p>
+          
+          <div className="hero-benefits">
+            <div className="benefit-item">
+              <span className="benefit-icon">⚡</span>
+              <span>Быстрый старт за 1 неделю</span>
+            </div>
+            <div className="benefit-item">
+              <span className="benefit-icon">📈</span>
+              <span>ROI от 200% гарантированно</span>
+            </div>
+            <div className="benefit-item">
+              <span className="benefit-icon">🛡️</span>
+              <span>Поддержка 24/7</span>
+            </div>
+          </div>
           
           <div className="hero-cta">
             <button 
               className="cta-primary"
-              onClick={() => scrollToSection('showcase')}
+              onClick={() => scrollToSection('quiz')}
             >
-              📊 Посмотреть кейсы
+              🎯 Узнать свою выгоду за 2 минуты
             </button>
             <button 
               className="cta-secondary"
-              onClick={() => scrollToSection('calculator')}
+              onClick={() => scrollToSection('showcase')}
             >
-              💰 Рассчитать выгоду
+              📊 Примеры работ
             </button>
-            <button 
-              className="cta-tertiary"
-              onClick={() => scrollToSection('manager')}
-            >
-              💬 Спросить управляющего
-            </button>
+          </div>
+          
+          <div className="hero-trust">
+            <span className="trust-text">Нам доверяют:</span>
+            <div className="trust-companies">
+              <span>500+ компаний</span>
+              <span>2M+ рублей среднего ROI</span>
+              <span>98% клиентов продлевают</span>
+            </div>
           </div>
         </div>
         
         <div className="hero-controls">
-          <div className="animation-control">
-            <label className="animation-toggle">
-              <input
-                type="checkbox"
-                checked={animationEnabled}
-                onChange={(e) => setAnimationEnabled(e.target.checked)}
-              />
-              <span>🎬 Анимация</span>
-            </label>
+          <label className="animation-toggle">
+            <input
+              type="checkbox"
+              checked={animationEnabled}
+              onChange={(e) => setAnimationEnabled(e.target.checked)}
+            />
+            <span>🎬 Анимация {animationEnabled ? 'вкл' : 'выкл'}</span>
+          </label>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Быстрый опрос вместо сложного калькулятора
+function QuickQuiz() {
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answers, setAnswers] = useState({});
+  const [showResult, setShowResult] = useState(false);
+
+  const questions = [
+    {
+      id: 'business_size',
+      question: 'Какой у вас бизнес?',
+      options: [
+        { value: 'small', label: '🏪 Малый (до 10 сотрудников)', emoji: '👥' },
+        { value: 'medium', label: '🏢 Средний (10-100 сотрудников)', emoji: '👥👥' },
+        { value: 'large', label: '🏭 Крупный (100+ сотрудников)', emoji: '👥👥👥' }
+      ]
+    },
+    {
+      id: 'main_problem',
+      question: 'Главная проблема прямо сейчас?',
+      options: [
+        { value: 'leads', label: '📉 Мало клиентов', emoji: '😟' },
+        { value: 'process', label: '⚙️ Хаос в процессах', emoji: '🤯' },
+        { value: 'data', label: '📊 Нет аналитики', emoji: '🔍' },
+        { value: 'costs', label: '💸 Высокие расходы', emoji: '😰' }
+      ]
+    },
+    {
+      id: 'budget',
+      question: 'Готовы инвестировать в решение?',
+      options: [
+        { value: 'low', label: '💰 До 100 тыс. руб.', emoji: '💸' },
+        { value: 'medium', label: '💰 100-500 тыс. руб.', emoji: '💰' },
+        { value: 'high', label: '💰 500+ тыс. руб.', emoji: '💎' }
+      ]
+    }
+  ];
+
+  const handleAnswer = (value) => {
+    const newAnswers = { ...answers, [questions[currentQuestion].id]: value };
+    setAnswers(newAnswers);
+    
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+    } else {
+      setShowResult(true);
+    }
+  };
+
+  const calculateROI = () => {
+    const baseROI = {
+      small: { min: 200, max: 400 },
+      medium: { min: 300, max: 600 },
+      large: { min: 500, max: 1200 }
+    };
+    
+    const size = answers.business_size || 'small';
+    const roi = baseROI[size];
+    
+    return {
+      min: roi.min,
+      max: roi.max,
+      avgMonthly: Math.round((roi.min + roi.max) / 2 * 1000),
+      payback: size === 'small' ? 3 : size === 'medium' ? 6 : 9
+    };
+  };
+
+  if (showResult) {
+    const result = calculateROI();
+    return (
+      <section id="quiz" className="quiz-section">
+        <div className="container">
+          <div className="quiz-result">
+            <h2>🎉 Ваш потенциал роста:</h2>
+            
+            <div className="result-cards">
+              <div className="result-card main">
+                <h3>💰 Дополнительная прибыль</h3>
+                <div className="big-number">{result.avgMonthly.toLocaleString()} ₽/мес</div>
+              </div>
+              
+              <div className="result-card">
+                <h4>📈 ROI</h4>
+                <div className="number">{result.min}-{result.max}%</div>
+              </div>
+              
+              <div className="result-card">
+                <h4>⏱ Окупаемость</h4>
+                <div className="number">{result.payback} мес.</div>
+              </div>
+            </div>
+            
+            <div className="result-actions">
+              <button className="cta-primary large">
+                📞 Получить подробный план бесплатно
+              </button>
+              <button className="cta-secondary" onClick={() => setShowResult(false)}>
+                🔄 Пройти заново
+              </button>
+            </div>
+            
+            <div className="next-steps">
+              <h3>📋 Что дальше?</h3>
+              <div className="steps">
+                <div className="step">
+                  <span className="step-number">1</span>
+                  <span>Бесплатная консультация 30 мин</span>
+                </div>
+                <div className="step">
+                  <span className="step-number">2</span>
+                  <span>Экспресс-аудит вашего бизнеса</span>
+                </div>
+                <div className="step">
+                  <span className="step-number">3</span>
+                  <span>Персональный план внедрения</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  const currentQ = questions[currentQuestion];
+  
+  return (
+    <section id="quiz" className="quiz-section">
+      <div className="container">
+        <div className="quiz-container">
+          <div className="quiz-progress">
+            <div className="progress-steps">
+              {questions.map((_, index) => (
+                <div 
+                  key={index}
+                  className={`step ${index <= currentQuestion ? 'active' : ''}`}
+                />
+              ))}
+            </div>
+            <span className="progress-text">
+              Вопрос {currentQuestion + 1} из {questions.length}
+            </span>
           </div>
           
-          <div className="trust-indicators">
-            <div className="kpi-item">
-              <span className="kpi-value">200-1200%</span>
-              <span className="kpi-label">ROI</span>
-            </div>
-            <div className="kpi-item">
-              <span className="kpi-value">95%</span>
-              <span className="kpi-label">SLA</span>
-            </div>
-            <div className="kpi-item">
-              <span className="kpi-value">4.8/5</span>
-              <span className="kpi-label">NPS</span>
+          <div className="quiz-content">
+            <h2>{currentQ.question}</h2>
+            
+            <div className="quiz-options">
+              {currentQ.options.map((option, index) => (
+                <button
+                  key={option.value}
+                  className="quiz-option"
+                  onClick={() => handleAnswer(option.value)}
+                >
+                  <span className="option-emoji">{option.emoji}</span>
+                  <span className="option-text">{option.label}</span>
+                </button>
+              ))}
             </div>
           </div>
         </div>
@@ -308,6 +554,131 @@ function Calculator() {
               </div>
             </div>
           )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Секция контактов
+function ContactSection() {
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    company: '',
+    message: ''
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Здесь будет интеграция с CRM
+    alert('Спасибо! Мы свяжемся с вами в течение 15 минут.');
+    setFormData({ name: '', phone: '', company: '', message: '' });
+  };
+
+  return (
+    <section id="contact" className="contact-section">
+      <div className="container">
+        <div className="contact-content">
+          <div className="contact-info">
+            <h2>📞 Получите бесплатную консультацию</h2>
+            <p>
+              Обсудим ваш бизнес, проанализируем возможности роста 
+              и составим персональный план внедрения ИИ.
+            </p>
+            
+            <div className="contact-features">
+              <div className="feature">
+                <span className="feature-icon">⚡</span>
+                <div>
+                  <h4>Быстро</h4>
+                  <p>Перезвоним в течение 15 минут</p>
+                </div>
+              </div>
+              <div className="feature">
+                <span className="feature-icon">🎯</span>
+                <div>
+                  <h4>Персонально</h4>
+                  <p>Решения под ваш бизнес</p>
+                </div>
+              </div>
+              <div className="feature">
+                <span className="feature-icon">💰</span>
+                <div>
+                  <h4>Бесплатно</h4>
+                  <p>Консультация ничего не стоит</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="contact-methods">
+              <a href="tel:+78005553535" className="contact-method">
+                <span className="method-icon">📞</span>
+                <div>
+                  <div className="method-title">Позвонить сейчас</div>
+                  <div className="method-value">+7 (800) 555-35-35</div>
+                </div>
+              </a>
+              
+              <a href="mailto:hello@neuroexpert.ru" className="contact-method">
+                <span className="method-icon">📧</span>
+                <div>
+                  <div className="method-title">Написать email</div>
+                  <div className="method-value">hello@neuroexpert.ru</div>
+                </div>
+              </a>
+            </div>
+          </div>
+          
+          <div className="contact-form">
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <input
+                  type="text"
+                  placeholder="Ваше имя"
+                  value={formData.name}
+                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  required
+                />
+              </div>
+              
+              <div className="form-group">
+                <input
+                  type="tel"
+                  placeholder="Телефон"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                  required
+                />
+              </div>
+              
+              <div className="form-group">
+                <input
+                  type="text"
+                  placeholder="Название компании"
+                  value={formData.company}
+                  onChange={(e) => setFormData({...formData, company: e.target.value})}
+                />
+              </div>
+              
+              <div className="form-group">
+                <textarea
+                  placeholder="Расскажите о вашем бизнесе и задачах"
+                  value={formData.message}
+                  onChange={(e) => setFormData({...formData, message: e.target.value})}
+                  rows="4"
+                />
+              </div>
+              
+              <button type="submit" className="submit-btn">
+                📞 Получить консультацию бесплатно
+              </button>
+              
+              <div className="form-note">
+                Нажимая кнопку, вы соглашаетесь с обработкой персональных данных
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </section>
@@ -625,23 +996,24 @@ export default function HomePage() {
   if (activeTab === 'main') {
     return (
       <div className="app">
+        <Navigation />
+        <ProgressIndicator />
         <HeroSection />
         
         <main className="main-content">
+          <QuickQuiz />
           <BusinessShowcase />
           <Calculator />
           <SmartFAQ />
-          <PersonalizationModule />
-          <LearningPlatform />
+          <ContactSection />
         </main>
         
         <VoiceFeedback />
         
-        <nav className="admin-nav">
-          <button onClick={() => setActiveTab('admin')}>⚙️ Админка</button>
-          <button onClick={() => setActiveTab('analytics')}>📊 Аналитика</button>
-          <button onClick={() => setActiveTab('testing')}>🧪 Тестирование</button>
-        </nav>
+        {/* Админские функции скрыты в обычном режиме */}
+        <div className="admin-access" style={{position: 'fixed', bottom: '10px', right: '10px', opacity: 0.1}}>
+          <button onClick={() => setActiveTab('admin')} title="Админка">⚙️</button>
+        </div>
       </div>
     );
   }
