@@ -204,17 +204,20 @@ function analyzeVoiceMessage(voiceData) {
 
 // Функция отправки уведомлений о голосовом сообщении
 async function sendVoiceNotification(voiceLead) {
-  // В production здесь будет:
-  // - Email с аудио файлом
-  // - Telegram уведомление с транскрипцией
-  // - CRM создание задачи с высоким приоритетом
-  
   console.log(`🔊 Voice Notification: New ${voiceLead.priority} priority voice message (${voiceLead.voice.duration}s)`);
   console.log(`📝 Transcription: "${voiceLead.voice.transcription}"`);
   console.log(`😊 Sentiment: ${voiceLead.voice.sentiment}, Urgency: ${voiceLead.voice.urgency}`);
   
-  // Имитация задержки отправки
-  await new Promise(resolve => setTimeout(resolve, 800));
+  // Отправка в Telegram если настроен
+  try {
+    await sendTelegramVoiceNotification(voiceLead);
+  } catch (error) {
+    console.error('Telegram voice notification failed:', error);
+  }
+  
+  // В production здесь также будет:
+  // - Email с аудио файлом
+  // - CRM создание задачи с высоким приоритетом
 }
 
 // Функция генерации автоответа для голосовой формы
@@ -245,4 +248,74 @@ function generateVoiceAutoResponse(voiceData, analysis) {
   }
 
   return { message, expectedCallTime };
+}
+
+// Функция отправки голосового уведомления в Telegram
+async function sendTelegramVoiceNotification(voiceLead) {
+  const botToken = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+  
+  if (!botToken || !chatId) {
+    console.log('Telegram not configured - skipping voice notification');
+    return;
+  }
+  
+  // Форматирование приоритета и настроения
+  const priorityEmoji = {
+    'high': '🔴 ВЫСОКИЙ',
+    'medium': '🟡 СРЕДНИЙ', 
+    'low': '🟢 НИЗКИЙ'
+  };
+  
+  const sentimentEmoji = {
+    'positive': '😊 Позитивное',
+    'negative': '😠 Негативное',
+    'neutral': '😐 Нейтральное'
+  };
+  
+  const urgencyEmoji = {
+    'high': '⚡ Срочно',
+    'normal': '⏰ Обычное'
+  };
+  
+  // Создание сообщения
+  const message = `🎤 ГОЛОСОВОЕ СООБЩЕНИЕ - ${priorityEmoji[voiceLead.priority]} ПРИОРИТЕТ
+
+📞 Телефон: ${voiceLead.contact.phone}
+⏱️ Длительность: ${voiceLead.voice.duration}с
+📝 Расшифровка: "${voiceLead.voice.transcription}"
+
+🎯 Приоритет: ${voiceLead.priority.toUpperCase()}
+${sentimentEmoji[voiceLead.voice.sentiment]}
+${urgencyEmoji[voiceLead.voice.urgency]}
+${voiceLead.voice.keywords.length > 0 ? `🏷️ Ключевые слова: ${voiceLead.voice.keywords.join(', ')}` : ''}
+
+⏰ Перезвонить: ${generateVoiceAutoResponse({phone: voiceLead.contact.phone}, {priority: voiceLead.priority, urgency: voiceLead.voice.urgency}).expectedCallTime}
+🔗 ID заявки: ${voiceLead.id}
+
+📊 Источник: ${voiceLead.source}
+🌐 IP: ${voiceLead.metadata.ip || 'Unknown'}
+🕐 Время: ${new Date(voiceLead.timestamp).toLocaleString('ru-RU')}`;
+
+  // Отправка в Telegram
+  const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+  
+  const response = await fetch(telegramUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      chat_id: chatId,
+      text: message,
+      parse_mode: 'HTML'
+    }),
+  });
+  
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`Telegram API error: ${error}`);
+  }
+  
+  console.log('✅ Telegram voice notification sent successfully');
 }

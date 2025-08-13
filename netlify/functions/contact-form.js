@@ -163,15 +163,19 @@ function calculateLeadPriority(formData) {
 
 // Функция отправки уведомлений команде
 async function sendNotification(lead) {
-  // В production здесь будет:
-  // - Email уведомление менеджеру
-  // - Telegram/Slack уведомление
-  // - Push уведомление в CRM
-  
   console.log(`🔔 Notification: New ${lead.priority} priority lead from ${lead.contact.name}`);
   
-  // Имитация задержки отправки
-  await new Promise(resolve => setTimeout(resolve, 500));
+  // Отправка в Telegram если настроен
+  try {
+    await sendTelegramNotification(lead);
+  } catch (error) {
+    console.error('Telegram notification failed:', error);
+  }
+  
+  // В production здесь также будет:
+  // - Email уведомление менеджеру
+  // - Slack уведомление
+  // - Push уведомление в CRM
 }
 
 // Функция генерации автоответа
@@ -195,4 +199,59 @@ function generateAutoResponse(formData) {
   }
   
   return { message, expectedCallTime };
+}
+
+// Функция отправки уведомления в Telegram
+async function sendTelegramNotification(lead) {
+  const botToken = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+  
+  if (!botToken || !chatId) {
+    console.log('Telegram not configured - skipping notification');
+    return;
+  }
+  
+  // Форматирование приоритета
+  const priorityEmoji = {
+    'high': '🔴 ВЫСОКИЙ',
+    'medium': '🟡 СРЕДНИЙ', 
+    'low': '🟢 НИЗКИЙ'
+  };
+  
+  // Создание сообщения
+  const message = `🆕 НОВАЯ ЗАЯВКА - ${priorityEmoji[lead.priority]} ПРИОРИТЕТ
+
+👤 Клиент: ${lead.contact.name}
+📞 Телефон: ${lead.contact.phone}${lead.contact.company ? `\n🏢 Компания: ${lead.contact.company}` : ''}
+📝 Сообщение: ${lead.message || 'Не указано'}
+
+🎯 Приоритет: ${lead.priority.toUpperCase()}
+⏰ Перезвонить: ${generateAutoResponse({name: lead.contact.name, phone: lead.contact.phone, company: lead.contact.company}).expectedCallTime}
+🔗 ID заявки: ${lead.id}
+
+📊 Источник: ${lead.source}
+🌐 IP: ${lead.metadata.ip || 'Unknown'}
+🕐 Время: ${new Date(lead.timestamp).toLocaleString('ru-RU')}`;
+
+  // Отправка в Telegram
+  const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+  
+  const response = await fetch(telegramUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      chat_id: chatId,
+      text: message,
+      parse_mode: 'HTML'
+    }),
+  });
+  
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`Telegram API error: ${error}`);
+  }
+  
+  console.log('✅ Telegram notification sent successfully');
 }
