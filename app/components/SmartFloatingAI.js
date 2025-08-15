@@ -81,7 +81,7 @@ export default function SmartFloatingAI() {
       if (!response.ok) throw new Error('API Error');
 
       const data = await response.json();
-      const responseTime = Date.now() - startTime;
+      const responseTime = data.responseTime || (Date.now() - startTime);
       
       // Обновляем статистику
       setStats(prev => ({
@@ -92,38 +92,34 @@ export default function SmartFloatingAI() {
       
       setIsLoading(false);
       
-      // Добавляем префикс модели к ответу для демонстрации
-      const modelPrefix = selectedModel === 'claude' 
-        ? '[Claude Opus 4]: ' 
-        : '[Gemini Pro]: ';
+      // Используем ответ от API без дополнительных префиксов
+      const answer = data.answer || 'Извините, произошла ошибка. Попробуйте еще раз.';
       
-      typewriterEffect(modelPrefix + (data.answer || 'Извините, произошла ошибка. Попробуйте еще раз.'), selectedModel);
+      typewriterEffect(answer, data.model || selectedModel);
 
       // Отправляем аналитику
       if (typeof window !== 'undefined' && window.gtag) {
         window.gtag('event', 'ai_chat_message', {
           event_category: 'engagement',
-          event_label: selectedModel,
+          event_label: data.model || selectedModel,
           response_time: responseTime
         });
       }
 
-      // Telegram уведомление о активности
-      if (stats.totalQuestions % 5 === 0) { // Каждые 5 вопросов
-        fetch('/.netlify/functions/telegram-notify', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            type: 'ai_chat',
-            data: {
-              question: userMessage,
-              answer: data.answer?.substring(0, 200),
-              dialogLength: messages.length,
-              model: selectedModel
-            }
-          })
-        }).catch(console.error);
-      }
+      // Сохраняем историю чата в localStorage
+      const chatHistory = {
+        timestamp: new Date().toISOString(),
+        question: userMessage,
+        answer: answer,
+        model: data.model || selectedModel,
+        responseTime: responseTime
+      };
+      
+      const history = JSON.parse(localStorage.getItem('chatHistory') || '[]');
+      history.push(chatHistory);
+      // Храним только последние 50 сообщений
+      if (history.length > 50) history.shift();
+      localStorage.setItem('chatHistory', JSON.stringify(history));
 
     } catch (error) {
       console.error('Error:', error);
