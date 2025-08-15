@@ -3,6 +3,35 @@
 /* Импорт шрифтов */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
+/* Оптимизация производительности */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Предотвращение дёрганий */
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+  overscroll-behavior: none;
+}
+
+/* Оптимизация для мобильных */
+@media (max-width: 768px) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: pan-y;
+  }
+  
+  body {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 /* CSS переменные */
 :root {
   /* Основные цвета */
@@ -96,11 +125,32 @@ body::before {
 
 /* Контейнеры */
 .container {
-  max-width: 1400px;
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 1.5rem;
   position: relative;
-  z-index: 1;
+}
+
+/* Стабилизация секций */
+section {
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Предотвращение layout shift */
+img, video, iframe {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Стабилизация текста */
+p, h1, h2, h3, h4, h5, h6 {
+  transform: translateZ(0);
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Загрузчик */
@@ -834,21 +884,25 @@ h3 {
 
 /* Улучшенные кнопки с анимацией ряби */
 .btn {
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: var(--transition);
-  border: none;
-  outline: none;
+  transition: all var(--transition-base);
   position: relative;
   overflow: hidden;
   text-decoration: none;
+  white-space: nowrap;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .btn::before {
@@ -2630,5 +2684,58 @@ h3 {
   
   .pricing-card .features {
     font-size: 0.875rem;
+  }
+}
+
+/* Карточки с эффектом стекла */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Мобильная оптимизация против дёрганий */
+@media (max-width: 768px) {
+  /* Отключаем сложные анимации на мобильных */
+  * {
+    animation-duration: 0.3s !important;
+    animation-delay: 0s !important;
+  }
+  
+  /* Упрощаем переходы */
+  .btn, .card, .feature-card, .pricing-card {
+    transition: opacity 0.2s ease !important;
+  }
+  
+  /* Стабилизация скролла */
+  html, body {
+    scroll-behavior: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Предотвращение прыжков при загрузке шрифтов */
+  body {
+    font-display: swap;
+  }
+  
+  /* Фиксируем высоту элементов */
+  .hero-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Отключаем hover эффекты на тач устройствах */
+  @media (hover: none) {
+    .btn:hover, .card:hover {
+      transform: none !important;
+    }
   }
 }
