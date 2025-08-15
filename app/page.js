@@ -1,4 +1,5 @@
 'use client';
+// Version: 2.0 - Updated with new design and features
 import { useState, useEffect, Suspense } from 'react';
 import dynamic from 'next/dynamic';
 
