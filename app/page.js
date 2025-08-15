@@ -679,6 +679,21 @@ function FeatureCard({ icon, title, description, features }) {
 
 // Компонент карточки тарифа
 function PricingCard({ name, price, period, features, isPopular }) {
+  const handleClick = () => {
+    const contact = document.getElementById('contact');
+    if (contact) {
+      contact.scrollIntoView({ behavior: 'smooth' });
+      // Добавляем информацию о выбранном тарифе в форму
+      setTimeout(() => {
+        const messageField = document.querySelector('textarea[name="message"]');
+        if (messageField) {
+          messageField.value = `Интересует тариф "${name}" (${price}₽/${period})`;
+          messageField.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      }, 500);
+    }
+  };
+
   return (
     <div className={`pricing-card ${isPopular ? 'popular' : ''}`}>
       {isPopular && <div className="popular-badge">Популярный</div>}
@@ -696,8 +711,8 @@ function PricingCard({ name, price, period, features, isPopular }) {
           </li>
         ))}
       </ul>
-      <button className="pricing-button">
-        {price === "По запросу" ? "Связаться" : "Выбрать тариф"}
+      <button className="pricing-button" onClick={handleClick}>
+        {price.includes("От") ? "Обсудить проект" : "Выбрать тариф"}
       </button>
     </div>
   );

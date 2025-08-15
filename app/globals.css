@@ -2916,3 +2916,37 @@ h3 {
     gap: 1rem;
   }
 }
+
+/* Глобальные стили для кнопок */
+button {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Улучшаем стили для pricing-button */
+.pricing-button {
+  cursor: pointer;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.pricing-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+}
+
+.pricing-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2);
+}
