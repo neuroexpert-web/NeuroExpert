@@ -46,6 +46,11 @@ const OnboardingTour = dynamic(
   { ssr: false }
 );
 
+const AnimatedLogo = dynamic(
+  () => import('./components/AnimatedLogo'),
+  { ssr: false }
+);
+
 // Компонент загрузки
 const LoadingSpinner = () => (
   <div className="loading-spinner">
@@ -85,9 +90,12 @@ export default function HomePage() {
       {/* Навигация */}
       <nav className="main-nav">
         <div className="nav-container">
-          <div className="logo">
+          <div className="logo animated-nav-logo">
             <span className="logo-icon">🧠</span>
-            <span className="logo-text">NeuroExpert</span>
+            <span className="logo-text">
+              <span className="logo-neuro">Neuro</span>
+              <span className="logo-expert">Expert</span>
+            </span>
           </div>
           
           <div className="nav-links">
@@ -108,11 +116,8 @@ export default function HomePage() {
             <span className="badge badge-warning">🚀 Стартап • Начинаем вместе</span>
           </div>
           
-          <h1 className="hero-title">
-            <span className="gradient-text">NeuroExpert</span>
-            <br />
-            <span className="hero-subtitle">Платформа AI-ассистентов нового поколения</span>
-          </h1>
+          {/* Анимированный логотип вместо обычного заголовка */}
+          <AnimatedLogo />
           
           <p className="hero-description">
             Мы только начинаем, но уже готовы предложить вам передовые технологии:<br/>

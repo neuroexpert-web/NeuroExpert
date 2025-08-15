@@ -2264,3 +2264,146 @@ h3 {
     grid-template-columns: 1fr;
   }
 }
+
+/* Анимированный логотип в навигации */
+.animated-nav-logo {
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.animated-nav-logo:hover {
+  transform: scale(1.05);
+}
+
+.logo-icon {
+  font-size: 2rem;
+  margin-right: 0.75rem;
+  display: inline-block;
+  animation: brainPulse 2s ease-in-out infinite;
+}
+
+@keyframes brainPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.1);
+    filter: brightness(1.2) drop-shadow(0 0 20px #6366f1);
+  }
+}
+
+.logo-text {
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.logo-neuro {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+.logo-expert {
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+.logo-neuro::after,
+.logo-expert::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: inherit;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.animated-nav-logo:hover .logo-neuro::after,
+.animated-nav-logo:hover .logo-expert::after {
+  transform: scaleX(1);
+}
+
+/* Эффект свечения при наведении */
+.animated-nav-logo:hover .logo-icon {
+  animation: brainGlow 0.5s ease;
+}
+
+@keyframes brainGlow {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.2) rotate(10deg);
+    filter: brightness(1.5) drop-shadow(0 0 30px #6366f1);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Дополнительный эффект для hero секции */
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-content::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.1), transparent 70%);
+  pointer-events: none;
+  animation: heroGlow 8s ease-in-out infinite;
+}
+
+@keyframes heroGlow {
+  0%, 100% {
+    opacity: 0.5;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateX(-50%) scale(1.1);
+  }
+}
+
+/* Адаптивность для логотипа */
+@media (max-width: 768px) {
+  .logo-icon {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+  }
+  
+  .logo-text {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .animated-nav-logo {
+    transform: none;
+  }
+  
+  .logo-neuro::after,
+  .logo-expert::after {
+    display: none;
+  }
+}
