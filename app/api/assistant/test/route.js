@@ -6,6 +6,7 @@ export async function GET() {
     apiKeyPresent: !!process.env.GOOGLE_GEMINI_API_KEY,
     apiKeyLength: process.env.GOOGLE_GEMINI_API_KEY?.length || 0,
     nodeEnv: process.env.NODE_ENV,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    message: 'API test endpoint is working'
   });
 }

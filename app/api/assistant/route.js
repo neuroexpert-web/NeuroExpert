@@ -126,8 +126,18 @@ export async function POST(request) {
 
     try {
       if (!process.env.GOOGLE_GEMINI_API_KEY) {
-        console.error('GOOGLE_GEMINI_API_KEY not set');
-        answer = 'AI-ассистент временно недоступен. Пожалуйста, позвоните нам по телефону +7 (904) 047-63-83 или напишите на aineuroexpert@gmail.com';
+        console.error('GOOGLE_GEMINI_API_KEY not set - using demo mode');
+        // Demo режим для тестирования
+        const demoResponses = {
+          'сколько стоит': 'Наши тарифы начинаются от 39,900₽/месяц для небольших проектов. Тариф "Бизнес" стоит 89,900₽/месяц и включает создание интернет-магазина или корпоративного сайта с AI-ассистентом. Для крупных проектов (SaaS платформы, маркетплейсы) - от 199,900₽/месяц.',
+          'что умеете': 'Мы создаем: интернет-магазины с AI-консультантами, мобильные приложения с встроенным ассистентом, корпоративные сайты с AI-отделом продаж, образовательные платформы с персональным AI-преподавателем, SaaS решения. Все проекты включают обученного под ваш бизнес AI-специалиста.',
+          'сроки': 'Запуск проекта занимает 2-4 недели в зависимости от сложности. Landing page - 2 недели, интернет-магазин - 3 недели, мобильное приложение - 4 недели.',
+          'default': 'Я AI-ассистент NeuroExpert. Мы создаем сайты, приложения и интернет-магазины с встроенными AI-специалистами. Хотите узнать подробнее о наших услугах?'
+        };
+        
+        const lowerQuestion = question.toLowerCase();
+        answer = demoResponses[Object.keys(demoResponses).find(key => lowerQuestion.includes(key))] || demoResponses.default;
+        
       } else if (model === 'gemini') {
         const geminiModel = genAI.getGenerativeModel({ model: "gemini-pro" });
         
