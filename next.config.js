@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+// Note: 'target' property removed as it's deprecated in Next.js 12+
+// Netlify automatically detects and optimizes for serverless deployment
 const nextConfig = {
   // Оптимизация производительности
   reactStrictMode: true,
@@ -68,9 +70,6 @@ const nextConfig = {
       },
     ];
   },
-  
-  // Оптимизация для Netlify
-  target: 'serverless',
   
   // Webpack оптимизации
   webpack: (config, { isServer }) => {
