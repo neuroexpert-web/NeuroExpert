@@ -8,6 +8,12 @@ function NeuralNetworkBackground({ animationEnabled = true }) {
   const [webglSupported, setWebglSupported] = useState(true);
   const [nodeCount, setNodeCount] = useState(100);
   const [connectionStrength, setConnectionStrength] = useState(0.7);
+  const [isClient, setIsClient] = useState(false);
+
+  // Проверяем, что мы на клиенте
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // WebGL шейдеры для красивых эффектов
   const vertexShaderSource = `
@@ -366,16 +372,41 @@ function NeuralNetworkBackground({ animationEnabled = true }) {
   }
 
   useEffect(() => {
+    // Проверяем, что мы на клиенте и canvas доступен
+    if (!isClient || !canvasRef.current) return;
+    
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    
+    // Безопасная проверка WebGL
+    let gl;
+    try {
+      gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) {
+        setWebglSupported(false);
+        // Используем fallback на Canvas 2D
+        initCanvas2DFallback();
+        return;
+      }
+    } catch (e) {
+      console.warn('WebGL не поддерживается:', e);
+      setWebglSupported(false);
+      initCanvas2DFallback();
+      return;
+    }
 
-    const resizeCanvas = () => {
+    // Функция изменения размера
+    const handleResize = () => {
+      if (!canvas || !gl) return;
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      gl.viewport(0, 0, canvas.width, canvas.height);
     };
 
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    // Безопасное добавление слушателя
+    if (typeof window !== 'undefined') {
+      handleResize();
+      window.addEventListener('resize', handleResize);
+    }
 
     // Пробуем WebGL, иначе Canvas 2D
     const webgl = initWebGL();
@@ -385,19 +416,74 @@ function NeuralNetworkBackground({ animationEnabled = true }) {
       animate2D();
     }
 
+    // Очистка
     return () => {
-      window.removeEventListener('resize', resizeCanvas);
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', handleResize);
+      }
     };
-  }, [nodeCount, connectionStrength, webglSupported, animationEnabled]);
+  }, [animationEnabled, nodeCount, connectionStrength, isClient]);
+
+  // Canvas 2D fallback для случаев когда WebGL не поддерживается
+  const initCanvas2DFallback = () => {
+    if (!canvasRef.current) return;
+    
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Простая анимация для fallback
+    const animate = () => {
+      if (!canvas || !ctx) return;
+      
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Рисуем простые линии и точки
+      ctx.strokeStyle = 'rgba(77, 216, 255, 0.2)';
+      ctx.fillStyle = 'rgba(77, 216, 255, 0.8)';
+      
+      // Простая сетка
+      for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+          const x = (canvas.width / 10) * i + 50;
+          const y = (canvas.height / 10) * j + 50;
+          
+          ctx.beginPath();
+          ctx.arc(x, y, 3, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      
+      if (animationEnabled) {
+        animationRef.current = requestAnimationFrame(animate);
+      }
+    };
+    
+    animate();
+  };
+
+  // Рендерим canvas только на клиенте
+  if (!isClient) {
+    return <div className="neural-network-bg-placeholder" />;
+  }
 
   return (
-    <>
-      <canvas
+    <div className="neural-network-container">
+      <canvas 
         ref={canvasRef}
-        className="neural-background"
+        className="neural-network-canvas"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: -1,
+          opacity: animationEnabled ? 1 : 0.3
+        }}
       />
       
       {/* Контролы для настройки */}
@@ -533,7 +619,7 @@ function NeuralNetworkBackground({ animationEnabled = true }) {
           }
         }
       `}</style>
-    </>
+    </div>
   );
 }
 
