@@ -103,160 +103,267 @@ export default function HomePage() {
       {/* Главный экран */}
       <section className="hero-section">
         <div className="hero-content">
-          {/* Простой и понятный заголовок */}
+          {/* Честное позиционирование */}
           <div className="hero-badge">
-            <span className="badge badge-primary">🚀 Новинка 2024</span>
+            <span className="badge badge-warning">🚀 Стартап • Начинаем вместе</span>
           </div>
           
           <h1 className="hero-title">
-            <span className="gradient-text">Увеличьте продажи на 40%</span>
+            <span className="gradient-text">NeuroExpert</span>
             <br />
-            <span className="hero-subtitle">с помощью искусственного интеллекта</span>
+            <span className="hero-subtitle">Платформа AI-ассистентов нового поколения</span>
           </h1>
           
           <p className="hero-description">
-            Мы поможем автоматизировать рутинные задачи, найти новых клиентов 
-            и увеличить прибыль вашего бизнеса. Без сложностей, просто и эффективно.
+            Мы только начинаем, но уже готовы предложить вам передовые технологии:<br/>
+            <strong>персональные AI-эксперты</strong> прямо на вашем сайте или в приложении,<br/>
+            которые заменят дорогие CRM-системы и целые отделы поддержки.
           </p>
           
-          {/* Четкие действия */}
+          {/* Честные преимущества */}
+          <div className="hero-features">
+            <div className="hero-feature">
+              <span className="feature-emoji">💰</span>
+              <span className="feature-text">Экономия до 80% на CRM</span>
+            </div>
+            <div className="hero-feature">
+              <span className="feature-emoji">🤖</span>
+              <span className="feature-text">AI-ассистент 24/7</span>
+            </div>
+            <div className="hero-feature">
+              <span className="feature-emoji">🚀</span>
+              <span className="feature-text">Внедрение за 3 дня</span>
+            </div>
+          </div>
+          
+          {/* Призыв к действию */}
           <div className="hero-actions">
             <button 
               className="btn btn-primary btn-large"
-              onClick={() => {
-                const calc = document.getElementById('calculator');
-                calc?.scrollIntoView({ behavior: 'smooth' });
-              }}
+              onClick={() => setShowAI(true)}
             >
-              <span>💰</span>
-              Рассчитать мою выгоду
+              <span>💬</span>
+              Попробовать AI-ассистента
             </button>
             
             <button 
               className="btn btn-secondary btn-large"
-              onClick={() => setShowAI(true)}
+              onClick={() => {
+                const demo = document.getElementById('live-demo');
+                demo?.scrollIntoView({ behavior: 'smooth' });
+              }}
             >
-              <span>💬</span>
-              Получить консультацию
+              <span>👀</span>
+              Посмотреть демо
             </button>
           </div>
           
-          {/* Социальное доказательство */}
-          <div className="hero-trust">
-            <div className="trust-item">
-              <span className="trust-number">500+</span>
-              <span className="trust-label">компаний уже с нами</span>
-            </div>
-            <div className="trust-divider">•</div>
-            <div className="trust-item">
-              <span className="trust-number">4.9</span>
-              <span className="trust-label">рейтинг клиентов</span>
-            </div>
-            <div className="trust-divider">•</div>
-            <div className="trust-item">
-              <span className="trust-number">24/7</span>
-              <span className="trust-label">поддержка</span>
-            </div>
+          {/* Честное обещание */}
+          <div className="hero-promise">
+            <p className="promise-text">
+              <span className="promise-icon">🤝</span>
+              Мы молодая команда, которая верит в силу AI. 
+              Станьте одним из первых клиентов и получите <strong>особые условия</strong>.
+            </p>
           </div>
         </div>
         
-        {/* Визуальная демонстрация */}
+        {/* Демо технологии */}
         <div className="hero-visual">
-          <div className="demo-preview">
-            <div className="demo-screen">
-              <div className="demo-header">
-                <span>📊 Ваша прибыль через 6 месяцев</span>
+          <div className="tech-showcase">
+            <div className="showcase-header">
+              <span className="live-indicator"></span>
+              AI-ассистент в действии
+            </div>
+            <div className="showcase-chat">
+              <div className="chat-message user">
+                <span>Сколько стоит ваша CRM?</span>
               </div>
-              <div className="demo-chart">
-                <div className="chart-bar" style={{height: '40%'}}>До</div>
-                <div className="chart-bar chart-bar-success" style={{height: '80%'}}>После</div>
+              <div className="chat-message ai">
+                <span>Вам не нужна отдельная CRM! Наш AI-ассистент:</span>
+                <ul>
+                  <li>• Запоминает всех клиентов</li>
+                  <li>• Ведет историю общения</li>
+                  <li>• Анализирует и сегментирует базу</li>
+                  <li>• Стоит в 10 раз дешевле</li>
+                </ul>
               </div>
-              <div className="demo-result">
-                <span className="result-label">Рост:</span>
-                <span className="result-value">+40%</span>
-              </div>
+            </div>
+            <div className="showcase-footer">
+              Работает на Gemini Pro и Claude AI
             </div>
           </div>
         </div>
       </section>
 
-      {/* Секция "Как это работает" - новая */}
-      <section className="how-it-works">
+      {/* Секция "Почему мы?" - новая */}
+      <section className="why-us-section">
         <div className="container">
-          <h2 className="section-title">Как это работает?</h2>
-          <p className="section-subtitle">Всего 3 простых шага к успеху</p>
+          <h2 className="section-title">Почему выбрать стартап?</h2>
+          <p className="section-subtitle">
+            Мы не корпорация с раздутыми ценами. Мы - энтузиасты AI.
+          </p>
           
-          <div className="steps-grid">
-            <div className="step-card">
-              <div className="step-number">1</div>
-              <div className="step-icon">📊</div>
-              <h3>Анализируем ваш бизнес</h3>
-              <p>Рассказываете о вашей компании, мы находим точки роста</p>
+          <div className="advantages-grid">
+            <div className="advantage-card">
+              <div className="advantage-icon">💸</div>
+              <h3>Честные цены</h3>
+              <p>Без наценок за бренд. Платите только за технологию.</p>
+              <div className="price-comparison">
+                <div className="price-item">
+                  <span className="price-label">Обычная CRM:</span>
+                  <span className="price-value old">50 000₽/мес</span>
+                </div>
+                <div className="price-item">
+                  <span className="price-label">Наш AI:</span>
+                  <span className="price-value new">5 000₽/мес</span>
+                </div>
+              </div>
             </div>
             
-            <div className="step-card">
-              <div className="step-number">2</div>
-              <div className="step-icon">🤖</div>
-              <h3>Внедряем AI-решения</h3>
-              <p>Автоматизируем продажи, маркетинг и работу с клиентами</p>
+            <div className="advantage-card">
+              <div className="advantage-icon">🧠</div>
+              <h3>Новейшие технологии</h3>
+              <p>Используем самые передовые AI-модели без ограничений.</p>
+              <div className="tech-stack">
+                <span className="tech-badge">GPT-4</span>
+                <span className="tech-badge">Claude 3</span>
+                <span className="tech-badge">Gemini Pro</span>
+              </div>
             </div>
             
-            <div className="step-card">
-              <div className="step-number">3</div>
-              <div className="step-icon">💰</div>
-              <h3>Получаете результат</h3>
-              <p>Видите рост продаж и экономию времени уже через месяц</p>
+            <div className="advantage-card">
+              <div className="advantage-icon">🤝</div>
+              <h3>Личный подход</h3>
+              <p>Основатели лично участвуют в каждом проекте.</p>
+              <div className="founder-note">
+                "Мы растем вместе с вами"
+                <span className="founder-name">- Команда NeuroExpert</span>
+              </div>
             </div>
-          </div>
-          
-          <div className="cta-center">
-            <button className="btn btn-primary">
-              Начать прямо сейчас →
-            </button>
           </div>
         </div>
       </section>
 
-      {/* Обновленная секция возможностей */}
+      {/* Секция реальных возможностей */}
       <section id="features" className="features-section">
         <div className="container">
-          <h2 className="section-title">Что вы получите?</h2>
+          <h2 className="section-title">Что умеет наш AI прямо сейчас</h2>
           <p className="section-subtitle">
-            Конкретные инструменты для роста вашего бизнеса
+            Без преувеличений. Только то, что работает.
           </p>
           
           <div className="features-grid">
             <div className="feature-card">
-              <div className="feature-icon">🎯</div>
-              <h3>Умные продажи</h3>
-              <p>AI-помощник сам обзванивает клиентов, отвечает на вопросы и продает 24/7</p>
-              <ul className="feature-benefits">
-                <li>✓ Экономия на менеджерах</li>
-                <li>✓ Продажи круглосуточно</li>
-                <li>✓ Конверсия выше на 30%</li>
-              </ul>
-            </div>
-            
-            <div className="feature-card">
-              <div className="feature-icon">📈</div>
-              <h3>Автоматический маркетинг</h3>
-              <p>Система сама запускает рекламу, пишет посты и привлекает клиентов</p>
-              <ul className="feature-benefits">
-                <li>✓ Без маркетолога</li>
-                <li>✓ Дешевле в 5 раз</li>
-                <li>✓ Результат через 7 дней</li>
-              </ul>
-            </div>
-            
-            <div className="feature-card">
               <div className="feature-icon">💬</div>
-              <h3>Клиентский сервис</h3>
-              <p>AI отвечает клиентам мгновенно, решает проблемы и повышает лояльность</p>
-              <ul className="feature-benefits">
-                <li>✓ Ответ за 1 секунду</li>
-                <li>✓ Довольные клиенты</li>
-                <li>✓ Больше повторных продаж</li>
+              <h3>AI-консультант на сайте</h3>
+              <p>Отвечает на вопросы клиентов мгновенно, 24/7</p>
+              <ul className="feature-list">
+                <li>✓ Понимает контекст вашего бизнеса</li>
+                <li>✓ Обучается на ваших материалах</li>
+                <li>✓ Говорит на языке ваших клиентов</li>
               </ul>
+              <div className="feature-demo">
+                <button className="btn btn-sm btn-primary" onClick={() => setShowAI(true)}>
+                  Попробовать сейчас
+                </button>
+              </div>
+            </div>
+            
+            <div className="feature-card">
+              <div className="feature-icon">📊</div>
+              <h3>Замена CRM системы</h3>
+              <p>AI запоминает и анализирует всех клиентов</p>
+              <ul className="feature-list">
+                <li>✓ Автоматическая сегментация</li>
+                <li>✓ История всех обращений</li>
+                <li>✓ Умные напоминания</li>
+              </ul>
+              <div className="feature-status">
+                <span className="status-badge status-ready">Готово к использованию</span>
+              </div>
+            </div>
+            
+            <div className="feature-card">
+              <div className="feature-icon">🔌</div>
+              <h3>Интеграция за 5 минут</h3>
+              <p>Простая установка на любой сайт или приложение</p>
+              <ul className="feature-list">
+                <li>✓ Одна строка кода</li>
+                <li>✓ Работает везде</li>
+                <li>✓ Без программистов</li>
+              </ul>
+              <div className="feature-code">
+                <code>&lt;script src="neuroexpert.ai/widget.js"&gt;&lt;/script&gt;</code>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Живая демонстрация */}
+      <section id="live-demo" className="live-demo-section">
+        <div className="container">
+          <h2 className="section-title">Посмотрите, как это работает</h2>
+          <p className="section-subtitle">
+            Реальный пример AI-ассистента для интернет-магазина
+          </p>
+          
+          <div className="demo-container">
+            <div className="demo-screen">
+              <div className="demo-browser">
+                <div className="browser-header">
+                  <span className="browser-dot"></span>
+                  <span className="browser-dot"></span>
+                  <span className="browser-dot"></span>
+                  <span className="browser-url">your-shop.com</span>
+                </div>
+                <div className="browser-content">
+                  <div className="shop-header">
+                    <h3>Ваш интернет-магазин</h3>
+                  </div>
+                  
+                  {/* AI виджет */}
+                  <div className="ai-widget-demo">
+                    <div className="widget-header">
+                      <span className="widget-avatar">🤖</span>
+                      <span className="widget-name">AI-помощник</span>
+                      <span className="widget-status">Онлайн</span>
+                    </div>
+                    <div className="widget-messages">
+                      <div className="demo-message ai">
+                        Здравствуйте! Я AI-ассистент. Чем могу помочь?
+                      </div>
+                      <div className="demo-message user">
+                        Какие у вас есть скидки?
+                      </div>
+                      <div className="demo-message ai">
+                        Сейчас действуют скидки:
+                        • 20% на весь каталог
+                        • Бесплатная доставка от 3000₽
+                        • Подарок при покупке от 5000₽
+                        
+                        Хотите, я помогу выбрать товар?
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="demo-stats">
+              <div className="stat-item">
+                <span className="stat-value">0.5 сек</span>
+                <span className="stat-label">Время ответа</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-value">24/7</span>
+                <span className="stat-label">Доступность</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-value">∞</span>
+                <span className="stat-label">Клиентов в час</span>
+              </div>
             </div>
           </div>
         </div>
