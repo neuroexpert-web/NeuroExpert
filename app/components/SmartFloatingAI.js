@@ -278,6 +278,7 @@ export default function SmartFloatingAI() {
           </div>
         </div>
 
+        {/* Стили */}
         <style jsx>{`
           .ai-float-button {
             position: fixed;
@@ -762,6 +763,148 @@ export default function SmartFloatingAI() {
               right: 10px;
               bottom: 10px;
             }
+          }
+
+          .ai-assistant-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            font-family: var(--font-system);
+          }
+
+          .ai-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+            transition: all 0.3s ease;
+          }
+
+          .ai-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(99, 102, 241, 0.4);
+          }
+
+          .ai-toggle.active {
+            transform: scale(0.9);
+          }
+
+          .ai-toggle svg {
+            width: 28px;
+            height: 28px;
+            fill: white;
+          }
+
+          .ai-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 380px;
+            max-width: calc(100vw - 40px);
+            max-height: 600px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: slideIn 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+          }
+
+          /* Мобильная адаптация */
+          @media (max-width: 768px) {
+            .ai-assistant-widget {
+              bottom: 10px;
+              right: 10px;
+            }
+            
+            .ai-toggle {
+              width: 50px;
+              height: 50px;
+            }
+            
+            .ai-window {
+              position: fixed;
+              bottom: 0;
+              right: 0;
+              left: 0;
+              width: 100%;
+              max-width: 100%;
+              max-height: 80vh;
+              border-radius: 20px 20px 0 0;
+            }
+          }
+
+          @keyframes slideIn {
+            from {
+              opacity: 0;
+              transform: translateY(20px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+
+          .ai-header {
+            padding: 20px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+
+          .ai-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+          }
+
+          .ai-header-subtitle {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-top: 2px;
+          }
+
+          .ai-models {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+          }
+
+          .model-select {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+          }
+
+          .model-select:hover {
+            background: rgba(255, 255, 255, 0.3);
+          }
+
+          .ai-chat {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            min-height: 300px;
           }
         `}</style>
       </div>

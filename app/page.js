@@ -66,11 +66,11 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
-    // Имитируем загрузку для плавного появления
+    // Скрываем основной loader после загрузки
     setTimeout(() => setIsLoading(false), 1000);
     
-    // Показываем AI помощника через 3 секунды
-    setTimeout(() => setShowAI(true), 3000);
+    // Убираем автоматическое открытие AI помощника
+    // setTimeout(() => setShowAI(true), 3000);
   }, []);
 
   // Принудительно скрываем загрузчик после монтирования
@@ -566,7 +566,7 @@ export default function HomePage() {
                 "Мобильное приложение (iOS/Android)",
                 "Полная замена CRM системы",
                 "Поддержка 24/7",
-                "API интеграции"
+                "API интеграция"
               ]}
               isPopular={true}
             />

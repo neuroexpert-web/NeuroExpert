@@ -114,6 +114,9 @@ export async function POST(request) {
   try {
     const { question, model = 'gemini' } = await request.json();
     
+    console.log('Assistant API called:', { question, model });
+    console.log('API Key present:', !!process.env.GOOGLE_GEMINI_API_KEY);
+    
     if (!question) {
       return NextResponse.json({ error: 'Вопрос обязателен' }, { status: 400 });
     }
@@ -122,7 +125,10 @@ export async function POST(request) {
     let usedModel = model;
 
     try {
-      if (model === 'gemini' && process.env.GOOGLE_GEMINI_API_KEY) {
+      if (!process.env.GOOGLE_GEMINI_API_KEY) {
+        console.error('GOOGLE_GEMINI_API_KEY not set');
+        answer = 'AI-ассистент временно недоступен. Пожалуйста, позвоните нам по телефону +7 (904) 047-63-83 или напишите на aineuroexpert@gmail.com';
+      } else if (model === 'gemini') {
         const geminiModel = genAI.getGenerativeModel({ model: "gemini-pro" });
         
         const prompt = `${KNOWLEDGE_BASE}\n\nВОПРОС КЛИЕНТА: ${question}\n\nОТВЕТ:`;
