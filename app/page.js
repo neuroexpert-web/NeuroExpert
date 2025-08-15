@@ -21,6 +21,16 @@ const AnalyticsTracker = dynamic(
   { ssr: false }
 );
 
+const ROICalculator = dynamic(
+  () => import('./components/ROICalculator'),
+  { ssr: false }
+);
+
+const ContactForm = dynamic(
+  () => import('./components/ContactForm'),
+  { ssr: false }
+);
+
 // Компонент загрузки
 const LoadingSpinner = () => (
   <div className="loading-spinner">
@@ -64,6 +74,7 @@ export default function HomePage() {
           
           <div className="nav-links">
             <a href="#features" className="nav-link">Возможности</a>
+            <a href="#calculator" className="nav-link">Калькулятор</a>
             <a href="#pricing" className="nav-link">Тарифы</a>
             <a href="#demo" className="nav-link">Демо</a>
             <a href="#contact" className="nav-link nav-cta">Начать</a>
@@ -165,6 +176,9 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Калькулятор ROI */}
+      <ROICalculator />
+
       {/* Секция тарифов */}
       <section id="pricing" className="pricing-section">
         <div className="section-container">
@@ -218,6 +232,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Контактная форма */}
+      <ContactForm />
 
       {/* AI Ассистент */}
       {showAI && <SmartFloatingAI />}
