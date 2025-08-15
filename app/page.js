@@ -73,6 +73,20 @@ export default function HomePage() {
     setTimeout(() => setShowAI(true), 3000);
   }, []);
 
+  // Принудительно скрываем загрузчик после монтирования
+  useEffect(() => {
+    const loader = document.getElementById('global-loader');
+    if (loader) {
+      setTimeout(() => {
+        loader.style.opacity = '0';
+        loader.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => {
+          loader.style.display = 'none';
+        }, 300);
+      }, 500);
+    }
+  }, []);
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -234,11 +248,11 @@ export default function HomePage() {
               <div className="price-comparison">
                 <div className="price-item">
                   <span className="price-label">Обычная CRM:</span>
-                  <span className="price-value old">50 000₽/мес</span>
+                  <span className="price-value old">от 150 000₽/мес</span>
                 </div>
                 <div className="price-item">
                   <span className="price-label">Наш AI:</span>
-                  <span className="price-value new">5 000₽/мес</span>
+                  <span className="price-value new">от 39 900₽/мес</span>
                 </div>
               </div>
             </div>
@@ -404,43 +418,46 @@ export default function HomePage() {
           <div className="pricing-grid">
             <PricingCard
               name="Старт"
-              price="15,000"
+              price="39,900"
               period="месяц"
               features={[
-                "До 100 клиентов",
-                "Базовая аналитика",
+                "AI-ассистент на сайте",
+                "До 1000 диалогов/месяц",
+                "Базовая CRM функция",
                 "Email поддержка",
-                "1 пользователь"
+                "1 сайт/приложение"
               ]}
               isPopular={false}
             />
             
             <PricingCard
               name="Бизнес"
-              price="45,000"
+              price="89,900"
               period="месяц"
               features={[
-                "До 1000 клиентов",
-                "Расширенная аналитика",
-                "Приоритетная поддержка",
-                "5 пользователей",
-                "API доступ",
-                "Кастомизация"
+                "Всё из тарифа Старт",
+                "До 10 000 диалогов/месяц",
+                "Полная CRM замена",
+                "Приоритетная поддержка 24/7",
+                "До 3 сайтов",
+                "API интеграции",
+                "Кастомизация AI"
               ]}
               isPopular={true}
             />
             
             <PricingCard
-              name="Корпорация"
-              price="По запросу"
-              period=""
+              name="Enterprise"
+              price="От 199,900"
+              period="месяц"
               features={[
-                "Неограниченно клиентов",
-                "Полная аналитика",
-                "Выделенный менеджер",
-                "Неограниченно пользователей",
-                "White Label",
-                "On-premise установка"
+                "Безлимитные диалоги",
+                "Белый лейбл решение",
+                "Выделенный сервер",
+                "SLA гарантии",
+                "Персональный менеджер",
+                "Обучение AI под ваш бизнес",
+                "Приоритетная разработка"
               ]}
               isPopular={false}
             />
