@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: neuroexpert
+    runtime: node
+    region: oregon # oregon, frankfurt, ohio, singapore
+    plan: free # free, starter ($7/month), standard ($25/month)
+    
+    # Команды сборки и запуска
+    buildCommand: npm install && npm run build
+    startCommand: npm run start:render
+    
+    # Настройки окружения
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 18
+        
+    # Health check
+    healthCheckPath: /
+    
+    # Автомасштабирование (для платных планов)
+    autoDeploy: true # автодеплой при push в GitHub

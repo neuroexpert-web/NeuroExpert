@@ -4,7 +4,7 @@ const next = require('next');
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = '0.0.0.0';
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 10000; // Render использует переменную PORT
 
 const app = next({ dev, hostname, port });
 const handle = app.getRequestHandler();
@@ -12,6 +12,14 @@ const handle = app.getRequestHandler();
 app.prepare().then(() => {
   createServer(async (req, res) => {
     try {
+      // Добавляем заголовки для правильной работы
+      res.setHeader('X-Powered-By', 'NeuroExpert');
+      
+      // Кэширование статических ресурсов
+      if (req.url.startsWith('/_next/static')) {
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      }
+      
       const parsedUrl = parse(req.url, true);
       await handle(req, res, parsedUrl);
     } catch (err) {
@@ -23,5 +31,12 @@ app.prepare().then(() => {
     if (err) throw err;
     console.log(`> Ready on http://${hostname}:${port}`);
     console.log(`> Environment: ${process.env.NODE_ENV || 'development'}`);
+    
+    // Логируем важные переменные для отладки
+    console.log('> API Keys configured:', {
+      GEMINI: !!process.env.GOOGLE_GEMINI_API_KEY,
+      TELEGRAM: !!process.env.TELEGRAM_BOT_TOKEN,
+      CHAT_ID: !!process.env.TELEGRAM_CHAT_ID
+    });
   });
 });
