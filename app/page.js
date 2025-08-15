@@ -31,6 +31,16 @@ const ContactForm = dynamic(
   { ssr: false }
 );
 
+const RealtimeStats = dynamic(
+  () => import('./components/RealtimeStats'),
+  { ssr: false }
+);
+
+const QuickActions = dynamic(
+  () => import('./components/QuickActions'),
+  { ssr: false }
+);
+
 // Компонент загрузки
 const LoadingSpinner = () => (
   <div className="loading-spinner">
@@ -132,6 +142,34 @@ export default function HomePage() {
                 <li>✓ План цифровизации</li>
                 <li>✓ ROI калькулятор</li>
               </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Реалтайм статистика */}
+      <RealtimeStats />
+
+      {/* Секция дашборда */}
+      <section className="dashboard-section">
+        <div className="section-container">
+          <h2 className="section-title">
+            Центр управления <span className="gradient-text">NeuroExpert</span>
+          </h2>
+          <p className="section-subtitle">
+            Все инструменты цифровизации в одном месте
+          </p>
+
+          <div className="dashboard-grid">
+            <QuickActions />
+            
+            <div className="dashboard-card">
+              <h3>📈 Аналитика продаж</h3>
+              <div className="sales-chart">
+                <div className="chart-placeholder">
+                  <span>График продаж будет здесь</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
