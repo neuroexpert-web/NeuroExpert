@@ -41,6 +41,11 @@ const QuickActions = dynamic(
   { ssr: false }
 );
 
+const OnboardingTour = dynamic(
+  () => import('./components/OnboardingTour'),
+  { ssr: false }
+);
+
 // Компонент загрузки
 const LoadingSpinner = () => (
   <div className="loading-spinner">
@@ -74,6 +79,9 @@ export default function HomePage() {
       {/* Аналитика */}
       <AnalyticsTracker />
       
+      {/* Онбординг для новых пользователей */}
+      <OnboardingTour />
+      
       {/* Навигация */}
       <nav className="main-nav">
         <div className="nav-container">
@@ -95,121 +103,161 @@ export default function HomePage() {
       {/* Главный экран */}
       <section className="hero-section">
         <div className="hero-content">
-          <h1 className="hero-title">
-            <span className="gradient-text">Цифровизация бизнеса</span>
-            <br />
-            на новом уровне с ИИ
-          </h1>
-          
-          <p className="hero-subtitle">
-            Первая в России платформа полной автоматизации бизнес-процессов
-            с искусственным интеллектом. Экономия до 70% времени и ресурсов.
-          </p>
-          
-          <div className="hero-stats">
-            <div className="stat-item">
-              <div className="stat-number">500+</div>
-              <div className="stat-label">Компаний</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">93%</div>
-              <div className="stat-label">Эффективность</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">24/7</div>
-              <div className="stat-label">Поддержка</div>
-            </div>
+          {/* Простой и понятный заголовок */}
+          <div className="hero-badge">
+            <span className="badge badge-primary">🚀 Новинка 2024</span>
           </div>
           
-          <div className="hero-buttons">
-            <button className="btn-primary" onClick={() => setShowAI(true)}>
-              <span>🚀</span> Попробовать бесплатно
+          <h1 className="hero-title">
+            <span className="gradient-text">Увеличьте продажи на 40%</span>
+            <br />
+            <span className="hero-subtitle">с помощью искусственного интеллекта</span>
+          </h1>
+          
+          <p className="hero-description">
+            Мы поможем автоматизировать рутинные задачи, найти новых клиентов 
+            и увеличить прибыль вашего бизнеса. Без сложностей, просто и эффективно.
+          </p>
+          
+          {/* Четкие действия */}
+          <div className="hero-actions">
+            <button 
+              className="btn btn-primary btn-large"
+              onClick={() => {
+                const calc = document.getElementById('calculator');
+                calc?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              <span>💰</span>
+              Рассчитать мою выгоду
             </button>
-            <button className="btn-secondary">
-              <span>📊</span> Посмотреть демо
+            
+            <button 
+              className="btn btn-secondary btn-large"
+              onClick={() => setShowAI(true)}
+            >
+              <span>💬</span>
+              Получить консультацию
             </button>
+          </div>
+          
+          {/* Социальное доказательство */}
+          <div className="hero-trust">
+            <div className="trust-item">
+              <span className="trust-number">500+</span>
+              <span className="trust-label">компаний уже с нами</span>
+            </div>
+            <div className="trust-divider">•</div>
+            <div className="trust-item">
+              <span className="trust-number">4.9</span>
+              <span className="trust-label">рейтинг клиентов</span>
+            </div>
+            <div className="trust-divider">•</div>
+            <div className="trust-item">
+              <span className="trust-number">24/7</span>
+              <span className="trust-label">поддержка</span>
+            </div>
           </div>
         </div>
         
+        {/* Визуальная демонстрация */}
         <div className="hero-visual">
-          <div className="floating-card">
-            <div className="card-glow"></div>
-            <div className="card-content">
-              <h3>AI-аудит компании</h3>
-              <ul className="feature-list">
-                <li>✓ Анализ бизнес-процессов</li>
-                <li>✓ Оценка эффективности</li>
-                <li>✓ План цифровизации</li>
-                <li>✓ ROI калькулятор</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Реалтайм статистика */}
-      <RealtimeStats />
-
-      {/* Секция дашборда */}
-      <section className="dashboard-section">
-        <div className="section-container">
-          <h2 className="section-title">
-            Центр управления <span className="gradient-text">NeuroExpert</span>
-          </h2>
-          <p className="section-subtitle">
-            Все инструменты цифровизации в одном месте
-          </p>
-
-          <div className="dashboard-grid">
-            <QuickActions />
-            
-            <div className="dashboard-card">
-              <h3>📈 Аналитика продаж</h3>
-              <div className="sales-chart">
-                <div className="chart-placeholder">
-                  <span>График продаж будет здесь</span>
-                </div>
+          <div className="demo-preview">
+            <div className="demo-screen">
+              <div className="demo-header">
+                <span>📊 Ваша прибыль через 6 месяцев</span>
+              </div>
+              <div className="demo-chart">
+                <div className="chart-bar" style={{height: '40%'}}>До</div>
+                <div className="chart-bar chart-bar-success" style={{height: '80%'}}>После</div>
+              </div>
+              <div className="demo-result">
+                <span className="result-label">Рост:</span>
+                <span className="result-value">+40%</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Секция возможностей */}
+      {/* Секция "Как это работает" - новая */}
+      <section className="how-it-works">
+        <div className="container">
+          <h2 className="section-title">Как это работает?</h2>
+          <p className="section-subtitle">Всего 3 простых шага к успеху</p>
+          
+          <div className="steps-grid">
+            <div className="step-card">
+              <div className="step-number">1</div>
+              <div className="step-icon">📊</div>
+              <h3>Анализируем ваш бизнес</h3>
+              <p>Рассказываете о вашей компании, мы находим точки роста</p>
+            </div>
+            
+            <div className="step-card">
+              <div className="step-number">2</div>
+              <div className="step-icon">🤖</div>
+              <h3>Внедряем AI-решения</h3>
+              <p>Автоматизируем продажи, маркетинг и работу с клиентами</p>
+            </div>
+            
+            <div className="step-card">
+              <div className="step-number">3</div>
+              <div className="step-icon">💰</div>
+              <h3>Получаете результат</h3>
+              <p>Видите рост продаж и экономию времени уже через месяц</p>
+            </div>
+          </div>
+          
+          <div className="cta-center">
+            <button className="btn btn-primary">
+              Начать прямо сейчас →
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Обновленная секция возможностей */}
       <section id="features" className="features-section">
-        <div className="section-container">
-          <h2 className="section-title">
-            Что умеет <span className="gradient-text">NeuroExpert</span>
-          </h2>
+        <div className="container">
+          <h2 className="section-title">Что вы получите?</h2>
+          <p className="section-subtitle">
+            Конкретные инструменты для роста вашего бизнеса
+          </p>
           
           <div className="features-grid">
-            <FeatureCard
-              icon="🤖"
-              title="ИИ-управляющий"
-              description="Виртуальный директор на базе Claude и Gemini для принятия решений"
-              features={["Анализ данных", "Стратегическое планирование", "24/7 мониторинг"]}
-            />
+            <div className="feature-card">
+              <div className="feature-icon">🎯</div>
+              <h3>Умные продажи</h3>
+              <p>AI-помощник сам обзванивает клиентов, отвечает на вопросы и продает 24/7</p>
+              <ul className="feature-benefits">
+                <li>✓ Экономия на менеджерах</li>
+                <li>✓ Продажи круглосуточно</li>
+                <li>✓ Конверсия выше на 30%</li>
+              </ul>
+            </div>
             
-            <FeatureCard
-              icon="📊"
-              title="Умная аналитика"
-              description="Полный цифровой аудит компании с рекомендациями по оптимизации"
-              features={["Финансовый анализ", "KPI мониторинг", "Предиктивная аналитика"]}
-            />
+            <div className="feature-card">
+              <div className="feature-icon">📈</div>
+              <h3>Автоматический маркетинг</h3>
+              <p>Система сама запускает рекламу, пишет посты и привлекает клиентов</p>
+              <ul className="feature-benefits">
+                <li>✓ Без маркетолога</li>
+                <li>✓ Дешевле в 5 раз</li>
+                <li>✓ Результат через 7 дней</li>
+              </ul>
+            </div>
             
-            <FeatureCard
-              icon="🛠"
-              title="Автоматизация"
-              description="Создание сайтов, приложений и CRM систем без программистов"
-              features={["No-code платформа", "Готовые шаблоны", "Интеграции API"]}
-            />
-            
-            <FeatureCard
-              icon="💬"
-              title="Омниканальность"
-              description="Единый центр управления всеми каналами коммуникации"
-              features={["Telegram боты", "Email рассылки", "Голосовые ассистенты"]}
-            />
+            <div className="feature-card">
+              <div className="feature-icon">💬</div>
+              <h3>Клиентский сервис</h3>
+              <p>AI отвечает клиентам мгновенно, решает проблемы и повышает лояльность</p>
+              <ul className="feature-benefits">
+                <li>✓ Ответ за 1 секунду</li>
+                <li>✓ Довольные клиенты</li>
+                <li>✓ Больше повторных продаж</li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>

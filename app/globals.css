@@ -1458,3 +1458,319 @@ h3 {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Улучшенные стили для понятности */
+.hero-badge {
+  margin-bottom: 1rem;
+  animation: slideIn 0.6s ease-out;
+}
+
+.hero-subtitle {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.hero-description {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto 2rem;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+.btn-large {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+  gap: 0.75rem;
+}
+
+.hero-trust {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  opacity: 0.9;
+}
+
+.trust-item {
+  text-align: center;
+}
+
+.trust-number {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.trust-label {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.trust-divider {
+  color: var(--text-muted);
+  font-size: 1.5rem;
+}
+
+/* Демо превью */
+.demo-preview {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.demo-screen {
+  background: var(--dark-card);
+  border: 1px solid var(--dark-border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 1s ease-out 0.3s both;
+}
+
+.demo-header {
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+}
+
+.demo-chart {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: flex-end;
+  height: 150px;
+  margin-bottom: 1.5rem;
+}
+
+.chart-bar {
+  width: 80px;
+  background: var(--dark-border);
+  border-radius: 0.5rem 0.5rem 0 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  transition: all 0.5s ease;
+  animation: growBar 1s ease-out 0.5s both;
+}
+
+.chart-bar-success {
+  background: var(--success);
+  color: white;
+  animation-delay: 0.8s;
+}
+
+@keyframes growBar {
+  from {
+    height: 0;
+  }
+}
+
+.demo-result {
+  text-align: center;
+  padding: 1rem;
+  background: rgba(16, 185, 129, 0.1);
+  border-radius: 0.5rem;
+  border: 1px solid var(--success);
+}
+
+.result-label {
+  color: var(--text-secondary);
+  margin-right: 0.5rem;
+}
+
+.result-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--success);
+}
+
+/* Секция "Как это работает" */
+.how-it-works {
+  padding: 5rem 0;
+  background: var(--dark-bg-secondary);
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 3rem 0 4rem;
+}
+
+.step-card {
+  position: relative;
+  background: var(--dark-card);
+  border: 1px solid var(--dark-border);
+  border-radius: 1rem;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.step-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  border-color: var(--primary);
+}
+
+.step-number {
+  position: absolute;
+  top: -1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2rem;
+  height: 2rem;
+  background: var(--primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+}
+
+.step-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.step-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.step-card p {
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.cta-center {
+  text-align: center;
+}
+
+/* Обновленные feature карточки */
+.feature-card {
+  background: var(--dark-card);
+  border: 1px solid var(--dark-border);
+  border-radius: 1rem;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-primary);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+
+.feature-card:hover::before {
+  transform: translateX(0);
+}
+
+.feature-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+}
+
+.feature-card p {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.feature-benefits {
+  list-style: none;
+  padding: 0;
+}
+
+.feature-benefits li {
+  padding: 0.5rem 0;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.feature-benefits li::before {
+  content: '✓';
+  color: var(--success);
+  font-weight: 700;
+}
+
+/* Адаптивность для новых элементов */
+@media (max-width: 768px) {
+  .hero-trust {
+    gap: 1rem;
+  }
+  
+  .trust-divider {
+    display: none;
+  }
+  
+  .demo-chart {
+    gap: 1rem;
+  }
+  
+  .chart-bar {
+    width: 60px;
+  }
+  
+  .steps-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .step-card {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .btn-large {
+    width: 100%;
+  }
+  
+  .trust-item {
+    flex: 1 1 calc(50% - 0.5rem);
+  }
+  
+  .demo-screen {
+    padding: 1rem;
+  }
+}
