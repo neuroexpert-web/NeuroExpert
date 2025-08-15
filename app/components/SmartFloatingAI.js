@@ -69,7 +69,7 @@ export default function SmartFloatingAI() {
     const startTime = Date.now();
 
     try {
-      const response = await fetch('/.netlify/functions/assistant', {
+      const response = await fetch('/api/assistant', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 

@@ -73,20 +73,19 @@ export default function ROICalculator() {
     
     // Отправляем уведомление в Telegram
     try {
-      await fetch('/.netlify/functions/telegram-notify', {
+      await fetch('/api/telegram-notify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           type: 'roi_calculation',
           data: {
-            businessSize,
-            industry, 
-            revenue: parseFloat(revenue),
-            budget: parseFloat(budget),
-            ...calculatedResults
+            revenue: newMonthlyRevenue,
+            costs: newMonthlyCosts,
+            roi: newRoi,
+            timestamp: new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' })
           }
         })
-      });
+      }).catch(console.error);
     } catch (error) {
       console.error('Error sending Telegram notification:', error);
     }
