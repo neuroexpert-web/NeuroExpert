@@ -1,0 +1,338 @@
+/* SmartFloatingAI.css - Оптимизированные стили для мобильных */
+
+.ai-chat-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  color: white;
+  font-size: 24px;
+}
+
+.ai-chat-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 30px rgba(99, 102, 241, 0.4);
+}
+
+.ai-chat-button:active {
+  transform: scale(0.95);
+}
+
+.ai-chat-container {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 400px;
+  max-width: calc(100vw - 40px);
+  height: 600px;
+  max-height: calc(100vh - 120px);
+  background: var(--dark-bg-secondary);
+  border: 1px solid var(--dark-border);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1000;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ai-chat-header {
+  padding: 16px 20px;
+  background: var(--dark-card);
+  border-bottom: 1px solid var(--dark-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.ai-chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ai-chat-input-container {
+  padding: 16px;
+  background: var(--dark-card);
+  border-top: 1px solid var(--dark-border);
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.ai-chat-input {
+  flex: 1;
+  background: var(--dark-bg);
+  border: 1px solid var(--dark-border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: var(--text-primary);
+  font-size: 16px;
+  resize: none;
+  min-height: 48px;
+  max-height: 120px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.ai-chat-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.ai-chat-send {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--primary);
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.ai-chat-send:hover:not(:disabled) {
+  background: var(--primary-dark);
+  transform: scale(1.05);
+}
+
+.ai-chat-send:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Оптимизация для планшетов */
+@media (max-width: 768px) {
+  .ai-chat-button {
+    bottom: 16px;
+    right: 16px;
+    width: 56px;
+    height: 56px;
+  }
+  
+  .ai-chat-container {
+    width: 380px;
+    height: 550px;
+    bottom: 80px;
+    right: 16px;
+  }
+}
+
+/* Оптимизация для мобильных телефонов */
+@media (max-width: 480px) {
+  .ai-chat-button {
+    bottom: 12px;
+    right: 12px;
+    width: 52px;
+    height: 52px;
+    font-size: 22px;
+  }
+  
+  .ai-chat-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 0;
+    animation: slideUpMobile 0.3s ease-out;
+  }
+  
+  @keyframes slideUpMobile {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  
+  .ai-chat-header {
+    padding: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--dark-card);
+  }
+  
+  .ai-chat-messages {
+    padding: 16px;
+    padding-bottom: env(safe-area-inset-bottom, 16px);
+  }
+  
+  .ai-chat-input-container {
+    padding: 12px;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+    position: sticky;
+    bottom: 0;
+    background: var(--dark-card);
+  }
+  
+  .ai-chat-input {
+    font-size: 16px; /* Предотвращаем зум на iOS */
+    -webkit-text-size-adjust: 100%;
+  }
+  
+  /* Оптимизация для маленьких экранов */
+  .model-selector {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .quick-questions {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+  }
+  
+  .quick-question-btn {
+    flex-shrink: 0;
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+}
+
+/* Оптимизация для очень маленьких экранов */
+@media (max-width: 380px) {
+  .ai-chat-header {
+    padding: 12px;
+  }
+  
+  .ai-chat-messages {
+    padding: 12px;
+  }
+  
+  .message {
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  .ai-chat-input {
+    min-height: 44px;
+    padding: 10px 14px;
+    font-size: 16px;
+  }
+  
+  .ai-chat-send {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* Поддержка ландшафтной ориентации на мобильных */
+@media (max-height: 500px) and (max-width: 900px) {
+  .ai-chat-container {
+    height: 100vh;
+    max-height: 100vh;
+  }
+  
+  .ai-chat-messages {
+    padding: 12px;
+  }
+  
+  .ai-chat-header {
+    padding: 8px 16px;
+  }
+}
+
+/* Улучшения для touch устройств */
+@media (hover: none) and (pointer: coarse) {
+  .ai-chat-button {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .ai-chat-send,
+  .quick-question-btn,
+  .model-btn {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  
+  /* Увеличиваем области нажатия */
+  .ai-chat-button::before,
+  .ai-chat-send::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    bottom: -8px;
+    left: -8px;
+  }
+}
+
+/* Оптимизация скроллинга */
+.ai-chat-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ai-chat-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ai-chat-messages::-webkit-scrollbar-thumb {
+  background: var(--dark-border);
+  border-radius: 3px;
+}
+
+.ai-chat-messages::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Предотвращение проблем с клавиатурой на iOS */
+@supports (-webkit-touch-callout: none) {
+  .ai-chat-container {
+    height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  }
+  
+  .ai-chat-input-container {
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+}
+
+/* Темная тема для системных элементов */
+@media (prefers-color-scheme: dark) {
+  .ai-chat-input {
+    color-scheme: dark;
+  }
+}

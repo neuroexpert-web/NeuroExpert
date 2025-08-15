@@ -1,58 +1,106 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Server Actions включены по умолчанию в Next.js 14+
-  
-  // Настройки изображений для статики
-  images: {
-    unoptimized: true,
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-    ],
-  },
-  
-  // Отключаем проверки для быстрой сборки
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  
-  // Оптимизация сборки
+  // Оптимизация производительности
+  reactStrictMode: true,
   swcMinify: true,
+  poweredByHeader: false,
+  compress: true,
   
-  // Webpack конфигурация для SSR совместимости
+  // Оптимизация изображений
+  images: {
+    domains: ['api.dicebear.com'],
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+  },
+  
+  // Улучшение производительности сборки
+  experimental: {
+    optimizeCss: true,
+    optimizePackageImports: ['@google/generative-ai'],
+  },
+  
+  // Headers для безопасности и кэширования
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on'
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN'
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff'
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'origin-when-cross-origin'
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()'
+          }
+        ],
+      },
+      {
+        source: '/fonts/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ];
+  },
+  
+  // Оптимизация для Netlify
+  target: 'serverless',
+  
+  // Webpack оптимизации
   webpack: (config, { isServer }) => {
-    if (isServer) {
-      // Настройки для server-side
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        canvas: false,
-        encoding: false,
-        fs: false,
+    // Оптимизация bundle size
+    if (!isServer) {
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          default: false,
+          vendors: false,
+          vendor: {
+            name: 'vendor',
+            chunks: 'all',
+            test: /node_modules/,
+            priority: 20
+          },
+          common: {
+            name: 'common',
+            minChunks: 2,
+            chunks: 'all',
+            priority: 10,
+            reuseExistingChunk: true,
+            enforce: true
+          }
+        }
       };
     }
     
-    // Исключаем модули, которые не должны обрабатываться webpack
-    config.externals = [...(config.externals || []), 'canvas'];
-    
     return config;
   },
+};
 
-  // Настройки для production
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production' ? {
-      exclude: ['error', 'warn'],
-    } : false,
-  },
-  
-  // Настройки для Netlify
-  env: {
-    CUSTOM_KEY: process.env.GEMINI_API_KEY,
-  },
-}
-
-module.exports = nextConfig
+module.exports = nextConfig;
