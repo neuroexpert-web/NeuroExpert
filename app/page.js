@@ -115,7 +115,7 @@ export default function HomePage() {
           
           <div className="nav-links">
             <a href="#features" className="nav-link">Возможности</a>
-            <a href="#calculator" className="nav-link">Калькулятор</a>
+            <a href="#development" className="nav-link">Разработка</a>
             <a href="#pricing" className="nav-link">Тарифы</a>
             <a href="#demo" className="nav-link">Демо</a>
             <a href="#contact" className="nav-link nav-cta">Начать</a>
@@ -135,8 +135,8 @@ export default function HomePage() {
           <AnimatedLogo />
           
           <p className="hero-description">
-            Мы только начинаем, но уже готовы предложить вам передовые технологии:<br/>
-            <strong>персональные AI-эксперты</strong> прямо на вашем сайте или в приложении,<br/>
+            Мы не просто подключаем AI-чат. Мы создаем <strong>полноценные сайты, 
+            приложения и интернет-магазины</strong> с встроенными AI-специалистами,<br/>
             которые заменят дорогие CRM-системы и целые отделы поддержки.
           </p>
           
@@ -333,6 +333,130 @@ export default function HomePage() {
                 <code>&lt;script src="neuroexpert.ai/widget.js"&gt;&lt;/script&gt;</code>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Новая секция - Что мы создаем */}
+      <section id="development" className="development-section">
+        <div className="container">
+          <h2 className="section-title">
+            Создаем <span className="gradient-text">умные решения</span> под ключ
+          </h2>
+          <p className="section-subtitle">
+            Не просто AI-чат, а полноценные проекты с встроенным искусственным интеллектом
+          </p>
+          
+          <div className="development-grid">
+            <div className="dev-card">
+              <div className="dev-icon">🛍️</div>
+              <h3>Интернет-магазины с AI</h3>
+              <p>Магазин, где AI-консультант знает всё о товарах</p>
+              <ul className="dev-features">
+                <li>✓ Персональные рекомендации</li>
+                <li>✓ Помощь в выборе размера</li>
+                <li>✓ Оформление заказа голосом</li>
+                <li>✓ Автоматические скидки</li>
+              </ul>
+              <div className="dev-price">от 149 900₽</div>
+            </div>
+            
+            <div className="dev-card">
+              <div className="dev-icon">📱</div>
+              <h3>Мобильные приложения</h3>
+              <p>Приложения с AI-ассистентом внутри</p>
+              <ul className="dev-features">
+                <li>✓ iOS и Android</li>
+                <li>✓ Голосовой помощник</li>
+                <li>✓ Умные уведомления</li>
+                <li>✓ Офлайн режим</li>
+              </ul>
+              <div className="dev-price">от 299 900₽</div>
+            </div>
+            
+            <div className="dev-card">
+              <div className="dev-icon">🚀</div>
+              <h3>Landing Page с AI</h3>
+              <p>Продающие страницы с умным консультантом</p>
+              <ul className="dev-features">
+                <li>✓ Конверсия до 40%</li>
+                <li>✓ A/B тестирование</li>
+                <li>✓ Квалификация лидов</li>
+                <li>✓ Запись на встречу</li>
+              </ul>
+              <div className="dev-price">от 79 900₽</div>
+            </div>
+            
+            <div className="dev-card">
+              <div className="dev-icon">🏢</div>
+              <h3>Корпоративные сайты</h3>
+              <p>Сайты компаний с AI-отделом продаж</p>
+              <ul className="dev-features">
+                <li>✓ Многоязычность</li>
+                <li>✓ База знаний</li>
+                <li>✓ CRM интеграция</li>
+                <li>✓ Аналитика поведения</li>
+              </ul>
+              <div className="dev-price">от 199 900₽</div>
+            </div>
+            
+            <div className="dev-card">
+              <div className="dev-icon">🎓</div>
+              <h3>Образовательные платформы</h3>
+              <p>LMS с персональным AI-преподавателем</p>
+              <ul className="dev-features">
+                <li>✓ Адаптивное обучение</li>
+                <li>✓ Проверка заданий</li>
+                <li>✓ Мотивация студентов</li>
+                <li>✓ Отчеты прогресса</li>
+              </ul>
+              <div className="dev-price">от 349 900₽</div>
+            </div>
+            
+            <div className="dev-card">
+              <div className="dev-icon">💼</div>
+              <h3>SaaS платформы</h3>
+              <p>Сервисы с AI в основе бизнес-логики</p>
+              <ul className="dev-features">
+                <li>✓ Автоматизация процессов</li>
+                <li>✓ Умная аналитика</li>
+                <li>✓ API для партнеров</li>
+                <li>✓ Масштабирование</li>
+              </ul>
+              <div className="dev-price">от 499 900₽</div>
+            </div>
+          </div>
+          
+          <div className="development-cta">
+            <h3>Все проекты включают:</h3>
+            <div className="included-features">
+              <div className="included-item">
+                <span className="included-icon">🤖</span>
+                <span>AI-специалист обученный под ваш бизнес</span>
+              </div>
+              <div className="included-item">
+                <span className="included-icon">📊</span>
+                <span>Полная аналитика и CRM функции</span>
+              </div>
+              <div className="included-item">
+                <span className="included-icon">🔧</span>
+                <span>3 месяца поддержки бесплатно</span>
+              </div>
+              <div className="included-item">
+                <span className="included-icon">🚀</span>
+                <span>Запуск за 2-4 недели</span>
+              </div>
+            </div>
+            
+            <button 
+              className="btn btn-primary btn-large"
+              onClick={() => {
+                const contact = document.getElementById('contact');
+                contact?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              Обсудить проект
+            </button>
           </div>
         </div>
       </section>
