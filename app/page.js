@@ -176,7 +176,16 @@ export default function HomePage() {
             <p className="promise-text">
               <span className="promise-icon">🤝</span>
               Мы молодая команда, которая верит в силу AI. 
-              Станьте одним из первых клиентов и получите <strong>особые условия</strong>.
+              Станьте одним из первых клиентов и получите 
+              <button 
+                className="special-conditions-link"
+                onClick={() => {
+                  const contact = document.getElementById('contact');
+                  contact?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                особые условия
+              </button>.
             </p>
           </div>
         </div>

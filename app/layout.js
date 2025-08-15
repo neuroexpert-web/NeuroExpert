@@ -120,26 +120,39 @@ export default function RootLayout({ children }) {
             }
             .loading-spinner {
               position: fixed;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%);
-              width: 40px;
-              height: 40px;
-              border: 3px solid rgba(99, 102, 241, 0.2);
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background: #0a0e27;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              z-index: 9999;
+              transition: opacity 0.3s ease;
+            }
+            .loading-spinner.hide {
+              opacity: 0;
+              pointer-events: none;
+            }
+            .spinner {
+              width: 50px;
+              height: 50px;
+              border: 3px solid rgba(255, 255, 255, 0.1);
               border-top-color: #6366f1;
               border-radius: 50%;
-              animation: spin 0.8s linear infinite;
+              animation: spin 1s linear infinite;
             }
             @keyframes spin {
-              to { transform: translate(-50%, -50%) rotate(360deg); }
+              to { transform: rotate(360deg); }
             }
           `
         }} />
       </head>
-      <body suppressHydrationWarning>
-        {/* Индикатор загрузки */}
-        <div className="loading-spinner" id="global-loader" />
-        
+      <body className={inter.variable}>
+        <div className="loading-spinner" id="global-loader">
+          <div className="spinner"></div>
+        </div>
         {children}
         
         {/* Google Analytics с отложенной загрузкой */}
@@ -185,28 +198,39 @@ export default function RootLayout({ children }) {
           </Script>
         )}
         
-        {/* Service Worker регистрация */}
-        <Script id="register-sw" strategy="afterInteractive">
-          {`
-            if ('serviceWorker' in navigator && window.location.hostname !== 'localhost') {
-              window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').then(
-                  registration => console.log('SW registered:', registration.scope),
-                  err => console.log('SW registration failed:', err)
-                );
-              });
-            }
-            
-            // Скрываем индикатор загрузки когда страница готова
-            window.addEventListener('load', () => {
-              const loader = document.getElementById('global-loader');
-              if (loader) {
-                loader.style.opacity = '0';
-                setTimeout(() => loader.remove(), 300);
+        {/* Service Worker Registration */}
+        <Script
+          id="sw-register"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Регистрация Service Worker
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                  navigator.serviceWorker.register('/sw.js').then(
+                    (registration) => console.log('SW registered:', registration),
+                    (err) => console.log('SW registration failed:', err)
+                  );
+                });
               }
-            });
-          `}
-        </Script>
+              
+              // Скрываем загрузчик после полной загрузки
+              if (typeof window !== 'undefined') {
+                window.addEventListener('load', () => {
+                  setTimeout(() => {
+                    const loader = document.getElementById('global-loader');
+                    if (loader) {
+                      loader.classList.add('hide');
+                      setTimeout(() => {
+                        loader.style.display = 'none';
+                      }, 300);
+                    }
+                  }, 100);
+                });
+              }
+            `
+          }}
+        />
       </body>
     </html>
   )
