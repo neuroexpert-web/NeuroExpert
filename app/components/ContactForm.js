@@ -157,25 +157,19 @@ export default function ContactForm() {
             </ul>
 
             <div className="contact-info">
-              <div className="info-item">
-                <span className="info-icon">📱</span>
-                <div>
-                  <strong>Телефон</strong>
-                  <a href="tel:+78005553535">+7 (800) 555-35-35</a>
+              <div className="contact-item">
+                <span className="contact-icon">📞</span>
+                <div className="contact-details">
+                  <span className="contact-label">Телефон</span>
+                  <a href="tel:+79040476383" className="contact-value">+7 (904) 047-63-83</a>
                 </div>
               </div>
-              <div className="info-item">
-                <span className="info-icon">✉️</span>
-                <div>
-                  <strong>Email</strong>
-                  <a href="mailto:info@neuroexpert.ru">info@neuroexpert.ru</a>
-                </div>
-              </div>
-              <div className="info-item">
-                <span className="info-icon">💬</span>
-                <div>
-                  <strong>Telegram</strong>
-                  <a href="https://t.me/neuroexpert" target="_blank" rel="noopener">@neuroexpert</a>
+              
+              <div className="contact-item">
+                <span className="contact-icon">✉️</span>
+                <div className="contact-details">
+                  <span className="contact-label">Email</span>
+                  <a href="mailto:aineuroexpert@gmail.com" className="contact-value">aineuroexpert@gmail.com</a>
                 </div>
               </div>
             </div>

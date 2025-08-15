@@ -161,6 +161,13 @@ export default function HomePage() {
               <span>👀</span>
               Посмотреть демо
             </button>
+            <a 
+              href="tel:+79040476383" 
+              className="btn btn-outline btn-large"
+            >
+              <span>📞</span>
+              +7 (904) 047-63-83
+            </a>
           </div>
           
           {/* Честное обещание */}
@@ -436,43 +443,65 @@ export default function HomePage() {
 
       {/* AI Ассистент */}
       {showAI && <SmartFloatingAI />}
-
-      {/* Футер */}
+      
+      {/* Тур для новых пользователей */}
+      <OnboardingTour />
+      
+      {/* Футер с контактами */}
       <footer className="main-footer">
         <div className="footer-container">
           <div className="footer-content">
             <div className="footer-brand">
-              <h3>🧠 NeuroExpert</h3>
-              <p>Платформа №1 по цифровизации бизнеса в России</p>
+              <div className="footer-logo">
+                <span className="logo-icon">🧠</span>
+                <span className="logo-text">
+                  <span className="logo-neuro">Neuro</span>
+                  <span className="logo-expert">Expert</span>
+                </span>
+              </div>
+              <p className="footer-description">
+                Стартап, который делает AI-технологии доступными для каждого бизнеса
+              </p>
             </div>
             
-            <div className="footer-links">
-              <div className="footer-column">
-                <h4>Продукт</h4>
-                <a href="#features">Возможности</a>
-                <a href="#pricing">Тарифы</a>
-                <a href="#demo">Демо</a>
+            <div className="footer-contacts">
+              <h3 className="footer-title">Контакты</h3>
+              <div className="footer-contact-list">
+                <a href="tel:+79040476383" className="footer-contact">
+                  <span className="footer-icon">📞</span>
+                  +7 (904) 047-63-83
+                </a>
+                <a href="mailto:aineuroexpert@gmail.com" className="footer-contact">
+                  <span className="footer-icon">✉️</span>
+                  aineuroexpert@gmail.com
+                </a>
               </div>
-              
-              <div className="footer-column">
-                <h4>Компания</h4>
-                <a href="#about">О нас</a>
-                <a href="#blog">Блог</a>
-                <a href="#careers">Карьера</a>
-              </div>
-              
-              <div className="footer-column">
-                <h4>Поддержка</h4>
-                <a href="#docs">Документация</a>
-                <a href="#faq">FAQ</a>
-                <a href="#contact">Контакты</a>
-              </div>
+            </div>
+            
+            <div className="footer-cta">
+              <h3 className="footer-title">Готовы начать?</h3>
+              <p className="footer-text">
+                Получите персонального AI-ассистента для вашего бизнеса уже сегодня
+              </p>
+              <button 
+                className="btn btn-primary"
+                onClick={() => {
+                  const contact = document.getElementById('contact');
+                  contact?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                Начать сейчас
+              </button>
             </div>
           </div>
           
           <div className="footer-bottom">
-            <p>© 2024 NeuroExpert. Все права защищены.</p>
-            <p>Сделано с ❤️ в России</p>
+            <p className="footer-copyright">
+              © 2024 NeuroExpert. Все права защищены.
+            </p>
+            <p className="footer-made">
+              Сделано с ❤️ и AI в России
+            </p>
           </div>
         </div>
       </footer>

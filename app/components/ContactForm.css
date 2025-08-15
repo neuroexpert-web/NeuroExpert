@@ -61,49 +61,61 @@
   font-size: 14px;
 }
 
+/* Контактная информация */
 .contact-info {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 32px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
 }
 
-.info-item {
+.contact-item {
   display: flex;
-  gap: 16px;
   align-items: center;
+  gap: 1rem;
+  transition: transform 0.2s;
 }
 
-.info-icon {
-  font-size: 24px;
-  width: 48px;
-  height: 48px;
-  background: rgba(79, 70, 229, 0.1);
-  border-radius: 10px;
+.contact-item:hover {
+  transform: translateX(5px);
+}
+
+.contact-icon {
+  font-size: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  border-radius: 12px;
+  flex-shrink: 0;
 }
 
-.info-item strong {
-  display: block;
-  font-size: 14px;
-  color: var(--text-muted);
-  margin-bottom: 4px;
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
-.info-item a {
-  color: var(--primary-light);
+.contact-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.contact-value {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
   text-decoration: none;
-  font-size: 16px;
-  transition: color var(--transition-fast);
+  transition: color 0.2s;
 }
 
-.info-item a:hover {
-  color: var(--primary);
+.contact-value:hover {
+  color: var(--primary-color);
 }
 
 /* Form Styles */
