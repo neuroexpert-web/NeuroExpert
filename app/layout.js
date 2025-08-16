@@ -150,7 +150,7 @@ export default function RootLayout({ children }) {
           `
         }} />
       </head>
-      <body className={inter.variable}>
+      <body className={`${inter.variable} premium-body`} style={{ background: '#000000', color: '#ffffff' }}>
         <div className="loading-spinner" id="global-loader">
           <div className="spinner"></div>
         </div>

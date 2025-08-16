@@ -1,7 +1,26 @@
 /* NeuroExpert Premium Design System v4.0 */
 /* Ultra-luxury enterprise-grade visual system */
+/* Last updated: January 2025 */
 
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* CRITICAL: Override any previous styles */
+body, html {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+.premium-body {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+.premium-main {
+  background: #000000 !important;
+  min-height: 100vh !important;
+  position: relative !important;
+  overflow-x: hidden !important;
+}
 
 /* === PREMIUM COLOR SYSTEM === */
 :root {

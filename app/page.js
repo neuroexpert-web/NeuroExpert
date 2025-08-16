@@ -31,7 +31,7 @@ const AdminPanel = dynamic(() => import('./components/AdminPanel'), {
 
 export default function Home() {
   return (
-    <main className="premium-main">
+    <main className="premium-main" style={{ background: 'var(--noir-900)', minHeight: '100vh' }}>
       {/* Premium фон с эффектами */}
       <PremiumBackground />
       
