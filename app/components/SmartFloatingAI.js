@@ -6,7 +6,7 @@ export default function SmartFloatingAI() {
   const [messages, setMessages] = useState([
     {
       type: 'assistant',
-      text: 'Привет! Я AI-помощник NeuroExpert. Как я могу помочь вам с цифровизацией бизнеса?',
+      text: 'Привет! Я ваш управляющий NeuroExpert — цифровой директор, который поможет развивать бизнес с помощью простых и эффективных цифровых решений. Чем могу помочь?',
       model: 'gemini'
     }
   ]);
