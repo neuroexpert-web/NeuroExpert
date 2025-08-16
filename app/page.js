@@ -3,10 +3,12 @@
 import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import PremiumBackground from './components/PremiumBackground';
+import PremiumHero from './components/PremiumHero';
 import HeroSection from './components/HeroSection';
 import JourneySection from './components/JourneySection';
 import WhyUsSection from './components/WhyUsSection';
 import PricingSection from './components/PricingSection';
+import PageTransition from './components/PageTransition';
 
 // Динамические импорты для оптимизации
 const ROICalculator = dynamic(() => import('./components/ROICalculator'), {
@@ -35,8 +37,8 @@ export default function Home() {
       {/* Premium фон с эффектами */}
       <PremiumBackground />
       
-      {/* Hero секция с новым позиционированием */}
-      <HeroSection />
+      {/* Premium Hero с 3D эффектами */}
+      <PremiumHero />
       
       {/* Ваш простой путь к результату */}
       <JourneySection />
