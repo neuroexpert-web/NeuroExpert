@@ -6,6 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "start:render": "next start -p $PORT",
+    "build:render": "next build",
     "netlify": "next build",
     "export": "next build",
     "start:prod": "NODE_ENV=production node server.js",

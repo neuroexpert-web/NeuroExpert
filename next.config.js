@@ -5,8 +5,8 @@
 // Sentry temporarily disabled until properly configured
 
 const nextConfig = {
-  // Для Cloudflare Pages используем стандартный output
-  // output: 'standalone', // Закомментировано для Cloudflare Pages
+  // Режим output зависит от платформы
+  output: process.env.NEXT_OUTPUT_MODE || undefined,
   
   // Генерация статических файлов
   generateBuildId: async () => {
