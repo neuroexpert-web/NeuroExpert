@@ -1,17 +1,18 @@
 'use client';
-import { useState } from 'react';
+import { useState, FormEvent, ChangeEvent } from 'react';
+import { ROIFormData, ROIResults } from '@/types';
 import './ROICalculator.css';
 
-export default function ROICalculator() {
-  const [formData, setFormData] = useState({
+export default function ROICalculator(): JSX.Element {
+  const [formData, setFormData] = useState<ROIFormData>({
     businessSize: 'small',
     industry: 'retail', 
     revenue: 1000000,
     budget: 200000
   });
   
-  const [showResult, setShowResult] = useState(false);
-  const [results, setResults] = useState({
+  const [showResult, setShowResult] = useState<boolean>(false);
+  const [results, setResults] = useState<ROIResults>({
     roi: 0,
     savings: 0,
     growth: 0,
@@ -19,13 +20,13 @@ export default function ROICalculator() {
   });
 
   // Множители для расчета
-  const sizeMultipliers = {
+  const sizeMultipliers: Record<ROIFormData['businessSize'], number> = {
     small: 3.2,
     medium: 4.5,
     large: 6.0
   };
   
-  const industryMultipliers = {
+  const industryMultipliers: Record<ROIFormData['industry'], number> = {
     retail: 1.2,
     services: 1.3,
     production: 1.1,
@@ -33,15 +34,15 @@ export default function ROICalculator() {
     other: 1.0
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
-    }));
+      [name]: name === 'revenue' || name === 'budget' ? Number(value) : value
+    } as ROIFormData));
   };
 
-  const calculateROI = async () => {
+  const calculateROI = async (): Promise<void> => {
     const { businessSize, industry, revenue, budget } = formData;
     
     // Расчеты на основе множителей

@@ -1,12 +1,14 @@
 module.exports = {
+  parser: '@typescript-eslint/parser',
   extends: [
     'next/core-web-vitals',
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
+    'plugin:@typescript-eslint/recommended',
     'prettier'
   ],
-  plugins: ['react', 'react-hooks'],
+  plugins: ['react', 'react-hooks', '@typescript-eslint'],
   rules: {
     // React rules
     'react/react-in-jsx-scope': 'off', // Not needed in Next.js
