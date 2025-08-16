@@ -139,6 +139,15 @@ export default function RootLayout({ children }) {
               opacity: 0;
               pointer-events: none;
             }
+            /* Автоматическое скрытие через CSS как запасной вариант */
+            @keyframes hideLoader {
+              0% { opacity: 1; }
+              90% { opacity: 1; }
+              100% { opacity: 0; pointer-events: none; }
+            }
+            .loading-spinner {
+              animation: hideLoader 3s forwards;
+            }
             .spinner {
               width: 50px;
               height: 50px;
@@ -217,20 +226,38 @@ export default function RootLayout({ children }) {
                   );
                 });
               }
-              
-              // Скрываем загрузчик после полной загрузки
-              if (typeof window !== 'undefined') {
-                window.addEventListener('load', () => {
-                  setTimeout(() => {
-                    const loader = document.getElementById('global-loader');
-                    if (loader) {
+            `
+          }}
+        />
+        
+        {/* Hide loader immediately */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Скрываем загрузчик сразу после загрузки DOM
+              if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function() {
+                  const loader = document.getElementById('global-loader');
+                  if (loader) {
+                    setTimeout(() => {
                       loader.classList.add('hide');
                       setTimeout(() => {
                         loader.style.display = 'none';
                       }, 300);
-                    }
-                  }, 100);
+                    }, 500);
+                  }
                 });
+              } else {
+                // DOM уже загружен
+                const loader = document.getElementById('global-loader');
+                if (loader) {
+                  setTimeout(() => {
+                    loader.classList.add('hide');
+                    setTimeout(() => {
+                      loader.style.display = 'none';
+                    }, 300);
+                  }, 500);
+                }
               }
             `
           }}
