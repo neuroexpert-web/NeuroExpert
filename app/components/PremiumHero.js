@@ -16,6 +16,20 @@ export default function PremiumHero() {
         0%, 100% { transform: translateY(0); }
         50% { transform: translateY(-10px); }
       }
+      @keyframes twinkle {
+        0%, 100% { opacity: 0; }
+        50% { opacity: 1; }
+      }
+      @keyframes shootingstar {
+        0% {
+          transform: translateX(0) translateY(0) rotate(45deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateX(300px) translateY(300px) rotate(45deg);
+          opacity: 0;
+        }
+      }
     `;
     document.head.appendChild(style);
     return () => document.head.removeChild(style);
