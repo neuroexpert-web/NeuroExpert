@@ -62,29 +62,59 @@ export default function WhyUsSection(): JSX.Element {
         <div className="trust-section">
           <PremiumCard glowColor="gold" className="trust-card">
             <div className="trust-content">
-              <h3 className="trust-title">Нам доверяют</h3>
-              <div className="trust-stats">
-                <div className="stat">
-                  <span className="stat-value">500+</span>
-                  <span className="stat-label">успешных проектов</span>
+              <h3 className="trust-title">Безопасность и гарантии</h3>
+              
+              <div className="security-grid">
+                <div className="security-block">
+                  <div className="security-icon">🔒</div>
+                  <h4 className="security-title">Защита данных</h4>
+                  <ul className="security-list">
+                    <li>Шифрование SSL/TLS всех соединений</li>
+                    <li>Соответствие 152-ФЗ "О персональных данных"</li>
+                    <li>Хранение данных в РФ (№ 242-ФЗ)</li>
+                    <li>NDA с каждым клиентом</li>
+                  </ul>
                 </div>
-                <div className="stat">
-                  <span className="stat-value">95%</span>
-                  <span className="stat-label">клиентов возвращаются</span>
+                
+                <div className="security-block">
+                  <div className="security-icon">✅</div>
+                  <h4 className="security-title">Гарантии качества</h4>
+                  <ul className="security-list">
+                    <li>Официальный договор с чёткими SLA</li>
+                    <li>Поэтапная оплата работ</li>
+                    <li>3 месяца бесплатной поддержки</li>
+                    <li>Гарантия возврата при неудовлетворённости</li>
+                  </ul>
                 </div>
-                <div className="stat">
-                  <span className="stat-value">10+</span>
-                  <span className="stat-label">лет на рынке</span>
+                
+                <div className="security-block">
+                  <div className="security-icon">⚖️</div>
+                  <h4 className="security-title">Правовая защита</h4>
+                  <ul className="security-list">
+                    <li>Соответствие GDPR и КСИИ</li>
+                    <li>Лицензия ФСБ на криптозащиту</li>
+                    <li>Сертификат ФСТЭК России</li>
+                    <li>Передача исходных кодов заказчику</li>
+                  </ul>
                 </div>
               </div>
-              <div className="technologies">
-                <h4>Используем передовые технологии</h4>
-                <div className="tech-badges">
-                  <span className="tech-badge">AI/ML</span>
-                  <span className="tech-badge">Cloud</span>
-                  <span className="tech-badge">Big Data</span>
-                  <span className="tech-badge">IoT</span>
-                  <span className="tech-badge">Blockchain</span>
+              
+              <div className="compliance-badges">
+                <div className="compliance-badge">
+                  <span className="badge-icon">🇷🇺</span>
+                  <span className="badge-text">152-ФЗ</span>
+                </div>
+                <div className="compliance-badge">
+                  <span className="badge-icon">🛡️</span>
+                  <span className="badge-text">GDPR</span>
+                </div>
+                <div className="compliance-badge">
+                  <span className="badge-icon">🔐</span>
+                  <span className="badge-text">ISO 27001</span>
+                </div>
+                <div className="compliance-badge">
+                  <span className="badge-icon">📋</span>
+                  <span className="badge-text">242-ФЗ</span>
                 </div>
               </div>
             </div>
@@ -198,62 +228,104 @@ export default function WhyUsSection(): JSX.Element {
           margin-bottom: 48px;
         }
 
-        .trust-stats {
+        .security-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
           gap: 40px;
-          margin-bottom: 60px;
+          margin-bottom: 48px;
         }
 
-        .stat {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
+        .security-block {
+          text-align: left;
+          padding: 32px;
+          background: rgba(102, 126, 234, 0.05);
+          border: 1px solid rgba(102, 126, 234, 0.2);
+          border-radius: 20px;
+          transition: all 0.3s ease;
         }
 
-        .stat-value {
+        .security-block:hover {
+          background: rgba(102, 126, 234, 0.1);
+          border-color: rgba(102, 126, 234, 0.4);
+          transform: translateY(-4px);
+          box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+
+        .security-icon {
+          font-size: 48px;
+          margin-bottom: 16px;
+          filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.5));
+        }
+
+        .security-title {
           font-family: var(--font-display);
-          font-size: 56px;
-          font-weight: 700;
-          background: linear-gradient(135deg, var(--gold-premium), var(--gold-rose));
+          font-size: 24px;
+          font-weight: 600;
+          color: var(--platinum-50);
+          margin-bottom: 16px;
+          background: linear-gradient(135deg, #667eea, #764ba2);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
         }
 
-        .stat-label {
-          font-size: 18px;
-          color: var(--platinum-400);
+        .security-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
         }
 
-        .technologies {
-          margin-top: 48px;
-        }
-
-        .technologies h4 {
-          font-family: var(--font-display);
-          font-size: 20px;
+        .security-list li {
           color: var(--platinum-300);
-          margin-bottom: 24px;
+          font-size: 15px;
+          line-height: 1.8;
+          padding-left: 24px;
+          position: relative;
+          margin-bottom: 8px;
         }
 
-        .tech-badges {
+        .security-list li::before {
+          content: '✓';
+          position: absolute;
+          left: 0;
+          color: #667eea;
+          font-weight: bold;
+        }
+
+        .compliance-badges {
           display: flex;
           flex-wrap: wrap;
-          gap: 16px;
+          gap: 20px;
           justify-content: center;
+          margin-top: 40px;
         }
 
-        .tech-badge {
-          padding: 8px 20px;
-          background: rgba(65, 54, 241, 0.1);
-          border: 1px solid rgba(65, 54, 241, 0.3);
-          border-radius: 100px;
-          font-size: 14px;
+        .compliance-badge {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 12px 24px;
+          background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+          border: 1px solid rgba(102, 126, 234, 0.3);
+          border-radius: 50px;
+          transition: all 0.3s ease;
+        }
+
+        .compliance-badge:hover {
+          transform: scale(1.05);
+          box-shadow: 0 0 30px rgba(102, 126, 234, 0.4);
+          border-color: rgba(102, 126, 234, 0.6);
+        }
+
+        .badge-icon {
+          font-size: 24px;
+        }
+
+        .badge-text {
+          font-size: 16px;
           font-weight: 600;
-          color: var(--royal-gradient-start);
-          text-transform: uppercase;
-          letter-spacing: 1px;
+          color: var(--platinum-50);
+          letter-spacing: 0.5px;
         }
 
         @media (max-width: 768px) {
@@ -261,8 +333,22 @@ export default function WhyUsSection(): JSX.Element {
             padding: 40px 24px;
           }
 
-          .stat-value {
-            font-size: 40px;
+          .security-grid {
+            grid-template-columns: 1fr;
+            gap: 24px;
+          }
+
+          .security-block {
+            padding: 24px;
+          }
+
+          .compliance-badges {
+            gap: 12px;
+          }
+
+          .compliance-badge {
+            padding: 10px 20px;
+            font-size: 14px;
           }
 
           .benefits-grid {
