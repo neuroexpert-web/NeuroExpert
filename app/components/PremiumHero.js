@@ -23,10 +23,16 @@ export default function PremiumHero() {
       @keyframes shootingstar {
         0% {
           transform: translateX(0) translateY(0) rotate(45deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
           opacity: 1;
         }
         100% {
-          transform: translateX(300px) translateY(300px) rotate(45deg);
+          transform: translateX(400px) translateY(400px) rotate(45deg);
           opacity: 0;
         }
       }
@@ -52,7 +58,7 @@ export default function PremiumHero() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
         this.z = Math.random() * 1000;
-        this.size = Math.random() * 2;
+        this.size = Math.random() * 1.5;
         this.speedX = (Math.random() - 0.5) * 0.5;
         this.speedY = (Math.random() - 0.5) * 0.5;
         this.speedZ = Math.random() * 0.5;
@@ -87,9 +93,9 @@ export default function PremiumHero() {
         const size = this.size * perspective;
 
         ctx.globalAlpha = this.opacity * (1 - this.z / 1000);
-        ctx.fillStyle = '#6366f1';
-        ctx.shadowBlur = 20;
-        ctx.shadowColor = '#6366f1';
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = '#ffffff';
         
         ctx.beginPath();
         ctx.arc(x, y, size, 0, Math.PI * 2);
@@ -97,8 +103,8 @@ export default function PremiumHero() {
       }
     }
 
-    // Create particles
-    for (let i = 0; i < 100; i++) {
+    // Create particles (космическая пыль)
+    for (let i = 0; i < 50; i++) {
       particlesRef.current.push(new Particle());
     }
 
@@ -144,7 +150,7 @@ export default function PremiumHero() {
       alignItems: 'center',
       justifyContent: 'center',
       overflow: 'hidden',
-      background: '#0f172a'
+      background: 'radial-gradient(ellipse at center, #0a0e27 0%, #020515 100%)'
     }}>
       {/* 3D Particle Canvas */}
       <canvas
@@ -160,32 +166,52 @@ export default function PremiumHero() {
         }}
       />
 
-      {/* Gradient Orbs */}
+      {/* Космические звёзды */}
       <div style={{
         position: 'absolute',
-        top: '80px',
-        left: '80px',
-        width: '384px',
-        height: '384px',
-        background: 'linear-gradient(to right, #a855f7, #ec4899)',
-        borderRadius: '50%',
-        filter: 'blur(48px)',
-        opacity: 0.2,
-        animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
-      }}></div>
-      <div style={{
-        position: 'absolute',
-        bottom: '80px',
-        right: '80px',
-        width: '384px',
-        height: '384px',
-        background: 'linear-gradient(to right, #3b82f6, #14b8a6)',
-        borderRadius: '50%',
-        filter: 'blur(48px)',
-        opacity: 0.2,
-        animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        animationDelay: '2s'
-      }}></div>
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        overflow: 'hidden'
+      }}>
+        {/* Генерируем звёзды */}
+        {[...Array(150)].map((_, i) => (
+          <div
+            key={i}
+            style={{
+              position: 'absolute',
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              width: `${Math.random() * 3}px`,
+              height: `${Math.random() * 3}px`,
+              background: 'white',
+              borderRadius: '50%',
+              opacity: Math.random(),
+              animation: `twinkle ${Math.random() * 5 + 5}s infinite`,
+              animationDelay: `${Math.random() * 5}s`
+            }}
+          />
+        ))}
+        
+        {/* Падающие звёзды */}
+        {[...Array(3)].map((_, i) => (
+          <div
+            key={`shooting-${i}`}
+            style={{
+              position: 'absolute',
+              top: `${Math.random() * 50}%`,
+              left: `${Math.random() * 50 - 50}%`,
+              width: '2px',
+              height: '100px',
+              background: 'linear-gradient(to bottom, white, transparent)',
+              opacity: 0,
+              animation: `shootingstar ${3 + i}s linear infinite`,
+              animationDelay: `${i * 7}s`
+            }}
+          />
+        ))}
+      </div>
 
       {/* Content */}
       <div style={{
