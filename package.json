@@ -11,17 +11,37 @@
     "start:prod": "NODE_ENV=production node server.js",
     "build:standalone": "next build && cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static",
     "start:railway": "node server.js",
-    "start:render": "NODE_ENV=production node server.js"
+    "start:render": "NODE_ENV=production node server.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md}\""
   },
   "dependencies": {
     "@google/generative-ai": "^0.15.0",
+    "bcryptjs": "^2.4.3",
     "critters": "^0.0.23",
+    "jsonwebtoken": "^9.0.2",
     "next": "^14.2.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@netlify/plugin-nextjs": "^5.0.0"
+    "@netlify/plugin-nextjs": "^5.0.0",
+    "@testing-library/jest-dom": "^6.1.5",
+    "@testing-library/react": "^14.1.2",
+    "@testing-library/user-event": "^14.5.1",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "^14.2.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "prettier": "^3.1.1"
   },
   "engines": {
     "node": ">=18.0.0",

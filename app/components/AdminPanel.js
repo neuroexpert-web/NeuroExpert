@@ -15,27 +15,61 @@ function AdminPanel() {
 
   // Проверка авторизации
   useEffect(() => {
-    const savedAuth = localStorage.getItem('admin_authorized');
-    if (savedAuth === 'true') {
-      setIsAuthorized(true);
-      loadContent();
-    }
+    const checkAuth = async () => {
+      const token = localStorage.getItem('admin_token');
+      if (token) {
+        try {
+          const response = await fetch('/api/admin/auth', {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          const data = await response.json();
+          if (data.valid) {
+            setIsAuthorized(true);
+            loadContent();
+          } else {
+            localStorage.removeItem('admin_token');
+            localStorage.removeItem('admin_authorized');
+          }
+        } catch (error) {
+          console.error('Auth check error:', error);
+        }
+      }
+    };
+    checkAuth();
   }, []);
 
-  const handleLogin = () => {
-    // В реальном проекте здесь будет проверка на сервере
-    if (password === 'neuroexpert2025') {
-      setIsAuthorized(true);
-      localStorage.setItem('admin_authorized', 'true');
-      loadContent();
-    } else {
-      alert('Неверный пароль');
+  const handleLogin = async () => {
+    try {
+      const response = await fetch('/api/admin/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setIsAuthorized(true);
+        localStorage.setItem('admin_token', data.token);
+        localStorage.setItem('admin_authorized', 'true');
+        loadContent();
+      } else {
+        alert('Неверный пароль');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      alert('Ошибка авторизации. Попробуйте позже.');
     }
   };
 
   const handleLogout = () => {
     setIsAuthorized(false);
     localStorage.removeItem('admin_authorized');
+    localStorage.removeItem('admin_token');
     setPassword('');
   };
 

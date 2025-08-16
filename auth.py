@@ -11,7 +11,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Настройки безопасности
-SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key-here")
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise ValueError("SECRET_KEY environment variable is not set. Please set it in your .env file")
+
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -74,13 +77,10 @@ async def get_current_active_user(current_user: User = Depends(get_current_user)
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
 
-# Временное хранилище пользователей (в реальном проекте должно быть в базе данных)
-fake_users_db = {
-    "admin": {
-        "username": "admin",
-        "full_name": "Administrator",
-        "email": "admin@example.com",
-        "hashed_password": get_password_hash("admin"),
-        "disabled": False,
-    }
-}
+# Получаем пользователя из базы данных (заглушка)
+def get_user(username: str):
+    # В реальном проекте здесь должен быть запрос к базе данных
+    # Сейчас возвращаем None для безопасности
+    return None
+    
+# Для инициализации админа используйте отдельный скрипт init_admin.py
