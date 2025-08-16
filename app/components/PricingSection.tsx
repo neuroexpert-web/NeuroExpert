@@ -20,6 +20,19 @@ export default function PricingSection(): JSX.Element {
     element?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handlePlanSelect = (planName: string) => {
+    setSelectedPlan(planName);
+    // Открываем чат с AI директором с предзаполненным сообщением
+    setTimeout(() => {
+      const event = new CustomEvent('openAIChat', { 
+        detail: { 
+          message: `Здравствуйте! Меня интересует тариф "${planName}". Расскажите подробнее о возможностях и как начать работу.` 
+        } 
+      });
+      window.dispatchEvent(event);
+    }, 300);
+  };
+
   const plans: PricingPlan[] = [
     {
       name: 'Старт',
@@ -119,7 +132,7 @@ export default function PricingSection(): JSX.Element {
 
                 <button 
                   className={`btn-luxury ${plan.popular ? 'btn-gold' : ''} btn-full`}
-                  onClick={() => setSelectedPlan(plan.name)}
+                  onClick={() => handlePlanSelect(plan.name)}
                 >
                   <span>Выбрать {plan.name}</span>
                   <span className="btn-arrow">→</span>
@@ -154,6 +167,37 @@ export default function PricingSection(): JSX.Element {
                 <span className="item-label">Поддержка</span>
                 <span className="item-value">24/7 включена</span>
               </div>
+            </div>
+          </div>
+          
+          <div className="contact-promo">
+            <h3>Нужна консультация?</h3>
+            <p>Поговорите с AI директором или оставьте заявку</p>
+            <div className="contact-buttons">
+              <button 
+                className="btn-luxury btn-gold"
+                onClick={() => {
+                  const event = new CustomEvent('openAIChat', { 
+                    detail: { 
+                      message: 'Здравствуйте! Помогите выбрать подходящий тариф для моего бизнеса.' 
+                    } 
+                  });
+                  window.dispatchEvent(event);
+                }}
+              >
+                <span>Консультация AI</span>
+                <span className="btn-icon">🤖</span>
+              </button>
+              <button 
+                className="btn-luxury btn-outline"
+                onClick={() => {
+                  const contactForm = document.querySelector('.contact-form-section');
+                  contactForm?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                <span>Оставить заявку</span>
+                <span className="btn-icon">📧</span>
+              </button>
             </div>
           </div>
         </div>
@@ -363,6 +407,36 @@ export default function PricingSection(): JSX.Element {
         .item-value {
           font-weight: 700;
           color: var(--gold-premium);
+        }
+
+        .contact-promo {
+          background: var(--glass-white);
+          backdrop-filter: blur(10px);
+          border: 1px solid var(--glass-border);
+          border-radius: 24px;
+          padding: 40px;
+          text-align: center;
+        }
+
+        .contact-promo h3 {
+          font-family: var(--font-display);
+          font-size: 28px;
+          font-weight: 700;
+          color: var(--platinum-50);
+          margin-bottom: 12px;
+        }
+
+        .contact-promo p {
+          font-size: 18px;
+          color: var(--platinum-400);
+          margin-bottom: 32px;
+        }
+
+        .contact-buttons {
+          display: flex;
+          gap: 16px;
+          justify-content: center;
+          flex-wrap: wrap;
         }
 
         @media (max-width: 1200px) {

@@ -57,7 +57,15 @@ export default function SmartFloatingAI() {
 
   // Слушаем событие открытия чата
   useEffect(() => {
-    const handleOpenChat = () => setIsOpen(true);
+    const handleOpenChat = (event) => {
+      setIsOpen(true);
+      // Если есть предзаполненное сообщение, устанавливаем его
+      if (event.detail && event.detail.message) {
+        setTimeout(() => {
+          setUserInput(event.detail.message);
+        }, 100);
+      }
+    };
     window.addEventListener('openAIChat', handleOpenChat);
     return () => window.removeEventListener('openAIChat', handleOpenChat);
   }, []);
