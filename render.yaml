@@ -6,7 +6,7 @@ services:
     plan: free # free, starter ($7/month), standard ($25/month)
     
     # Команды сборки и запуска
-    buildCommand: npm install && npm run build
+    buildCommand: npm install && npm run build && cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static
     startCommand: npm start
     
     # Настройки окружения

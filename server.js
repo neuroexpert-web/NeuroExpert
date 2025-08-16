@@ -16,8 +16,13 @@ app.prepare().then(() => {
       res.setHeader('X-Powered-By', 'NeuroExpert');
       
       // Кэширование статических ресурсов
-      if (req.url.startsWith('/_next/static')) {
+      if (req.url.startsWith('/_next/static') || req.url.startsWith('/static')) {
         res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      }
+      
+      // Обработка CSS файлов
+      if (req.url.endsWith('.css')) {
+        res.setHeader('Content-Type', 'text/css; charset=utf-8');
       }
       
       const parsedUrl = parse(req.url, true);

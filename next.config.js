@@ -8,6 +8,12 @@ const nextConfig = {
   // Режим вывода для Node.js сервера
   output: 'standalone',
   
+  // Генерация статических файлов
+  generateBuildId: async () => {
+    // Используем фиксированный ID для консистентности
+    return 'neuroexpert-build-2025'
+  },
+  
   // Оптимизация производительности
   reactStrictMode: true,
   swcMinify: true,
