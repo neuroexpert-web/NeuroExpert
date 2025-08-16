@@ -315,6 +315,20 @@ export default function PremiumHero() {
               // Скролл к секции с ценами
               document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
             }}
+            animate={{
+              boxShadow: [
+                '0 0 30px rgba(102, 126, 234, 0.5), inset 0 0 15px rgba(255, 255, 255, 0.1)',
+                '0 0 50px rgba(118, 75, 162, 0.7), inset 0 0 25px rgba(255, 255, 255, 0.2)',
+                '0 0 30px rgba(102, 126, 234, 0.5), inset 0 0 15px rgba(255, 255, 255, 0.1)'
+              ]
+            }}
+            transition={{
+              boxShadow: {
+                duration: 2,
+                repeat: Infinity,
+                ease: 'easeInOut'
+              }
+            }}
             style={{
               position: 'relative',
               padding: '16px 40px',
@@ -323,10 +337,10 @@ export default function PremiumHero() {
               letterSpacing: '0.02em',
               color: 'white',
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              border: 'none',
+              border: '2px solid transparent',
+              backgroundClip: 'padding-box',
               borderRadius: '50px',
               cursor: 'pointer',
-              boxShadow: '0 0 40px rgba(102, 126, 234, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.2)',
               display: 'flex',
               alignItems: 'center',
               gap: '10px',
@@ -335,25 +349,32 @@ export default function PremiumHero() {
             }}
             whileHover={{ 
               scale: 1.05,
-              boxShadow: '0 0 60px rgba(102, 126, 234, 0.8), inset 0 0 30px rgba(255, 255, 255, 0.3)'
+              boxShadow: '0 0 80px rgba(102, 126, 234, 0.9), 0 0 120px rgba(118, 75, 162, 0.6), inset 0 0 30px rgba(255, 255, 255, 0.3)'
             }}
             whileTap={{ scale: 0.95 }}
           >
             <motion.span
               animate={{
-                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
+                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                textShadow: [
+                  '0 0 20px rgba(102, 126, 234, 0.8), 0 0 40px rgba(102, 126, 234, 0.6)',
+                  '0 0 30px rgba(118, 75, 162, 0.8), 0 0 50px rgba(118, 75, 162, 0.6)',
+                  '0 0 20px rgba(102, 126, 234, 0.8), 0 0 40px rgba(102, 126, 234, 0.6)'
+                ]
               }}
               transition={{
-                duration: 3,
+                duration: 2,
                 repeat: Infinity,
                 ease: 'linear'
               }}
               style={{
-                background: 'linear-gradient(90deg, #fff, #e0e7ff, #fff)',
-                backgroundSize: '200% 100%',
+                background: 'linear-gradient(90deg, #fff, #f0f0ff, #e0e7ff, #f0f0ff, #fff)',
+                backgroundSize: '300% 100%',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
+                backgroundClip: 'text',
+                filter: 'drop-shadow(0 0 8px rgba(102, 126, 234, 0.6))',
+                fontWeight: '700'
               }}
             >
               Начать сейчас
@@ -376,6 +397,20 @@ export default function PremiumHero() {
               // Скролл к секции "Почему мы"
               document.getElementById('why-us')?.scrollIntoView({ behavior: 'smooth' });
             }}
+            animate={{
+              boxShadow: [
+                '0 0 20px rgba(102, 126, 234, 0.3), inset 0 0 10px rgba(102, 126, 234, 0.1)',
+                '0 0 35px rgba(118, 75, 162, 0.5), inset 0 0 15px rgba(118, 75, 162, 0.2)',
+                '0 0 20px rgba(102, 126, 234, 0.3), inset 0 0 10px rgba(102, 126, 234, 0.1)'
+              ]
+            }}
+            transition={{
+              boxShadow: {
+                duration: 2.5,
+                repeat: Infinity,
+                ease: 'easeInOut'
+              }
+            }}
             style={{
               position: 'relative',
               padding: '16px 40px',
@@ -393,18 +428,34 @@ export default function PremiumHero() {
             }}
             whileHover={{ 
               scale: 1.05,
-              boxShadow: '0 0 30px rgba(102, 126, 234, 0.5)'
+              boxShadow: '0 0 50px rgba(102, 126, 234, 0.7), 0 0 80px rgba(118, 75, 162, 0.5)'
             }}
             whileTap={{ scale: 0.95 }}
           >
             <motion.span
-              style={{ position: 'relative', zIndex: 1 }}
+              style={{ 
+                position: 'relative', 
+                zIndex: 1,
+                background: 'linear-gradient(90deg, #fff, #e0e7ff, #f0f0ff, #e0e7ff, #fff)',
+                backgroundSize: '300% 100%',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                filter: 'drop-shadow(0 0 6px rgba(102, 126, 234, 0.5))',
+                fontWeight: '700'
+              }}
               animate={{
-                color: ['#ffffff', '#e0e7ff', '#ffffff']
+                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                textShadow: [
+                  '0 0 15px rgba(102, 126, 234, 0.6), 0 0 30px rgba(102, 126, 234, 0.4)',
+                  '0 0 25px rgba(118, 75, 162, 0.7), 0 0 40px rgba(118, 75, 162, 0.5)',
+                  '0 0 15px rgba(102, 126, 234, 0.6), 0 0 30px rgba(102, 126, 234, 0.4)'
+                ]
               }}
               transition={{
-                duration: 2,
-                repeat: Infinity
+                duration: 2.5,
+                repeat: Infinity,
+                ease: 'linear'
               }}
             >
               Узнать больше
