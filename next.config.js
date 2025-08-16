@@ -5,8 +5,8 @@
 // Sentry temporarily disabled until properly configured
 
 const nextConfig = {
-  // Режим вывода для Node.js сервера
-  output: 'standalone',
+  // Для Cloudflare Pages используем стандартный output
+  // output: 'standalone', // Закомментировано для Cloudflare Pages
   
   // Генерация статических файлов
   generateBuildId: async () => {
