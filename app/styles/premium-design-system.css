@@ -113,9 +113,9 @@ body, html {
 .premium-orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.4;
-  animation: orbFloat 20s ease-in-out infinite;
+  filter: blur(80px);
+  opacity: 0.15;
+  animation: orbFloat 30s ease-in-out infinite;
 }
 
 .orb-1 {
@@ -305,19 +305,19 @@ body, html {
 @keyframes orbFloat {
   0%, 100% {
     transform: translate(0, 0) scale(1);
-    opacity: 0.4;
+    opacity: 0.15;
   }
   25% {
-    transform: translate(50px, -50px) scale(1.1);
-    opacity: 0.5;
+    transform: translate(20px, -20px) scale(1.05);
+    opacity: 0.2;
   }
   50% {
-    transform: translate(-30px, 30px) scale(0.9);
-    opacity: 0.3;
+    transform: translate(-15px, 15px) scale(0.95);
+    opacity: 0.1;
   }
   75% {
-    transform: translate(40px, 20px) scale(1.05);
-    opacity: 0.45;
+    transform: translate(15px, 10px) scale(1.02);
+    opacity: 0.18;
   }
 }
 

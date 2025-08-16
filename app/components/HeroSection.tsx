@@ -305,13 +305,14 @@ export default function HeroSection(): JSX.Element {
 
         .logo-title {
           font-family: var(--font-heading);
-          font-size: clamp(48px, 8vw, 96px);
+          font-size: clamp(64px, 10vw, 120px);
           font-weight: 900;
           line-height: 1;
-          margin-bottom: 16px;
-          letter-spacing: -0.02em;
+          margin-bottom: 24px;
+          letter-spacing: -0.03em;
           position: relative;
           display: inline-block;
+          text-shadow: 0 4px 40px rgba(0, 0, 0, 0.5);
         }
 
         .logo-neuro {
@@ -331,8 +332,14 @@ export default function HeroSection(): JSX.Element {
         }
 
         @keyframes pulseGlow {
-          0%, 100% { filter: brightness(1) drop-shadow(0 0 20px currentColor); }
-          50% { filter: brightness(1.2) drop-shadow(0 0 40px currentColor); }
+          0%, 100% { 
+            filter: brightness(1) drop-shadow(0 0 10px currentColor); 
+            transform: scale(1);
+          }
+          50% { 
+            filter: brightness(1.1) drop-shadow(0 0 20px currentColor); 
+            transform: scale(1.02);
+          }
         }
 
         .logo-tagline {
