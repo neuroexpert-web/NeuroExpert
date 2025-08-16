@@ -79,15 +79,69 @@ export default function AIDirectorCapabilities() {
           {Object.entries(capabilities).map(([key, cap]) => (
             <motion.button
               key={key}
-              className={`glass px-6 py-3 rounded-xl font-semibold transition-all ${
-                activeTab === key ? 'bg-primary text-white' : ''
-              }`}
               onClick={() => setActiveTab(key)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              animate={{
+                boxShadow: activeTab === key ? [
+                  '0 0 25px rgba(102, 126, 234, 0.6), inset 0 0 15px rgba(102, 126, 234, 0.3)',
+                  '0 0 35px rgba(118, 75, 162, 0.7), inset 0 0 20px rgba(118, 75, 162, 0.4)',
+                  '0 0 25px rgba(102, 126, 234, 0.6), inset 0 0 15px rgba(102, 126, 234, 0.3)'
+                ] : ['0 0 15px rgba(102, 126, 234, 0.3)']
+              }}
+              transition={{
+                boxShadow: {
+                  duration: 2,
+                  repeat: activeTab === key ? Infinity : 0,
+                  ease: 'easeInOut'
+                }
+              }}
+              style={{
+                padding: '12px 24px',
+                borderRadius: '50px',
+                fontWeight: '600',
+                fontSize: '16px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                cursor: 'pointer',
+                position: 'relative',
+                overflow: 'hidden',
+                background: activeTab === key 
+                  ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' 
+                  : 'rgba(20, 20, 40, 0.6)',
+                border: activeTab === key 
+                  ? '2px solid transparent' 
+                  : '2px solid rgba(102, 126, 234, 0.3)',
+                backdropFilter: 'blur(10px)',
+                color: 'white',
+                transition: 'all 0.3s ease'
+              }}
             >
-              <span className="text-2xl mr-2">{cap.icon}</span>
-              {cap.title}
+              <span style={{ fontSize: '24px' }}>{cap.icon}</span>
+              <motion.span
+                animate={{
+                  backgroundPosition: activeTab === key ? ['0% 50%', '100% 50%', '0% 50%'] : ['0% 50%']
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: activeTab === key ? Infinity : 0,
+                  ease: 'linear'
+                }}
+                style={{
+                  background: activeTab === key 
+                    ? 'linear-gradient(90deg, #fff, #f0f0ff, #e0e7ff, #f0f0ff, #fff)'
+                    : 'linear-gradient(90deg, #fff, #fff)',
+                  backgroundSize: '300% 100%',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  filter: activeTab === key ? 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))' : 'none',
+                  fontWeight: '700'
+                }}
+              >
+                {cap.title}
+              </motion.span>
             </motion.button>
           ))}
         </div>
@@ -98,23 +152,44 @@ export default function AIDirectorCapabilities() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4 }}
-          className="card-premium"
+          style={{
+            background: 'rgba(20, 20, 40, 0.8)',
+            backdropFilter: 'blur(20px)',
+            borderRadius: '24px',
+            padding: '32px',
+            border: '1px solid rgba(102, 126, 234, 0.3)',
+            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(102, 126, 234, 0.2), inset 0 0 20px rgba(102, 126, 234, 0.1)'
+          }}
         >
           {activeTab === 'personality' && (
             <div className="grid md:grid-cols-2 gap-8">
               <div>
-                <h3 className="text-2xl font-bold mb-4">{capabilities.personality.content.name}</h3>
-                <p className="text-gray-300 mb-2">{capabilities.personality.content.role}</p>
-                <p className="text-primary mb-6">{capabilities.personality.content.experience}</p>
+                <h3 style={{ fontSize: '28px', fontWeight: '700', marginBottom: '16px', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{capabilities.personality.content.name}</h3>
+                <p style={{ color: '#e0e7ff', marginBottom: '8px', fontSize: '18px' }}>{capabilities.personality.content.role}</p>
+                <p style={{ color: '#667eea', marginBottom: '24px', fontSize: '16px', fontWeight: '600' }}>{capabilities.personality.content.experience}</p>
               </div>
               <div>
-                <h4 className="text-lg font-semibold mb-4">Достижения:</h4>
-                <ul className="space-y-2">
+                <h4 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '16px', color: '#e0e7ff' }}>Достижения:</h4>
+                <ul style={{ listStyle: 'none', padding: 0 }}>
                   {capabilities.personality.content.achievements.map((achievement, i) => (
-                    <li key={i} className="flex items-start">
-                      <span className="text-primary mr-2">✓</span>
-                      {achievement}
-                    </li>
+                    <motion.li 
+                      key={i} 
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                      style={{ 
+                        display: 'flex', 
+                        alignItems: 'flex-start', 
+                        marginBottom: '12px',
+                        padding: '12px',
+                        background: 'rgba(102, 126, 234, 0.1)',
+                        borderRadius: '12px',
+                        border: '1px solid rgba(102, 126, 234, 0.2)'
+                      }}
+                    >
+                      <span style={{ color: '#667eea', marginRight: '8px', fontSize: '20px' }}>✨</span>
+                      <span style={{ color: '#f0f0ff', fontSize: '15px' }}>{achievement}</span>
+                    </motion.li>
                   ))}
                 </ul>
               </div>
@@ -123,13 +198,29 @@ export default function AIDirectorCapabilities() {
 
           {activeTab === 'intelligence' && (
             <div>
-              <h3 className="text-2xl font-bold mb-6">Навыки эмпатии и понимания</h3>
+              <h3 style={{ fontSize: '28px', fontWeight: '700', marginBottom: '24px', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Навыки эмпатии и понимания</h3>
               <div className="grid md:grid-cols-2 gap-4">
                 {capabilities.intelligence.content.skills.map((skill, i) => (
-                  <div key={i} className="glass p-4 rounded-lg hover-lift">
-                    <span className="text-primary text-xl mr-2">💡</span>
-                    {skill}
-                  </div>
+                  <motion.div 
+                    key={i} 
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: i * 0.1 }}
+                    whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(102, 126, 234, 0.4)' }}
+                    style={{
+                      background: 'rgba(102, 126, 234, 0.1)',
+                      padding: '20px',
+                      borderRadius: '16px',
+                      border: '1px solid rgba(102, 126, 234, 0.3)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    <span style={{ fontSize: '24px', marginRight: '12px' }}>💡</span>
+                    <span style={{ color: '#f0f0ff', fontSize: '16px' }}>{skill}</span>
+                  </motion.div>
                 ))}
               </div>
             </div>
