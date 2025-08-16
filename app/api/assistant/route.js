@@ -284,7 +284,7 @@ ${Object.values(DIRECTOR_KNOWLEDGE_BASE.services.ai_solutions).map(solution =>
 
 ${DIRECTOR_KNOWLEDGE_BASE.companyInfo.mission}
 
-У нас ${DIRECTOR_KNOWLEDGE_BASE.personality.experience} и более ${DIRECTOR_KNOWLEDGE_BASE.personality.achievements[0]}.
+Имею ${DIRECTOR_KNOWLEDGE_BASE.personality.experience}. Специализируюсь на создании цифровых решений, которые приносят измеримый результат.
 
 Расскажите о вашем проекте, и я предложу оптимальное решение с расчётом ROI!`;
 }

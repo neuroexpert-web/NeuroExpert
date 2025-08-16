@@ -213,10 +213,19 @@ export default function SmartFloatingAI() {
                 <span className="ai-status-dot"></span>
               </div>
               <div className="ai-header-info">
-                <h3>AI-Управляющий Алексей</h3>
-                <p className="ai-subtitle">8 лет опыта • {stats.totalQuestions} консультаций</p>
+                <h3>AI-Управляющий Александр</h3>
+                <p className="ai-subtitle">15+ лет опыта • {stats.totalQuestions} консультаций</p>
               </div>
             </div>
+            <button 
+              className="ai-close-button"
+              onClick={() => setIsOpen(false)}
+              aria-label="Закрыть чат"
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </button>
             <div className="ai-header-right">
               <div className="model-selector">
                 <button 
@@ -1017,6 +1026,34 @@ export default function SmartFloatingAI() {
             opacity: 0.7;
             margin-bottom: 4px;
             display: inline-block;
+          }
+
+          .ai-close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+          }
+
+          .ai-close-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+          }
+
+          .ai-close-button svg {
+            width: 18px;
+            height: 18px;
           }
         `}</style>
       </div>
