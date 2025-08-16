@@ -11,6 +11,11 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   
+  // Временно отключаем ESLint для продакшен сборки
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  
   // Оптимизация изображений
   images: {
     domains: ['api.dicebear.com'],

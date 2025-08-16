@@ -1,5 +1,5 @@
 'use client';
-import { useState, FormEvent, ChangeEvent } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { ROIFormData, ROIResults } from '@/types';
 import './ROICalculator.css';
 
