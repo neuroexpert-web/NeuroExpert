@@ -31,6 +31,11 @@ const AdminPanel = dynamic(() => import('./components/AdminPanel'), {
   loading: () => <div>Загрузка админ-панели...</div>
 });
 
+const AIDirectorCapabilities = dynamic(() => import('./components/AIDirectorCapabilities'), {
+  ssr: false,
+  loading: () => <div className="loading-skeleton">Загрузка AI директора...</div>
+});
+
 export default function Home() {
   return (
     <main className="premium-main" style={{ background: 'var(--noir-900)', minHeight: '100vh' }}>
@@ -39,6 +44,11 @@ export default function Home() {
       
       {/* Premium Hero с 3D эффектами */}
       <PremiumHero />
+      
+      {/* AI Управляющий директор */}
+      <Suspense fallback={<div className="loading-skeleton">Загрузка...</div>}>
+        <AIDirectorCapabilities />
+      </Suspense>
       
       {/* Ваш простой путь к результату */}
       <JourneySection />

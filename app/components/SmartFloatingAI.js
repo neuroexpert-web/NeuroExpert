@@ -3,23 +3,14 @@ import { useState, useEffect, useRef } from 'react';
 
 export default function SmartFloatingAI() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([
-    {
-      type: 'assistant',
-      text: `Добро пожаловать! Я ваш персональный цифровой директор от NeuroExpert. 
-
-🎯 За 7 лет работы я помог 300+ компаниям увеличить прибыль в среднем на 40% через цифровизацию.
-
-💡 Могу прямо сейчас:
-• Провести экспресс-аудит вашего бизнеса
-• Рассчитать потенциал роста и ROI
-• Предложить конкретные решения под вашу нишу
-• Показать кейсы похожих компаний
-
-Расскажите о вашем бизнесе, и я покажу, как увеличить прибыль уже через 2-4 недели.`,
-      model: 'gemini'
-    }
-  ]);
+  const [messages, setMessages] = useState([]);
+  const [context, setContext] = useState({
+    industry: null,
+    companySize: null,
+    urgency: null,
+    previousInteractions: 0,
+    userProfile: {}
+  });
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
@@ -45,6 +36,31 @@ export default function SmartFloatingAI() {
     "Сколько времени займет?",
     "С чего начать?"
   ];
+
+  // Динамическое приветствие при открытии чата
+  useEffect(() => {
+    if (isOpen && messages.length === 0) {
+      const hour = new Date().getHours();
+      const timeOfDay = hour < 12 ? 'morning' : hour < 18 ? 'day' : 'evening';
+      
+      const greetings = {
+        morning: "Доброе утро! ☀️ Александр Нейронов, управляющий директор NeuroExpert. Рад видеть вас так рано - это признак амбициозных людей! Чем могу помочь с вашим бизнесом?",
+        day: "Добрый день! 👋 Александр Нейронов на связи. Самое продуктивное время для больших решений! Расскажите о вашем проекте.",
+        evening: "Добрый вечер! 🌙 Александр здесь. Даже в позднее время готов помочь с вашим проектом. Что вас интересует?"
+      };
+      
+      setTimeout(() => {
+        typewriterEffect(greetings[timeOfDay], 'system');
+      }, 500);
+    }
+  }, [isOpen]);
+
+  // Слушаем событие открытия чата
+  useEffect(() => {
+    const handleOpenChat = () => setIsOpen(true);
+    window.addEventListener('openAIChat', handleOpenChat);
+    return () => window.removeEventListener('openAIChat', handleOpenChat);
+  }, []);
 
   const typewriterEffect = (text, model, callback) => {
     let i = 0;
@@ -84,7 +100,11 @@ export default function SmartFloatingAI() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           question: userMessage,
-          model: selectedModel // Передаем выбранную модель
+          model: selectedModel,
+          context: {
+            ...context,
+            previousInteractions: context.previousInteractions + 1
+          }
         })
       });
 
@@ -93,7 +113,12 @@ export default function SmartFloatingAI() {
       const data = await response.json();
       const responseTime = data.responseTime || (Date.now() - startTime);
       
-      // Обновляем статистику
+      // Обновляем контекст и статистику
+      setContext(prev => ({
+        ...prev,
+        previousInteractions: prev.previousInteractions + 1
+      }));
+      
       setStats(prev => ({
         totalQuestions: prev.totalQuestions + 1,
         avgResponseTime: Math.round((prev.avgResponseTime * prev.totalQuestions + responseTime) / (prev.totalQuestions + 1)),
@@ -105,7 +130,22 @@ export default function SmartFloatingAI() {
       // Используем ответ от API без дополнительных префиксов
       const answer = data.answer || 'Извините, произошла ошибка. Попробуйте еще раз.';
       
-      typewriterEffect(answer, data.model || selectedModel);
+      // Показываем основной ответ
+      typewriterEffect(answer, data.model || selectedModel, () => {
+        // После основного ответа показываем follow-up вопросы
+        if (data.followUpQuestions && data.followUpQuestions.length > 0) {
+          setTimeout(() => {
+            const followUpMessage = {
+              type: 'assistant',
+              text: '💡 Могу рассказать подробнее:',
+              isFollowUp: true,
+              questions: data.followUpQuestions,
+              model: 'system'
+            };
+            setMessages(prev => [...prev, followUpMessage]);
+          }, 500);
+        }
+      });
 
       // Отправляем аналитику
       if (typeof window !== 'undefined' && window.gtag) {
@@ -224,13 +264,31 @@ export default function SmartFloatingAI() {
           <div className="ai-messages">
             {messages.map((message, index) => (
               <div key={index} className={`ai-message ${message.type}`}>
-                {message.type === 'assistant' && message.model && (
+                {message.type === 'assistant' && message.model && !message.isFollowUp && (
                   <span className="message-model">
-                    {message.model === 'claude' ? '🧠 Claude' : '✨ Gemini'}
+                    {message.model === 'claude' ? '🧠 Claude' : 
+                     message.model === 'gemini' ? '✨ Gemini' : 
+                     '🤖 AI Director'}
                   </span>
                 )}
                 <div className="ai-message-content">
                   {message.text}
+                  {message.isFollowUp && message.questions && (
+                    <div className="follow-up-questions">
+                      {message.questions.map((question, qIndex) => (
+                        <button
+                          key={qIndex}
+                          className="follow-up-btn"
+                          onClick={() => {
+                            setInput(question);
+                            sendMessage();
+                          }}
+                        >
+                          {question}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -926,6 +984,39 @@ export default function SmartFloatingAI() {
             flex-direction: column;
             gap: 16px;
             min-height: 300px;
+          }
+
+          .follow-up-questions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+          }
+
+          .follow-up-btn {
+            padding: 8px 16px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 20px;
+            color: #6366f1;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+          }
+
+          .follow-up-btn:hover {
+            background: #6366f1;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+          }
+
+          .message-model {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-bottom: 4px;
+            display: inline-block;
           }
         `}</style>
       </div>
