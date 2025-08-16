@@ -182,27 +182,7 @@ export default function PremiumHero() {
         maxWidth: '1152px',
         margin: '0 auto'
       }}>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <span style={{
-            display: 'inline-block',
-            padding: '8px 24px',
-            marginBottom: '24px',
-            fontSize: '14px',
-            fontWeight: '600',
-            letterSpacing: '0.05em',
-            textTransform: 'uppercase',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            color: 'white',
-            borderRadius: '20px',
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-          }}>
-            AI-Powered Platform
-          </span>
-        </motion.div>
+
 
         <motion.h1
           style={{
