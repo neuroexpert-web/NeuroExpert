@@ -2,7 +2,13 @@
 // Note: 'target' property removed as it's deprecated in Next.js 12+
 // Netlify automatically detects and optimizes for serverless deployment
 
-const { withSentryConfig } = require("@sentry/nextjs");
+let withSentryConfig;
+try {
+  withSentryConfig = require("@sentry/nextjs").withSentryConfig;
+} catch (e) {
+  // Sentry not available
+  withSentryConfig = null;
+}
 
 const nextConfig = {
   // Оптимизация производительности
@@ -105,32 +111,30 @@ const nextConfig = {
   },
 };
 
-// Wrap the config with Sentry
-module.exports = withSentryConfig(
-  nextConfig,
-  {
-    // For all available options, see:
-    // https://github.com/getsentry/sentry-webpack-plugin#options
+// Wrap the config with Sentry only if DSN is configured
+const sentryWebpackPluginOptions = {
+  // For all available options, see:
+  // https://github.com/getsentry/sentry-webpack-plugin#options
+  silent: true,
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+  // Skip source map upload if no auth token
+  dryRun: !process.env.SENTRY_AUTH_TOKEN,
+};
 
-    // Suppresses source map uploading logs during build
-    silent: true,
-    org: "neuroexpert",
-    project: "neuroexpert-app",
-  },
-  {
-    // For all available options, see:
-    // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+const sentryOptions = {
+  // For all available options, see:
+  // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+  widenClientFileUpload: true,
+  transpileClientSDK: false,
+  hideSourceMaps: true,
+  disableLogger: true,
+  // Skip Sentry build step if no DSN configured
+  disableServerWebpackPlugin: !process.env.SENTRY_DSN && !process.env.NEXT_PUBLIC_SENTRY_DSN,
+  disableClientWebpackPlugin: !process.env.SENTRY_DSN && !process.env.NEXT_PUBLIC_SENTRY_DSN,
+};
 
-    // Upload a larger set of source maps for prettier stack traces (increases build time)
-    widenClientFileUpload: true,
-
-    // Transpiles SDK to be compatible with IE11 (increases bundle size)
-    transpileClientSDK: false,
-
-    // Hides source maps from generated client bundles
-    hideSourceMaps: true,
-
-    // Automatically tree-shake Sentry logger statements to reduce bundle size
-    disableLogger: true,
-  }
-);
+// Export config with or without Sentry based on availability and configuration
+module.exports = withSentryConfig && (process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN)
+  ? withSentryConfig(nextConfig, sentryWebpackPluginOptions, sentryOptions)
+  : nextConfig;
