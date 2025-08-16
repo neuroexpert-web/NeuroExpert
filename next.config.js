@@ -2,13 +2,7 @@
 // Note: 'target' property removed as it's deprecated in Next.js 12+
 // Netlify automatically detects and optimizes for serverless deployment
 
-let withSentryConfig;
-try {
-  withSentryConfig = require("@sentry/nextjs").withSentryConfig;
-} catch (e) {
-  // Sentry not available
-  withSentryConfig = null;
-}
+// Sentry temporarily disabled until properly configured
 
 const nextConfig = {
   // Оптимизация производительности
@@ -111,30 +105,5 @@ const nextConfig = {
   },
 };
 
-// Wrap the config with Sentry only if DSN is configured
-const sentryWebpackPluginOptions = {
-  // For all available options, see:
-  // https://github.com/getsentry/sentry-webpack-plugin#options
-  silent: true,
-  org: process.env.SENTRY_ORG,
-  project: process.env.SENTRY_PROJECT,
-  // Skip source map upload if no auth token
-  dryRun: !process.env.SENTRY_AUTH_TOKEN,
-};
-
-const sentryOptions = {
-  // For all available options, see:
-  // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
-  widenClientFileUpload: true,
-  transpileClientSDK: false,
-  hideSourceMaps: true,
-  disableLogger: true,
-  // Skip Sentry build step if no DSN configured
-  disableServerWebpackPlugin: !process.env.SENTRY_DSN && !process.env.NEXT_PUBLIC_SENTRY_DSN,
-  disableClientWebpackPlugin: !process.env.SENTRY_DSN && !process.env.NEXT_PUBLIC_SENTRY_DSN,
-};
-
-// Export config with or without Sentry based on availability and configuration
-module.exports = withSentryConfig && (process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN)
-  ? withSentryConfig(nextConfig, sentryWebpackPluginOptions, sentryOptions)
-  : nextConfig;
+// Temporarily disable Sentry completely until properly configured
+module.exports = nextConfig;

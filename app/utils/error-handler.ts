@@ -1,4 +1,5 @@
-import * as Sentry from '@sentry/nextjs';
+// Sentry temporarily disabled
+// import * as Sentry from '@sentry/nextjs';
 
 export interface AppError extends Error {
   statusCode?: number;
@@ -37,39 +38,13 @@ export function captureError(
     return;
   }
 
-  // Send to Sentry in production
-  Sentry.withScope((scope) => {
-    // Add context
-    if (context) {
-      scope.setContext('additional', context);
-    }
-
-    // Add error level based on status code
-    if ('statusCode' in error) {
-      if (error.statusCode >= 500) {
-        scope.setLevel('error');
-      } else if (error.statusCode >= 400) {
-        scope.setLevel('warning');
-      } else {
-        scope.setLevel('info');
-      }
-      
-      scope.setTag('statusCode', error.statusCode);
-    }
-
-    // Add operational flag
-    if ('isOperational' in error) {
-      scope.setTag('isOperational', error.isOperational);
-    }
-
-    // Capture the error
-    Sentry.captureException(error);
-  });
+  // Sentry temporarily disabled - just log to console
+  console.error('Production error:', error, context);
 }
 
 export function captureMessage(
   message: string, 
-  level: Sentry.SeverityLevel = 'info',
+  level: string = 'info',
   context?: Record<string, any>
 ): void {
   if (process.env.NODE_ENV === 'development') {
@@ -77,13 +52,8 @@ export function captureMessage(
     return;
   }
 
-  Sentry.withScope((scope) => {
-    scope.setLevel(level);
-    if (context) {
-      scope.setContext('additional', context);
-    }
-    Sentry.captureMessage(message);
-  });
+  // Sentry temporarily disabled - just log to console
+  console.log(`[${level.toUpperCase()}]`, message, context);
 }
 
 // Error boundary helper
