@@ -4,18 +4,10 @@
   "devCommand": "npm run dev",
   "installCommand": "npm install",
   "framework": "nextjs",
-  "regions": ["iad1"],
-  "functions": {
-    "netlify/functions/*.js": {
-      "runtime": "nodejs18.x"
-    }
+  "regions": ["iad1", "cdg1", "syd1"],
+  "env": {
+    "NODE_ENV": "production"
   },
-  "rewrites": [
-    {
-      "source": "/api/:path*",
-      "destination": "/netlify/functions/:path*"
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",
