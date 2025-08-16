@@ -280,19 +280,180 @@ export default function AIDirectorCapabilities() {
           <p className="text-gray-400 mb-6">
             Попробуйте пообщаться с AI директором прямо сейчас!
           </p>
-          <button
-            className="btn-premium"
+          <motion.button
             onClick={() => {
               // Открыть чат
               const event = new CustomEvent('openAIChat');
               window.dispatchEvent(event);
             }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            animate={{
+              boxShadow: [
+                '0 0 40px rgba(102, 126, 234, 0.5), 0 0 80px rgba(118, 75, 162, 0.3)',
+                '0 0 60px rgba(118, 75, 162, 0.6), 0 0 100px rgba(102, 126, 234, 0.4)',
+                '0 0 40px rgba(102, 126, 234, 0.5), 0 0 80px rgba(118, 75, 162, 0.3)'
+              ]
+            }}
+            transition={{
+              boxShadow: {
+                duration: 3,
+                repeat: Infinity,
+                ease: 'easeInOut'
+              }
+            }}
+            style={{
+              position: 'relative',
+              padding: '20px 48px',
+              fontSize: '20px',
+              fontWeight: '700',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              border: 'none',
+              borderRadius: '60px',
+              color: 'white',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '16px',
+              overflow: 'hidden'
+            }}
           >
-            Начать диалог с AI директором
-            <svg className="inline-block ml-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-            </svg>
-          </button>
+            {/* Волна свечения */}
+            <motion.div
+              style={{
+                position: 'absolute',
+                top: '-50%',
+                left: '-50%',
+                width: '200%',
+                height: '200%',
+                background: 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%)',
+                pointerEvents: 'none'
+              }}
+              animate={{
+                x: ['-50%', '150%'],
+                opacity: [0, 1, 0]
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: 'easeInOut',
+                delay: 1
+              }}
+            />
+            
+            <motion.span
+              style={{
+                background: 'linear-gradient(90deg, #fff, #f0f0ff, #e0e7ff, #f0f0ff, #fff)',
+                backgroundSize: '300% 100%',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.5))'
+              }}
+              animate={{
+                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: 'linear'
+              }}
+            >
+              Начать диалог с AI директором
+            </motion.span>
+            
+            {/* Морфинг иконок */}
+            <div style={{ position: 'relative', width: '32px', height: '32px' }}>
+              {/* Мозг */}
+              <motion.svg
+                style={{ position: 'absolute', top: 0, left: 0 }}
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                animate={{
+                  opacity: [1, 1, 0, 0, 0, 0, 1],
+                  scale: [1, 1.1, 0.8, 0, 0, 0, 1]
+                }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  times: [0, 0.14, 0.16, 0.17, 0.5, 0.83, 0.84]
+                }}
+              >
+                <path d="M9.5 2a4.5 4.5 0 00-3.5 7.5c-.5.5-1 1.5-1 2.5 0 1.5 1 3 2.5 3.5.5 3 2.5 4.5 5.5 4.5s5-1.5 5.5-4.5c1.5-.5 2.5-2 2.5-3.5 0-1-.5-2-1-2.5A4.5 4.5 0 0016.5 2c-1.5 0-2.5.5-3.5 1.5-1-1-2-1.5-3.5-1.5z" />
+              </motion.svg>
+              
+              {/* Чат */}
+              <motion.svg
+                style={{ position: 'absolute', top: 0, left: 0 }}
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                animate={{
+                  opacity: [0, 0, 0, 1, 1, 0, 0],
+                  scale: [0, 0, 0.8, 1, 1.1, 0.8, 0]
+                }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  times: [0, 0.16, 0.17, 0.33, 0.47, 0.49, 0.5]
+                }}
+              >
+                <path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </motion.svg>
+              
+              {/* Лампочка */}
+              <motion.svg
+                style={{ position: 'absolute', top: 0, left: 0 }}
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                animate={{
+                  opacity: [0, 0, 0, 0, 0, 1, 1, 0, 0],
+                  scale: [0, 0, 0, 0, 0.8, 1, 1.1, 0.8, 0]
+                }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  times: [0, 0.33, 0.49, 0.5, 0.51, 0.67, 0.81, 0.83, 0.84]
+                }}
+              >
+                <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </motion.svg>
+              
+              {/* Искра свечения */}
+              <motion.div
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  background: 'radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%)',
+                  transform: 'translate(-50%, -50%)',
+                  pointerEvents: 'none'
+                }}
+                animate={{
+                  opacity: [0, 0.5, 0, 0.5, 0, 0.5, 0],
+                  scale: [0.5, 1.5, 0.5, 1.5, 0.5, 1.5, 0.5]
+                }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity
+                }}
+              />
+            </div>
+          </motion.button>
         </motion.div>
       </div>
     </section>
