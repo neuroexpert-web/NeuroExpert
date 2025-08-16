@@ -16,26 +16,7 @@ export default function PremiumHero() {
         0%, 100% { transform: translateY(0); }
         50% { transform: translateY(-10px); }
       }
-      @keyframes twinkle {
-        0%, 100% { opacity: 0; }
-        50% { opacity: 1; }
-      }
-      @keyframes shootingstar {
-        0% {
-          transform: translateX(0) translateY(0) rotate(45deg);
-          opacity: 0;
-        }
-        10% {
-          opacity: 1;
-        }
-        90% {
-          opacity: 1;
-        }
-        100% {
-          transform: translateX(400px) translateY(400px) rotate(45deg);
-          opacity: 0;
-        }
-      }
+
       @keyframes neonPulse {
         0%, 100% {
           box-shadow: 0 0 40px rgba(102, 126, 234, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.2);
@@ -60,69 +41,94 @@ export default function PremiumHero() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Particle class
-    class Particle {
+    // Node class для нейронной сети
+    class Node {
       constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.z = Math.random() * 1000;
-        this.size = Math.random() * 1.5;
-        this.speedX = (Math.random() - 0.5) * 0.5;
-        this.speedY = (Math.random() - 0.5) * 0.5;
-        this.speedZ = Math.random() * 0.5;
-        this.opacity = Math.random();
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
+        this.radius = Math.random() * 2 + 1;
+        this.connections = [];
       }
 
       update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        this.z -= this.speedZ;
+        this.x += this.vx;
+        this.y += this.vy;
 
-        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-        if (this.z <= 0) this.z = 1000;
+        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
 
         // Mouse interaction
         const dx = this.x - mouseRef.current.x;
         const dy = this.y - mouseRef.current.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         
-        if (distance < 100) {
-          const force = (100 - distance) / 100;
-          this.x += dx * force * 0.03;
-          this.y += dy * force * 0.03;
+        if (distance < 150) {
+          const force = (150 - distance) / 150;
+          this.vx += dx * force * 0.002;
+          this.vy += dy * force * 0.002;
         }
       }
 
       draw() {
-        const perspective = 1000 / (1000 - this.z);
-        const x = (this.x - canvas.width / 2) * perspective + canvas.width / 2;
-        const y = (this.y - canvas.height / 2) * perspective + canvas.height / 2;
-        const size = this.size * perspective;
-
-        ctx.globalAlpha = this.opacity * (1 - this.z / 1000);
-        ctx.fillStyle = '#ffffff';
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = '#ffffff';
-        
         ctx.beginPath();
-        ctx.arc(x, y, size, 0, Math.PI * 2);
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(102, 126, 234, 0.8)';
         ctx.fill();
+        
+        // Glow effect
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = '#667eea';
+      }
+
+      connectTo(other) {
+        const dx = this.x - other.x;
+        const dy = this.y - other.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < 150) {
+          const opacity = (1 - distance / 150) * 0.5;
+          
+          // Gradient line
+          const gradient = ctx.createLinearGradient(this.x, this.y, other.x, other.y);
+          gradient.addColorStop(0, `rgba(102, 126, 234, ${opacity})`);
+          gradient.addColorStop(0.5, `rgba(118, 75, 162, ${opacity})`);
+          gradient.addColorStop(1, `rgba(102, 126, 234, ${opacity})`);
+          
+          ctx.beginPath();
+          ctx.moveTo(this.x, this.y);
+          ctx.lineTo(other.x, other.y);
+          ctx.strokeStyle = gradient;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
       }
     }
 
-    // Create particles (космическая пыль)
-    for (let i = 0; i < 50; i++) {
-      particlesRef.current.push(new Particle());
+    // Create nodes для нейронной сети
+    const nodes = [];
+    for (let i = 0; i < 30; i++) {
+      nodes.push(new Node());
     }
+    particlesRef.current = nodes;
 
     // Animation loop
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'rgba(10, 10, 30, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
       
-      particlesRef.current.forEach(particle => {
-        particle.update();
-        particle.draw();
+      // Draw connections
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          nodes[i].connectTo(nodes[j]);
+        }
+      }
+      
+      // Update and draw nodes
+      nodes.forEach(node => {
+        node.update();
+        node.draw();
       });
 
       requestAnimationFrame(animate);
@@ -158,9 +164,81 @@ export default function PremiumHero() {
       alignItems: 'center',
       justifyContent: 'center',
       overflow: 'hidden',
-      background: 'radial-gradient(ellipse at center, #0a0e27 0%, #020515 100%)'
+      background: 'linear-gradient(to bottom, #0a0a1e 0%, #1a1a2e 100%)'
     }}>
-      {/* 3D Particle Canvas */}
+
+
+      {/* Жидкий градиент фон */}
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        overflow: 'hidden',
+        filter: 'blur(40px)',
+        opacity: 0.7
+      }}>
+        <motion.div
+          animate={{
+            x: [0, 100, 0],
+            y: [0, -100, 0],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          style={{
+            position: 'absolute',
+            top: '-50%',
+            left: '-50%',
+            width: '200%',
+            height: '200%',
+            background: 'radial-gradient(circle at 20% 50%, #6366f1 0%, transparent 50%)',
+          }}
+        />
+        <motion.div
+          animate={{
+            x: [0, -100, 0],
+            y: [0, 100, 0],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          style={{
+            position: 'absolute',
+            top: '-50%',
+            left: '-50%',
+            width: '200%',
+            height: '200%',
+            background: 'radial-gradient(circle at 80% 50%, #764ba2 0%, transparent 50%)',
+          }}
+        />
+        <motion.div
+          animate={{
+            x: [0, 50, 0],
+            y: [0, 50, 0],
+          }}
+          transition={{
+            duration: 18,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          style={{
+            position: 'absolute',
+            top: '-50%',
+            left: '-50%',
+            width: '200%',
+            height: '200%',
+            background: 'radial-gradient(circle at 50% 50%, #667eea 0%, transparent 50%)',
+          }}
+        />
+      </div>
+
+      {/* Нейронная сеть */}
       <canvas
         ref={canvasRef}
         style={{
@@ -169,57 +247,10 @@ export default function PremiumHero() {
           left: 0,
           width: '100%',
           height: '100%',
-          zIndex: 0,
+          zIndex: 1,
           opacity: 0.6
         }}
       />
-
-      {/* Космические звёзды */}
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        overflow: 'hidden'
-      }}>
-        {/* Генерируем звёзды */}
-        {[...Array(150)].map((_, i) => (
-          <div
-            key={i}
-            style={{
-              position: 'absolute',
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              width: `${Math.random() * 3}px`,
-              height: `${Math.random() * 3}px`,
-              background: 'white',
-              borderRadius: '50%',
-              opacity: Math.random(),
-              animation: `twinkle ${Math.random() * 5 + 5}s infinite`,
-              animationDelay: `${Math.random() * 5}s`
-            }}
-          />
-        ))}
-        
-        {/* Падающие звёзды */}
-        {[...Array(3)].map((_, i) => (
-          <div
-            key={`shooting-${i}`}
-            style={{
-              position: 'absolute',
-              top: `${Math.random() * 50}%`,
-              left: `${Math.random() * 50 - 50}%`,
-              width: '2px',
-              height: '100px',
-              background: 'linear-gradient(to bottom, white, transparent)',
-              opacity: 0,
-              animation: `shootingstar ${3 + i}s linear infinite`,
-              animationDelay: `${i * 7}s`
-            }}
-          />
-        ))}
-      </div>
 
       {/* Content */}
       <div style={{
