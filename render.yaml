@@ -7,7 +7,7 @@ services:
     
     # Команды сборки и запуска
     buildCommand: npm install && npm run build
-    startCommand: npm run start:render
+    startCommand: npm start
     
     # Настройки окружения
     envVars:

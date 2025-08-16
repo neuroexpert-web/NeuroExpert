@@ -5,6 +5,9 @@
 // Sentry temporarily disabled until properly configured
 
 const nextConfig = {
+  // Режим вывода для Node.js сервера
+  output: 'standalone',
+  
   // Оптимизация производительности
   reactStrictMode: true,
   swcMinify: true,
