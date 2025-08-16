@@ -6,7 +6,17 @@ export default function SmartFloatingAI() {
   const [messages, setMessages] = useState([
     {
       type: 'assistant',
-      text: 'Привет! Я ваш управляющий NeuroExpert — цифровой директор, который поможет развивать бизнес с помощью простых и эффективных цифровых решений. Чем могу помочь?',
+      text: `Добро пожаловать! Я ваш персональный цифровой директор от NeuroExpert. 
+
+🎯 За 7 лет работы я помог 300+ компаниям увеличить прибыль в среднем на 40% через цифровизацию.
+
+💡 Могу прямо сейчас:
+• Провести экспресс-аудит вашего бизнеса
+• Рассчитать потенциал роста и ROI
+• Предложить конкретные решения под вашу нишу
+• Показать кейсы похожих компаний
+
+Расскажите о вашем бизнесе, и я покажу, как увеличить прибыль уже через 2-4 недели.`,
       model: 'gemini'
     }
   ]);
@@ -491,22 +501,33 @@ export default function SmartFloatingAI() {
           }
 
           .ai-close-btn {
-            background: none;
-            border: none;
-            color: #94a3b8;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #e2e8f0;
             font-size: 24px;
             cursor: pointer;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
             padding: 0;
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
+            z-index: 10;
           }
 
           .ai-close-btn:hover {
-            color: white;
+            background: rgba(255, 59, 48, 0.2);
+            border-color: rgba(255, 59, 48, 0.3);
+            color: #ff3b30;
+            transform: scale(1.05);
+          }
+
+          .ai-close-btn svg {
+            width: 20px;
+            height: 20px;
           }
 
           .ai-stats-bar {

@@ -16,12 +16,25 @@ export default function HeroSection(): JSX.Element {
   return (
     <section className="hero-section">
       <div className="hero-content">
+        {/* Animated NeuroExpert Logo */}
+        <div className={`hero-logo ${isVisible ? 'visible' : ''}`}>
+          <h1 className="logo-title">
+            <span className="logo-neuro">Neuro</span>
+            <span className="logo-expert">Expert</span>
+          </h1>
+          <div className="logo-tagline">
+            <span className="tagline-text">Платформа цифровизации</span>
+            <span className="tagline-divider">—</span>
+            <span className="tagline-accent">вашего бизнеса</span>
+          </div>
+        </div>
+
         {/* Main headline */}
-        <h1 className={`hero-title ${isVisible ? 'visible' : ''}`}>
-          <span className="title-line">Комплекс услуг цифровизации</span>
-          <span className="title-line gradient">вашего бизнеса —</span>
-          <span className="title-line">просто и эффективно</span>
-        </h1>
+        <h2 className={`hero-title ${isVisible ? 'visible' : ''}`}>
+          <span className="title-line">Комплекс услуг для роста</span>
+          <span className="title-line gradient">прибыли и эффективности</span>
+          <span className="title-line">без сложностей</span>
+        </h2>
 
         {/* Subtitle */}
         <p className={`hero-subtitle ${isVisible ? 'visible' : ''}`}>
@@ -275,6 +288,81 @@ export default function HeroSection(): JSX.Element {
           font-family: var(--font-body);
           font-size: 16px;
           color: var(--platinum-400);
+        }
+
+        /* Logo Styles */
+        .hero-logo {
+          margin-bottom: 48px;
+          opacity: 0;
+          transform: translateY(-30px);
+          transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hero-logo.visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .logo-title {
+          font-family: var(--font-heading);
+          font-size: clamp(48px, 8vw, 96px);
+          font-weight: 900;
+          line-height: 1;
+          margin-bottom: 16px;
+          letter-spacing: -0.02em;
+          position: relative;
+          display: inline-block;
+        }
+
+        .logo-neuro {
+          background: linear-gradient(135deg, var(--royal-500), var(--royal-300));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          animation: pulseGlow 3s ease-in-out infinite;
+        }
+
+        .logo-expert {
+          background: linear-gradient(135deg, var(--gold-400), var(--gold-300));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          animation: pulseGlow 3s ease-in-out infinite 0.5s;
+        }
+
+        @keyframes pulseGlow {
+          0%, 100% { filter: brightness(1) drop-shadow(0 0 20px currentColor); }
+          50% { filter: brightness(1.2) drop-shadow(0 0 40px currentColor); }
+        }
+
+        .logo-tagline {
+          font-family: var(--font-body);
+          font-size: clamp(18px, 3vw, 28px);
+          font-weight: 300;
+          color: var(--platinum-300);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 16px;
+          opacity: 0;
+          animation: fadeInUp 1s ease-out 0.5s forwards;
+        }
+
+        .tagline-divider {
+          color: var(--gold-400);
+          font-weight: 400;
+        }
+
+        .tagline-accent {
+          color: var(--platinum-100);
+          font-weight: 400;
+        }
+
+        @keyframes fadeInUp {
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
 
         @media (max-width: 768px) {
