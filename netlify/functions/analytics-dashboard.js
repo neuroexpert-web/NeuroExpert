@@ -25,8 +25,17 @@ exports.handler = async function(event, context) {
     };
   }
 
-  // Простая авторизация (в production используйте JWT)
-  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+  // Безопасная авторизация
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  if (!adminPassword) {
+    return {
+      statusCode: 503,
+      body: JSON.stringify({ 
+        error: 'Сервис временно недоступен. Административный доступ не настроен.' 
+      })
+    };
+  }
+  
   const providedPassword = event.queryStringParameters?.password;
   
   if (providedPassword !== adminPassword) {

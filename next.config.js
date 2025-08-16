@@ -4,6 +4,26 @@
 
 // Sentry temporarily disabled until properly configured
 
+// Content Security Policy configuration
+const ContentSecurityPolicy = `
+  default-src 'self';
+  script-src 'self' 'unsafe-eval' 'unsafe-inline' *.google.com *.googleapis.com *.gstatic.com *.google-analytics.com *.googletagmanager.com mc.yandex.ru *.yandex.net;
+  style-src 'self' 'unsafe-inline' *.googleapis.com fonts.googleapis.com;
+  img-src 'self' blob: data: *.google.com *.googleapis.com *.gstatic.com *.google-analytics.com api.dicebear.com;
+  font-src 'self' fonts.gstatic.com;
+  connect-src 'self' *.google.com *.googleapis.com *.google-analytics.com mc.yandex.ru *.yandex.net generativelanguage.googleapis.com;
+  media-src 'self';
+  object-src 'none';
+  child-src 'self';
+  frame-src 'self' *.google.com;
+  frame-ancestors 'self';
+  base-uri 'self';
+  form-action 'self';
+  manifest-src 'self';
+  worker-src 'self' blob:;
+  upgrade-insecure-requests;
+`;
+
 const nextConfig = {
   // Режим output зависит от платформы
   output: process.env.NEXT_OUTPUT_MODE || undefined,
@@ -20,12 +40,14 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   
-  // Временно отключаем ESLint и TypeScript проверки для продакшен сборки
+  // Строгие проверки качества кода
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
+    dirs: ['app', 'components', 'lib', 'utils'], // Проверяем только важные директории
   },
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
+    tsconfigPath: './tsconfig.json',
   },
   
   // Оптимизация изображений
@@ -53,6 +75,10 @@ const nextConfig = {
             value: 'on'
           },
           {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload'
+          },
+          {
             key: 'X-Frame-Options',
             value: 'SAMEORIGIN'
           },
@@ -62,11 +88,15 @@ const nextConfig = {
           },
           {
             key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin'
+            value: 'strict-origin-when-cross-origin'
           },
           {
             key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=()'
+            value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=()'
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: ContentSecurityPolicy.replace(/\s{2,}/g, ' ').trim()
           }
         ],
       },

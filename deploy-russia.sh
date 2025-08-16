@@ -102,18 +102,18 @@ if [ ! -f .env.production.local ]; then
 NODE_ENV=production
 
 # Google Gemini AI
-GOOGLE_GEMINI_API_KEY=your-gemini-api-key
+GOOGLE_GEMINI_API_KEY=\${GOOGLE_GEMINI_API_KEY:-}
 
 # Безопасность
-JWT_SECRET=$(openssl rand -base64 32)
-ADMIN_PASSWORD_HASH=\$2a\$10\$YourHashHere
+JWT_SECRET=\${JWT_SECRET:-$(openssl rand -base64 32)}
+ADMIN_PASSWORD_HASH=\${ADMIN_PASSWORD_HASH:-}
 
 # Telegram интеграция (опционально)
-TELEGRAM_BOT_TOKEN=your-bot-token
-TELEGRAM_CHAT_ID=your-chat-id
+TELEGRAM_BOT_TOKEN=\${TELEGRAM_BOT_TOKEN:-}
+TELEGRAM_CHAT_ID=\${TELEGRAM_CHAT_ID:-}
 
 # База данных (если используется)
-DATABASE_URL=postgresql://user:password@localhost:5432/neuroexpert
+DATABASE_URL=\${DATABASE_URL:-}
 EOF
     echo -e "${RED}⚠️  Не забудьте обновить .env.production.local с вашими реальными ключами!${NC}"
 fi

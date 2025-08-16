@@ -1,7 +1,14 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { withRateLimit } from '../../middleware/rateLimit';
 
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || '');
+// Проверка наличия API ключа
+const GEMINI_API_KEY = process.env.GOOGLE_GEMINI_API_KEY;
+if (!GEMINI_API_KEY) {
+  console.error('GOOGLE_GEMINI_API_KEY is not set in environment variables');
+}
+
+const genAI = GEMINI_API_KEY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null;
 
 const KNOWLEDGE_BASE = `
   Ты - высококвалифицированный цифровой директор компании NeuroExpert с 7-летним опытом в цифровизации бизнеса.
@@ -141,17 +148,28 @@ async function sendTelegramNotification(question, answer, model) {
   }
 }
 
-export async function POST(request) {
+async function handler(request) {
   const startTime = Date.now();
   
   try {
     const { question, model = 'gemini' } = await request.json();
     
     console.log('Assistant API called:', { question, model });
-    console.log('API Key present:', !!process.env.GOOGLE_GEMINI_API_KEY);
+    console.log('API Key present:', !!GEMINI_API_KEY);
     
     if (!question) {
       return NextResponse.json({ error: 'Вопрос обязателен' }, { status: 400 });
+    }
+
+    // Проверка доступности Gemini API
+    if ((model === 'gemini' || model === 'claude') && (!genAI || !GEMINI_API_KEY)) {
+      console.error('Gemini API key is missing, falling back to demo mode');
+      return NextResponse.json({ 
+        answer: 'AI сервис временно работает в демо-режиме. Для полной функциональности свяжитесь с нами: +7 (904) 047-63-83',
+        model: 'demo',
+        responseTime: Date.now() - startTime,
+        warning: 'API key not configured'
+      });
     }
 
     let answer;
@@ -238,3 +256,6 @@ export async function POST(request) {
     );
   }
 }
+
+// Export with rate limiting
+export const POST = withRateLimit(handler, 'ai');

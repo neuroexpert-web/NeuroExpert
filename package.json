@@ -23,12 +23,14 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
-    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md}\""
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
+    "generate:password": "node scripts/generate-password.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.15.0",
     "bcryptjs": "^2.4.3",
     "critters": "^0.0.23",
+    "date-fns": "^3.2.0",
     "jsonwebtoken": "^9.0.2",
     "next": "^14.2.0",
     "react": "18.2.0",
@@ -52,6 +54,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-security": "^1.7.1",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "prettier": "^3.1.1",
