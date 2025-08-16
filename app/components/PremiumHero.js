@@ -123,12 +123,27 @@ export default function PremiumHero() {
   }, []);
 
   return (
-    <section className="relative min-h-[80vh] py-20 flex items-center justify-center overflow-hidden premium-bg">
+    <section style={{
+      position: 'relative',
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      overflow: 'hidden',
+      background: '#0f172a'
+    }}>
       {/* 3D Particle Canvas */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 z-0"
-        style={{ opacity: 0.6 }}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 0,
+          opacity: 0.6
+        }}
       />
 
       {/* Gradient Orbs */}
@@ -159,28 +174,63 @@ export default function PremiumHero() {
       }}></div>
 
       {/* Content */}
-      <div className="relative z-10 text-center px-4 max-w-6xl mx-auto">
+      <div style={{
+        position: 'relative',
+        zIndex: 10,
+        textAlign: 'center',
+        padding: '0 16px',
+        maxWidth: '1152px',
+        margin: '0 auto'
+      }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <span className="badge-premium mb-6 inline-block">
+          <span style={{
+            display: 'inline-block',
+            padding: '8px 24px',
+            marginBottom: '24px',
+            fontSize: '14px',
+            fontWeight: '600',
+            letterSpacing: '0.05em',
+            textTransform: 'uppercase',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: 'white',
+            borderRadius: '20px',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+          }}>
             AI-Powered Platform
           </span>
         </motion.div>
 
         <motion.h1
-          className="text-6xl md:text-8xl font-bold mb-6"
+          style={{
+            fontSize: 'clamp(3rem, 8vw, 6rem)',
+            fontWeight: 'bold',
+            marginBottom: '24px',
+            lineHeight: 1.1
+          }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <span className="gradient-text">NeuroExpert</span>
+          <span style={{
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text'
+          }}>NeuroExpert</span>
         </motion.h1>
 
         <motion.p
-          className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto"
+          style={{
+            fontSize: 'clamp(1.125rem, 2vw, 1.5rem)',
+            color: '#cbd5e1',
+            marginBottom: '32px',
+            maxWidth: '768px',
+            margin: '0 auto 32px'
+          }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
@@ -190,48 +240,132 @@ export default function PremiumHero() {
         </motion.p>
 
         <motion.div
-          className="flex flex-col sm:flex-row gap-4 justify-center"
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            gap: '16px',
+            justifyContent: 'center',
+            flexWrap: 'wrap'
+          }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
         >
-          <button className="btn-premium group">
-            <span className="relative z-10">Начать сейчас</span>
-            <svg className="inline-block ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <button style={{
+            padding: '14px 32px',
+            fontWeight: '600',
+            fontSize: '16px',
+            letterSpacing: '0.02em',
+            color: 'white',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            border: 'none',
+            borderRadius: '12px',
+            cursor: 'pointer',
+            boxShadow: '0 20px 60px -10px rgba(99, 102, 241, 0.3)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}>
+            <span>Начать сейчас</span>
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
           </button>
           
-          <button className="glass px-8 py-4 rounded-xl font-semibold hover:bg-white/10 transition-all">
+          <button style={{
+            padding: '14px 32px',
+            fontWeight: '600',
+            fontSize: '16px',
+            color: 'white',
+            background: 'rgba(255, 255, 255, 0.05)',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '12px',
+            cursor: 'pointer'
+          }}>
             Узнать больше
           </button>
         </motion.div>
 
         {/* Stats */}
         <motion.div
-          className="grid grid-cols-3 gap-8 mt-20"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '32px',
+            marginTop: '80px',
+            maxWidth: '800px',
+            margin: '80px auto 0'
+          }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
         >
-          <div className="glass p-6 rounded-2xl hover-lift">
-            <h3 className="text-4xl font-bold gradient-text mb-2">2-4</h3>
-            <p className="text-gray-400">Недели до запуска</p>
+          <div style={{
+            padding: '24px',
+            background: 'rgba(255, 255, 255, 0.05)',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '16px',
+            textAlign: 'center'
+          }}>
+            <h3 style={{
+              fontSize: '2.5rem',
+              fontWeight: 'bold',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              marginBottom: '8px'
+            }}>2-4</h3>
+            <p style={{ color: '#94a3b8' }}>Недели до запуска</p>
           </div>
-          <div className="glass p-6 rounded-2xl hover-lift">
-            <h3 className="text-4xl font-bold gradient-text mb-2">40%</h3>
-            <p className="text-gray-400">Рост конверсии</p>
+          <div style={{
+            padding: '24px',
+            background: 'rgba(255, 255, 255, 0.05)',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '16px',
+            textAlign: 'center'
+          }}>
+            <h3 style={{
+              fontSize: '2.5rem',
+              fontWeight: 'bold',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              marginBottom: '8px'
+            }}>40%</h3>
+            <p style={{ color: '#94a3b8' }}>Рост конверсии</p>
           </div>
-          <div className="glass p-6 rounded-2xl hover-lift">
-            <h3 className="text-4xl font-bold gradient-text mb-2">24/7</h3>
-            <p className="text-gray-400">AI поддержка</p>
+          <div style={{
+            padding: '24px',
+            background: 'rgba(255, 255, 255, 0.05)',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '16px',
+            textAlign: 'center'
+          }}>
+            <h3 style={{
+              fontSize: '2.5rem',
+              fontWeight: 'bold',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              marginBottom: '8px'
+            }}>24/7</h3>
+            <p style={{ color: '#94a3b8' }}>AI поддержка</p>
           </div>
         </motion.div>
       </div>
 
       {/* Scroll indicator */}
       <motion.div
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        style={{
+          position: 'absolute',
+          bottom: '32px',
+          left: '50%',
+          transform: 'translateX(-50%)'
+        }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2 }}
