@@ -6,7 +6,7 @@ services:
     plan: free # free, starter ($7/month), standard ($25/month)
     
     # Команды сборки и запуска
-    buildCommand: npm install && npm run build && cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static
+    buildCommand: bash scripts/render-build.sh
     startCommand: npm start
     
     # Настройки окружения
@@ -14,7 +14,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: NODE_VERSION
-        value: 18
+        value: 20
         
     # Health check
     healthCheckPath: /
