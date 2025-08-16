@@ -48,7 +48,7 @@ export default function PremiumHero() {
         this.y = Math.random() * canvas.height;
         this.vx = (Math.random() - 0.5) * 0.5;
         this.vy = (Math.random() - 0.5) * 0.5;
-        this.radius = Math.random() * 2 + 1;
+        this.radius = Math.random() * 1.5 + 0.5;
         this.connections = [];
       }
 
@@ -74,12 +74,12 @@ export default function PremiumHero() {
       draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(102, 126, 234, 0.8)';
+        ctx.fillStyle = 'rgba(102, 126, 234, 0.6)';
         ctx.fill();
         
-        // Glow effect
-        ctx.shadowBlur = 20;
-        ctx.shadowColor = '#667eea';
+        // Subtle glow
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = 'rgba(102, 126, 234, 0.5)';
       }
 
       connectTo(other) {
@@ -87,8 +87,8 @@ export default function PremiumHero() {
         const dy = this.y - other.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         
-        if (distance < 150) {
-          const opacity = (1 - distance / 150) * 0.5;
+        if (distance < 120) {
+          const opacity = (1 - distance / 120) * 0.3;
           
           // Gradient line
           const gradient = ctx.createLinearGradient(this.x, this.y, other.x, other.y);
@@ -108,7 +108,7 @@ export default function PremiumHero() {
 
     // Create nodes для нейронной сети
     const nodes = [];
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 20; i++) {
       nodes.push(new Node());
     }
     particlesRef.current = nodes;
@@ -176,8 +176,8 @@ export default function PremiumHero() {
         width: '100%',
         height: '100%',
         overflow: 'hidden',
-        filter: 'blur(40px)',
-        opacity: 0.7
+        filter: 'blur(80px)',
+        opacity: 0.3
       }}>
         <motion.div
           animate={{
