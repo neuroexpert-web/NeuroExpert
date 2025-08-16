@@ -107,7 +107,7 @@ export default function PremiumHero() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden premium-bg">
+    <section className="relative py-32 flex items-center justify-center overflow-hidden premium-bg">
       {/* 3D Particle Canvas */}
       <canvas
         ref={canvasRef}
@@ -176,12 +176,12 @@ export default function PremiumHero() {
           transition={{ duration: 0.8, delay: 0.8 }}
         >
           <div className="glass p-6 rounded-2xl hover-lift">
-            <h3 className="text-4xl font-bold gradient-text mb-2">300+</h3>
-            <p className="text-gray-400">Успешных проектов</p>
+            <h3 className="text-4xl font-bold gradient-text mb-2">2-4</h3>
+            <p className="text-gray-400">Недели до запуска</p>
           </div>
           <div className="glass p-6 rounded-2xl hover-lift">
-            <h3 className="text-4xl font-bold gradient-text mb-2">99%</h3>
-            <p className="text-gray-400">Довольных клиентов</p>
+            <h3 className="text-4xl font-bold gradient-text mb-2">40%</h3>
+            <p className="text-gray-400">Рост конверсии</p>
           </div>
           <div className="glass p-6 rounded-2xl hover-lift">
             <h3 className="text-4xl font-bold gradient-text mb-2">24/7</h3>
