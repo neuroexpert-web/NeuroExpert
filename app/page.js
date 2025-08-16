@@ -52,10 +52,14 @@ export default function Home() {
       <JourneySection />
       
       {/* Почему NeuroExpert */}
-      <WhyUsSection />
+      <section id="why-us">
+        <WhyUsSection />
+      </section>
       
       {/* Тарифы */}
-      <PricingSection />
+      <section id="pricing">
+        <PricingSection />
+      </section>
       
       {/* Калькулятор ROI */}
       <section className="roi-section" id="benefits">

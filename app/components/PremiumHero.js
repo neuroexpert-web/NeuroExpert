@@ -36,6 +36,14 @@ export default function PremiumHero() {
           opacity: 0;
         }
       }
+      @keyframes neonPulse {
+        0%, 100% {
+          box-shadow: 0 0 40px rgba(102, 126, 234, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+        50% {
+          box-shadow: 0 0 60px rgba(102, 126, 234, 0.9), inset 0 0 30px rgba(255, 255, 255, 0.4);
+        }
+      }
     `;
     document.head.appendChild(style);
     return () => document.head.removeChild(style);
@@ -271,40 +279,125 @@ export default function PremiumHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
         >
-          <button style={{
-            padding: '14px 32px',
-            fontWeight: '600',
-            fontSize: '16px',
-            letterSpacing: '0.02em',
-            color: 'white',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            border: 'none',
-            borderRadius: '12px',
-            cursor: 'pointer',
-            boxShadow: '0 20px 60px -10px rgba(99, 102, 241, 0.3)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}>
-            <span>Начать сейчас</span>
-            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <motion.button
+            onClick={() => {
+              // Скролл к секции с ценами
+              document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            style={{
+              position: 'relative',
+              padding: '16px 40px',
+              fontWeight: '700',
+              fontSize: '18px',
+              letterSpacing: '0.02em',
+              color: 'white',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              border: 'none',
+              borderRadius: '50px',
+              cursor: 'pointer',
+              boxShadow: '0 0 40px rgba(102, 126, 234, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              overflow: 'hidden',
+              transition: 'all 0.3s ease'
+            }}
+            whileHover={{ 
+              scale: 1.05,
+              boxShadow: '0 0 60px rgba(102, 126, 234, 0.8), inset 0 0 30px rgba(255, 255, 255, 0.3)'
+            }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <motion.span
+              animate={{
+                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: 'linear'
+              }}
+              style={{
+                background: 'linear-gradient(90deg, #fff, #e0e7ff, #fff)',
+                backgroundSize: '200% 100%',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}
+            >
+              Начать сейчас
+            </motion.span>
+            <motion.svg 
+              width="20" 
+              height="20" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+              animate={{ x: [0, 5, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          </button>
+            </motion.svg>
+          </motion.button>
           
-          <button style={{
-            padding: '14px 32px',
-            fontWeight: '600',
-            fontSize: '16px',
-            color: 'white',
-            background: 'rgba(255, 255, 255, 0.05)',
-            backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            borderRadius: '12px',
-            cursor: 'pointer'
-          }}>
-            Узнать больше
-          </button>
+          <motion.button
+            onClick={() => {
+              // Скролл к секции "Почему мы"
+              document.getElementById('why-us')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            style={{
+              position: 'relative',
+              padding: '16px 40px',
+              fontWeight: '600',
+              fontSize: '18px',
+              color: 'white',
+              background: 'transparent',
+              border: '2px solid transparent',
+              borderRadius: '50px',
+              cursor: 'pointer',
+              backgroundImage: 'linear-gradient(#0a0e27, #0a0e27), linear-gradient(135deg, #667eea, #764ba2)',
+              backgroundOrigin: 'border-box',
+              backgroundClip: 'padding-box, border-box',
+              overflow: 'hidden'
+            }}
+            whileHover={{ 
+              scale: 1.05,
+              boxShadow: '0 0 30px rgba(102, 126, 234, 0.5)'
+            }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <motion.span
+              style={{ position: 'relative', zIndex: 1 }}
+              animate={{
+                color: ['#ffffff', '#e0e7ff', '#ffffff']
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity
+              }}
+            >
+              Узнать больше
+            </motion.span>
+            <motion.div
+              style={{
+                position: 'absolute',
+                top: '-50%',
+                left: '-50%',
+                width: '200%',
+                height: '200%',
+                background: 'radial-gradient(circle, rgba(102, 126, 234, 0.3) 0%, transparent 70%)',
+                opacity: 0
+              }}
+              animate={{
+                opacity: [0, 0.5, 0],
+                scale: [0.5, 1.5, 0.5]
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity
+              }}
+            />
+          </motion.button>
         </motion.div>
 
         {/* Stats */}
