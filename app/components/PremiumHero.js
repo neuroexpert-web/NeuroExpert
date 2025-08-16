@@ -4,6 +4,22 @@ import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 
 export default function PremiumHero() {
+  // Добавляем стили анимаций
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes pulse {
+        0%, 100% { opacity: 0.2; }
+        50% { opacity: 0.3; }
+      }
+      @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+      }
+    `;
+    document.head.appendChild(style);
+    return () => document.head.removeChild(style);
+  }, []);
   const canvasRef = useRef(null);
   const mouseRef = useRef({ x: 0, y: 0 });
   const particlesRef = useRef([]);
@@ -107,7 +123,7 @@ export default function PremiumHero() {
   }, []);
 
   return (
-    <section className="relative py-32 flex items-center justify-center overflow-hidden premium-bg">
+    <section className="relative min-h-[80vh] py-20 flex items-center justify-center overflow-hidden premium-bg">
       {/* 3D Particle Canvas */}
       <canvas
         ref={canvasRef}
@@ -116,8 +132,31 @@ export default function PremiumHero() {
       />
 
       {/* Gradient Orbs */}
-      <div className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
-      <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-blue-500 to-teal-500 rounded-full filter blur-3xl opacity-20 animate-pulse animation-delay-2000"></div>
+      <div style={{
+        position: 'absolute',
+        top: '80px',
+        left: '80px',
+        width: '384px',
+        height: '384px',
+        background: 'linear-gradient(to right, #a855f7, #ec4899)',
+        borderRadius: '50%',
+        filter: 'blur(48px)',
+        opacity: 0.2,
+        animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+      }}></div>
+      <div style={{
+        position: 'absolute',
+        bottom: '80px',
+        right: '80px',
+        width: '384px',
+        height: '384px',
+        background: 'linear-gradient(to right, #3b82f6, #14b8a6)',
+        borderRadius: '50%',
+        filter: 'blur(48px)',
+        opacity: 0.2,
+        animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        animationDelay: '2s'
+      }}></div>
 
       {/* Content */}
       <div className="relative z-10 text-center px-4 max-w-6xl mx-auto">
@@ -197,8 +236,22 @@ export default function PremiumHero() {
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2 }}
       >
-        <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-white/50 rounded-full mt-2 animate-bounce"></div>
+        <div style={{
+          width: '24px',
+          height: '40px',
+          border: '2px solid rgba(255, 255, 255, 0.3)',
+          borderRadius: '20px',
+          display: 'flex',
+          justifyContent: 'center'
+        }}>
+          <div style={{
+            width: '4px',
+            height: '12px',
+            background: 'rgba(255, 255, 255, 0.5)',
+            borderRadius: '2px',
+            marginTop: '8px',
+            animation: 'bounce 2s infinite'
+          }}></div>
         </div>
       </motion.div>
     </section>
