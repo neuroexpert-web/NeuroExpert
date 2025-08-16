@@ -15,6 +15,11 @@ interface PricingPlan {
 export default function PricingSection(): JSX.Element {
   const [selectedPlan, setSelectedPlan] = useState<string>('Бизнес');
 
+  const scrollToROI = () => {
+    const element = document.getElementById('benefits');
+    element?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   const plans: PricingPlan[] = [
     {
       name: 'Старт',
@@ -128,7 +133,7 @@ export default function PricingSection(): JSX.Element {
           <div className="roi-calculator-promo">
             <h3>Есть калькулятор выгоды</h3>
             <p>Быстро поймите, сколько вы сэкономите с нашими решениями</p>
-            <button className="btn-luxury btn-outline">
+            <button className="btn-luxury btn-outline" onClick={scrollToROI}>
               <span>Рассчитать экономию</span>
               <span className="btn-icon">💰</span>
             </button>

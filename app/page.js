@@ -79,8 +79,13 @@ export default function Home() {
             <button 
               className="btn-luxury btn-gold btn-large"
               onClick={() => {
-                const aiButton = document.querySelector('.floating-ai-button');
-                if (aiButton) aiButton.click();
+                const aiButton = document.querySelector('.ai-float-button');
+                if (aiButton) {
+                  aiButton.click();
+                } else {
+                  // Если кнопка AI еще не загрузилась, показываем алерт
+                  alert('AI директор загружается, попробуйте через секунду...');
+                }
               }}
             >
               <span>Запустить демо</span>
