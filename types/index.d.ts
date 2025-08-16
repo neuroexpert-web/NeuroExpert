@@ -25,7 +25,7 @@ export interface ROIResults {
   roi: number;
   savings: number;
   growth: number;
-  payback: number | string;
+  payback: number;
 }
 
 export interface ChatMessage {
