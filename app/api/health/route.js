@@ -68,7 +68,7 @@ async function checkRedis() {
 }
 
 // AI Service health check
-async function checkAIService() {
+async function checkAIService(context = {}) {
   try {
     const hasApiKey = !!process.env.GOOGLE_GEMINI_API_KEY;
     
@@ -80,9 +80,11 @@ async function checkAIService() {
       };
     }
     
-    // Test with a simple prompt
+    // Test with a simple prompt using absolute URL derived from request
     const start = Date.now();
-    const response = await fetch('/api/assistant', {
+    const base = context.request ? new URL(context.request.url).origin : '';
+    const url = base ? `${base}/api/assistant` : '/api/assistant';
+    const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ question: 'test', model: 'gemini' })
@@ -227,7 +229,7 @@ export async function GET(request) {
     
     // Run specific service check if requested
     if (service && HEALTH_CHECKS[service]) {
-      const result = await HEALTH_CHECKS[service]();
+      const result = await HEALTH_CHECKS[service]({ request });
       return NextResponse.json({
         service,
         ...result,
@@ -238,7 +240,7 @@ export async function GET(request) {
     // Run all health checks in parallel
     const checkPromises = Object.entries(HEALTH_CHECKS).map(async ([name, checkFn]) => {
       try {
-        const result = await checkFn();
+        const result = await checkFn({ request });
         return [name, result];
       } catch (error) {
         return [name, {

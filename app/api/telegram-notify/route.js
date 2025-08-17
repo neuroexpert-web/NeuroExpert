@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server';
+import { withRateLimitRoute } from '../../middleware/rateLimit';
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+const TELEGRAM_API_KEY = process.env.TELEGRAM_NOTIFY_API_KEY; // set in Vercel env
 
 async function sendTelegramMessage(text) {
   if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
@@ -29,8 +31,17 @@ async function sendTelegramMessage(text) {
   }
 }
 
-export async function POST(request) {
+async function handler(request) {
   try {
+    // Simple auth via x-api-key header
+    if (!TELEGRAM_API_KEY) {
+      return NextResponse.json({ error: 'Endpoint not configured' }, { status: 500 });
+    }
+    const apiKey = request.headers.get('x-api-key');
+    if (apiKey !== TELEGRAM_API_KEY) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const { type, data } = await request.json();
     
     let message = '';
@@ -38,31 +49,31 @@ export async function POST(request) {
     switch (type) {
       case 'roi_calculation':
         message = `🧮 *Новый расчет ROI*\n\n` +
-          `💰 Доход: ${data.revenue.toLocaleString('ru-RU')}₽\n` +
-          `📊 Затраты: ${data.costs.toLocaleString('ru-RU')}₽\n` +
-          `📈 ROI: ${data.roi}%\n` +
-          `⏱ Время: ${data.timestamp}`;
+          `💰 Доход: ${data.revenue?.toLocaleString('ru-RU') ?? '-'}₽\n` +
+          `📊 Затраты: ${data.costs?.toLocaleString('ru-RU') ?? '-'}₽\n` +
+          `📈 ROI: ${data.roi ?? '-'}%\n` +
+          `⏱ Время: ${data.timestamp ?? new Date().toLocaleString('ru-RU')}`;
         break;
         
       case 'contact_form':
         message = `📬 *Новая заявка*\n\n` +
-          `👤 Имя: ${data.name}\n` +
+          `👤 Имя: ${data.name ?? '-'}\n` +
           `📞 Телефон: ${data.phone || 'Не указан'}\n` +
           `📧 Email: ${data.email || 'Не указан'}\n` +
           `💬 Сообщение: ${data.message || 'Нет сообщения'}\n` +
-          `⏱ Время: ${data.timestamp}`;
+          `⏱ Время: ${data.timestamp ?? new Date().toLocaleString('ru-RU')}`;
         break;
         
       case 'ai_chat':
         message = `🤖 *AI чат активность*\n\n` +
-          `❓ Вопрос: ${data.question}\n` +
-          `💡 Ответ: ${data.answer}\n` +
-          `🎯 Модель: ${data.model}\n` +
-          `⏱ Время: ${data.timestamp}`;
+          `❓ Вопрос: ${data.question ?? '-'}\n` +
+          `💡 Ответ: ${data.answer ?? '-'}\n` +
+          `🎯 Модель: ${data.model ?? '-'}\n` +
+          `⏱ Время: ${data.timestamp ?? new Date().toLocaleString('ru-RU')}`;
         break;
         
       default:
-        message = `📢 *Уведомление*\n\n${JSON.stringify(data, null, 2)}`;
+        message = `📢 *Уведомление*\n\n${JSON.stringify(data ?? {}, null, 2)}`;
     }
     
     const success = await sendTelegramMessage(message);
@@ -76,3 +87,5 @@ export async function POST(request) {
     );
   }
 }
+
+export const POST = withRateLimitRoute(handler, 'contact');

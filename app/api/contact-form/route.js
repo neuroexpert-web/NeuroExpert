@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { withRateLimit } from '../../middleware/rateLimit';
+import { withRateLimitRoute } from '../../middleware/rateLimit';
 
 async function handler(request) {
   try {
@@ -111,4 +111,4 @@ async function handler(request) {
 }
 
 // Export with rate limiting
-export const POST = withRateLimit(handler, 'contact');
+export const POST = withRateLimitRoute(handler, 'contact');

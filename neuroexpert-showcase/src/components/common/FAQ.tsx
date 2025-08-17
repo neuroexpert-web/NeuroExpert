@@ -1,5 +1,5 @@
 import React from 'react';
-import faqData from '../../data/faq';
+import { faqData } from '../../data/faq';
 
 const FAQ: React.FC = () => {
     return (

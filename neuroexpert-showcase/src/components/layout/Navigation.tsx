@@ -1,21 +1,21 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 const Navigation: React.FC = () => {
     return (
         <nav className="navigation">
             <ul className="nav-list">
                 <li>
-                    <Link to="/">Home</Link>
+                    <Link href="/">Home</Link>
                 </li>
                 <li>
-                    <Link to="/showcase">Showcase</Link>
+                    <Link href="/showcase">Showcase</Link>
                 </li>
                 <li>
-                    <Link to="/about">About Us</Link>
+                    <Link href="/about">About Us</Link>
                 </li>
                 <li>
-                    <Link to="/contact">Contact</Link>
+                    <Link href="/contact">Contact</Link>
                 </li>
             </ul>
         </nav>

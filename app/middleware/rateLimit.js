@@ -3,6 +3,8 @@
  * Protects against brute force and DDoS attacks
  */
 
+import { NextResponse } from 'next/server';
+
 const rateLimit = new Map();
 
 // Configuration
@@ -129,6 +131,54 @@ export function checkRateLimit(clientId, endpoint = 'default') {
   const req = { headers: { 'x-real-ip': clientId } };
   const rateLimiter = createRateLimiter(endpoint);
   return rateLimiter(req, {}, () => true);
+}
+
+/**
+ * Wrapper for Next.js App Router-compatible routes
+ */
+export function withRateLimitRoute(handler, endpoint = 'default') {
+  const maxRequests = RATE_LIMIT_CONFIG.max[endpoint] || RATE_LIMIT_CONFIG.max.default;
+
+  return async (request, ...args) => {
+    if (process.env.NODE_ENV === 'development') {
+      return handler(request, ...args);
+    }
+
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
+               request.headers.get('x-real-ip') ||
+               'unknown';
+    const key = `${ip}:${endpoint}`;
+    const now = Date.now();
+
+    let clientData = rateLimit.get(key);
+    if (!clientData || now - clientData.firstRequest > RATE_LIMIT_CONFIG.windowMs) {
+      clientData = { count: 0, firstRequest: now };
+      rateLimit.set(key, clientData);
+    }
+
+    clientData.count++;
+
+    const headers = new Headers();
+    headers.set('X-RateLimit-Limit', String(maxRequests));
+    headers.set('X-RateLimit-Remaining', String(Math.max(0, maxRequests - clientData.count)));
+    headers.set('X-RateLimit-Reset', new Date(clientData.firstRequest + RATE_LIMIT_CONFIG.windowMs).toISOString());
+
+    if (clientData.count > maxRequests) {
+      const retryAfterSec = Math.ceil((clientData.firstRequest + RATE_LIMIT_CONFIG.windowMs - now) / 1000);
+      headers.set('Retry-After', String(retryAfterSec));
+      return NextResponse.json({ error: RATE_LIMIT_CONFIG.message, retryAfter: retryAfterSec }, { status: 429, headers });
+    }
+
+    const response = await handler(request, ...args);
+    try {
+      if (response && response.headers && typeof response.headers.set === 'function') {
+        response.headers.set('X-RateLimit-Limit', String(maxRequests));
+        response.headers.set('X-RateLimit-Remaining', String(Math.max(0, maxRequests - clientData.count)));
+        response.headers.set('X-RateLimit-Reset', new Date(clientData.firstRequest + RATE_LIMIT_CONFIG.windowMs).toISOString());
+      }
+    } catch {}
+    return response;
+  };
 }
 
 // Export configurations for customization

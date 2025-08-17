@@ -7,7 +7,7 @@
 // Content Security Policy configuration
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' *.google.com *.googleapis.com *.gstatic.com *.google-analytics.com *.googletagmanager.com mc.yandex.ru *.yandex.net;
+  script-src 'self' 'unsafe-inline' *.google.com *.googleapis.com *.gstatic.com *.google-analytics.com *.googletagmanager.com mc.yandex.ru *.yandex.net;
   style-src 'self' 'unsafe-inline' *.googleapis.com fonts.googleapis.com;
   img-src 'self' blob: data: *.google.com *.googleapis.com *.gstatic.com *.google-analytics.com api.dicebear.com;
   font-src 'self' fonts.gstatic.com;
@@ -42,11 +42,11 @@ const nextConfig = {
   
   // Временно отключаем проверки для деплоя
   eslint: {
-    ignoreDuringBuilds: true, // TODO: включить обратно после исправления ошибок
+    ignoreDuringBuilds: false,
     dirs: ['app', 'components', 'lib', 'utils'],
   },
   typescript: {
-    ignoreBuildErrors: true, // TODO: включить обратно после исправления ошибок
+    ignoreBuildErrors: false,
     tsconfigPath: './tsconfig.json',
   },
   

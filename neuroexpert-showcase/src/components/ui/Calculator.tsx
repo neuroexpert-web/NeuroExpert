@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 
-const Calculator = () => {
-    const [investment, setInvestment] = useState(0);
-    const [returnValue, setReturnValue] = useState(0);
-    const [roi, setRoi] = useState(null);
+const Calculator: React.FC = () => {
+    const [investment, setInvestment] = useState<number>(0);
+    const [returnValue, setReturnValue] = useState<number>(0);
+    const [roi, setRoi] = useState<number | null>(null);
 
     const calculateROI = () => {
         if (investment > 0) {
             const calculatedROI = ((returnValue - investment) / investment) * 100;
-            setRoi(calculatedROI.toFixed(2));
+            setRoi(Number(calculatedROI.toFixed(2)));
         } else {
             setRoi(null);
         }
