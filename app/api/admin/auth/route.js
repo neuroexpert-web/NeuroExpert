@@ -29,7 +29,7 @@ async function postHandler(request) {
     if (!isValidPassword) {
       return NextResponse.json(
         { error: 'Invalid credentials' },
-        { status: 401, headers: { 'Cache-Control': 'no-store' } }
+        { status: 401, headers: { 'Cache-Control': 'no-store', 'WWW-Authenticate': 'Bearer realm="admin"' } }
       );
     }
 
@@ -74,7 +74,7 @@ async function getHandler(request) {
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return NextResponse.json(
         { valid: false },
-        { status: 401, headers: { 'Cache-Control': 'no-store' } }
+        { status: 401, headers: { 'Cache-Control': 'no-store', 'WWW-Authenticate': 'Bearer realm="admin"' } }
       );
     }
 
@@ -89,7 +89,7 @@ async function getHandler(request) {
     } catch (error) {
       return NextResponse.json(
         { valid: false },
-        { status: 401, headers: { 'Cache-Control': 'no-store' } }
+        { status: 401, headers: { 'Cache-Control': 'no-store', 'WWW-Authenticate': 'Bearer error="invalid_token"' } }
       );
     }
   } catch (error) {
