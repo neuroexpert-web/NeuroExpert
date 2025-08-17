@@ -99,7 +99,7 @@
 - ✅ **Build команда**: `npm run build`
 - ✅ **Publish directory**: `.next`
 - ✅ **Node.js версия**: 18+
-- ✅ **Environment variables**: GEMINI_API_KEY
+- ✅ **Environment variables**: GOOGLE_GEMINI_API_KEY
 
 ### Предварительные требования
 - ✅ Git репозиторий готов
