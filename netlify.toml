@@ -64,6 +64,13 @@
   [headers.values]
     Cache-Control = "public, max-age=60, s-maxage=31536000"
 
+# Доп. заголовки для Functions/API
+[[headers]]
+  for = "/.netlify/functions/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+    Cache-Control = "no-store"
+
 # Обработка 404
 [[redirects]]
   from = "/*"
