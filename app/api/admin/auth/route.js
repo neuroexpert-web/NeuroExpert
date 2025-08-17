@@ -4,11 +4,16 @@ import bcrypt from 'bcryptjs';
 import { withRateLimit } from '../../../middleware/rateLimit';
 
 // Получаем секретный ключ и хешированный пароль из переменных окружения
-const JWT_SECRET = process.env.JWT_SECRET || 'your-jwt-secret-key';
-const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH || '$2a$10$YourHashedPasswordHere';
+const { JWT_SECRET, ADMIN_PASSWORD_HASH } = process.env;
 
 async function postHandler(request) {
   try {
+    if (!JWT_SECRET || !ADMIN_PASSWORD_HASH) {
+      return NextResponse.json(
+        { error: 'Server configuration error' },
+        { status: 503 }
+      );
+    }
     const { password } = await request.json();
 
     if (!password) {
@@ -58,6 +63,12 @@ export const POST = withRateLimit(postHandler, 'auth');
 // Проверка токена
 export async function GET(request) {
   try {
+    if (!JWT_SECRET) {
+      return NextResponse.json(
+        { valid: false, error: 'Server configuration error' },
+        { status: 503 }
+      );
+    }
     const authHeader = request.headers.get('authorization');
     
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
