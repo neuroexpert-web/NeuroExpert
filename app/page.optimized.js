@@ -1,182 +1,131 @@
 'use client';
 
-import { useState, useEffect, Suspense, lazy } from 'react';
+import { lazy, Suspense } from 'react';
 import dynamic from 'next/dynamic';
+
+// Критические компоненты загружаем сразу
 import AnimatedLogo from './components/AnimatedLogo';
-import BusinessShowcase from './components/BusinessShowcase';
-import ContactForm from './components/ContactForm';
-import QuickActions from './components/QuickActions';
-import ROICalculator from './components/ROICalculator.tsx';
-import RealtimeStats from './components/RealtimeStats';
-import SmartFAQ from './components/SmartFAQ';
-import NeuralNetworkBackground from './components/NeuralNetworkBackground';
-import NeuralParticles from './components/NeuralParticles';
+import Header from './components/Header';
+import HeroSection from './components/HeroSection';
 
-// Heavy components loaded on demand
+// Lazy loading для тяжелых компонентов
+const ROICalculator = dynamic(() => import('./components/ROICalculator'), {
+  loading: () => <div className="skeleton-loader">Загрузка калькулятора...</div>,
+  ssr: false
+});
+
 const SmartFloatingAI = dynamic(() => import('./components/SmartFloatingAI'), {
-  ssr: false,
-  loading: () => <div className="ai-loading-placeholder">AI загружается...</div>
-});
-
-const AdminPanel = dynamic(() => import('./components/AdminPanel'), {
-  ssr: false,
-  loading: () => <div>Загрузка админ-панели...</div>
-});
-
-const LearningPlatform = dynamic(() => import('./components/LearningPlatform'), {
-  ssr: false,
-  loading: () => <div>Загрузка платформы обучения...</div>
-});
-
-const ContentAutomation = dynamic(() => import('./components/ContentAutomation'), {
-  ssr: false,
-  loading: () => <div>Загрузка автоматизации контента...</div>
-});
-
-const CRMAnalytics = dynamic(() => import('./components/CRMAnalytics'), {
-  ssr: false,
-  loading: () => <div>Загрузка CRM аналитики...</div>
-});
-
-const PersonalizationModule = dynamic(() => import('./components/PersonalizationModule'), {
-  ssr: false,
-  loading: () => <div>Загрузка персонализации...</div>
-});
-
-// Test panels - load only when needed
-const SmokeTestPanel = dynamic(() => import('./components/SmokeTestPanel'), {
-  ssr: false,
-  loading: () => <div>Загрузка панели тестирования...</div>
-});
-
-const UXTestingPanel = dynamic(() => import('./components/UXTestingPanel'), {
-  ssr: false,
-  loading: () => <div>Загрузка UX тестов...</div>
-});
-
-const MobileTestPanel = dynamic(() => import('./components/MobileTestPanel'), {
-  ssr: false,
-  loading: () => <div>Загрузка мобильных тестов...</div>
-});
-
-const PerformancePanel = dynamic(() => import('./components/PerformancePanel'), {
-  ssr: false,
-  loading: () => <div>Загрузка панели производительности...</div>
-});
-
-const ErrorLogPanel = dynamic(() => import('./components/ErrorLogPanel'), {
-  ssr: false,
-  loading: () => <div>Загрузка логов ошибок...</div>
-});
-
-// Modal components
-const ConfirmationModal = dynamic(() => import('./components/ConfirmationModal'), {
+  loading: () => null,
   ssr: false
 });
 
-const VoiceFeedbackModal = dynamic(() => import('./components/VoiceFeedbackModal'), {
-  ssr: false
+const ContactForm = dynamic(() => import('./components/ContactForm'), {
+  loading: () => <div className="skeleton-loader">Загрузка формы...</div>
 });
 
-const OnboardingTour = dynamic(() => import('./components/OnboardingTour'), {
-  ssr: false
+const TestimonialsCarousel = dynamic(() => import('./components/TestimonialsCarousel'), {
+  loading: () => <div className="skeleton-loader">Загрузка отзывов...</div>
 });
+
+const ComparisonTable = dynamic(() => import('./components/ComparisonTable'));
+const SmartFAQ = dynamic(() => import('./components/SmartFAQ'));
+const Footer = dynamic(() => import('./components/Footer'));
+
+// Оптимизированные lazy компоненты
+const PremiumHero = lazy(() => import('./components/PremiumHero'));
+const BenefitsShowcase = lazy(() => import('./components/BenefitsShowcase'));
+const PersonalizationModule = lazy(() => import('./components/PersonalizationModule'));
+const AIDirectorCapabilities = lazy(() => import('./components/AIDirectorCapabilities'));
+const ConfirmationModal = lazy(() => import('./components/ConfirmationModal'));
 
 export default function OptimizedHome() {
-  const [activeSection, setActiveSection] = useState('main');
-  const [showTestPanels, setShowTestPanels] = useState(false);
-  const [showAdvancedFeatures, setShowAdvancedFeatures] = useState(false);
-  const [isClient, setIsClient] = useState(false);
-  
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) {
-    // Server-side render only critical content
-    return (
-      <main className="main-container">
-        <NeuralNetworkBackground />
-        <AnimatedLogo />
-        <BusinessShowcase />
-        <ROICalculator />
-        <ContactForm />
-      </main>
-    );
-  }
-
   return (
-    <main className="main-container">
-      {/* Background effects */}
-      <NeuralNetworkBackground />
-      <NeuralParticles />
-      
-      {/* Core components - always loaded */}
+    <main className="min-h-screen">
+      {/* Критический контент - загружается сразу */}
       <AnimatedLogo />
-      <BusinessShowcase />
-      <QuickActions />
-      <ROICalculator />
-      <RealtimeStats />
-      <SmartFAQ />
-      <ContactForm />
+      <Header />
+      <HeroSection />
       
-      {/* AI Assistant - loaded dynamically */}
-      <Suspense fallback={<div>Загрузка AI...</div>}>
-        <SmartFloatingAI />
+      {/* Премиум секция с lazy loading */}
+      <Suspense fallback={<div className="min-h-screen" />}>
+        <PremiumHero />
       </Suspense>
       
-      {/* Advanced features - loaded on demand */}
-      {showAdvancedFeatures && (
-        <Suspense fallback={<div>Загрузка дополнительных функций...</div>}>
-          <LearningPlatform />
-          <ContentAutomation />
-          <CRMAnalytics />
-          <PersonalizationModule />
-        </Suspense>
-      )}
+      {/* AI Директор - загружается при прокрутке */}
+      <Suspense fallback={<div className="skeleton-section" />}>
+        <section id="ai-director" className="py-20 px-4 bg-slate-900/50">
+          <AIDirectorCapabilities />
+        </section>
+      </Suspense>
       
-      {/* Test panels - loaded on demand */}
-      {showTestPanels && (
-        <Suspense fallback={<div>Загрузка панелей тестирования...</div>}>
-          <div className="test-panels-container">
-            <SmokeTestPanel />
-            <UXTestingPanel />
-            <MobileTestPanel />
-            <PerformancePanel />
-            <ErrorLogPanel />
-          </div>
-        </Suspense>
-      )}
+      {/* ROI Калькулятор - dynamic import без SSR */}
+      <section id="calculator" className="py-20 px-4">
+        <ROICalculator />
+      </section>
       
-      {/* Admin panel - loaded on demand */}
-      {activeSection === 'admin' && (
-        <Suspense fallback={<div>Загрузка админ-панели...</div>}>
-          <AdminPanel />
-        </Suspense>
-      )}
+      {/* Преимущества */}
+      <Suspense fallback={<div className="skeleton-section" />}>
+        <BenefitsShowcase />
+      </Suspense>
       
-      {/* Modals - loaded when needed */}
+      {/* Персонализация */}
+      <Suspense fallback={<div className="skeleton-section" />}>
+        <PersonalizationModule />
+      </Suspense>
+      
+      {/* Отзывы */}
+      <section className="py-20 px-4 bg-slate-900/30">
+        <TestimonialsCarousel />
+      </section>
+      
+      {/* Сравнение */}
+      <section className="py-20 px-4">
+        <ComparisonTable />
+      </section>
+      
+      {/* FAQ */}
+      <section id="faq" className="py-20 px-4 bg-slate-900/50">
+        <SmartFAQ />
+      </section>
+      
+      {/* Контактная форма */}
+      <section id="contact" className="py-20 px-4">
+        <ContactForm />
+      </section>
+      
+      {/* Footer */}
+      <Footer />
+      
+      {/* Модальные окна */}
       <Suspense fallback={null}>
         <ConfirmationModal />
-        <VoiceFeedbackModal />
-        <OnboardingTour />
       </Suspense>
       
-      {/* Toggle buttons for advanced features */}
-      <div className="feature-toggles">
-        <button 
-          onClick={() => setShowAdvancedFeatures(!showAdvancedFeatures)}
-          className="toggle-button"
-        >
-          {showAdvancedFeatures ? 'Скрыть' : 'Показать'} расширенные функции
-        </button>
-        <button 
-          onClick={() => setShowTestPanels(!showTestPanels)}
-          className="toggle-button"
-        >
-          {showTestPanels ? 'Скрыть' : 'Показать'} панели тестирования
-        </button>
-      </div>
+      {/* AI Ассистент - загружается только при использовании */}
+      <SmartFloatingAI />
+      
+      <style jsx>{`
+        .skeleton-loader {
+          background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+          background-size: 200% 100%;
+          animation: loading 1.5s infinite;
+          height: 200px;
+          border-radius: 12px;
+          margin: 20px 0;
+        }
+        
+        .skeleton-section {
+          min-height: 400px;
+          background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+          background-size: 200% 100%;
+          animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+          0% { background-position: 200% 0; }
+          100% { background-position: -200% 0; }
+        }
+      `}</style>
     </main>
   );
 }
