@@ -12,6 +12,19 @@ import {
 // Максимальный размер тела запроса ~64KB
 const MAX_REQUEST_SIZE = 64 * 1024;
 
+const TONES = {
+  friendly: 'Дружелюбный, тёплый, вовлекающий стиль',
+  formal: 'Более официальный, деловой стиль',
+  concise: 'Короткие, по делу ответы',
+  persuasive: 'Убедительный тон с фокусом на ценности'
+};
+
+function normalizeTone(tone) {
+  if (!tone) return null;
+  const key = String(tone).toLowerCase();
+  return TONES[key] ? key : null;
+}
+
 // Проверка наличия API ключей
 const GEMINI_API_KEY = process.env.GOOGLE_GEMINI_API_KEY;
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
@@ -23,70 +36,47 @@ if (!GEMINI_API_KEY && !ANTHROPIC_API_KEY) {
 const genAI = GEMINI_API_KEY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null;
 
 // Создаём расширенный промпт на основе базы знаний
-function createEnhancedPrompt(userMessage, context = {}) {
+function createEnhancedPrompt(userMessage, context = {}, toneKey = null) {
   const hour = new Date().getHours();
   const timeOfDay = hour < 12 ? 'morning' : hour < 18 ? 'day' : 'evening';
-  const greeting = DIRECTOR_KNOWLEDGE_BASE.emotionalIntelligence.greetings[timeOfDay];
-  
   const userIntent = analyzeUserIntent(userMessage);
+  const toneInstruction = toneKey ? `Дополнительно используй стиль: ${TONES[toneKey]}.` : '';
   
   return `
 Ты - ${DIRECTOR_KNOWLEDGE_BASE.personality.name}, ${DIRECTOR_KNOWLEDGE_BASE.personality.role}.
 
-ТВОЯ ЛИЧНОСТЬ И ОПЫТ:
+ИНСТРУКЦИИ ПО СТИЛЮ: ${toneInstruction}
+
+ЛИЧНОСТЬ:
 ${JSON.stringify(DIRECTOR_KNOWLEDGE_BASE.personality, null, 2)}
 
-ЭМОЦИОНАЛЬНЫЙ ИНТЕЛЛЕКТ:
-Используй эмпатию и понимание из: ${JSON.stringify(DIRECTOR_KNOWLEDGE_BASE.emotionalIntelligence.empathy, null, 2)}
+ЭМОЦИИ/ЭМПАТИЯ:
+${JSON.stringify(DIRECTOR_KNOWLEDGE_BASE.emotionalIntelligence.empathy, null, 2)}
 
-ДЕТАЛЬНАЯ ИНФОРМАЦИЯ О КОМПАНИИ:
-${JSON.stringify(DIRECTOR_KNOWLEDGE_BASE.companyInfo, null, 2)}
-
-УСЛУГИ И РЕШЕНИЯ:
-${JSON.stringify(DIRECTOR_KNOWLEDGE_BASE.services, null, 2)}
-
-ПРОЦЕСС РАБОТЫ:
-${JSON.stringify(DIRECTOR_KNOWLEDGE_BASE.workProcess, null, 2)}
-
-ОБРАБОТКА ВОЗРАЖЕНИЙ:
-${JSON.stringify(DIRECTOR_KNOWLEDGE_BASE.objectionHandling, null, 2)}
-
-ОТРАСЛЕВАЯ ЭКСПЕРТИЗА:
-${JSON.stringify(DIRECTOR_KNOWLEDGE_BASE.industryExpertise, null, 2)}
-
-МЕТРИКИ УСПЕХА:
-${JSON.stringify(DIRECTOR_KNOWLEDGE_BASE.successMetrics, null, 2)}
+КОМПАНИЯ/УСЛУГИ/ПРОЦЕСС/ВОЗРАЖЕНИЯ/ЭКСПЕРТИЗА/МЕТРИКИ:
+${JSON.stringify({
+  companyInfo: DIRECTOR_KNOWLEDGE_BASE.companyInfo,
+  services: DIRECTOR_KNOWLEDGE_BASE.services,
+  workProcess: DIRECTOR_KNOWLEDGE_BASE.workProcess,
+  objectionHandling: DIRECTOR_KNOWLEDGE_BASE.objectionHandling,
+  industryExpertise: DIRECTOR_KNOWLEDGE_BASE.industryExpertise,
+  successMetrics: DIRECTOR_KNOWLEDGE_BASE.successMetrics,
+}, null, 2)}
 
 КОНТЕКСТ ПОЛЬЗОВАТЕЛЯ:
 - Время суток: ${timeOfDay}
-- Определенные намерения: ${userIntent.join(', ')}
-- Предыдущие взаимодействия: ${context.previousInteractions || 'Первое обращение'}
+- Намерения: ${userIntent.join(', ')}
+- История: ${context.previousInteractions || 'Первое обращение'}
 
 ИНСТРУКЦИИ ПО ОТВЕТУ:
-1. Начни с персонализированного приветствия (если это первое сообщение)
-2. Проанализируй вопрос клиента и определи его истинную потребность
-3. Дай конкретный, полезный ответ с примерами и цифрами
-4. Используй эмоциональный интеллект для создания доверия
-5. Приведи релевантный кейс или социальное доказательство
-6. Предложи конкретный следующий шаг
-7. Задай уточняющий вопрос для продолжения диалога
-
-СТИЛЬ ОБЩЕНИЯ:
-- Дружелюбный, но профессиональный
-- Простые слова вместо технических терминов
-- Короткие предложения и абзацы
-- Эмодзи для визуализации (но не переусердствуй)
-- Конкретика вместо абстракций
-
-ВАЖНО:
-- НЕ используй канцелярит и формальные обращения
-- НЕ давай общие ответы - всегда конкретика
-- НЕ забывай про эмпатию и человечность
-- ВСЕГДА предлагай реальную ценность в каждом ответе
+1) Приветствие и краткий смысл ответа
+2) Конкретный совет/числа/примеры
+3) 1-2 релевантных кейса
+4) Следующий шаг для клиента
+5) Уточняющий вопрос для продолжения
 
 Вопрос клиента: "${userMessage}"
-
-Твой ответ (как Александр Нейронов):`;
+`;
 }
 
 async function sendTelegramNotification(question, answer, model) {
@@ -174,10 +164,10 @@ async function handler(request) {
       return NextResponse.json({ error: 'Слишком большой запрос' }, { status: 413, headers: { 'Cache-Control': 'no-store' } });
     }
 
-    const { question, model = 'gemini', context = {} } = await request.json();
+    const { question, model = 'gemini', context = {}, tone } = await request.json();
     
     if (process.env.NODE_ENV !== 'production') {
-      console.log('Assistant API called:', { question, model });
+      console.log('Assistant API called:', { question, model, tone });
       console.log('API Keys available:', { 
         gemini: !!GEMINI_API_KEY, 
         claude: !!ANTHROPIC_API_KEY 
@@ -191,26 +181,25 @@ async function handler(request) {
       return NextResponse.json({ error: 'Вопрос слишком длинный' }, { status: 413, headers: { 'Cache-Control': 'no-store' } });
     }
 
+    const toneKey = normalizeTone(tone);
+
     // Создаём улучшенный промпт
-    const enhancedPrompt = createEnhancedPrompt(question, context);
+    const enhancedPrompt = createEnhancedPrompt(question, context, toneKey);
     
     let answer;
     let usedModel = model;
     
     try {
       if (model === 'claude' && ANTHROPIC_API_KEY) {
-        // Используем Claude
         answer = await getClaudeResponse(enhancedPrompt);
         usedModel = 'claude';
       } else if (genAI && GEMINI_API_KEY) {
-        // Используем Gemini
         const geminiModel = genAI.getGenerativeModel({ model: "gemini-pro" });
         const result = await geminiModel.generateContent(enhancedPrompt);
         const response = result.response;
         answer = response.text();
         usedModel = 'gemini';
       } else {
-        // Демо режим с продвинутыми ответами
         const intent = analyzeUserIntent(question);
         answer = generateDemoResponse(question, intent);
         usedModel = 'demo';
@@ -222,11 +211,7 @@ async function handler(request) {
     }
 
     const responseTime = Date.now() - startTime;
-
-    // Отправляем уведомление в Telegram
     sendTelegramNotification(question, answer, usedModel).catch(console.error);
-
-    // Анализируем интент для follow-up
     const intent = analyzeUserIntent(question);
     const followUpQuestions = generateFollowUpQuestions(intent[0], context);
 
@@ -236,6 +221,7 @@ async function handler(request) {
       responseTime,
       intent,
       followUpQuestions,
+      tone: toneKey || 'default',
       emotion: 'professional'
     }, { headers: { 'Cache-Control': 'no-store' } });
 
