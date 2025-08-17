@@ -2,6 +2,7 @@
 import { Inter } from 'next/font/google'
 import './globals.css'
 import './styles/premium-design-system.css'
+import './styles/premium-glass-sections.css'
 import Script from 'next/script'
 
 // Оптимизированная загрузка шрифта

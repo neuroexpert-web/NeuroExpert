@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
-import PremiumBackground from './components/PremiumBackground';
+import PremiumGlassBackground from './components/PremiumGlassBackground';
 import PremiumHero from './components/PremiumHero';
 import JourneySection from './components/JourneySection';
 import WhyUsSection from './components/WhyUsSection';
@@ -37,8 +37,8 @@ const AIDirectorCapabilities = dynamic(() => import('./components/AIDirectorCapa
 export default function Home() {
   return (
     <main className="premium-main" style={{ background: 'var(--noir-900)', minHeight: '100vh' }}>
-      {/* Premium фон с эффектами */}
-      <PremiumBackground />
+      {/* Premium стеклянный фон с глубокими эффектами */}
+      <PremiumGlassBackground />
       
       {/* Premium Hero с 3D эффектами */}
       <PremiumHero />
