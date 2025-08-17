@@ -20,7 +20,30 @@ export default function ContactForm() {
 
   const [isListening, setIsListening] = useState(false);
   const [activeField, setActiveField] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isFormFocused, setIsFormFocused] = useState(false);
   const recognitionRef = useRef(null);
+
+  useEffect(() => {
+    // Определяем мобильное устройство
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    // Обработка фокуса для мобильных
+    const handleFocus = () => setIsFormFocused(true);
+    const handleBlur = (e) => {
+      // Проверяем, что фокус ушел за пределы формы
+      if (!e.currentTarget.contains(e.relatedTarget)) {
+        setTimeout(() => setIsFormFocused(false), 200);
+      }
+    };
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     // Инициализация Web Speech API
@@ -102,154 +125,249 @@ export default function ContactForm() {
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const formatPhone = (phone) => {
-    const cleaned = phone.replace(/\D/g, '');
-    const match = cleaned.match(/^(\d{1})(\d{3})(\d{3})(\d{2})(\d{2})$/);
-    if (match) {
-      return `+${match[1]} (${match[2]}) ${match[3]}-${match[4]}-${match[5]}`;
-    }
-    return phone;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!formData.name || !formData.phone) {
-      setStatus({
-        loading: false,
-        success: false,
-        error: true,
-        message: 'Пожалуйста, заполните обязательные поля'
-      });
-      return;
-    }
-
     setStatus({ loading: true, success: false, error: false, message: '' });
 
     try {
       const response = await fetch('/api/contact-form', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          phone: formatPhone(formData.phone)
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
       });
 
       const result = await response.json();
-
-      if (response.ok && result.success) {
+      
+      if (response.ok) {
         setStatus({
           loading: false,
           success: true,
           error: false,
-          message: 'Спасибо! Мы свяжемся с вами в течение 15 минут.'
+          message: result.message || 'Заявка успешно отправлена!'
         });
-
-        setFormData({
-          name: '',
-          phone: '',
-          email: '',
-          company: '',
-          message: ''
-        });
+        setFormData({ name: '', phone: '', email: '', company: '', message: '' });
       } else {
-        throw new Error(result.error || 'Произошла ошибка');
+        throw new Error(result.error || 'Ошибка отправки');
       }
     } catch (error) {
-      console.error('Ошибка отправки формы:', error);
       setStatus({
         loading: false,
         success: false,
         error: true,
-        message: error.message || 'Произошла ошибка при отправке формы'
+        message: error.message || 'Ошибка отправки. Попробуйте позже.'
       });
     }
   };
 
-  const inputStyle = {
-    width: '100%',
-    padding: '16px',
-    paddingRight: '60px',
-    background: 'rgba(102, 126, 234, 0.1)',
-    border: '1px solid rgba(102, 126, 234, 0.3)',
-    borderRadius: '12px',
-    color: 'white',
-    fontSize: '16px',
-    outline: 'none',
-    transition: 'all 0.3s ease'
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   return (
-    <section className="contact-form-section py-20 px-4" id="contact">
-      <div className="max-w-4xl mx-auto">
+    <section 
+      id="contact" 
+      className={`contact-section ${isMobile && isFormFocused ? 'mobile-focused' : ''}`}
+      style={{
+        padding: isMobile ? '40px 16px' : '80px 20px',
+        background: '#0b0f17',
+        minHeight: isMobile && isFormFocused ? '100vh' : 'auto',
+        position: 'relative'
+      }}
+    >
+      <style jsx>{`
+        .contact-section {
+          transition: all 0.3s ease;
+        }
+        
+        .contact-section.mobile-focused {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          z-index: 9999;
+          overflow-y: auto;
+          background: rgba(11, 15, 23, 0.98);
+          backdrop-filter: blur(20px);
+        }
+        
+        .mobile-close-btn {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          color: white;
+          font-size: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          z-index: 10;
+        }
+        
+        .form-container {
+          transition: all 0.3s ease;
+        }
+        
+        @media (max-width: 768px) {
+          .mobile-focused .form-container {
+            max-width: 100% !important;
+            width: 100% !important;
+            padding: 32px 20px !important;
+            margin-top: 60px !important;
+          }
+          
+          .mobile-focused input,
+          .mobile-focused textarea {
+            font-size: 16px !important;
+            padding: 20px !important;
+            height: 56px !important;
+          }
+          
+          .mobile-focused textarea {
+            height: 120px !important;
+            min-height: 120px !important;
+          }
+          
+          .mobile-focused .form-field {
+            margin-bottom: 20px !important;
+          }
+          
+          .mobile-focused .voice-btn {
+            width: 48px !important;
+            height: 48px !important;
+            font-size: 24px !important;
+          }
+          
+          .mobile-focused .submit-btn {
+            height: 60px !important;
+            font-size: 18px !important;
+            margin-top: 24px !important;
+          }
+          
+          .contact-info {
+            display: none;
+          }
+          
+          .mobile-focused .contact-info {
+            display: none !important;
+          }
+        }
+      `}</style>
+      
+      <div className="container mx-auto">
+        {/* Кнопка закрытия для мобильной версии */}
+        {isMobile && isFormFocused && (
+          <motion.button
+            className="mobile-close-btn"
+            onClick={() => setIsFormFocused(false)}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+          >
+            ✕
+          </motion.button>
+        )}
+        
+        {/* Заголовок */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
           className="text-center mb-12"
+          style={{ display: isMobile && isFormFocused ? 'none' : 'block' }}
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span style={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
-            }}>
-              Начните цифровизацию сегодня
-            </span>
+          <h2 style={{ 
+            fontSize: '48px', 
+            fontWeight: '800', 
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            marginBottom: '16px'
+          }}>
+            Начните трансформацию
           </h2>
-          <p className="text-xl text-gray-400">
-            Оставьте заявку и получите бесплатную консультацию
+          <p style={{ fontSize: '20px', color: '#a0a9cc' }}>
+            Оставьте заявку и получите персональную консультацию
           </p>
         </motion.div>
 
+        {/* Форма */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="form-container"
           style={{
-            background: 'rgba(20, 20, 40, 0.8)',
+            maxWidth: '600px',
+            margin: '0 auto',
+            background: 'rgba(30, 41, 59, 0.5)',
             backdropFilter: 'blur(20px)',
-            borderRadius: '32px',
+            borderRadius: '24px',
             padding: '48px',
-            border: '1px solid rgba(102, 126, 234, 0.3)',
-            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3), 0 0 40px rgba(102, 126, 234, 0.2)'
+            border: '1px solid rgba(102, 126, 234, 0.3)'
           }}
         >
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Имя */}
+          <form 
+            onSubmit={handleSubmit} 
+            className="space-y-6"
+            onFocus={() => isMobile && setIsFormFocused(true)}
+          >
+            {/* Поле Имя */}
             <motion.div
-              whileHover={{ scale: 1.01 }}
-              transition={{ duration: 0.2 }}
-              style={{ position: 'relative' }}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 }}
+              className="form-field"
             >
-              <label className="block text-sm font-medium mb-2" style={{ color: '#a0a9cc' }}>
-                Ваше имя *
+              <label 
+                htmlFor="name" 
+                style={{ 
+                  display: 'block', 
+                  marginBottom: '8px', 
+                  color: '#e0e7ff',
+                  fontWeight: '600'
+                }}
+              >
+                Ваше имя
               </label>
               <div style={{ position: 'relative' }}>
                 <input
                   type="text"
+                  id="name"
                   name="name"
                   value={formData.name}
-                  onChange={handleChange}
-                  placeholder="Например: Иван Иванов"
-                  style={inputStyle}
-                  onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
-                  onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="Александр"
+                  style={{
+                    width: '100%',
+                    padding: '16px',
+                    paddingRight: '60px',
+                    background: 'rgba(17, 24, 39, 0.5)',
+                    border: '1px solid rgba(102, 126, 234, 0.3)',
+                    borderRadius: '12px',
+                    color: 'white',
+                    fontSize: '16px',
+                    outline: 'none',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = 'rgba(102, 126, 234, 0.8)';
+                    e.target.style.background = 'rgba(17, 24, 39, 0.8)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)';
+                    e.target.style.background = 'rgba(17, 24, 39, 0.5)';
+                  }}
                 />
                 <motion.button
                   type="button"
+                  className="voice-btn"
                   onClick={() => startListening('name')}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
@@ -280,28 +398,57 @@ export default function ContactForm() {
               </div>
             </motion.div>
 
-            {/* Телефон */}
+            {/* Поле Телефон */}
             <motion.div
-              whileHover={{ scale: 1.01 }}
-              transition={{ duration: 0.2 }}
-              style={{ position: 'relative' }}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4 }}
+              className="form-field"
             >
-              <label className="block text-sm font-medium mb-2" style={{ color: '#a0a9cc' }}>
-                Телефон *
+              <label 
+                htmlFor="phone" 
+                style={{ 
+                  display: 'block', 
+                  marginBottom: '8px', 
+                  color: '#e0e7ff',
+                  fontWeight: '600'
+                }}
+              >
+                Телефон
               </label>
               <div style={{ position: 'relative' }}>
                 <input
                   type="tel"
+                  id="phone"
                   name="phone"
                   value={formData.phone}
-                  onChange={handleChange}
-                  placeholder="+7 (996) 009-63-34"
-                  style={inputStyle}
-                  onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
-                  onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="+7 (999) 123-45-67"
+                  style={{
+                    width: '100%',
+                    padding: '16px',
+                    paddingRight: '60px',
+                    background: 'rgba(17, 24, 39, 0.5)',
+                    border: '1px solid rgba(102, 126, 234, 0.3)',
+                    borderRadius: '12px',
+                    color: 'white',
+                    fontSize: '16px',
+                    outline: 'none',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = 'rgba(102, 126, 234, 0.8)';
+                    e.target.style.background = 'rgba(17, 24, 39, 0.8)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)';
+                    e.target.style.background = 'rgba(17, 24, 39, 0.5)';
+                  }}
                 />
                 <motion.button
                   type="button"
+                  className="voice-btn"
                   onClick={() => startListening('phone')}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
@@ -332,71 +479,154 @@ export default function ContactForm() {
               </div>
             </motion.div>
 
-            {/* Email */}
+            {/* Поле Email */}
             <motion.div
-              whileHover={{ scale: 1.01 }}
-              transition={{ duration: 0.2 }}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.5 }}
+              className="form-field"
             >
-              <label className="block text-sm font-medium mb-2" style={{ color: '#a0a9cc' }}>
+              <label 
+                htmlFor="email" 
+                style={{ 
+                  display: 'block', 
+                  marginBottom: '8px', 
+                  color: '#e0e7ff',
+                  fontWeight: '600'
+                }}
+              >
                 Email
               </label>
               <input
                 type="email"
+                id="email"
                 name="email"
                 value={formData.email}
-                onChange={handleChange}
-                placeholder="example@company.ru"
-                style={inputStyle}
-                onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
-                onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
+                onChange={handleInputChange}
+                required
+                placeholder="alex@company.ru"
+                style={{
+                  width: '100%',
+                  padding: '16px',
+                  background: 'rgba(17, 24, 39, 0.5)',
+                  border: '1px solid rgba(102, 126, 234, 0.3)',
+                  borderRadius: '12px',
+                  color: 'white',
+                  fontSize: '16px',
+                  outline: 'none',
+                  transition: 'all 0.3s ease'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = 'rgba(102, 126, 234, 0.8)';
+                  e.target.style.background = 'rgba(17, 24, 39, 0.8)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)';
+                  e.target.style.background = 'rgba(17, 24, 39, 0.5)';
+                }}
               />
             </motion.div>
 
-            {/* Компания */}
+            {/* Поле Компания */}
             <motion.div
-              whileHover={{ scale: 1.01 }}
-              transition={{ duration: 0.2 }}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.6 }}
+              className="form-field"
             >
-              <label className="block text-sm font-medium mb-2" style={{ color: '#a0a9cc' }}>
-                Компания
+              <label 
+                htmlFor="company" 
+                style={{ 
+                  display: 'block', 
+                  marginBottom: '8px', 
+                  color: '#e0e7ff',
+                  fontWeight: '600'
+                }}
+              >
+                Компания (необязательно)
               </label>
               <input
                 type="text"
+                id="company"
                 name="company"
                 value={formData.company}
-                onChange={handleChange}
-                placeholder="Название вашей компании"
-                style={inputStyle}
-                onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
-                onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
+                onChange={handleInputChange}
+                placeholder="ООО Рога и Копыта"
+                style={{
+                  width: '100%',
+                  padding: '16px',
+                  background: 'rgba(17, 24, 39, 0.5)',
+                  border: '1px solid rgba(102, 126, 234, 0.3)',
+                  borderRadius: '12px',
+                  color: 'white',
+                  fontSize: '16px',
+                  outline: 'none',
+                  transition: 'all 0.3s ease'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = 'rgba(102, 126, 234, 0.8)';
+                  e.target.style.background = 'rgba(17, 24, 39, 0.8)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)';
+                  e.target.style.background = 'rgba(17, 24, 39, 0.5)';
+                }}
               />
             </motion.div>
 
-            {/* Сообщение */}
+            {/* Поле Сообщение */}
             <motion.div
-              whileHover={{ scale: 1.01 }}
-              transition={{ duration: 0.2 }}
-              style={{ position: 'relative' }}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.7 }}
+              className="form-field"
             >
-              <label className="block text-sm font-medium mb-2" style={{ color: '#a0a9cc' }}>
+              <label 
+                htmlFor="message" 
+                style={{ 
+                  display: 'block', 
+                  marginBottom: '8px', 
+                  color: '#e0e7ff',
+                  fontWeight: '600'
+                }}
+              >
                 Сообщение
               </label>
               <div style={{ position: 'relative' }}>
                 <textarea
+                  id="message"
                   name="message"
                   value={formData.message}
-                  onChange={handleChange}
+                  onChange={handleInputChange}
+                  required
+                  rows="4"
                   placeholder="Расскажите о вашем проекте..."
-                  rows={4}
                   style={{
-                    ...inputStyle,
-                    resize: 'none'
+                    width: '100%',
+                    padding: '16px',
+                    paddingRight: '60px',
+                    background: 'rgba(17, 24, 39, 0.5)',
+                    border: '1px solid rgba(102, 126, 234, 0.3)',
+                    borderRadius: '12px',
+                    color: 'white',
+                    fontSize: '16px',
+                    outline: 'none',
+                    transition: 'all 0.3s ease',
+                    resize: 'vertical',
+                    minHeight: '100px'
                   }}
-                  onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
-                  onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = 'rgba(102, 126, 234, 0.8)';
+                    e.target.style.background = 'rgba(17, 24, 39, 0.8)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)';
+                    e.target.style.background = 'rgba(17, 24, 39, 0.5)';
+                  }}
                 />
                 <motion.button
                   type="button"
+                  className="voice-btn"
                   onClick={() => startListening('message')}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
@@ -454,6 +684,7 @@ export default function ContactForm() {
             {/* Кнопка отправки */}
             <motion.button
               type="submit"
+              className="submit-btn"
               disabled={status.loading}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -512,7 +743,7 @@ export default function ContactForm() {
             </motion.button>
 
             {/* Подсказка о голосовом вводе */}
-            {recognitionRef.current && (
+            {recognitionRef.current && !isMobile && (
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -531,7 +762,8 @@ export default function ContactForm() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
-          className="mt-12 text-center"
+          className="contact-info mt-12 text-center"
+          style={{ display: isMobile && isFormFocused ? 'none' : 'block' }}
         >
           <p style={{ color: '#a0a9cc', marginBottom: '16px' }}>
             Или свяжитесь с нами напрямую:
