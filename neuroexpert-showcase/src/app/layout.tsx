@@ -5,7 +5,11 @@ import Navigation from '../components/layout/Navigation';
 import '../styles/components.css';
 import '../styles/showcase.css';
 
-const Layout = ({ children }) => {
+interface LayoutProps {
+    children: React.ReactNode;
+}
+
+const Layout: React.FC<LayoutProps> = ({ children }) => {
     return (
         <div>
             <Header />
