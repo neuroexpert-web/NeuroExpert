@@ -56,43 +56,72 @@ async function contactFormHandler(request) {
     });
     
     // Send notification to Telegram if configured
-    if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
+    const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+    const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+    
+    console.log('Telegram config check:', {
+      hasToken: !!TELEGRAM_BOT_TOKEN,
+      tokenLength: TELEGRAM_BOT_TOKEN ? TELEGRAM_BOT_TOKEN.length : 0,
+      hasChatId: !!TELEGRAM_CHAT_ID,
+      chatIdValue: TELEGRAM_CHAT_ID || 'not set'
+    });
+    
+    if (TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID) {
       try {
-        const telegramMessage = `
-🔔 Новая заявка с сайта NeuroExpert
+        const telegramMessage = `🔔 <b>Новая заявка с сайта NeuroExpert</b>
 
-👤 Имя: ${name}
-📧 Email: ${email}
-📱 Телефон: ${phone || 'Не указан'}
-💬 Сообщение: ${message}
-🕐 Время: ${new Date().toLocaleString('ru-RU')}
-        `;
+👤 <b>Имя:</b> ${name}
+📧 <b>Email:</b> ${email}
+📱 <b>Телефон:</b> ${phone || 'Не указан'}
+💬 <b>Сообщение:</b> ${message}
+🕐 <b>Время:</b> ${new Date().toLocaleString('ru-RU')}`;
         
-        const response = await fetch(
-          `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              chat_id: process.env.TELEGRAM_CHAT_ID,
-              text: telegramMessage,
-              parse_mode: 'HTML'
-            })
-          }
-        );
+        console.log('Sending Telegram message to chat:', TELEGRAM_CHAT_ID);
         
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error('Failed to send Telegram notification:', errorText);
+        const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+        const telegramBody = {
+          chat_id: TELEGRAM_CHAT_ID,
+          text: telegramMessage,
+          parse_mode: 'HTML'
+        };
+        
+        console.log('Telegram request URL:', telegramUrl.replace(TELEGRAM_BOT_TOKEN, 'TOKEN_HIDDEN'));
+        console.log('Telegram request body:', telegramBody);
+        
+        const response = await fetch(telegramUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(telegramBody)
+        });
+        
+        const responseData = await response.json();
+        console.log('Telegram API response:', responseData);
+        
+        if (!response.ok || !responseData.ok) {
+          console.error('Failed to send Telegram notification:', {
+            status: response.status,
+            error: responseData.description || 'Unknown error',
+            errorCode: responseData.error_code
+          });
         } else {
-          console.log('Telegram notification sent successfully');
+          console.log('✅ Telegram notification sent successfully!', {
+            messageId: responseData.result?.message_id,
+            chatId: responseData.result?.chat?.id
+          });
         }
       } catch (error) {
-        console.error('Telegram notification error:', error);
+        console.error('Telegram notification error:', {
+          message: error.message,
+          stack: error.stack
+        });
         // Don't fail the request if Telegram fails
       }
     } else {
-      console.warn('Telegram notifications not configured. Set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID environment variables.');
+      console.warn('⚠️ Telegram notifications not configured!');
+      console.warn('Missing:', {
+        token: !TELEGRAM_BOT_TOKEN ? 'TELEGRAM_BOT_TOKEN' : null,
+        chatId: !TELEGRAM_CHAT_ID ? 'TELEGRAM_CHAT_ID' : null
+      });
     }
     
     // Return success response
