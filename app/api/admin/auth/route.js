@@ -61,7 +61,7 @@ async function postHandler(request) {
 export const POST = withRateLimit(postHandler, 'auth');
 
 // Проверка токена
-export async function GET(request) {
+async function getHandler(request) {
   try {
     if (!JWT_SECRET) {
       return NextResponse.json(
@@ -100,3 +100,5 @@ export async function GET(request) {
     );
   }
 }
+
+export const GET = withRateLimit(getHandler, 'auth');
