@@ -1,19 +1,25 @@
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import { withRateLimit } from '../../../middleware/rateLimit';
 
 // Получаем секретный ключ и хешированный пароль из переменных окружения
-const JWT_SECRET = process.env.JWT_SECRET || 'your-jwt-secret-key';
-const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH || '$2a$10$YourHashedPasswordHere';
+const { JWT_SECRET, ADMIN_PASSWORD_HASH } = process.env;
 
-export async function POST(request) {
+async function postHandler(request) {
   try {
+    if (!JWT_SECRET || !ADMIN_PASSWORD_HASH) {
+      return NextResponse.json(
+        { error: 'Server configuration error' },
+        { status: 503, headers: { 'Cache-Control': 'no-store' } }
+      );
+    }
     const { password } = await request.json();
 
     if (!password) {
       return NextResponse.json(
         { error: 'Password is required' },
-        { status: 400 }
+        { status: 400, headers: { 'Cache-Control': 'no-store' } }
       );
     }
 
@@ -23,7 +29,7 @@ export async function POST(request) {
     if (!isValidPassword) {
       return NextResponse.json(
         { error: 'Invalid credentials' },
-        { status: 401 }
+        { status: 401, headers: { 'Cache-Control': 'no-store', 'WWW-Authenticate': 'Bearer realm="admin"' } }
       );
     }
 
@@ -41,26 +47,34 @@ export async function POST(request) {
       success: true,
       token,
       expiresIn: 86400 // 24 hours in seconds
-    });
+    }, { headers: { 'Cache-Control': 'no-store' } });
 
   } catch (error) {
     console.error('Admin auth error:', error);
     return NextResponse.json(
       { error: 'Authentication failed' },
-      { status: 500 }
+      { status: 500, headers: { 'Cache-Control': 'no-store' } }
     );
   }
 }
 
+export const POST = withRateLimit(postHandler, 'auth');
+
 // Проверка токена
-export async function GET(request) {
+async function getHandler(request) {
   try {
+    if (!JWT_SECRET) {
+      return NextResponse.json(
+        { valid: false, error: 'Server configuration error' },
+        { status: 503, headers: { 'Cache-Control': 'no-store' } }
+      );
+    }
     const authHeader = request.headers.get('authorization');
     
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return NextResponse.json(
         { valid: false },
-        { status: 401 }
+        { status: 401, headers: { 'Cache-Control': 'no-store', 'WWW-Authenticate': 'Bearer realm="admin"' } }
       );
     }
 
@@ -71,18 +85,20 @@ export async function GET(request) {
       return NextResponse.json({
         valid: true,
         role: decoded.role
-      });
+      }, { headers: { 'Cache-Control': 'no-store' } });
     } catch (error) {
       return NextResponse.json(
         { valid: false },
-        { status: 401 }
+        { status: 401, headers: { 'Cache-Control': 'no-store', 'WWW-Authenticate': 'Bearer error="invalid_token"' } }
       );
     }
   } catch (error) {
     console.error('Token verification error:', error);
     return NextResponse.json(
       { valid: false },
-      { status: 500 }
+      { status: 500, headers: { 'Cache-Control': 'no-store' } }
     );
   }
 }
+
+export const GET = withRateLimit(getHandler, 'auth');

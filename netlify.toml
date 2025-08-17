@@ -35,7 +35,7 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
-    Content-Security-Policy = "default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:; img-src 'self' data: https: blob:; connect-src 'self' https: wss:;"
+    Content-Security-Policy = "default-src 'self' 'unsafe-inline' https: data: blob:; img-src 'self' data: https: blob:; connect-src 'self' https: wss:;"
 
 # Кэширование статических ресурсов
 [[headers]]
@@ -63,6 +63,13 @@
   for = "/_next/image/*"
   [headers.values]
     Cache-Control = "public, max-age=60, s-maxage=31536000"
+
+# Доп. заголовки для Functions/API
+[[headers]]
+  for = "/.netlify/functions/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+    Cache-Control = "no-store"
 
 # Обработка 404
 [[redirects]]

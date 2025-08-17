@@ -15,6 +15,7 @@ export default function PremiumBackground(): JSX.Element {
   const particlesRef = useRef<Particle[]>([]);
   const mouseRef = useRef({ x: 0, y: 0 });
   const animationRef = useRef<number>();
+  const stopRef = useRef<boolean>(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -23,42 +24,87 @@ export default function PremiumBackground(): JSX.Element {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     // Set canvas size
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      // Re-init on resize for consistent density
+      initParticles();
     };
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Initialize luxury particles
+    // Initialize particles with adaptive density
     const initParticles = () => {
       particlesRef.current = [];
-      const particleCount = Math.floor((canvas.width * canvas.height) / 15000);
-      
+      const area = canvas.width * canvas.height;
+      const baseCount = Math.floor(area / 15000);
+      const maxCount = isMobile ? 60 : 160;
+      const particleCount = Math.min(baseCount, maxCount);
+
+      const styles = getComputedStyle(document.documentElement);
+      const accent = styles.getPropertyValue('--accent').trim() || '#6366f1';
+      const gold = '#FFD700';
+
       for (let i = 0; i < particleCount; i++) {
         particlesRef.current.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
           size: Math.random() * 2 + 0.5,
-          speedX: (Math.random() - 0.5) * 0.2,
-          speedY: (Math.random() - 0.5) * 0.2,
+          speedX: (Math.random() - 0.5) * (isMobile ? 0.15 : 0.25),
+          speedY: (Math.random() - 0.5) * (isMobile ? 0.15 : 0.25),
           opacity: Math.random() * 0.2 + 0.05,
-          color: Math.random() > 0.5 ? '#4136f1' : '#FFD700'
+          color: Math.random() > 0.6 ? gold : accent
         });
       }
     };
-    initParticles();
 
-    // Mouse tracking
+    // Reduced motion: keep static canvas (no animation)
+    if (reduceMotion) {
+      particlesRef.current = [];
+      ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      window.addEventListener('resize', resizeCanvas);
+      return () => {
+        window.removeEventListener('resize', resizeCanvas);
+      };
+    }
+
+    // Mouse tracking (desktop only)
     const handleMouseMove = (e: MouseEvent) => {
       mouseRef.current = { x: e.clientX, y: e.clientY };
     };
-    window.addEventListener('mousemove', handleMouseMove);
+    if (!isMobile) window.addEventListener('mousemove', handleMouseMove);
 
-    // Animation loop
-    const animate = () => {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    // Pause when tab hidden
+    const handleVisibility = () => {
+      stopRef.current = document.hidden;
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    // Animation loop with FPS throttling
+    const targetFPS = isMobile ? 30 : 45;
+    const frameInterval = 1000 / targetFPS;
+    let last = performance.now();
+
+    const animate = (now: number) => {
+      if (stopRef.current) {
+        animationRef.current = requestAnimationFrame(animate);
+        return;
+      }
+
+      const delta = now - last;
+      if (delta < frameInterval) {
+        animationRef.current = requestAnimationFrame(animate);
+        return;
+      }
+      last = now;
+
+      // Faint trail background for smoothness
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.06)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       particlesRef.current.forEach((particle) => {
@@ -66,15 +112,16 @@ export default function PremiumBackground(): JSX.Element {
         particle.x += particle.speedX;
         particle.y += particle.speedY;
 
-        // Mouse interaction
-        const dx = mouseRef.current.x - particle.x;
-        const dy = mouseRef.current.y - particle.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        
-        if (distance < 100) {
-          const force = (100 - distance) / 100;
-          particle.x -= (dx / distance) * force * 2;
-          particle.y -= (dy / distance) * force * 2;
+        // Mouse interaction (subtle)
+        if (!isMobile) {
+          const dx = mouseRef.current.x - particle.x;
+          const dy = mouseRef.current.y - particle.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          if (distance < 100) {
+            const force = (100 - distance) / 100;
+            particle.x -= (dx / (distance || 1)) * force * 1.5;
+            particle.y -= (dy / (distance || 1)) * force * 1.5;
+          }
         }
 
         // Wrap around screen
@@ -83,43 +130,53 @@ export default function PremiumBackground(): JSX.Element {
         if (particle.y < 0) particle.y = canvas.height;
         if (particle.y > canvas.height) particle.y = 0;
 
-        // Draw particle with glow
+        // Draw particle with subtle glow (desktop only)
         ctx.globalAlpha = particle.opacity;
         ctx.fillStyle = particle.color;
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = particle.color;
+        if (!isMobile) {
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = particle.color;
+        }
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
         ctx.fill();
         ctx.shadowBlur = 0;
       });
 
-      // Draw connections
+      // Draw neural connections
+      const maxDistance = isMobile ? 90 : 150;
+      const lineAlpha = isMobile ? 0.08 : 0.12;
       particlesRef.current.forEach((particle, i) => {
-        particlesRef.current.slice(i + 1).forEach((otherParticle) => {
-          const dx = particle.x - otherParticle.x;
-          const dy = particle.y - otherParticle.y;
+        for (let j = i + 1; j < particlesRef.current.length; j++) {
+          const other = particlesRef.current[j];
+          const dx = particle.x - other.x;
+          const dy = particle.y - other.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < 150) {
-            ctx.globalAlpha = (1 - distance / 150) * 0.1;
+          if (distance < maxDistance) {
+            ctx.globalAlpha = (1 - distance / maxDistance) * lineAlpha;
             ctx.strokeStyle = '#4136f1';
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(particle.x, particle.y);
-            ctx.lineTo(otherParticle.x, otherParticle.y);
+            ctx.lineTo(other.x, other.y);
             ctx.stroke();
           }
-        });
+        }
       });
 
       animationRef.current = requestAnimationFrame(animate);
     };
-    animate();
+
+    // Initialize after helper is defined
+    // (initParticles may use canvas size from resizeCanvas)
+    // Ensure some particles even if resize triggers later
+    particlesRef.current.length === 0 && (function seed() { initParticles(); })();
+    animationRef.current = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
-      window.removeEventListener('mousemove', handleMouseMove);
+      if (!isMobile) window.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('visibilitychange', handleVisibility);
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }

@@ -7,7 +7,7 @@
 // Content Security Policy configuration
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' *.google.com *.googleapis.com *.gstatic.com *.google-analytics.com *.googletagmanager.com mc.yandex.ru *.yandex.net;
+  script-src 'self' 'unsafe-inline' *.google.com *.googleapis.com *.gstatic.com *.google-analytics.com *.googletagmanager.com mc.yandex.ru *.yandex.net vercel.live *.vercel.live;
   style-src 'self' 'unsafe-inline' *.googleapis.com fonts.googleapis.com;
   img-src 'self' blob: data: *.google.com *.googleapis.com *.gstatic.com *.google-analytics.com api.dicebear.com;
   font-src 'self' fonts.gstatic.com;
@@ -80,7 +80,7 @@ const nextConfig = {
           },
           {
             key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
+            value: 'DENY'
           },
           {
             key: 'X-Content-Type-Options',
@@ -99,6 +99,19 @@ const nextConfig = {
             value: ContentSecurityPolicy.replace(/\s{2,}/g, ' ').trim()
           }
         ],
+      },
+      {
+        source: '/api/:path*',
+        headers: [
+          {
+            key: 'X-Robots-Tag',
+            value: 'noindex'
+          },
+          {
+            key: 'Cache-Control',
+            value: 'no-store'
+          }
+        ]
       },
       {
         source: '/fonts/:path*',

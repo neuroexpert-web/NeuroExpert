@@ -102,6 +102,10 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://www.google-analytics.com" />
         <link rel="preconnect" href="https://mc.yandex.ru" />
         
+        {/* Preload ключевых изображений */}
+        <link rel="preload" as="image" href="/og-image.png" imagesrcset="/og-image.png 1x" />
+        <link rel="preload" as="image" href="/twitter-image.png" imagesrcset="/twitter-image.png 1x" />
+        
         {/* PWA метатеги */}
         <meta name="theme-color" content="#6366f1" />
         <link rel="manifest" href="/manifest.json" />
@@ -194,12 +198,11 @@ export default function RootLayout({ children }) {
         {process.env.NEXT_PUBLIC_YM_ID && (
           <Script id="yandex-metrika" strategy="afterInteractive">
             {`
-              (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-              m[i].l=1*new Date();
-              for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-              k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-              (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-              
+              (function(m,e,t,r,i,k,a){
+                m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+                m[i].l=1*new Date();
+                k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+              })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
               ym(${process.env.NEXT_PUBLIC_YM_ID}, "init", {
                 clickmap:true,
                 trackLinks:true,
@@ -217,15 +220,28 @@ export default function RootLayout({ children }) {
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
-              // Регистрация Service Worker
-              if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
+              // Регистрация Service Worker только на прод-домейне (не на *.vercel.app)
+              (function(){
+                if (!('serviceWorker' in navigator)) return;
+                var host = window.location.hostname;
+                var isVercelPreview = host.endsWith('.vercel.app');
+                if (isVercelPreview) {
+                  // В превью отключаем SW и очищаем кэши
+                  navigator.serviceWorker.getRegistrations().then(function(rs){
+                    rs.forEach(function(reg){ reg.unregister(); });
+                  });
+                  if (window.caches && caches.keys) {
+                    caches.keys().then(function(keys){ keys.forEach(function(k){ caches.delete(k); }); });
+                  }
+                  return;
+                }
+                window.addEventListener('load', function(){
                   navigator.serviceWorker.register('/sw.js').then(
-                    (registration) => console.log('SW registered:', registration),
-                    (err) => console.log('SW registration failed:', err)
+                    function(registration){ console.log('SW registered:', registration); },
+                    function(err){ console.log('SW registration failed:', err); }
                   );
                 });
-              }
+              })();
             `
           }}
         />
