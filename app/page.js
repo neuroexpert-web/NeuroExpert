@@ -6,6 +6,7 @@ import HeroSection from './components/HeroSection';
 import JourneySection from './components/JourneySection';
 import WhyUsSection from './components/WhyUsSection';
 import PricingSection from './components/PricingSection';
+import AnalyticsTracker from './components/AnalyticsTracker';
 
 // Динамические импорты для оптимизации
 const ROICalculator = dynamic(() => import('./components/ROICalculator'), {
@@ -36,6 +37,9 @@ const AIDirectorCapabilities = dynamic(() => import('./components/AIDirectorCapa
 export default function Home() {
   return (
     <main className="premium-main" style={{ background: 'var(--noir-900)', minHeight: '100vh' }}>
+      {/* Трекер аналитики */}
+      <AnalyticsTracker />
+      
       {/* Новая Hero секция с улучшенным фоном и мобильной адаптацией */}
       <HeroSection />
       
