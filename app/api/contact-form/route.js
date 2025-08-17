@@ -44,6 +44,17 @@ async function handler(request) {
       timestamp: new Date().toISOString()
     });
     
+    // Log submission for debugging
+    console.log('New contact form submission:', {
+      name,
+      email,
+      phone,
+      message,
+      timestamp: new Date().toISOString(),
+      hasToken: !!process.env.TELEGRAM_BOT_TOKEN,
+      hasChatId: !!process.env.TELEGRAM_CHAT_ID
+    });
+    
     // Send notification to Telegram if configured
     if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
       try {
@@ -71,12 +82,17 @@ async function handler(request) {
         );
         
         if (!response.ok) {
-          console.error('Failed to send Telegram notification');
+          const errorText = await response.text();
+          console.error('Failed to send Telegram notification:', errorText);
+        } else {
+          console.log('Telegram notification sent successfully');
         }
       } catch (error) {
         console.error('Telegram notification error:', error);
         // Don't fail the request if Telegram fails
       }
+    } else {
+      console.warn('Telegram notifications not configured. Set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID environment variables.');
     }
     
     // Return success response

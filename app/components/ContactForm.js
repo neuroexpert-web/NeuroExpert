@@ -24,11 +24,13 @@ export default function ContactForm() {
 
   useEffect(() => {
     // Инициализация Web Speech API
-    if (typeof window !== 'undefined' && 'webkitSpeechRecognition' in window) {
-      const recognition = new window.webkitSpeechRecognition();
-      recognition.continuous = false;
-      recognition.interimResults = false;
-      recognition.lang = 'ru-RU';
+    if (typeof window !== 'undefined') {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'ru-RU';
 
       recognition.onstart = () => {
         console.log('Голосовой ввод начат');
@@ -48,13 +50,40 @@ export default function ContactForm() {
       recognition.onerror = (event) => {
         console.error('Ошибка распознавания:', event.error);
         setIsListening(false);
+        
+        // Показываем ошибку пользователю
+        let errorMessage = 'Ошибка распознавания речи';
+        switch(event.error) {
+          case 'no-speech':
+            errorMessage = 'Речь не обнаружена. Попробуйте ещё раз.';
+            break;
+          case 'not-allowed':
+            errorMessage = 'Доступ к микрофону запрещён. Разрешите доступ в настройках браузера.';
+            break;
+          case 'network':
+            errorMessage = 'Ошибка сети. Проверьте интернет-соединение.';
+            break;
+        }
+        
+        setStatus({
+          loading: false,
+          success: false,
+          error: true,
+          message: errorMessage
+        });
+        
+        // Очищаем сообщение через 5 секунд
+        setTimeout(() => {
+          setStatus({ loading: false, success: false, error: false, message: '' });
+        }, 5000);
       };
 
       recognition.onend = () => {
         setIsListening(false);
       };
 
-      recognitionRef.current = recognition;
+        recognitionRef.current = recognition;
+      }
     }
   }, [activeField]);
 
