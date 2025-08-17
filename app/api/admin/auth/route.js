@@ -1,12 +1,13 @@
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import { withRateLimit } from '../../../middleware/rateLimit';
 
 // Получаем секретный ключ и хешированный пароль из переменных окружения
 const JWT_SECRET = process.env.JWT_SECRET || 'your-jwt-secret-key';
 const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH || '$2a$10$YourHashedPasswordHere';
 
-export async function POST(request) {
+async function postHandler(request) {
   try {
     const { password } = await request.json();
 
@@ -51,6 +52,8 @@ export async function POST(request) {
     );
   }
 }
+
+export const POST = withRateLimit(postHandler, 'auth');
 
 // Проверка токена
 export async function GET(request) {
