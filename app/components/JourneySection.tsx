@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { motion } from 'framer-motion';
 import PremiumCard from './PremiumCard';
 
 interface JourneyStep {
@@ -121,10 +122,129 @@ export default function JourneySection(): JSX.Element {
           <p className="cta-text">
             Готовы начать свой путь к цифровой трансформации?
           </p>
-          <button className="btn-luxury btn-large">
-            <span>Начать с бесплатного аудита</span>
-            <span className="btn-arrow">→</span>
-          </button>
+          <motion.button
+            onClick={() => {
+              // Открываем AI чат с предзаполненным сообщением
+              const event = new CustomEvent('openAIChat', { 
+                detail: { 
+                  message: 'Здравствуйте! Меня интересует бесплатный аудит бизнеса. Расскажите подробнее, что входит в аудит и как его получить?' 
+                } 
+              });
+              window.dispatchEvent(event);
+            }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            animate={{
+              boxShadow: [
+                '0 0 40px rgba(102, 126, 234, 0.6), 0 0 80px rgba(118, 75, 162, 0.4)',
+                '0 0 60px rgba(118, 75, 162, 0.8), 0 0 120px rgba(102, 126, 234, 0.6)',
+                '0 0 40px rgba(102, 126, 234, 0.6), 0 0 80px rgba(118, 75, 162, 0.4)'
+              ]
+            }}
+            transition={{
+              boxShadow: {
+                duration: 2,
+                repeat: Infinity,
+                ease: 'easeInOut'
+              }
+            }}
+            style={{
+              position: 'relative',
+              padding: '24px 56px',
+              fontSize: '22px',
+              fontWeight: '700',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              border: '2px solid transparent',
+              backgroundClip: 'padding-box',
+              borderRadius: '60px',
+              color: 'white',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '16px',
+              overflow: 'hidden',
+              marginTop: '24px'
+            }}
+          >
+            {/* Волна света */}
+            <motion.div
+              style={{
+                position: 'absolute',
+                top: '-50%',
+                left: '-50%',
+                width: '200%',
+                height: '200%',
+                background: 'radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%)',
+                pointerEvents: 'none'
+              }}
+              animate={{
+                x: ['-50%', '150%'],
+                opacity: [0, 1, 0]
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: 'easeInOut'
+              }}
+            />
+            
+            {/* Текст с градиентом */}
+            <motion.span
+              style={{
+                background: 'linear-gradient(90deg, #fff, #f0f0ff, #e0e7ff, #f0f0ff, #fff)',
+                backgroundSize: '300% 100%',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                filter: 'drop-shadow(0 0 12px rgba(255, 255, 255, 0.6))',
+                position: 'relative',
+                zIndex: 1
+              }}
+              animate={{
+                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: 'linear'
+              }}
+            >
+              Начать с бесплатного аудита
+            </motion.span>
+            
+            {/* Анимированная стрелка */}
+            <motion.span
+              animate={{ x: [0, 8, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+              style={{
+                fontSize: '28px',
+                position: 'relative',
+                zIndex: 1
+              }}
+            >
+              →
+            </motion.span>
+            
+            {/* Дополнительный неоновый эффект */}
+            <motion.div
+              style={{
+                position: 'absolute',
+                inset: '-2px',
+                background: 'linear-gradient(135deg, #667eea, #764ba2)',
+                borderRadius: '60px',
+                opacity: 0.5,
+                filter: 'blur(8px)',
+                zIndex: -1
+              }}
+              animate={{
+                opacity: [0.3, 0.6, 0.3]
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity
+              }}
+            />
+          </motion.button>
         </div>
       </div>
 
