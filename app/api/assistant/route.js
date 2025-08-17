@@ -203,7 +203,7 @@ async function handler(request) {
       }
     } catch (error) {
       console.error('AI API Error:', error);
-      answer = 'Извините, произошла техническая ошибка. Пожалуйста, позвоните нам по телефону +7 (904) 047-63-83 или напишите на aineuroexpert@gmail.com. Мы обязательно поможем!';
+      answer = 'Извините, произошла техническая ошибка. Пожалуйста, позвоните нам по телефону +7 (996) 009-63-34 или напишите на neuroexpertai@gmail.com. Мы обязательно поможем!';
       usedModel = 'error';
     }
 

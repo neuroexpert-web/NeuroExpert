@@ -295,7 +295,7 @@ export default function ContactForm() {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  placeholder="+7 (999) 123-45-67"
+                  placeholder="+7 (996) 009-63-34"
                   style={inputStyle}
                   onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
                   onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
@@ -538,7 +538,7 @@ export default function ContactForm() {
           </p>
           <div className="flex flex-wrap gap-6 justify-center">
             <motion.a
-              href="tel:+74951234567"
+              href="tel:+79960096334"
               whileHover={{ scale: 1.05 }}
               style={{
                 display: 'flex',
@@ -548,10 +548,10 @@ export default function ContactForm() {
                 textDecoration: 'none'
               }}
             >
-              📞 +7 (495) 123-45-67
+              📞 +7 (996) 009-63-34
             </motion.a>
             <motion.a
-              href="mailto:info@neuroexpert.ru"
+              href="mailto:neuroexpertai@gmail.com"
               whileHover={{ scale: 1.05 }}
               style={{
                 display: 'flex',
@@ -561,7 +561,7 @@ export default function ContactForm() {
                 textDecoration: 'none'
               }}
             >
-              ✉️ info@neuroexpert.ru
+              ✉️ neuroexpertai@gmail.com
             </motion.a>
             <motion.button
               onClick={() => {
