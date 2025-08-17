@@ -1,6 +1,10 @@
 import React from 'react';
 
-const BusinessSegmentSelector = ({ onSelectSegment }) => {
+interface Props {
+    onSelectSegment?: (id: string) => void;
+}
+
+const BusinessSegmentSelector: React.FC<Props> = ({ onSelectSegment = () => {} }) => {
     const segments = [
         { id: 'small', label: 'Малый бизнес' },
         { id: 'medium', label: 'Средний бизнес' },

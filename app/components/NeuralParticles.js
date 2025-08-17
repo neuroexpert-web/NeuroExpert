@@ -11,6 +11,7 @@ function NeuralParticles() {
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
+    const isMobile = window.innerWidth < 768;
     
     // Настройка размера canvas
     const resizeCanvas = () => {
@@ -24,16 +25,16 @@ function NeuralParticles() {
     // Создание частиц
     const createParticles = () => {
       const particles = [];
-      const particleCount = Math.floor((canvas.width * canvas.height) / 15000); // Адаптивное количество
+      const particleCount = Math.floor((canvas.width * canvas.height) / (isMobile ? 32000 : 15000));
       
       for (let i = 0; i < particleCount; i++) {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.5,
-          vy: (Math.random() - 0.5) * 0.5,
+          vx: (Math.random() - 0.5) * (isMobile ? 0.25 : 0.5),
+          vy: (Math.random() - 0.5) * (isMobile ? 0.25 : 0.5),
           size: Math.random() * 2 + 1,
-          opacity: Math.random() * 0.6 + 0.2,
+          opacity: (Math.random() * (isMobile ? 0.35 : 0.6)) + (isMobile ? 0.15 : 0.2),
           color: getRandomNeuralColor(),
           pulsePhase: Math.random() * Math.PI * 2,
           connections: []
@@ -68,7 +69,7 @@ function NeuralParticles() {
 
     // Анимация частиц
     const animate = () => {
-      ctx.fillStyle = 'rgba(10, 10, 15, 0.05)';
+      ctx.fillStyle = `rgba(10, 10, 15, ${isMobile ? 0.04 : 0.05})`;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
       const particles = particlesRef.current;
@@ -89,29 +90,31 @@ function NeuralParticles() {
         const dy = mouse.y - particle.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         
-        if (distance < 150) {
-          const force = (150 - distance) / 150;
-          particle.vx += (dx / distance) * force * 0.01;
-          particle.vy += (dy / distance) * force * 0.01;
+        const maxR = isMobile ? 90 : 150;
+        if (distance < maxR) {
+          const force = (maxR - distance) / maxR;
+          particle.vx += (dx / distance) * force * (isMobile ? 0.006 : 0.01);
+          particle.vy += (dy / distance) * force * (isMobile ? 0.006 : 0.01);
         }
         
         // Ограничение скорости
         const speed = Math.sqrt(particle.vx * particle.vx + particle.vy * particle.vy);
-        if (speed > 1) {
-          particle.vx = (particle.vx / speed) * 1;
-          particle.vy = (particle.vy / speed) * 1;
+        const maxSpeed = isMobile ? 0.7 : 1;
+        if (speed > maxSpeed) {
+          particle.vx = (particle.vx / speed) * maxSpeed;
+          particle.vy = (particle.vy / speed) * maxSpeed;
         }
         
         // Пульсация
-        particle.pulsePhase += 0.02;
-        const pulse = Math.sin(particle.pulsePhase) * 0.3 + 0.7;
+        particle.pulsePhase += isMobile ? 0.01 : 0.02;
+        const pulse = Math.sin(particle.pulsePhase) * (isMobile ? 0.2 : 0.3) + 0.7;
         
         // Отрисовка частицы
         ctx.save();
         ctx.globalAlpha = particle.opacity * pulse;
         ctx.fillStyle = particle.color;
         ctx.shadowColor = particle.color;
-        ctx.shadowBlur = 10 * pulse;
+        ctx.shadowBlur = (isMobile ? 6 : 10) * pulse;
         
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size * pulse, 0, Math.PI * 2);
@@ -124,15 +127,16 @@ function NeuralParticles() {
           const dy = particle.y - otherParticle.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
           
-          if (distance < 120) {
-            const opacity = (120 - distance) / 120 * 0.3;
+          const maxD = isMobile ? 90 : 120;
+          if (distance < maxD) {
+            const opacity = (maxD - distance) / maxD * (isMobile ? 0.18 : 0.3) * pulse;
             
             ctx.save();
-            ctx.globalAlpha = opacity * pulse;
+            ctx.globalAlpha = opacity;
             ctx.strokeStyle = particle.color;
             ctx.lineWidth = 0.5;
             ctx.shadowColor = particle.color;
-            ctx.shadowBlur = 5;
+            ctx.shadowBlur = isMobile ? 2 : 5;
             
             ctx.beginPath();
             ctx.moveTo(particle.x, particle.y);

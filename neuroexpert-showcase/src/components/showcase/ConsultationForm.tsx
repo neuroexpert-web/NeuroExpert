@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent, ChangeEvent } from 'react';
 
-const ConsultationForm = () => {
+const ConsultationForm: React.FC = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [businessType, setBusinessType] = useState('');
     const [message, setMessage] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         // Handle form submission logic here
         console.log({ name, email, businessType, message });
@@ -21,7 +21,7 @@ const ConsultationForm = () => {
                     type="text"
                     id="name"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
                     required
                 />
             </div>
@@ -31,7 +31,7 @@ const ConsultationForm = () => {
                     type="email"
                     id="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                     required
                 />
             </div>
@@ -40,7 +40,7 @@ const ConsultationForm = () => {
                 <select
                     id="businessType"
                     value={businessType}
-                    onChange={(e) => setBusinessType(e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLSelectElement>) => setBusinessType(e.target.value)}
                     required
                 >
                     <option value="">Выберите тип бизнеса</option>
@@ -54,7 +54,7 @@ const ConsultationForm = () => {
                 <textarea
                     id="message"
                     value={message}
-                    onChange={(e) => setMessage(e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setMessage(e.target.value)}
                     required
                 />
             </div>

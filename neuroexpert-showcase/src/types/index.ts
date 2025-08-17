@@ -1,2 +1,2 @@
-export * from './business';
-export * from './package';
+export type { BusinessSegment as BusinessSegmentKey, ServicePackage as BusinessServicePackage, BusinessSegmentData } from './business';
+export type { ServicePackage as PackageItem, BusinessSegment as PackageSegment } from './package';

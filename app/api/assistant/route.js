@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { withRateLimit } from '../../middleware/rateLimit';
+import { withRateLimitRoute } from '../../middleware/rateLimit';
 import { 
   DIRECTOR_KNOWLEDGE_BASE, 
   analyzeUserIntent,
@@ -298,4 +298,4 @@ ${DIRECTOR_KNOWLEDGE_BASE.companyInfo.mission}
 }
 
 // Export with rate limiting
-export const POST = withRateLimit(handler, 'ai');
+export const POST = withRateLimitRoute(handler, 'ai');

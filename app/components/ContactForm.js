@@ -21,6 +21,7 @@ export default function ContactForm() {
   const [isListening, setIsListening] = useState(false);
   const [activeField, setActiveField] = useState(null);
   const recognitionRef = useRef(null);
+  const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
 
   useEffect(() => {
     // Инициализация Web Speech API
@@ -72,7 +73,6 @@ export default function ContactForm() {
           message: errorMessage
         });
         
-        // Очищаем сообщение через 5 секунд
         setTimeout(() => {
           setStatus({ loading: false, success: false, error: false, message: '' });
         }, 5000);
@@ -179,13 +179,13 @@ export default function ContactForm() {
 
   const inputStyle = {
     width: '100%',
-    padding: '16px',
+    padding: isMobile ? '18px' : '16px',
     paddingRight: '60px',
     background: 'rgba(102, 126, 234, 0.1)',
     border: '1px solid rgba(102, 126, 234, 0.3)',
-    borderRadius: '12px',
+    borderRadius: isMobile ? '16px' : '12px',
     color: 'white',
-    fontSize: '16px',
+    fontSize: isMobile ? '17px' : '16px',
     outline: 'none',
     transition: 'all 0.3s ease'
   };
@@ -215,26 +215,22 @@ export default function ContactForm() {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
           style={{
-            background: 'rgba(20, 20, 40, 0.8)',
+            background: 'rgba(20, 20, 40, 0.85)',
             backdropFilter: 'blur(20px)',
-            borderRadius: '32px',
-            padding: '48px',
+            borderRadius: isMobile ? '24px' : '32px',
+            padding: isMobile ? '24px' : '48px',
             border: '1px solid rgba(102, 126, 234, 0.3)',
             boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3), 0 0 40px rgba(102, 126, 234, 0.2)'
           }}
         >
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Имя */}
-            <motion.div
-              whileHover={{ scale: 1.01 }}
-              transition={{ duration: 0.2 }}
-              style={{ position: 'relative' }}
-            >
-              <label className="block text-sm font-medium mb-2" style={{ color: '#a0a9cc' }}>
+            <motion.div whileHover={{ scale: 1.01 }} transition={{ duration: 0.2 }} style={{ position: 'relative' }}>
+              <label className="block text-sm font-medium mb-2" style={{ color: '#a0a9cc', fontSize: isMobile ? '14px' : '13px' }}>
                 Ваше имя *
               </label>
               <div style={{ position: 'relative' }}>
@@ -245,6 +241,7 @@ export default function ContactForm() {
                   onChange={handleChange}
                   placeholder="Например: Иван Иванов"
                   style={inputStyle}
+                  inputMode="text"
                   onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
                   onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
                 />
@@ -254,25 +251,15 @@ export default function ContactForm() {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   animate={isListening && activeField === 'name' ? {
-                    scale: [1, 1.2, 1],
-                    backgroundColor: ['rgba(102, 126, 234, 0.2)', 'rgba(102, 126, 234, 0.4)', 'rgba(102, 126, 234, 0.2)']
+                    scale: [1, 1.15, 1],
+                    backgroundColor: ['rgba(102, 126, 234, 0.2)', 'rgba(102, 126, 234, 0.35)', 'rgba(102, 126, 234, 0.2)']
                   } : {}}
-                  transition={{ duration: 1, repeat: isListening && activeField === 'name' ? Infinity : 0 }}
+                  transition={{ duration: 1.2, repeat: isListening && activeField === 'name' ? Infinity : 0 }}
                   style={{
-                    position: 'absolute',
-                    right: '12px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '50%',
-                    background: 'rgba(102, 126, 234, 0.2)',
-                    border: '1px solid rgba(102, 126, 234, 0.4)',
-                    color: 'white',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
+                    position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)',
+                    width: isMobile ? '44px' : '40px', height: isMobile ? '44px' : '40px', borderRadius: '50%',
+                    background: 'rgba(102, 126, 234, 0.2)', border: '1px solid rgba(102, 126, 234, 0.4)',
+                    color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'
                   }}
                 >
                   🎤
@@ -281,12 +268,8 @@ export default function ContactForm() {
             </motion.div>
 
             {/* Телефон */}
-            <motion.div
-              whileHover={{ scale: 1.01 }}
-              transition={{ duration: 0.2 }}
-              style={{ position: 'relative' }}
-            >
-              <label className="block text-sm font-medium mb-2" style={{ color: '#a0a9cc' }}>
+            <motion.div whileHover={{ scale: 1.01 }} transition={{ duration: 0.2 }} style={{ position: 'relative' }}>
+              <label className="block text-sm font-medium mb-2" style={{ color: '#a0a9cc', fontSize: isMobile ? '14px' : '13px' }}>
                 Телефон *
               </label>
               <div style={{ position: 'relative' }}>
@@ -297,6 +280,7 @@ export default function ContactForm() {
                   onChange={handleChange}
                   placeholder="+7 (996) 009-63-34"
                   style={inputStyle}
+                  inputMode="tel"
                   onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
                   onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
                 />
@@ -306,25 +290,15 @@ export default function ContactForm() {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   animate={isListening && activeField === 'phone' ? {
-                    scale: [1, 1.2, 1],
-                    backgroundColor: ['rgba(102, 126, 234, 0.2)', 'rgba(102, 126, 234, 0.4)', 'rgba(102, 126, 234, 0.2)']
+                    scale: [1, 1.15, 1],
+                    backgroundColor: ['rgba(102, 126, 234, 0.2)', 'rgba(102, 126, 234, 0.35)', 'rgba(102, 126, 234, 0.2)']
                   } : {}}
-                  transition={{ duration: 1, repeat: isListening && activeField === 'phone' ? Infinity : 0 }}
+                  transition={{ duration: 1.2, repeat: isListening && activeField === 'phone' ? Infinity : 0 }}
                   style={{
-                    position: 'absolute',
-                    right: '12px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '50%',
-                    background: 'rgba(102, 126, 234, 0.2)',
-                    border: '1px solid rgba(102, 126, 234, 0.4)',
-                    color: 'white',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
+                    position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)',
+                    width: isMobile ? '44px' : '40px', height: isMobile ? '44px' : '40px', borderRadius: '50%',
+                    background: 'rgba(102, 126, 234, 0.2)', border: '1px solid rgba(102, 126, 234, 0.4)',
+                    color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'
                   }}
                 >
                   🎤
@@ -333,11 +307,8 @@ export default function ContactForm() {
             </motion.div>
 
             {/* Email */}
-            <motion.div
-              whileHover={{ scale: 1.01 }}
-              transition={{ duration: 0.2 }}
-            >
-              <label className="block text-sm font-medium mb-2" style={{ color: '#a0a9cc' }}>
+            <motion.div whileHover={{ scale: 1.01 }} transition={{ duration: 0.2 }}>
+              <label className="block text-sm font-medium mb-2" style={{ color: '#a0a9cc', fontSize: isMobile ? '14px' : '13px' }}>
                 Email
               </label>
               <input
@@ -347,17 +318,15 @@ export default function ContactForm() {
                 onChange={handleChange}
                 placeholder="example@company.ru"
                 style={inputStyle}
+                inputMode="email"
                 onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
                 onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
               />
             </motion.div>
 
             {/* Компания */}
-            <motion.div
-              whileHover={{ scale: 1.01 }}
-              transition={{ duration: 0.2 }}
-            >
-              <label className="block text-sm font-medium mb-2" style={{ color: '#a0a9cc' }}>
+            <motion.div whileHover={{ scale: 1.01 }} transition={{ duration: 0.2 }}>
+              <label className="block text-sm font-medium mb-2" style={{ color: '#a0a9cc', fontSize: isMobile ? '14px' : '13px' }}>
                 Компания
               </label>
               <input
@@ -367,18 +336,15 @@ export default function ContactForm() {
                 onChange={handleChange}
                 placeholder="Название вашей компании"
                 style={inputStyle}
+                inputMode="text"
                 onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
                 onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
               />
             </motion.div>
 
             {/* Сообщение */}
-            <motion.div
-              whileHover={{ scale: 1.01 }}
-              transition={{ duration: 0.2 }}
-              style={{ position: 'relative' }}
-            >
-              <label className="block text-sm font-medium mb-2" style={{ color: '#a0a9cc' }}>
+            <motion.div whileHover={{ scale: 1.01 }} transition={{ duration: 0.2 }} style={{ position: 'relative' }}>
+              <label className="block text-sm font-medium mb-2" style={{ color: '#a0a9cc', fontSize: isMobile ? '14px' : '13px' }}>
                 Сообщение
               </label>
               <div style={{ position: 'relative' }}>
@@ -387,11 +353,8 @@ export default function ContactForm() {
                   value={formData.message}
                   onChange={handleChange}
                   placeholder="Расскажите о вашем проекте..."
-                  rows={4}
-                  style={{
-                    ...inputStyle,
-                    resize: 'none'
-                  }}
+                  rows={isMobile ? 5 : 4}
+                  style={{ ...inputStyle, resize: 'none', paddingTop: isMobile ? '18px' : '16px' }}
                   onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
                   onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
                 />
@@ -401,24 +364,15 @@ export default function ContactForm() {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   animate={isListening && activeField === 'message' ? {
-                    scale: [1, 1.2, 1],
-                    backgroundColor: ['rgba(102, 126, 234, 0.2)', 'rgba(102, 126, 234, 0.4)', 'rgba(102, 126, 234, 0.2)']
+                    scale: [1, 1.15, 1],
+                    backgroundColor: ['rgba(102, 126, 234, 0.2)', 'rgba(102, 126, 234, 0.35)', 'rgba(102, 126, 234, 0.2)']
                   } : {}}
-                  transition={{ duration: 1, repeat: isListening && activeField === 'message' ? Infinity : 0 }}
+                  transition={{ duration: 1.2, repeat: isListening && activeField === 'message' ? Infinity : 0 }}
                   style={{
-                    position: 'absolute',
-                    right: '12px',
-                    top: '12px',
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '50%',
-                    background: 'rgba(102, 126, 234, 0.2)',
-                    border: '1px solid rgba(102, 126, 234, 0.4)',
-                    color: 'white',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
+                    position: 'absolute', right: '12px', top: '12px',
+                    width: isMobile ? '44px' : '40px', height: isMobile ? '44px' : '40px', borderRadius: '50%',
+                    background: 'rgba(102, 126, 234, 0.2)', border: '1px solid rgba(102, 126, 234, 0.4)',
+                    color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'
                   }}
                 >
                   🎤
@@ -434,15 +388,9 @@ export default function ContactForm() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   style={{
-                    padding: '16px',
-                    borderRadius: '12px',
-                    textAlign: 'center',
-                    background: status.success 
-                      ? 'rgba(34, 197, 94, 0.1)'
-                      : 'rgba(239, 68, 68, 0.1)',
-                    border: `1px solid ${status.success 
-                      ? 'rgba(34, 197, 94, 0.3)'
-                      : 'rgba(239, 68, 68, 0.3)'}`,
+                    padding: isMobile ? '18px' : '16px', borderRadius: isMobile ? '16px' : '12px', textAlign: 'center',
+                    background: status.success ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                    border: `1px solid ${status.success ? 'rgba(34, 197, 94, 0.3)' : 'rgba(239, 68, 68, 0.3)'}`,
                     color: status.success ? '#22c55e' : '#ef4444'
                   }}
                 >
@@ -457,43 +405,18 @@ export default function ContactForm() {
               disabled={status.loading}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              animate={{
-                boxShadow: [
-                  '0 0 20px rgba(102, 126, 234, 0.4)',
-                  '0 0 40px rgba(118, 75, 162, 0.6)',
-                  '0 0 20px rgba(102, 126, 234, 0.4)'
-                ]
-              }}
-              transition={{
-                boxShadow: {
-                  duration: 2,
-                  repeat: Infinity
-                }
-              }}
+              animate={{ boxShadow: ['0 0 20px rgba(102, 126, 234, 0.4)', '0 0 40px rgba(118, 75, 162, 0.6)', '0 0 20px rgba(102, 126, 234, 0.4)'] }}
+              transition={{ boxShadow: { duration: 2, repeat: Infinity } }}
               style={{
-                width: '100%',
-                padding: '18px',
-                background: status.loading 
-                  ? 'rgba(102, 126, 234, 0.5)'
-                  : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                border: 'none',
-                borderRadius: '50px',
-                color: 'white',
-                fontSize: '18px',
-                fontWeight: '700',
-                cursor: status.loading ? 'not-allowed' : 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '12px'
+                width: '100%', padding: isMobile ? '20px' : '18px',
+                background: status.loading ? 'rgba(102, 126, 234, 0.5)' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                border: 'none', borderRadius: '50px', color: 'white', fontSize: isMobile ? '18px' : '18px', fontWeight: '700',
+                cursor: status.loading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px'
               }}
             >
               {status.loading ? (
                 <>
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                  >
+                  <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}>
                     ⏳
                   </motion.div>
                   Отправка...
@@ -501,10 +424,7 @@ export default function ContactForm() {
               ) : (
                 <>
                   Отправить заявку
-                  <motion.span
-                    animate={{ x: [0, 5, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  >
+                  <motion.span animate={{ x: [0, 5, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
                     →
                   </motion.span>
                 </>
@@ -513,13 +433,7 @@ export default function ContactForm() {
 
             {/* Подсказка о голосовом вводе */}
             {recognitionRef.current && (
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                className="text-center text-sm mt-4"
-                style={{ color: '#a0a9cc' }}
-              >
+              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="text-center text-sm mt-4" style={{ color: '#a0a9cc' }}>
                 💡 Нажмите на микрофон 🎤 для голосового ввода
               </motion.p>
             )}
@@ -527,59 +441,18 @@ export default function ContactForm() {
         </motion.div>
 
         {/* Дополнительная информация */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
-          className="mt-12 text-center"
-        >
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="mt-12 text-center">
           <p style={{ color: '#a0a9cc', marginBottom: '16px' }}>
             Или свяжитесь с нами напрямую:
           </p>
           <div className="flex flex-wrap gap-6 justify-center">
-            <motion.a
-              href="tel:+79960096334"
-              whileHover={{ scale: 1.05 }}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                color: '#667eea',
-                textDecoration: 'none'
-              }}
-            >
+            <motion.a href="tel:+79960096334" whileHover={{ scale: 1.05 }} style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#667eea', textDecoration: 'none' }}>
               📞 +7 (996) 009-63-34
             </motion.a>
-            <motion.a
-              href="mailto:neuroexpertai@gmail.com"
-              whileHover={{ scale: 1.05 }}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                color: '#667eea',
-                textDecoration: 'none'
-              }}
-            >
+            <motion.a href="mailto:neuroexpertai@gmail.com" whileHover={{ scale: 1.05 }} style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#667eea', textDecoration: 'none' }}>
               ✉️ neuroexpertai@gmail.com
             </motion.a>
-            <motion.button
-              onClick={() => {
-                const event = new CustomEvent('openAIChat');
-                window.dispatchEvent(event);
-              }}
-              whileHover={{ scale: 1.05 }}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                color: '#667eea',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '16px'
-              }}
-            >
+            <motion.button onClick={() => { const event = new CustomEvent('openAIChat'); window.dispatchEvent(event); }} whileHover={{ scale: 1.05 }} style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#667eea', background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px' }}>
               💬 Чат с AI директором
             </motion.button>
           </div>

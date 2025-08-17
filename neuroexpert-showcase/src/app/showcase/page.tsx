@@ -11,20 +11,44 @@ const ShowcasePage = () => {
       <div className="service-packages">
         <h2>Пакеты для Малого Бизнеса</h2>
         <div className="package-list">
-          {smallBusinessPackages.map((package) => (
-            <ServicePackageCard key={package.id} package={package} />
+          {smallBusinessPackages.map((pkg, idx) => (
+            <ServicePackageCard
+              key={idx}
+              title={pkg.title}
+              description={pkg.description}
+              benefits={Array.isArray(pkg.benefits) ? pkg.benefits : [pkg.benefits]}
+              steps={pkg.steps}
+              exampleResult={pkg.exampleResult}
+              onRequestConsultation={() => {}}
+            />
           ))}
         </div>
         <h2>Пакеты для Среднего Бизнеса</h2>
         <div className="package-list">
-          {mediumBusinessPackages.map((package) => (
-            <ServicePackageCard key={package.id} package={package} />
+          {mediumBusinessPackages.map((pkg, idx) => (
+            <ServicePackageCard
+              key={idx}
+              title={pkg.title}
+              description={pkg.description}
+              benefits={Array.isArray(pkg.benefits) ? pkg.benefits : [pkg.benefits]}
+              steps={pkg.steps}
+              exampleResult={pkg.exampleResult}
+              onRequestConsultation={() => {}}
+            />
           ))}
         </div>
         <h2>Пакеты для Крупного Бизнеса</h2>
         <div className="package-list">
-          {largeBusinessPackages.map((package) => (
-            <ServicePackageCard key={package.id} package={package} />
+          {largeBusinessPackages.map((pkg, idx) => (
+            <ServicePackageCard
+              key={idx}
+              title={pkg.title}
+              description={pkg.description}
+              benefits={Array.isArray(pkg.benefits) ? pkg.benefits : [pkg.benefits]}
+              steps={pkg.steps}
+              exampleResult={pkg.exampleResult}
+              onRequestConsultation={() => {}}
+            />
           ))}
         </div>
       </div>
