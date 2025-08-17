@@ -20,7 +20,7 @@ cd "c:\Users\USER\Desktop\УЛУЧШЕННЫЙ КОД НЕЙРОЭКСПЕРТ" 
 
 После успешного git push:
 1. **Netlify Dashboard** → ваш сайт → **Deploys** (проверить что сборка идет)
-2. **Settings** → **Environment variables** → Add: `GEMINI_API_KEY` = ваш ключ
+2. **Settings** → **Environment variables** → Add: `GOOGLE_GEMINI_API_KEY` = ваш ключ
 
 ---
 
