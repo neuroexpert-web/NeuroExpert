@@ -1,0 +1,450 @@
+.heroSection {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Фоновые элементы */
+.backgroundWrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.gradientBackground {
+  position: absolute;
+  inset: 0;
+  transition: background 0.3s ease;
+}
+
+.gridPattern {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 100px 100px;
+  opacity: 0.5;
+}
+
+/* Мобильная адаптация сетки */
+@media (max-width: 768px) {
+  .gridPattern {
+    background-size: 50px 50px;
+    opacity: 0.3;
+  }
+}
+
+.floatingElements {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.floatingOrb {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  top: 10%;
+  right: 10%;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.2) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(60px);
+}
+
+.floatingOrb2 {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  bottom: 20%;
+  left: 5%;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(60px);
+}
+
+/* Мобильная адаптация орбов */
+@media (max-width: 768px) {
+  .floatingOrb {
+    width: 200px;
+    height: 200px;
+    top: 5%;
+    right: -10%;
+  }
+  
+  .floatingOrb2 {
+    width: 150px;
+    height: 150px;
+    bottom: 10%;
+    left: -10%;
+  }
+}
+
+.noiseOverlay {
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Контент */
+.heroContent {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  justify-content: center;
+}
+
+.container {
+  max-width: 1200px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Бейдж */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  background: rgba(124, 58, 237, 0.1);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  border-radius: 100px;
+  margin-bottom: 32px;
+}
+
+.badgeIcon {
+  font-size: 16px;
+}
+
+.badgeText {
+  font-size: 14px;
+  font-weight: 500;
+  color: #a78bfa;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Мобильная адаптация бейджа */
+@media (max-width: 768px) {
+  .badge {
+    padding: 6px 16px;
+    margin-bottom: 24px;
+  }
+  
+  .badgeText {
+    font-size: 12px;
+  }
+}
+
+/* Заголовок */
+.title {
+  margin: 0 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.titleMain {
+  font-size: clamp(48px, 8vw, 96px);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  background: linear-gradient(to right, #7c3aed, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+}
+
+.titleGradient {
+  font-size: clamp(32px, 6vw, 64px);
+  font-weight: 800;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.1;
+}
+
+.titleSub {
+  font-size: clamp(24px, 4vw, 40px);
+  font-weight: 600;
+  color: #e2e8f0;
+  line-height: 1.2;
+}
+
+/* Мобильная адаптация заголовка */
+@media (max-width: 768px) {
+  .title {
+    margin-bottom: 20px;
+    gap: 4px;
+  }
+  
+  .titleMain {
+    font-size: 48px;
+  }
+  
+  .titleGradient {
+    font-size: 32px;
+  }
+  
+  .titleSub {
+    font-size: 20px;
+  }
+}
+
+/* Описание */
+.description {
+  font-size: clamp(16px, 2.5vw, 20px);
+  line-height: 1.6;
+  color: #94a3b8;
+  max-width: 700px;
+  margin: 0 auto 40px;
+}
+
+@media (max-width: 768px) {
+  .description {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 32px;
+  }
+}
+
+/* CTA кнопки */
+.ctaButtons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 60px;
+}
+
+.primaryButton,
+.secondaryButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.primaryButton {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  color: white;
+}
+
+.primaryButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+}
+
+.primaryButton::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.primaryButton:hover::before {
+  opacity: 1;
+}
+
+.primaryButton span,
+.primaryButton svg {
+  position: relative;
+  z-index: 1;
+}
+
+.secondaryButton {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.secondaryButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.buttonIcon,
+.playIcon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Мобильная адаптация кнопок */
+@media (max-width: 768px) {
+  .ctaButtons {
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto 40px;
+  }
+  
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+    padding: 14px 24px;
+    font-size: 15px;
+  }
+}
+
+/* Статистика */
+.stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  margin-bottom: 60px;
+}
+
+.statItem {
+  text-align: center;
+}
+
+.statNumber {
+  display: block;
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 4px;
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.statDivider {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.1), transparent);
+}
+
+/* Мобильная адаптация статистики */
+@media (max-width: 768px) {
+  .stats {
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+  
+  .statDivider {
+    display: none;
+  }
+  
+  .statNumber {
+    font-size: 32px;
+  }
+  
+  .statLabel {
+    font-size: 13px;
+  }
+}
+
+/* Скролл индикатор */
+.scrollIndicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #64748b;
+  cursor: pointer;
+}
+
+.scrollIndicator svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Мобильная адаптация скролл индикатора */
+@media (max-width: 768px) {
+  .scrollIndicator {
+    bottom: 20px;
+  }
+  
+  .scrollIndicator svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Планшетная адаптация */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .floatingOrb {
+    width: 300px;
+    height: 300px;
+  }
+  
+  .floatingOrb2 {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .titleMain {
+    font-size: 72px;
+  }
+  
+  .titleGradient {
+    font-size: 48px;
+  }
+  
+  .titleSub {
+    font-size: 32px;
+  }
+  
+  .stats {
+    gap: 32px;
+  }
+}
+
+/* Анимации для мобильных */
+@media (max-width: 768px) {
+  @media (prefers-reduced-motion: reduce) {
+    .floatingOrb,
+    .floatingOrb2 {
+      animation: none !important;
+    }
+  }
+}
+
+/* Темная тема поддержка */
+@media (prefers-color-scheme: dark) {
+  .heroSection {
+    background: #000;
+  }
+}
+
+/* Высокая плотность пикселей */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .gridPattern {
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.01) 0.5px, transparent 0.5px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.01) 0.5px, transparent 0.5px);
+  }
+}
