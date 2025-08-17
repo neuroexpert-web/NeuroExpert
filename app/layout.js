@@ -212,15 +212,25 @@ export default function RootLayout({ children }) {
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
-              // Регистрация Service Worker
-              if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
+              // Регистрация Service Worker только на прод-домейне (не на *.vercel.app)
+              (function(){
+                if (!('serviceWorker' in navigator)) return;
+                var host = window.location.hostname;
+                var isVercelPreview = host.endsWith('.vercel.app');
+                if (isVercelPreview) {
+                  // В превью лучше отключить SW и выписать старые регистрации
+                  navigator.serviceWorker.getRegistrations().then(function(rs){
+                    rs.forEach(function(reg){ reg.unregister(); });
+                  });
+                  return;
+                }
+                window.addEventListener('load', function(){
                   navigator.serviceWorker.register('/sw.js').then(
-                    (registration) => console.log('SW registered:', registration),
-                    (err) => console.log('SW registration failed:', err)
+                    function(registration){ console.log('SW registered:', registration); },
+                    function(err){ console.log('SW registration failed:', err); }
                   );
                 });
-              }
+              })();
             `
           }}
         />
