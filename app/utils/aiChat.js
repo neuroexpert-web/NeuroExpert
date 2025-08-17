@@ -3,7 +3,7 @@
  * Утилита для управления диалогом с AI ассистентом
  */
 
-export const openAIChat = (message = null) => {
+export const openAIChat = (message) => {
   // Создаем кастомное событие для открытия чата
   const event = new CustomEvent('openAIChat', {
     detail: message ? { message } : null
