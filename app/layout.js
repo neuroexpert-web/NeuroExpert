@@ -226,10 +226,13 @@ export default function RootLayout({ children }) {
                 var host = window.location.hostname;
                 var isVercelPreview = host.endsWith('.vercel.app');
                 if (isVercelPreview) {
-                  // В превью лучше отключить SW и выписать старые регистрации
+                  // В превью отключаем SW и очищаем кэши
                   navigator.serviceWorker.getRegistrations().then(function(rs){
                     rs.forEach(function(reg){ reg.unregister(); });
                   });
+                  if (window.caches && caches.keys) {
+                    caches.keys().then(function(keys){ keys.forEach(function(k){ caches.delete(k); }); });
+                  }
                   return;
                 }
                 window.addEventListener('load', function(){
