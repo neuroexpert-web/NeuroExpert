@@ -43,7 +43,7 @@ git push origin main
 - Проверьте Build logs
 
 ### 2. Переменные окружения:
-- GEMINI_API_KEY должен быть установлен
+- GOOGLE_GEMINI_API_KEY должен быть установлен
 - Проверьте все переменные из ENVIRONMENT_VARIABLES.md
 
 ### 3. Тестирование:
