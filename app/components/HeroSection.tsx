@@ -101,7 +101,7 @@ export default function HeroSection() {
             transition={{ duration: 0.6 }}
           >
             <span className={styles.badgeIcon}>⚡</span>
-            <span className={styles.badgeText}>AI-Powered Platform</span>
+            <span className={styles.badgeText}>Платформа на базе ИИ</span>
           </motion.div>
 
           {/* Заголовок */}
@@ -158,18 +158,18 @@ export default function HeroSection() {
             transition={{ duration: 1, delay: 0.8 }}
           >
             <div className={styles.statItem}>
-              <span className={styles.statNumber}>500+</span>
-              <span className={styles.statLabel}>Компаний доверяют нам</span>
+              <span className={styles.statNumber}>2-4</span>
+              <span className={styles.statLabel}>Недели до результата</span>
             </div>
             <div className={styles.statDivider} />
             <div className={styles.statItem}>
               <span className={styles.statNumber}>320%</span>
-              <span className={styles.statLabel}>Средний ROI</span>
+              <span className={styles.statLabel}>Прогнозируемый ROI</span>
             </div>
             <div className={styles.statDivider} />
             <div className={styles.statItem}>
               <span className={styles.statNumber}>24/7</span>
-              <span className={styles.statLabel}>AI поддержка</span>
+              <span className={styles.statLabel}>AI консультант</span>
             </div>
           </motion.div>
         </div>
