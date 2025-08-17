@@ -582,25 +582,38 @@ export default function SmartFloatingAI() {
             display: flex;
             align-items: center;
             gap: 10px;
+            flex-wrap: wrap; /* позволяет переноситься кнопкам */
+            justify-content: flex-end;
           }
 
           .model-selector {
             display: flex;
             gap: 8px;
+            flex-wrap: wrap; /* исправляет выход кнопок за границу */
+            max-width: 220px;
           }
 
           .model-btn {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
+            gap: 6px;
+            padding: 6px 12px;
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
+            border-radius: 18px;
             color: white;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
+            white-space: nowrap; /* не разбивать текст */
+          }
+
+          /* Mobile tweaks */
+          @media (max-width: 480px) {
+            .model-btn {
+              padding: 4px 8px;
+              font-size: 11px;
+            }
           }
 
           .model-btn:hover:not(:disabled) {
