@@ -1,6 +1,9 @@
-import { NextResponse } from 'next/server';
+export const dynamic = 'force-dynamic';
 
-export async function GET() {
+import { NextResponse } from 'next/server';
+import { withRateLimit } from '../../middleware/rateLimit';
+
+async function handler() {
   return NextResponse.json({
     status: 'ok',
     message: 'API is working',
@@ -16,5 +19,7 @@ export async function GET() {
       hasTelegramBot: !!process.env.TELEGRAM_BOT_TOKEN,
       hasTelegramChat: !!process.env.TELEGRAM_CHAT_ID
     }
-  });
+  }, { headers: { 'Cache-Control': 'no-store' } });
 }
+
+export const GET = withRateLimit(handler, 'default');
