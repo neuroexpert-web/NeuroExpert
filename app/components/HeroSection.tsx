@@ -135,20 +135,31 @@ export default function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            <Link href="/services" className={styles.primaryButton}>
+            <Link href="#contact" className={styles.primaryButton} onClick={(e) => {
+              e.preventDefault();
+              const contactForm = document.querySelector('.contact-form-section');
+              contactForm?.scrollIntoView({ behavior: 'smooth' });
+            }}>
               <span>Начать бесплатно</span>
               <svg className={styles.buttonIcon} viewBox="0 0 24 24" fill="none">
                 <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </Link>
             
-            <Link href="/assistant" className={styles.secondaryButton}>
+            <button className={styles.secondaryButton} onClick={() => {
+              const event = new CustomEvent('openAIChat', { 
+                detail: { 
+                  message: 'Здравствуйте! Покажите мне демо возможностей платформы NeuroExpert.' 
+                } 
+              });
+              window.dispatchEvent(event);
+            }}>
               <span>Посмотреть демо</span>
               <svg className={styles.playIcon} viewBox="0 0 24 24" fill="none">
                 <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
                 <path d="M10 8L16 12L10 16V8Z" fill="currentColor"/>
               </svg>
-            </Link>
+            </button>
           </motion.div>
 
           {/* Статистика */}
