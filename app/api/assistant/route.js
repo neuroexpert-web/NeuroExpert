@@ -9,6 +9,9 @@ import {
   addEmotionalTone
 } from '../../utils/ai-director-system';
 
+// Максимальный размер тела запроса ~64KB
+const MAX_REQUEST_SIZE = 64 * 1024;
+
 // Проверка наличия API ключей
 const GEMINI_API_KEY = process.env.GOOGLE_GEMINI_API_KEY;
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
@@ -165,6 +168,12 @@ async function handler(request) {
   const startTime = Date.now();
   
   try {
+    // Быстрый отказ, если Content-Length слишком большой
+    const contentLength = Number(request.headers.get('content-length') || 0);
+    if (contentLength > MAX_REQUEST_SIZE) {
+      return NextResponse.json({ error: 'Слишком большой запрос' }, { status: 413, headers: { 'Cache-Control': 'no-store' } });
+    }
+
     const { question, model = 'gemini', context = {} } = await request.json();
     
     if (process.env.NODE_ENV !== 'production') {

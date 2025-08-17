@@ -1,8 +1,18 @@
 import { NextResponse } from 'next/server';
 import { withRateLimit } from '../../middleware/rateLimit';
 
+const MAX_REQUEST_SIZE = 64 * 1024;
+
 async function handler(request) {
   try {
+    const contentLength = Number(request.headers.get('content-length') || 0);
+    if (contentLength > MAX_REQUEST_SIZE) {
+      return NextResponse.json(
+        { error: 'Слишком большой запрос' },
+        { status: 413, headers: { 'Cache-Control': 'no-store' } }
+      );
+    }
+
     const data = await request.json();
     
     // Validate required fields
