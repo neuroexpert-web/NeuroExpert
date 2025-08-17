@@ -286,12 +286,7 @@ export default function PremiumHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <span style={{
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text'
-          }}>NeuroExpert</span>
+          <span className="gradient-text-anim">NeuroExpert</span>
         </motion.h1>
 
         <motion.p
@@ -309,6 +304,24 @@ export default function PremiumHero() {
           Премиум платформа для создания интеллектуальных бизнес-решений
           с использованием передовых AI технологий
         </motion.p>
+
+        {/* Local styles for animated logo */}
+        <style jsx>{`
+          .gradient-text-anim {
+            background: linear-gradient(120deg, #667eea 0%, #764ba2 25%, #14b8a6 50%, #667eea 75%, #764ba2 100%);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 6s ease-in-out infinite;
+          }
+
+          @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+          }
+        `}</style>
 
         <motion.div
           style={{
