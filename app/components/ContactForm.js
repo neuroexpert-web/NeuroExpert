@@ -135,6 +135,8 @@ export default function ContactForm() {
     setStatus({ loading: true, success: false, error: false, message: '' });
 
     try {
+      console.log('Отправка формы:', formData);
+      
       const response = await fetch('/api/contact-form', {
         method: 'POST',
         headers: {
@@ -146,15 +148,25 @@ export default function ContactForm() {
         }),
       });
 
+      console.log('Response status:', response.status);
       const result = await response.json();
+      console.log('Response data:', result);
 
       if (response.ok && result.success) {
         setStatus({
           loading: false,
           success: true,
           error: false,
-          message: 'Спасибо! Мы свяжемся с вами в течение 15 минут.'
+          message: result.message || 'Спасибо! Мы свяжемся с вами в течение 15 минут.'
         });
+
+        // Отправляем событие в Google Analytics
+        if (typeof window !== 'undefined' && window.gtag) {
+          window.gtag('event', 'form_submit', {
+            event_category: 'engagement',
+            event_label: 'contact_form'
+          });
+        }
 
         setFormData({
           name: '',
@@ -168,11 +180,13 @@ export default function ContactForm() {
       }
     } catch (error) {
       console.error('Ошибка отправки формы:', error);
+      console.error('Stack trace:', error.stack);
+      
       setStatus({
         loading: false,
         success: false,
         error: true,
-        message: error.message || 'Произошла ошибка при отправке формы'
+        message: error.message || 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте позже.'
       });
     }
   };

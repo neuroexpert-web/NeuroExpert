@@ -45,9 +45,9 @@ export default function PremiumCard({
   };
 
   const glowColors = {
-    blue: 'rgba(65, 54, 241, 0.3)',
-    gold: 'rgba(255, 215, 0, 0.3)',
-    purple: 'rgba(139, 92, 246, 0.3)'
+    blue: 'rgba(65, 54, 241, 0.1)',
+    gold: 'rgba(255, 215, 0, 0.1)',
+    purple: 'rgba(139, 92, 246, 0.1)'
   };
 
   return (
@@ -74,8 +74,8 @@ export default function PremiumCard({
         <div 
           className="card-glow"
           style={{
-            background: `radial-gradient(circle at ${glowPosition.x}% ${glowPosition.y}%, ${glowColors[glowColor]}, transparent 60%)`,
-            opacity: interactive ? 1 : 0.5
+            background: `radial-gradient(circle at ${glowPosition.x}% ${glowPosition.y}%, ${glowColors[glowColor]}, transparent 40%)`,
+            opacity: interactive ? 0.5 : 0.3
           }}
         />
 
@@ -119,7 +119,7 @@ export default function PremiumCard({
           background: linear-gradient(135deg, #FFD700, #FDB462);
           padding: 8px 24px;
           border-radius: 0 0 12px 12px;
-          box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
+          box-shadow: 0 4px 16px rgba(255, 215, 0, 0.2);
           z-index: 10;
         }
 
@@ -138,14 +138,14 @@ export default function PremiumCard({
           left: -100%;
           width: 100%;
           height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-          animation: badgeShine 3s ease-in-out infinite;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+          animation: badgeShine 6s ease-in-out infinite;
         }
 
         .card-glow {
           position: absolute;
           inset: -50%;
-          opacity: 0.6;
+          opacity: 0.15;
           transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
           pointer-events: none;
         }
@@ -158,11 +158,11 @@ export default function PremiumCard({
           height: 1px;
           background: linear-gradient(90deg, 
             transparent 0%, 
-            rgba(255, 255, 255, 0.2) 50%, 
+            rgba(255, 255, 255, 0.1) 50%, 
             transparent 100%
           );
           transform: translateX(-100%);
-          animation: cardShine 8s ease-in-out infinite;
+          animation: cardShine 12s ease-in-out infinite;
         }
 
         .card-content {
@@ -185,7 +185,7 @@ export default function PremiumCard({
         }
 
         .premium-card:hover .card-border-glow {
-          opacity: 0.6;
+          opacity: 0.3;
         }
 
         @keyframes badgeShine {

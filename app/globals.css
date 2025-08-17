@@ -74,6 +74,17 @@ body {
   --secondary-light: #fbbf24;
   --accent: #10b981;
   
+  /* Новая цветовая схема для Hero */
+  --hero-bg-start: #0a0a0a;
+  --hero-bg-end: #1a1a2e;
+  --hero-primary: #7c3aed;
+  --hero-primary-light: #a78bfa;
+  --hero-secondary: #3b82f6;
+  --hero-secondary-light: #8b5cf6;
+  --hero-text-primary: #e2e8f0;
+  --hero-text-secondary: #94a3b8;
+  --hero-text-muted: #64748b;
+  
   /* Темная тема */
   --dark-bg: #0f172a;
   --dark-bg-secondary: #1e293b;

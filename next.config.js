@@ -40,13 +40,13 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   
-  // Временно отключаем проверки для деплоя
+  // ESLint проверки включены
   eslint: {
-    ignoreDuringBuilds: true, // TODO: включить обратно после исправления ошибок
+    ignoreDuringBuilds: false,
     dirs: ['app', 'components', 'lib', 'utils'],
   },
   typescript: {
-    ignoreBuildErrors: true, // TODO: включить обратно после исправления ошибок
+    ignoreBuildErrors: false,
     tsconfigPath: './tsconfig.json',
   },
   

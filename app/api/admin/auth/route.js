@@ -1,12 +1,13 @@
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import { rateLimitMiddleware } from '../../../middleware/rateLimit';
 
 // Получаем секретный ключ и хешированный пароль из переменных окружения
 const JWT_SECRET = process.env.JWT_SECRET || 'your-jwt-secret-key';
 const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH || '$2a$10$YourHashedPasswordHere';
 
-export async function POST(request) {
+async function authHandler(request) {
   try {
     const { password } = await request.json();
 
@@ -85,4 +86,23 @@ export async function GET(request) {
       { status: 500 }
     );
   }
+}
+
+export async function POST(request) {
+  const rateLimitCheck = await rateLimitMiddleware('/api/admin/auth')(request);
+  
+  if (rateLimitCheck instanceof Response) {
+    // Rate limit exceeded - важно для защиты от brute force
+    return rateLimitCheck;
+  }
+  
+  // Process request with rate limit headers
+  const response = await authHandler(request);
+  
+  // Add rate limit headers to response
+  Object.entries(rateLimitCheck.headers).forEach(([key, value]) => {
+    response.headers.set(key, value);
+  });
+  
+  return response;
 }

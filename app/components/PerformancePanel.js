@@ -258,7 +258,7 @@ class PerformanceMonitor {
     
     const traverse = (element, depth) => {
       maxDepth = Math.max(maxDepth, depth);
-      for (let child of element.children) {
+      for (const child of element.children) {
         traverse(child, depth + 1);
       }
     };
