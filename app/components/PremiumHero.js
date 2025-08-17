@@ -55,10 +55,11 @@ export default function PremiumHero() {
     // Node class для нейронной сети
     class Node {
       constructor() {
+        const speedScale = window.innerWidth < 768 ? 0.2 : 0.5;
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.vx = (Math.random() - 0.5) * 0.5;
-        this.vy = (Math.random() - 0.5) * 0.5;
+        this.vx = (Math.random() - 0.5) * speedScale;
+        this.vy = (Math.random() - 0.5) * speedScale;
         this.radius = Math.random() * 1.5 + 0.5;
         this.connections = [];
       }
@@ -70,15 +71,17 @@ export default function PremiumHero() {
         if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
         if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
 
-        // Mouse interaction
+        // Mouse interaction (ослаблено на мобильном)
         const dx = this.x - mouseRef.current.x;
         const dy = this.y - mouseRef.current.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         
-        if (distance < 150) {
-          const force = (150 - distance) / 150;
-          this.vx += dx * force * 0.002;
-          this.vy += dy * force * 0.002;
+        const maxMouseRadius = window.innerWidth < 768 ? 90 : 150;
+        const forceScale = window.innerWidth < 768 ? 0.001 : 0.002;
+        if (distance < maxMouseRadius) {
+          const force = (maxMouseRadius - distance) / maxMouseRadius;
+          this.vx += dx * force * forceScale;
+          this.vy += dy * force * forceScale;
         }
       }
 
@@ -89,7 +92,7 @@ export default function PremiumHero() {
         ctx.fill();
         
         // Subtle glow
-        ctx.shadowBlur = 10;
+        ctx.shadowBlur = window.innerWidth < 768 ? 4 : 10;
         ctx.shadowColor = 'rgba(102, 126, 234, 0.5)';
       }
 
@@ -98,8 +101,9 @@ export default function PremiumHero() {
         const dy = this.y - other.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         
-        if (distance < 120) {
-          const opacity = (1 - distance / 120) * 0.3;
+        const maxDist = window.innerWidth < 768 ? 90 : 120;
+        if (distance < maxDist) {
+          const opacity = (1 - distance / maxDist) * 0.25;
           
           // Gradient line
           const gradient = ctx.createLinearGradient(this.x, this.y, other.x, other.y);
@@ -119,7 +123,7 @@ export default function PremiumHero() {
 
     // Create nodes для нейронной сети
     const nodes = [];
-    const nodeCount = window.innerWidth < 768 ? 10 : 20;
+    const nodeCount = window.innerWidth < 768 ? 8 : 20;
     for (let i = 0; i < nodeCount; i++) {
       nodes.push(new Node());
     }
@@ -127,7 +131,7 @@ export default function PremiumHero() {
 
     // Animation loop
     const animate = () => {
-      ctx.fillStyle = 'rgba(10, 10, 30, 0.05)';
+      ctx.fillStyle = 'rgba(10, 10, 30, 0.06)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
       // Draw connections
@@ -168,6 +172,10 @@ export default function PremiumHero() {
     };
   }, []);
 
+  // Параметры анимаций фона в зависимости от устройства
+  const bgAmp = isMobile ? 30 : 100;
+  const bgAmpSmall = isMobile ? 20 : 50;
+
   return (
     <section style={{
       position: 'relative',
@@ -188,18 +196,18 @@ export default function PremiumHero() {
         width: '100%',
         height: '100%',
         overflow: 'hidden',
-        filter: 'blur(80px)',
-        opacity: 0.3
+        filter: isMobile ? 'blur(60px)' : 'blur(80px)',
+        opacity: isMobile ? 0.22 : 0.3
       }}>
         <motion.div
           animate={{
-            x: [0, 100, 0],
-            y: [0, -100, 0],
+            x: [0, bgAmp, 0],
+            y: [0, -bgAmp, 0],
           }}
           transition={{
-            duration: 20,
+            duration: isMobile ? 30 : 20,
             repeat: Infinity,
-            ease: "linear"
+            ease: 'linear'
           }}
           style={{
             position: 'absolute',
@@ -212,13 +220,13 @@ export default function PremiumHero() {
         />
         <motion.div
           animate={{
-            x: [0, -100, 0],
-            y: [0, 100, 0],
+            x: [0, -bgAmp, 0],
+            y: [0, bgAmp, 0],
           }}
           transition={{
-            duration: 15,
+            duration: isMobile ? 28 : 15,
             repeat: Infinity,
-            ease: "linear"
+            ease: 'linear'
           }}
           style={{
             position: 'absolute',
@@ -231,13 +239,13 @@ export default function PremiumHero() {
         />
         <motion.div
           animate={{
-            x: [0, 50, 0],
-            y: [0, 50, 0],
+            x: [0, bgAmpSmall, 0],
+            y: [0, bgAmpSmall, 0],
           }}
           transition={{
-            duration: 18,
+            duration: isMobile ? 32 : 18,
             repeat: Infinity,
-            ease: "linear"
+            ease: 'linear'
           }}
           style={{
             position: 'absolute',
@@ -260,7 +268,7 @@ export default function PremiumHero() {
           width: '100%',
           height: '100%',
           zIndex: 1,
-          opacity: 0.6
+          opacity: isMobile ? 0.3 : 0.6
         }}
       />
 
@@ -279,31 +287,34 @@ export default function PremiumHero() {
           style={{
             fontSize: 'clamp(3rem, 8vw, 6rem)',
             fontWeight: 'bold',
-            marginBottom: '24px',
+            marginBottom: '16px',
             lineHeight: 1.1
           }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <span className="gradient-text-anim">NeuroExpert</span>
+          <span className="gradient-text-anim" style={{ animationDuration: isMobile ? '12s' : '6s' }}>NeuroExpert</span>
         </motion.h1>
 
-        <motion.p
+        <motion.h2
           style={{
-            fontSize: 'clamp(1.125rem, 2vw, 1.5rem)',
-            color: '#cbd5e1',
-            marginBottom: '32px',
-            maxWidth: '768px',
-            margin: '0 auto 32px'
+            fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
+            fontWeight: 800,
+            marginBottom: isMobile ? '16px' : '24px',
+            lineHeight: 1.2,
+            background: 'linear-gradient(135deg, #ffffff 0%, #e5e7eb 50%, #c7d2fe 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            filter: 'drop-shadow(0 0 10px rgba(99, 102, 241, 0.25))'
           }}
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
+          transition={{ duration: 0.8, delay: 0.35 }}
         >
-          Премиум платформа для создания интеллектуальных бизнес-решений
-          с использованием передовых AI технологий
-        </motion.p>
+          AI‑платформа для роста продаж и автоматизации
+        </motion.h2>
 
         {/* Local styles for animated logo */}
         <style jsx>{`
@@ -340,14 +351,14 @@ export default function PremiumHero() {
               // Скролл к секции с ценами
               document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
             }}
-            animate={{
+            animate={isMobile ? undefined : {
               boxShadow: [
                 '0 0 30px rgba(102, 126, 234, 0.5), inset 0 0 15px rgba(255, 255, 255, 0.1)',
                 '0 0 50px rgba(118, 75, 162, 0.7), inset 0 0 25px rgba(255, 255, 255, 0.2)',
                 '0 0 30px rgba(102, 126, 234, 0.5), inset 0 0 15px rgba(255, 255, 255, 0.1)'
               ]
             }}
-            transition={{
+            transition={isMobile ? undefined : {
               boxShadow: {
                 duration: 2,
                 repeat: Infinity,
@@ -356,9 +367,9 @@ export default function PremiumHero() {
             }}
             style={{
               position: 'relative',
-              padding: isMobile ? '14px 28px' : '16px 40px',
+              padding: isMobile ? '12px 20px' : '16px 40px',
               fontWeight: '700',
-              fontSize: isMobile ? '16px' : '18px',
+              fontSize: isMobile ? '15px' : '18px',
               letterSpacing: '0.02em',
               color: 'white',
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -372,14 +383,14 @@ export default function PremiumHero() {
               overflow: 'hidden',
               transition: 'all 0.3s ease'
             }}
-            whileHover={{ 
+            whileHover={isMobile ? undefined : { 
               scale: 1.05,
               boxShadow: '0 0 80px rgba(102, 126, 234, 0.9), 0 0 120px rgba(118, 75, 162, 0.6), inset 0 0 30px rgba(255, 255, 255, 0.3)'
             }}
             whileTap={{ scale: 0.95 }}
           >
             <motion.span
-              animate={{
+              animate={isMobile ? undefined : {
                 backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
                 textShadow: [
                   '0 0 20px rgba(102, 126, 234, 0.8), 0 0 40px rgba(102, 126, 234, 0.6)',
@@ -387,7 +398,7 @@ export default function PremiumHero() {
                   '0 0 20px rgba(102, 126, 234, 0.8), 0 0 40px rgba(102, 126, 234, 0.6)'
                 ]
               }}
-              transition={{
+              transition={isMobile ? undefined : {
                 duration: 2,
                 repeat: Infinity,
                 ease: 'linear'
@@ -422,14 +433,14 @@ export default function PremiumHero() {
               // Скролл к секции "Почему мы"
               document.getElementById('why-us')?.scrollIntoView({ behavior: 'smooth' });
             }}
-            animate={{
+            animate={isMobile ? undefined : {
               boxShadow: [
                 '0 0 20px rgba(102, 126, 234, 0.3), inset 0 0 10px rgba(102, 126, 234, 0.1)',
                 '0 0 35px rgba(118, 75, 162, 0.5), inset 0 0 15px rgba(118, 75, 162, 0.2)',
                 '0 0 20px rgba(102, 126, 234, 0.3), inset 0 0 10px rgba(102, 126, 234, 0.1)'
               ]
             }}
-            transition={{
+            transition={isMobile ? undefined : {
               boxShadow: {
                 duration: 2.5,
                 repeat: Infinity,
@@ -438,9 +449,9 @@ export default function PremiumHero() {
             }}
             style={{
               position: 'relative',
-              padding: isMobile ? '14px 28px' : '16px 40px',
+              padding: isMobile ? '12px 20px' : '16px 40px',
               fontWeight: '600',
-              fontSize: isMobile ? '16px' : '18px',
+              fontSize: isMobile ? '15px' : '18px',
               color: 'white',
               background: 'transparent',
               border: '2px solid transparent',
@@ -451,7 +462,7 @@ export default function PremiumHero() {
               backgroundClip: 'padding-box, border-box',
               overflow: 'hidden'
             }}
-            whileHover={{ 
+            whileHover={isMobile ? undefined : { 
               scale: 1.05,
               boxShadow: '0 0 50px rgba(102, 126, 234, 0.7), 0 0 80px rgba(118, 75, 162, 0.5)'
             }}
@@ -469,7 +480,7 @@ export default function PremiumHero() {
                 filter: 'drop-shadow(0 0 6px rgba(102, 126, 234, 0.5))',
                 fontWeight: '700'
               }}
-              animate={{
+              animate={isMobile ? undefined : {
                 backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
                 textShadow: [
                   '0 0 15px rgba(102, 126, 234, 0.6), 0 0 30px rgba(102, 126, 234, 0.4)',
@@ -477,7 +488,7 @@ export default function PremiumHero() {
                   '0 0 15px rgba(102, 126, 234, 0.6), 0 0 30px rgba(102, 126, 234, 0.4)'
                 ]
               }}
-              transition={{
+              transition={isMobile ? undefined : {
                 duration: 2.5,
                 repeat: Infinity,
                 ease: 'linear'
@@ -495,11 +506,11 @@ export default function PremiumHero() {
                 background: 'radial-gradient(circle, rgba(102, 126, 234, 0.3) 0%, transparent 70%)',
                 opacity: 0
               }}
-              animate={{
+              animate={isMobile ? undefined : {
                 opacity: [0, 0.5, 0],
                 scale: [0.5, 1.5, 0.5]
               }}
-              transition={{
+              transition={isMobile ? undefined : {
                 duration: 2,
                 repeat: Infinity
               }}
@@ -511,18 +522,18 @@ export default function PremiumHero() {
         <motion.div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '32px',
-            marginTop: '80px',
-            maxWidth: '800px',
-            margin: '80px auto 0'
+            gridTemplateColumns: isMobile ? 'repeat(2, minmax(0, 1fr))' : 'repeat(3, minmax(0, 1fr))',
+            gap: isMobile ? '12px' : '32px',
+            marginTop: isMobile ? '24px' : '80px',
+            maxWidth: isMobile ? '100%' : '800px',
+            margin: isMobile ? '24px auto 0' : '80px auto 0'
           }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
         >
           <div style={{
-            padding: '24px',
+            padding: isMobile ? '16px' : '24px',
             background: 'rgba(255, 255, 255, 0.05)',
             backdropFilter: 'blur(12px)',
             border: '1px solid rgba(255, 255, 255, 0.1)',
@@ -530,17 +541,17 @@ export default function PremiumHero() {
             textAlign: 'center'
           }}>
             <h3 style={{
-              fontSize: '2.5rem',
+              fontSize: isMobile ? '1.75rem' : '2.5rem',
               fontWeight: 'bold',
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               marginBottom: '8px'
-            }}>2-4</h3>
+            }}>⏱️ 2–4</h3>
             <p style={{ color: '#94a3b8' }}>Недели до запуска</p>
           </div>
           <div style={{
-            padding: '24px',
+            padding: isMobile ? '16px' : '24px',
             background: 'rgba(255, 255, 255, 0.05)',
             backdropFilter: 'blur(12px)',
             border: '1px solid rgba(255, 255, 255, 0.1)',
@@ -548,17 +559,17 @@ export default function PremiumHero() {
             textAlign: 'center'
           }}>
             <h3 style={{
-              fontSize: '2.5rem',
+              fontSize: isMobile ? '1.75rem' : '2.5rem',
               fontWeight: 'bold',
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               marginBottom: '8px'
-            }}>40%</h3>
+            }}>📈 40%</h3>
             <p style={{ color: '#94a3b8' }}>Рост конверсии</p>
           </div>
           <div style={{
-            padding: '24px',
+            padding: isMobile ? '16px' : '24px',
             background: 'rgba(255, 255, 255, 0.05)',
             backdropFilter: 'blur(12px)',
             border: '1px solid rgba(255, 255, 255, 0.1)',
@@ -566,13 +577,13 @@ export default function PremiumHero() {
             textAlign: 'center'
           }}>
             <h3 style={{
-              fontSize: '2.5rem',
+              fontSize: isMobile ? '1.75rem' : '2.5rem',
               fontWeight: 'bold',
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               marginBottom: '8px'
-            }}>24/7</h3>
+            }}>🤖 24/7</h3>
             <p style={{ color: '#94a3b8' }}>AI поддержка</p>
           </div>
         </motion.div>
