@@ -29,7 +29,7 @@ async function postHandler(request) {
     if (!isValidPassword) {
       return NextResponse.json(
         { error: 'Invalid credentials' },
-        { status: 401 }
+        { status: 401, headers: { 'Cache-Control': 'no-store' } }
       );
     }
 
@@ -47,7 +47,7 @@ async function postHandler(request) {
       success: true,
       token,
       expiresIn: 86400 // 24 hours in seconds
-    });
+    }, { headers: { 'Cache-Control': 'no-store' } });
 
   } catch (error) {
     console.error('Admin auth error:', error);
@@ -74,7 +74,7 @@ async function getHandler(request) {
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return NextResponse.json(
         { valid: false },
-        { status: 401 }
+        { status: 401, headers: { 'Cache-Control': 'no-store' } }
       );
     }
 
@@ -85,11 +85,11 @@ async function getHandler(request) {
       return NextResponse.json({
         valid: true,
         role: decoded.role
-      });
+      }, { headers: { 'Cache-Control': 'no-store' } });
     } catch (error) {
       return NextResponse.json(
         { valid: false },
-        { status: 401 }
+        { status: 401, headers: { 'Cache-Control': 'no-store' } }
       );
     }
   } catch (error) {
