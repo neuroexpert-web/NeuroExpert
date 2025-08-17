@@ -222,7 +222,7 @@
 /* CTA кнопки */
 .ctaButtons {
   display: flex;
-  gap: 16px;
+  gap: 20px;
   justify-content: center;
   flex-wrap: wrap;
   margin-bottom: 60px;
@@ -232,39 +232,64 @@
 .secondaryButton {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 16px 32px;
+  gap: 10px;
+  padding: 18px 36px;
   font-size: 16px;
   font-weight: 600;
-  border-radius: 12px;
+  border-radius: 50px;
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  text-decoration: none;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+/* Неоновый градиент для основной кнопки */
 .primaryButton {
-  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  animation: neonPulse 2s ease-in-out infinite;
 }
 
-.primaryButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+@keyframes neonPulse {
+  0%, 100% {
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4),
+                0 0 40px rgba(102, 126, 234, 0.2),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    box-shadow: 0 4px 25px rgba(102, 126, 234, 0.6),
+                0 0 60px rgba(102, 126, 234, 0.4),
+                inset 0 0 25px rgba(255, 255, 255, 0.2);
+  }
 }
 
 .primaryButton::before {
   content: '';
   position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.primaryButton:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 30px rgba(102, 126, 234, 0.6),
+              0 0 80px rgba(102, 126, 234, 0.5),
+              inset 0 0 30px rgba(255, 255, 255, 0.2);
 }
 
 .primaryButton:hover::before {
-  opacity: 1;
+  left: 100%;
+}
+
+.primaryButton:active {
+  transform: translateY(-1px) scale(1.02);
 }
 
 .primaryButton span,
@@ -273,17 +298,66 @@
   z-index: 1;
 }
 
+/* Вторичная кнопка с неоновой обводкой */
 .secondaryButton {
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  padding: 17px 35px;
+  overflow: visible;
+}
+
+.secondaryButton::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50px;
+  padding: 2px;
+  background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: borderRotate 3s linear infinite;
+}
+
+@keyframes borderRotate {
+  0% {
+    background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+  }
+  33% {
+    background: linear-gradient(135deg, #764ba2, #f093fb, #667eea);
+  }
+  66% {
+    background: linear-gradient(135deg, #f093fb, #667eea, #764ba2);
+  }
+  100% {
+    background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+  }
+}
+
+.secondaryButton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
+  z-index: -1;
 }
 
 .secondaryButton:hover {
+  transform: translateY(-3px) scale(1.05);
+  color: white;
+}
+
+.secondaryButton:hover::after {
   background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(102, 126, 234, 0.5),
+              inset 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.secondaryButton:active {
+  transform: translateY(-1px) scale(1.02);
 }
 
 .buttonIcon,
@@ -297,15 +371,32 @@
   .ctaButtons {
     flex-direction: column;
     width: 100%;
-    max-width: 300px;
+    max-width: 320px;
     margin: 0 auto 40px;
+    gap: 16px;
   }
   
   .primaryButton,
   .secondaryButton {
     width: 100%;
-    padding: 14px 24px;
+    padding: 16px 28px;
     font-size: 15px;
+    border-radius: 40px;
+  }
+  
+  .primaryButton {
+    animation: neonPulseMobile 2.5s ease-in-out infinite;
+  }
+  
+  @keyframes neonPulseMobile {
+    0%, 100% {
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3),
+                  0 0 30px rgba(102, 126, 234, 0.15);
+    }
+    50% {
+      box-shadow: 0 4px 20px rgba(102, 126, 234, 0.5),
+                  0 0 40px rgba(102, 126, 234, 0.3);
+    }
   }
 }
 
