@@ -37,11 +37,12 @@ app.prepare().then(() => {
     console.log(`> Ready on http://${hostname}:${port}`);
     console.log(`> Environment: ${process.env.NODE_ENV || 'development'}`);
     
-    // Логируем важные переменные для отладки
-    console.log('> API Keys configured:', {
-      GEMINI: !!process.env.GOOGLE_GEMINI_API_KEY,
-      TELEGRAM: !!process.env.TELEGRAM_BOT_TOKEN,
-      CHAT_ID: !!process.env.TELEGRAM_CHAT_ID
-    });
+    // Security: Log configuration status only in development
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('> Configuration status:', {
+        GEMINI_API: !!process.env.GOOGLE_GEMINI_API_KEY,
+        TELEGRAM: !!process.env.TELEGRAM_BOT_TOKEN && !!process.env.TELEGRAM_CHAT_ID
+      });
+    }
   });
 });

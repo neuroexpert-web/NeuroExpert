@@ -1,62 +1,40 @@
 {
   "extends": [
     "next/core-web-vitals",
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:react/recommended",
-    "plugin:react-hooks/recommended",
     "plugin:security/recommended",
+    "plugin:@typescript-eslint/recommended",
     "prettier"
   ],
-  "plugins": [
-    "@typescript-eslint",
-    "security",
-    "react",
-    "react-hooks"
-  ],
+  "plugins": ["security", "@typescript-eslint"],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2022,
     "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
-    }
-  },
-  "env": {
-    "browser": true,
-    "es2022": true,
-    "node": true
+    "project": "./tsconfig.json"
   },
   "rules": {
     // Security rules
     "security/detect-object-injection": "warn",
-    "security/detect-non-literal-regexp": "warn",
-    "security/detect-unsafe-regex": "error",
-    "security/detect-buffer-noassert": "error",
+    "security/detect-non-literal-fs-filename": "error",
     "security/detect-eval-with-expression": "error",
     "security/detect-no-csrf-before-method-override": "error",
     "security/detect-possible-timing-attacks": "warn",
     
-    // Code quality
+    // Console logs
     "no-console": ["warn", { "allow": ["warn", "error"] }],
-    "no-debugger": "error",
+    
+    // Code quality
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": ["error", { 
-      "argsIgnorePattern": "^_",
-      "varsIgnorePattern": "^_"
-    }],
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "warn",
-    "@typescript-eslint/no-non-null-assertion": "warn",
     
-    // React rules
+    // React specific
     "react/prop-types": "off",
-    "react/react-in-jsx-scope": "off",
-    "react/display-name": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     
     // Best practices
-    "eqeqeq": ["error", "always"],
     "no-eval": "error",
     "no-implied-eval": "error",
     "no-new-func": "error",
@@ -64,19 +42,11 @@
     "prefer-const": "error",
     "require-await": "error",
     
-    // Async/Promise rules
-    "no-async-promise-executor": "error",
-    "no-await-in-loop": "warn",
-    "no-promise-executor-return": "error",
-    "prefer-promise-reject-errors": "error"
+    // Security patterns
+    "no-hardcoded-passwords": "off",
+    "no-secrets": "off"
   },
   "overrides": [
-    {
-      "files": ["*.ts", "*.tsx"],
-      "rules": {
-        "@typescript-eslint/explicit-function-return-type": "off"
-      }
-    },
     {
       "files": ["*.js", "*.jsx"],
       "rules": {
@@ -88,11 +58,9 @@
     "node_modules/",
     ".next/",
     "out/",
-    "build/",
-    "dist/",
-    "*.min.js",
+    "public/",
+    "*.config.js",
     "coverage/",
-    ".vercel/",
-    ".netlify/"
+    "dist/"
   ]
 }

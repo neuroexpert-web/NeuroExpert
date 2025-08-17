@@ -7,11 +7,11 @@
 // Content Security Policy configuration
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' *.google.com *.googleapis.com *.gstatic.com *.google-analytics.com *.googletagmanager.com mc.yandex.ru *.yandex.net;
+  script-src 'self' 'unsafe-eval' 'unsafe-inline' *.google.com *.googleapis.com *.gstatic.com *.google-analytics.com *.googletagmanager.com mc.yandex.ru *.yandex.net ${process.env.NODE_ENV === 'development' ? "'unsafe-eval'" : ''};
   style-src 'self' 'unsafe-inline' *.googleapis.com fonts.googleapis.com;
   img-src 'self' blob: data: *.google.com *.googleapis.com *.gstatic.com *.google-analytics.com api.dicebear.com;
   font-src 'self' fonts.gstatic.com;
-  connect-src 'self' *.google.com *.googleapis.com *.google-analytics.com mc.yandex.ru *.yandex.net generativelanguage.googleapis.com;
+  connect-src 'self' *.google.com *.googleapis.com *.google-analytics.com mc.yandex.ru *.yandex.net generativelanguage.googleapis.com ${process.env.NODE_ENV === 'development' ? 'ws://localhost:*' : ''};
   media-src 'self';
   object-src 'none';
   child-src 'self';
@@ -22,6 +22,8 @@ const ContentSecurityPolicy = `
   manifest-src 'self';
   worker-src 'self' blob:;
   upgrade-insecure-requests;
+  block-all-mixed-content;
+  report-uri ${process.env.CSP_REPORT_URI || '/api/csp-report'};
 `;
 
 const nextConfig = {
@@ -40,13 +42,13 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   
-  // Временно отключаем проверки для деплоя
+  // Включаем проверки для повышения качества кода
   eslint: {
-    ignoreDuringBuilds: true, // TODO: включить обратно после исправления ошибок
+    ignoreDuringBuilds: false,
     dirs: ['app', 'components', 'lib', 'utils'],
   },
   typescript: {
-    ignoreBuildErrors: true, // TODO: включить обратно после исправления ошибок
+    ignoreBuildErrors: false,
     tsconfigPath: './tsconfig.json',
   },
   

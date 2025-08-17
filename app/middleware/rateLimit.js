@@ -1,135 +1,100 @@
-/**
- * Rate Limiting Middleware for Next.js API Routes
- * Protects against brute force and DDoS attacks
- */
+import { NextResponse } from 'next/server';
 
-const rateLimit = new Map();
+// Simple in-memory rate limiter
+// In production, use Redis or similar for distributed rate limiting
+const rateLimitMap = new Map();
 
 // Configuration
-const RATE_LIMIT_CONFIG = {
-  windowMs: 60 * 1000, // 1 minute
-  max: {
-    default: 60,        // 60 requests per minute by default
-    auth: 5,            // 5 login attempts per minute
-    ai: 20,             // 20 AI requests per minute
-    contact: 5,         // 5 contact form submissions per minute
-  },
-  message: 'Too many requests, please try again later.',
-  standardHeaders: true,
-  legacyHeaders: false,
-};
+const WINDOW_MS = parseInt(process.env.RATE_LIMIT_WINDOW_MS || '60000'); // 1 minute
+const MAX_REQUESTS = parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100'); // 100 requests per window
 
-/**
- * Get client identifier (IP address with fallbacks)
- */
-function getClientId(req) {
-  return req.headers['x-forwarded-for']?.split(',')[0].trim() ||
-         req.headers['x-real-ip'] ||
-         req.connection?.remoteAddress ||
-         req.socket?.remoteAddress ||
-         'unknown';
-}
-
-/**
- * Clean up old entries from rate limit map
- */
-function cleanupOldEntries() {
-  const now = Date.now();
-  for (const [key, data] of rateLimit.entries()) {
-    if (now - data.firstRequest > RATE_LIMIT_CONFIG.windowMs) {
-      rateLimit.delete(key);
+export function rateLimit(options = {}) {
+  const {
+    windowMs = WINDOW_MS,
+    max = MAX_REQUESTS,
+    message = 'Too many requests, please try again later.',
+    keyGenerator = (req) => {
+      // Use IP address as key
+      const forwarded = req.headers.get('x-forwarded-for');
+      const ip = forwarded ? forwarded.split(',')[0].trim() : 'unknown';
+      return ip;
     }
-  }
-}
+  } = options;
 
-/**
- * Rate limiting middleware factory
- * @param {string} endpoint - The endpoint type (auth, ai, contact, etc.)
- * @returns {Function} Middleware function
- */
-export function createRateLimiter(endpoint = 'default') {
-  const maxRequests = RATE_LIMIT_CONFIG.max[endpoint] || RATE_LIMIT_CONFIG.max.default;
-
-  return async function rateLimitMiddleware(req, res, next) {
-    // Skip rate limiting in development
-    if (process.env.NODE_ENV === 'development') {
-      return next ? next() : undefined;
-    }
-
-    const clientId = getClientId(req);
-    const key = `${clientId}:${endpoint}`;
+  return async function rateLimitMiddleware(req) {
+    const key = keyGenerator(req);
     const now = Date.now();
 
-    // Clean up old entries periodically
-    if (Math.random() < 0.01) { // 1% chance
-      cleanupOldEntries();
+    // Clean up old entries
+    for (const [k, data] of rateLimitMap.entries()) {
+      if (now - data.windowStart > windowMs) {
+        rateLimitMap.delete(k);
+      }
     }
 
-    // Get or create client data
-    let clientData = rateLimit.get(key);
-    if (!clientData) {
-      clientData = {
+    // Get or create rate limit data for this key
+    let data = rateLimitMap.get(key);
+    if (!data || now - data.windowStart > windowMs) {
+      data = {
         count: 0,
-        firstRequest: now,
+        windowStart: now
       };
-      rateLimit.set(key, clientData);
-    }
-
-    // Check if window has expired
-    if (now - clientData.firstRequest > RATE_LIMIT_CONFIG.windowMs) {
-      clientData.count = 0;
-      clientData.firstRequest = now;
+      rateLimitMap.set(key, data);
     }
 
     // Increment request count
-    clientData.count++;
-
-    // Set rate limit headers
-    if (res && typeof res.setHeader === 'function') {
-      res.setHeader('X-RateLimit-Limit', maxRequests);
-      res.setHeader('X-RateLimit-Remaining', Math.max(0, maxRequests - clientData.count));
-      res.setHeader('X-RateLimit-Reset', new Date(clientData.firstRequest + RATE_LIMIT_CONFIG.windowMs).toISOString());
-    }
+    data.count++;
 
     // Check if limit exceeded
-    if (clientData.count > maxRequests) {
-      if (res && typeof res.status === 'function') {
-        return res.status(429).json({
-          error: RATE_LIMIT_CONFIG.message,
-          retryAfter: Math.ceil((clientData.firstRequest + RATE_LIMIT_CONFIG.windowMs - now) / 1000),
-        });
-      }
-      return false; // For non-HTTP contexts
+    if (data.count > max) {
+      const retryAfter = Math.ceil((data.windowStart + windowMs - now) / 1000);
+      
+      return NextResponse.json(
+        {
+          error: message,
+          retryAfter: retryAfter
+        },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': retryAfter.toString(),
+            'X-RateLimit-Limit': max.toString(),
+            'X-RateLimit-Remaining': '0',
+            'X-RateLimit-Reset': new Date(data.windowStart + windowMs).toISOString()
+          }
+        }
+      );
     }
 
-    // Continue to next middleware
-    return next ? next() : true;
+    // Add rate limit headers to response
+    const remaining = max - data.count;
+    const reset = new Date(data.windowStart + windowMs).toISOString();
+
+    return {
+      headers: {
+        'X-RateLimit-Limit': max.toString(),
+        'X-RateLimit-Remaining': remaining.toString(),
+        'X-RateLimit-Reset': reset
+      }
+    };
   };
 }
 
-/**
- * Wrapper for Next.js API routes
- */
-export function withRateLimit(handler, endpoint = 'default') {
-  const rateLimiter = createRateLimiter(endpoint);
-  
-  return async (req, res) => {
-    return new Promise((resolve) => {
-      rateLimiter(req, res, async () => {
-        resolve(await handler(req, res));
-      });
-    });
-  };
-}
+// Specific rate limiters for different endpoints
+export const apiRateLimit = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 100, // 100 requests per minute
+  message: 'API rate limit exceeded. Please try again later.'
+});
 
-/**
- * Rate limit check for non-HTTP contexts
- */
-export function checkRateLimit(clientId, endpoint = 'default') {
-  const req = { headers: { 'x-real-ip': clientId } };
-  const rateLimiter = createRateLimiter(endpoint);
-  return rateLimiter(req, {}, () => true);
-}
+export const authRateLimit = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // 5 attempts per 15 minutes
+  message: 'Too many authentication attempts. Please try again later.'
+});
 
-// Export configurations for customization
-export const rateLimitConfig = RATE_LIMIT_CONFIG;
+export const assistantRateLimit = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 20, // 20 requests per minute (AI calls are expensive)
+  message: 'AI assistant rate limit exceeded. Please wait before making more requests.'
+});

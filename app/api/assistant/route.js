@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { assistantRateLimit } from '@/app/middleware/rateLimit';
 import { withRateLimit } from '../../middleware/rateLimit';
 import { 
   DIRECTOR_KNOWLEDGE_BASE, 
@@ -14,7 +15,7 @@ const GEMINI_API_KEY = process.env.GOOGLE_GEMINI_API_KEY;
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 
 if (!GEMINI_API_KEY && !ANTHROPIC_API_KEY) {
-  console.error('No AI API keys found. Please set GOOGLE_GEMINI_API_KEY or ANTHROPIC_API_KEY');
+  console.error('No AI API keys configured. Please check environment variables.');
 }
 
 const genAI = GEMINI_API_KEY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null;
@@ -167,11 +168,10 @@ async function handler(request) {
   try {
     const { question, model = 'gemini', context = {} } = await request.json();
     
-    console.log('Assistant API called:', { question, model });
-    console.log('API Keys available:', { 
-      gemini: !!GEMINI_API_KEY, 
-      claude: !!ANTHROPIC_API_KEY 
-    });
+    // Log only in development without sensitive data
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('Assistant API called:', { model, questionLength: question?.length });
+    }
     
     if (!question) {
       return NextResponse.json({ error: 'Вопрос обязателен' }, { status: 400 });
