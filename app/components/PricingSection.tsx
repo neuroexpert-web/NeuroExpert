@@ -16,7 +16,7 @@ export default function PricingSection(): JSX.Element {
   const [selectedPlan, setSelectedPlan] = useState<string>('Бизнес');
 
   const scrollToROI = () => {
-    const element = document.getElementById('benefits');
+    const element = document.getElementById('roi-calculator');
     element?.scrollIntoView({ behavior: 'smooth' });
   };
 
