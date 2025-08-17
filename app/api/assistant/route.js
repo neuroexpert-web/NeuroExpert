@@ -10,11 +10,18 @@ import {
 } from '../../utils/ai-director-system';
 
 // Проверка наличия API ключей
-const GEMINI_API_KEY = process.env.GOOGLE_GEMINI_API_KEY;
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_GEMINI_API_KEY;
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 
 if (!GEMINI_API_KEY && !ANTHROPIC_API_KEY) {
-  console.error('No AI API keys found. Please set GOOGLE_GEMINI_API_KEY or ANTHROPIC_API_KEY');
+  console.error('❌ CRITICAL: No AI API keys found!');
+  console.error('Please set one of the following environment variables:');
+  console.error('- GEMINI_API_KEY (recommended)');
+  console.error('- GOOGLE_GEMINI_API_KEY');
+  console.error('- ANTHROPIC_API_KEY');
+  console.error('Current env vars:', Object.keys(process.env).filter(key => 
+    key.includes('API') || key.includes('GEMINI') || key.includes('ANTHROPIC')
+  ));
 }
 
 const genAI = GEMINI_API_KEY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null;
@@ -203,7 +210,40 @@ async function handler(request) {
       }
     } catch (error) {
       console.error('AI API Error:', error);
-      answer = 'Извините, произошла техническая ошибка. Пожалуйста, позвоните нам по телефону +7 (904) 047-63-83 или напишите на aineuroexpert@gmail.com. Мы обязательно поможем!';
+      console.error('Error details:', {
+        message: error.message,
+        model: model,
+        apiKeysAvailable: {
+          gemini: !!GEMINI_API_KEY,
+          anthropic: !!ANTHROPIC_API_KEY
+        }
+      });
+      
+      // Более детальное сообщение об ошибке в зависимости от причины
+      if (!GEMINI_API_KEY && !ANTHROPIC_API_KEY) {
+        answer = `🔧 К сожалению, AI ассистент временно недоступен из-за отсутствия API ключей.
+        
+Чтобы исправить это:
+1. Добавьте переменную GEMINI_API_KEY в настройки окружения
+2. Получите ключ на https://ai.google.dev/
+3. Перезапустите приложение
+
+А пока свяжитесь с нами напрямую:
+📞 +7 (904) 047-63-83
+📧 aineuroexpert@gmail.com`;
+      } else if (error.message && error.message.includes('quota')) {
+        answer = `⚠️ Превышен лимит запросов к AI. Пожалуйста, попробуйте через несколько минут или свяжитесь с нами:
+📞 +7 (904) 047-63-83
+📧 aineuroexpert@gmail.com`;
+      } else {
+        answer = `😔 Извините, произошла техническая ошибка при обработке вашего запроса.
+        
+Пожалуйста, попробуйте еще раз или свяжитесь с нами напрямую:
+📞 +7 (904) 047-63-83
+📧 aineuroexpert@gmail.com
+
+Мы обязательно поможем!`;
+      }
       usedModel = 'error';
     }
 
