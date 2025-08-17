@@ -283,8 +283,9 @@ export default function AIDirectorCapabilities() {
           <motion.button
             onClick={() => {
               // Открыть чат
-              const event = new CustomEvent('openAIChat');
-              window.dispatchEvent(event);
+              import('@/app/utils/aiChat').then(({ openAIChat }) => {
+                openAIChat();
+              });
             }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}

@@ -125,12 +125,9 @@ export default function JourneySection(): JSX.Element {
           <motion.button
             onClick={() => {
               // Открываем AI чат с предзаполненным сообщением
-              const event = new CustomEvent('openAIChat', { 
-                detail: { 
-                  message: 'Здравствуйте! Меня интересует бесплатный аудит бизнеса. Расскажите подробнее, что входит в аудит и как его получить?' 
-                } 
+              import('@/app/utils/aiChat').then(({ openAIChat }) => {
+                openAIChat('Здравствуйте! Меня интересует бесплатный аудит бизнеса. Расскажите подробнее, что входит в аудит и как его получить?');
               });
-              window.dispatchEvent(event);
             }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}

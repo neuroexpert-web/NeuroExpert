@@ -378,12 +378,9 @@ export default function ROICalculator(): JSX.Element {
                     </p>
                     <motion.button
                       onClick={() => {
-                        const event = new CustomEvent('openAIChat', { 
-                          detail: { 
-                            message: `Здравствуйте! Я рассчитал ROI и получил ${results.roi}% за 3 года. Расскажите подробнее, как вы можете помочь достичь таких результатов?` 
-                          } 
+                        import('@/app/utils/aiChat').then(({ openAIChat }) => {
+                          openAIChat(`Здравствуйте! Я рассчитал ROI и получил ${results.roi}% за 3 года. Расскажите подробнее, как вы можете помочь достичь таких результатов?`);
                         });
-                        window.dispatchEvent(event);
                       }}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}

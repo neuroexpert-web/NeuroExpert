@@ -24,12 +24,9 @@ export default function PricingSection(): JSX.Element {
     setSelectedPlan(planName);
     // Открываем чат с AI директором с предзаполненным сообщением
     setTimeout(() => {
-      const event = new CustomEvent('openAIChat', { 
-        detail: { 
-          message: `Здравствуйте! Меня интересует тариф "${planName}". Расскажите подробнее о возможностях и как начать работу.` 
-        } 
+      import('@/app/utils/aiChat').then(({ openAIChat }) => {
+        openAIChat(`Здравствуйте! Меня интересует тариф "${planName}". Расскажите подробнее о возможностях и как начать работу.`);
       });
-      window.dispatchEvent(event);
     }, 300);
   };
 
@@ -177,12 +174,9 @@ export default function PricingSection(): JSX.Element {
               <button 
                 className="btn-luxury btn-gold"
                 onClick={() => {
-                  const event = new CustomEvent('openAIChat', { 
-                    detail: { 
-                      message: 'Здравствуйте! Помогите выбрать подходящий тариф для моего бизнеса.' 
-                    } 
+                  import('@/app/utils/aiChat').then(({ openAIChat, AI_CHAT_MESSAGES }) => {
+                    openAIChat(AI_CHAT_MESSAGES.PRICING_INFO);
                   });
-                  window.dispatchEvent(event);
                 }}
               >
                 <span>Консультация AI</span>

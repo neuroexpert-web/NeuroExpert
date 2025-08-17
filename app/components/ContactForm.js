@@ -565,8 +565,9 @@ export default function ContactForm() {
             </motion.a>
             <motion.button
               onClick={() => {
-                const event = new CustomEvent('openAIChat');
-                window.dispatchEvent(event);
+                import('@/app/utils/aiChat').then(({ openAIChat, AI_CHAT_MESSAGES }) => {
+                  openAIChat(AI_CHAT_MESSAGES.CONTACT_SUPPORT);
+                });
               }}
               whileHover={{ scale: 1.05 }}
               style={{
