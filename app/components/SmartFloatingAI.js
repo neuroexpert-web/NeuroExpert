@@ -3,7 +3,15 @@ import { useState, useEffect, useRef } from 'react';
 
 export default function SmartFloatingAI() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([]);
+  // История сообщений хранится в localStorage -> диалог не пропадает после перезагрузки
+  const [messages, setMessages] = useState(() => {
+    if (typeof window === 'undefined') return [];
+    try {
+      return JSON.parse(localStorage.getItem('ai_messages') || '[]');
+    } catch {
+      return [];
+    }
+  });
   const [context, setContext] = useState({
     industry: null,
     companySize: null,
@@ -28,6 +36,15 @@ export default function SmartFloatingAI() {
 
   useEffect(() => {
     scrollToBottom();
+  }, [messages]);
+
+  // Сохраняем историю сообщений при каждом изменении
+  useEffect(() => {
+    if (messages && messages.length) {
+      try {
+        localStorage.setItem('ai_messages', JSON.stringify(messages));
+      } catch {}
+    }
   }, [messages]);
 
   const quickQuestions = [
@@ -189,11 +206,20 @@ export default function SmartFloatingAI() {
     }
   };
 
-  const handleKeyPress = (e) => {
+  const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
+  };
+
+  // Очистка истории диалога
+  const clearHistory = () => {
+    setMessages([]);
+    try {
+      localStorage.removeItem('ai_messages');
+      localStorage.removeItem('chatHistory');
+    } catch {}
   };
 
   return (
@@ -251,6 +277,13 @@ export default function SmartFloatingAI() {
                 >
                   <span className="model-icon">🧠</span>
                   Claude
+                </button>
+                <button
+                  className="model-btn"
+                  onClick={clearHistory}
+                  title="Очистить историю диалога"
+                >
+                  🗑
                 </button>
               </div>
               <button 
@@ -345,13 +378,19 @@ export default function SmartFloatingAI() {
           )}
 
           <div className="ai-input-area">
-            <input
-              type="text"
+            <textarea
               value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyPress={handleKeyPress}
+              onChange={(e) => {
+                setInput(e.target.value);
+                // Auto-resize textarea height
+                e.target.style.height = 'auto';
+                e.target.style.height = `${e.target.scrollHeight}px`;
+              }}
+              onKeyDown={handleKeyDown}
               placeholder="Введите ваш вопрос..."
               disabled={isLoading}
+              rows={1}
+              style={{ resize: 'none' }}
             />
             <button
               onClick={() => sendMessage()}
@@ -785,7 +824,7 @@ export default function SmartFloatingAI() {
             border-top: 1px solid rgba(255, 255, 255, 0.1);
           }
 
-          .ai-input-area input {
+          .ai-input-area input, .ai-input-area textarea {
             flex: 1;
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -797,12 +836,12 @@ export default function SmartFloatingAI() {
             transition: all 0.3s ease;
           }
 
-          .ai-input-area input:focus {
+          .ai-input-area input:focus, .ai-input-area textarea:focus {
             border-color: #4f46e5;
             background: rgba(255, 255, 255, 0.15);
           }
 
-          .ai-input-area input::placeholder {
+          .ai-input-area input::placeholder, .ai-input-area textarea::placeholder {
             color: #94a3b8;
           }
 
