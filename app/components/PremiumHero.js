@@ -1,9 +1,20 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
 export default function PremiumHero() {
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   // Добавляем стили анимаций
   useEffect(() => {
     const style = document.createElement('style');
@@ -108,7 +119,8 @@ export default function PremiumHero() {
 
     // Create nodes для нейронной сети
     const nodes = [];
-    for (let i = 0; i < 20; i++) {
+    const nodeCount = window.innerWidth < 768 ? 10 : 20;
+    for (let i = 0; i < nodeCount; i++) {
       nodes.push(new Node());
     }
     particlesRef.current = nodes;
@@ -257,7 +269,7 @@ export default function PremiumHero() {
         position: 'relative',
         zIndex: 10,
         textAlign: 'center',
-        padding: '0 16px',
+        padding: isMobile ? '0 16px' : '0 24px',
         maxWidth: '1152px',
         margin: '0 auto'
       }}>
@@ -331,9 +343,9 @@ export default function PremiumHero() {
             }}
             style={{
               position: 'relative',
-              padding: '16px 40px',
+              padding: isMobile ? '14px 28px' : '16px 40px',
               fontWeight: '700',
-              fontSize: '18px',
+              fontSize: isMobile ? '16px' : '18px',
               letterSpacing: '0.02em',
               color: 'white',
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -413,9 +425,9 @@ export default function PremiumHero() {
             }}
             style={{
               position: 'relative',
-              padding: '16px 40px',
+              padding: isMobile ? '14px 28px' : '16px 40px',
               fontWeight: '600',
-              fontSize: '18px',
+              fontSize: isMobile ? '16px' : '18px',
               color: 'white',
               background: 'transparent',
               border: '2px solid transparent',
