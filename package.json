@@ -26,20 +26,20 @@
     "generate:password": "node scripts/generate-password.js"
   },
   "dependencies": {
-    "@google/generative-ai": "^0.15.0",
-    "bcryptjs": "^2.4.3",
+    "@google/generative-ai": "^0.24.1",
+    "@types/node": "^20.10.6",
+    "@types/react": "^18.2.46",
+    "@types/react-dom": "^18.2.18",
+    "bcryptjs": "^3.0.2",
     "critters": "^0.0.23",
-    "date-fns": "^3.2.0",
-    "framer-motion": "^10.18.0",
+    "date-fns": "^4.1.0",
+    "framer-motion": "^12.23.12",
     "jsonwebtoken": "^9.0.2",
     "next": "^14.2.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "styled-jsx": "^5.1.7",
-    "typescript": "^5.3.3",
-    "@types/node": "^20.10.6",
-    "@types/react": "^18.2.46",
-    "@types/react-dom": "^18.2.18"
+    "typescript": "^5.3.3"
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^5.0.0",
@@ -56,6 +56,7 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-security": "^1.7.1",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "prettier": "^3.1.1"

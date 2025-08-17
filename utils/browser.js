@@ -186,7 +186,7 @@ export const getConnection = () => {
   return 'unknown';
 };
 
-export default {
+const browserUtils = {
   isBrowser,
   isServer,
   getWindow,
@@ -205,3 +205,5 @@ export default {
   safeConsole,
   safeWindowGlobal
 };
+
+export default browserUtils;

@@ -3,133 +3,97 @@
  * Protects against brute force and DDoS attacks
  */
 
+// Rate limiting middleware для защиты API endpoints
 const rateLimit = new Map();
 
-// Configuration
-const RATE_LIMIT_CONFIG = {
-  windowMs: 60 * 1000, // 1 minute
-  max: {
-    default: 60,        // 60 requests per minute by default
-    auth: 5,            // 5 login attempts per minute
-    ai: 20,             // 20 AI requests per minute
-    contact: 5,         // 5 contact form submissions per minute
-  },
-  message: 'Too many requests, please try again later.',
-  standardHeaders: true,
-  legacyHeaders: false,
+// Конфигурация лимитов для разных endpoints
+const RATE_LIMITS = {
+  '/api/assistant': { windowMs: 60000, max: 10 }, // 10 запросов в минуту
+  '/api/contact-form': { windowMs: 300000, max: 5 }, // 5 запросов в 5 минут
+  '/api/admin/auth': { windowMs: 900000, max: 5 }, // 5 попыток входа в 15 минут
+  '/api/telegram-notify': { windowMs: 60000, max: 20 }, // 20 уведомлений в минуту
+  'default': { windowMs: 60000, max: 30 } // 30 запросов в минуту по умолчанию
 };
 
-/**
- * Get client identifier (IP address with fallbacks)
- */
-function getClientId(req) {
-  return req.headers['x-forwarded-for']?.split(',')[0].trim() ||
-         req.headers['x-real-ip'] ||
-         req.connection?.remoteAddress ||
-         req.socket?.remoteAddress ||
-         'unknown';
+// Функция для получения IP адреса клиента
+function getClientIp(request) {
+  const forwarded = request.headers.get('x-forwarded-for');
+  const ip = forwarded ? forwarded.split(',')[0] : request.headers.get('x-real-ip');
+  return ip || 'unknown';
 }
 
-/**
- * Clean up old entries from rate limit map
- */
-function cleanupOldEntries() {
-  const now = Date.now();
-  for (const [key, data] of rateLimit.entries()) {
-    if (now - data.firstRequest > RATE_LIMIT_CONFIG.windowMs) {
-      rateLimit.delete(key);
-    }
-  }
-}
-
-/**
- * Rate limiting middleware factory
- * @param {string} endpoint - The endpoint type (auth, ai, contact, etc.)
- * @returns {Function} Middleware function
- */
-export function createRateLimiter(endpoint = 'default') {
-  const maxRequests = RATE_LIMIT_CONFIG.max[endpoint] || RATE_LIMIT_CONFIG.max.default;
-
-  return async function rateLimitMiddleware(req, res, next) {
-    // Skip rate limiting in development
-    if (process.env.NODE_ENV === 'development') {
-      return next ? next() : undefined;
-    }
-
-    const clientId = getClientId(req);
-    const key = `${clientId}:${endpoint}`;
+// Основная функция rate limiting
+export function rateLimitMiddleware(pathname) {
+  return async function(request) {
+    const clientIp = getClientIp(request);
+    const key = `${clientIp}:${pathname}`;
     const now = Date.now();
-
-    // Clean up old entries periodically
-    if (Math.random() < 0.01) { // 1% chance
-      cleanupOldEntries();
+    
+    // Получаем конфигурацию для endpoint
+    const config = RATE_LIMITS[pathname] || RATE_LIMITS.default;
+    
+    // Получаем текущие данные для клиента
+    if (!rateLimit.has(key)) {
+      rateLimit.set(key, { count: 0, resetTime: now + config.windowMs });
     }
-
-    // Get or create client data
-    let clientData = rateLimit.get(key);
-    if (!clientData) {
-      clientData = {
-        count: 0,
-        firstRequest: now,
-      };
-      rateLimit.set(key, clientData);
-    }
-
-    // Check if window has expired
-    if (now - clientData.firstRequest > RATE_LIMIT_CONFIG.windowMs) {
+    
+    const clientData = rateLimit.get(key);
+    
+    // Проверяем, нужно ли сбросить счетчик
+    if (now > clientData.resetTime) {
       clientData.count = 0;
-      clientData.firstRequest = now;
+      clientData.resetTime = now + config.windowMs;
     }
-
-    // Increment request count
+    
+    // Увеличиваем счетчик
     clientData.count++;
-
-    // Set rate limit headers
-    if (res && typeof res.setHeader === 'function') {
-      res.setHeader('X-RateLimit-Limit', maxRequests);
-      res.setHeader('X-RateLimit-Remaining', Math.max(0, maxRequests - clientData.count));
-      res.setHeader('X-RateLimit-Reset', new Date(clientData.firstRequest + RATE_LIMIT_CONFIG.windowMs).toISOString());
+    
+    // Проверяем лимит
+    if (clientData.count > config.max) {
+      const retryAfter = Math.ceil((clientData.resetTime - now) / 1000);
+      
+      return new Response(
+        JSON.stringify({
+          error: 'Too many requests',
+          message: `Rate limit exceeded. Try again in ${retryAfter} seconds.`,
+          retryAfter
+        }),
+        {
+          status: 429,
+          headers: {
+            'Content-Type': 'application/json',
+            'X-RateLimit-Limit': config.max.toString(),
+            'X-RateLimit-Remaining': '0',
+            'X-RateLimit-Reset': clientData.resetTime.toString(),
+            'Retry-After': retryAfter.toString()
+          }
+        }
+      );
     }
-
-    // Check if limit exceeded
-    if (clientData.count > maxRequests) {
-      if (res && typeof res.status === 'function') {
-        return res.status(429).json({
-          error: RATE_LIMIT_CONFIG.message,
-          retryAfter: Math.ceil((clientData.firstRequest + RATE_LIMIT_CONFIG.windowMs - now) / 1000),
-        });
+    
+    // Возвращаем headers с информацией о лимите
+    return {
+      headers: {
+        'X-RateLimit-Limit': config.max.toString(),
+        'X-RateLimit-Remaining': (config.max - clientData.count).toString(),
+        'X-RateLimit-Reset': clientData.resetTime.toString()
       }
-      return false; // For non-HTTP contexts
-    }
-
-    // Continue to next middleware
-    return next ? next() : true;
+    };
   };
 }
 
-/**
- * Wrapper for Next.js API routes
- */
-export function withRateLimit(handler, endpoint = 'default') {
-  const rateLimiter = createRateLimiter(endpoint);
-  
-  return async (req, res) => {
-    return new Promise((resolve) => {
-      rateLimiter(req, res, async () => {
-        resolve(await handler(req, res));
-      });
+// Периодическая очистка старых записей (каждые 5 минут)
+if (typeof setInterval !== 'undefined') {
+  setInterval(() => {
+    const now = Date.now();
+    const keysToDelete = [];
+    
+    rateLimit.forEach((data, key) => {
+      if (now > data.resetTime + 300000) { // Удаляем записи старше 5 минут после сброса
+        keysToDelete.push(key);
+      }
     });
-  };
+    
+    keysToDelete.forEach(key => rateLimit.delete(key));
+  }, 300000);
 }
-
-/**
- * Rate limit check for non-HTTP contexts
- */
-export function checkRateLimit(clientId, endpoint = 'default') {
-  const req = { headers: { 'x-real-ip': clientId } };
-  const rateLimiter = createRateLimiter(endpoint);
-  return rateLimiter(req, {}, () => true);
-}
-
-// Export configurations for customization
-export const rateLimitConfig = RATE_LIMIT_CONFIG;

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { withRateLimit } from '../../middleware/rateLimit';
+import { rateLimitMiddleware } from '../../middleware/rateLimit';
 
-async function handler(request) {
+async function contactFormHandler(request) {
   try {
     const data = await request.json();
     
@@ -111,4 +111,21 @@ async function handler(request) {
 }
 
 // Export with rate limiting
-export const POST = withRateLimit(handler, 'contact');
+export async function POST(request) {
+  const rateLimitCheck = await rateLimitMiddleware('/api/contact-form')(request);
+  
+  if (rateLimitCheck instanceof Response) {
+    // Rate limit exceeded
+    return rateLimitCheck;
+  }
+  
+  // Process request with rate limit headers
+  const response = await contactFormHandler(request);
+  
+  // Add rate limit headers to response
+  Object.entries(rateLimitCheck.headers).forEach(([key, value]) => {
+    response.headers.set(key, value);
+  });
+  
+  return response;
+}
