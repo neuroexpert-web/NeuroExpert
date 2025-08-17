@@ -4,7 +4,7 @@
 
 ### 🔍 **САМЫЕ ЧАСТЫЕ ПРИЧИНЫ:**
 
-#### **1. Отсутствует GEMINI_API_KEY (90% случаев)**
+#### **1. Отсутствует GOOGLE_GEMINI_API_KEY (90% случаев)**
 ```
 СИМПТОМЫ:
 - Сайт крутится в загрузке
@@ -13,7 +13,7 @@
 
 РЕШЕНИЕ:
 1. Netlify Dashboard → Site Settings → Environment variables
-2. Add variable: GEMINI_API_KEY = ваш_ключ_от_google_ai
+2. Add variable: GOOGLE_GEMINI_API_KEY = ваш_ключ_от_google_ai
 3. Redeploy site
 ```
 
@@ -68,7 +68,7 @@
 ```
 1. Site Settings → Environment variables
 2. ОБЯЗАТЕЛЬНО должны быть:
-   - GEMINI_API_KEY (начинается с AIza...)
+   - GOOGLE_GEMINI_API_KEY (начинается с AIza...)
    - NODE_ENV = production
 ```
 
@@ -91,7 +91,7 @@
 ```
 Site Settings → Environment variables → Add variable:
 
-1. GEMINI_API_KEY
+1. GOOGLE_GEMINI_API_KEY
    Value: AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 2. NODE_ENV  
@@ -168,7 +168,7 @@ F12 → Console
 ### **Ошибка: "Application error"**
 ```
 ПРИЧИНА: Проблема с Functions или Environment variables
-РЕШЕНИЕ: Добавить GEMINI_API_KEY и Redeploy
+РЕШЕНИЕ: Добавить GOOGLE_GEMINI_API_KEY и Redeploy
 ```
 
 ### **Ошибка: "Page Not Found"**
@@ -186,7 +186,7 @@ F12 → Console
 ### **Ошибка: "500 Internal Server Error"**
 ```
 ПРИЧИНА: Проблемы с Netlify Functions
-РЕШЕНИЕ: Проверить GEMINI_API_KEY и логи Functions
+РЕШЕНИЕ: Проверить GOOGLE_GEMINI_API_KEY и логи Functions
 ```
 
 ---
@@ -197,7 +197,7 @@ F12 → Console
 □ Build прошел успешно (зеленый в Deploys)
 □ Publish directory: .next
 □ Functions directory: netlify/functions  
-□ GEMINI_API_KEY добавлен
+□ GOOGLE_GEMINI_API_KEY добавлен
 □ NODE_ENV = production
 □ В Functions видны 4 функции
 □ В браузере очищен кэш (Ctrl+Shift+R)
@@ -209,7 +209,7 @@ F12 → Console
 # 🎯 **ПЕРВОЕ ДЕЙСТВИЕ ПРЯМО СЕЙЧАС:**
 
 ## **1. Откройте F12 → Console и найдите ошибки**
-## **2. Проверьте есть ли GEMINI_API_KEY в Netlify**  
+## **2. Проверьте есть ли GOOGLE_GEMINI_API_KEY в Netlify**  
 ## **3. Сделайте Redeploy site**
 
 **90% проблем решается этими тремя действиями!** 🚀
