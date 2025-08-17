@@ -207,17 +207,25 @@ async function handler(request) {
       usedModel = 'error';
     }
 
+    // Персонализация и эмоциональный тон
+    const personalized = personalizeResponse(answer, context);
+    // Определяем эмоцию: для pricing/timeline – excitement, trust – trust, иначе professional
+    const primaryIntent = analyzeUserIntent(question)[0];
+    const emotionMap = { pricing: 'excitement', timeline: 'excitement', trust: 'trust', services: 'professional' };
+    const emotion = emotionMap[primaryIntent] || 'professional';
+    const finalAnswer = addEmotionalTone(personalized, emotion);
+
     const responseTime = Date.now() - startTime;
 
     // Отправляем уведомление в Telegram
-    sendTelegramNotification(question, answer, usedModel).catch(console.error);
+    sendTelegramNotification(question, finalAnswer, usedModel).catch(console.error);
 
     // Анализируем интент для follow-up
     const intent = analyzeUserIntent(question);
     const followUpQuestions = generateFollowUpQuestions(intent[0], context);
 
     return NextResponse.json({
-      answer,
+      answer: finalAnswer,
       model: usedModel,
       responseTime,
       intent,
