@@ -10,7 +10,15 @@
   
   /* Hero секция */
   .premium-hero {
-    min-height: 100vh;
+    min-height: auto;
+    height: auto;
+    padding: 60px 16px 40px !important;
+  }
+  
+  /* Первый блок специфично */
+  section:first-of-type {
+    min-height: auto !important;
+    height: auto !important;
     padding: 60px 16px 40px !important;
   }
   

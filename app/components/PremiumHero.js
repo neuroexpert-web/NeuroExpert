@@ -171,13 +171,14 @@ export default function PremiumHero() {
   return (
     <section style={{
       position: 'relative',
-      minHeight: '100vh',
+      minHeight: isMobile ? 'auto' : '100vh',
+      height: isMobile ? 'auto' : '100vh',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       overflow: 'hidden',
       background: 'linear-gradient(to bottom, #0a0a1e 0%, #1a1a2e 100%)',
-      padding: isMobile ? '40px 0' : '0'
+      padding: isMobile ? '60px 0 40px' : '0'
     }}>
 
 
@@ -271,8 +272,9 @@ export default function PremiumHero() {
         zIndex: 10,
         textAlign: 'center',
         padding: isMobile ? '0 16px' : '0 24px',
-        maxWidth: '1152px',
-        margin: '0 auto'
+        maxWidth: isMobile ? '100%' : '1152px',
+        margin: '0 auto',
+        width: '100%'
       }}>
 
 
@@ -303,8 +305,8 @@ export default function PremiumHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
         >
-          Премиум платформа для создания интеллектуальных бизнес-решений
-          с использованием передовых AI технологий
+          Увеличьте прибыль на 40% с помощью AI. Автоматизация процессов,
+          умная аналитика и персонализированные решения для вашего бизнеса
         </motion.p>
 
         {/* Local styles for animated logo */}
@@ -361,9 +363,9 @@ export default function PremiumHero() {
             }}
             style={{
               position: 'relative',
-              padding: isMobile ? '14px 28px' : '16px 40px',
+              padding: isMobile ? '12px 24px' : '16px 40px',
               fontWeight: '700',
-              fontSize: isMobile ? '16px' : '18px',
+              fontSize: isMobile ? '14px' : '18px',
               letterSpacing: '0.02em',
               color: 'white',
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -376,7 +378,7 @@ export default function PremiumHero() {
               gap: '10px',
               overflow: 'hidden',
               transition: 'all 0.3s ease',
-              width: isMobile ? '100%' : 'auto',
+              width: isMobile ? 'auto' : 'auto',
               justifyContent: 'center'
             }}
             whileHover={{ 
@@ -445,9 +447,9 @@ export default function PremiumHero() {
             }}
             style={{
               position: 'relative',
-              padding: isMobile ? '14px 28px' : '16px 40px',
+              padding: isMobile ? '12px 24px' : '16px 40px',
               fontWeight: '600',
-              fontSize: isMobile ? '16px' : '18px',
+              fontSize: isMobile ? '14px' : '18px',
               color: 'white',
               background: 'transparent',
               border: '2px solid transparent',
@@ -457,7 +459,7 @@ export default function PremiumHero() {
               backgroundOrigin: 'border-box',
               backgroundClip: 'padding-box, border-box',
               overflow: 'hidden',
-              width: isMobile ? '100%' : 'auto',
+              width: isMobile ? 'auto' : 'auto',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center'
@@ -522,69 +524,76 @@ export default function PremiumHero() {
         <motion.div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '32px',
-            marginTop: '80px',
+            gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: isMobile ? '16px' : '32px',
+            marginTop: isMobile ? '40px' : '80px',
             maxWidth: '800px',
-            margin: '80px auto 0'
+            margin: isMobile ? '40px auto 0' : '80px auto 0',
+            padding: isMobile ? '0 20px' : '0'
           }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
         >
           <div style={{
-            padding: '24px',
-            background: 'rgba(255, 255, 255, 0.05)',
+            padding: isMobile ? '20px' : '24px',
+            background: 'rgba(255, 255, 255, 0.1)',
             backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
             borderRadius: '16px',
-            textAlign: 'center'
+            textAlign: 'center',
+            boxShadow: '0 8px 32px rgba(99, 102, 241, 0.1)'
           }}>
+            <div style={{ fontSize: '2rem', marginBottom: '8px' }}>🚀</div>
             <h3 style={{
-              fontSize: '2.5rem',
+              fontSize: isMobile ? '2rem' : '2.5rem',
               fontWeight: 'bold',
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               marginBottom: '8px'
             }}>2-4</h3>
-            <p style={{ color: '#94a3b8' }}>Недели до запуска</p>
+            <p style={{ color: '#cbd5e1', fontSize: isMobile ? '14px' : '16px' }}>Недели до запуска</p>
           </div>
           <div style={{
-            padding: '24px',
-            background: 'rgba(255, 255, 255, 0.05)',
+            padding: isMobile ? '20px' : '24px',
+            background: 'rgba(255, 255, 255, 0.1)',
             backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
             borderRadius: '16px',
-            textAlign: 'center'
+            textAlign: 'center',
+            boxShadow: '0 8px 32px rgba(99, 102, 241, 0.1)'
           }}>
+            <div style={{ fontSize: '2rem', marginBottom: '8px' }}>📈</div>
             <h3 style={{
-              fontSize: '2.5rem',
+              fontSize: isMobile ? '2rem' : '2.5rem',
               fontWeight: 'bold',
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               marginBottom: '8px'
             }}>40%</h3>
-            <p style={{ color: '#94a3b8' }}>Рост конверсии</p>
+            <p style={{ color: '#cbd5e1', fontSize: isMobile ? '14px' : '16px' }}>Рост конверсии</p>
           </div>
           <div style={{
-            padding: '24px',
-            background: 'rgba(255, 255, 255, 0.05)',
+            padding: isMobile ? '20px' : '24px',
+            background: 'rgba(255, 255, 255, 0.1)',
             backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
             borderRadius: '16px',
-            textAlign: 'center'
+            textAlign: 'center',
+            boxShadow: '0 8px 32px rgba(99, 102, 241, 0.1)'
           }}>
+            <div style={{ fontSize: '2rem', marginBottom: '8px' }}>🤖</div>
             <h3 style={{
-              fontSize: '2.5rem',
+              fontSize: isMobile ? '2rem' : '2.5rem',
               fontWeight: 'bold',
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               marginBottom: '8px'
             }}>24/7</h3>
-            <p style={{ color: '#94a3b8' }}>AI поддержка</p>
+            <p style={{ color: '#cbd5e1', fontSize: isMobile ? '14px' : '16px' }}>AI поддержка</p>
           </div>
         </motion.div>
       </div>
