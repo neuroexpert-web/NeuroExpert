@@ -294,7 +294,14 @@ export default function PremiumHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <span className="gradient-text-anim" style={{ animationDuration: isMobile ? '12s' : '6s' }}>NeuroExpert</span>
+          <motion.span
+            className="gradient-text-anim"
+            style={{ animationDuration: isMobile ? '20s' : '12s', display: 'inline-block' }}
+            animate={{ y: [0, -3, 0, 3, 0] }}
+            transition={{ duration: isMobile ? 14 : 10, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            NeuroExpert
+          </motion.span>
         </motion.h1>
 
         <motion.h2
@@ -547,7 +554,7 @@ export default function PremiumHero() {
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               marginBottom: '8px'
-            }}>⏱️ 2–4</h3>
+            }}>⏰✨ 2–4</h3>
             <p style={{ color: '#94a3b8' }}>Недели до запуска</p>
           </div>
           <div style={{
@@ -565,7 +572,7 @@ export default function PremiumHero() {
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               marginBottom: '8px'
-            }}>📈 40%</h3>
+            }}>📈🚀 40%</h3>
             <p style={{ color: '#94a3b8' }}>Рост конверсии</p>
           </div>
           <div style={{
@@ -583,42 +590,13 @@ export default function PremiumHero() {
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               marginBottom: '8px'
-            }}>🤖 24/7</h3>
+            }}>🤖⚡ 24/7</h3>
             <p style={{ color: '#94a3b8' }}>AI поддержка</p>
           </div>
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        style={{
-          position: 'absolute',
-          bottom: '32px',
-          left: '50%',
-          transform: 'translateX(-50%)'
-        }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2 }}
-      >
-        <div style={{
-          width: '24px',
-          height: '40px',
-          border: '2px solid rgba(255, 255, 255, 0.3)',
-          borderRadius: '20px',
-          display: 'flex',
-          justifyContent: 'center'
-        }}>
-          <div style={{
-            width: '4px',
-            height: '12px',
-            background: 'rgba(255, 255, 255, 0.5)',
-            borderRadius: '2px',
-            marginTop: '8px',
-            animation: 'bounce 2s infinite'
-          }}></div>
-        </div>
-      </motion.div>
+      {/* Scroll indicator removed as requested */}
     </section>
   );
 }
