@@ -167,14 +167,19 @@ async function handler(request) {
   try {
     const { question, model = 'gemini', context = {} } = await request.json();
     
-    console.log('Assistant API called:', { question, model });
-    console.log('API Keys available:', { 
-      gemini: !!GEMINI_API_KEY, 
-      claude: !!ANTHROPIC_API_KEY 
-    });
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('Assistant API called:', { question, model });
+      console.log('API Keys available:', { 
+        gemini: !!GEMINI_API_KEY, 
+        claude: !!ANTHROPIC_API_KEY 
+      });
+    }
     
-    if (!question) {
+    if (!question || typeof question !== 'string' || question.trim().length === 0) {
       return NextResponse.json({ error: 'Вопрос обязателен' }, { status: 400 });
+    }
+    if (question.length > 4000) {
+      return NextResponse.json({ error: 'Вопрос слишком длинный' }, { status: 413 });
     }
 
     // Создаём улучшенный промпт
@@ -222,7 +227,7 @@ async function handler(request) {
       responseTime,
       intent,
       followUpQuestions,
-      emotion: 'professional' // Можно добавить анализ эмоций
+      emotion: 'professional'
     });
 
   } catch (error) {
