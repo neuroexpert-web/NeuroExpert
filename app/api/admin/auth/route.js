@@ -11,7 +11,7 @@ async function postHandler(request) {
     if (!JWT_SECRET || !ADMIN_PASSWORD_HASH) {
       return NextResponse.json(
         { error: 'Server configuration error' },
-        { status: 503 }
+        { status: 503, headers: { 'Cache-Control': 'no-store' } }
       );
     }
     const { password } = await request.json();
@@ -19,7 +19,7 @@ async function postHandler(request) {
     if (!password) {
       return NextResponse.json(
         { error: 'Password is required' },
-        { status: 400 }
+        { status: 400, headers: { 'Cache-Control': 'no-store' } }
       );
     }
 
@@ -53,7 +53,7 @@ async function postHandler(request) {
     console.error('Admin auth error:', error);
     return NextResponse.json(
       { error: 'Authentication failed' },
-      { status: 500 }
+      { status: 500, headers: { 'Cache-Control': 'no-store' } }
     );
   }
 }
@@ -66,7 +66,7 @@ async function getHandler(request) {
     if (!JWT_SECRET) {
       return NextResponse.json(
         { valid: false, error: 'Server configuration error' },
-        { status: 503 }
+        { status: 503, headers: { 'Cache-Control': 'no-store' } }
       );
     }
     const authHeader = request.headers.get('authorization');
@@ -96,7 +96,7 @@ async function getHandler(request) {
     console.error('Token verification error:', error);
     return NextResponse.json(
       { valid: false },
-      { status: 500 }
+      { status: 500, headers: { 'Cache-Control': 'no-store' } }
     );
   }
 }
