@@ -215,6 +215,20 @@ export default function ContactForm() {
         }
         
         @media (max-width: 768px) {
+          .contact-section {
+            padding: 20px 16px !important;
+          }
+          
+          .form-container {
+            padding: 24px 16px !important;
+            margin: 0 !important;
+          }
+          
+          input, textarea {
+            font-size: 16px !important;
+            padding: 16px !important;
+          }
+          
           .mobile-focused .form-container {
             max-width: 100% !important;
             width: 100% !important;

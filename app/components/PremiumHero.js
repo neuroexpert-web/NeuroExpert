@@ -176,7 +176,8 @@ export default function PremiumHero() {
       alignItems: 'center',
       justifyContent: 'center',
       overflow: 'hidden',
-      background: 'linear-gradient(to bottom, #0a0a1e 0%, #1a1a2e 100%)'
+      background: 'linear-gradient(to bottom, #0a0a1e 0%, #1a1a2e 100%)',
+      padding: isMobile ? '40px 0' : '0'
     }}>
 
 
@@ -277,9 +278,9 @@ export default function PremiumHero() {
 
         <motion.h1
           style={{
-            fontSize: 'clamp(3rem, 8vw, 6rem)',
+            fontSize: isMobile ? 'clamp(2.5rem, 10vw, 3.5rem)' : 'clamp(3rem, 8vw, 6rem)',
             fontWeight: 'bold',
-            marginBottom: '24px',
+            marginBottom: isMobile ? '16px' : '24px',
             lineHeight: 1.1
           }}
           initial={{ opacity: 0, y: 20 }}
@@ -291,11 +292,12 @@ export default function PremiumHero() {
 
         <motion.p
           style={{
-            fontSize: 'clamp(1.125rem, 2vw, 1.5rem)',
+            fontSize: isMobile ? '1rem' : 'clamp(1.125rem, 2vw, 1.5rem)',
             color: '#cbd5e1',
-            marginBottom: '32px',
-            maxWidth: '768px',
-            margin: '0 auto 32px'
+            marginBottom: isMobile ? '24px' : '32px',
+            maxWidth: isMobile ? '90%' : '768px',
+            margin: isMobile ? '0 auto 24px' : '0 auto 32px',
+            lineHeight: isMobile ? 1.6 : 1.5
           }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -326,10 +328,13 @@ export default function PremiumHero() {
         <motion.div
           style={{
             display: 'flex',
-            flexDirection: 'row',
-            gap: '16px',
+            flexDirection: isMobile ? 'column' : 'row',
+            gap: isMobile ? '12px' : '16px',
             justifyContent: 'center',
-            flexWrap: 'wrap'
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            width: isMobile ? '100%' : 'auto',
+            padding: isMobile ? '0 20px' : '0'
           }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -370,7 +375,9 @@ export default function PremiumHero() {
               alignItems: 'center',
               gap: '10px',
               overflow: 'hidden',
-              transition: 'all 0.3s ease'
+              transition: 'all 0.3s ease',
+              width: isMobile ? '100%' : 'auto',
+              justifyContent: 'center'
             }}
             whileHover={{ 
               scale: 1.05,
@@ -449,7 +456,11 @@ export default function PremiumHero() {
               backgroundImage: 'linear-gradient(#0a0e27, #0a0e27), linear-gradient(135deg, #667eea, #764ba2)',
               backgroundOrigin: 'border-box',
               backgroundClip: 'padding-box, border-box',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              width: isMobile ? '100%' : 'auto',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
             }}
             whileHover={{ 
               scale: 1.05,

@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import './styles/premium-design-system.css'
 import './styles/premium-glass-sections.css'
+import './styles/mobile-fixes.css'
 import Script from 'next/script'
 
 // Оптимизированная загрузка шрифта
@@ -30,6 +31,8 @@ export const metadata = {
   alternates: {
     canonical: '/',
   },
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes',
+  themeColor: '#0a0e1a',
   openGraph: {
     title: 'NeuroExpert - AI-платформа для цифровизации бизнеса',
     description: 'Увеличьте прибыль на 40% с помощью AI',
