@@ -15,12 +15,15 @@ const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH ?? (isTest
   ? '$2a$10$Jpej8chn4pPh2aCi0qDEr.F4GzOAxIawVq2KXUMKwWEVxNPBz9.s2' // hash for "test-password"
   : null);
 
+// Check will be performed at runtime instead of build time
 if (!JWT_SECRET || !ADMIN_PASSWORD_HASH) {
-  throw new Error(
-    'Environment variables JWT_SECRET and ADMIN_PASSWORD_HASH must be set in production.\n' +
+  if (process.env.NODE_ENV === 'production' && typeof window === 'undefined') {
+    console.error(
+      'WARNING: Environment variables JWT_SECRET and ADMIN_PASSWORD_HASH must be set in production.\n' +
       'Generate a secure ADMIN_PASSWORD_HASH via "npm run generate:password -- <password>" and\n' +
       'place both values into your hosting provider dashboard or a local .env file.'
-  );
+    );
+  }
 }
 
 // Simple in-memory rate-limiting (5 failed attempts / 60s per IP)

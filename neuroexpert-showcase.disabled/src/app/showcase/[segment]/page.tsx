@@ -1,15 +1,15 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import ServicePackageCard from '../../../components/showcase/ServicePackageCard';
-import { getPackagesBySegment } from '../../../data/packages';
+import { getPackagesBySegment, Package } from '../../../data/packages';
 
 const SegmentPage = () => {
   const router = useRouter();
   const { segment } = router.query;
-  const [packages, setPackages] = useState([]);
+  const [packages, setPackages] = useState<Package[]>([]);
 
   useEffect(() => {
-    if (segment) {
+    if (segment && typeof segment === 'string') {
       const fetchedPackages = getPackagesBySegment(segment);
       setPackages(fetchedPackages);
     }

@@ -164,7 +164,7 @@ class MobileTester {
   }
 
   trackScrollPerformance() {
-    let scrollMetrics = {
+            const scrollMetrics = {
       scrollEvents: 0,
       jankyFrames: 0,
       scrollVelocity: [],

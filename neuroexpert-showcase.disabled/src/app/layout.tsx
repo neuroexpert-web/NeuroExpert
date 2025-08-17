@@ -5,7 +5,7 @@ import Navigation from '../components/layout/Navigation';
 import '../styles/components.css';
 import '../styles/showcase.css';
 
-const Layout = ({ children }) => {
+const Layout = ({ children }: { children: React.ReactNode }) => {
     return (
         <div>
             <Header />
