@@ -79,7 +79,11 @@ export default function SmartFloatingAI() {
       // Если есть предзаполненное сообщение, устанавливаем его
       if (event.detail && event.detail.message) {
         setTimeout(() => {
-          setUserInput(event.detail.message);
+          setInput(event.detail.message);
+          // Авто-отправка сообщения через 200 мс после открытия
+          setTimeout(() => {
+            sendMessage();
+          }, 200);
         }, 100);
       }
     };
