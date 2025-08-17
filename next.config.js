@@ -80,7 +80,7 @@ const nextConfig = {
           },
           {
             key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
+            value: 'DENY'
           },
           {
             key: 'X-Content-Type-Options',
@@ -99,6 +99,19 @@ const nextConfig = {
             value: ContentSecurityPolicy.replace(/\s{2,}/g, ' ').trim()
           }
         ],
+      },
+      {
+        source: '/api/:path*',
+        headers: [
+          {
+            key: 'X-Robots-Tag',
+            value: 'noindex'
+          },
+          {
+            key: 'Cache-Control',
+            value: 'no-store'
+          }
+        ]
       },
       {
         source: '/fonts/:path*',
