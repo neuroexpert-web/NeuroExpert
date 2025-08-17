@@ -19,13 +19,17 @@ export function middleware(request) {
       );
     }
 
-    // Additionally, we can enforce custom header presence for SPA fetches
-    const csrfHeader = request.headers.get('x-neuroexpert-csrf');
-    if (!csrfHeader) {
-      return NextResponse.json(
-        { error: 'CSRF protection: missing CSRF header.' },
-        { status: 403 }
-      );
+    // If Origin is present and same-site, allow. Otherwise require custom header.
+    if (origin && host && origin.includes(host)) {
+      // same-site, allow without extra header
+    } else {
+      const csrfHeader = request.headers.get('x-neuroexpert-csrf');
+      if (!csrfHeader) {
+        return NextResponse.json(
+          { error: 'CSRF protection: missing CSRF header.' },
+          { status: 403 }
+        );
+      }
     }
   }
 
