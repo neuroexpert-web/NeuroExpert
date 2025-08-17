@@ -11,7 +11,19 @@ async function handler(request) {
     if (!name || !email || !message) {
       return NextResponse.json(
         { error: 'Пожалуйста, заполните все обязательные поля' },
-        { status: 400 }
+        { status: 400, headers: { 'Cache-Control': 'no-store' } }
+      );
+    }
+    
+    // Basic length constraints (non-blocking unless extreme)
+    const MAX_NAME = 200;
+    const MAX_EMAIL = 320;
+    const MAX_PHONE = 50;
+    const MAX_MESSAGE = 5000;
+    if (name.length > MAX_NAME || email.length > MAX_EMAIL || (phone && phone.length > MAX_PHONE) || message.length > MAX_MESSAGE) {
+      return NextResponse.json(
+        { error: 'Слишком длинные данные формы' },
+        { status: 413, headers: { 'Cache-Control': 'no-store' } }
       );
     }
     
@@ -20,7 +32,7 @@ async function handler(request) {
     if (!emailRegex.test(email)) {
       return NextResponse.json(
         { error: 'Пожалуйста, введите корректный email' },
-        { status: 400 }
+        { status: 400, headers: { 'Cache-Control': 'no-store' } }
       );
     }
     
@@ -30,30 +42,31 @@ async function handler(request) {
       if (!phoneRegex.test(phone) || phone.length < 10) {
         return NextResponse.json(
           { error: 'Пожалуйста, введите корректный номер телефона' },
-          { status: 400 }
+          { status: 400, headers: { 'Cache-Control': 'no-store' } }
         );
       }
     }
     
-    // Log the submission (in production, save to database)
-    console.log('Contact form submission:', {
-      name,
-      email,
-      phone,
-      message,
-      timestamp: new Date().toISOString()
-    });
-    
-    // Log submission for debugging
-    console.log('New contact form submission:', {
-      name,
-      email,
-      phone,
-      message,
-      timestamp: new Date().toISOString(),
-      hasToken: !!process.env.TELEGRAM_BOT_TOKEN,
-      hasChatId: !!process.env.TELEGRAM_CHAT_ID
-    });
+    // Log the submission (avoid sensitive logs in production)
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('Contact form submission:', {
+        name,
+        email,
+        phone,
+        message,
+        timestamp: new Date().toISOString()
+      });
+      
+      console.log('New contact form submission:', {
+        name,
+        email,
+        phone,
+        message,
+        timestamp: new Date().toISOString(),
+        hasToken: !!process.env.TELEGRAM_BOT_TOKEN,
+        hasChatId: !!process.env.TELEGRAM_CHAT_ID
+      });
+    }
     
     // Send notification to Telegram if configured
     if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
@@ -99,13 +112,13 @@ async function handler(request) {
     return NextResponse.json({
       success: true,
       message: 'Спасибо за вашу заявку! Мы свяжемся с вами в ближайшее время.'
-    });
+    }, { headers: { 'Cache-Control': 'no-store' } });
     
   } catch (error) {
     console.error('Contact form error:', error);
     return NextResponse.json(
       { error: 'Произошла ошибка при отправке формы' },
-      { status: 500 }
+      { status: 500, headers: { 'Cache-Control': 'no-store' } }
     );
   }
 }

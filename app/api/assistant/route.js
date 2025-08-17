@@ -176,10 +176,10 @@ async function handler(request) {
     }
     
     if (!question || typeof question !== 'string' || question.trim().length === 0) {
-      return NextResponse.json({ error: 'Вопрос обязателен' }, { status: 400 });
+      return NextResponse.json({ error: 'Вопрос обязателен' }, { status: 400, headers: { 'Cache-Control': 'no-store' } });
     }
     if (question.length > 4000) {
-      return NextResponse.json({ error: 'Вопрос слишком длинный' }, { status: 413 });
+      return NextResponse.json({ error: 'Вопрос слишком длинный' }, { status: 413, headers: { 'Cache-Control': 'no-store' } });
     }
 
     // Создаём улучшенный промпт
@@ -228,13 +228,13 @@ async function handler(request) {
       intent,
       followUpQuestions,
       emotion: 'professional'
-    });
+    }, { headers: { 'Cache-Control': 'no-store' } });
 
   } catch (error) {
     console.error('Assistant API error:', error);
     return NextResponse.json(
       { error: 'Внутренняя ошибка сервера' },
-      { status: 500 }
+      { status: 500, headers: { 'Cache-Control': 'no-store' } }
     );
   }
 }
