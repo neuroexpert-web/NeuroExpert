@@ -334,6 +334,13 @@
   line-height: 1;
 }
 
+/* Стиль для эмодзи */
+.statItem:first-child .statNumber {
+  -webkit-text-fill-color: initial;
+  background: none;
+  filter: brightness(1.2);
+}
+
 .statLabel {
   font-size: 14px;
   color: #64748b;

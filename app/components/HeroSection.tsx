@@ -158,8 +158,8 @@ export default function HeroSection() {
             transition={{ duration: 1, delay: 0.8 }}
           >
             <div className={styles.statItem}>
-              <span className={styles.statNumber}>2-4</span>
-              <span className={styles.statLabel}>Недели до результата</span>
+              <span className={styles.statNumber}>🚀</span>
+              <span className={styles.statLabel}>Быстрый старт роста</span>
             </div>
             <div className={styles.statDivider} />
             <div className={styles.statItem}>
