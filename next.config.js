@@ -63,16 +63,22 @@ const nextConfig = {
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   
+  // Удаление console.log в production
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error', 'warn'],
+    } : false,
+  },
+
   // Улучшение производительности сборки
   experimental: {
     optimizeCss: true,
     optimizePackageImports: ['@google/generative-ai', 'framer-motion', 'date-fns'],
     turbo: {
-      loaders: {
-        '.svg': ['@svgr/webpack'],
+      rules: {
+        '*.svg': ['@svgr/webpack'],
       },
     },
-    swcMinify: true,
     cpus: 4,
   },
   
