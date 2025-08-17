@@ -462,8 +462,9 @@ export default function SmartFloatingAI() {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            width: 380px;
+            width: 420px;
             height: 600px;
+            max-height: 85vh;
             background: #0f172a;
             border-radius: 20px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
@@ -475,6 +476,7 @@ export default function SmartFloatingAI() {
             transition: all 0.3s ease;
             z-index: 1001;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
           }
 
           .ai-chat-window.open {
@@ -496,10 +498,13 @@ export default function SmartFloatingAI() {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
+            padding: 16px 20px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             background: linear-gradient(135deg, #1e293b, #0f172a);
             border-radius: 20px 20px 0 0;
+            flex-shrink: 0;
+            gap: 12px;
+            min-height: 70px;
           }
 
           .ai-header-left {
@@ -551,26 +556,32 @@ export default function SmartFloatingAI() {
           .ai-header-right {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            flex-shrink: 0;
+            max-width: 65%;
+            overflow: hidden;
           }
 
           .model-selector {
             display: flex;
-            gap: 8px;
+            gap: 6px;
+            flex-shrink: 0;
           }
 
           .model-btn {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
+            gap: 6px;
+            padding: 6px 12px;
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 20px;
             color: white;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
           }
 
           .model-btn:hover:not(:disabled) {
@@ -585,7 +596,7 @@ export default function SmartFloatingAI() {
           }
 
           .model-btn .model-icon {
-            font-size: 18px;
+            font-size: 16px;
           }
 
           .ai-close-btn {
@@ -652,10 +663,31 @@ export default function SmartFloatingAI() {
           .ai-messages {
             flex: 1;
             overflow-y: auto;
+            overflow-x: hidden;
             padding: 20px;
             display: flex;
             flex-direction: column;
             gap: 16px;
+            min-height: 0;
+            scroll-behavior: smooth;
+          }
+          
+          .ai-messages::-webkit-scrollbar {
+            width: 6px;
+          }
+          
+          .ai-messages::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+          }
+          
+          .ai-messages::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+          }
+          
+          .ai-messages::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
           }
 
           .ai-message {
@@ -950,6 +982,50 @@ export default function SmartFloatingAI() {
               max-width: 100%;
               max-height: 80vh;
               border-radius: 20px 20px 0 0;
+            }
+            
+            .ai-chat-window {
+              width: 100%;
+              height: 100vh;
+              max-height: 100vh;
+              bottom: 0;
+              right: 0;
+              left: 0;
+              border-radius: 20px 20px 0 0;
+            }
+            
+            .ai-chat-header {
+              padding: 12px 16px;
+              min-height: 60px;
+            }
+            
+            .model-selector {
+              gap: 4px;
+            }
+            
+            .model-btn {
+              padding: 5px 10px;
+              font-size: 11px;
+              gap: 4px;
+            }
+            
+            .model-btn .model-icon {
+              font-size: 14px;
+            }
+            
+            .ai-header-right {
+              max-width: 70%;
+            }
+            
+            .ai-messages {
+              padding: 16px;
+            }
+            
+            .ai-float-button {
+              width: 56px;
+              height: 56px;
+              bottom: 20px;
+              right: 20px;
             }
           }
 
