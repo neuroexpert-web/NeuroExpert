@@ -8,6 +8,10 @@ import {
   generateFollowUpQuestions,
   addEmotionalTone
 } from '../../utils/ai-director-system';
+import fs from 'fs';
+import path from 'path';
+
+export const runtime = 'nodejs';
 
 // Проверка наличия API ключей
 const GEMINI_API_KEY = process.env.GOOGLE_GEMINI_API_KEY;
@@ -18,6 +22,25 @@ if (!GEMINI_API_KEY && !ANTHROPIC_API_KEY) {
 }
 
 const genAI = GEMINI_API_KEY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null;
+
+// Load system prompt for NeuroExpert v3.2 (used as systemInstruction)
+const PROMPT_PATH = path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v3_2.md');
+let SYSTEM_PROMPT = '';
+try {
+  SYSTEM_PROMPT = fs.readFileSync(PROMPT_PATH, 'utf-8');
+} catch (e) {
+  console.error('Failed to load system prompt for assistant:', e);
+}
+
+function normalizeHistory(rawHistory) {
+  if (!Array.isArray(rawHistory)) return [];
+  return rawHistory.slice(-20).map((item) => {
+    const role = item?.role === 'model' ? 'model' : 'user';
+    const partsArray = Array.isArray(item?.parts) ? item.parts : [];
+    const parts = partsArray.map((p) => (typeof p === 'string' ? { text: p } : p)).filter(Boolean);
+    return { role, parts };
+  });
+}
 
 // Создаём расширенный промпт на основе базы знаний
 function createEnhancedPrompt(userMessage, context = {}) {
@@ -165,7 +188,7 @@ async function handler(request) {
   const startTime = Date.now();
   
   try {
-    const { question, model = 'gemini', context = {} } = await request.json();
+    const { question, model = 'gemini', context = {}, history = [] } = await request.json();
     
     console.log('Assistant API called:', { question, model });
     console.log('API Keys available:', { 
@@ -189,11 +212,15 @@ async function handler(request) {
         answer = await getClaudeResponse(enhancedPrompt);
         usedModel = 'claude';
       } else if (genAI && GEMINI_API_KEY) {
-        // Используем Gemini
-        const geminiModel = genAI.getGenerativeModel({ model: "gemini-pro" });
-        const result = await geminiModel.generateContent(enhancedPrompt);
+        // Используем Gemini с системным промптом и историей диалога
+        const geminiModel = genAI.getGenerativeModel({ 
+          model: "gemini-pro",
+          systemInstruction: SYSTEM_PROMPT || undefined,
+        });
+        const chat = geminiModel.startChat({ history: normalizeHistory(history) });
+        const result = await chat.sendMessage(question);
         const response = result.response;
-        answer = response.text();
+        answer = typeof response.text === 'function' ? response.text() : '';
         usedModel = 'gemini';
       } else {
         // Демо режим с продвинутыми ответами
