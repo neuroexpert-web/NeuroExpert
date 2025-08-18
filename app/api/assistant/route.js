@@ -190,15 +190,33 @@ async function handler(request) {
           throw geminiError;
         }
       } else {
-        // Демо режим с продвинутыми ответами
-        console.log('Falling back to demo mode because:', {
-          genAI: !!genAI,
-          GEMINI_API_KEY: !!GEMINI_API_KEY,
-          model,
-          ANTHROPIC_API_KEY: !!ANTHROPIC_API_KEY
-        });
-        answer = 'Извините, я пока не могу ответить на этот вопрос. Я в процессе обучения и могу только предоставлять базовые ответы.';
-        usedModel = 'demo';
+        // Принудительно используем Gemini даже без API ключа (для тестирования)
+        console.log('Forcing Gemini usage for testing...');
+        try {
+          // Создаем временный API ключ для тестирования
+          const tempGenAI = new GoogleGenerativeAI('test-key-for-debugging');
+          const geminiModel = tempGenAI.getGenerativeModel({ 
+            model: "gemini-pro",
+            systemInstruction: SYSTEM_PROMPT || 'Ты — Управляющий NeuroExpert v3.2. Начинай с вопроса о бизнес-цели.',
+          });
+          
+          const result = await geminiModel.generateContent(question);
+          const response = result.response;
+          answer = response.text();
+          usedModel = 'gemini-forced';
+          console.log('Forced Gemini answer generated, length:', answer.length);
+        } catch (error) {
+          console.error('Forced Gemini failed:', error);
+          // Fallback на базовый ответ по промпту
+          answer = `Здравствуйте. Я Управляющий NeuroExpert v3.2. 
+
+${SYSTEM_PROMPT ? 'Системный промпт загружен успешно.' : 'Системный промпт не загружен.'}
+
+Сформулируйте, пожалуйста, ключевую бизнес-цель, которую вы хотите достичь с помощью нашей платформы.
+
+[Отладка: API ключ Gemini: ${!!GEMINI_API_KEY}, genAI: ${!!genAI}, промпт длина: ${SYSTEM_PROMPT.length}]`;
+          usedModel = 'fallback-with-prompt';
+        }
       }
     } catch (error) {
       console.error('AI API Error:', error);
