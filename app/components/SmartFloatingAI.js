@@ -234,7 +234,7 @@ export default function SmartFloatingAI() {
           <div className="ai-chat-header">
             <div className="ai-header-left">
               <div className="ai-avatar-circle">
-                <span className="ai-avatar-emoji">🤖</span>
+                <span className="ai-avatar-emoji">👨‍💼</span>
                 <span className="ai-status-dot"></span>
               </div>
               <div className="ai-header-info">
@@ -272,7 +272,9 @@ export default function SmartFloatingAI() {
                 className="ai-close-btn"
                 aria-label="Закрыть чат"
               >
-                ✕
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M13 1L1 13M1 1L13 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </button>
             </div>
           </div>
@@ -282,7 +284,7 @@ export default function SmartFloatingAI() {
               <div key={index} className={`ai-message ${message.type}`}>
                 {message.type === 'assistant' && (
                   <div className="ai-message-avatar">
-                    <span>🤖</span>
+                    <span>👨‍💼</span>
                   </div>
                 )}
                 <div className="ai-message-content">
@@ -303,7 +305,7 @@ export default function SmartFloatingAI() {
             {isLoading && (
               <div className="ai-message assistant">
                 <div className="ai-message-avatar">
-                  <span>🤖</span>
+                  <span>👨‍💼</span>
                 </div>
                 <div className="ai-typing">
                   <span></span>
@@ -586,24 +588,33 @@ export default function SmartFloatingAI() {
         }
 
         .ai-close-btn {
-          width: 36px;
-          height: 36px;
-          border-radius: 50%;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          width: 40px;
+          height: 40px;
+          border-radius: 12px;
+          background: rgba(255, 255, 255, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.12);
           color: #94a3b8;
-          font-size: 18px;
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           display: flex;
           align-items: center;
           justify-content: center;
+          backdrop-filter: blur(10px);
         }
 
         .ai-close-btn:hover {
-          background: rgba(239, 68, 68, 0.1);
-          border-color: rgba(239, 68, 68, 0.3);
+          background: rgba(239, 68, 68, 0.15);
+          border-color: rgba(239, 68, 68, 0.4);
           color: #ef4444;
+          transform: scale(1.05);
+        }
+        
+        .ai-close-btn svg {
+          transition: transform 0.3s ease;
+        }
+        
+        .ai-close-btn:hover svg {
+          transform: rotate(90deg);
         }
 
         .ai-messages {
