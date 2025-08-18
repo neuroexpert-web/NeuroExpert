@@ -23,7 +23,7 @@ export default function SmartFloatingAI() {
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [selectedModel, setSelectedModel] = useState('claude'); // 'gemini' или 'claude' - Claude по умолчанию
-  const [dialogHistory, setDialogHistory] = useState([]); // История диалога для Gemini
+  const [dialogHistory, setDialogHistory] = useState([]); // История диалога для текущей модели
   const [stats, setStats] = useState({
     totalQuestions: 0,
     avgResponseTime: 0,
@@ -53,8 +53,8 @@ export default function SmartFloatingAI() {
 
   // Быстрые вопросы - только 2 самых важных
   const quickQuestions = [
-    "Рассчитать ROI для моего бизнеса",
-    "С чего начать цифровизацию?"
+    "Увеличить продажи на 20% за 3 месяца",
+    "Автоматизировать обработку заказов"
   ];
 
   // Динамическое приветствие при открытии чата
@@ -246,7 +246,10 @@ export default function SmartFloatingAI() {
               <div className="model-selector">
                 <button 
                   className={`model-btn ${selectedModel === 'gemini' ? 'active' : ''}`}
-                  onClick={() => setSelectedModel('gemini')}
+                  onClick={() => {
+                    setSelectedModel('gemini');
+                    setDialogHistory([]); // Очищаем историю при смене модели
+                  }}
                   title="Google Gemini Pro"
                 >
                   <span className="model-icon">✨</span>
@@ -254,7 +257,10 @@ export default function SmartFloatingAI() {
                 </button>
                 <button 
                   className={`model-btn ${selectedModel === 'claude' ? 'active' : ''}`}
-                  onClick={() => setSelectedModel('claude')}
+                  onClick={() => {
+                    setSelectedModel('claude');
+                    setDialogHistory([]); // Очищаем историю при смене модели
+                  }}
                   title="Claude Opus"
                 >
                   <span className="model-icon">🧠</span>
@@ -683,6 +689,16 @@ export default function SmartFloatingAI() {
         .ai-message.user .ai-message-text {
           background: linear-gradient(135deg, #60a5fa, #a78bfa);
           color: white;
+        }
+
+        .ai-message-model {
+          font-size: 11px;
+          color: rgba(255, 255, 255, 0.4);
+          margin-top: 6px;
+          padding-left: 18px;
+          display: flex;
+          align-items: center;
+          gap: 4px;
         }
 
         .ai-typing {
