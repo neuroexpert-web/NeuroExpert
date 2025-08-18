@@ -280,7 +280,7 @@ exports.handler = async (event, context) => {
 async function getGeminiResponse(question, apiKey) {
   const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({ 
-    model: "gemini-2.0-pro-latest",
+    model: "gemini-1.5-pro-latest",
     systemInstruction: SYSTEM_PROMPT || `Ты — Управляющий NeuroExpert v3.2. Начинай с вопроса о бизнес-цели.`,
     generationConfig: {
       temperature: 0.7,
