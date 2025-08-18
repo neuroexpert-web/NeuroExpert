@@ -471,22 +471,33 @@ export default function SmartFloatingAI() {
 
         @media (max-width: 640px) {
           .ai-chat-window {
-            width: calc(100vw - 20px);
+            width: calc(100vw - 30px);
             height: calc(100vh - 100px);
             bottom: 10px;
-            right: 10px;
-            left: 10px;
+            right: 15px;
+            left: 15px;
           }
           
           .ai-chat-header {
-            padding: 12px;
+            padding: 10px;
             border-radius: 20px 20px 0 0;
+            gap: 8px;
+          }
+          
+          .ai-header-right {
+            gap: 6px;
           }
           
           .ai-close-btn {
-            width: 36px;
-            height: 36px;
-            margin-right: -4px;
+            width: 32px;
+            height: 32px;
+            margin-right: 0;
+            border-radius: 8px;
+          }
+          
+          .ai-close-btn svg {
+            width: 12px;
+            height: 12px;
           }
           
           .ai-header-info h3 {
