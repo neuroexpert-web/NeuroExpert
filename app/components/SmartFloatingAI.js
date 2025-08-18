@@ -281,6 +281,11 @@ export default function SmartFloatingAI() {
                 )}
                 <div className="ai-message-content">
                   <div className="ai-message-text">{message.text}</div>
+                  {message.type === 'assistant' && message.model && (
+                    <div className="ai-message-model">
+                      {message.model === 'claude' ? '🧠 Claude' : '✨ Gemini'}
+                    </div>
+                  )}
                 </div>
                 {message.type === 'user' && (
                   <div className="ai-message-avatar">

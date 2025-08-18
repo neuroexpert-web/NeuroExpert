@@ -189,8 +189,8 @@ async function handler(request) {
     let updatedHistory = history; // Initialize updatedHistory
     
     try {
-      // Приоритет Claude, если ключ есть
-      if (ANTHROPIC_API_KEY) {
+      // Выбираем модель на основе запроса пользователя
+      if (model === 'claude' && ANTHROPIC_API_KEY) {
         // Используем Claude с историей
         console.log('Using Claude with system prompt');
         console.log('ANTHROPIC_API_KEY exists:', !!ANTHROPIC_API_KEY);
@@ -199,7 +199,7 @@ async function handler(request) {
         answer = claudeResponse.text;
         updatedHistory = claudeResponse.updatedHistory;
         usedModel = 'claude';
-      } else if (genAI && GEMINI_API_KEY) {
+      } else if (model === 'gemini' && genAI && GEMINI_API_KEY) {
         // Используем Gemini с системным промптом v3.2
         console.log('Using Gemini with system prompt, length:', SYSTEM_PROMPT.length);
         console.log('Gemini API key exists:', !!GEMINI_API_KEY);
@@ -232,6 +232,13 @@ async function handler(request) {
           console.error('Gemini API call failed:', geminiError);
           throw geminiError;
         }
+      } else if (ANTHROPIC_API_KEY && model !== 'gemini') {
+        // Fallback на Claude если Gemini недоступен
+        console.log('Fallback to Claude (Gemini not available)');
+        const claudeResponse = await getClaudeResponse(question, history);
+        answer = claudeResponse.text;
+        updatedHistory = claudeResponse.updatedHistory;
+        usedModel = 'claude';
       } else {
         // Принудительно используем Gemini даже без API ключа (для тестирования)
         console.log('Forcing Gemini usage for testing...');
