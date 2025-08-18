@@ -207,22 +207,11 @@ async function handler(request) {
         
         try {
           const geminiModel = genAI.getGenerativeModel({ 
-            model: "gemini-pro"
+            model: "gemini-1.5-pro-latest",
+            systemInstruction: SYSTEM_PROMPT
           });
           
-          // Для gemini-pro добавляем системный промпт как первое сообщение в истории
-          const chatHistory = history && history.length > 0 ? history : [
-            {
-              role: "user",
-              parts: [{ text: "Ты — " + SYSTEM_PROMPT }]
-            },
-            {
-              role: "model",
-              parts: [{ text: "Понял. Я Управляющий NeuroExpert v3.2. Буду действовать согласно инструкциям." }]
-            }
-          ];
-          
-          const chat = geminiModel.startChat({ history: chatHistory });
+          const chat = geminiModel.startChat({ history: history || [] });
           const result = await chat.sendMessage(question);
           answer = result.response.text();
           updatedHistory = await chat.getHistory();
@@ -246,7 +235,7 @@ async function handler(request) {
           // Создаем временный API ключ для тестирования
           const tempGenAI = new GoogleGenerativeAI('test-key-for-debugging');
           const geminiModel = tempGenAI.getGenerativeModel({ 
-            model: "gemini-pro",
+            model: "gemini-1.5-pro-latest",
             systemInstruction: SYSTEM_PROMPT || 'Ты — Управляющий NeuroExpert v3.2. Начинай с вопроса о бизнес-цели.',
           });
           
