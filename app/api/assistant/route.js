@@ -131,7 +131,7 @@ async function getClaudeResponse(prompt, history = []) {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-3-opus-20240229',
+        model: 'claude-3-sonnet-20240229',
         max_tokens: 2048,
         system: SYSTEM_PROMPT, // Claude поддерживает system prompt напрямую!
         messages: messages,
