@@ -22,7 +22,7 @@ export default function SmartFloatingAI() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-  const [selectedModel, setSelectedModel] = useState('gemini'); // 'gemini' или 'claude'
+  const [selectedModel, setSelectedModel] = useState('claude'); // 'gemini' или 'claude' - Claude по умолчанию
   const [dialogHistory, setDialogHistory] = useState([]); // История диалога для Gemini
   const [stats, setStats] = useState({
     totalQuestions: 0,

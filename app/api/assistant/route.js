@@ -108,12 +108,21 @@ async function sendTelegramNotification(question, answer, model) {
 }
 
 // Функция для взаимодействия с Claude API (Anthropic)
-async function getClaudeResponse(prompt) {
+async function getClaudeResponse(prompt, history = []) {
   if (!ANTHROPIC_API_KEY) {
     throw new Error('ANTHROPIC_API_KEY is not set');
   }
 
   try {
+    // Подготавливаем историю для Claude
+    const messages = history.length > 0 ? history : [];
+    
+    // Добавляем текущее сообщение
+    messages.push({
+      role: 'user',
+      content: prompt
+    });
+
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -123,21 +132,29 @@ async function getClaudeResponse(prompt) {
       },
       body: JSON.stringify({
         model: 'claude-3-opus-20240229',
-        max_tokens: 1024,
-        messages: [{
-          role: 'user',
-          content: prompt
-        }],
+        max_tokens: 2048,
+        system: SYSTEM_PROMPT, // Claude поддерживает system prompt напрямую!
+        messages: messages,
         temperature: 0.7
       })
     });
 
     if (!response.ok) {
+      const errorData = await response.text();
+      console.error('Claude API error response:', errorData);
       throw new Error(`Claude API error: ${response.status}`);
     }
 
     const data = await response.json();
-    return data.content[0].text;
+    
+    // Возвращаем ответ и обновленную историю
+    return {
+      text: data.content[0].text,
+      updatedHistory: [...messages, {
+        role: 'assistant',
+        content: data.content[0].text
+      }]
+    };
   } catch (error) {
     console.error('Claude API error:', error);
     throw error;
@@ -167,9 +184,13 @@ async function handler(request) {
     let updatedHistory = history; // Initialize updatedHistory
     
     try {
-      if (model === 'claude' && ANTHROPIC_API_KEY) {
-        // Используем Claude
-        answer = await getClaudeResponse(question);
+      // Приоритет Claude, если ключ есть
+      if (ANTHROPIC_API_KEY) {
+        // Используем Claude с историей
+        console.log('Using Claude with system prompt');
+        const claudeResponse = await getClaudeResponse(question, history);
+        answer = claudeResponse.text;
+        updatedHistory = claudeResponse.updatedHistory;
         usedModel = 'claude';
       } else if (genAI && GEMINI_API_KEY) {
         // Используем Gemini с системным промптом v3.2
