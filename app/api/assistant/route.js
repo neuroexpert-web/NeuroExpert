@@ -179,7 +179,7 @@ async function handler(request) {
         
         try {
           const geminiModel = genAI.getGenerativeModel({ 
-            model: "gemini-1.5-flash-latest",
+            model: "gemini-pro",
             systemInstruction: SYSTEM_PROMPT,
           });
           const chat = geminiModel.startChat({ history });
@@ -199,13 +199,14 @@ async function handler(request) {
           // Создаем временный API ключ для тестирования
           const tempGenAI = new GoogleGenerativeAI('test-key-for-debugging');
           const geminiModel = tempGenAI.getGenerativeModel({ 
-            model: "gemini-1.5-flash-latest",
+            model: "gemini-pro",
             systemInstruction: SYSTEM_PROMPT || 'Ты — Управляющий NeuroExpert v3.2. Начинай с вопроса о бизнес-цели.',
           });
           
-          const result = await geminiModel.generateContent(question);
-          const response = result.response;
-          answer = response.text();
+          const chat = geminiModel.startChat({ history: history || [] });
+          const result = await chat.sendMessage(question);
+          answer = result.response.text();
+          updatedHistory = await chat.getHistory();
           usedModel = 'gemini-forced';
           console.log('Forced Gemini answer generated, length:', answer.length);
         } catch (error) {
@@ -244,7 +245,7 @@ ${SYSTEM_PROMPT ? 'Системный промпт загружен успешн
     // const followUpQuestions = generateFollowUpQuestions(intent[0], context);
 
     return NextResponse.json({
-      answer: finalAnswer,
+      reply: finalAnswer, // Изменено с 'answer' на 'reply' согласно чек-листу
       model: usedModel,
       responseTime,
       updated_history: updatedHistory || history,

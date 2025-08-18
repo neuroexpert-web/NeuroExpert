@@ -23,6 +23,7 @@ export default function SmartFloatingAI() {
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [selectedModel, setSelectedModel] = useState('gemini'); // 'gemini' или 'claude'
+  const [dialogHistory, setDialogHistory] = useState([]); // История диалога для Gemini
   const [stats, setStats] = useState({
     totalQuestions: 0,
     avgResponseTime: 0,
@@ -128,10 +129,14 @@ export default function SmartFloatingAI() {
     try {
       const response = await fetch('/api/assistant', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-neuroexpert-csrf': 'browser' // Добавляем CSRF заголовок
+        },
         body: JSON.stringify({ 
-          question: userMessage,
+          userMessage: userMessage, // Изменено с 'question' на 'userMessage'
           model: selectedModel,
+          history: dialogHistory, // Передаем историю диалога
           context: {
             ...context,
             previousInteractions: context.previousInteractions + 1
@@ -160,7 +165,13 @@ export default function SmartFloatingAI() {
       }));
 
       setIsLoading(false);
-      typewriterEffect(data.answer || 'Извините, не удалось получить ответ.', data.model || selectedModel);
+      
+      // Обновляем историю диалога из ответа сервера
+      if (data.updated_history) {
+        setDialogHistory(data.updated_history);
+      }
+      
+      typewriterEffect(data.reply || data.answer || 'Извините, не удалось получить ответ.', data.model || selectedModel);
 
       // Сохраняем в истории чатов
       const history = JSON.parse(localStorage.getItem('chatHistory') || '[]');
@@ -195,6 +206,7 @@ export default function SmartFloatingAI() {
   // Очистка истории диалога
   const clearHistory = () => {
     setMessages([]);
+    setDialogHistory([]); // Очищаем историю Gemini
     try {
       localStorage.removeItem('ai_messages');
       localStorage.removeItem('chatHistory');
