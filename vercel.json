@@ -7,7 +7,7 @@
   "regions": ["iad1", "cdg1", "syd1"],
   "env": {
     "NODE_ENV": "production",
-    "GOOGLE_GEMINI_API_KEY": "@google-gemini-api-key"
+    "GOOGLE_GEMINI_API_KEY": "dummy_gemini_key"
   },
   "headers": [
     {
@@ -27,6 +27,5 @@
         }
       ]
     }
-  ],
-  "forceDeployTimestamp": "2025-08-18T12:00:00Z"
+  ]
 }
