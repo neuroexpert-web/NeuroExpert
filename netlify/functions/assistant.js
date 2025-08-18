@@ -285,8 +285,7 @@ async function getGeminiResponse(question, apiKey) {
 
   const systemInstruction = SYSTEM_PROMPT || `Ты — Управляющий NeuroExpert v3.2. Начинай с вопроса о бизнес-цели.`;
    
-  const result = await model.generateContent({
-    contents: question,
+  const result = await model.generateContent(question, {
     systemInstruction,
     generationConfig: {
       temperature: 0.7,

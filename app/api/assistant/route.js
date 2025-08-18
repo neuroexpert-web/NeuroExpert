@@ -180,8 +180,7 @@ async function handler(request) {
           const geminiModel = genAI.getGenerativeModel({ 
             model: "gemini-pro",
           });
-          const result = await geminiModel.generateContent({
-            contents: question,
+          const result = await geminiModel.generateContent(question, {
             systemInstruction: SYSTEM_PROMPT,
           });
           console.log('Gemini model created and content generated successfully');
