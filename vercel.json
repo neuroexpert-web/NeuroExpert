@@ -6,7 +6,8 @@
   "framework": "nextjs",
   "regions": ["iad1", "cdg1", "syd1"],
   "env": {
-    "NODE_ENV": "production"
+    "NODE_ENV": "production",
+    "GOOGLE_GEMINI_API_KEY": "@google-gemini-api-key"
   },
   "headers": [
     {
