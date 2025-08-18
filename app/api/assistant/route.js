@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { assistantRateLimit } from '@/app/middleware/rateLimit';
+import fs from 'fs';
+import path from 'path';
 import { 
   DIRECTOR_KNOWLEDGE_BASE, 
   analyzeUserIntent,
@@ -18,6 +20,15 @@ if (!GEMINI_API_KEY && !ANTHROPIC_API_KEY) {
 }
 
 const genAI = GEMINI_API_KEY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null;
+
+// Load system prompt for NeuroExpert v3.2 (used as systemInstruction)
+const PROMPT_PATH = path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v3_2.md');
+let SYSTEM_PROMPT = '';
+try {
+  SYSTEM_PROMPT = fs.readFileSync(PROMPT_PATH, 'utf-8');
+} catch (e) {
+  console.error('Failed to load system prompt for assistant:', e);
+}
 
 // Создаём расширенный промпт на основе базы знаний
 function createEnhancedPrompt(userMessage, context = {}) {
@@ -189,7 +200,10 @@ async function handler(request) {
         usedModel = 'claude';
       } else if (genAI && GEMINI_API_KEY) {
         // Используем Gemini
-        const geminiModel = genAI.getGenerativeModel({ model: "gemini-pro" });
+        const geminiModel = genAI.getGenerativeModel({ 
+          model: "gemini-pro",
+          systemInstruction: SYSTEM_PROMPT || undefined,
+        });
         const result = await geminiModel.generateContent(enhancedPrompt);
         const response = result.response;
         answer = response.text();
