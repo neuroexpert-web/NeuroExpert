@@ -477,6 +477,47 @@ export default function SmartFloatingAI() {
             right: 10px;
             left: 10px;
           }
+          
+          .ai-chat-header {
+            padding: 12px;
+            border-radius: 20px 20px 0 0;
+          }
+          
+          .ai-close-btn {
+            width: 36px;
+            height: 36px;
+            margin-right: -4px;
+          }
+          
+          .ai-header-info h3 {
+            font-size: 15px;
+          }
+          
+          .ai-header-left {
+            gap: 8px;
+          }
+          
+          .ai-avatar-circle {
+            width: 36px;
+            height: 36px;
+          }
+          
+          .ai-avatar-emoji {
+            font-size: 20px;
+          }
+          
+          .model-selector {
+            gap: 4px;
+          }
+          
+          .model-btn {
+            padding: 6px 10px;
+            font-size: 12px;
+          }
+          
+          .ai-subtitle {
+            display: none;
+          }
         }
 
         .ai-chat-container {
