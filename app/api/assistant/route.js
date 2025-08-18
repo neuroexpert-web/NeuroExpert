@@ -179,10 +179,22 @@ async function handler(request) {
         
         try {
           const geminiModel = genAI.getGenerativeModel({ 
-            model: "gemini-pro",
-            systemInstruction: SYSTEM_PROMPT,
+            model: "gemini-pro"
           });
-          const chat = geminiModel.startChat({ history });
+          
+          // Для gemini-pro добавляем системный промпт как первое сообщение в истории
+          const chatHistory = history && history.length > 0 ? history : [
+            {
+              role: "user",
+              parts: [{ text: "Ты — " + SYSTEM_PROMPT }]
+            },
+            {
+              role: "model",
+              parts: [{ text: "Понял. Я Управляющий NeuroExpert v3.2. Буду действовать согласно инструкциям." }]
+            }
+          ];
+          
+          const chat = geminiModel.startChat({ history: chatHistory });
           const result = await chat.sendMessage(question);
           answer = result.response.text();
           updatedHistory = await chat.getHistory();
