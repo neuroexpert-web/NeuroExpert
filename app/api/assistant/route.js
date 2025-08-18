@@ -148,7 +148,7 @@ async function handler(request) {
   const startTime = Date.now();
   
   try {
-    const { question, model = 'gemini', context = {} } = await request.json();
+    const { userMessage: question, model = 'gemini', history = [] } = await request.json();
     
     // Log only in development without sensitive data
     if (process.env.NODE_ENV !== 'production') {
@@ -164,6 +164,7 @@ async function handler(request) {
     
     let answer;
     let usedModel = model;
+    let updatedHistory = history; // Initialize updatedHistory
     
     try {
       if (model === 'claude' && ANTHROPIC_API_KEY) {
@@ -181,10 +182,10 @@ async function handler(request) {
             model: "gemini-1.5-pro-latest",
             systemInstruction: SYSTEM_PROMPT,
           });
-          const result = await geminiModel.generateContent(question);
-          console.log('Gemini model created and content generated successfully');
-          const response = result.response || result;
-          answer = typeof response.text === 'function' ? response.text() : response.choices ? response.choices[0].text : String(response);
+          const chat = geminiModel.startChat({ history });
+          const result = await chat.sendMessage(question);
+          answer = result.response.text();
+          updatedHistory = await chat.getHistory();
           usedModel = 'gemini';
           console.log('Gemini answer generated, length:', answer.length);
         } catch (geminiError) {
@@ -246,6 +247,7 @@ ${SYSTEM_PROMPT ? 'Системный промпт загружен успешн
       answer: finalAnswer,
       model: usedModel,
       responseTime,
+      updated_history: updatedHistory || history,
       // intent,
       // followUpQuestions,
       // emotion: 'professional' // Можно добавить анализ эмоций
