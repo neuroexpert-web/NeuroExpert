@@ -238,8 +238,8 @@ export default function SmartFloatingAI() {
                 <span className="ai-status-dot"></span>
               </div>
               <div className="ai-header-info">
-                <h3>AI-Директор Александр</h3>
-                <p className="ai-subtitle">Управляющий NeuroExpert</p>
+                <h3>Управляющий NeuroExpert v3.2</h3>
+                <p className="ai-subtitle">Ваш стратегический командный центр</p>
               </div>
             </div>
             <div className="ai-header-right">
