@@ -280,13 +280,8 @@ exports.handler = async (event, context) => {
 async function getGeminiResponse(question, apiKey) {
   const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({ 
-    model: "gemini-1.5-pro-latest"
-  });
-
-  const systemInstruction = SYSTEM_PROMPT || `Ты — Управляющий NeuroExpert v3.2. Начинай с вопроса о бизнес-цели.`;
-   
-  const result = await model.generateContent(question, {
-    systemInstruction,
+    model: "gemini-1.5-pro-latest",
+    systemInstruction: SYSTEM_PROMPT || `Ты — Управляющий NeuroExpert v3.2. Начинай с вопроса о бизнес-цели.`,
     generationConfig: {
       temperature: 0.7,
       topK: 40,
@@ -294,6 +289,7 @@ async function getGeminiResponse(question, apiKey) {
       maxOutputTokens: 1024,
     }
   });
+  const result = await model.generateContent(question);
   const response = await result.response;
   return response.text();
 }

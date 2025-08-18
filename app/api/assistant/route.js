@@ -179,10 +179,9 @@ async function handler(request) {
         try {
           const geminiModel = genAI.getGenerativeModel({ 
             model: "gemini-pro",
-          });
-          const result = await geminiModel.generateContent(question, {
             systemInstruction: SYSTEM_PROMPT,
           });
+          const result = await geminiModel.generateContent(question);
           console.log('Gemini model created and content generated successfully');
           const response = result.response || result;
           answer = typeof response.text === 'function' ? response.text() : response.choices ? response.choices[0].text : String(response);
