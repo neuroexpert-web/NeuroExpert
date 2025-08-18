@@ -11,8 +11,11 @@ import path from 'path';
 //   addEmotionalTone
 // } from '../../utils/ai-director-system';
 
-// Проверка наличия API ключей
-const GEMINI_API_KEY = process.env.GOOGLE_GEMINI_API_KEY;
+// Поддерживаем несколько названий переменных среды для ключа Gemini,
+// чтобы избежать ошибки из-за опечаток в панели хостинга
+const GEMINI_API_KEY = process.env.GOOGLE_GEMINI_API_KEY
+  || process.env.GEMINI_API_KEY
+  || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 
 if (!GEMINI_API_KEY && !ANTHROPIC_API_KEY) {
@@ -214,9 +217,7 @@ async function handler(request) {
 
 ${SYSTEM_PROMPT ? 'Системный промпт загружен успешно.' : 'Системный промпт не загружен.'}
 
-Сформулируйте, пожалуйста, ключевую бизнес-цель, которую вы хотите достичь с помощью нашей платформы.
-
-[Отладка: API ключ Gemini: ${!!GEMINI_API_KEY}, genAI: ${!!genAI}, промпт длина: ${SYSTEM_PROMPT.length}]`;
+Сформулируйте, пожалуйста, ключевую бизнес-цель, которую вы хотите достичь с помощью нашей платформы.${process.env.NODE_ENV !== 'production' ? `\n\n[Отладка: API ключ Gemini: ${!!GEMINI_API_KEY}, genAI: ${!!genAI}, промпт длина: ${SYSTEM_PROMPT.length}]` : ''}`;
           usedModel = 'fallback-with-prompt';
         }
       }

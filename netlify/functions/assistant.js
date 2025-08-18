@@ -173,7 +173,7 @@ exports.handler = async (event, context) => {
     };
   }
 
-  const geminiApiKey = process.env.GEMINI_API_KEY;
+  const geminiApiKey = process.env.GOOGLE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
   const claudeApiKey = process.env.ANTHROPIC_API_KEY;
 
   if (!question || question.trim() === '') {
