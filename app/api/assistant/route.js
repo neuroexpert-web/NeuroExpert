@@ -21,6 +21,14 @@ if (!GEMINI_API_KEY && !ANTHROPIC_API_KEY) {
 
 const genAI = GEMINI_API_KEY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null;
 
+// Debug logging
+console.log('API Keys check:', {
+  hasGeminiKey: !!GEMINI_API_KEY,
+  hasAnthropicKey: !!ANTHROPIC_API_KEY,
+  genAIInitialized: !!genAI,
+  geminiKeyLength: GEMINI_API_KEY ? GEMINI_API_KEY.length : 0
+});
+
 // Load system prompt for NeuroExpert v3.2 (used as systemInstruction)
 const PROMPT_PATH = path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v3_2.md');
 let SYSTEM_PROMPT = '';
@@ -134,6 +142,7 @@ async function handler(request) {
         usedModel = 'claude';
       } else if (genAI && GEMINI_API_KEY) {
         // Используем Gemini с системным промптом v3.2
+        console.log('Using Gemini with system prompt, length:', SYSTEM_PROMPT.length);
         const geminiModel = genAI.getGenerativeModel({ 
           model: "gemini-pro",
           systemInstruction: SYSTEM_PROMPT || undefined,
@@ -144,8 +153,12 @@ async function handler(request) {
         usedModel = 'gemini';
       } else {
         // Демо режим с продвинутыми ответами
-        // const intent = analyzeUserIntent(question);
-        // answer = generateDemoResponse(question, intent);
+        console.log('Falling back to demo mode because:', {
+          genAI: !!genAI,
+          GEMINI_API_KEY: !!GEMINI_API_KEY,
+          model,
+          ANTHROPIC_API_KEY: !!ANTHROPIC_API_KEY
+        });
         answer = 'Извините, я пока не могу ответить на этот вопрос. Я в процессе обучения и могу только предоставлять базовые ответы.';
         usedModel = 'demo';
       }
