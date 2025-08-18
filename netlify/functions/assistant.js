@@ -280,8 +280,14 @@ exports.handler = async (event, context) => {
 async function getGeminiResponse(question, apiKey) {
   const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({ 
-    model: "gemini-1.5-pro-latest",
-    systemInstruction: SYSTEM_PROMPT,
+    model: "gemini-1.5-pro-latest"
+  });
+
+  const systemInstruction = SYSTEM_PROMPT || `Ты — Управляющий NeuroExpert v3.2. Начинай с вопроса о бизнес-цели.`;
+   
+  const result = await model.generateContent({
+    contents: question,
+    systemInstruction,
     generationConfig: {
       temperature: 0.7,
       topK: 40,
@@ -289,22 +295,6 @@ async function getGeminiResponse(question, apiKey) {
       maxOutputTokens: 1024,
     }
   });
-  
-  const contextualPrompt = `${KNOWLEDGE_BASE}
-  
-  ЗАДАЧА: Ответьте на вопрос клиента как опытный управляющий NeuroExpert.
-  Используйте информацию о новых возможностях платформы версии 3.0.
-  
-  ВОПРОС КЛИЕНТА: ${question}
-  
-  ВАЖНО: 
-  - Упоминайте преимущества двойного ИИ (Claude + Gemini)
-  - Говорите о Telegram CRM и real-time аналитике
-  - Приводите конкретные цифры ROI
-  - Предлагайте бесплатную консультацию
-  - Отвечайте на русском языке`;
-  
-  const result = await model.generateContent(contextualPrompt);
   const response = await result.response;
   return response.text();
 }

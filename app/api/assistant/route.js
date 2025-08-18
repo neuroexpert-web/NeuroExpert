@@ -179,15 +179,14 @@ async function handler(request) {
         try {
           const geminiModel = genAI.getGenerativeModel({ 
             model: "gemini-pro",
-            systemInstruction: SYSTEM_PROMPT || undefined,
           });
-          console.log('Gemini model created successfully');
-          
-          const result = await geminiModel.generateContent(question);
-          console.log('Gemini response received');
-          
-          const response = result.response;
-          answer = response.text();
+          const result = await geminiModel.generateContent({
+            contents: question,
+            systemInstruction: SYSTEM_PROMPT,
+          });
+          console.log('Gemini model created and content generated successfully');
+          const response = result.response || result;
+          answer = typeof response.text === 'function' ? response.text() : response.choices ? response.choices[0].text : String(response);
           usedModel = 'gemini';
           console.log('Gemini answer generated, length:', answer.length);
         } catch (geminiError) {
