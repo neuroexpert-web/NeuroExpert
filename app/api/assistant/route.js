@@ -167,10 +167,15 @@ async function handler(request) {
   try {
     const { userMessage: question, model = 'gemini', history = [] } = await request.json();
     
-    // Log only in development without sensitive data
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('Assistant API called:', { model, questionLength: question?.length });
-    }
+    // Debug logging
+    console.log('Assistant API called:', { 
+      model, 
+      questionLength: question?.length,
+      hasAnthropicKey: !!ANTHROPIC_API_KEY,
+      hasGeminiKey: !!GEMINI_API_KEY,
+      anthropicKeyLength: ANTHROPIC_API_KEY ? ANTHROPIC_API_KEY.length : 0,
+      nodeEnv: process.env.NODE_ENV
+    });
     
     if (!question) {
       return NextResponse.json({ error: 'Вопрос обязателен' }, { status: 400 });
@@ -188,6 +193,8 @@ async function handler(request) {
       if (ANTHROPIC_API_KEY) {
         // Используем Claude с историей
         console.log('Using Claude with system prompt');
+        console.log('ANTHROPIC_API_KEY exists:', !!ANTHROPIC_API_KEY);
+        console.log('ANTHROPIC_API_KEY length:', ANTHROPIC_API_KEY ? ANTHROPIC_API_KEY.length : 0);
         const claudeResponse = await getClaudeResponse(question, history);
         answer = claudeResponse.text;
         updatedHistory = claudeResponse.updatedHistory;
@@ -332,6 +339,8 @@ export async function GET() {
       env: {
         hasGeminiKey: !!process.env.GOOGLE_GEMINI_API_KEY,
         geminiKeyLength: process.env.GOOGLE_GEMINI_API_KEY ? process.env.GOOGLE_GEMINI_API_KEY.length : 0,
+        hasAnthropicKey: !!process.env.ANTHROPIC_API_KEY,
+        anthropicKeyLength: process.env.ANTHROPIC_API_KEY ? process.env.ANTHROPIC_API_KEY.length : 0,
         nodeEnv: process.env.NODE_ENV
       }
     });
