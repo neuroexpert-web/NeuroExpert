@@ -31,6 +31,7 @@ console.log('API Keys check:', {
 
 // Load system prompt for NeuroExpert v3.2 (used as systemInstruction)
 // This file contains the complete system prompt for the AI assistant
+// Vercel deployment trigger - updated at: ${new Date().toISOString()}
 const PROMPT_PATH = path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v3_2.md');
 let SYSTEM_PROMPT = '';
 
