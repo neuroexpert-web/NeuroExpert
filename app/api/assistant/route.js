@@ -32,11 +32,36 @@ console.log('API Keys check:', {
 // Load system prompt for NeuroExpert v3.2 (used as systemInstruction)
 const PROMPT_PATH = path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v3_2.md');
 let SYSTEM_PROMPT = '';
+
+// Check if file exists
 try {
-  SYSTEM_PROMPT = fs.readFileSync(PROMPT_PATH, 'utf-8');
-  console.log('System prompt loaded successfully, length:', SYSTEM_PROMPT.length);
+  if (fs.existsSync(PROMPT_PATH)) {
+    console.log('Prompt file exists at:', PROMPT_PATH);
+    SYSTEM_PROMPT = fs.readFileSync(PROMPT_PATH, 'utf-8');
+    console.log('System prompt loaded successfully, length:', SYSTEM_PROMPT.length);
+    console.log('System prompt preview:', SYSTEM_PROMPT.substring(0, 200) + '...');
+  } else {
+    console.error('Prompt file does not exist at:', PROMPT_PATH);
+    // Try alternative paths
+    const altPaths = [
+      path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v3_2.md'),
+      path.join(process.cwd(), 'neuroexpert_v3_2.md'),
+      path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v3_2.md')
+    ];
+    
+    for (const altPath of altPaths) {
+      if (fs.existsSync(altPath)) {
+        console.log('Found prompt file at alternative path:', altPath);
+        SYSTEM_PROMPT = fs.readFileSync(altPath, 'utf-8');
+        break;
+      }
+    }
+  }
 } catch (e) {
   console.error('Failed to load system prompt for assistant:', e);
+  console.error('Prompt path:', PROMPT_PATH);
+  console.error('Current working directory:', process.cwd());
+  console.error('Available files in utils:', fs.readdirSync(path.join(process.cwd(), 'app', 'utils')).join(', '));
 }
 
 async function sendTelegramNotification(question, answer, model) {
@@ -143,14 +168,27 @@ async function handler(request) {
       } else if (genAI && GEMINI_API_KEY) {
         // Используем Gemini с системным промптом v3.2
         console.log('Using Gemini with system prompt, length:', SYSTEM_PROMPT.length);
-        const geminiModel = genAI.getGenerativeModel({ 
-          model: "gemini-pro",
-          systemInstruction: SYSTEM_PROMPT || undefined,
-        });
-        const result = await geminiModel.generateContent(question);
-        const response = result.response;
-        answer = response.text();
-        usedModel = 'gemini';
+        console.log('Gemini API key exists:', !!GEMINI_API_KEY);
+        console.log('genAI initialized:', !!genAI);
+        
+        try {
+          const geminiModel = genAI.getGenerativeModel({ 
+            model: "gemini-pro",
+            systemInstruction: SYSTEM_PROMPT || undefined,
+          });
+          console.log('Gemini model created successfully');
+          
+          const result = await geminiModel.generateContent(question);
+          console.log('Gemini response received');
+          
+          const response = result.response;
+          answer = response.text();
+          usedModel = 'gemini';
+          console.log('Gemini answer generated, length:', answer.length);
+        } catch (geminiError) {
+          console.error('Gemini API call failed:', geminiError);
+          throw geminiError;
+        }
       } else {
         // Демо режим с продвинутыми ответами
         console.log('Falling back to demo mode because:', {
