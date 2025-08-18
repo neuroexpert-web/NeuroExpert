@@ -178,7 +178,7 @@ async function handler(request) {
         
         try {
           const geminiModel = genAI.getGenerativeModel({ 
-            model: "gemini-pro",
+            model: "gemini-1.5-pro-latest",
             systemInstruction: SYSTEM_PROMPT,
           });
           const result = await geminiModel.generateContent(question);
