@@ -31,7 +31,7 @@ export const ANALYTICS_EVENTS = {
 // Конфигурация мониторинга
 const MONITORING_CONFIG = {
   enableVercelAnalytics: process.env.NODE_ENV === 'production',
-  enableSentry: !!process.env.SENTRY_DSN,
+  enableSentry: false, // Временно отключено до установки пакета
   enableCustomLogging: true,
   slowQueryThreshold: 3000, // 3 секунды
   apiTimeoutThreshold: 10000 // 10 секунд
@@ -57,7 +57,9 @@ class MonitoringService {
         this.logger.info('Vercel Analytics initialized');
       }
 
-      // Инициализация Sentry (опционально)
+      // Инициализация Sentry (отключено до установки пакета)
+      // TODO: Раскомментировать после установки @sentry/nextjs
+      /*
       if (MONITORING_CONFIG.enableSentry && process.env.SENTRY_DSN) {
         try {
           const Sentry = await import('@sentry/nextjs');
@@ -78,6 +80,7 @@ class MonitoringService {
           this.logger.warn('Sentry not available, continuing without it');
         }
       }
+      */
 
       this.initialized = true;
     } catch (error) {
@@ -121,7 +124,9 @@ class MonitoringService {
       // Логирование
       this.logger.error('Application error', errorInfo);
 
-      // Sentry (если доступен)
+      // Sentry (отключено до установки пакета)
+      // TODO: Раскомментировать после установки @sentry/nextjs
+      /*
       if (MONITORING_CONFIG.enableSentry && typeof window !== 'undefined') {
         import('@sentry/nextjs').then(Sentry => {
           Sentry.captureException(error, {
@@ -131,6 +136,7 @@ class MonitoringService {
           // Sentry не установлен, продолжаем без него
         });
       }
+      */
 
       // Отправка в Telegram для критических ошибок
       if (context.severity === 'critical') {
