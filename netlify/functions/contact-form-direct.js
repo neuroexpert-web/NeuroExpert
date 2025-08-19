@@ -1,4 +1,4 @@
-// Обработчик контактной формы с валидацией и сохранением
+// Альтернативная версия с прямой отправкой в Telegram
 exports.handler = async (event, context) => {
   // CORS headers
   const headers = {
@@ -26,6 +26,51 @@ exports.handler = async (event, context) => {
     };
   }
 
+  // Функция прямой отправки в Telegram
+  const sendToTelegram = async (data) => {
+    const botToken = process.env.TELEGRAM_BOT_TOKEN;
+    const chatId = process.env.TELEGRAM_CHAT_ID;
+    
+    if (!botToken || !chatId) {
+      console.log('Telegram credentials not configured');
+      return { success: false, message: 'Telegram not configured' };
+    }
+    
+    const message = `📨 *Новая заявка с сайта*\n\n` +
+      `👤 *Имя:* ${data.name}\n` +
+      `📱 *Телефон:* ${data.phone}\n` +
+      `📧 *Email:* ${data.email || 'Не указан'}\n` +
+      `🏢 *Компания:* ${data.company || 'Не указана'}\n` +
+      `💬 *Сообщение:* ${data.message || 'Без сообщения'}\n\n` +
+      `🌐 *Источник:* NeuroExpert\n` +
+      `📅 _${new Date().toLocaleString('ru-RU')}_`;
+    
+    try {
+      const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message,
+          parse_mode: 'Markdown',
+          disable_web_page_preview: true
+        })
+      });
+      
+      const result = await response.json();
+      
+      if (result.ok) {
+        return { success: true, messageId: result.result.message_id };
+      } else {
+        console.error('Telegram API error:', result);
+        return { success: false, message: result.description };
+      }
+    } catch (error) {
+      console.error('Telegram send error:', error);
+      return { success: false, message: error.message };
+    }
+  };
+
   try {
     // Парсинг данных формы
     const { name, phone, email, company, message } = JSON.parse(event.body || '{}');
@@ -42,7 +87,7 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Валидация телефона (простая проверка)
+    // Валидация телефона
     const phoneRegex = /^[\d\s\-\+\(\)]+$/;
     if (!phoneRegex.test(phone)) {
       return {
@@ -86,52 +131,24 @@ exports.handler = async (event, context) => {
       message: message || null,
       source: 'website',
       timestamp: new Date().toISOString(),
-      status: 'new',
-      utm: {
-        source: event.queryStringParameters?.utm_source || null,
-        medium: event.queryStringParameters?.utm_medium || null,
-        campaign: event.queryStringParameters?.utm_campaign || null
-      }
+      status: 'new'
     };
 
-    // В production здесь должно быть сохранение в БД
-    // Например: await saveToDatabase(lead);
     console.log('New lead:', lead);
 
-    // Отправка уведомления в Telegram
-    try {
-      const telegramResponse = await fetch(`${process.env.URL || 'http://localhost:8888'}/.netlify/functions/telegram-notify`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          type: 'contact_form',
-          data: {
-            name,
-            phone: formattedPhone,
-            email,
-            company,
-            message
-          }
-        })
-      });
-      
-      const telegramResult = await telegramResponse.json();
-      
-      if (telegramResult.success) {
-        console.log('Telegram notification sent successfully:', telegramResult.telegram_message_id);
-      } else {
-        console.error('Telegram notification failed:', telegramResult.message);
-      }
-    } catch (telegramError) {
-      console.error('Failed to send Telegram notification:', telegramError);
-      // Не прерываем основной процесс, если Telegram не работает
-    }
+    // Отправка в Telegram
+    const telegramResult = await sendToTelegram({
+      name,
+      phone: formattedPhone,
+      email,
+      company,
+      message
+    });
 
-    // Отправка email администратору (если настроен)
-    if (process.env.ADMIN_EMAIL && process.env.SENDGRID_API_KEY) {
-      // await sendAdminNotification(lead);
+    if (!telegramResult.success) {
+      console.error('Telegram notification failed:', telegramResult.message);
+    } else {
+      console.log('Telegram notification sent, message ID:', telegramResult.messageId);
     }
 
     // Успешный ответ
@@ -141,7 +158,8 @@ exports.handler = async (event, context) => {
       body: JSON.stringify({ 
         success: true,
         message: 'Заявка успешно отправлена',
-        leadId: lead.id
+        leadId: lead.id,
+        telegramSent: telegramResult.success
       })
     };
 

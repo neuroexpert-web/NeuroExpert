@@ -138,7 +138,7 @@ export default function ContactForm() {
     setStatus({ loading: true, success: false, error: false, message: '' });
 
     try {
-      const response = await fetch('/api/contact-form', {
+      const response = await fetch('/.netlify/functions/contact-form', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
