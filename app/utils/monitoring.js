@@ -57,22 +57,26 @@ class MonitoringService {
         this.logger.info('Vercel Analytics initialized');
       }
 
-      // Инициализация Sentry
+      // Инициализация Sentry (опционально)
       if (MONITORING_CONFIG.enableSentry && process.env.SENTRY_DSN) {
-        const Sentry = await import('@sentry/nextjs');
-        Sentry.init({
-          dsn: process.env.SENTRY_DSN,
-          environment: process.env.NODE_ENV,
-          tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
-          beforeSend(event) {
-            // Фильтрация чувствительных данных
-            if (event.request?.cookies) {
-              delete event.request.cookies;
+        try {
+          const Sentry = await import('@sentry/nextjs');
+          Sentry.init({
+            dsn: process.env.SENTRY_DSN,
+            environment: process.env.NODE_ENV,
+            tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
+            beforeSend(event) {
+              // Фильтрация чувствительных данных
+              if (event.request?.cookies) {
+                delete event.request.cookies;
+              }
+              return event;
             }
-            return event;
-          }
-        });
-        this.logger.info('Sentry initialized');
+          });
+          this.logger.info('Sentry initialized');
+        } catch (error) {
+          this.logger.warn('Sentry not available, continuing without it');
+        }
       }
 
       this.initialized = true;
@@ -117,12 +121,14 @@ class MonitoringService {
       // Логирование
       this.logger.error('Application error', errorInfo);
 
-      // Sentry
+      // Sentry (если доступен)
       if (MONITORING_CONFIG.enableSentry && typeof window !== 'undefined') {
         import('@sentry/nextjs').then(Sentry => {
           Sentry.captureException(error, {
             extra: context
           });
+        }).catch(() => {
+          // Sentry не установлен, продолжаем без него
         });
       }
 
