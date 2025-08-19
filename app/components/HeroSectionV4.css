@@ -1,0 +1,328 @@
+/* Импорт шрифтов */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Hero секция */
+.hero-section {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  background-color: #0A051A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Canvas фон */
+.neural-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0.6;
+}
+
+/* Контент */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 900px;
+  padding: 2rem;
+}
+
+/* Предзаголовок */
+.pre-header {
+  font-size: 14px;
+  font-weight: 500;
+  color: #A0A3B5;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 1.5rem 0;
+  animation: fadeIn 0.8s ease-out;
+}
+
+/* Основной заголовок */
+.main-header {
+  font-size: clamp(48px, 10vw, 80px);
+  font-weight: 700;
+  margin: 0 0 2rem 0;
+  line-height: 1.2;
+  display: inline-block;
+}
+
+/* Буквы заголовка */
+.main-header .letter {
+  display: inline-block;
+  position: relative;
+  opacity: 0;
+}
+
+.main-header .letter-content {
+  display: inline-block;
+  background: linear-gradient(90deg, #A855F7, #6366F1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  opacity: 0;
+  transform: scale(0.8) translateY(10px);
+}
+
+/* Нейронный импульс */
+.neural-pulse {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #FFFFFF;
+  border-radius: 50%;
+  box-shadow: 
+    0 0 20px 10px rgba(255, 255, 255, 0.8),
+    0 0 40px 20px rgba(168, 85, 247, 0.6),
+    0 0 60px 30px rgba(99, 102, 241, 0.4);
+  opacity: 0;
+  top: 50%;
+  left: -20px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* Анимация появления букв */
+.main-header .letter.animate .neural-pulse {
+  animation: neuralPulseMove 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+.main-header .letter.animate .letter-content {
+  animation: letterReveal 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+  animation-delay: 0.1s;
+}
+
+/* Анимация движения импульса */
+@keyframes neuralPulseMove {
+  0% {
+    opacity: 0;
+    left: -20px;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  10% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  90% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    left: calc(100% + 20px);
+    transform: translate(-50%, -50%) scale(0);
+  }
+}
+
+/* Анимация проявления буквы */
+@keyframes letterReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(10px);
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* Подзаголовок */
+.sub-header {
+  font-size: clamp(24px, 5vw, 36px);
+  font-weight: 600;
+  color: #60A5FA;
+  text-transform: uppercase;
+  margin: 0 0 0.5rem 0;
+  animation: fadeIn 0.8s ease-out 2s backwards;
+}
+
+/* Подпись к подзаголовку */
+.sub-header-caption {
+  font-size: 16px;
+  font-weight: 500;
+  color: #A0A3B5;
+  text-transform: uppercase;
+  margin: 0 0 2rem 0;
+  animation: fadeIn 0.8s ease-out 2.2s backwards;
+}
+
+/* Описание */
+.description {
+  font-size: clamp(16px, 3vw, 20px);
+  font-weight: 400;
+  color: #D1D5DB;
+  max-width: 600px;
+  line-height: 1.5;
+  margin: 0 auto 3rem;
+  animation: fadeIn 0.8s ease-out 2.4s backwards;
+}
+
+/* CTA кнопка */
+.cta-button {
+  padding: 18px 40px;
+  border-radius: 50px;
+  border: none;
+  background: linear-gradient(90deg, #6366F1, #A855F7);
+  color: #FFFFFF;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  box-shadow: 0 10px 25px -5px rgba(168, 85, 247, 0.3);
+  transition: all 0.2s ease-out;
+  animation: fadeIn 0.8s ease-out 2.6s backwards;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Эффект при наведении */
+.cta-button:hover {
+  transform: scale(1.05);
+  box-shadow: 
+    0 14px 30px -7px rgba(168, 85, 247, 0.4),
+    0 0 50px -10px rgba(168, 85, 247, 0.3);
+}
+
+/* Эффект волны при клике */
+.cta-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease-out, height 0.6s ease-out;
+}
+
+.cta-button:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Базовая анимация появления */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Адаптивность для планшетов */
+@media (max-width: 768px) {
+  .hero-content {
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+  
+  .pre-header {
+    font-size: 12px;
+  }
+  
+  .main-header {
+    font-size: clamp(40px, 8vw, 60px);
+  }
+  
+  .sub-header {
+    font-size: clamp(20px, 4vw, 28px);
+  }
+  
+  .sub-header-caption {
+    font-size: 14px;
+  }
+  
+  .description {
+    font-size: clamp(14px, 2.5vw, 18px);
+  }
+  
+  .cta-button {
+    padding: 16px 36px;
+    font-size: 14px;
+  }
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 480px) {
+  .hero-section {
+    min-height: 100svh;
+  }
+  
+  .hero-content {
+    padding: 1rem;
+  }
+  
+  .pre-header {
+    font-size: 11px;
+    margin-bottom: 1rem;
+  }
+  
+  .main-header {
+    font-size: clamp(36px, 12vw, 48px);
+    margin-bottom: 1.5rem;
+  }
+  
+  .sub-header {
+    font-size: clamp(18px, 6vw, 24px);
+  }
+  
+  .sub-header-caption {
+    font-size: 12px;
+    margin-bottom: 1.5rem;
+  }
+  
+  .description {
+    font-size: 14px;
+    margin-bottom: 2rem;
+    padding: 0 0.5rem;
+  }
+  
+  .cta-button {
+    padding: 14px 32px;
+    font-size: 13px;
+  }
+  
+  /* Упрощенная анимация для мобильных */
+  .neural-pulse {
+    box-shadow: 
+      0 0 10px 5px rgba(255, 255, 255, 0.8),
+      0 0 20px 10px rgba(168, 85, 247, 0.6);
+  }
+}
+
+/* Оптимизация для устройств с reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .neural-background {
+    display: none;
+  }
+  
+  .main-header .letter-content {
+    opacity: 1;
+    transform: none;
+  }
+  
+  .neural-pulse {
+    display: none;
+  }
+}

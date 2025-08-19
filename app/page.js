@@ -3,7 +3,8 @@
 import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import PremiumGlassBackground from './components/PremiumGlassBackground';
-import HeroSectionV3 from './components/HeroSectionV3';
+import HeroSectionV4 from './components/HeroSectionV4';
+// import HeroSectionV3 from './components/HeroSectionV3';
 // import HeroSectionV2 from './components/HeroSectionV2';
 // import PremiumHero from './components/PremiumHero';
 import JourneySection from './components/JourneySection';
@@ -40,7 +41,7 @@ export default function Home() {
   return (
     <main className="premium-main" style={{ background: 'var(--noir-900)', minHeight: '100vh' }}>
       {/* Новая Hero секция с анимированным фоном */}
-      <HeroSectionV3 />
+      <HeroSectionV4 />
       
       {/* AI Управляющий директор */}
       <Suspense fallback={<div className="loading-skeleton">Загрузка...</div>}>
