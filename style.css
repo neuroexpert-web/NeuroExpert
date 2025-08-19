@@ -1,0 +1,168 @@
+/* Глобальные стили и фон */
+body {
+    margin: 0;
+    background-color: #0A051A;
+    font-family: 'Inter', sans-serif;
+    color: #D1D5DB;
+}
+
+.hero-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+#hero-background-animation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 20px;
+}
+
+/* Типографика */
+.pre-header {
+    font-size: 14px;
+    font-weight: 500;
+    color: #A0A3B5;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+}
+
+.main-header {
+    font-size: clamp(48px, 10vw, 80px);
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(90deg, #A855F7 0%, #6366F1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.sub-header {
+    font-size: clamp(24px, 5vw, 36px);
+    font-weight: 600;
+    color: #60A5FA;
+    text-transform: uppercase;
+    margin-top: 16px;
+    margin-bottom: 8px;
+}
+
+.sub-header-caption {
+    font-size: 16px;
+    font-weight: 500;
+    color: #A0A3B5;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.description {
+    font-size: clamp(16px, 3vw, 20px);
+    font-weight: 400;
+    color: #D1D5DB;
+    max-width: 600px;
+    line-height: 1.6;
+    margin: 24px auto 40px auto;
+}
+
+/* Кнопка призыва к действию */
+.cta-button {
+    display: inline-block;
+    padding: 18px 40px;
+    border-radius: 50px;
+    border: none;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    color: #FFFFFF;
+    background: linear-gradient(90deg, #6366F1 0%, #A855F7 100%);
+    box-shadow: 0 10px 30px -5px rgba(168, 85, 247, 0.4);
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.cta-button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 15px 35px -5px rgba(168, 85, 247, 0.5);
+}
+
+/* Анимация появления символов */
+@keyframes char-appear {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.char {
+    position: relative;
+    opacity: 0;
+}
+
+.char.visible {
+    animation: char-appear 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+/* Псевдоэлементы для эффекта импульса */
+.char::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #A855F7 0%, #6366F1 100%);
+    clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
+    transition: clip-path 0.5s ease-out;
+    z-index: -1;
+    transform: translateY(-50%);
+}
+
+.char.impulse::before {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.char::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -3px;
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 15px white;
+    opacity: 0;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.char.pulse::after {
+    animation: pulse-move 0.5s ease-out forwards;
+}
+
+@keyframes pulse-move {
+    0% {
+        opacity: 1;
+        left: -3px;
+    }
+    100% {
+        opacity: 0;
+        left: calc(100% + 3px);
+    }
+}

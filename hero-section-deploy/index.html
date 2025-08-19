@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroExpert - Цифровая AI Бизнес-платформа</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0A051A;
+            color: #D1D5DB;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        .hero-section {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            padding: 40px 20px;
+            z-index: 10;
+            position: relative;
+        }
+        
+        .pre-header {
+            font-size: 14px;
+            font-weight: 500;
+            color: #A0A3B5;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+        
+        .main-header {
+            font-size: clamp(48px, 10vw, 80px);
+            font-weight: 700;
+            margin: 0 0 16px 0;
+            background: linear-gradient(90deg, #A855F7 0%, #6366F1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: #A855F7; /* Fallback для браузеров без поддержки */
+        }
+        
+        .sub-header {
+            font-size: clamp(24px, 5vw, 36px);
+            font-weight: 600;
+            color: #60A5FA;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        
+        .sub-header-caption {
+            font-size: 16px;
+            font-weight: 500;
+            color: #A0A3B5;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+        
+        .description {
+            font-size: clamp(16px, 3vw, 20px);
+            font-weight: 400;
+            color: #D1D5DB;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 18px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: #FFFFFF;
+            background: linear-gradient(90deg, #6366F1 0%, #A855F7 100%);
+            box-shadow: 0 10px 30px -5px rgba(168, 85, 247, 0.4);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 35px -5px rgba(168, 85, 247, 0.6);
+        }
+        
+        /* Простые частицы на CSS */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #3B82F6;
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .particle:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 20%; top: 80%; animation-delay: 0.5s; }
+        .particle:nth-child(3) { left: 30%; top: 40%; animation-delay: 1s; }
+        .particle:nth-child(4) { left: 40%; top: 70%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { left: 50%; top: 30%; animation-delay: 2s; }
+        .particle:nth-child(6) { left: 60%; top: 90%; animation-delay: 2.5s; }
+        .particle:nth-child(7) { left: 70%; top: 10%; animation-delay: 3s; }
+        .particle:nth-child(8) { left: 80%; top: 60%; animation-delay: 3.5s; }
+        .particle:nth-child(9) { left: 90%; top: 25%; animation-delay: 4s; }
+        .particle:nth-child(10) { left: 15%; top: 55%; animation-delay: 4.5s; }
+        .particle:nth-child(11) { left: 25%; top: 15%; animation-delay: 5s; }
+        .particle:nth-child(12) { left: 35%; top: 85%; animation-delay: 5.5s; }
+        .particle:nth-child(13) { left: 45%; top: 45%; animation-delay: 6s; }
+        .particle:nth-child(14) { left: 55%; top: 75%; animation-delay: 0.2s; }
+        .particle:nth-child(15) { left: 65%; top: 35%; animation-delay: 0.7s; }
+        .particle:nth-child(16) { left: 75%; top: 95%; animation-delay: 1.2s; }
+        .particle:nth-child(17) { left: 85%; top: 5%; animation-delay: 1.7s; }
+        .particle:nth-child(18) { left: 95%; top: 65%; animation-delay: 2.2s; }
+        .particle:nth-child(19) { left: 5%; top: 50%; animation-delay: 2.7s; }
+        .particle:nth-child(20) { left: 12%; top: 88%; animation-delay: 3.2s; }
+        
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px) translateX(0px);
+                opacity: 0.3;
+            }
+            25% { 
+                transform: translateY(-20px) translateX(10px);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: translateY(-10px) translateX(-15px);
+                opacity: 0.6;
+            }
+            75% { 
+                transform: translateY(-30px) translateX(5px);
+                opacity: 0.9;
+            }
+        }
+        
+        /* Анимация появления */
+        .hero-content > * {
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .pre-header { animation-delay: 0.2s; }
+        .main-header { animation-delay: 0.4s; }
+        .sub-header { animation-delay: 0.6s; }
+        .sub-header-caption { animation-delay: 0.8s; }
+        .description { animation-delay: 1s; }
+        .cta-button { animation-delay: 1.2s; }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .hero-content {
+                padding: 20px 15px;
+            }
+            
+            .pre-header {
+                font-size: 12px;
+                margin-bottom: 20px;
+            }
+            
+            .sub-header-caption {
+                font-size: 14px;
+            }
+            
+            .cta-button {
+                padding: 16px 32px;
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero-section">
+        <!-- Простые CSS частицы -->
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+        
+        <div class="hero-content">
+            <p class="pre-header">ЦИФРОВАЯ AI БИЗНЕС-ПЛАТФОРМА</p>
+            <h1 class="main-header">NeuroExpert</h1>
+            <h2 class="sub-header">ЦИФРОВИЗАЦИЯ БИЗНЕСА</h2>
+            <p class="sub-header-caption">С ПОМОЩЬЮ ИСКУССТВЕННОГО ИНТЕЛЛЕКТА</p>
+            <p class="description">Автоматизируйте бизнес-процессы, увеличивайте прибыль и опережайте конкурентов, используя передовые AI-технологии.</p>
+            <a href="#" class="cta-button">НАЧАТЬ БЕСПЛАТНО</a>
+        </div>
+    </section>
+</body>
+</html>
