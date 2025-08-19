@@ -20,6 +20,9 @@ export default function ContactForm() {
 
   const [isMobile, setIsMobile] = useState(false);
   const [isFormFocused, setIsFormFocused] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [activeField, setActiveField] = useState(null);
+  const recognitionRef = useRef(null);
 
   useEffect(() => {
     // Определяем мобильное устройство
@@ -113,7 +116,7 @@ export default function ContactForm() {
         recognitionRef.current = recognition;
       }
     }
-  }, [activeField]);
+  }, []);
 
   const startListening = (fieldName) => {
     if (recognitionRef.current && !isListening) {
