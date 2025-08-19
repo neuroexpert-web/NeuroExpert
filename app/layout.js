@@ -5,6 +5,8 @@ import './styles/premium-design-system.css'
 import './styles/premium-glass-sections.css'
 import './styles/mobile-fixes.css'
 import Script from 'next/script'
+import ErrorBoundary from './components/ErrorBoundary'
+import { Analytics } from '@vercel/analytics/react'
 
 // Оптимизированная загрузка шрифта
 const inter = Inter({ 
@@ -170,7 +172,10 @@ export default function RootLayout({ children }) {
         <div className="loading-spinner" id="global-loader">
           <div className="spinner"></div>
         </div>
-        {children}
+        <ErrorBoundary>
+          {children}
+        </ErrorBoundary>
+        <Analytics />
         
         {/* Google Analytics с отложенной загрузкой */}
         {process.env.NEXT_PUBLIC_GA_ID && (
