@@ -173,7 +173,7 @@ exports.handler = async (event, context) => {
     };
   }
 
-  const geminiApiKey = process.env.GOOGLE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+  const geminiApiKey = process.env.GOOGLE_GEMINI_API_KEY;
   const claudeApiKey = process.env.ANTHROPIC_API_KEY;
 
   if (!question || question.trim() === '') {
@@ -320,6 +320,6 @@ async function getClaudeResponse(question, apiKey) {
   */
   
   // Пока используем Gemini с префиксом Claude для демонстрации
-  const geminiResponse = await getGeminiResponse(question, process.env.GEMINI_API_KEY);
+  const geminiResponse = await getGeminiResponse(question, process.env.GOOGLE_GEMINI_API_KEY);
   return `[Claude Opus 4 - Demo Mode]\n\n${geminiResponse}`;
 }

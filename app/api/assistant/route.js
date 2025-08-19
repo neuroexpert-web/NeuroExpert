@@ -11,11 +11,8 @@ import path from 'path';
 //   addEmotionalTone
 // } from '../../utils/ai-director-system';
 
-// Поддерживаем несколько названий переменных среды для ключа Gemini,
-// чтобы избежать ошибки из-за опечаток в панели хостинга
-const GEMINI_API_KEY = process.env.GOOGLE_GEMINI_API_KEY
-  || process.env.GEMINI_API_KEY
-  || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+// Используем только безопасное имя переменной
+const GEMINI_API_KEY = process.env.GOOGLE_GEMINI_API_KEY;
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 
 if (!GEMINI_API_KEY && !ANTHROPIC_API_KEY) {
