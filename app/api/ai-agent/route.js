@@ -12,7 +12,7 @@ export async function POST(request) {
   try {
     // Rate limiting
     const rateLimitResult = await apiRateLimit(request);
-    if (rateLimitResult.status === 429) {
+    if (rateLimitResult instanceof NextResponse) {
       return rateLimitResult;
     }
 
