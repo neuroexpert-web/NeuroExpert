@@ -3,6 +3,15 @@ import { NextResponse } from 'next/server';
 export async function GET() {
   const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
   
+  // Проверяем наличие ключа
+  if (!ANTHROPIC_API_KEY || !ANTHROPIC_API_KEY.startsWith('sk-')) {
+    return NextResponse.json({
+      has_key: false,
+      status: 'no_api_key',
+      message: 'Anthropic API key not configured'
+    });
+  }
+  
   // Проверяем баланс через API (если такой endpoint существует)
   try {
     // Пробуем получить информацию об аккаунте
