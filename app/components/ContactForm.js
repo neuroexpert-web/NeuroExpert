@@ -18,11 +18,8 @@ export default function ContactForm() {
     message: ''
   });
 
-  const [isListening, setIsListening] = useState(false);
-  const [activeField, setActiveField] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isFormFocused, setIsFormFocused] = useState(false);
-  const recognitionRef = useRef(null);
 
   useEffect(() => {
     // Определяем мобильное устройство
@@ -325,7 +322,7 @@ export default function ContactForm() {
           transition={{ delay: 0.2 }}
           className="form-container"
           style={{
-            maxWidth: '600px',
+            maxWidth: '900px',
             margin: '0 auto',
             background: 'rgba(30, 41, 59, 0.5)',
             backdropFilter: 'blur(20px)',
