@@ -14,7 +14,7 @@ const ROICalculator = dynamic(() => import('./components/PremiumROICalculator'),
   loading: () => <div className="loading-skeleton">Загрузка калькулятора ROI...</div>
 });
 
-const SmartFloatingAI = dynamic(() => import('./components/ImprovedFloatingAI'), {
+const SmartFloatingAI = dynamic(() => import('./components/SmartFloatingAI'), {
   ssr: false,
   loading: () => <div className="ai-loading">AI управляющий загружается...</div>
 });
