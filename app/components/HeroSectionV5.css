@@ -1,0 +1,215 @@
+/* Подключение шрифта Inter */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Глобальные стили */
+body {
+    margin: 0;
+    background-color: #0A051A;
+    font-family: 'Inter', sans-serif;
+    color: #D1D5DB;
+}
+
+/* Hero секция */
+.hero-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+/* Контейнер для фоновой анимации */
+#hero-background-animation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* Контент Hero секции */
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 20px;
+}
+
+/* Предзаголовок */
+.pre-header {
+    font-size: 14px;
+    font-weight: 500;
+    color: #A0A3B5;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+}
+
+/* Основной заголовок */
+.main-header {
+    font-size: clamp(48px, 10vw, 80px);
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(90deg, #A855F7 0%, #6366F1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Подзаголовок */
+.sub-header {
+    font-size: clamp(24px, 5vw, 36px);
+    font-weight: 600;
+    color: #60A5FA;
+    text-transform: uppercase;
+    margin-top: 16px;
+    margin-bottom: 8px;
+}
+
+/* Подпись к подзаголовку */
+.sub-header-caption {
+    font-size: 16px;
+    font-weight: 500;
+    color: #A0A3B5;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+/* Описание */
+.description {
+    font-size: clamp(16px, 3vw, 20px);
+    font-weight: 400;
+    color: #D1D5DB;
+    max-width: 600px;
+    line-height: 1.6;
+    margin: 24px auto 40px auto;
+}
+
+/* CTA кнопка */
+.cta-button {
+    display: inline-block;
+    padding: 18px 40px;
+    border-radius: 50px;
+    border: none;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: linear-gradient(90deg, #6366F1 0%, #A855F7 100%);
+    box-shadow: 0 10px 30px -5px rgba(168, 85, 247, 0.4);
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer;
+}
+
+/* Hover эффект для кнопки */
+.cta-button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 15px 35px -5px rgba(168, 85, 247, 0.5);
+}
+
+/* Стили для анимации букв */
+.char {
+    position: relative;
+    display: inline-block;
+    opacity: 0;
+}
+
+/* Псевдоэлемент для градиентного заполнения */
+.char::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #A855F7 0%, #6366F1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
+    transition: clip-path 0.5s ease-out;
+}
+
+/* Псевдоэлемент для светового импульса */
+.char::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -10px;
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 15px white, 0 0 30px #A855F7, 0 0 45px #6366F1;
+    opacity: 0;
+    transform: translateY(-50%);
+    transition: left 0.5s ease-out, opacity 0.3s ease-out;
+}
+
+/* Класс для видимых букв */
+.char.visible {
+    animation: char-appear 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+/* Анимация появления букв */
+@keyframes char-appear {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .hero-content {
+        padding: 15px;
+    }
+    
+    .pre-header {
+        font-size: 12px;
+    }
+    
+    .sub-header-caption {
+        font-size: 14px;
+    }
+    
+    .cta-button {
+        padding: 16px 36px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .pre-header {
+        font-size: 11px;
+        margin-bottom: 20px;
+    }
+    
+    .sub-header {
+        margin-top: 12px;
+    }
+    
+    .sub-header-caption {
+        font-size: 12px;
+    }
+    
+    .description {
+        font-size: 14px;
+        margin: 20px auto 32px auto;
+        padding: 0 10px;
+    }
+    
+    .cta-button {
+        padding: 14px 32px;
+        font-size: 13px;
+    }
+}
