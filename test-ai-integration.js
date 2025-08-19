@@ -31,7 +31,8 @@ const testAIIntegration = async () => {
       const response = await fetch('http://localhost:3000/api/ai-agent', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'x-neuroexpert-csrf': '1'
         },
         body: JSON.stringify(test)
       });
