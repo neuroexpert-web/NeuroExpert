@@ -1,5 +1,97 @@
 /* SmartFloatingAI.css - Оптимизированные стили для мобильных */
 
+/* Плавающая кнопка AI */
+.ai-float-button {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #60a5fa, #a78bfa);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(96, 165, 250, 0.3);
+  transition: all 0.3s ease;
+  z-index: 9998;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateZ(0); /* Принудительное аппаратное ускорение */
+  will-change: transform; /* Оптимизация анимации */
+}
+
+.ai-float-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 30px rgba(96, 165, 250, 0.4);
+}
+
+.ai-float-button.hidden {
+  transform: scale(0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ai-button-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-icon {
+  font-size: 32px;
+  z-index: 2;
+  position: relative;
+}
+
+.ai-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  animation: pulse 2s ease-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+}
+
+.ai-tooltip {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 6px;
+  font-size: 14px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.ai-float-button:hover .ai-tooltip {
+  opacity: 1;
+}
+
+/* Старые стили для совместимости */
 .ai-chat-button {
   position: fixed;
   bottom: 20px;
@@ -136,6 +228,85 @@
   cursor: not-allowed;
 }
 
+/* Базовые стили для окна чата */
+.ai-chat-window {
+  display: none;
+}
+
+.ai-chat-window.open {
+  display: block;
+}
+
+/* Стили для шапки */
+.ai-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.ai-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Кнопка закрытия */
+.ai-close-btn {
+  background: transparent;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+}
+
+.ai-close-btn:hover {
+  background: var(--dark-bg);
+  color: var(--text-primary);
+}
+
+/* Аватар и информация в шапке */
+.ai-avatar-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.ai-status-dot {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  background: #10b981;
+  border-radius: 50%;
+  border: 2px solid var(--dark-card);
+}
+
+.ai-header-info h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.ai-subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
 /* Оптимизация для планшетов */
 @media (max-width: 768px) {
   .ai-chat-button {
@@ -155,6 +326,18 @@
 
 /* Оптимизация для мобильных телефонов */
 @media (max-width: 480px) {
+  .ai-float-button {
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    z-index: 9999; /* Увеличиваем z-index для мобильных */
+  }
+  
+  .ai-float-button .ai-icon {
+    font-size: 28px;
+  }
+  
   .ai-chat-button {
     bottom: 12px;
     right: 12px;
@@ -165,14 +348,14 @@
   
   .ai-chat-container {
     position: fixed;
-    top: 0;
+    top: env(safe-area-inset-top, 0);
     left: 0;
     right: 0;
     bottom: 0;
     width: 100%;
-    height: 100%;
+    height: calc(100% - env(safe-area-inset-top, 0));
     max-width: 100%;
-    max-height: 100%;
+    max-height: calc(100vh - env(safe-area-inset-top, 0));
     border-radius: 0;
     animation: slideUpMobile 0.3s ease-out;
   }
@@ -188,10 +371,14 @@
   
   .ai-chat-header {
     padding: 16px;
+    padding-top: max(16px, env(safe-area-inset-top));
     position: sticky;
     top: 0;
     z-index: 10;
     background: var(--dark-card);
+    min-height: 60px;
+    display: flex;
+    align-items: center;
   }
   
   .ai-chat-messages {
@@ -229,6 +416,49 @@
     flex-shrink: 0;
     font-size: 12px;
     padding: 6px 12px;
+  }
+  
+  /* Фиксируем структуру чата на мобильных */
+  .ai-chat-window {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+  }
+  
+  /* Убеждаемся что кнопка закрытия видна */
+  .ai-close-btn {
+    position: relative;
+    z-index: 11;
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 8px;
+  }
+  
+  /* Корректируем расположение элементов в шапке */
+  .ai-header-left {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .ai-header-right {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  
+  /* Уменьшаем размер текста в шапке на мобильных */
+  .ai-header-info h3 {
+    font-size: 16px;
+  }
+  
+  .ai-subtitle {
+    font-size: 12px;
   }
 }
 
@@ -327,6 +557,53 @@
   
   .ai-chat-input-container {
     padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+}
+
+/* Дополнительные фиксы для мобильных устройств */
+@media (max-width: 480px) {
+  /* Предотвращаем переполнение контента */
+  .ai-chat-container {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  /* Убеждаемся, что сообщения не вылезают за границы */
+  .ai-messages {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+  }
+  
+  /* Фиксируем позицию окна */
+  .ai-chat-window.open .ai-chat-container {
+    position: fixed !important;
+    top: 0 !important;
+    padding-top: env(safe-area-inset-top, 0);
+  }
+  
+  /* Увеличиваем видимость кнопки закрытия */
+  .ai-close-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  /* Корректируем выбор модели на мобильных */
+  .model-selector {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+  }
+  
+  .model-btn {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+  
+  .model-icon {
+    display: none;
   }
 }
 

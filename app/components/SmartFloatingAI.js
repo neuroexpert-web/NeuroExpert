@@ -1,8 +1,10 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
+import './SmartFloatingAI.css';
 
 export default function SmartFloatingAI() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true); // Кнопка видна сразу
   // История сообщений хранится в localStorage -> диалог не пропадает после перезагрузки
   const [messages, setMessages] = useState(() => {
     if (typeof window === 'undefined') return [];
@@ -216,17 +218,19 @@ export default function SmartFloatingAI() {
   return (
     <>
       {/* Кнопка открытия чата */}
-      <button
-        className={`ai-float-button ${isOpen ? 'hidden' : ''}`}
-        onClick={() => setIsOpen(true)}
-        aria-label="Открыть AI помощника"
-      >
-        <div className="ai-button-content">
-          <span className="ai-icon">🤖</span>
-          <span className="ai-pulse"></span>
-        </div>
-        <div className="ai-tooltip">AI помощник</div>
-      </button>
+      {isVisible && !isOpen && (
+        <button
+          className="ai-float-button"
+          onClick={() => setIsOpen(true)}
+          aria-label="Открыть AI помощника"
+        >
+          <div className="ai-button-content">
+            <span className="ai-icon">🤖</span>
+            <span className="ai-pulse"></span>
+          </div>
+          <div className="ai-tooltip">AI помощник</div>
+        </button>
+      )}
 
       {/* Окно чата */}
       <div className={`ai-chat-window ${isOpen ? 'open' : ''}`}>
