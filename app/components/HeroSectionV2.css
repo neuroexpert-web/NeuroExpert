@@ -1,0 +1,171 @@
+/* Дополнительные стили для Hero Section V2 */
+
+/* Улучшенная анимация заголовка с SVG эффектом */
+.letter-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.letter-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.letter-path {
+  fill: none;
+  stroke: url(#neon-gradient);
+  stroke-width: 2;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.8));
+  animation: drawLetter 1s ease-out forwards;
+}
+
+@keyframes drawLetter {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Улучшенный эффект частиц для фона */
+.particle-glow {
+  filter: blur(1px);
+  box-shadow: 
+    0 0 10px currentColor,
+    0 0 20px currentColor,
+    0 0 30px currentColor;
+}
+
+/* Дополнительные эффекты для кнопок */
+.cta-button {
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.cta-button.primary {
+  background-image: 
+    linear-gradient(135deg, #667eea 0%, #764ba2 100%),
+    linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background-size: 100% 100%, 200% 200%;
+  background-position: 0 0, 50% 50%;
+  background-blend-mode: normal, overlay;
+}
+
+/* Hover эффект с волной */
+.cta-button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: width 0.8s, height 0.8s, opacity 0.8s;
+  opacity: 0;
+}
+
+.cta-button:hover::after {
+  width: 300%;
+  height: 300%;
+  opacity: 0;
+  animation: rippleWave 0.8s ease-out;
+}
+
+@keyframes rippleWave {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    width: 300%;
+    height: 300%;
+    opacity: 0;
+  }
+}
+
+/* Мобильная оптимизация анимаций */
+@media (max-width: 768px) {
+  /* Упрощаем анимации для лучшей производительности */
+  .letter-path {
+    stroke-width: 1;
+    filter: none;
+  }
+  
+  .cta-button::before,
+  .cta-button::after {
+    display: none;
+  }
+  
+  .cta-button.primary:hover,
+  .cta-button.secondary:hover {
+    transform: scale(1.05);
+  }
+}
+
+/* Эффект мерцающих звезд для фона */
+@keyframes twinkle {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 3s infinite;
+}
+
+/* Градиент для SVG */
+.neon-gradient-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+/* Улучшенная типографика */
+.main-header {
+  text-shadow: 
+    0 0 20px rgba(168, 85, 247, 0.5),
+    0 0 40px rgba(168, 85, 247, 0.3),
+    0 0 60px rgba(168, 85, 247, 0.2);
+}
+
+/* Анимация появления контента */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* Пульсирующий эффект для акцентов */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+.pulse-effect {
+  animation: pulse 2s ease-in-out infinite;
+}

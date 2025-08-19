@@ -209,7 +209,7 @@ export default function HeroSectionV2() {
               document.getElementById('calculator')?.scrollIntoView({ behavior: 'smooth' });
             }}
           >
-            Калькулятор
+            <span>Калькулятор</span>
           </button>
         </motion.div>
       </div>
@@ -333,33 +333,179 @@ export default function HeroSectionV2() {
           text-transform: uppercase;
           letter-spacing: 0.05em;
           cursor: pointer;
-          transition: all 0.2s ease-out;
+          transition: all 0.3s ease-out;
           position: relative;
           overflow: hidden;
+          isolation: isolate;
         }
 
+        /* Первичная кнопка с неоновым градиентом */
         .cta-button.primary {
-          background: linear-gradient(90deg, #6366F1, #A855F7);
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           color: #FFFFFF;
-          box-shadow: 0 10px 25px -5px rgba(168, 85, 247, 0.3);
+          box-shadow: 
+            0 10px 25px -5px rgba(168, 85, 247, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+          position: relative;
+        }
+
+        .cta-button.primary::before {
+          content: '';
+          position: absolute;
+          top: -2px;
+          left: -2px;
+          right: -2px;
+          bottom: -2px;
+          background: linear-gradient(135deg, #667eea, #764ba2, #f093fb, #f5576c);
+          border-radius: 50px;
+          opacity: 0;
+          z-index: -1;
+          transition: opacity 0.3s ease-out;
+          filter: blur(10px);
+          animation: neonPulse 2s linear infinite;
+        }
+
+        .cta-button.primary::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(135deg, 
+            transparent 0%, 
+            rgba(255, 255, 255, 0.2) 50%, 
+            transparent 100%
+          );
+          transform: translateX(-100%) skewX(-20deg);
+          transition: transform 0.6s ease-out;
+        }
+
+        .cta-button.primary:hover::before {
+          opacity: 1;
+        }
+
+        .cta-button.primary:hover::after {
+          transform: translateX(100%) skewX(-20deg);
         }
 
         .cta-button.primary:hover {
-          transform: scale(1.05);
-          box-shadow: 0 15px 35px -5px rgba(168, 85, 247, 0.4);
+          transform: translateY(-2px) scale(1.02);
+          box-shadow: 
+            0 15px 35px -5px rgba(168, 85, 247, 0.6),
+            0 0 40px rgba(168, 85, 247, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
 
+        .cta-button.primary:active {
+          transform: translateY(0) scale(0.98);
+          box-shadow: 
+            0 5px 15px -5px rgba(168, 85, 247, 0.4),
+            inset 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Вторичная кнопка с неоновым контуром */
         .cta-button.secondary {
-          background: transparent;
+          background: rgba(96, 165, 250, 0.1);
           color: #60A5FA;
-          border: 2px solid #60A5FA;
-          box-shadow: 0 0 20px -5px rgba(96, 165, 250, 0.3);
+          position: relative;
+          box-shadow: 
+            0 0 20px rgba(96, 165, 250, 0.3),
+            inset 0 0 20px rgba(96, 165, 250, 0.1);
+        }
+
+        .cta-button.secondary::before {
+          content: '';
+          position: absolute;
+          top: -2px;
+          left: -2px;
+          right: -2px;
+          bottom: -2px;
+          background: linear-gradient(135deg, #60A5FA, #3B82F6, #8B5CF6);
+          border-radius: 50px;
+          z-index: -1;
+          opacity: 0.8;
+          animation: neonRotate 3s linear infinite;
+        }
+
+        .cta-button.secondary::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: #0A051A;
+          border-radius: 48px;
+          z-index: -1;
+          margin: 2px;
+        }
+
+        .cta-button.secondary span {
+          position: relative;
+          z-index: 1;
         }
 
         .cta-button.secondary:hover {
-          background: rgba(96, 165, 250, 0.1);
-          transform: scale(1.05);
-          box-shadow: 0 0 30px -5px rgba(96, 165, 250, 0.5);
+          transform: translateY(-2px) scale(1.02);
+          color: #FFFFFF;
+          background: rgba(96, 165, 250, 0.2);
+          box-shadow: 
+            0 0 40px rgba(96, 165, 250, 0.5),
+            0 0 80px rgba(96, 165, 250, 0.3),
+            inset 0 0 30px rgba(96, 165, 250, 0.2);
+        }
+
+        .cta-button.secondary:hover::before {
+          opacity: 1;
+          filter: blur(2px);
+        }
+
+        .cta-button.secondary:active {
+          transform: translateY(0) scale(0.98);
+        }
+
+        /* Анимации для неоновых эффектов */
+        @keyframes neonPulse {
+          0% {
+            filter: blur(10px) brightness(1);
+          }
+          50% {
+            filter: blur(15px) brightness(1.2);
+          }
+          100% {
+            filter: blur(10px) brightness(1);
+          }
+        }
+
+        @keyframes neonRotate {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+
+        /* Ripple эффект при клике */
+        .cta-button::before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 0;
+          height: 0;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.5);
+          transform: translate(-50%, -50%);
+          transition: width 0.6s, height 0.6s;
+        }
+
+        .cta-button:active::before {
+          width: 300px;
+          height: 300px;
+          opacity: 0;
         }
 
         /* Адаптивность */

@@ -3,7 +3,8 @@
 import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import PremiumGlassBackground from './components/PremiumGlassBackground';
-import PremiumHero from './components/PremiumHero';
+import HeroSectionV2 from './components/HeroSectionV2';
+// import PremiumHero from './components/PremiumHero';
 import JourneySection from './components/JourneySection';
 import WhyUsSection from './components/WhyUsSection';
 import PricingSection from './components/PricingSection';
@@ -37,11 +38,8 @@ const AIDirectorCapabilities = dynamic(() => import('./components/AIDirectorCapa
 export default function Home() {
   return (
     <main className="premium-main" style={{ background: 'var(--noir-900)', minHeight: '100vh' }}>
-      {/* Premium стеклянный фон с глубокими эффектами */}
-      <PremiumGlassBackground />
-      
-      {/* Premium Hero с 3D эффектами */}
-      <PremiumHero />
+      {/* Новая Hero секция с анимированным фоном */}
+      <HeroSectionV2 />
       
       {/* AI Управляющий директор */}
       <Suspense fallback={<div className="loading-skeleton">Загрузка...</div>}>
