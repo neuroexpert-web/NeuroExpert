@@ -1,0 +1,272 @@
+/* Подключение шрифта Inter */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Hero секция */
+.hero-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    background-color: #0A051A;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Canvas для фоновой анимации */
+.hero-background-animation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* Контент Hero секции */
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 20px;
+}
+
+/* Предзаголовок */
+.pre-header {
+    font-size: 14px;
+    font-weight: 500;
+    color: #A0A3B5;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    opacity: 0;
+}
+
+/* Основной заголовок */
+.main-header {
+    font-size: clamp(48px, 10vw, 80px);
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.2;
+}
+
+/* Буквы заголовка */
+.letter {
+    display: inline-block;
+    position: relative;
+    opacity: 0;
+    background: linear-gradient(90deg, #A855F7 0%, #6366F1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: letterAppear 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+/* Анимация появления букв */
+@keyframes letterAppear {
+    0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.8);
+        filter: blur(10px);
+    }
+    50% {
+        filter: blur(5px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+/* Нейронный импульс */
+.neural-pulse {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 
+        0 0 15px white,
+        0 0 30px #A855F7,
+        0 0 45px #6366F1;
+    top: 50%;
+    left: -10px;
+    transform: translateY(-50%);
+    animation: pulseMove 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+@keyframes pulseMove {
+    0% {
+        left: -10px;
+        opacity: 0;
+        transform: translateY(-50%) scale(0);
+    }
+    10% {
+        opacity: 1;
+        transform: translateY(-50%) scale(1);
+    }
+    90% {
+        opacity: 1;
+        transform: translateY(-50%) scale(1);
+    }
+    100% {
+        left: calc(100% + 10px);
+        opacity: 0;
+        transform: translateY(-50%) scale(0);
+    }
+}
+
+/* Подзаголовок */
+.sub-header {
+    font-size: clamp(24px, 5vw, 36px);
+    font-weight: 600;
+    color: #60A5FA;
+    text-transform: uppercase;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    opacity: 0;
+}
+
+/* Подпись к подзаголовку */
+.sub-header-caption {
+    font-size: 16px;
+    font-weight: 500;
+    color: #A0A3B5;
+    text-transform: uppercase;
+    margin: 0;
+    opacity: 0;
+}
+
+/* Описание */
+.description {
+    font-size: clamp(16px, 3vw, 20px);
+    font-weight: 400;
+    color: #D1D5DB;
+    max-width: 600px;
+    line-height: 1.6;
+    margin: 24px auto 40px auto;
+    opacity: 0;
+}
+
+/* CTA кнопка */
+.cta-button {
+    display: inline-block;
+    padding: 18px 40px;
+    border-radius: 50px;
+    border: none;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: linear-gradient(90deg, #6366F1 0%, #A855F7 100%);
+    box-shadow: 0 10px 30px -5px rgba(168, 85, 247, 0.4);
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer;
+    opacity: 0;
+}
+
+/* Hover эффект для кнопки */
+.cta-button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 15px 35px -5px rgba(168, 85, 247, 0.5);
+}
+
+/* Анимация появления элементов */
+.fade-in {
+    animation: fadeInUp 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .hero-content {
+        padding: 15px;
+    }
+    
+    .pre-header {
+        font-size: 12px;
+    }
+    
+    .main-header {
+        font-size: clamp(36px, 8vw, 48px);
+    }
+    
+    .sub-header {
+        font-size: clamp(20px, 4vw, 28px);
+    }
+    
+    .sub-header-caption {
+        font-size: 14px;
+    }
+    
+    .description {
+        font-size: 16px;
+    }
+    
+    .cta-button {
+        padding: 16px 36px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-section {
+        min-height: 100svh;
+    }
+    
+    .pre-header {
+        font-size: 11px;
+        margin-bottom: 20px;
+    }
+    
+    .main-header {
+        font-size: clamp(32px, 10vw, 40px);
+    }
+    
+    .sub-header {
+        font-size: clamp(18px, 5vw, 24px);
+        margin-top: 12px;
+    }
+    
+    .sub-header-caption {
+        font-size: 12px;
+    }
+    
+    .description {
+        font-size: 14px;
+        margin: 20px auto 32px auto;
+        padding: 0 10px;
+    }
+    
+    .cta-button {
+        padding: 14px 32px;
+        font-size: 13px;
+    }
+}
+
+/* Оптимизация для reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .hero-background-animation {
+        display: none;
+    }
+}
