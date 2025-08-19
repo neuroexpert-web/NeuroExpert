@@ -1,0 +1,336 @@
+/* Mobile Contact Form Full Screen Optimization */
+
+@media (max-width: 768px) {
+  /* Основная секция формы */
+  .contact-section {
+    padding: 0 !important;
+    margin: 0 !important;
+    min-height: 100vh;
+    background: var(--bg-dark, #0b0f17) !important;
+  }
+  
+  /* Когда форма в фокусе - полноэкранный режим */
+  .contact-section.mobile-focused {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 9999 !important;
+    height: 100vh !important;
+    width: 100vw !important;
+    overflow: hidden !important;
+  }
+  
+  /* Контейнер */
+  .contact-container {
+    height: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  /* Скрываем заголовок секции */
+  .section-header {
+    display: none !important;
+  }
+  
+  /* Контент - флекс колонка на весь экран */
+  .contact-content {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100vh !important;
+    gap: 0 !important;
+    margin: 0 !important;
+  }
+  
+  /* Скрываем benefits блок */
+  .contact-benefits {
+    display: none !important;
+  }
+  
+  /* Форма на весь экран */
+  .contact-form,
+  .form-container {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    background: var(--bg-dark, #0b0f17) !important;
+    backdrop-filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  
+  /* Внутренняя обертка формы */
+  .form-wrapper,
+  .contact-form > div:first-child {
+    flex: 1 !important;
+    padding: 20px !important;
+    padding-top: env(safe-area-inset-top, 20px) !important;
+    padding-bottom: 100px !important; /* Место для кнопки */
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  
+  /* Заголовок формы */
+  .contact-form h2,
+  .contact-form h3 {
+    font-size: 24px !important;
+    margin-bottom: 10px !important;
+    text-align: center !important;
+    font-weight: 600 !important;
+  }
+  
+  .contact-form > p,
+  .form-description {
+    font-size: 14px !important;
+    text-align: center !important;
+    color: var(--text-secondary, #9ca3af) !important;
+    margin-bottom: 20px !important;
+  }
+  
+  /* Ряды формы */
+  .form-row {
+    display: block !important;
+    margin-bottom: 0 !important;
+  }
+  
+  /* Группы полей */
+  .form-group {
+    margin-bottom: 16px !important;
+    width: 100% !important;
+  }
+  
+  .form-group label {
+    font-size: 14px !important;
+    margin-bottom: 6px !important;
+    color: var(--text-secondary, #9ca3af) !important;
+    display: block !important;
+    font-weight: 500 !important;
+  }
+  
+  /* Поля ввода - увеличенные для удобства */
+  .form-group input,
+  .form-group textarea,
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  textarea {
+    width: 100% !important;
+    padding: 16px !important;
+    font-size: 16px !important; /* Важно для iOS - предотвращает zoom */
+    border-radius: 12px !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    color: var(--text, #e7ecf3) !important;
+    transition: all 0.3s ease !important;
+  }
+  
+  /* Фокус на полях */
+  .form-group input:focus,
+  .form-group textarea:focus,
+  input:focus,
+  textarea:focus {
+    background: rgba(125, 211, 252, 0.08) !important;
+    border-color: var(--accent, #7dd3fc) !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.15) !important;
+  }
+  
+  /* Textarea специфичные стили */
+  .form-group textarea,
+  textarea {
+    min-height: 100px !important;
+    max-height: 200px !important;
+    resize: vertical !important;
+  }
+  
+  /* Кнопка отправки - фиксированная внизу экрана */
+  .submit-btn,
+  button[type="submit"],
+  .contact-form button {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 20px !important;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0)) !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    border-radius: 0 !important;
+    background: linear-gradient(135deg, #7dd3fc 0%, #38bdf8 100%) !important;
+    color: #000 !important;
+    border: none !important;
+    box-shadow: 0 -4px 20px rgba(125, 211, 252, 0.3) !important;
+    z-index: 100 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    transition: all 0.2s ease !important;
+    text-transform: none !important;
+  }
+  
+  .submit-btn:active,
+  button[type="submit"]:active {
+    transform: scale(0.98) !important;
+  }
+  
+  .submit-btn.loading,
+  button[type="submit"]:disabled {
+    opacity: 0.8 !important;
+    cursor: not-allowed !important;
+  }
+  
+  /* Статус сообщения */
+  .form-status {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 90% !important;
+    max-width: 320px !important;
+    padding: 24px !important;
+    border-radius: 16px !important;
+    font-size: 16px !important;
+    text-align: center !important;
+    z-index: 200 !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+    animation: statusFadeIn 0.3s ease-out !important;
+  }
+  
+  .form-status.success {
+    background: #10b981 !important;
+    color: white !important;
+  }
+  
+  .form-status.error {
+    background: #ef4444 !important;
+    color: white !important;
+  }
+  
+  /* Голосовой ввод кнопка */
+  .voice-input-btn {
+    position: absolute !important;
+    right: 12px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 40px !important;
+    height: 40px !important;
+    padding: 0 !important;
+    background: rgba(125, 211, 252, 0.1) !important;
+    border: 1px solid rgba(125, 211, 252, 0.3) !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 20px !important;
+    color: var(--accent, #7dd3fc) !important;
+  }
+  
+  .voice-input-btn.listening {
+    background: var(--accent, #7dd3fc) !important;
+    color: var(--noir-900, #000) !important;
+    animation: pulse 1.5s infinite !important;
+  }
+  
+  /* Скрываем disclaimer */
+  .form-disclaimer {
+    display: none !important;
+  }
+  
+  /* Spinner */
+  .spinner {
+    width: 20px !important;
+    height: 20px !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+    border-top-color: white !important;
+    border-radius: 50% !important;
+    animation: spin 0.8s linear infinite !important;
+  }
+  
+  /* Адаптация под маленькие экраны */
+  @media (max-height: 600px) {
+    .form-wrapper,
+    .contact-form > div:first-child {
+      padding-top: 10px !important;
+    }
+    
+    .contact-form h2,
+    .contact-form h3 {
+      font-size: 20px !important;
+      margin-bottom: 8px !important;
+    }
+    
+    .form-group {
+      margin-bottom: 12px !important;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+      padding: 14px !important;
+    }
+  }
+}
+
+/* Анимации */
+@keyframes statusFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -40%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(125, 211, 252, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(125, 211, 252, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(125, 211, 252, 0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* iOS Safari фиксы */
+@supports (-webkit-touch-callout: none) {
+  .contact-section.mobile-focused {
+    height: -webkit-fill-available !important;
+  }
+  
+  .contact-content {
+    height: -webkit-fill-available !important;
+  }
+}
+
+/* Темная тема для input полей */
+@media (prefers-color-scheme: dark) {
+  .form-group input,
+  .form-group textarea,
+  input,
+  textarea {
+    color-scheme: dark;
+    -webkit-text-fill-color: var(--text, #e7ecf3);
+  }
+}

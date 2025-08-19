@@ -1,0 +1,243 @@
+/* Mobile-optimized Contact Form Styles */
+
+/* Мобильная версия - полноэкранная форма */
+@media (max-width: 768px) {
+  .contact-section {
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .contact-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+
+  .contact-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 0;
+    height: 100%;
+  }
+
+  /* Скрываем benefits на мобильных при фокусе на форме */
+  .contact-benefits {
+    display: none;
+  }
+
+  /* Форма на весь экран */
+  .contact-form {
+    flex: 1;
+    border-radius: 0;
+    padding: 20px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-dark);
+    backdrop-filter: none;
+    border: none;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  /* Заголовок формы */
+  .contact-form h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+    padding-top: env(safe-area-inset-top, 20px);
+  }
+
+  /* Контейнер для полей формы */
+  .form-fields {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow-y: auto;
+    padding-bottom: 20px;
+  }
+
+  /* Однострочная компоновка полей */
+  .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 0;
+  }
+
+  /* Увеличенные поля ввода для мобильных */
+  .form-group {
+    width: 100%;
+  }
+
+  .form-group label {
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: var(--text-secondary);
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 16px;
+    font-size: 16px; /* Предотвращает zoom на iOS */
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    -webkit-appearance: none; /* Убирает стандартные стили iOS */
+  }
+
+  /* Фокус на полях */
+  .form-group input:focus,
+  .form-group textarea:focus {
+    background: rgba(125, 211, 252, 0.05);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.1);
+  }
+
+  /* Текстовое поле */
+  .form-group textarea {
+    min-height: 120px;
+    resize: none; /* Отключаем resize на мобильных */
+  }
+
+  /* Кнопка отправки внизу экрана */
+  .submit-btn {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 18px;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 16px 16px 0 0;
+    background: var(--accent-gradient);
+    color: var(--noir-900);
+    border: none;
+    box-shadow: 0 -4px 20px rgba(125, 211, 252, 0.3);
+    z-index: 10;
+    margin-top: auto;
+    margin-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  .submit-btn:active {
+    transform: scale(0.98);
+  }
+
+  /* Статус формы */
+  .form-status {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 320px;
+    padding: 20px;
+    border-radius: 16px;
+    font-size: 16px;
+    text-align: center;
+    z-index: 100;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Модальное окно успеха/ошибки */
+  .form-status.success {
+    background: rgba(16, 185, 129, 0.95);
+    color: white;
+  }
+
+  .form-status.error {
+    background: rgba(239, 68, 68, 0.95);
+    color: white;
+  }
+
+  /* Voice input button для мобильных */
+  .voice-input-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(125, 211, 252, 0.1);
+    border: 1px solid rgba(125, 211, 252, 0.3);
+    border-radius: 8px;
+    color: var(--accent);
+    font-size: 18px;
+  }
+
+  .voice-input-btn.listening {
+    background: var(--accent);
+    color: var(--noir-900);
+    animation: pulse 1.5s infinite;
+  }
+
+  /* Улучшенная типографика для мобильных */
+  .contact-form p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  /* Отступы для безопасных зон на iPhone */
+  .contact-form {
+    padding-left: env(safe-area-inset-left, 20px);
+    padding-right: env(safe-area-inset-right, 20px);
+    padding-top: env(safe-area-inset-top, 20px);
+  }
+
+  /* Адаптация под клавиатуру */
+  .form-focused .form-fields {
+    padding-bottom: 280px; /* Место для клавиатуры */
+  }
+
+  /* Скрываем disclaimer на мобильных */
+  .form-disclaimer {
+    display: none;
+  }
+}
+
+/* Планшеты - промежуточный вариант */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .contact-content {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+/* Анимация пульсации для voice button */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(125, 211, 252, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(125, 211, 252, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(125, 211, 252, 0);
+  }
+}
+
+/* Темная тема для полей ввода */
+@media (prefers-color-scheme: dark) {
+  .form-group input,
+  .form-group textarea {
+    color-scheme: dark;
+  }
+}
