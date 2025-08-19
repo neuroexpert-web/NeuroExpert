@@ -10,13 +10,10 @@ const agentsManager = getAIAgentsManager();
 
 export async function POST(request) {
   try {
-    // Skip CSRF check in development
-    if (process.env.NODE_ENV !== 'development') {
-      // Rate limiting
-      const rateLimitResult = await apiRateLimit(request);
-      if (rateLimitResult.status === 429) {
-        return rateLimitResult;
-      }
+    // Rate limiting
+    const rateLimitResult = await apiRateLimit(request);
+    if (rateLimitResult.status === 429) {
+      return rateLimitResult;
     }
 
     const body = await request.json();
