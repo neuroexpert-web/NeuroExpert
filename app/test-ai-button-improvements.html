@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Улучшения кнопки AI ассистента</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0b0f17;
+            color: #e7ecf3;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            padding: 60px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(102, 126, 234, 0.3);
+        }
+        
+        .hero h1 {
+            margin: 0 0 20px;
+            font-size: 3rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero p {
+            margin: 0;
+            font-size: 1.3rem;
+            color: #a0aec0;
+        }
+        
+        .features {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .feature-card {
+            background: rgba(20, 20, 40, 0.8);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(102, 126, 234, 0.6);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+        }
+        
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            color: #e0e7ff;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .feature-description {
+            color: #a0aec0;
+            line-height: 1.6;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0 0;
+        }
+        
+        .feature-list li {
+            padding: 8px 0;
+            display: flex;
+            align-items: start;
+            gap: 10px;
+            color: #a0aec0;
+        }
+        
+        .feature-list .check {
+            color: #10b981;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .demo-section {
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 30px;
+            padding: 60px 20px;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .demo-section h2 {
+            color: #e0e7ff;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .demo-button {
+            display: inline-block;
+            padding: 20px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .demo-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+        
+        .comparison {
+            background: rgba(239, 68, 68, 0.05);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .comparison h3 {
+            color: #ef4444;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .comparison-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+        }
+        
+        .old {
+            color: #ef4444;
+            text-decoration: line-through;
+        }
+        
+        .new {
+            color: #10b981;
+            font-weight: 600;
+        }
+        
+        .mobile-preview {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .mobile-preview h3 {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+        
+        .preview-device {
+            display: inline-block;
+            width: 300px;
+            height: 600px;
+            background: #1a1a2e;
+            border: 8px solid #333;
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+        
+        .preview-screen {
+            width: 100%;
+            height: 100%;
+            background: #0b0f17;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
+            padding: 20px;
+        }
+        
+        .preview-button {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            position: relative;
+        }
+        
+        .preview-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 20px;
+            height: 20px;
+            background: #ef4444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>🚀 Новая кнопка AI ассистента</h1>
+        <p>Улучшенный UX для максимального удобства пользователей</p>
+    </div>
+    
+    <div class="features">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">✨</div>
+                <h3 class="feature-title">Визуальные улучшения</h3>
+                <ul class="feature-list">
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Пульсирующая анимация при новых сообщениях</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Индикатор количества непрочитанных</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Анимация печатания "..."</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Плавные переходы и эффекты</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3 class="feature-title">Улучшенная функциональность</h3>
+                <ul class="feature-list">
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Перетаскивание кнопки по экрану</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Автоматическое прилипание к краям</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Сворачивание/разворачивание чата</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Быстрые действия одним кликом</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">💡</div>
+                <h3 class="feature-title">Умные подсказки</h3>
+                <ul class="feature-list">
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Приветственная подсказка для новых</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Автоскрытие после 5 секунд</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Контекстные подсказки в чате</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Статус "Онлайн/Печатает"</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3 class="feature-title">Мобильная оптимизация</h3>
+                <ul class="feature-list">
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Адаптивный размер кнопки</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Полноэкранный чат на мобильных</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Оптимизация для касаний</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Поддержка безопасных зон</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3 class="feature-title">Современный дизайн</h3>
+                <ul class="feature-list">
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Градиентная кнопка с тенями</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Glassmorphism эффекты</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Анимированные иконки</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Темная тема по умолчанию</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3 class="feature-title">Производительность</h3>
+                <ul class="feature-list">
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Ленивая загрузка компонента</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Оптимизированные анимации</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Минимальный размер бандла</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span>GPU-ускоренные эффекты</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="comparison">
+            <h3>🔄 Что изменилось</h3>
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h4>Визуальная обратная связь</h4>
+                    <p class="old">Статичная кнопка без индикации</p>
+                    <p class="new">→ Анимации, индикаторы, подсказки</p>
+                </div>
+                <div class="comparison-item">
+                    <h4>Позиционирование</h4>
+                    <p class="old">Фиксированная позиция справа внизу</p>
+                    <p class="new">→ Перетаскивание и прилипание к краям</p>
+                </div>
+                <div class="comparison-item">
+                    <h4>Мобильный опыт</h4>
+                    <p class="old">Может мешать контенту</p>
+                    <p class="new">→ Адаптивный размер и позиция</p>
+                </div>
+                <div class="comparison-item">
+                    <h4>Первое впечатление</h4>
+                    <p class="old">Непонятно, что это за кнопка</p>
+                    <p class="new">→ Приветственная подсказка</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mobile-preview">
+            <h3>📱 Превью на мобильном</h3>
+            <div class="preview-device">
+                <div class="preview-screen">
+                    <div class="preview-button">
+                        🤖
+                        <div class="preview-badge">1</div>
+                    </div>
+                </div>
+            </div>
+            <p style="margin-top: 20px; color: #a0aec0;">
+                Кнопка адаптируется под размер экрана и не мешает контенту
+            </p>
+        </div>
+        
+        <div class="demo-section">
+            <h2>Готово к использованию!</h2>
+            <p style="color: #a0aec0; margin-bottom: 30px; font-size: 1.2rem;">
+                Новая кнопка AI ассистента уже интегрирована в приложение
+            </p>
+            <a href="/" class="demo-button">Посмотреть в действии</a>
+        </div>
+    </div>
+    
+    <script>
+        // Анимация preview кнопки
+        const previewButton = document.querySelector('.preview-button');
+        setInterval(() => {
+            previewButton.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                previewButton.style.transform = 'scale(1)';
+            }, 300);
+        }, 3000);
+    </script>
+</body>
+</html>
