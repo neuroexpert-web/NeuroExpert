@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agents Test Links</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #00ff88;
+            margin-bottom: 2rem;
+        }
+        .links {
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+        }
+        .link-item {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+        .link-item h3 {
+            color: #00ccff;
+            margin-top: 0;
+        }
+        a {
+            color: #00ff88;
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(0,255,136,0.1);
+            border: 1px solid #00ff88;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        a:hover {
+            background: rgba(0,255,136,0.2);
+            transform: translateY(-2px);
+        }
+        .status {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(0,255,136,0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+        code {
+            background: rgba(255,255,255,0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>🤖 AI Agents - Тестовые ссылки</h1>
+    
+    <div class="links">
+        <div class="link-item">
+            <h3>1. Тестирование AI агентов</h3>
+            <p>Интерактивная страница с чатом и дашбордом</p>
+            <a href="/test-ai-agents" target="_blank">Открыть тестовую страницу</a>
+        </div>
+        
+        <div class="link-item">
+            <h3>2. Главная страница</h3>
+            <p>Основная страница приложения</p>
+            <a href="/" target="_blank">Открыть главную</a>
+        </div>
+        
+        <div class="link-item">
+            <h3>3. API Endpoints</h3>
+            <p>Проверка работы API</p>
+            <a href="/api/health?detailed=true" target="_blank">Health Check</a>
+            <a href="/api/test" target="_blank" style="margin-left: 1rem;">Test API</a>
+        </div>
+    </div>
+    
+    <div class="status">
+        <h2>✅ Сервер запущен и работает!</h2>
+        <p>Для работы AI агентов добавьте API ключи в <code>.env.local</code></p>
+        <p>Минимально необходим: <code>GOOGLE_GEMINI_API_KEY</code></p>
+    </div>
+    
+    <script>
+        // Автоматическая проверка статуса
+        fetch('/api/health')
+            .then(res => res.json())
+            .then(data => {
+                console.log('Server status:', data);
+            })
+            .catch(err => {
+                console.error('Server check failed:', err);
+            });
+    </script>
+</body>
+</html>
