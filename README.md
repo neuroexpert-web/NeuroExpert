@@ -3,9 +3,14 @@
 
 ## 🚀 Быстрое развертывание
 
+### Рекомендуемая платформа: Vercel
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/aineuroexpert-cell/AI-Audit)
+
+> **Vercel** - основная платформа для production развертывания. Оптимизирована для Next.js приложений.
+
+### Альтернативные платформы
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/nextjs)
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/aineuroexpert-cell/AI-Audit)
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/aineuroexpert-cell/AI-Audit)
 [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/aineuroexpert-cell/AI-Audit)
 
 ## 📋 О проекте
@@ -51,20 +56,23 @@ npm run dev
 npm run build
 ```
 
-## 🌐 Деплой на Netlify
+## 🌐 Деплой на Vercel (Рекомендуется)
 
 1. **Подключение репозитория:**
-   - New site from Git → выберите ваш GitHub репозиторий
-   - Build command: `npm run build`
-   - Publish directory: `.next`
+   - Импортируйте проект из GitHub
+   - Vercel автоматически определит Next.js
+   - Настройки сборки определятся автоматически
 
 2. **Настройка переменных окружения:**
-   - Site configuration → Environment variables
-   - Добавьте: `GEMINI_API_KEY` = ваш ключ Gemini API
+   - Settings → Environment Variables
+   - Добавьте: `GOOGLE_GEMINI_API_KEY` = ваш ключ Gemini API
+   - Добавьте: `JWT_SECRET` = случайная строка для безопасности
 
 3. **Автоматический деплой:**
-   - `netlify.toml` уже настроен для Next.js
-   - При каждом push в main ветку происходит автоматический деплой
+   - При каждом push в main происходит production деплой
+   - Pull requests получают preview URLs
+
+> Подробная документация: см. [DEPLOYMENT_STRATEGY.md](./DEPLOYMENT_STRATEGY.md)
 
 ## 📦 Структура проекта
 
