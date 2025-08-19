@@ -42,8 +42,16 @@ export default function ContactForm() {
       }
     };
     
+    // Предотвращаем зум на iOS при фокусе на input
+    if (isMobile) {
+      const viewport = document.querySelector('meta[name="viewport"]');
+      if (viewport) {
+        viewport.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1');
+      }
+    }
+    
     return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     // Инициализация Web Speech API
@@ -360,15 +368,18 @@ export default function ContactForm() {
                   placeholder="Александр"
                   style={{
                     width: '100%',
-                    padding: '16px',
-                    paddingRight: '60px',
+                    padding: isMobile ? '20px' : '16px',
+                    paddingRight: isMobile ? '70px' : '60px',
                     background: 'rgba(17, 24, 39, 0.5)',
                     border: '1px solid rgba(102, 126, 234, 0.3)',
-                    borderRadius: '12px',
+                    borderRadius: isMobile ? '16px' : '12px',
                     color: 'white',
-                    fontSize: '16px',
+                    fontSize: isMobile ? '18px' : '16px',
                     outline: 'none',
-                    transition: 'all 0.3s ease'
+                    transition: 'all 0.3s ease',
+                    WebkitAppearance: 'none',
+                    MozAppearance: 'none',
+                    appearance: 'none'
                   }}
                   onFocus={(e) => {
                     e.target.style.borderColor = 'rgba(102, 126, 234, 0.8)';
@@ -392,11 +403,11 @@ export default function ContactForm() {
                   transition={{ duration: 1, repeat: isListening && activeField === 'name' ? Infinity : 0 }}
                   style={{
                     position: 'absolute',
-                    right: '12px',
+                    right: isMobile ? '10px' : '12px',
                     top: '50%',
                     transform: 'translateY(-50%)',
-                    width: '40px',
-                    height: '40px',
+                    width: isMobile ? '50px' : '40px',
+                    height: isMobile ? '50px' : '40px',
                     borderRadius: '50%',
                     background: 'rgba(102, 126, 234, 0.2)',
                     border: '1px solid rgba(102, 126, 234, 0.4)',
@@ -404,7 +415,8 @@ export default function ContactForm() {
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
+                    fontSize: isMobile ? '24px' : '20px'
                   }}
                 >
                   🎤
@@ -441,15 +453,18 @@ export default function ContactForm() {
                   placeholder="+7 (999) 123-45-67"
                   style={{
                     width: '100%',
-                    padding: '16px',
-                    paddingRight: '60px',
+                    padding: isMobile ? '20px' : '16px',
+                    paddingRight: isMobile ? '70px' : '60px',
                     background: 'rgba(17, 24, 39, 0.5)',
                     border: '1px solid rgba(102, 126, 234, 0.3)',
-                    borderRadius: '12px',
+                    borderRadius: isMobile ? '16px' : '12px',
                     color: 'white',
-                    fontSize: '16px',
+                    fontSize: isMobile ? '18px' : '16px',
                     outline: 'none',
-                    transition: 'all 0.3s ease'
+                    transition: 'all 0.3s ease',
+                    WebkitAppearance: 'none',
+                    MozAppearance: 'none',
+                    appearance: 'none'
                   }}
                   onFocus={(e) => {
                     e.target.style.borderColor = 'rgba(102, 126, 234, 0.8)';
@@ -473,11 +488,11 @@ export default function ContactForm() {
                   transition={{ duration: 1, repeat: isListening && activeField === 'phone' ? Infinity : 0 }}
                   style={{
                     position: 'absolute',
-                    right: '12px',
+                    right: isMobile ? '10px' : '12px',
                     top: '50%',
                     transform: 'translateY(-50%)',
-                    width: '40px',
-                    height: '40px',
+                    width: isMobile ? '50px' : '40px',
+                    height: isMobile ? '50px' : '40px',
                     borderRadius: '50%',
                     background: 'rgba(102, 126, 234, 0.2)',
                     border: '1px solid rgba(102, 126, 234, 0.4)',
@@ -485,7 +500,8 @@ export default function ContactForm() {
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
+                    fontSize: isMobile ? '24px' : '20px'
                   }}
                 >
                   🎤
@@ -613,21 +629,24 @@ export default function ContactForm() {
                   value={formData.message}
                   onChange={handleInputChange}
                   required
-                  rows="4"
+                  rows={isMobile ? "5" : "4"}
                   placeholder="Расскажите о вашем проекте..."
                   style={{
                     width: '100%',
-                    padding: '16px',
-                    paddingRight: '60px',
+                    padding: isMobile ? '20px' : '16px',
+                    paddingRight: isMobile ? '70px' : '60px',
                     background: 'rgba(17, 24, 39, 0.5)',
                     border: '1px solid rgba(102, 126, 234, 0.3)',
-                    borderRadius: '12px',
+                    borderRadius: isMobile ? '16px' : '12px',
                     color: 'white',
-                    fontSize: '16px',
+                    fontSize: isMobile ? '18px' : '16px',
                     outline: 'none',
                     transition: 'all 0.3s ease',
                     resize: 'vertical',
-                    minHeight: '100px'
+                    minHeight: isMobile ? '120px' : '100px',
+                    WebkitAppearance: 'none',
+                    MozAppearance: 'none',
+                    appearance: 'none'
                   }}
                   onFocus={(e) => {
                     e.target.style.borderColor = 'rgba(102, 126, 234, 0.8)';
@@ -717,20 +736,23 @@ export default function ContactForm() {
               }}
               style={{
                 width: '100%',
-                padding: '18px',
+                padding: isMobile ? '22px' : '18px',
                 background: status.loading 
                   ? 'rgba(102, 126, 234, 0.5)'
                   : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                 border: 'none',
-                borderRadius: '50px',
+                borderRadius: isMobile ? '16px' : '50px',
                 color: 'white',
-                fontSize: '18px',
+                fontSize: isMobile ? '18px' : '18px',
                 fontWeight: '700',
                 cursor: status.loading ? 'not-allowed' : 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '12px'
+                gap: '12px',
+                minHeight: isMobile ? '60px' : 'auto',
+                marginTop: isMobile ? '20px' : '0',
+                boxShadow: '0 10px 30px rgba(102, 126, 234, 0.3)'
               }}
             >
               {status.loading ? (
