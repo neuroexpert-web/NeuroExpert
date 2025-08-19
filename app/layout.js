@@ -1,9 +1,6 @@
 
 import { Inter } from 'next/font/google'
-import './globals.css'
-import './styles/premium-design-system.css'
-import './styles/premium-glass-sections.css'
-import './styles/mobile-fixes.css'
+import './globals-optimized.css'
 import Script from 'next/script'
 import ErrorBoundary from './components/ErrorBoundary'
 import { Analytics } from '@vercel/analytics/react'
