@@ -1,0 +1,463 @@
+.dashboard {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
+  min-height: 100vh;
+  color: #ffffff;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.header h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(45deg, #00ff88, #00ccff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header p {
+  font-size: 1.2rem;
+  color: #888;
+}
+
+.agentsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.agentCard {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.agentCard::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #00ff88, #00ccff);
+  border-radius: 16px;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+}
+
+.agentCard:hover::before {
+  opacity: 0.2;
+}
+
+.agentCard.selected {
+  border-color: #00ff88;
+  background: rgba(0, 255, 136, 0.1);
+}
+
+.agentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.agentHeader h3 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.statusIndicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.metricLabel {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.metricValue {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #00ff88;
+}
+
+.chartContainer {
+  height: 60px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.miniChart {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.chartBar {
+  width: 40px;
+  background: #00ff88;
+  border-radius: 4px 4px 0 0;
+  transition: height 0.3s ease;
+}
+
+.testSection {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 3rem;
+}
+
+.testSection h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.testControls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.testInput {
+  flex: 1;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  resize: vertical;
+  transition: all 0.3s ease;
+}
+
+.testInput:focus {
+  outline: none;
+  border-color: #00ff88;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.testButton {
+  padding: 1rem 2rem;
+  background: linear-gradient(45deg, #00ff88, #00ccff);
+  border: none;
+  border-radius: 8px;
+  color: #000;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.testButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(0, 255, 136, 0.4);
+}
+
+.testButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.selectedAgentInfo {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #00ff88;
+}
+
+.testResult {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.error {
+  color: #ff4444;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.resultHeader {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.agentBadge {
+  background: #00ff88;
+  color: #000;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.qualityScore {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+.responseTime {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.responseContent {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.suggestions {
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.suggestions h4 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: #ffc107;
+}
+
+.suggestions ul {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.suggestions li {
+  margin-bottom: 0.25rem;
+}
+
+.qualityDetails {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.qualityDetails h4 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.qualityMetrics {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.qualityMetric {
+  display: grid;
+  grid-template-columns: 120px 1fr 50px;
+  align-items: center;
+  gap: 1rem;
+}
+
+.progressBar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.historySection {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.historySection h3 {
+  margin-bottom: 1rem;
+}
+
+.historyList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.historyItem {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.historyHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.historyAgent {
+  background: rgba(0, 255, 136, 0.2);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.historyQuality {
+  color: #00ff88;
+}
+
+.historyTime {
+  color: #666;
+}
+
+.historyQuery,
+.historyResponse {
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+  color: #ccc;
+}
+
+.historyQuery strong,
+.historyResponse strong {
+  color: #fff;
+}
+
+.tips {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.tips h3 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+}
+
+.tipsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.tip {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1.5rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.tip:hover {
+  background: rgba(0, 255, 136, 0.1);
+  transform: translateY(-2px);
+}
+
+.tipIcon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.tip h4 {
+  margin: 0 0 0.5rem 0;
+  color: #00ff88;
+}
+
+.tip p {
+  margin: 0;
+  color: #ccc;
+  font-size: 0.95rem;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 1rem;
+  }
+
+  .header h1 {
+    font-size: 2rem;
+  }
+
+  .agentsGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .testControls {
+    flex-direction: column;
+  }
+
+  .resultHeader {
+    justify-content: center;
+  }
+
+  .qualityMetric {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .tipsList {
+    grid-template-columns: 1fr;
+  }
+}
