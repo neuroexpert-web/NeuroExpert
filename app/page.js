@@ -9,7 +9,7 @@ import WhyUsSection from './components/WhyUsSection';
 import PricingSection from './components/PricingSection';
 
 // Динамические импорты для оптимизации
-const ROICalculator = dynamic(() => import('./components/ImprovedROICalculator'), {
+const ROICalculator = dynamic(() => import('./components/PremiumROICalculator'), {
   ssr: false,
   loading: () => <div className="loading-skeleton">Загрузка калькулятора ROI...</div>
 });
