@@ -591,7 +591,7 @@ function SmartFloatingAI() {
         .ai-header-right {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 8px;
         }
 
         .model-selector {
@@ -602,13 +602,15 @@ function SmartFloatingAI() {
         .model-btn {
           display: flex;
           align-items: center;
-          gap: 4px;
-          padding: 8px 14px;
+          justify-content: center;
+          width: 36px;
+          height: 36px;
+          padding: 0;
           background: rgba(255, 255, 255, 0.05);
           border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 20px;
+          border-radius: 50%;
           color: #94a3b8;
-          font-size: 13px;
+          font-size: 18px;
           cursor: pointer;
           transition: all 0.2s ease;
         }
@@ -616,12 +618,23 @@ function SmartFloatingAI() {
         .model-btn:hover {
           background: rgba(255, 255, 255, 0.1);
           color: white;
+          transform: scale(1.05);
         }
 
         .model-btn.active {
           background: linear-gradient(135deg, #60a5fa, #a78bfa);
           border-color: transparent;
           color: white;
+          animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+          0%, 100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: .8;
+          }
         }
 
         .model-icon {
@@ -635,12 +648,13 @@ function SmartFloatingAI() {
         }
 
         .ai-close-btn {
-          width: 40px;
-          height: 40px;
-          border-radius: 12px;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
           background: rgba(255, 255, 255, 0.08);
           border: 1px solid rgba(255, 255, 255, 0.12);
           color: #94a3b8;
+          font-size: 18px;
           cursor: pointer;
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           display: flex;
