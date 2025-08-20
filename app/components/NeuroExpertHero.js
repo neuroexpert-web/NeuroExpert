@@ -24,23 +24,26 @@ export default function NeuroExpertHero() {
           spacing: 18.00
         });
 
-        // Анимация заголовка "Neural Impulse"
+        // Анимация заголовка "Нейронный импульс"
         const header = document.getElementById('animated-main-header');
         if (header) {
           const text = header.textContent;
           header.innerHTML = '';
           
-          text.split('').forEach((char, i) => {
+          // Оборачиваем каждую букву в span
+          text.split('').forEach(char => {
             const span = document.createElement('span');
+            span.className = 'char';
             span.textContent = char;
-            span.className = 'letter';
-            span.style.cssText = `
-              display: inline-block;
-              opacity: 0;
-              transform: translateY(50px) rotateX(90deg);
-              animation: letterReveal 0.8s ${i * 0.08}s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
-            `;
             header.appendChild(span);
+          });
+
+          // Запуск анимации
+          const chars = document.querySelectorAll('.char');
+          chars.forEach((char, index) => {
+            setTimeout(() => {
+              char.classList.add('visible');
+            }, index * 70); // Задержка появления для каждой буквы
           });
         }
       }
@@ -100,7 +103,7 @@ export default function NeuroExpertHero() {
           margin: 0 auto;
         }
 
-        /* Типография согласно ТЗ */
+        /* Типография */
         .pre-header {
           font-weight: 500;
           font-size: 14px;
@@ -146,73 +149,79 @@ export default function NeuroExpertHero() {
           animation: fadeIn 1s 0.6s ease-out forwards;
         }
 
-        /* Кнопки CTA согласно ТЗ */
-        .cta-buttons {
-          display: flex;
-          gap: 20px;
-          justify-content: center;
-          flex-wrap: wrap;
-          margin-top: 40px;
+        /* Неоновая прозрачная кнопка (как мы утвердили ранее) */
+        .cta-button {
+          position: relative;
+          padding: 0;
+          border: none;
+          background: transparent;
+          cursor: pointer;
+          font-family: 'Inter', -apple-system, sans-serif;
           opacity: 0;
-          animation: fadeIn 1s 0.8s ease-out forwards;
+          animation: fadeIn 1s 0.8s ease-out forwards, pulseGlow 2s 1.8s ease-in-out infinite;
+          margin-top: 40px;
+          overflow: visible;
+          display: inline-block;
         }
 
-        .cta-button {
-          display: inline-block;
+        @keyframes pulseGlow {
+          0%, 100% {
+            filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.5));
+          }
+          50% {
+            filter: drop-shadow(0 0 40px rgba(0, 255, 255, 0.8));
+          }
+        }
+
+        .button-glow {
+          position: absolute;
+          inset: -20px;
+          background: radial-gradient(circle at center, rgba(99, 102, 241, 0.3) 0%, transparent 70%);
+          filter: blur(20px);
+          pointer-events: none;
+        }
+
+        .button-content {
+          position: relative;
           padding: 18px 40px;
+          border: 2px solid;
+          border-image: linear-gradient(90deg, #6366F1, #A855F7) 1;
           border-radius: 50px;
-          border: none;
-          text-decoration: none;
+          background: transparent;
+          backdrop-filter: blur(10px);
+          transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .button-text {
           font-size: 16px;
           font-weight: 600;
-          color: #FFFFFF;
-          text-transform: uppercase;
           background: linear-gradient(90deg, #6366F1, #A855F7);
-          box-shadow: 0 10px 30px -5px rgba(168, 85, 247, 0.4);
-          transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
-                      box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-          cursor: pointer;
-          position: relative;
-          overflow: hidden;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
         }
 
-        .cta-button::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, 
-            transparent, 
-            rgba(255, 255, 255, 0.3), 
-            transparent);
-          transition: left 0.6s;
-        }
-
-        .cta-button:hover {
-          transform: translateY(-3px) scale(1.05);
+        .cta-button:hover .button-content {
+          transform: translateY(-2px);
+          background: rgba(99, 102, 241, 0.1);
           box-shadow: 0 15px 35px -5px rgba(168, 85, 247, 0.5);
         }
 
-        .cta-button:hover::before {
-          left: 100%;
+        /* Стили для анимации букв из ТЗ */
+        .char {
+          position: relative;
+          display: inline-block;
+          opacity: 0;
+          transform: translateY(20px);
+          transition: opacity 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                      transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
-        .cta-button.secondary {
-          background: linear-gradient(90deg, #A855F7, #EC4899);
-          box-shadow: 0 10px 30px -5px rgba(236, 72, 153, 0.4);
-        }
-
-        .cta-button.secondary:hover {
-          box-shadow: 0 15px 35px -5px rgba(236, 72, 153, 0.5);
-        }
-
-        /* Иконки для кнопок */
-        .button-icon {
-          margin-right: 8px;
-          font-size: 20px;
-          vertical-align: middle;
+        .char.visible {
+          opacity: 1;
+          transform: translateY(0);
         }
 
         /* Анимации */
@@ -227,39 +236,14 @@ export default function NeuroExpertHero() {
           }
         }
 
-        @keyframes letterReveal {
-          0% {
-            opacity: 0;
-            transform: translateY(50px) rotateX(90deg);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0) rotateX(0);
-          }
-        }
-
-        /* Анимация букв заголовка */
-        .main-header .letter {
-          display: inline-block;
-          transform-style: preserve-3d;
-          backface-visibility: hidden;
-        }
-
         /* Мобильная адаптация */
         @media (max-width: 768px) {
           .hero-content {
             padding: 20px;
           }
 
-          .cta-buttons {
-            flex-direction: column;
-            align-items: center;
-          }
-
           .cta-button {
-            width: 100%;
-            max-width: 300px;
-            padding: 16px 32px;
+            margin-bottom: 60px;
           }
 
           .pre-header {
@@ -289,16 +273,12 @@ export default function NeuroExpertHero() {
           <p className="description">
             Автоматизируйте бизнес-процессы, увеличивайте прибыль и опережайте конкурентов с помощью передовых ИИ технологий.
           </p>
-          <div className="cta-buttons">
-            <a href="/roi-calculator" className="cta-button">
-              <span className="button-icon">🧮</span>
-              Калькулятор
-            </a>
-            <a href="/smart-ai" className="cta-button secondary">
-              <span className="button-icon">🚀</span>
-              Начать бесплатно
-            </a>
-          </div>
+          <a href="/smart-ai" className="cta-button">
+            <div className="button-glow"></div>
+            <div className="button-content">
+              <span className="button-text">Начать</span>
+            </div>
+          </a>
         </div>
       </section>
     </>
