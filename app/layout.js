@@ -1,5 +1,6 @@
 
 import { Inter } from 'next/font/google'
+// Импорт стилей в правильном порядке
 import './globals.css'
 import './styles/premium-design-system.css'
 import './styles/premium-glass-sections.css'
@@ -97,8 +98,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ru" className={inter.variable}>
       <head>
-        {/* Premium styles fallback */}
-        <link rel="stylesheet" href="/premium-styles.css" />
+        {/* Preload критических ресурсов */}
+        <link rel="preload" href="/_next/static/css/app/globals.css" as="style" />
+        <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" as="style" />
         
         {/* Preconnect для оптимизации загрузки */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -125,6 +127,45 @@ export default function RootLayout({ children }) {
               font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
               -webkit-font-smoothing: antialiased;
               -moz-osx-font-smoothing: grayscale;
+              opacity: 0;
+              animation: fadeInPage 0.3s ease-out forwards;
+              animation-delay: 0.1s;
+            }
+            
+            /* Базовые стили для структуры */
+            main {
+              min-height: 100vh;
+              position: relative;
+            }
+            
+            /* Предотвращаем прыжки текста */
+            h1, h2, h3, h4, h5, h6 {
+              font-weight: 700;
+              line-height: 1.2;
+              margin: 0;
+            }
+            
+            p {
+              line-height: 1.6;
+              margin: 0;
+            }
+            
+            /* Контейнеры секций */
+            section {
+              position: relative;
+              width: 100%;
+            }
+            
+            @keyframes fadeInPage {
+              to {
+                opacity: 1;
+              }
+            }
+            
+            @keyframes fadeInContent {
+              to {
+                opacity: 1;
+              }
             }
             .loading-spinner {
               position: fixed;
