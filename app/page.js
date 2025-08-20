@@ -37,11 +37,8 @@ const AIDirectorCapabilities = dynamic(() => import('./components/AIDirectorCapa
 export default function Home() {
   return (
     <main className="premium-main" style={{ background: 'var(--noir-900)', minHeight: '100vh' }}>
-      {/* Premium стеклянный фон с глубокими эффектами */}
-      <PremiumGlassBackground />
-      
-      {/* Premium Hero с 3D эффектами */}
-      <PremiumHero />
+      {/* Новый Hero блок с анимацией нейросети */}
+      <NeuroExpertHero />
       
       {/* AI Управляющий директор */}
       <Suspense fallback={<div className="loading-skeleton">Загрузка...</div>}>
