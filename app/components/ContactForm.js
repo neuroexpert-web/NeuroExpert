@@ -6,8 +6,6 @@ export default function ContactForm() {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
-    email: '',
-    company: '',
     message: ''
   });
   
@@ -55,7 +53,7 @@ export default function ContactForm() {
           error: false,
           message: result.message || 'Спасибо! Мы свяжемся с вами в ближайшее время.'
         });
-        setFormData({ name: '', phone: '', email: '', company: '', message: '' });
+        setFormData({ name: '', phone: '', message: '' });
       } else {
         throw new Error(result.error || 'Ошибка отправки формы');
       }
