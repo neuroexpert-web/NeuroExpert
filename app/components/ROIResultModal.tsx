@@ -74,9 +74,9 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             style={{
               position: 'fixed',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
+              top: window.innerWidth <= 480 ? '0' : '50%',
+              left: window.innerWidth <= 480 ? '0' : '50%',
+              transform: window.innerWidth <= 480 ? 'none' : 'translate(-50%, -50%)',
               background: 'linear-gradient(180deg, rgba(20, 20, 40, 0.95) 0%, rgba(30, 30, 60, 0.95) 100%)',
               borderRadius: window.innerWidth <= 480 ? '0' : '32px',
               padding: window.innerWidth <= 480 ? '24px' : '48px',
@@ -86,9 +86,6 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
               width: window.innerWidth <= 480 ? '100%' : '90%',
               maxHeight: window.innerWidth <= 480 ? '100vh' : '90vh',
               height: window.innerWidth <= 480 ? '100vh' : 'auto',
-              top: window.innerWidth <= 480 ? '0' : '50%',
-              left: window.innerWidth <= 480 ? '0' : '50%',
-              transform: window.innerWidth <= 480 ? 'none' : 'translate(-50%, -50%)',
               overflow: 'auto',
               zIndex: 1001
             }}
