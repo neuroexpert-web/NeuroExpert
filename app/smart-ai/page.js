@@ -13,7 +13,6 @@ export default function SmartAIPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Автоматически открываем AI ассистента при загрузке страницы
     const timer = setTimeout(() => {
       const aiButton = document.querySelector('.ai-trigger-button');
       if (aiButton) {
