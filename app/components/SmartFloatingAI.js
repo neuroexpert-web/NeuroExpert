@@ -243,30 +243,26 @@ function SmartFloatingAI() {
               </div>
             </div>
             <div className="ai-header-right">
-              <div className="model-selector">
-                <button 
-                  className={`model-btn ${selectedModel === 'gemini' ? 'active' : ''}`}
-                  onClick={() => {
-                    setSelectedModel('gemini');
-                    setDialogHistory([]); // Очищаем историю при смене модели
-                  }}
-                  title="Google Gemini Pro"
-                >
-                  <span className="model-icon">✨</span>
-                  <span className="model-text">Gemini</span>
-                </button>
-                <button 
-                  className={`model-btn ${selectedModel === 'claude' ? 'active' : ''}`}
-                  onClick={() => {
-                    setSelectedModel('claude');
-                    setDialogHistory([]); // Очищаем историю при смене модели
-                  }}
-                  title="Claude Opus"
-                >
-                  <span className="model-icon">🧠</span>
-                  <span className="model-text">Claude</span>
-                </button>
-              </div>
+              <button 
+                className={`model-btn ${selectedModel === 'gemini' ? 'active' : ''}`}
+                onClick={() => {
+                  setSelectedModel('gemini');
+                  setDialogHistory([]); // Очищаем историю при смене модели
+                }}
+                title="Google Gemini Pro"
+              >
+                ✨
+              </button>
+              <button 
+                className={`model-btn ${selectedModel === 'claude' ? 'active' : ''}`}
+                onClick={() => {
+                  setSelectedModel('claude');
+                  setDialogHistory([]); // Очищаем историю при смене модели
+                }}
+                title="Claude 3"
+              >
+                🧠
+              </button>
               <button 
                 onClick={() => setIsOpen(false)}
                 className="ai-close-btn"
