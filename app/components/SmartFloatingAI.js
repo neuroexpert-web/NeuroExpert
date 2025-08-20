@@ -1,7 +1,7 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo, memo } from 'react';
 
-export default function SmartFloatingAI() {
+function SmartFloatingAI() {
   const [isOpen, setIsOpen] = useState(false);
   // История сообщений хранится в localStorage -> диалог не пропадает после перезагрузки
   const [messages, setMessages] = useState(() => {
@@ -116,7 +116,7 @@ export default function SmartFloatingAI() {
     }, 20);
   };
 
-  const sendMessage = async () => {
+  const sendMessage = useCallback(async () => {
     if (!input.trim() || isLoading || isTyping) return;
 
     const userMessage = input.trim();
@@ -897,3 +897,5 @@ export default function SmartFloatingAI() {
     </>
   );
 }
+
+export default memo(SmartFloatingAI);

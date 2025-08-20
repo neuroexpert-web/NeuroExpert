@@ -3,6 +3,7 @@
 // Netlify automatically detects and optimizes for serverless deployment
 
 // Sentry temporarily disabled until properly configured
+const crypto = require('crypto');
 
 // Content Security Policy configuration
 const ContentSecurityPolicy = `
@@ -68,18 +69,36 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production' ? {
       exclude: ['error', 'warn'],
     } : false,
+    // Эмоции и стили
+    emotion: true,
   },
 
   // Улучшение производительности сборки
   experimental: {
     optimizeCss: true,
-    optimizePackageImports: ['@google/generative-ai', 'framer-motion', 'date-fns'],
+    optimizePackageImports: [
+      '@google/generative-ai', 
+      'framer-motion', 
+      'date-fns',
+      'bcryptjs',
+      'jsonwebtoken',
+      'styled-jsx'
+    ],
     turbo: {
       rules: {
         '*.svg': ['@svgr/webpack'],
       },
     },
     cpus: 4,
+    // Модульная федерация для уменьшения дублирования кода
+    modularizeImports: {
+      'date-fns': {
+        transform: 'date-fns/{{member}}',
+      },
+      'framer-motion': {
+        transform: 'framer-motion/{{member}}',
+      },
+    },
   },
   
   // Headers для безопасности и кэширования
@@ -140,20 +159,46 @@ const nextConfig = {
   },
   
   // Webpack оптимизации
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, dev }) => {
     // Оптимизация bundle size
     if (!isServer) {
+      // Улучшенное разделение кода
       config.optimization.splitChunks = {
         chunks: 'all',
         cacheGroups: {
           default: false,
           vendors: false,
+          // Отдельный бандл для фреймворка
+          framework: {
+            name: 'framework',
+            chunks: 'all',
+            test: /[\\/]node_modules[\\/](react|react-dom|next)[\\/]/,
+            priority: 40,
+            enforce: true
+          },
+          // Библиотеки
+          lib: {
+            test(module) {
+              return module.size() > 160000 &&
+                /node_modules[/\\]/.test(module.identifier());
+            },
+            name(module) {
+              const hash = crypto.createHash('sha1');
+              hash.update(module.identifier());
+              return hash.digest('hex').substring(0, 8);
+            },
+            priority: 30,
+            minChunks: 1,
+            reuseExistingChunk: true,
+          },
+          // Общий vendor код
           vendor: {
             name: 'vendor',
             chunks: 'all',
             test: /node_modules/,
             priority: 20
           },
+          // Общий код приложения
           common: {
             name: 'common',
             minChunks: 2,
@@ -164,7 +209,20 @@ const nextConfig = {
           }
         }
       };
+
+      // Минимизация только в production
+      if (!dev) {
+        config.optimization.minimize = true;
+        config.optimization.usedExports = true;
+        config.optimization.sideEffects = false;
+      }
     }
+    
+    // Алиасы для оптимизации импортов
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'lodash': 'lodash-es',
+    };
     
     return config;
   },
