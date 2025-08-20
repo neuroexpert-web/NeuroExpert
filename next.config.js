@@ -69,8 +69,6 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production' ? {
       exclude: ['error', 'warn'],
     } : false,
-    // Эмоции и стили
-    emotion: true,
   },
 
   // Улучшение производительности сборки
