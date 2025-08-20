@@ -3,65 +3,120 @@
 import { useEffect, useRef } from 'react';
 
 export default function NeuroExpertHero() {
-  const vantaRef = useRef(null);
-  const heroRef = useRef(null);
+  const canvasRef = useRef(null);
+  const animationRef = useRef(null);
+  const particlesRef = useRef([]);
+  const mouseRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
-    let vantaEffect = null;
-    
-    // Загружаем скрипты динамически
-    const loadScripts = async () => {
-      // Загружаем Three.js
-      if (!window.THREE) {
-        const threeScript = document.createElement('script');
-        threeScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js';
-        threeScript.async = true;
-        document.head.appendChild(threeScript);
-        
-        await new Promise((resolve) => {
-          threeScript.onload = resolve;
-        });
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+
+    // Настройка canvas
+    canvas.width = width;
+    canvas.height = height;
+
+    // Класс для частиц
+    class Particle {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
+        this.radius = Math.random() * 2 + 1;
       }
-      
-      // Загружаем Vanta.js
-      if (!window.VANTA) {
-        const vantaScript = document.createElement('script');
-        vantaScript.src = 'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.net.min.js';
-        vantaScript.async = true;
-        document.head.appendChild(vantaScript);
-        
-        await new Promise((resolve) => {
-          vantaScript.onload = resolve;
-        });
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < 0 || this.x > width) this.vx = -this.vx;
+        if (this.y < 0 || this.y > height) this.vy = -this.vy;
       }
-      
-      // Инициализируем Vanta
-      if (window.VANTA && window.THREE && heroRef.current) {
-        try {
-          vantaEffect = window.VANTA.NET({
-            el: heroRef.current,
-            THREE: window.THREE,
-            mouseControls: true,
-            touchControls: true,
-            gyroControls: false,
-            minHeight: 200.00,
-            minWidth: 200.00,
-            scale: 1.00,
-            scaleMobile: 1.00,
-            color: 0x6366f1,
-            backgroundColor: 0x0a051a,
-            points: 20.00,
-            maxDistance: 25.00,
-            spacing: 15.00
-          });
-          console.log('Vanta effect initialized');
-        } catch (error) {
-          console.error('Vanta initialization error:', error);
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(99, 102, 241, 0.8)';
+        ctx.fill();
+      }
+    }
+
+    // Создаем частицы
+    const particleCount = 100;
+    for (let i = 0; i < particleCount; i++) {
+      particlesRef.current.push(new Particle());
+    }
+
+    // Функция анимации
+    const animate = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      // Рисуем связи между частицами
+      particlesRef.current.forEach((particle, i) => {
+        particle.update();
+        particle.draw();
+
+        // Соединяем близкие частицы
+        for (let j = i + 1; j < particlesRef.current.length; j++) {
+          const dx = particlesRef.current[j].x - particle.x;
+          const dy = particlesRef.current[j].y - particle.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 150) {
+            ctx.beginPath();
+            ctx.moveTo(particle.x, particle.y);
+            ctx.lineTo(particlesRef.current[j].x, particlesRef.current[j].y);
+            ctx.strokeStyle = `rgba(99, 102, 241, ${0.2 * (1 - distance / 150)})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
         }
-      }
+
+        // Соединяем с курсором
+        const mouseDistance = Math.sqrt(
+          Math.pow(mouseRef.current.x - particle.x, 2) +
+          Math.pow(mouseRef.current.y - particle.y, 2)
+        );
+
+        if (mouseDistance < 200) {
+          ctx.beginPath();
+          ctx.moveTo(particle.x, particle.y);
+          ctx.lineTo(mouseRef.current.x, mouseRef.current.y);
+          ctx.strokeStyle = `rgba(168, 85, 247, ${0.3 * (1 - mouseDistance / 200)})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+      });
+
+      animationRef.current = requestAnimationFrame(animate);
     };
-    
-    loadScripts();
+
+    animate();
+
+    // Обработчик движения мыши
+    const handleMouseMove = (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseRef.current = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
+    };
+
+    // Обработчик изменения размера окна
+    const handleResize = () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('resize', handleResize);
 
     // Анимация заголовка
     const animateHeader = () => {
@@ -88,9 +143,11 @@ export default function NeuroExpertHero() {
     setTimeout(animateHeader, 300);
 
     return () => {
-      if (vantaEffect) {
-        vantaEffect.destroy();
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
       }
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -105,13 +162,8 @@ export default function NeuroExpertHero() {
   };
 
   return (
-    <section className="hero-section" ref={heroRef}>
-      {/* Анимированные частицы как fallback */}
-      <div className="particles-container">
-        {[...Array(50)].map((_, i) => (
-          <div key={i} className={`particle particle-${i % 5}`} />
-        ))}
-      </div>
+    <section className="hero-section">
+      <canvas ref={canvasRef} className="neural-network-canvas" />
       
       <div className="hero-content">
         <p className="pre-header">ЦИФРОВАЯ AI ПЛАТФОРМА ДЛЯ БИЗНЕСА</p>
@@ -155,72 +207,13 @@ export default function NeuroExpertHero() {
           background: #0A051A;
         }
 
-        /* Анимированные частицы как альтернатива Vanta */
-        .particles-container {
+        .neural-network-canvas {
           position: absolute;
           top: 0;
           left: 0;
           width: 100%;
           height: 100%;
-          overflow: hidden;
           z-index: 1;
-        }
-
-        .particle {
-          position: absolute;
-          width: 2px;
-          height: 2px;
-          background: #6366f1;
-          border-radius: 50%;
-          opacity: 0.5;
-          animation: particleFloat 20s infinite linear;
-        }
-
-        .particle::after {
-          content: '';
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: 100px;
-          height: 1px;
-          background: linear-gradient(90deg, transparent, #6366f1, transparent);
-          opacity: 0.3;
-          animation: particleConnect 3s infinite ease-in-out;
-        }
-
-        .particle-0 { top: 10%; left: 10%; animation-delay: 0s; }
-        .particle-1 { top: 20%; left: 80%; animation-delay: 2s; }
-        .particle-2 { top: 60%; left: 20%; animation-delay: 4s; }
-        .particle-3 { top: 80%; left: 60%; animation-delay: 6s; }
-        .particle-4 { top: 40%; left: 40%; animation-delay: 8s; }
-
-        @keyframes particleFloat {
-          0% {
-            transform: translate(0, 0) rotate(0deg);
-            opacity: 0;
-          }
-          10% {
-            opacity: 0.5;
-          }
-          90% {
-            opacity: 0.5;
-          }
-          100% {
-            transform: translate(100vw, -100vh) rotate(360deg);
-            opacity: 0;
-          }
-        }
-
-        @keyframes particleConnect {
-          0%, 100% {
-            width: 0;
-            opacity: 0;
-          }
-          50% {
-            width: 150px;
-            opacity: 0.3;
-          }
         }
 
         .hero-content {
@@ -424,27 +417,10 @@ export default function NeuroExpertHero() {
           }
         }
 
-        /* Fallback градиент для фона */
-        .hero-section::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: 
-            radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
-            radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 40% 20%, rgba(96, 165, 250, 0.1) 0%, transparent 50%);
-          pointer-events: none;
-          opacity: 0.7;
-          z-index: 0;
-        }
-
         /* Мобильная адаптация */
         @media (max-width: 768px) {
-          .particles-container {
-            display: none; /* Отключаем на мобильных для производительности */
+          .neural-network-canvas {
+            opacity: 0.5; /* Уменьшаем яркость на мобильных */
           }
 
           .hero-content {
