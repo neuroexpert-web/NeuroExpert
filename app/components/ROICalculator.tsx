@@ -6,8 +6,7 @@ import { ROIFormData, ROIResults } from '../../types';
 export default function ROICalculator(): JSX.Element {
   const [formData, setFormData] = useState<ROIFormData>({
     businessSize: 'small',
-    industry: 'retail', 
-    revenue: 1000000,
+    industry: 'retail',
     budget: 200000
   });
   
@@ -38,18 +37,18 @@ export default function ROICalculator(): JSX.Element {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'revenue' || name === 'budget' ? Number(value) : value
+      [name]: name === 'budget' ? Number(value) : value
     } as ROIFormData));
   };
 
   const calculateROI = async (): Promise<void> => {
-    const { businessSize, industry, revenue, budget } = formData;
+    const { businessSize, industry, budget } = formData;
     
     // Расчеты на основе множителей
     const baseROI = sizeMultipliers[businessSize] * industryMultipliers[industry];
     const roi = Math.round(baseROI * 100);
     const savings = Math.round(budget * 0.35);
-    const growth = Math.round(revenue * 0.25);
+    const growth = Math.round(budget * baseROI);
     const payback = Math.round(budget / (savings / 12));
     
     setResults({ roi, savings, growth, payback });
@@ -169,38 +168,10 @@ export default function ROICalculator(): JSX.Element {
                   </select>
                 </motion.div>
 
-                {/* Годовой доход */}
+                {/* Желаемые инвестиции в цифровизацию */}
                 <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
                   <label className="block text-sm font-medium mb-2" style={{ color: '#a0a9cc' }}>
-                    Годовой доход (₽)
-                  </label>
-                  <input
-                    type="number"
-                    name="revenue"
-                    value={formData.revenue}
-                    onChange={handleInputChange}
-                    min="0"
-                    step="100000"
-                    style={{
-                      width: '100%',
-                      padding: '16px',
-                      background: 'rgba(102, 126, 234, 0.1)',
-                      border: '1px solid rgba(102, 126, 234, 0.3)',
-                      borderRadius: '12px',
-                      color: 'white',
-                      fontSize: '16px',
-                      outline: 'none',
-                      transition: 'all 0.3s ease'
-                    }}
-                    onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
-                    onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
-                  />
-                </motion.div>
-
-                {/* Бюджет на IT */}
-                <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
-                  <label className="block text-sm font-medium mb-2" style={{ color: '#a0a9cc' }}>
-                    Текущий IT бюджет (₽)
+                    Желаемые инвестиции в цифровизацию (₽)
                   </label>
                   <input
                     type="number"
