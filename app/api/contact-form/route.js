@@ -1,10 +1,6 @@
 import { NextResponse } from 'next/server';
 import { apiRateLimit } from '@/app/middleware/rateLimit';
 
-// ВРЕМЕННОЕ РЕШЕНИЕ - для проверки работы Telegram
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8293000531:AAFJzDeo7xAtVNytHKDBbHZTuQyR2EW9qcI';
-const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '1634470382';
-
 async function handler(request) {
   try {
     const data = await request.json();
@@ -60,16 +56,14 @@ async function handler(request) {
     });
     
     // Send notification to Telegram if configured
-    if (TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID) {
+    if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
       try {
         // Логирование для отладки
         console.log('Attempting to send Telegram notification:', {
-          hasToken: !!TELEGRAM_BOT_TOKEN,
-          tokenLength: TELEGRAM_BOT_TOKEN?.length,
-          chatId: TELEGRAM_CHAT_ID,
-          chatIdType: typeof TELEGRAM_CHAT_ID,
-          actualToken: TELEGRAM_BOT_TOKEN?.substring(0, 10) + '...',
-          actualChatId: TELEGRAM_CHAT_ID
+          hasToken: !!process.env.TELEGRAM_BOT_TOKEN,
+          tokenLength: process.env.TELEGRAM_BOT_TOKEN?.length,
+          chatId: process.env.TELEGRAM_CHAT_ID,
+          chatIdType: typeof process.env.TELEGRAM_CHAT_ID
         });
         
         const telegramMessage = `
@@ -82,8 +76,8 @@ async function handler(request) {
 🕐 Время: ${new Date().toLocaleString('ru-RU')}
         `;
         
-        const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-        console.log('Telegram URL:', telegramUrl.replace(TELEGRAM_BOT_TOKEN, 'TOKEN_HIDDEN'));
+        const telegramUrl = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`;
+        console.log('Telegram URL:', telegramUrl.replace(process.env.TELEGRAM_BOT_TOKEN, 'TOKEN_HIDDEN'));
         
         const response = await fetch(
           telegramUrl,
@@ -91,7 +85,7 @@ async function handler(request) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              chat_id: TELEGRAM_CHAT_ID,
+              chat_id: process.env.TELEGRAM_CHAT_ID,
               text: telegramMessage
             })
           }
