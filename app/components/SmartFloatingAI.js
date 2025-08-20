@@ -750,14 +750,29 @@ function SmartFloatingAI() {
             margin: 0 !important;
           }
           
+          .ai-header-right {
+            display: flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+          }
+          
+          .model-btn,
           .ai-close-btn {
-            position: fixed !important;
-            top: 20px !important;
-            right: 20px !important;
-            z-index: 10000 !important;
-            font-size: 28px !important;
-            width: 44px !important;
-            height: 44px !important;
+            width: 32px !important;
+            height: 32px !important;
+            min-width: 32px !important;
+            font-size: 16px !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            position: relative !important;
+            top: auto !important;
+            right: auto !important;
+            z-index: auto !important;
+          }
+          
+          .ai-close-btn {
+            background: rgba(239, 68, 68, 0.1) !important;
+            border-color: rgba(239, 68, 68, 0.2) !important;
           }
         }
 
