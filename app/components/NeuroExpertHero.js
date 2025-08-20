@@ -410,24 +410,24 @@ export default function NeuroExpertHero() {
         .pre-header {
           font-family: 'Orbitron', monospace;
           font-weight: 400;
-          font-size: 16px;
+          font-size: 14px;
           color: #60A5FA;
-          letter-spacing: 0.4em;
+          letter-spacing: 0.3em;
           text-transform: uppercase;
-          margin-bottom: 50px;
+          margin-bottom: 30px;
           opacity: 0;
           animation: slideInTop 1s 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
-          text-shadow: 0 0 30px rgba(96, 165, 250, 0.6);
+          text-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
         }
 
         .main-header {
           font-family: 'Orbitron', monospace;
           font-weight: 900;
-          font-size: clamp(80px, 14vw, 140px);
+          font-size: clamp(70px, 12vw, 120px);
           margin: 0;
           line-height: 1;
           text-transform: uppercase;
-          margin-bottom: 60px;
+          margin-bottom: 40px;
           perspective: 1000px;
           letter-spacing: 0.05em;
         }
@@ -474,14 +474,14 @@ export default function NeuroExpertHero() {
         .sub-header {
           font-family: 'Inter', sans-serif;
           font-weight: 600;
-          font-size: clamp(24px, 4.5vw, 36px);
+          font-size: clamp(22px, 4vw, 32px);
           background: linear-gradient(90deg, #60A5FA, #A855F7);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
           text-transform: uppercase;
-          margin-bottom: 40px;
-          margin-top: -20px;
+          margin-bottom: 30px;
+          margin-top: -15px;
           opacity: 0;
           animation: slideInBottom 1s 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
           letter-spacing: 0.15em;
@@ -489,11 +489,11 @@ export default function NeuroExpertHero() {
 
         .description {
           font-weight: 400;
-          font-size: clamp(18px, 2.8vw, 24px);
+          font-size: clamp(17px, 2.5vw, 22px);
           color: rgba(209, 213, 219, 0.95);
-          max-width: 800px;
-          line-height: 1.8;
-          margin: 0 auto 60px;
+          max-width: 700px;
+          line-height: 1.7;
+          margin: 0 auto 50px;
           opacity: 0;
           animation: fadeIn 1s 0.7s ease-out forwards;
           text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
