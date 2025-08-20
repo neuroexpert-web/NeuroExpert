@@ -88,15 +88,6 @@ const nextConfig = {
       },
     },
     cpus: 4,
-    // Модульная федерация для уменьшения дублирования кода
-    modularizeImports: {
-      'date-fns': {
-        transform: 'date-fns/{{member}}',
-      },
-      'framer-motion': {
-        transform: 'framer-motion/{{member}}',
-      },
-    },
   },
   
   // Headers для безопасности и кэширования

@@ -703,14 +703,13 @@ export default function NeuroExpertHero() {
           </p>
           <button 
             onClick={() => {
-              // Ищем кнопку AI ассистента и кликаем на неё
-              const aiButton = document.querySelector('.ai-floating-button');
-              if (aiButton) {
-                aiButton.click();
-              } else {
-                // Если кнопка не найдена, скроллим вниз
-                window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
-              }
+              // Создаем событие для открытия AI чата
+              const event = new CustomEvent('openAIChat', { 
+                detail: { 
+                  message: 'Здравствуйте! Я хочу начать цифровую трансформацию своего бизнеса. С чего мне начать?' 
+                } 
+              });
+              window.dispatchEvent(event);
             }} 
             className="cta-button"
             type="button"
