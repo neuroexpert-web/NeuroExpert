@@ -293,7 +293,7 @@ export default function Home() {
 
         @media (max-width: 768px) {
           section {
-            padding: 80px 0;
+            padding: 40px 20px;
           }
 
           .section-header {
