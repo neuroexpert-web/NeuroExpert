@@ -96,7 +96,6 @@ export default function RootLayout({ children }) {
       <head>
         {/* Preload критических ресурсов */}
         <link rel="preload" href="/_next/static/css/app/globals.css" as="style" />
-        <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" as="style" />
         
         {/* Preconnect для оптимизации загрузки */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -262,8 +261,16 @@ export default function RootLayout({ children }) {
               if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
                   navigator.serviceWorker.register('/sw.js').then(
-                    (registration) => console.log('SW registered:', registration),
-                    (err) => console.log('SW registration failed:', err)
+                    (registration) => {
+                      if (process.env.NODE_ENV === 'development') {
+                        console.log('SW registered:', registration);
+                      }
+                    },
+                    (err) => {
+                      if (process.env.NODE_ENV === 'development') {
+                        console.log('SW registration failed:', err);
+                      }
+                    }
                   );
                 });
               }

@@ -5,8 +5,10 @@
 // Sentry temporarily disabled until properly configured
 const crypto = require('crypto');
 
-// Content Security Policy configuration - упрощено для исправления проблем
-const ContentSecurityPolicy = `
+// Content Security Policy configuration - улучшенная безопасность
+const isDevelopment = process.env.NODE_ENV === 'development';
+
+const ContentSecurityPolicy = isDevelopment ? `
   default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;
   script-src * 'unsafe-inline' 'unsafe-eval';
   style-src * 'unsafe-inline';
@@ -15,6 +17,21 @@ const ContentSecurityPolicy = `
   connect-src *;
   frame-src *;
   worker-src * blob:;
+` : `
+  default-src 'self';
+  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://mc.yandex.ru;
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  img-src 'self' data: blob: https: https://api.dicebear.com;
+  font-src 'self' https://fonts.gstatic.com;
+  connect-src 'self' https: wss: https://generativelanguage.googleapis.com;
+  frame-src 'self';
+  worker-src 'self' blob:;
+  object-src 'none';
+  base-uri 'self';
+  form-action 'self';
+  frame-ancestors 'none';
+  block-all-mixed-content;
+  upgrade-insecure-requests;
 `;
 
 const nextConfig = {
