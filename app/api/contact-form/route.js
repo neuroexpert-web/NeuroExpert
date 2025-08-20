@@ -58,6 +58,14 @@ async function handler(request) {
     // Send notification to Telegram if configured
     if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
       try {
+        // Логирование для отладки
+        console.log('Attempting to send Telegram notification:', {
+          hasToken: !!process.env.TELEGRAM_BOT_TOKEN,
+          tokenLength: process.env.TELEGRAM_BOT_TOKEN?.length,
+          chatId: process.env.TELEGRAM_CHAT_ID,
+          chatIdType: typeof process.env.TELEGRAM_CHAT_ID
+        });
+        
         const telegramMessage = `
 🔔 Новая заявка с сайта NeuroExpert
 
@@ -68,24 +76,34 @@ async function handler(request) {
 🕐 Время: ${new Date().toLocaleString('ru-RU')}
         `;
         
+        const telegramUrl = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`;
+        console.log('Telegram URL:', telegramUrl.replace(process.env.TELEGRAM_BOT_TOKEN, 'TOKEN_HIDDEN'));
+        
         const response = await fetch(
-          `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`,
+          telegramUrl,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               chat_id: process.env.TELEGRAM_CHAT_ID,
-              text: telegramMessage,
-              parse_mode: 'HTML'
+              text: telegramMessage
             })
           }
         );
         
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error('Failed to send Telegram notification:', errorText);
+        const responseData = await response.json();
+        
+        if (!response.ok || !responseData.ok) {
+          console.error('Failed to send Telegram notification:', {
+            status: response.status,
+            statusText: response.statusText,
+            error: responseData
+          });
         } else {
-          console.log('Telegram notification sent successfully');
+          console.log('Telegram notification sent successfully:', {
+            messageId: responseData.result?.message_id,
+            chatId: responseData.result?.chat?.id
+          });
         }
       } catch (error) {
         console.error('Telegram notification error:', error);
