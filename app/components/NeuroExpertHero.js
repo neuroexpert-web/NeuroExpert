@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react';
 export default function NeuroExpertHero() {
   const canvasRef = useRef(null);
   const animationRef = useRef(null);
-  const particlesRef = useRef([]);
+  const nodesRef = useRef([]);
   const mouseRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -16,98 +16,130 @@ export default function NeuroExpertHero() {
     let width = window.innerWidth;
     let height = window.innerHeight;
 
-    // Настройка canvas
     canvas.width = width;
     canvas.height = height;
 
-    // Класс для частиц
-    class Particle {
+    // Класс для узлов нейросети
+    class Node {
       constructor() {
         this.x = Math.random() * width;
         this.y = Math.random() * height;
-        this.vx = (Math.random() - 0.5) * 0.5;
-        this.vy = (Math.random() - 0.5) * 0.5;
-        this.radius = Math.random() * 2 + 1;
+        this.z = Math.random() * 1000; // Глубина
+        this.vx = (Math.random() - 0.5) * 0.3;
+        this.vy = (Math.random() - 0.5) * 0.3;
+        this.vz = (Math.random() - 0.5) * 0.5;
+        this.radius = 1;
+        this.pulsePhase = Math.random() * Math.PI * 2;
       }
 
       update() {
         this.x += this.vx;
         this.y += this.vy;
+        this.z += this.vz;
+        this.pulsePhase += 0.02;
 
-        if (this.x < 0 || this.x > width) this.vx = -this.vx;
-        if (this.y < 0 || this.y > height) this.vy = -this.vy;
+        // Границы с плавным отскоком
+        if (this.x < 50 || this.x > width - 50) this.vx *= -0.9;
+        if (this.y < 50 || this.y > height - 50) this.vy *= -0.9;
+        if (this.z < 0 || this.z > 1000) this.vz *= -0.9;
+
+        // Эффект глубины
+        const scale = (1000 - this.z) / 1000;
+        this.radius = 0.5 + scale * 1.5 + Math.sin(this.pulsePhase) * 0.3;
       }
 
       draw() {
+        const scale = (1000 - this.z) / 1000;
+        const opacity = scale * 0.8;
+        
+        // Свечение узла
+        const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius * 5);
+        gradient.addColorStop(0, `rgba(99, 102, 241, ${opacity})`);
+        gradient.addColorStop(0.5, `rgba(99, 102, 241, ${opacity * 0.5})`);
+        gradient.addColorStop(1, 'rgba(99, 102, 241, 0)');
+        
+        ctx.fillStyle = gradient;
+        ctx.fillRect(this.x - this.radius * 5, this.y - this.radius * 5, this.radius * 10, this.radius * 10);
+        
+        // Центральная точка
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(99, 102, 241, 0.8)';
+        ctx.fillStyle = `rgba(147, 197, 253, ${opacity})`;
         ctx.fill();
       }
     }
 
-    // Создаем частицы
-    const particleCount = 100;
-    for (let i = 0; i < particleCount; i++) {
-      particlesRef.current.push(new Particle());
+    // Создаем узлы
+    const nodeCount = 50;
+    for (let i = 0; i < nodeCount; i++) {
+      nodesRef.current.push(new Node());
     }
 
     // Функция анимации
     const animate = () => {
-      ctx.clearRect(0, 0, width, height);
+      // Затемненный фон с эффектом глубины
+      ctx.fillStyle = 'rgba(10, 5, 26, 0.1)';
+      ctx.fillRect(0, 0, width, height);
 
-      // Рисуем связи между частицами
-      particlesRef.current.forEach((particle, i) => {
-        particle.update();
-        particle.draw();
+      // Сортируем по глубине для правильного отображения
+      nodesRef.current.sort((a, b) => b.z - a.z);
 
-        // Соединяем близкие частицы
-        for (let j = i + 1; j < particlesRef.current.length; j++) {
-          const dx = particlesRef.current[j].x - particle.x;
-          const dy = particlesRef.current[j].y - particle.y;
+      // Рисуем связи
+      nodesRef.current.forEach((node, i) => {
+        node.update();
+
+        // Соединяем только близкие узлы на похожей глубине
+        for (let j = i + 1; j < nodesRef.current.length; j++) {
+          const other = nodesRef.current[j];
+          const dx = other.x - node.x;
+          const dy = other.y - node.y;
+          const dz = Math.abs(other.z - node.z);
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 150) {
+          if (distance < 200 && dz < 200) {
+            const scale = (1000 - (node.z + other.z) / 2) / 1000;
+            const opacity = (1 - distance / 200) * (1 - dz / 200) * scale * 0.3;
+            
             ctx.beginPath();
-            ctx.moveTo(particle.x, particle.y);
-            ctx.lineTo(particlesRef.current[j].x, particlesRef.current[j].y);
-            ctx.strokeStyle = `rgba(99, 102, 241, ${0.2 * (1 - distance / 150)})`;
-            ctx.lineWidth = 0.5;
+            ctx.moveTo(node.x, node.y);
+            ctx.lineTo(other.x, other.y);
+            
+            // Градиент для линий
+            const gradient = ctx.createLinearGradient(node.x, node.y, other.x, other.y);
+            gradient.addColorStop(0, `rgba(99, 102, 241, ${opacity})`);
+            gradient.addColorStop(0.5, `rgba(168, 85, 247, ${opacity * 0.8})`);
+            gradient.addColorStop(1, `rgba(99, 102, 241, ${opacity})`);
+            
+            ctx.strokeStyle = gradient;
+            ctx.lineWidth = scale * 0.5;
             ctx.stroke();
           }
         }
-
-        // Соединяем с курсором
-        const mouseDistance = Math.sqrt(
-          Math.pow(mouseRef.current.x - particle.x, 2) +
-          Math.pow(mouseRef.current.y - particle.y, 2)
-        );
-
-        if (mouseDistance < 200) {
-          ctx.beginPath();
-          ctx.moveTo(particle.x, particle.y);
-          ctx.lineTo(mouseRef.current.x, mouseRef.current.y);
-          ctx.strokeStyle = `rgba(168, 85, 247, ${0.3 * (1 - mouseDistance / 200)})`;
-          ctx.lineWidth = 1;
-          ctx.stroke();
-        }
       });
+
+      // Рисуем узлы
+      nodesRef.current.forEach(node => node.draw());
+
+      // Эффект курсора
+      const mouseGradient = ctx.createRadialGradient(
+        mouseRef.current.x, mouseRef.current.y, 0,
+        mouseRef.current.x, mouseRef.current.y, 150
+      );
+      mouseGradient.addColorStop(0, 'rgba(168, 85, 247, 0.1)');
+      mouseGradient.addColorStop(1, 'rgba(168, 85, 247, 0)');
+      ctx.fillStyle = mouseGradient;
+      ctx.fillRect(0, 0, width, height);
 
       animationRef.current = requestAnimationFrame(animate);
     };
 
     animate();
 
-    // Обработчик движения мыши
+    // Обработчики событий
     const handleMouseMove = (e) => {
-      const rect = canvas.getBoundingClientRect();
-      mouseRef.current = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top
-      };
+      mouseRef.current = { x: e.clientX, y: e.clientY };
     };
 
-    // Обработчик изменения размера окна
     const handleResize = () => {
       width = window.innerWidth;
       height = window.innerHeight;
@@ -118,8 +150,8 @@ export default function NeuroExpertHero() {
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('resize', handleResize);
 
-    // Анимация заголовка
-    const animateHeader = () => {
+    // Анимация текста
+    const animateText = () => {
       const header = document.getElementById('animated-main-header');
       if (header && header.children.length === 0) {
         const text = header.textContent;
@@ -132,15 +164,15 @@ export default function NeuroExpertHero() {
           span.style.cssText = `
             display: inline-block;
             opacity: 0;
-            transform: translateY(50px) rotateX(90deg);
-            animation: letterReveal 0.8s ${i * 0.08}s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            transform: translateZ(100px) rotateY(90deg);
+            animation: letterReveal3D 1s ${i * 0.1}s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
           `;
           header.appendChild(span);
         });
       }
     };
 
-    setTimeout(animateHeader, 300);
+    setTimeout(animateText, 500);
 
     return () => {
       if (animationRef.current) {
@@ -153,44 +185,50 @@ export default function NeuroExpertHero() {
 
   const handleStartClick = (e) => {
     e.preventDefault();
+    const button = e.currentTarget;
+    
+    // Ripple эффект
+    const rect = button.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    ripple.style.left = `${e.clientX - rect.left}px`;
+    ripple.style.top = `${e.clientY - rect.top}px`;
+    button.appendChild(ripple);
+    
+    setTimeout(() => ripple.remove(), 1000);
+    
+    // Открываем AI чат
     setTimeout(() => {
       const aiButton = document.querySelector('.ai-float-button');
-      if (aiButton) {
-        aiButton.click();
-      }
-    }, 100);
+      if (aiButton) aiButton.click();
+    }, 300);
   };
 
   return (
     <section className="hero-section">
       <canvas ref={canvasRef} className="neural-network-canvas" />
       
+      <div className="depth-layers">
+        <div className="depth-layer layer-1"></div>
+        <div className="depth-layer layer-2"></div>
+        <div className="depth-layer layer-3"></div>
+      </div>
+      
       <div className="hero-content">
-        <p className="pre-header">ЦИФРОВАЯ AI ПЛАТФОРМА ДЛЯ БИЗНЕСА</p>
-        <h1 className="main-header" id="animated-main-header">NeuroExpert</h1>
-        <h2 className="sub-header">СОЗДАЙТЕ ЦИФРОВОЕ ПОЗИЦИОНИРОВАНИЕ</h2>
-        <p className="description">
-          Автоматизируйте бизнес-процессы, увеличивайте прибыль и опережайте конкурентов с помощью передовых ИИ технологий.
-        </p>
-        <div className="cta-buttons">
-          <a href="#benefits" className="cta-button cta-calculator">
-            <span className="button-gradient"></span>
-            <span className="button-content">
-              <span className="button-icon">🧮</span>
-              <span>Калькулятор</span>
-            </span>
-          </a>
-          <a 
-            href="#" 
-            className="cta-button cta-start"
+        <div className="content-wrapper">
+          <h1 className="main-header" id="animated-main-header">NeuroExpert</h1>
+          <p className="tagline">Искусственный интеллект для вашего бизнеса</p>
+          
+          <button 
+            className="cta-button"
             onClick={handleStartClick}
           >
-            <span className="button-gradient"></span>
+            <span className="button-bg"></span>
             <span className="button-content">
-              <span className="button-icon">🚀</span>
-              <span>Начать бесплатно</span>
+              <span className="button-text">Начать</span>
+              <span className="button-arrow">→</span>
             </span>
-          </a>
+          </button>
         </div>
       </div>
 
@@ -202,9 +240,9 @@ export default function NeuroExpertHero() {
           display: flex;
           align-items: center;
           justify-content: center;
-          text-align: center;
           overflow: hidden;
           background: #0A051A;
+          perspective: 1000px;
         }
 
         .neural-network-canvas {
@@ -216,266 +254,266 @@ export default function NeuroExpertHero() {
           z-index: 1;
         }
 
+        /* Слои глубины */
+        .depth-layers {
+          position: absolute;
+          inset: 0;
+          z-index: 2;
+          pointer-events: none;
+        }
+
+        .depth-layer {
+          position: absolute;
+          inset: 0;
+          opacity: 0.03;
+        }
+
+        .layer-1 {
+          background: radial-gradient(circle at 30% 50%, #6366f1 0%, transparent 50%);
+          animation: float1 20s infinite ease-in-out;
+        }
+
+        .layer-2 {
+          background: radial-gradient(circle at 70% 70%, #a855f7 0%, transparent 50%);
+          animation: float2 25s infinite ease-in-out;
+        }
+
+        .layer-3 {
+          background: radial-gradient(circle at 50% 20%, #60a5fa 0%, transparent 50%);
+          animation: float3 30s infinite ease-in-out;
+        }
+
+        @keyframes float1 {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          50% { transform: translate(30px, -30px) scale(1.1); }
+        }
+
+        @keyframes float2 {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          50% { transform: translate(-40px, 20px) scale(0.9); }
+        }
+
+        @keyframes float3 {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          50% { transform: translate(20px, 40px) scale(1.05); }
+        }
+
         .hero-content {
           position: relative;
           z-index: 10;
-          padding: 20px;
-          max-width: 1200px;
           width: 100%;
-          margin: 0 auto;
+          max-width: 1400px;
+          padding: 0 60px;
         }
 
-        .pre-header {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-          font-weight: 500;
-          font-size: 14px;
-          color: #A0A3B5;
-          letter-spacing: 0.2em;
-          text-transform: uppercase;
-          margin: 0 0 24px 0;
-          opacity: 0;
-          animation: fadeInDown 1s ease-out forwards;
+        .content-wrapper {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 40px;
+          padding-left: 10%;
         }
 
+        /* Заголовок с элегантным оформлением */
         .main-header {
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-          font-weight: 700;
-          font-size: 80px;
-          line-height: 1;
-          margin: 0 0 24px 0;
-          background: linear-gradient(135deg, #A855F7 0%, #6366F1 50%, #60A5FA 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+          font-weight: 300;
+          font-size: clamp(60px, 8vw, 120px);
+          line-height: 0.9;
+          margin: 0;
+          letter-spacing: -0.02em;
           color: transparent;
-          filter: drop-shadow(0 0 30px rgba(168, 85, 247, 0.4));
+          background: linear-gradient(135deg, 
+            #ffffff 0%, 
+            #93c5fd 25%, 
+            #6366f1 50%, 
+            #a855f7 75%, 
+            #ffffff 100%
+          );
           background-size: 200% 200%;
-          animation: gradientShift 3s ease infinite;
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: gradientFlow 4s ease infinite;
+          filter: drop-shadow(0 0 40px rgba(99, 102, 241, 0.3));
+          transform-style: preserve-3d;
+          perspective: 1000px;
         }
 
-        @keyframes gradientShift {
+        @keyframes gradientFlow {
           0% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
           100% { background-position: 0% 50%; }
         }
 
-        .sub-header {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-          font-weight: 600;
-          font-size: 36px;
-          color: #60A5FA;
-          text-transform: uppercase;
-          margin: 0 0 20px 0;
-          letter-spacing: 0.05em;
-          opacity: 0;
-          animation: fadeInUp 1s 0.6s ease-out forwards;
+        @keyframes letterReveal3D {
+          to {
+            opacity: 1;
+            transform: translateZ(0) rotateY(0);
+          }
         }
 
-        .description {
+        .tagline {
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
           font-weight: 400;
-          font-size: 20px;
-          color: #D1D5DB;
-          max-width: 650px;
-          line-height: 1.6;
-          margin: 0 auto 40px;
+          font-size: clamp(18px, 2vw, 24px);
+          color: #93c5fd;
           opacity: 0;
-          animation: fadeInUp 1s 0.8s ease-out forwards;
+          animation: fadeInSlide 1s 1.5s ease-out forwards;
+          letter-spacing: 0.02em;
         }
 
-        .cta-buttons {
-          display: flex;
-          gap: 20px;
-          justify-content: center;
-          flex-wrap: wrap;
-          margin-top: 40px;
-          opacity: 0;
-          animation: fadeInUp 1s 1s ease-out forwards;
+        @keyframes fadeInSlide {
+          to {
+            opacity: 0.8;
+            transform: translateX(0);
+          }
+          from {
+            opacity: 0;
+            transform: translateX(-30px);
+          }
         }
 
+        /* Минималистичная кнопка */
         .cta-button {
           position: relative;
           display: inline-flex;
           align-items: center;
           padding: 0;
           border: none;
-          border-radius: 50px;
-          text-decoration: none;
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-          font-size: 16px;
-          font-weight: 600;
-          color: #FFFFFF;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          overflow: hidden;
+          background: none;
           cursor: pointer;
-          transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-                      box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+          font-size: 18px;
+          font-weight: 500;
+          color: #ffffff;
+          opacity: 0;
+          animation: fadeInSlide 1s 1.8s ease-out forwards;
+          overflow: hidden;
+          transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .button-gradient {
+        .button-bg {
           position: absolute;
-          inset: 0;
+          inset: -2px;
+          background: linear-gradient(135deg, 
+            rgba(99, 102, 241, 0.1) 0%, 
+            rgba(168, 85, 247, 0.1) 100%
+          );
           border-radius: 50px;
-          z-index: 0;
-        }
-
-        .cta-calculator .button-gradient {
-          background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
-        }
-
-        .cta-start .button-gradient {
-          background: linear-gradient(135deg, #A855F7 0%, #EC4899 100%);
+          backdrop-filter: blur(10px);
+          opacity: 0;
+          transition: opacity 0.3s ease;
         }
 
         .button-content {
           position: relative;
-          z-index: 1;
           display: flex;
           align-items: center;
-          gap: 10px;
-          padding: 18px 40px;
+          gap: 20px;
+          padding: 20px 50px;
+          border: 1px solid rgba(147, 197, 253, 0.2);
+          border-radius: 50px;
+          background: transparent;
+          transition: all 0.3s ease;
         }
 
-        .cta-button::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-          z-index: 2;
-          transition: left 0.6s;
+        .button-text {
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
         }
 
-        .cta-calculator {
-          box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.6);
+        .button-arrow {
+          font-size: 24px;
+          transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .cta-start {
-          box-shadow: 0 10px 30px -10px rgba(168, 85, 247, 0.6);
+        .cta-button:hover .button-bg {
+          opacity: 1;
         }
 
-        .cta-button:hover {
-          transform: translateY(-3px) scale(1.05);
+        .cta-button:hover .button-content {
+          border-color: rgba(147, 197, 253, 0.5);
+          transform: translateZ(10px);
         }
 
-        .cta-calculator:hover {
-          box-shadow: 0 15px 40px -10px rgba(99, 102, 241, 0.8);
-        }
-
-        .cta-start:hover {
-          box-shadow: 0 15px 40px -10px rgba(168, 85, 247, 0.8);
-        }
-
-        .cta-button:hover::before {
-          left: 100%;
+        .cta-button:hover .button-arrow {
+          transform: translateX(5px);
         }
 
         .cta-button:active {
-          transform: translateY(-1px) scale(0.98);
+          transform: scale(0.98);
         }
 
-        .button-icon {
-          font-size: 20px;
-          filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
-          animation: iconPulse 2s ease-in-out infinite;
+        /* Ripple эффект */
+        .ripple {
+          position: absolute;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.5);
+          transform: translate(-50%, -50%);
+          animation: rippleEffect 1s ease-out;
+          pointer-events: none;
         }
 
-        @keyframes iconPulse {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.1); }
-        }
-
-        @keyframes fadeInDown {
+        @keyframes rippleEffect {
           from {
+            width: 0;
+            height: 0;
+            opacity: 1;
+          }
+          to {
+            width: 200px;
+            height: 200px;
             opacity: 0;
-            transform: translateY(-30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
           }
         }
 
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes letterReveal {
-          to {
-            opacity: 1;
-            transform: translateY(0) rotateX(0);
-          }
-        }
-
-        /* Мобильная адаптация */
-        @media (max-width: 768px) {
-          .neural-network-canvas {
-            opacity: 0.5; /* Уменьшаем яркость на мобильных */
-          }
-
+        /* Адаптивность */
+        @media (max-width: 1024px) {
           .hero-content {
-            padding: 20px 15px;
+            padding: 0 40px;
           }
 
-          .pre-header {
-            font-size: 12px;
-            letter-spacing: 0.1em;
+          .content-wrapper {
+            padding-left: 0;
+            align-items: center;
+            text-align: center;
           }
+        }
 
-          .main-header {
-            font-size: 48px;
-          }
-
-          .sub-header {
-            font-size: 24px;
-          }
-
-          .description {
-            font-size: 16px;
+        @media (max-width: 768px) {
+          .hero-content {
             padding: 0 20px;
           }
 
-          .cta-buttons {
-            flex-direction: column;
-            align-items: center;
+          .main-header {
+            font-size: clamp(48px, 12vw, 80px);
           }
 
-          .cta-button {
-            width: 100%;
-            max-width: 280px;
+          .tagline {
+            font-size: 18px;
           }
 
           .button-content {
-            justify-content: center;
+            padding: 16px 40px;
+          }
+
+          .button-text {
+            font-size: 16px;
           }
         }
 
         @media (max-width: 480px) {
           .main-header {
-            font-size: 36px;
+            font-size: 48px;
           }
 
-          .sub-header {
-            font-size: 18px;
-          }
-
-          .description {
-            font-size: 14px;
+          .tagline {
+            font-size: 16px;
           }
 
           .button-content {
-            padding: 16px 30px;
-            font-size: 14px;
+            padding: 14px 32px;
           }
         }
       `}</style>
