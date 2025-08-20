@@ -6,49 +6,64 @@ import Script from 'next/script';
 export default function NeuroExpertHero() {
   const vantaRef = useRef(null);
   const heroRef = useRef(null);
-  const [scriptsLoaded, setScriptsLoaded] = useState(false);
+  const [vantaLoaded, setVantaLoaded] = useState(false);
 
   useEffect(() => {
-    if (!scriptsLoaded) return;
-
-    // Инициализация Vanta.js
-    if (window.VANTA && window.VANTA.NET && !vantaRef.current) {
-      try {
-        vantaRef.current = window.VANTA.NET({
-          el: heroRef.current,
-          mouseControls: true,
-          touchControls: true,
-          gyroControls: false,
-          minHeight: 200.00,
-          minWidth: 200.00,
-          scale: 1.00,
-          scaleMobile: 1.00,
-          color: 0x6366f1,
-          backgroundColor: 0x0a051a,
-          points: 12.00,
-          maxDistance: 25.00,
-          spacing: 18.00,
-          showDots: true
-        });
-      } catch (error) {
-        console.error('Vanta initialization error:', error);
+    // Функция инициализации Vanta
+    const initVanta = () => {
+      if (window.THREE && window.VANTA && !vantaRef.current) {
+        try {
+          vantaRef.current = window.VANTA.NET({
+            el: heroRef.current,
+            THREE: window.THREE,
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: 0x6366f1,
+            backgroundColor: 0x0a051a,
+            points: 20.00,
+            maxDistance: 25.00,
+            spacing: 15.00
+          });
+          console.log('Vanta NET initialized successfully');
+        } catch (error) {
+          console.error('Vanta initialization error:', error);
+        }
       }
+    };
+
+    // Проверяем загрузку и инициализируем
+    if (vantaLoaded && window.THREE && window.VANTA) {
+      setTimeout(initVanta, 100);
     }
 
     // Анимация заголовка
-    const header = document.getElementById('animated-main-header');
-    if (header && header.children.length === 0) {
-      const text = header.textContent;
-      header.innerHTML = '';
-      
-      text.split('').forEach((char, i) => {
-        const span = document.createElement('span');
-        span.textContent = char;
-        span.className = 'letter';
-        span.style.animationDelay = `${i * 0.08}s`;
-        header.appendChild(span);
-      });
-    }
+    const animateHeader = () => {
+      const header = document.getElementById('animated-main-header');
+      if (header && header.children.length === 0) {
+        const text = header.textContent;
+        header.innerHTML = '';
+        
+        text.split('').forEach((char, i) => {
+          const span = document.createElement('span');
+          span.textContent = char;
+          span.className = 'letter';
+          span.style.cssText = `
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(50px) rotateX(90deg);
+            animation: letterReveal 0.8s ${i * 0.08}s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+          `;
+          header.appendChild(span);
+        });
+      }
+    };
+
+    setTimeout(animateHeader, 300);
 
     return () => {
       if (vantaRef.current) {
@@ -56,7 +71,7 @@ export default function NeuroExpertHero() {
         vantaRef.current = null;
       }
     };
-  }, [scriptsLoaded]);
+  }, [vantaLoaded]);
 
   const handleStartClick = (e) => {
     e.preventDefault();
@@ -71,23 +86,22 @@ export default function NeuroExpertHero() {
   return (
     <>
       <Script
-        src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"
+        src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"
         strategy="afterInteractive"
         onLoad={() => {
           console.log('Three.js loaded');
         }}
       />
       <Script
-        src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"
+        src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.net.min.js"
         strategy="afterInteractive"
         onLoad={() => {
           console.log('Vanta.js loaded');
-          setScriptsLoaded(true);
+          setVantaLoaded(true);
         }}
       />
 
       <section className="hero-section" ref={heroRef}>
-        <div className="hero-overlay"></div>
         <div className="hero-content">
           <p className="pre-header">ЦИФРОВАЯ AI ПЛАТФОРМА ДЛЯ БИЗНЕСА</p>
           <h1 className="main-header" id="animated-main-header">NeuroExpert</h1>
@@ -97,16 +111,22 @@ export default function NeuroExpertHero() {
           </p>
           <div className="cta-buttons">
             <a href="#benefits" className="cta-button cta-calculator">
-              <span className="button-icon">🧮</span>
-              <span>Калькулятор</span>
+              <span className="button-gradient"></span>
+              <span className="button-content">
+                <span className="button-icon">🧮</span>
+                <span>Калькулятор</span>
+              </span>
             </a>
             <a 
               href="#" 
               className="cta-button cta-start"
               onClick={handleStartClick}
             >
-              <span className="button-icon">🚀</span>
-              <span>Начать бесплатно</span>
+              <span className="button-gradient"></span>
+              <span className="button-content">
+                <span className="button-icon">🚀</span>
+                <span>Начать бесплатно</span>
+              </span>
             </a>
           </div>
         </div>
@@ -123,16 +143,6 @@ export default function NeuroExpertHero() {
           text-align: center;
           overflow: hidden;
           background: #0A051A;
-        }
-
-        .hero-overlay {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
-          pointer-events: none;
         }
 
         .hero-content {
@@ -168,13 +178,14 @@ export default function NeuroExpertHero() {
           background-clip: text;
           color: transparent;
           filter: drop-shadow(0 0 30px rgba(168, 85, 247, 0.4));
+          background-size: 200% 200%;
+          animation: gradientShift 3s ease infinite;
         }
 
-        .main-header .letter {
-          display: inline-block;
-          opacity: 0;
-          transform: translateY(50px) rotateX(90deg);
-          animation: letterReveal 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        @keyframes gradientShift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
         }
 
         .sub-header {
@@ -212,10 +223,11 @@ export default function NeuroExpertHero() {
         }
 
         .cta-button {
+          position: relative;
           display: inline-flex;
           align-items: center;
-          gap: 10px;
-          padding: 18px 40px;
+          padding: 0;
+          border: none;
           border-radius: 50px;
           text-decoration: none;
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -224,19 +236,34 @@ export default function NeuroExpertHero() {
           color: #FFFFFF;
           text-transform: uppercase;
           letter-spacing: 0.05em;
-          position: relative;
           overflow: hidden;
-          transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
           cursor: pointer;
-          box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
+          transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+                      box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
-        .cta-calculator {
-          background: linear-gradient(135deg, #6366F1, #8B5CF6);
+        .button-gradient {
+          position: absolute;
+          inset: 0;
+          border-radius: 50px;
+          z-index: 0;
         }
 
-        .cta-start {
-          background: linear-gradient(135deg, #A855F7, #EC4899);
+        .cta-calculator .button-gradient {
+          background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+        }
+
+        .cta-start .button-gradient {
+          background: linear-gradient(135deg, #A855F7 0%, #EC4899 100%);
+        }
+
+        .button-content {
+          position: relative;
+          z-index: 1;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 18px 40px;
         }
 
         .cta-button::before {
@@ -247,21 +274,47 @@ export default function NeuroExpertHero() {
           width: 100%;
           height: 100%;
           background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+          z-index: 2;
           transition: left 0.6s;
+        }
+
+        .cta-calculator {
+          box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.6);
+        }
+
+        .cta-start {
+          box-shadow: 0 10px 30px -10px rgba(168, 85, 247, 0.6);
         }
 
         .cta-button:hover {
           transform: translateY(-3px) scale(1.05);
-          box-shadow: 0 15px 40px -5px rgba(0, 0, 0, 0.4);
+        }
+
+        .cta-calculator:hover {
+          box-shadow: 0 15px 40px -10px rgba(99, 102, 241, 0.8);
+        }
+
+        .cta-start:hover {
+          box-shadow: 0 15px 40px -10px rgba(168, 85, 247, 0.8);
         }
 
         .cta-button:hover::before {
           left: 100%;
         }
 
+        .cta-button:active {
+          transform: translateY(-1px) scale(0.98);
+        }
+
         .button-icon {
           font-size: 20px;
           filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+          animation: iconPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes iconPulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.1); }
         }
 
         @keyframes fadeInDown {
@@ -291,6 +344,21 @@ export default function NeuroExpertHero() {
             opacity: 1;
             transform: translateY(0) rotateX(0);
           }
+        }
+
+        /* Fallback для Vanta фона */
+        .hero-section::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
+                      radial-gradient(circle at 40% 20%, rgba(96, 165, 250, 0.1) 0%, transparent 50%);
+          pointer-events: none;
+          opacity: 0.7;
         }
 
         /* Мобильная адаптация */
@@ -325,6 +393,9 @@ export default function NeuroExpertHero() {
           .cta-button {
             width: 100%;
             max-width: 280px;
+          }
+
+          .button-content {
             justify-content: center;
           }
         }
@@ -342,7 +413,7 @@ export default function NeuroExpertHero() {
             font-size: 14px;
           }
 
-          .cta-button {
+          .button-content {
             padding: 16px 30px;
             font-size: 14px;
           }

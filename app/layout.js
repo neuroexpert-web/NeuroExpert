@@ -266,6 +266,10 @@ export default function RootLayout({ children }) {
             `
           }}
         />
+        
+        {/* Vanta.js scripts for neural network animation */}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.net.min.js" defer></script>
       </body>
     </html>
   )
