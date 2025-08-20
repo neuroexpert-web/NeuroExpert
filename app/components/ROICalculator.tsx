@@ -16,6 +16,16 @@ export default function ROICalculator(): JSX.Element {
     roi: 0,
     profit: 0
   });
+  
+  // Определяем мобильное устройство
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  
+  // Проверка на мобильное устройство
+  if (typeof window !== 'undefined') {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', checkMobile);
+    checkMobile();
+  }
 
   // Коэффициенты отрасли согласно ТЗ
   const industryCoefficients: Record<ROIFormData['industry'], number> = {
@@ -117,13 +127,13 @@ export default function ROICalculator(): JSX.Element {
           style={{
             background: 'rgba(20, 20, 40, 0.8)',
             backdropFilter: 'blur(20px)',
-            borderRadius: '32px',
-            padding: '48px',
+            borderRadius: isMobile ? '16px' : '32px',
+            padding: isMobile ? '24px 16px' : '48px',
             border: '1px solid rgba(102, 126, 234, 0.3)',
             boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3), 0 0 40px rgba(102, 126, 234, 0.2)'
           }}
         >
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className={isMobile ? "space-y-8" : "grid md:grid-cols-2 gap-8"}>
             {/* Форма ввода */}
             <div>
               <h3 className="text-2xl font-bold mb-6" style={{ color: '#e0e7ff' }}>
@@ -142,14 +152,17 @@ export default function ROICalculator(): JSX.Element {
                     onChange={handleInputChange}
                     style={{
                       width: '100%',
-                      padding: '16px',
+                      padding: isMobile ? '18px' : '16px',
                       background: 'rgba(102, 126, 234, 0.1)',
                       border: '1px solid rgba(102, 126, 234, 0.3)',
                       borderRadius: '12px',
                       color: 'white',
-                      fontSize: '16px',
+                      fontSize: isMobile ? '18px' : '16px',
                       outline: 'none',
-                      transition: 'all 0.3s ease'
+                      transition: 'all 0.3s ease',
+                      WebkitAppearance: 'none',
+                      MozAppearance: 'none',
+                      appearance: 'none'
                     }}
                     onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
                     onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
@@ -178,14 +191,17 @@ export default function ROICalculator(): JSX.Element {
                     onChange={handleInputChange}
                     style={{
                       width: '100%',
-                      padding: '16px',
+                      padding: isMobile ? '18px' : '16px',
                       background: 'rgba(102, 126, 234, 0.1)',
                       border: '1px solid rgba(102, 126, 234, 0.3)',
                       borderRadius: '12px',
                       color: 'white',
-                      fontSize: '16px',
+                      fontSize: isMobile ? '18px' : '16px',
                       outline: 'none',
-                      transition: 'all 0.3s ease'
+                      transition: 'all 0.3s ease',
+                      WebkitAppearance: 'none',
+                      MozAppearance: 'none',
+                      appearance: 'none'
                     }}
                     onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
                     onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
@@ -213,14 +229,17 @@ export default function ROICalculator(): JSX.Element {
                     step="10000"
                     style={{
                       width: '100%',
-                      padding: '16px',
+                      padding: isMobile ? '18px' : '16px',
                       background: 'rgba(102, 126, 234, 0.1)',
                       border: '1px solid rgba(102, 126, 234, 0.3)',
                       borderRadius: '12px',
                       color: 'white',
-                      fontSize: '16px',
+                      fontSize: isMobile ? '18px' : '16px',
                       outline: 'none',
-                      transition: 'all 0.3s ease'
+                      transition: 'all 0.3s ease',
+                      WebkitAppearance: 'none',
+                      MozAppearance: 'none',
+                      appearance: 'none'
                     }}
                     onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
                     onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
@@ -269,9 +288,9 @@ export default function ROICalculator(): JSX.Element {
             </div>
 
             {/* Информационный блок */}
-            <div className="hidden md:flex items-center justify-center">
+            <div className={isMobile ? "text-center mt-8" : "hidden md:flex items-center justify-center"}>
               <div className="text-center">
-                <div style={{ fontSize: '120px', marginBottom: '20px' }}>📈</div>
+                <div style={{ fontSize: isMobile ? '60px' : '120px', marginBottom: '20px' }}>📈</div>
                 <h3 className="text-2xl font-bold mb-4" style={{ color: '#e0e7ff' }}>
                   Откройте потенциал вашего бизнеса
                 </h3>
