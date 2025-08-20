@@ -113,7 +113,7 @@ function SmartFloatingAI() {
         setIsTyping(false);
         if (callback) callback();
       }
-    }, 20);
+    }, 5); // Ускорено с 20мс до 5мс - в 4 раза быстрее
   };
 
   const handleAutoMessage = async (userMessage) => {
