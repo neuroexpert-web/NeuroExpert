@@ -14,7 +14,7 @@ export default function NeuroExpertHero() {
     let width = window.innerWidth;
     let height = window.innerHeight;
 
-    // Настройка canvas с учетом DPI
+    // Настройка canvas с учетом DPI для четкости
     const dpr = window.devicePixelRatio || 1;
     canvas.width = width * dpr;
     canvas.height = height * dpr;
@@ -22,151 +22,256 @@ export default function NeuroExpertHero() {
     canvas.style.height = height + 'px';
     ctx.scale(dpr, dpr);
 
-    // Параметры сети
-    const particles = [];
-    const particleCount = width > 768 ? 100 : 60;
-    const connectionDistance = width > 768 ? 200 : 150;
-    const mouseRadius = width > 768 ? 250 : 150;
+    // Очищаем canvas для четкого изображения
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
 
-    // Класс для частиц с улучшенной яркостью
-    class Particle {
-      constructor() {
+    // Нейроны
+    const neurons = [];
+    const neuronCount = width > 768 ? 120 : 80;
+    
+    // Импульсы для передачи сигналов
+    const impulses = [];
+    
+    // Класс нейрона
+    class Neuron {
+      constructor(index) {
         this.x = Math.random() * width;
         this.y = Math.random() * height;
-        this.vx = (Math.random() - 0.5) * 0.3;
-        this.vy = (Math.random() - 0.5) * 0.3;
-        this.radius = Math.random() * 2 + 1;
-        this.pulsePhase = Math.random() * Math.PI * 2;
-        this.brightness = 0.5 + Math.random() * 0.5;
+        this.vx = (Math.random() - 0.5) * 0.2;
+        this.vy = (Math.random() - 0.5) * 0.2;
+        this.radius = Math.random() * 2 + 2;
+        this.energy = Math.random();
+        this.connections = [];
+        this.pulseTimer = Math.random() * 200;
+        this.glowIntensity = 0;
+        this.targetGlow = 0;
+        this.id = index;
       }
 
       update() {
+        // Плавное движение
         this.x += this.vx;
         this.y += this.vy;
-        this.pulsePhase += 0.02;
 
-        // Плавный отскок от границ
-        if (this.x < 20 || this.x > width - 20) this.vx *= -1;
-        if (this.y < 20 || this.y > height - 20) this.vy *= -1;
+        // Мягкие границы
+        if (this.x < 50) this.vx += 0.1;
+        if (this.x > width - 50) this.vx -= 0.1;
+        if (this.y < 50) this.vy += 0.1;
+        if (this.y > height - 50) this.vy -= 0.1;
 
-        // Пульсация яркости
-        this.brightness = 0.5 + Math.sin(this.pulsePhase) * 0.3;
+        // Обновляем энергию
+        this.energy = Math.min(1, this.energy + 0.001);
+        
+        // Пульсация
+        this.pulseTimer++;
+        if (this.pulseTimer > 200 && this.energy > 0.5 && Math.random() < 0.01) {
+          this.pulse();
+          this.pulseTimer = 0;
+        }
+
+        // Плавное изменение свечения
+        this.glowIntensity += (this.targetGlow - this.glowIntensity) * 0.1;
+        if (this.glowIntensity < 0.01) this.targetGlow = 0;
+      }
+
+      pulse() {
+        this.targetGlow = 1;
+        this.energy *= 0.5;
+        
+        // Создаем импульсы к соединенным нейронам
+        this.connections.forEach(connection => {
+          if (connection.strength > 0.3) {
+            impulses.push(new Impulse(this, connection.neuron));
+          }
+        });
       }
 
       draw() {
-        // Основная точка с ярким свечением
+        // Основное ядро нейрона
+        const coreGradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius);
+        coreGradient.addColorStop(0, `rgba(147, 197, 253, ${0.9 + this.glowIntensity * 0.1})`);
+        coreGradient.addColorStop(0.5, `rgba(99, 102, 241, ${0.7 + this.glowIntensity * 0.3})`);
+        coreGradient.addColorStop(1, `rgba(99, 102, 241, 0)`);
+        
+        ctx.fillStyle = coreGradient;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(99, 102, 241, ${this.brightness})`;
         ctx.fill();
 
-        // Неоновое свечение вокруг точки
-        const glowGradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius * 8);
-        glowGradient.addColorStop(0, `rgba(99, 102, 241, ${this.brightness * 0.5})`);
-        glowGradient.addColorStop(0.5, `rgba(147, 197, 253, ${this.brightness * 0.3})`);
-        glowGradient.addColorStop(1, 'rgba(99, 102, 241, 0)');
-        ctx.fillStyle = glowGradient;
-        ctx.fillRect(this.x - this.radius * 8, this.y - this.radius * 8, this.radius * 16, this.radius * 16);
+        // Внешнее свечение при активности
+        if (this.glowIntensity > 0.1) {
+          const glowGradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius * 6);
+          glowGradient.addColorStop(0, `rgba(99, 102, 241, ${this.glowIntensity * 0.3})`);
+          glowGradient.addColorStop(0.5, `rgba(168, 85, 247, ${this.glowIntensity * 0.2})`);
+          glowGradient.addColorStop(1, 'rgba(99, 102, 241, 0)');
+          
+          ctx.fillStyle = glowGradient;
+          ctx.fillRect(this.x - this.radius * 6, this.y - this.radius * 6, this.radius * 12, this.radius * 12);
+        }
+
+        // Центральная точка
+        ctx.fillStyle = `rgba(255, 255, 255, ${0.8 + this.glowIntensity * 0.2})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius * 0.3, 0, Math.PI * 2);
+        ctx.fill();
       }
     }
 
-    // Создаем частицы
-    for (let i = 0; i < particleCount; i++) {
-      particles.push(new Particle());
+    // Класс импульса
+    class Impulse {
+      constructor(from, to) {
+        this.from = from;
+        this.to = to;
+        this.progress = 0;
+        this.speed = 0.02;
+        this.size = 3;
+        this.trail = [];
+      }
+
+      update() {
+        this.progress += this.speed;
+        
+        // Текущая позиция импульса
+        const x = this.from.x + (this.to.x - this.from.x) * this.progress;
+        const y = this.from.y + (this.to.y - this.from.y) * this.progress;
+        
+        // Сохраняем след
+        this.trail.push({ x, y, opacity: 1 });
+        if (this.trail.length > 10) {
+          this.trail.shift();
+        }
+        
+        // Уменьшаем прозрачность следа
+        this.trail.forEach((point, i) => {
+          point.opacity = (i / this.trail.length) * 0.5;
+        });
+
+        // Когда импульс достигает цели
+        if (this.progress >= 1) {
+          this.to.targetGlow = 0.8;
+          this.to.energy = Math.min(1, this.to.energy + 0.3);
+          return true;
+        }
+        return false;
+      }
+
+      draw() {
+        // Рисуем след
+        this.trail.forEach((point, i) => {
+          if (i > 0) {
+            const prevPoint = this.trail[i - 1];
+            const gradient = ctx.createLinearGradient(prevPoint.x, prevPoint.y, point.x, point.y);
+            gradient.addColorStop(0, `rgba(236, 72, 153, ${prevPoint.opacity})`);
+            gradient.addColorStop(1, `rgba(168, 85, 247, ${point.opacity})`);
+            
+            ctx.strokeStyle = gradient;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(prevPoint.x, prevPoint.y);
+            ctx.lineTo(point.x, point.y);
+            ctx.stroke();
+          }
+        });
+
+        // Головка импульса
+        const currentX = this.from.x + (this.to.x - this.from.x) * this.progress;
+        const currentY = this.from.y + (this.to.y - this.from.y) * this.progress;
+        
+        const headGradient = ctx.createRadialGradient(currentX, currentY, 0, currentX, currentY, this.size);
+        headGradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+        headGradient.addColorStop(0.5, 'rgba(236, 72, 153, 0.8)');
+        headGradient.addColorStop(1, 'rgba(236, 72, 153, 0)');
+        
+        ctx.fillStyle = headGradient;
+        ctx.beginPath();
+        ctx.arc(currentX, currentY, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
+
+    // Создаем нейроны
+    for (let i = 0; i < neuronCount; i++) {
+      neurons.push(new Neuron(i));
+    }
+
+    // Устанавливаем связи между нейронами
+    neurons.forEach((neuron, i) => {
+      neurons.forEach((other, j) => {
+        if (i !== j) {
+          const dx = other.x - neuron.x;
+          const dy = other.y - neuron.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < 150) {
+            const strength = 1 - distance / 150;
+            neuron.connections.push({ neuron: other, strength });
+          }
+        }
+      });
+    });
 
     let mouseX = -1000;
     let mouseY = -1000;
 
-    // Класс для анимированных соединений
-    class Connection {
-      constructor(p1, p2, distance) {
-        this.p1 = p1;
-        this.p2 = p2;
-        this.distance = distance;
-        this.opacity = 0;
-        this.targetOpacity = (1 - distance / connectionDistance) * 0.6;
-        this.pulsePhase = Math.random() * Math.PI * 2;
-      }
-
-      update() {
-        this.pulsePhase += 0.03;
-        this.opacity += (this.targetOpacity - this.opacity) * 0.1;
-      }
-
-      draw() {
-        const pulse = 1 + Math.sin(this.pulsePhase) * 0.2;
-        
-        // Градиент для нити
-        const gradient = ctx.createLinearGradient(this.p1.x, this.p1.y, this.p2.x, this.p2.y);
-        gradient.addColorStop(0, `rgba(99, 102, 241, ${this.opacity * pulse})`);
-        gradient.addColorStop(0.5, `rgba(168, 85, 247, ${this.opacity * pulse * 0.8})`);
-        gradient.addColorStop(1, `rgba(99, 102, 241, ${this.opacity * pulse})`);
-
-        ctx.beginPath();
-        ctx.moveTo(this.p1.x, this.p1.y);
-        ctx.lineTo(this.p2.x, this.p2.y);
-        ctx.strokeStyle = gradient;
-        ctx.lineWidth = 0.3; // Очень тонкие нити
-        ctx.stroke();
-      }
-    }
-
-    const connections = [];
-
     const animate = () => {
-      // Полупрозрачный фон для эффекта следа
-      ctx.fillStyle = 'rgba(10, 5, 26, 0.08)';
+      // Темный фон с легким градиентом
+      ctx.fillStyle = '#0A051A';
+      ctx.fillRect(0, 0, width, height);
+      
+      // Легкий градиент для глубины
+      const bgGradient = ctx.createRadialGradient(width / 2, height / 2, 0, width / 2, height / 2, width / 2);
+      bgGradient.addColorStop(0, 'rgba(99, 102, 241, 0.02)');
+      bgGradient.addColorStop(1, 'rgba(10, 5, 26, 0)');
+      ctx.fillStyle = bgGradient;
       ctx.fillRect(0, 0, width, height);
 
-      // Обновляем соединения
-      connections.length = 0;
-
-      // Обновляем частицы и создаем соединения
-      particles.forEach((particle, i) => {
-        particle.update();
-
-        // Проверяем соединения с другими частицами
-        particles.slice(i + 1).forEach(otherParticle => {
-          const dx = otherParticle.x - particle.x;
-          const dy = otherParticle.y - particle.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < connectionDistance) {
-            connections.push(new Connection(particle, otherParticle, distance));
-          }
-        });
-
-        // Взаимодействие с мышью
-        const mouseDistance = Math.sqrt(
-          Math.pow(mouseX - particle.x, 2) + Math.pow(mouseY - particle.y, 2)
-        );
-
-        if (mouseDistance < mouseRadius) {
-          const opacity = (1 - mouseDistance / mouseRadius) * 0.8;
+      // Обновляем и рисуем связи
+      neurons.forEach(neuron => {
+        neuron.connections.forEach(connection => {
+          const opacity = connection.strength * 0.15 * (0.5 + neuron.energy * 0.5);
           
-          // Яркая нить к курсору
-          const gradient = ctx.createLinearGradient(particle.x, particle.y, mouseX, mouseY);
-          gradient.addColorStop(0, `rgba(168, 85, 247, ${opacity})`);
-          gradient.addColorStop(1, `rgba(236, 72, 153, ${opacity * 0.5})`);
-          
-          ctx.beginPath();
-          ctx.moveTo(particle.x, particle.y);
-          ctx.lineTo(mouseX, mouseY);
-          ctx.strokeStyle = gradient;
+          // Тонкая светящаяся линия
+          ctx.strokeStyle = `rgba(99, 102, 241, ${opacity})`;
           ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          ctx.moveTo(neuron.x, neuron.y);
+          ctx.lineTo(connection.neuron.x, connection.neuron.y);
           ctx.stroke();
+        });
+      });
+
+      // Обновляем и рисуем импульсы
+      for (let i = impulses.length - 1; i >= 0; i--) {
+        if (impulses[i].update()) {
+          impulses.splice(i, 1);
+        } else {
+          impulses[i].draw();
+        }
+      }
+
+      // Обновляем и рисуем нейроны
+      neurons.forEach(neuron => {
+        neuron.update();
+        neuron.draw();
+      });
+
+      // Эффект взаимодействия с мышью
+      neurons.forEach(neuron => {
+        const dx = mouseX - neuron.x;
+        const dy = mouseY - neuron.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < 100) {
+          const force = (1 - distance / 100) * 0.5;
+          neuron.vx += dx * force * 0.001;
+          neuron.vy += dy * force * 0.001;
+          
+          if (distance < 50 && Math.random() < 0.1) {
+            neuron.pulse();
+          }
         }
       });
-
-      // Рисуем соединения
-      connections.forEach(connection => {
-        connection.update();
-        connection.draw();
-      });
-
-      // Рисуем частицы поверх соединений
-      particles.forEach(particle => particle.draw());
 
       animationRef.current = requestAnimationFrame(animate);
     };
