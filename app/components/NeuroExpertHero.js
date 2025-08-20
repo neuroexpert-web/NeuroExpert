@@ -59,17 +59,23 @@ export default function NeuroExpertHero() {
     // Оптимизация для производительности
     ctx.imageSmoothingEnabled = false;
 
-    // ПАРАМЕТРЫ МОЩНОЙ ВИЗУАЛИЗАЦИИ
+    // ПАРАМЕТРЫ ГИПНОТИЧЕСКОЙ ВИЗУАЛИЗАЦИИ
     const config = {
-      nodeCount: width > 768 ? 150 : 80,
-      nodeSize: 3,
-      connectionDistance: 200,
-      mouseRadius: 300,
-      baseSpeed: 0.3,
-      pulseSpeed: 0.02,
-      glowIntensity: 1.5,
+      nodeCount: width > 768 ? 120 : 60,
+      nodeSize: 4,
+      connectionDistance: 250,
+      mouseRadius: 400,
+      baseSpeed: 0.15, // Замедлено для гипнотического эффекта
+      pulseSpeed: 0.008, // Медленная пульсация
+      glowIntensity: 2.5, // Усиленное свечение
       particleTrails: true,
-      electricArcs: true
+      electricArcs: true,
+      // Новые завораживающие параметры
+      waveAmplitude: 30,
+      waveFrequency: 0.002,
+      colorShiftSpeed: 0.0005,
+      depthLayers: 3,
+      spiralForce: 0.001
     };
 
     const nodes = [];
@@ -97,37 +103,63 @@ export default function NeuroExpertHero() {
       }
 
       update(mouseX, mouseY) {
-        // Физика движения
-        this.x += this.vx;
-        this.y += this.vy;
+        // Добавляем волновое движение для гипнотического эффекта
+        const waveX = Math.sin(Date.now() * config.waveFrequency + this.baseY * 0.01) * config.waveAmplitude;
+        const waveY = Math.cos(Date.now() * config.waveFrequency + this.baseX * 0.01) * config.waveAmplitude;
+        
+        // Спиральное движение вокруг базовой точки
+        const spiralAngle = Date.now() * config.spiralForce;
+        const spiralRadius = 20 + Math.sin(this.pulse) * 10;
+        const spiralX = Math.cos(spiralAngle + this.pulse) * spiralRadius;
+        const spiralY = Math.sin(spiralAngle + this.pulse) * spiralRadius;
+        
+        // Комбинированное движение
+        this.x += this.vx + waveX * 0.01 + spiralX * 0.001;
+        this.y += this.vy + waveY * 0.01 + spiralY * 0.001;
 
-        // Отталкивание от краев
-        if (this.x < 50) this.vx += 0.5;
-        if (this.x > width - 50) this.vx -= 0.5;
-        if (this.y < 50) this.vy += 0.5;
-        if (this.y > height - 50) this.vy -= 0.5;
+        // Мягкое отталкивание от краев с эластичностью
+        const edgeForce = 0.3;
+        const edgeDistance = 100;
+        if (this.x < edgeDistance) this.vx += (edgeDistance - this.x) * edgeForce * 0.01;
+        if (this.x > width - edgeDistance) this.vx -= (this.x - (width - edgeDistance)) * edgeForce * 0.01;
+        if (this.y < edgeDistance) this.vy += (edgeDistance - this.y) * edgeForce * 0.01;
+        if (this.y > height - edgeDistance) this.vy -= (this.y - (height - edgeDistance)) * edgeForce * 0.01;
 
-        // Магнитное притяжение к мыши
+        // Усиленное магнитное притяжение к мыши с вихревым эффектом
         const dx = mouseX - this.x;
         const dy = mouseY - this.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         
         if (distance < config.mouseRadius) {
-          const force = (1 - distance / config.mouseRadius) * 0.1;
-          this.vx += dx * force * 0.01;
-          this.vy += dy * force * 0.01;
+          const force = Math.pow(1 - distance / config.mouseRadius, 2) * 0.15;
+          // Добавляем вихревое движение вокруг курсора
+          const angle = Math.atan2(dy, dx);
+          const tangentX = -Math.sin(angle);
+          const tangentY = Math.cos(angle);
+          
+          this.vx += (dx * force + tangentX * force * 0.5) * 0.01;
+          this.vy += (dy * force + tangentY * force * 0.5) * 0.01;
         }
 
-        // Ограничение скорости
+        // Плавное ограничение скорости
         const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
-        if (speed > 2) {
-          this.vx = (this.vx / speed) * 2;
-          this.vy = (this.vy / speed) * 2;
+        const maxSpeed = this.type === 'core' ? 1.5 : 1.0;
+        if (speed > maxSpeed) {
+          const dampening = 0.95;
+          this.vx *= dampening;
+          this.vy *= dampening;
         }
 
-        // Пульсация энергии
-        this.pulse += config.pulseSpeed;
-        this.energy = 0.5 + Math.sin(this.pulse) * 0.3 + Math.random() * 0.2;
+        // Гипнотическая пульсация энергии с многослойными волнами
+        this.pulse += config.pulseSpeed * (1 + Math.sin(Date.now() * 0.0001) * 0.5);
+        this.energy = 0.5 + 
+                     Math.sin(this.pulse) * 0.2 + 
+                     Math.sin(this.pulse * 2.3) * 0.1 + 
+                     Math.sin(this.pulse * 3.7) * 0.05;
+        
+        // Плавное изменение цвета
+        this.hue += config.colorShiftSpeed * 360;
+        if (this.hue > 360) this.hue -= 360;
         
         // След частицы
         if (config.particleTrails && Math.random() < 0.1) {
