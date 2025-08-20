@@ -1,19 +1,44 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import Script from 'next/script';
+import { useEffect, useRef } from 'react';
 
 export default function NeuroExpertHero() {
   const vantaRef = useRef(null);
   const heroRef = useRef(null);
-  const [vantaLoaded, setVantaLoaded] = useState(false);
 
   useEffect(() => {
-    // Функция инициализации Vanta
-    const initVanta = () => {
-      if (window.THREE && window.VANTA && !vantaRef.current) {
+    let vantaEffect = null;
+    
+    // Загружаем скрипты динамически
+    const loadScripts = async () => {
+      // Загружаем Three.js
+      if (!window.THREE) {
+        const threeScript = document.createElement('script');
+        threeScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js';
+        threeScript.async = true;
+        document.head.appendChild(threeScript);
+        
+        await new Promise((resolve) => {
+          threeScript.onload = resolve;
+        });
+      }
+      
+      // Загружаем Vanta.js
+      if (!window.VANTA) {
+        const vantaScript = document.createElement('script');
+        vantaScript.src = 'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.net.min.js';
+        vantaScript.async = true;
+        document.head.appendChild(vantaScript);
+        
+        await new Promise((resolve) => {
+          vantaScript.onload = resolve;
+        });
+      }
+      
+      // Инициализируем Vanta
+      if (window.VANTA && window.THREE && heroRef.current) {
         try {
-          vantaRef.current = window.VANTA.NET({
+          vantaEffect = window.VANTA.NET({
             el: heroRef.current,
             THREE: window.THREE,
             mouseControls: true,
@@ -29,17 +54,14 @@ export default function NeuroExpertHero() {
             maxDistance: 25.00,
             spacing: 15.00
           });
-          console.log('Vanta NET initialized successfully');
+          console.log('Vanta effect initialized');
         } catch (error) {
           console.error('Vanta initialization error:', error);
         }
       }
     };
-
-    // Проверяем загрузку и инициализируем
-    if (vantaLoaded && window.THREE && window.VANTA) {
-      setTimeout(initVanta, 100);
-    }
+    
+    loadScripts();
 
     // Анимация заголовка
     const animateHeader = () => {
@@ -66,12 +88,11 @@ export default function NeuroExpertHero() {
     setTimeout(animateHeader, 300);
 
     return () => {
-      if (vantaRef.current) {
-        vantaRef.current.destroy();
-        vantaRef.current = null;
+      if (vantaEffect) {
+        vantaEffect.destroy();
       }
     };
-  }, [vantaLoaded]);
+  }, []);
 
   const handleStartClick = (e) => {
     e.preventDefault();
@@ -84,53 +105,42 @@ export default function NeuroExpertHero() {
   };
 
   return (
-    <>
-      <Script
-        src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"
-        strategy="afterInteractive"
-        onLoad={() => {
-          console.log('Three.js loaded');
-        }}
-      />
-      <Script
-        src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.net.min.js"
-        strategy="afterInteractive"
-        onLoad={() => {
-          console.log('Vanta.js loaded');
-          setVantaLoaded(true);
-        }}
-      />
-
-      <section className="hero-section" ref={heroRef}>
-        <div className="hero-content">
-          <p className="pre-header">ЦИФРОВАЯ AI ПЛАТФОРМА ДЛЯ БИЗНЕСА</p>
-          <h1 className="main-header" id="animated-main-header">NeuroExpert</h1>
-          <h2 className="sub-header">СОЗДАЙТЕ ЦИФРОВОЕ ПОЗИЦИОНИРОВАНИЕ</h2>
-          <p className="description">
-            Автоматизируйте бизнес-процессы, увеличивайте прибыль и опережайте конкурентов с помощью передовых ИИ технологий.
-          </p>
-          <div className="cta-buttons">
-            <a href="#benefits" className="cta-button cta-calculator">
-              <span className="button-gradient"></span>
-              <span className="button-content">
-                <span className="button-icon">🧮</span>
-                <span>Калькулятор</span>
-              </span>
-            </a>
-            <a 
-              href="#" 
-              className="cta-button cta-start"
-              onClick={handleStartClick}
-            >
-              <span className="button-gradient"></span>
-              <span className="button-content">
-                <span className="button-icon">🚀</span>
-                <span>Начать бесплатно</span>
-              </span>
-            </a>
-          </div>
+    <section className="hero-section" ref={heroRef}>
+      {/* Анимированные частицы как fallback */}
+      <div className="particles-container">
+        {[...Array(50)].map((_, i) => (
+          <div key={i} className={`particle particle-${i % 5}`} />
+        ))}
+      </div>
+      
+      <div className="hero-content">
+        <p className="pre-header">ЦИФРОВАЯ AI ПЛАТФОРМА ДЛЯ БИЗНЕСА</p>
+        <h1 className="main-header" id="animated-main-header">NeuroExpert</h1>
+        <h2 className="sub-header">СОЗДАЙТЕ ЦИФРОВОЕ ПОЗИЦИОНИРОВАНИЕ</h2>
+        <p className="description">
+          Автоматизируйте бизнес-процессы, увеличивайте прибыль и опережайте конкурентов с помощью передовых ИИ технологий.
+        </p>
+        <div className="cta-buttons">
+          <a href="#benefits" className="cta-button cta-calculator">
+            <span className="button-gradient"></span>
+            <span className="button-content">
+              <span className="button-icon">🧮</span>
+              <span>Калькулятор</span>
+            </span>
+          </a>
+          <a 
+            href="#" 
+            className="cta-button cta-start"
+            onClick={handleStartClick}
+          >
+            <span className="button-gradient"></span>
+            <span className="button-content">
+              <span className="button-icon">🚀</span>
+              <span>Начать бесплатно</span>
+            </span>
+          </a>
         </div>
-      </section>
+      </div>
 
       <style jsx>{`
         .hero-section {
@@ -143,6 +153,74 @@ export default function NeuroExpertHero() {
           text-align: center;
           overflow: hidden;
           background: #0A051A;
+        }
+
+        /* Анимированные частицы как альтернатива Vanta */
+        .particles-container {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+          z-index: 1;
+        }
+
+        .particle {
+          position: absolute;
+          width: 2px;
+          height: 2px;
+          background: #6366f1;
+          border-radius: 50%;
+          opacity: 0.5;
+          animation: particleFloat 20s infinite linear;
+        }
+
+        .particle::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 100px;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, #6366f1, transparent);
+          opacity: 0.3;
+          animation: particleConnect 3s infinite ease-in-out;
+        }
+
+        .particle-0 { top: 10%; left: 10%; animation-delay: 0s; }
+        .particle-1 { top: 20%; left: 80%; animation-delay: 2s; }
+        .particle-2 { top: 60%; left: 20%; animation-delay: 4s; }
+        .particle-3 { top: 80%; left: 60%; animation-delay: 6s; }
+        .particle-4 { top: 40%; left: 40%; animation-delay: 8s; }
+
+        @keyframes particleFloat {
+          0% {
+            transform: translate(0, 0) rotate(0deg);
+            opacity: 0;
+          }
+          10% {
+            opacity: 0.5;
+          }
+          90% {
+            opacity: 0.5;
+          }
+          100% {
+            transform: translate(100vw, -100vh) rotate(360deg);
+            opacity: 0;
+          }
+        }
+
+        @keyframes particleConnect {
+          0%, 100% {
+            width: 0;
+            opacity: 0;
+          }
+          50% {
+            width: 150px;
+            opacity: 0.3;
+          }
         }
 
         .hero-content {
@@ -346,23 +424,29 @@ export default function NeuroExpertHero() {
           }
         }
 
-        /* Fallback для Vanta фона */
-        .hero-section::before {
+        /* Fallback градиент для фона */
+        .hero-section::after {
           content: '';
           position: absolute;
           top: 0;
           left: 0;
           right: 0;
           bottom: 0;
-          background: radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
-                      radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
-                      radial-gradient(circle at 40% 20%, rgba(96, 165, 250, 0.1) 0%, transparent 50%);
+          background: 
+            radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 40% 20%, rgba(96, 165, 250, 0.1) 0%, transparent 50%);
           pointer-events: none;
           opacity: 0.7;
+          z-index: 0;
         }
 
         /* Мобильная адаптация */
         @media (max-width: 768px) {
+          .particles-container {
+            display: none; /* Отключаем на мобильных для производительности */
+          }
+
           .hero-content {
             padding: 20px 15px;
           }
@@ -419,6 +503,6 @@ export default function NeuroExpertHero() {
           }
         }
       `}</style>
-    </>
+    </section>
   );
 }
