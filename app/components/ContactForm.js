@@ -132,7 +132,10 @@ export default function ContactForm() {
     try {
       const response = await fetch('/api/contact-form', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-neuroexpert-csrf': '1'
+        },
         body: JSON.stringify(formData)
       });
 
