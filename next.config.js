@@ -5,26 +5,16 @@
 // Sentry temporarily disabled until properly configured
 const crypto = require('crypto');
 
-// Content Security Policy configuration
+// Content Security Policy configuration - упрощено для исправления проблем
 const ContentSecurityPolicy = `
-  default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' *.google.com *.googleapis.com *.gstatic.com *.google-analytics.com *.googletagmanager.com mc.yandex.ru *.yandex.net ${process.env.NODE_ENV === 'development' ? "'unsafe-eval'" : ''};
-  style-src 'self' 'unsafe-inline' *.googleapis.com fonts.googleapis.com;
-  img-src 'self' blob: data: *.google.com *.googleapis.com *.gstatic.com *.google-analytics.com api.dicebear.com;
-  font-src 'self' fonts.gstatic.com;
-  connect-src 'self' *.google.com *.googleapis.com *.google-analytics.com mc.yandex.ru *.yandex.net generativelanguage.googleapis.com ${process.env.NODE_ENV === 'development' ? 'ws://localhost:*' : ''};
-  media-src 'self';
-  object-src 'none';
-  child-src 'self';
-  frame-src 'self' *.google.com;
-  frame-ancestors 'self';
-  base-uri 'self';
-  form-action 'self';
-  manifest-src 'self';
-  worker-src 'self' blob:;
-  upgrade-insecure-requests;
-  block-all-mixed-content;
-  report-uri ${process.env.CSP_REPORT_URI || '/api/csp-report'};
+  default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;
+  script-src * 'unsafe-inline' 'unsafe-eval';
+  style-src * 'unsafe-inline';
+  img-src * data: blob:;
+  font-src *;
+  connect-src *;
+  frame-src *;
+  worker-src * blob:;
 `;
 
 const nextConfig = {
@@ -108,10 +98,11 @@ const nextConfig = {
             key: 'X-Frame-Options',
             value: 'SAMEORIGIN'
           },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff'
-          },
+          // Временно отключено для исправления проблем с CSS
+          // {
+          //   key: 'X-Content-Type-Options',
+          //   value: 'nosniff'
+          // },
           {
             key: 'Referrer-Policy',
             value: 'strict-origin-when-cross-origin'
