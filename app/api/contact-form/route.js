@@ -64,10 +64,12 @@ async function handler(request) {
       try {
         // Логирование для отладки
         console.log('Attempting to send Telegram notification:', {
-          hasToken: !!process.env.TELEGRAM_BOT_TOKEN,
-          tokenLength: process.env.TELEGRAM_BOT_TOKEN?.length,
-          chatId: process.env.TELEGRAM_CHAT_ID,
-          chatIdType: typeof process.env.TELEGRAM_CHAT_ID
+          hasToken: !!TELEGRAM_BOT_TOKEN,
+          tokenLength: TELEGRAM_BOT_TOKEN?.length,
+          chatId: TELEGRAM_CHAT_ID,
+          chatIdType: typeof TELEGRAM_CHAT_ID,
+          actualToken: TELEGRAM_BOT_TOKEN?.substring(0, 10) + '...',
+          actualChatId: TELEGRAM_CHAT_ID
         });
         
         const telegramMessage = `
