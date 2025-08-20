@@ -1,3 +1,4 @@
+
 import { Inter } from 'next/font/google'
 // Импорт стилей в правильном порядке
 import './globals.css'
@@ -70,6 +71,17 @@ export const metadata = {
     statusBarStyle: 'black-translucent',
     title: 'NeuroExpert',
   },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+    userScalable: true,
+    viewportFit: 'cover',
+  },
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f8fafc' },
+    { media: '(prefers-color-scheme: dark)', color: '#0f172a' },
+  ],
   other: {
     'mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-capable': 'yes',
@@ -78,16 +90,6 @@ export const metadata = {
     'msapplication-TileColor': '#6366f1',
     'msapplication-tap-highlight': 'no',
   },
-}
-
-// Экспортируем viewport отдельно согласно Next.js 14
-export const viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 5,
-  userScalable: true,
-  viewportFit: 'cover',
-  themeColor: '#0a0e1a',
 }
 
 export default function RootLayout({ children }) {
