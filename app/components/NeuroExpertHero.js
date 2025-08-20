@@ -88,33 +88,54 @@ export default function NeuroExpertHero() {
       }
 
       draw() {
-        // Основное ядро нейрона
-        const coreGradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius);
-        coreGradient.addColorStop(0, `rgba(147, 197, 253, ${0.9 + this.glowIntensity * 0.1})`);
-        coreGradient.addColorStop(0.5, `rgba(99, 102, 241, ${0.7 + this.glowIntensity * 0.3})`);
-        coreGradient.addColorStop(1, `rgba(99, 102, 241, 0)`);
+        // Яркое неоновое свечение (как в Аватаре)
+        const outerGlow = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius * 12);
+        outerGlow.addColorStop(0, `rgba(0, 255, 255, ${0.3 + this.glowIntensity * 0.4})`);
+        outerGlow.addColorStop(0.3, `rgba(0, 200, 255, ${0.2 + this.glowIntensity * 0.3})`);
+        outerGlow.addColorStop(0.6, `rgba(100, 149, 237, ${0.1 + this.glowIntensity * 0.2})`);
+        outerGlow.addColorStop(1, 'rgba(0, 150, 255, 0)');
+        
+        ctx.fillStyle = outerGlow;
+        ctx.fillRect(this.x - this.radius * 12, this.y - this.radius * 12, this.radius * 24, this.radius * 24);
+
+        // Средний слой свечения
+        const midGlow = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius * 6);
+        midGlow.addColorStop(0, `rgba(0, 255, 255, ${0.5 + this.glowIntensity * 0.5})`);
+        midGlow.addColorStop(0.5, `rgba(0, 200, 255, ${0.3 + this.glowIntensity * 0.3})`);
+        midGlow.addColorStop(1, 'rgba(0, 200, 255, 0)');
+        
+        ctx.fillStyle = midGlow;
+        ctx.fillRect(this.x - this.radius * 6, this.y - this.radius * 6, this.radius * 12, this.radius * 12);
+
+        // Яркое ядро нейрона
+        const coreGradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius * 2);
+        coreGradient.addColorStop(0, `rgba(255, 255, 255, ${0.9 + this.glowIntensity * 0.1})`);
+        coreGradient.addColorStop(0.3, `rgba(0, 255, 255, ${0.8 + this.glowIntensity * 0.2})`);
+        coreGradient.addColorStop(0.7, `rgba(0, 200, 255, ${0.6 + this.glowIntensity * 0.2})`);
+        coreGradient.addColorStop(1, 'rgba(0, 150, 255, 0)');
         
         ctx.fillStyle = coreGradient;
         ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius * 2, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Центральная яркая точка
+        ctx.fillStyle = `rgba(255, 255, 255, ${0.95 + this.glowIntensity * 0.05})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius * 0.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Добавляем блики
+        ctx.save();
+        ctx.globalCompositeOperation = 'screen';
+        const highlight = ctx.createRadialGradient(this.x - this.radius * 0.3, this.y - this.radius * 0.3, 0, this.x, this.y, this.radius);
+        highlight.addColorStop(0, 'rgba(255, 255, 255, 0.3)');
+        highlight.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.fillStyle = highlight;
+        ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fill();
-
-        // Внешнее свечение при активности
-        if (this.glowIntensity > 0.1) {
-          const glowGradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius * 6);
-          glowGradient.addColorStop(0, `rgba(99, 102, 241, ${this.glowIntensity * 0.3})`);
-          glowGradient.addColorStop(0.5, `rgba(168, 85, 247, ${this.glowIntensity * 0.2})`);
-          glowGradient.addColorStop(1, 'rgba(99, 102, 241, 0)');
-          
-          ctx.fillStyle = glowGradient;
-          ctx.fillRect(this.x - this.radius * 6, this.y - this.radius * 6, this.radius * 12, this.radius * 12);
-        }
-
-        // Центральная точка
-        ctx.fillStyle = `rgba(255, 255, 255, ${0.8 + this.glowIntensity * 0.2})`;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius * 0.3, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.restore();
       }
     }
 
@@ -229,15 +250,25 @@ export default function NeuroExpertHero() {
       // Обновляем и рисуем связи
       neurons.forEach(neuron => {
         neuron.connections.forEach(connection => {
-          const opacity = connection.strength * 0.15 * (0.5 + neuron.energy * 0.5);
+          const opacity = connection.strength * 0.3 * (0.5 + neuron.energy * 0.5);
           
-          // Тонкая светящаяся линия
-          ctx.strokeStyle = `rgba(99, 102, 241, ${opacity})`;
-          ctx.lineWidth = 0.5;
+          // Неоновая светящаяся линия
+          ctx.save();
+          ctx.shadowBlur = 10;
+          ctx.shadowColor = 'rgba(0, 255, 255, 0.8)';
+          
+          const gradient = ctx.createLinearGradient(neuron.x, neuron.y, connection.neuron.x, connection.neuron.y);
+          gradient.addColorStop(0, `rgba(0, 255, 255, ${opacity})`);
+          gradient.addColorStop(0.5, `rgba(0, 200, 255, ${opacity * 0.8})`);
+          gradient.addColorStop(1, `rgba(0, 255, 255, ${opacity})`);
+          
+          ctx.strokeStyle = gradient;
+          ctx.lineWidth = 1;
           ctx.beginPath();
           ctx.moveTo(neuron.x, neuron.y);
           ctx.lineTo(connection.neuron.x, connection.neuron.y);
           ctx.stroke();
+          ctx.restore();
         });
       });
 
