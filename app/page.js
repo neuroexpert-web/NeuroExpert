@@ -40,6 +40,30 @@ export default function Home() {
       {/* Новый Hero блок с анимацией нейросети */}
       <NeuroExpertHero />
       
+      {/* Кнопка быстрого доступа к калькулятору */}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        padding: '40px 20px',
+        background: 'transparent',
+        position: 'relative',
+        zIndex: 10
+      }}>
+        <a href="#benefits" style={{ textDecoration: 'none' }}>
+          <button className="roi-quick-access-btn">
+            <span className="roi-btn-content">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '12px' }}>
+                <path d="M19 3H5c-1.1 0-1.99.9-1.99 2L3 19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V7h14v12z" fill="currentColor"/>
+                <path d="M11.5 9h1v3h3v1h-3v3h-1v-3h-3v-1h3V9z" fill="currentColor"/>
+                <path d="M18 11h-3v1h3v-1zm0 2h-3v1h3v-1zm0 2h-3v1h3v-1z" fill="currentColor"/>
+              </svg>
+              Рассчитать экономию прямо сейчас
+            </span>
+            <span className="roi-btn-shimmer"></span>
+          </button>
+        </a>
+      </div>
+      
       {/* AI Управляющий директор */}
       <Suspense fallback={<div className="loading-skeleton">Загрузка...</div>}>
         <AIDirectorCapabilities />
@@ -298,6 +322,90 @@ export default function Home() {
 
           .section-header {
             margin-bottom: 40px;
+          }
+        }
+
+        /* Кнопка быстрого доступа к калькулятору */
+        .roi-quick-access-btn {
+          position: relative;
+          padding: 20px 48px;
+          font-size: 18px;
+          font-weight: 600;
+          color: white;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border: none;
+          border-radius: 100px;
+          cursor: pointer;
+          overflow: hidden;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .roi-quick-access-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        .roi-quick-access-btn:active {
+          transform: translateY(0);
+        }
+
+        .roi-btn-content {
+          position: relative;
+          z-index: 2;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .roi-btn-shimmer {
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.3),
+            transparent
+          );
+          animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+          0% {
+            left: -100%;
+          }
+          20%, 100% {
+            left: 100%;
+          }
+        }
+
+        .roi-quick-access-btn::before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 0;
+          height: 0;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.2);
+          transform: translate(-50%, -50%);
+          transition: width 0.6s, height 0.6s;
+        }
+
+        .roi-quick-access-btn:hover::before {
+          width: 300px;
+          height: 300px;
+        }
+
+        @media (max-width: 768px) {
+          .roi-quick-access-btn {
+            padding: 16px 32px;
+            font-size: 16px;
           }
         }
       `}</style>
