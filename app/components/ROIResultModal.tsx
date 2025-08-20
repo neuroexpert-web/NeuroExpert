@@ -92,17 +92,17 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+            <div style={{ textAlign: 'center', marginBottom: window.innerWidth <= 480 ? '24px' : '40px' }}>
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: 'spring' }}
-                style={{ fontSize: '80px', marginBottom: '20px' }}
+                style={{ fontSize: window.innerWidth <= 480 ? '60px' : '80px', marginBottom: window.innerWidth <= 480 ? '12px' : '20px' }}
               >
                 🎉
               </motion.div>
               <h2 style={{
-                fontSize: '36px',
+                fontSize: window.innerWidth <= 480 ? '24px' : '36px',
                 fontWeight: '700',
                 marginBottom: '16px',
                 background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -121,13 +121,13 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
               transition={{ delay: 0.3 }}
               style={{
                 background: 'rgba(102, 126, 234, 0.1)',
-                padding: '24px',
+                padding: window.innerWidth <= 480 ? '16px' : '24px',
                 borderRadius: '16px',
-                marginBottom: '32px',
+                marginBottom: window.innerWidth <= 480 ? '20px' : '32px',
                 border: '1px solid rgba(102, 126, 234, 0.2)'
               }}
             >
-              <h3 style={{ color: '#667eea', marginBottom: '16px', fontSize: '20px' }}>
+              <h3 style={{ color: '#667eea', marginBottom: '16px', fontSize: window.innerWidth <= 480 ? '18px' : '20px' }}>
                 📊 Ваши параметры:
               </h3>
               <div style={{ display: 'grid', gap: '12px' }}>
@@ -152,17 +152,17 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                 transition={{ delay: 0.4 }}
                 style={{
                   background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2))',
-                  padding: '32px',
+                  padding: window.innerWidth <= 480 ? '20px' : '32px',
                   borderRadius: '20px',
                   border: '1px solid rgba(102, 126, 234, 0.3)',
                   textAlign: 'center'
                 }}
               >
-                <h3 style={{ color: '#a0a0a0', marginBottom: '8px', fontSize: '18px' }}>
+                <h3 style={{ color: '#a0a0a0', marginBottom: '8px', fontSize: window.innerWidth <= 480 ? '16px' : '18px' }}>
                   Потенциальная годовая прибыль
                 </h3>
                 <div style={{
-                  fontSize: '48px',
+                  fontSize: window.innerWidth <= 480 ? '32px' : '48px',
                   fontWeight: '700',
                   color: '#48bb78',
                   marginBottom: '8px'
@@ -178,17 +178,17 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                 transition={{ delay: 0.5 }}
                 style={{
                   background: 'rgba(72, 187, 120, 0.1)',
-                  padding: '32px',
+                  padding: window.innerWidth <= 480 ? '20px' : '32px',
                   borderRadius: '20px',
                   border: '1px solid rgba(72, 187, 120, 0.3)',
                   textAlign: 'center'
                 }}
               >
-                <h3 style={{ color: '#a0a0a0', marginBottom: '8px', fontSize: '18px' }}>
+                <h3 style={{ color: '#a0a0a0', marginBottom: '8px', fontSize: window.innerWidth <= 480 ? '16px' : '18px' }}>
                   Возврат на инвестиции (ROI)
                 </h3>
                 <div style={{
-                  fontSize: '64px',
+                  fontSize: window.innerWidth <= 480 ? '48px' : '64px',
                   fontWeight: '700',
                   background: 'linear-gradient(135deg, #667eea, #764ba2)',
                   WebkitBackgroundClip: 'text',
@@ -211,7 +211,7 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                   textAlign: 'center'
                 }}
               >
-                <p style={{ color: '#e0e7ff', fontSize: '18px', lineHeight: '1.8' }}>
+                <p style={{ color: '#e0e7ff', fontSize: window.innerWidth <= 480 ? '16px' : '18px', lineHeight: '1.8' }}>
                   Инвестировав <strong>{formatCurrency(formData.investment)}</strong>, 
                   вы можете получить до <strong>{formatCurrency(results.profit)}</strong> чистой 
                   прибыли в первый год, что соответствует возврату на инвестиции 
@@ -314,7 +314,7 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
               transition={{ delay: 1.0 }}
               style={{ textAlign: 'center' }}
             >
-              <p style={{ color: '#e0e7ff', marginBottom: '24px', fontSize: '18px' }}>
+              <p style={{ color: '#e0e7ff', marginBottom: '24px', fontSize: window.innerWidth <= 480 ? '16px' : '18px' }}>
                 Готовы увеличить прибыль на {results.roi}%?
               </p>
               <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -334,12 +334,12 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                     onClose();
                   }}
                   style={{
-                    padding: '16px 40px',
+                    padding: window.innerWidth <= 480 ? '14px 24px' : '16px 40px',
                     background: 'linear-gradient(135deg, #667eea, #764ba2)',
                     border: 'none',
                     borderRadius: '50px',
                     color: 'white',
-                    fontSize: '18px',
+                    fontSize: window.innerWidth <= 480 ? '16px' : '18px',
                     fontWeight: '600',
                     cursor: 'pointer',
                     boxShadow: '0 10px 30px rgba(102, 126, 234, 0.3)'
@@ -355,12 +355,12 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                     onClose();
                   }}
                   style={{
-                    padding: '16px 40px',
+                    padding: window.innerWidth <= 480 ? '14px 24px' : '16px 40px',
                     background: 'transparent',
                     border: '2px solid rgba(102, 126, 234, 0.5)',
                     borderRadius: '50px',
                     color: '#667eea',
-                    fontSize: '18px',
+                    fontSize: window.innerWidth <= 480 ? '16px' : '18px',
                     fontWeight: '600',
                     cursor: 'pointer'
                   }}
@@ -377,19 +377,20 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
               onClick={onClose}
               style={{
                 position: 'absolute',
-                top: '24px',
-                right: '24px',
+                top: window.innerWidth <= 480 ? '16px' : '24px',
+                right: window.innerWidth <= 480 ? '16px' : '24px',
                 background: 'rgba(255, 255, 255, 0.1)',
                 border: 'none',
                 borderRadius: '50%',
-                width: '40px',
-                height: '40px',
+                width: window.innerWidth <= 480 ? '36px' : '40px',
+                height: window.innerWidth <= 480 ? '36px' : '40px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
                 color: '#a0a0a0',
-                fontSize: '20px'
+                fontSize: window.innerWidth <= 480 ? '18px' : '20px',
+                zIndex: 1002
               }}
             >
               ✕
