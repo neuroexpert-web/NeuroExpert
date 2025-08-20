@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server';
 import { apiRateLimit } from '@/app/middleware/rateLimit';
 
+// ВРЕМЕННОЕ РЕШЕНИЕ - для проверки работы Telegram
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8293000531:AAFJzDeo7xAtVNytHKDBbHZTuQyR2EW9qcI';
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '1634470382';
+
 async function handler(request) {
   try {
     const data = await request.json();
@@ -56,7 +60,7 @@ async function handler(request) {
     });
     
     // Send notification to Telegram if configured
-    if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
+    if (TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID) {
       try {
         // Логирование для отладки
         console.log('Attempting to send Telegram notification:', {
@@ -76,8 +80,8 @@ async function handler(request) {
 🕐 Время: ${new Date().toLocaleString('ru-RU')}
         `;
         
-        const telegramUrl = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`;
-        console.log('Telegram URL:', telegramUrl.replace(process.env.TELEGRAM_BOT_TOKEN, 'TOKEN_HIDDEN'));
+        const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+        console.log('Telegram URL:', telegramUrl.replace(TELEGRAM_BOT_TOKEN, 'TOKEN_HIDDEN'));
         
         const response = await fetch(
           telegramUrl,
@@ -85,7 +89,7 @@ async function handler(request) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              chat_id: process.env.TELEGRAM_CHAT_ID,
+              chat_id: TELEGRAM_CHAT_ID,
               text: telegramMessage
             })
           }
