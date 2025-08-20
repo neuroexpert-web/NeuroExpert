@@ -2,6 +2,7 @@
 import { useState, ChangeEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ROIFormData, ROIResults } from '../../types';
+import ROIResultModal from './ROIResultModal';
 
 export default function ROICalculator(): JSX.Element {
   const [formData, setFormData] = useState<ROIFormData>({
@@ -232,175 +233,16 @@ export default function ROICalculator(): JSX.Element {
               </div>
             </div>
 
-            {/* Результаты */}
-            <AnimatePresence mode="wait">
-              {showResult ? (
-                <motion.div
-                  key="results"
-                  initial={{ opacity: 0, x: 50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -50 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <h3 className="text-2xl font-bold mb-6" style={{ color: '#e0e7ff' }}>
-                    Ваши результаты
-                  </h3>
-                  
-                  <div className="space-y-4">
-                    {/* ROI */}
-                    <motion.div
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ delay: 0.1 }}
-                      style={{
-                        background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2))',
-                        padding: '24px',
-                        borderRadius: '20px',
-                        border: '1px solid rgba(102, 126, 234, 0.4)'
-                      }}
-                    >
-                      <div className="flex justify-between items-center">
-                        <span style={{ color: '#a0a9cc' }}>ROI за 3 года</span>
-                        <span className="text-3xl font-bold" style={{
-                          background: 'linear-gradient(135deg, #667eea, #764ba2)',
-                          WebkitBackgroundClip: 'text',
-                          WebkitTextFillColor: 'transparent',
-                          backgroundClip: 'text'
-                        }}>
-                          {results.roi}%
-                        </span>
-                      </div>
-                    </motion.div>
-
-                    {/* Экономия */}
-                    <motion.div
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ delay: 0.2 }}
-                      style={{
-                        background: 'rgba(102, 126, 234, 0.1)',
-                        padding: '20px',
-                        borderRadius: '16px',
-                        border: '1px solid rgba(102, 126, 234, 0.3)'
-                      }}
-                    >
-                      <div className="flex justify-between items-center">
-                        <span style={{ color: '#a0a9cc' }}>Годовая экономия</span>
-                        <span className="text-xl font-semibold" style={{ color: '#667eea' }}>
-                          {formatCurrency(results.savings)}
-                        </span>
-                      </div>
-                    </motion.div>
-
-                    {/* Рост доходов */}
-                    <motion.div
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ delay: 0.3 }}
-                      style={{
-                        background: 'rgba(102, 126, 234, 0.1)',
-                        padding: '20px',
-                        borderRadius: '16px',
-                        border: '1px solid rgba(102, 126, 234, 0.3)'
-                      }}
-                    >
-                      <div className="flex justify-between items-center">
-                        <span style={{ color: '#a0a9cc' }}>Рост доходов</span>
-                        <span className="text-xl font-semibold" style={{ color: '#667eea' }}>
-                          {formatCurrency(results.growth)}
-                        </span>
-                      </div>
-                    </motion.div>
-
-                    {/* Окупаемость */}
-                    <motion.div
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ delay: 0.4 }}
-                      style={{
-                        background: 'rgba(102, 126, 234, 0.1)',
-                        padding: '20px',
-                        borderRadius: '16px',
-                        border: '1px solid rgba(102, 126, 234, 0.3)'
-                      }}
-                    >
-                      <div className="flex justify-between items-center">
-                        <span style={{ color: '#a0a9cc' }}>Окупаемость</span>
-                        <span className="text-xl font-semibold" style={{ color: '#667eea' }}>
-                          {results.payback} мес.
-                        </span>
-                      </div>
-                    </motion.div>
-                  </div>
-
-                  {/* CTA */}
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.6 }}
-                    className="mt-8 p-6 rounded-2xl text-center"
-                    style={{
-                      background: 'rgba(118, 75, 162, 0.1)',
-                      border: '1px solid rgba(118, 75, 162, 0.3)'
-                    }}
-                  >
-                    <p className="mb-4" style={{ color: '#e0e7ff' }}>
-                      Хотите достичь таких результатов?
-                    </p>
-                    <motion.button
-                      onClick={() => {
-                        import('@/app/utils/aiChat').then(({ openAIChat }) => {
-                          openAIChat(`Здравствуйте! Я рассчитал ROI и получил ${results.roi}% за 3 года. Расскажите подробнее, как вы можете помочь достичь таких результатов?`);
-                        });
-                      }}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      style={{
-                        padding: '12px 32px',
-                        background: 'linear-gradient(135deg, #764ba2, #667eea)',
-                        border: 'none',
-                        borderRadius: '50px',
-                        color: 'white',
-                        fontSize: '16px',
-                        fontWeight: '600',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      Обсудить с AI директором
-                    </motion.button>
-                  </motion.div>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="placeholder"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="flex items-center justify-center h-full"
-                >
-                  <div className="text-center">
-                    <motion.div
-                      animate={{
-                        scale: [1, 1.1, 1],
-                        opacity: [0.5, 0.8, 0.5]
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity
-                      }}
-                      className="text-6xl mb-4"
-                    >
-                      📊
-                    </motion.div>
-                    <p style={{ color: '#a0a9cc' }}>
-                      Заполните форму для расчета вашего ROI
-                    </p>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
         </motion.div>
+
+        {/* Модальное окно с результатами */}
+        <ROIResultModal
+          isOpen={showResult}
+          onClose={() => setShowResult(false)}
+          results={results}
+          formData={formData}
+        />
       </div>
     </section>
   );
