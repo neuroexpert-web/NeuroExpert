@@ -5,8 +5,6 @@ import { useEffect, useRef } from 'react';
 export default function NeuroExpertHero() {
   const canvasRef = useRef(null);
   const animationRef = useRef(null);
-  const nodesRef = useRef([]);
-  const mouseRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -16,220 +14,170 @@ export default function NeuroExpertHero() {
     let width = window.innerWidth;
     let height = window.innerHeight;
 
-    canvas.width = width;
-    canvas.height = height;
+    // Настройка canvas с учетом DPI
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    ctx.scale(dpr, dpr);
 
-    // Класс для узлов нейросети
-    class Node {
+    // Параметры сети
+    const particles = [];
+    const particleCount = width > 768 ? 80 : 40; // Меньше частиц на мобильных
+    const connectionDistance = width > 768 ? 150 : 100;
+    const mouseRadius = width > 768 ? 200 : 100;
+
+    class Particle {
       constructor() {
         this.x = Math.random() * width;
         this.y = Math.random() * height;
-        this.z = Math.random() * 1000; // Глубина
-        this.vx = (Math.random() - 0.5) * 0.3;
-        this.vy = (Math.random() - 0.5) * 0.3;
-        this.vz = (Math.random() - 0.5) * 0.5;
-        this.radius = 1;
-        this.pulsePhase = Math.random() * Math.PI * 2;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
+        this.radius = Math.random() * 1.5 + 0.5;
       }
 
       update() {
         this.x += this.vx;
         this.y += this.vy;
-        this.z += this.vz;
-        this.pulsePhase += 0.02;
 
-        // Границы с плавным отскоком
-        if (this.x < 50 || this.x > width - 50) this.vx *= -0.9;
-        if (this.y < 50 || this.y > height - 50) this.vy *= -0.9;
-        if (this.z < 0 || this.z > 1000) this.vz *= -0.9;
-
-        // Эффект глубины
-        const scale = (1000 - this.z) / 1000;
-        this.radius = 0.5 + scale * 1.5 + Math.sin(this.pulsePhase) * 0.3;
+        if (this.x < 0 || this.x > width) this.vx = -this.vx;
+        if (this.y < 0 || this.y > height) this.vy = -this.vy;
       }
 
       draw() {
-        const scale = (1000 - this.z) / 1000;
-        const opacity = scale * 0.8;
-        
-        // Свечение узла
-        const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius * 5);
-        gradient.addColorStop(0, `rgba(99, 102, 241, ${opacity})`);
-        gradient.addColorStop(0.5, `rgba(99, 102, 241, ${opacity * 0.5})`);
-        gradient.addColorStop(1, 'rgba(99, 102, 241, 0)');
-        
-        ctx.fillStyle = gradient;
-        ctx.fillRect(this.x - this.radius * 5, this.y - this.radius * 5, this.radius * 10, this.radius * 10);
-        
-        // Центральная точка
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(147, 197, 253, ${opacity})`;
+        ctx.fillStyle = 'rgba(99, 102, 241, 0.8)';
         ctx.fill();
+
+        // Свечение
+        const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius * 3);
+        gradient.addColorStop(0, 'rgba(99, 102, 241, 0.3)');
+        gradient.addColorStop(1, 'rgba(99, 102, 241, 0)');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(this.x - this.radius * 3, this.y - this.radius * 3, this.radius * 6, this.radius * 6);
       }
     }
 
-    // Создаем узлы
-    const nodeCount = 50;
-    for (let i = 0; i < nodeCount; i++) {
-      nodesRef.current.push(new Node());
+    // Создаем частицы
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new Particle());
     }
 
-    // Функция анимации
+    let mouseX = -1000;
+    let mouseY = -1000;
+
     const animate = () => {
-      // Затемненный фон с эффектом глубины
-      ctx.fillStyle = 'rgba(10, 5, 26, 0.1)';
+      ctx.fillStyle = 'rgba(10, 5, 26, 0.05)';
       ctx.fillRect(0, 0, width, height);
 
-      // Сортируем по глубине для правильного отображения
-      nodesRef.current.sort((a, b) => b.z - a.z);
+      // Обновляем и рисуем частицы
+      particles.forEach((particle, i) => {
+        particle.update();
 
-      // Рисуем связи
-      nodesRef.current.forEach((node, i) => {
-        node.update();
-
-        // Соединяем только близкие узлы на похожей глубине
-        for (let j = i + 1; j < nodesRef.current.length; j++) {
-          const other = nodesRef.current[j];
-          const dx = other.x - node.x;
-          const dy = other.y - node.y;
-          const dz = Math.abs(other.z - node.z);
+        // Соединяем частицы
+        particles.slice(i + 1).forEach(otherParticle => {
+          const dx = otherParticle.x - particle.x;
+          const dy = otherParticle.y - particle.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 200 && dz < 200) {
-            const scale = (1000 - (node.z + other.z) / 2) / 1000;
-            const opacity = (1 - distance / 200) * (1 - dz / 200) * scale * 0.3;
-            
+          if (distance < connectionDistance) {
             ctx.beginPath();
-            ctx.moveTo(node.x, node.y);
-            ctx.lineTo(other.x, other.y);
-            
-            // Градиент для линий
-            const gradient = ctx.createLinearGradient(node.x, node.y, other.x, other.y);
-            gradient.addColorStop(0, `rgba(99, 102, 241, ${opacity})`);
-            gradient.addColorStop(0.5, `rgba(168, 85, 247, ${opacity * 0.8})`);
-            gradient.addColorStop(1, `rgba(99, 102, 241, ${opacity})`);
-            
-            ctx.strokeStyle = gradient;
-            ctx.lineWidth = scale * 0.5;
+            ctx.moveTo(particle.x, particle.y);
+            ctx.lineTo(otherParticle.x, otherParticle.y);
+            const opacity = (1 - distance / connectionDistance) * 0.5;
+            ctx.strokeStyle = `rgba(99, 102, 241, ${opacity})`;
+            ctx.lineWidth = 0.5;
             ctx.stroke();
           }
+        });
+
+        // Взаимодействие с мышью
+        const mouseDistance = Math.sqrt(
+          Math.pow(mouseX - particle.x, 2) + Math.pow(mouseY - particle.y, 2)
+        );
+
+        if (mouseDistance < mouseRadius) {
+          ctx.beginPath();
+          ctx.moveTo(particle.x, particle.y);
+          ctx.lineTo(mouseX, mouseY);
+          const opacity = (1 - mouseDistance / mouseRadius) * 0.5;
+          ctx.strokeStyle = `rgba(168, 85, 247, ${opacity})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
         }
+
+        particle.draw();
       });
-
-      // Рисуем узлы
-      nodesRef.current.forEach(node => node.draw());
-
-      // Эффект курсора
-      const mouseGradient = ctx.createRadialGradient(
-        mouseRef.current.x, mouseRef.current.y, 0,
-        mouseRef.current.x, mouseRef.current.y, 150
-      );
-      mouseGradient.addColorStop(0, 'rgba(168, 85, 247, 0.1)');
-      mouseGradient.addColorStop(1, 'rgba(168, 85, 247, 0)');
-      ctx.fillStyle = mouseGradient;
-      ctx.fillRect(0, 0, width, height);
 
       animationRef.current = requestAnimationFrame(animate);
     };
 
     animate();
 
-    // Обработчики событий
+    // События
     const handleMouseMove = (e) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY };
+      const rect = canvas.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
+    };
+
+    const handleMouseLeave = () => {
+      mouseX = -1000;
+      mouseY = -1000;
     };
 
     const handleResize = () => {
       width = window.innerWidth;
       height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
+      ctx.scale(dpr, dpr);
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    canvas.addEventListener('mousemove', handleMouseMove);
+    canvas.addEventListener('mouseleave', handleMouseLeave);
     window.addEventListener('resize', handleResize);
-
-    // Анимация текста
-    const animateText = () => {
-      const header = document.getElementById('animated-main-header');
-      if (header && header.children.length === 0) {
-        const text = header.textContent;
-        header.innerHTML = '';
-        
-        text.split('').forEach((char, i) => {
-          const span = document.createElement('span');
-          span.textContent = char;
-          span.className = 'letter';
-          span.style.cssText = `
-            display: inline-block;
-            opacity: 0;
-            transform: translateZ(100px) rotateY(90deg);
-            animation: letterReveal3D 1s ${i * 0.1}s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
-          `;
-          header.appendChild(span);
-        });
-      }
-    };
-
-    setTimeout(animateText, 500);
 
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
-      window.removeEventListener('mousemove', handleMouseMove);
+      canvas.removeEventListener('mousemove', handleMouseMove);
+      canvas.removeEventListener('mouseleave', handleMouseLeave);
       window.removeEventListener('resize', handleResize);
     };
   }, []);
 
   const handleStartClick = (e) => {
     e.preventDefault();
-    const button = e.currentTarget;
-    
-    // Ripple эффект
-    const rect = button.getBoundingClientRect();
-    const ripple = document.createElement('span');
-    ripple.className = 'ripple';
-    ripple.style.left = `${e.clientX - rect.left}px`;
-    ripple.style.top = `${e.clientY - rect.top}px`;
-    button.appendChild(ripple);
-    
-    setTimeout(() => ripple.remove(), 1000);
-    
-    // Открываем AI чат
     setTimeout(() => {
       const aiButton = document.querySelector('.ai-float-button');
       if (aiButton) aiButton.click();
-    }, 300);
+    }, 100);
   };
 
   return (
     <section className="hero-section">
-      <canvas ref={canvasRef} className="neural-network-canvas" />
-      
-      <div className="depth-layers">
-        <div className="depth-layer layer-1"></div>
-        <div className="depth-layer layer-2"></div>
-        <div className="depth-layer layer-3"></div>
-      </div>
+      <canvas ref={canvasRef} className="neural-canvas" />
       
       <div className="hero-content">
-        <div className="content-wrapper">
-          <h1 className="main-header" id="animated-main-header">NeuroExpert</h1>
-          <p className="tagline">Искусственный интеллект для вашего бизнеса</p>
-          
-          <button 
-            className="cta-button"
-            onClick={handleStartClick}
-          >
-            <span className="button-bg"></span>
-            <span className="button-content">
-              <span className="button-text">Начать</span>
-              <span className="button-arrow">→</span>
-            </span>
-          </button>
-        </div>
+        <p className="pre-header">ЦИФРОВАЯ AI ПЛАТФОРМА ДЛЯ БИЗНЕСА</p>
+        <h1 className="main-header">NeuroExpert</h1>
+        <h2 className="sub-header">СОЗДАЙТЕ ЦИФРОВОЕ ПОЗИЦИОНИРОВАНИЕ</h2>
+        <p className="description">
+          Автоматизируйте бизнес-процессы, увеличивайте прибыль и опережайте конкурентов с помощью передовых ИИ технологий
+        </p>
+        
+        <button className="cta-button" onClick={handleStartClick}>
+          <span className="button-inner">
+            <span className="button-text">Начать бесплатно</span>
+            <span className="button-icon">→</span>
+          </span>
+        </button>
       </div>
 
       <style jsx>{`
@@ -240,280 +188,206 @@ export default function NeuroExpertHero() {
           display: flex;
           align-items: center;
           justify-content: center;
-          overflow: hidden;
           background: #0A051A;
-          perspective: 1000px;
+          overflow: hidden;
         }
 
-        .neural-network-canvas {
+        .neural-canvas {
           position: absolute;
           top: 0;
           left: 0;
           width: 100%;
           height: 100%;
           z-index: 1;
-        }
-
-        /* Слои глубины */
-        .depth-layers {
-          position: absolute;
-          inset: 0;
-          z-index: 2;
-          pointer-events: none;
-        }
-
-        .depth-layer {
-          position: absolute;
-          inset: 0;
-          opacity: 0.03;
-        }
-
-        .layer-1 {
-          background: radial-gradient(circle at 30% 50%, #6366f1 0%, transparent 50%);
-          animation: float1 20s infinite ease-in-out;
-        }
-
-        .layer-2 {
-          background: radial-gradient(circle at 70% 70%, #a855f7 0%, transparent 50%);
-          animation: float2 25s infinite ease-in-out;
-        }
-
-        .layer-3 {
-          background: radial-gradient(circle at 50% 20%, #60a5fa 0%, transparent 50%);
-          animation: float3 30s infinite ease-in-out;
-        }
-
-        @keyframes float1 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          50% { transform: translate(30px, -30px) scale(1.1); }
-        }
-
-        @keyframes float2 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          50% { transform: translate(-40px, 20px) scale(0.9); }
-        }
-
-        @keyframes float3 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          50% { transform: translate(20px, 40px) scale(1.05); }
+          opacity: 0.7;
         }
 
         .hero-content {
           position: relative;
-          z-index: 10;
+          z-index: 2;
+          text-align: center;
+          padding: 40px 20px;
+          max-width: 900px;
           width: 100%;
-          max-width: 1400px;
-          padding: 0 60px;
         }
 
-        .content-wrapper {
-          display: flex;
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 40px;
-          padding-left: 10%;
-        }
-
-        /* Заголовок с элегантным оформлением */
-        .main-header {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-          font-weight: 300;
-          font-size: clamp(60px, 8vw, 120px);
-          line-height: 0.9;
-          margin: 0;
-          letter-spacing: -0.02em;
-          color: transparent;
-          background: linear-gradient(135deg, 
-            #ffffff 0%, 
-            #93c5fd 25%, 
-            #6366f1 50%, 
-            #a855f7 75%, 
-            #ffffff 100%
-          );
-          background-size: 200% 200%;
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-          animation: gradientFlow 4s ease infinite;
-          filter: drop-shadow(0 0 40px rgba(99, 102, 241, 0.3));
-          transform-style: preserve-3d;
-          perspective: 1000px;
-        }
-
-        @keyframes gradientFlow {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-
-        @keyframes letterReveal3D {
-          to {
-            opacity: 1;
-            transform: translateZ(0) rotateY(0);
-          }
-        }
-
-        .tagline {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-          font-weight: 400;
-          font-size: clamp(18px, 2vw, 24px);
+        .pre-header {
+          font-family: 'Inter', -apple-system, sans-serif;
+          font-size: 14px;
+          font-weight: 500;
+          letter-spacing: 0.15em;
           color: #93c5fd;
+          margin: 0 0 24px 0;
           opacity: 0;
-          animation: fadeInSlide 1s 1.5s ease-out forwards;
-          letter-spacing: 0.02em;
+          animation: fadeIn 1s ease-out forwards;
         }
 
-        @keyframes fadeInSlide {
-          to {
-            opacity: 0.8;
-            transform: translateX(0);
-          }
-          from {
-            opacity: 0;
-            transform: translateX(-30px);
-          }
+        .main-header {
+          font-family: 'Inter', -apple-system, sans-serif;
+          font-size: clamp(60px, 10vw, 96px);
+          font-weight: 700;
+          line-height: 1;
+          margin: 0 0 24px 0;
+          background: linear-gradient(135deg, #ffffff 0%, #93c5fd 50%, #6366f1 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          filter: drop-shadow(0 4px 20px rgba(99, 102, 241, 0.3));
+          opacity: 0;
+          animation: fadeIn 1s 0.2s ease-out forwards;
         }
 
-        /* Минималистичная кнопка */
+        .sub-header {
+          font-family: 'Inter', -apple-system, sans-serif;
+          font-size: clamp(24px, 4vw, 36px);
+          font-weight: 600;
+          color: #60a5fa;
+          margin: 0 0 24px 0;
+          letter-spacing: 0.05em;
+          opacity: 0;
+          animation: fadeIn 1s 0.4s ease-out forwards;
+        }
+
+        .description {
+          font-family: 'Inter', -apple-system, sans-serif;
+          font-size: clamp(16px, 2vw, 20px);
+          font-weight: 400;
+          line-height: 1.6;
+          color: #cbd5e1;
+          margin: 0 auto 40px;
+          max-width: 600px;
+          opacity: 0;
+          animation: fadeIn 1s 0.6s ease-out forwards;
+        }
+
         .cta-button {
           position: relative;
-          display: inline-flex;
-          align-items: center;
           padding: 0;
           border: none;
           background: none;
           cursor: pointer;
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-          font-size: 18px;
-          font-weight: 500;
-          color: #ffffff;
+          font-family: 'Inter', -apple-system, sans-serif;
           opacity: 0;
-          animation: fadeInSlide 1s 1.8s ease-out forwards;
-          overflow: hidden;
-          transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+          animation: fadeIn 1s 0.8s ease-out forwards;
         }
 
-        .button-bg {
-          position: absolute;
-          inset: -2px;
-          background: linear-gradient(135deg, 
-            rgba(99, 102, 241, 0.1) 0%, 
-            rgba(168, 85, 247, 0.1) 100%
-          );
-          border-radius: 50px;
-          backdrop-filter: blur(10px);
-          opacity: 0;
-          transition: opacity 0.3s ease;
-        }
-
-        .button-content {
-          position: relative;
+        .button-inner {
           display: flex;
           align-items: center;
-          gap: 20px;
-          padding: 20px 50px;
-          border: 1px solid rgba(147, 197, 253, 0.2);
+          gap: 12px;
+          padding: 18px 40px;
+          background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
           border-radius: 50px;
-          background: transparent;
-          transition: all 0.3s ease;
+          color: white;
+          font-size: 16px;
+          font-weight: 600;
+          letter-spacing: 0.02em;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.5);
         }
 
-        .button-text {
-          letter-spacing: 0.1em;
-          text-transform: uppercase;
+        .button-icon {
+          font-size: 20px;
+          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .button-arrow {
-          font-size: 24px;
-          transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        .cta-button:hover .button-inner {
+          transform: translateY(-2px);
+          box-shadow: 0 15px 40px -10px rgba(99, 102, 241, 0.7);
         }
 
-        .cta-button:hover .button-bg {
-          opacity: 1;
+        .cta-button:hover .button-icon {
+          transform: translateX(4px);
         }
 
-        .cta-button:hover .button-content {
-          border-color: rgba(147, 197, 253, 0.5);
-          transform: translateZ(10px);
+        .cta-button:active .button-inner {
+          transform: translateY(0);
         }
 
-        .cta-button:hover .button-arrow {
-          transform: translateX(5px);
-        }
-
-        .cta-button:active {
-          transform: scale(0.98);
-        }
-
-        /* Ripple эффект */
-        .ripple {
-          position: absolute;
-          border-radius: 50%;
-          background: rgba(255, 255, 255, 0.5);
-          transform: translate(-50%, -50%);
-          animation: rippleEffect 1s ease-out;
-          pointer-events: none;
-        }
-
-        @keyframes rippleEffect {
+        @keyframes fadeIn {
           from {
-            width: 0;
-            height: 0;
-            opacity: 1;
+            opacity: 0;
+            transform: translateY(20px);
           }
           to {
-            width: 200px;
-            height: 200px;
-            opacity: 0;
+            opacity: 1;
+            transform: translateY(0);
           }
         }
 
-        /* Адаптивность */
-        @media (max-width: 1024px) {
-          .hero-content {
-            padding: 0 40px;
-          }
-
-          .content-wrapper {
-            padding-left: 0;
-            align-items: center;
-            text-align: center;
-          }
-        }
-
+        /* Мобильная адаптация */
         @media (max-width: 768px) {
+          .neural-canvas {
+            opacity: 0.5;
+          }
+
           .hero-content {
-            padding: 0 20px;
+            padding: 20px;
+          }
+
+          .pre-header {
+            font-size: 12px;
+            letter-spacing: 0.1em;
+            margin-bottom: 16px;
           }
 
           .main-header {
-            font-size: clamp(48px, 12vw, 80px);
+            font-size: 48px;
+            margin-bottom: 16px;
           }
 
-          .tagline {
-            font-size: 18px;
+          .sub-header {
+            font-size: 20px;
+            margin-bottom: 16px;
           }
 
-          .button-content {
-            padding: 16px 40px;
-          }
-
-          .button-text {
+          .description {
             font-size: 16px;
+            margin-bottom: 32px;
+            padding: 0 10px;
+          }
+
+          .button-inner {
+            padding: 16px 32px;
+            font-size: 15px;
           }
         }
 
         @media (max-width: 480px) {
           .main-header {
-            font-size: 48px;
+            font-size: 40px;
           }
 
-          .tagline {
-            font-size: 16px;
+          .sub-header {
+            font-size: 18px;
           }
 
-          .button-content {
-            padding: 14px 32px;
+          .description {
+            font-size: 15px;
+          }
+
+          .button-inner {
+            padding: 14px 28px;
+            font-size: 14px;
+          }
+        }
+
+        /* Высокие экраны */
+        @media (min-height: 900px) {
+          .hero-content {
+            max-width: 1000px;
+          }
+
+          .main-header {
+            font-size: 112px;
+          }
+
+          .sub-header {
+            font-size: 40px;
+          }
+
+          .description {
+            font-size: 22px;
           }
         }
       `}</style>
