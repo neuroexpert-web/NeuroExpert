@@ -27,60 +27,78 @@ export default function ROICalculator(): JSX.Element {
     checkMobile();
   }
 
-  // Коэффициенты отрасли согласно ТЗ
+  // Более реалистичные коэффициенты отрасли
   const industryCoefficients: Record<ROIFormData['industry'], number> = {
-    'retail': 1.8,        // Розничная торговля
-    'production': 2.1,    // Производство
-    'it': 2.5,           // IT и телеком
-    'finance': 2.2,      // Финансовые услуги
-    'construction': 1.9, // Строительство
-    'medicine': 2.3,     // Медицина
-    'logistics': 2.0,    // Логистика
-    'services': 1.7,     // Услуги
-    'other': 1.5        // Другое
+    'retail': 1.3,        // Розничная торговля (было 1.8)
+    'production': 1.4,    // Производство (было 2.1)
+    'it': 1.6,           // IT и телеком (было 2.5)
+    'finance': 1.5,      // Финансовые услуги (было 2.2)
+    'construction': 1.35, // Строительство (было 1.9)
+    'medicine': 1.55,    // Медицина (было 2.3)
+    'logistics': 1.4,    // Логистика (было 2.0)
+    'services': 1.25,    // Услуги (было 1.7)
+    'other': 1.2        // Другое (было 1.5)
   };
   
-  // Коэффициенты масштаба согласно ТЗ
+  // Более реалистичные коэффициенты масштаба
   const scaleCoefficients: Record<ROIFormData['employeeCount'], number> = {
-    'up10': 1.1,        // до 10
-    'from11to50': 1.3,  // 11-50
-    'from51to250': 1.5, // 51-250
-    'over250': 1.7      // 250+
+    'up10': 1.05,        // до 10 (было 1.1)
+    'from11to50': 1.15,  // 11-50 (было 1.3)
+    'from51to250': 1.25, // 51-250 (было 1.5)
+    'over250': 1.35      // 250+ (было 1.7)
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
     const { name, value } = e.target;
+    
+    // Дополнительная валидация для суммы инвестиций
+    if (name === 'investment') {
+      const numValue = Number(value);
+      // Ограничиваем сумму от 100 тыс до 100 млн
+      if (numValue < 0) return; // Не позволяем отрицательные числа
+      if (numValue > 100000000) return; // Максимум 100 млн
+    }
+    
     setFormData(prev => ({
       ...prev,
       [name]: name === 'investment' ? Number(value) : value
     } as ROIFormData));
   };
 
-  // Расчет согласно формуле из ТЗ
+  // Улучшенный расчет с более реалистичными показателями
   const calculateROI = async (): Promise<void> => {
     const { industry, employeeCount, investment } = formData;
+    
+    // Проверка минимальной суммы
+    if (investment < 100000) {
+      alert('Минимальная сумма инвестиций - 100 000 руб.');
+      return;
+    }
     
     // Получаем коэффициенты
     const k_industry = industryCoefficients[industry];
     const k_scale = scaleCoefficients[employeeCount];
     
-    // Формула из ТЗ: Profit = Сумма_Инвестиций * K_industry * K_scale - Сумма_Инвестиций
-    const profit = investment * k_industry * k_scale - investment;
+    // Добавляем временной коэффициент (чем дольше, тем больше эффект)
+    const k_time = 1.2; // Коэффициент за год использования
     
-    // Формула из ТЗ: ROI (%) = (Profit / Сумма_Инвестиций) * 100
-    const roi = (profit / investment) * 100;
+    // Улучшенная формула с учетом времени
+    const yearProfit = investment * k_industry * k_scale * k_time - investment;
     
-    // Дополнительные метрики для красоты
-    const savings = Math.round(investment * 0.35);
-    const growth = Math.round(profit);
-    const payback = Math.round(12 / (roi / 100));
+    // ROI за год
+    const roi = (yearProfit / investment) * 100;
+    
+    // Дополнительные реалистичные метрики
+    const savings = Math.round(investment * 0.25); // 25% экономия на операциях
+    const growth = Math.round(yearProfit * 0.7); // 70% от прибыли - реальный рост
+    const payback = Math.round((investment / (yearProfit / 12))); // Месяцы окупаемости
     
     setResults({ 
       roi: Math.round(roi), 
-      profit: Math.round(profit),
+      profit: Math.round(yearProfit),
       savings,
       growth,
-      payback
+      payback: Math.min(payback, 36) // Максимум 36 месяцев
     });
     setShowResult(true);
   };
@@ -225,8 +243,9 @@ export default function ROICalculator(): JSX.Element {
                     value={formData.investment || ''}
                     onChange={handleInputChange}
                     placeholder="Например: 500000"
-                    min="0"
-                    step="10000"
+                    min="100000"
+                    max="100000000"
+                    step="50000"
                     style={{
                       width: '100%',
                       padding: isMobile ? '18px' : '16px',
