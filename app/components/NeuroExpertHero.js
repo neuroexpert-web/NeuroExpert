@@ -7,6 +7,30 @@ export default function NeuroExpertHero() {
   const animationRef = useRef(null);
 
   useEffect(() => {
+    // Анимация заголовков
+    const animateText = () => {
+      const header = document.getElementById('animated-main-header');
+      if (header && header.children.length === 0) {
+        const text = header.textContent;
+        header.innerHTML = '';
+        
+        text.split('').forEach((char, i) => {
+          const span = document.createElement('span');
+          span.textContent = char;
+          span.className = 'letter';
+          span.style.cssText = `
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(50px) rotateX(90deg);
+            animation: letterReveal 0.8s ${i * 0.08}s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+          `;
+          header.appendChild(span);
+        });
+      }
+    };
+
+    setTimeout(animateText, 300);
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -484,10 +508,19 @@ export default function NeuroExpertHero() {
           cursor: pointer;
           font-family: 'Inter', -apple-system, sans-serif;
           opacity: 0;
-          animation: fadeIn 1s 0.8s ease-out forwards;
+          animation: fadeIn 1s 0.8s ease-out forwards, pulseGlow 2s 1.8s ease-in-out infinite;
           margin-top: auto;
           margin-bottom: 60px;
           overflow: visible;
+        }
+
+        @keyframes pulseGlow {
+          0%, 100% {
+            filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.5));
+          }
+          50% {
+            filter: drop-shadow(0 0 40px rgba(0, 255, 255, 0.8));
+          }
         }
 
         .button-glow {
@@ -586,6 +619,24 @@ export default function NeuroExpertHero() {
             opacity: 1;
             transform: translateY(0);
           }
+        }
+
+        @keyframes letterReveal {
+          0% {
+            opacity: 0;
+            transform: translateY(50px) rotateX(90deg);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) rotateX(0);
+          }
+        }
+
+        /* Анимация букв заголовка */
+        .main-header .letter {
+          display: inline-block;
+          transform-style: preserve-3d;
+          backface-visibility: hidden;
         }
 
         /* Мобильная адаптация */
