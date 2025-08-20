@@ -701,9 +701,23 @@ export default function NeuroExpertHero() {
           <p className="description">
             Автоматизируйте бизнес-процессы, увеличивайте прибыль и опережайте конкурентов с помощью передовых ИИ технологий.
           </p>
-          <a href="/smart-ai" className="cta-button">
+          <button 
+            onClick={() => {
+              // Ищем кнопку AI ассистента и кликаем на неё
+              const aiButton = document.querySelector('.ai-floating-button');
+              if (aiButton) {
+                aiButton.click();
+              } else {
+                // Если кнопка не найдена, скроллим вниз
+                window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+              }
+            }} 
+            className="cta-button"
+            type="button"
+            style={{ border: 'none', cursor: 'pointer' }}
+          >
             <span>НАЧАТЬ БЕСПЛАТНО</span>
-          </a>
+          </button>
         </div>
       </section>
     </>
