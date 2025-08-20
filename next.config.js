@@ -19,18 +19,17 @@ const ContentSecurityPolicy = isDevelopment ? `
   worker-src * blob:;
 ` : `
   default-src 'self';
-  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://mc.yandex.ru;
+  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://mc.yandex.ru https://vercel.live;
   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
   img-src 'self' data: blob: https: https://api.dicebear.com;
-  font-src 'self' https://fonts.gstatic.com;
-  connect-src 'self' https: wss: https://generativelanguage.googleapis.com;
-  frame-src 'self';
+  font-src 'self' https://fonts.gstatic.com data:;
+  connect-src 'self' https: wss: https://generativelanguage.googleapis.com https://vercel.live;
+  frame-src 'self' https://vercel.live;
   worker-src 'self' blob:;
   object-src 'none';
   base-uri 'self';
   form-action 'self';
   frame-ancestors 'none';
-  block-all-mixed-content;
   upgrade-insecure-requests;
 `;
 
@@ -115,11 +114,10 @@ const nextConfig = {
             key: 'X-Frame-Options',
             value: 'SAMEORIGIN'
           },
-          // Временно отключено для исправления проблем с CSS
-          // {
-          //   key: 'X-Content-Type-Options',
-          //   value: 'nosniff'
-          // },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff'
+          },
           {
             key: 'Referrer-Policy',
             value: 'strict-origin-when-cross-origin'
@@ -149,6 +147,28 @@ const nextConfig = {
           {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/_next/static/css/:path*',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'text/css',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/app/globals.css',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'text/css',
           },
         ],
       },

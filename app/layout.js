@@ -94,8 +94,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ru" className={inter.variable}>
       <head>
-        {/* Preload критических ресурсов */}
-        <link rel="preload" href="/_next/static/css/app/globals.css" as="style" />
+        {/* Preload убран - Next.js автоматически оптимизирует загрузку CSS */}
         
         {/* Preconnect для оптимизации загрузки */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -262,14 +261,10 @@ export default function RootLayout({ children }) {
                 window.addEventListener('load', () => {
                   navigator.serviceWorker.register('/sw.js').then(
                     (registration) => {
-                      if (process.env.NODE_ENV === 'development') {
-                        console.log('SW registered:', registration);
-                      }
+                      // Логирование убрано из inline скрипта
                     },
                     (err) => {
-                      if (process.env.NODE_ENV === 'development') {
-                        console.log('SW registration failed:', err);
-                      }
+                      // Логирование убрано из inline скрипта
                     }
                   );
                 });

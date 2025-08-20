@@ -23,7 +23,10 @@ const LOG_COLORS = {
 class Logger {
   constructor(context = 'App') {
     this.context = context;
-    this.isDevelopment = process.env.NODE_ENV !== 'production';
+    // Безопасная проверка для клиентской стороны
+    this.isDevelopment = typeof process !== 'undefined' 
+      ? process.env.NODE_ENV !== 'production'
+      : false;
     this.logLevel = this.isDevelopment ? LOG_LEVELS.DEBUG : LOG_LEVELS.ERROR;
   }
 
