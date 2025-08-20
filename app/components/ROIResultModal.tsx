@@ -1,16 +1,12 @@
 'use client';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ROIResults } from '../../types';
+import { ROIResults, ROIFormData } from '../../types';
 
 interface ROIResultModalProps {
   isOpen: boolean;
   onClose: () => void;
   results: ROIResults;
-  formData: {
-    businessSize: string;
-    industry: string;
-    budget: number;
-  };
+  formData: ROIFormData;
 }
 
 export default function ROIResultModal({ isOpen, onClose, results, formData }: ROIResultModalProps) {
@@ -22,21 +18,26 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
     }).format(num);
   };
 
-  const getBusinessSizeText = (size: string) => {
-    switch(size) {
-      case 'small': return 'Малый бизнес (до 50 сотрудников)';
-      case 'medium': return 'Средний бизнес (50-250 сотрудников)';
-      case 'large': return 'Крупный бизнес (250+ сотрудников)';
-      default: return size;
+  const getEmployeeCountText = (count: string) => {
+    switch(count) {
+      case 'up10': return 'до 10 сотрудников';
+      case 'from11to50': return '11-50 сотрудников';
+      case 'from51to250': return '51-250 сотрудников';
+      case 'over250': return '250+ сотрудников';
+      default: return count;
     }
   };
 
   const getIndustryText = (industry: string) => {
     switch(industry) {
       case 'retail': return 'Розничная торговля';
-      case 'services': return 'Услуги';
       case 'production': return 'Производство';
-      case 'it': return 'IT и технологии';
+      case 'it': return 'IT и телеком';
+      case 'finance': return 'Финансовые услуги';
+      case 'construction': return 'Строительство';
+      case 'medicine': return 'Медицина';
+      case 'logistics': return 'Логистика';
+      case 'services': return 'Услуги';
       case 'other': return 'Другое';
       default: return industry;
     }
@@ -108,11 +109,8 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text'
               }}>
-                Ваш потенциал роста
+                Ваш потенциал роста с NeuroExpert
               </h2>
-              <p style={{ color: '#a0a0a0', fontSize: '18px' }}>
-                Персональный расчет эффективности цифровизации
-              </p>
             </div>
 
             {/* Input Summary */}
@@ -133,20 +131,20 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
               </h3>
               <div style={{ display: 'grid', gap: '12px' }}>
                 <div style={{ color: '#e0e7ff' }}>
-                  <span style={{ color: '#a0a0a0' }}>Размер компании:</span> {getBusinessSizeText(formData.businessSize)}
-                </div>
-                <div style={{ color: '#e0e7ff' }}>
                   <span style={{ color: '#a0a0a0' }}>Отрасль:</span> {getIndustryText(formData.industry)}
                 </div>
                 <div style={{ color: '#e0e7ff' }}>
-                  <span style={{ color: '#a0a0a0' }}>Инвестиции в цифровизацию:</span> {formatCurrency(formData.budget)}
+                  <span style={{ color: '#a0a0a0' }}>Количество сотрудников:</span> {getEmployeeCountText(formData.employeeCount)}
+                </div>
+                <div style={{ color: '#e0e7ff' }}>
+                  <span style={{ color: '#a0a0a0' }}>Планируемая сумма инвестиций:</span> {formatCurrency(formData.investment)}
                 </div>
               </div>
             </motion.div>
 
             {/* Main Results */}
             <div style={{ display: 'grid', gap: '24px', marginBottom: '32px' }}>
-              {/* ROI */}
+              {/* Потенциальная годовая прибыль */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -160,7 +158,33 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                 }}
               >
                 <h3 style={{ color: '#a0a0a0', marginBottom: '8px', fontSize: '18px' }}>
-                  Возврат инвестиций (ROI)
+                  Потенциальная годовая прибыль
+                </h3>
+                <div style={{
+                  fontSize: '48px',
+                  fontWeight: '700',
+                  color: '#48bb78',
+                  marginBottom: '8px'
+                }}>
+                  + {formatCurrency(results.profit)}
+                </div>
+              </motion.div>
+
+              {/* ROI */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.5 }}
+                style={{
+                  background: 'rgba(72, 187, 120, 0.1)',
+                  padding: '32px',
+                  borderRadius: '20px',
+                  border: '1px solid rgba(72, 187, 120, 0.3)',
+                  textAlign: 'center'
+                }}
+              >
+                <h3 style={{ color: '#a0a0a0', marginBottom: '8px', fontSize: '18px' }}>
+                  Возврат на инвестиции (ROI)
                 </h3>
                 <div style={{
                   fontSize: '64px',
@@ -168,88 +192,89 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                   background: 'linear-gradient(135deg, #667eea, #764ba2)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                  marginBottom: '8px'
+                  backgroundClip: 'text'
                 }}>
                   {results.roi}%
                 </div>
-                <p style={{ color: '#e0e7ff', fontSize: '16px' }}>
-                  за 3 года работы с нами
+              </motion.div>
+
+              {/* Сопроводительный текст */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+                style={{
+                  background: 'rgba(102, 126, 234, 0.05)',
+                  padding: '24px',
+                  borderRadius: '16px',
+                  textAlign: 'center'
+                }}
+              >
+                <p style={{ color: '#e0e7ff', fontSize: '18px', lineHeight: '1.8' }}>
+                  Инвестировав <strong>{formatCurrency(formData.investment)}</strong>, 
+                  вы можете получить до <strong>{formatCurrency(results.profit)}</strong> чистой 
+                  прибыли в первый год, что соответствует возврату на инвестиции 
+                  в <strong>{results.roi}%</strong>
                 </p>
               </motion.div>
 
-              {/* Detailed Metrics */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                  style={{
-                    background: 'rgba(72, 187, 120, 0.1)',
-                    padding: '24px',
-                    borderRadius: '16px',
-                    border: '1px solid rgba(72, 187, 120, 0.3)'
-                  }}
-                >
-                  <div style={{ color: '#48bb78', fontSize: '32px', marginBottom: '8px' }}>💰</div>
-                  <h4 style={{ color: '#e0e7ff', marginBottom: '8px' }}>Годовая экономия</h4>
-                  <div style={{ fontSize: '24px', fontWeight: '600', color: '#48bb78' }}>
-                    {formatCurrency(results.savings)}
-                  </div>
-                  <p style={{ color: '#a0a0a0', fontSize: '14px', marginTop: '4px' }}>
-                    на оптимизации процессов
-                  </p>
-                </motion.div>
+              {/* Дополнительные метрики (если есть) */}
+              {(results.savings || results.growth || results.payback) && (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+                  {results.savings && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.7 }}
+                      style={{
+                        background: 'rgba(72, 187, 120, 0.1)',
+                        padding: '24px',
+                        borderRadius: '16px',
+                        border: '1px solid rgba(72, 187, 120, 0.3)'
+                      }}
+                    >
+                      <div style={{ color: '#48bb78', fontSize: '32px', marginBottom: '8px' }}>💰</div>
+                      <h4 style={{ color: '#e0e7ff', marginBottom: '8px' }}>Годовая экономия</h4>
+                      <div style={{ fontSize: '24px', fontWeight: '600', color: '#48bb78' }}>
+                        {formatCurrency(results.savings)}
+                      </div>
+                      <p style={{ color: '#a0a0a0', fontSize: '14px', marginTop: '4px' }}>
+                        на оптимизации процессов
+                      </p>
+                    </motion.div>
+                  )}
 
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 }}
-                  style={{
-                    background: 'rgba(66, 153, 225, 0.1)',
-                    padding: '24px',
-                    borderRadius: '16px',
-                    border: '1px solid rgba(66, 153, 225, 0.3)'
-                  }}
-                >
-                  <div style={{ color: '#4299e1', fontSize: '32px', marginBottom: '8px' }}>📈</div>
-                  <h4 style={{ color: '#e0e7ff', marginBottom: '8px' }}>Рост доходов</h4>
-                  <div style={{ fontSize: '24px', fontWeight: '600', color: '#4299e1' }}>
-                    {formatCurrency(results.growth)}
-                  </div>
-                  <p style={{ color: '#a0a0a0', fontSize: '14px', marginTop: '4px' }}>
-                    дополнительной прибыли
-                  </p>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7 }}
-                  style={{
-                    background: 'rgba(237, 137, 54, 0.1)',
-                    padding: '24px',
-                    borderRadius: '16px',
-                    border: '1px solid rgba(237, 137, 54, 0.3)'
-                  }}
-                >
-                  <div style={{ color: '#ed8936', fontSize: '32px', marginBottom: '8px' }}>⏱️</div>
-                  <h4 style={{ color: '#e0e7ff', marginBottom: '8px' }}>Окупаемость</h4>
-                  <div style={{ fontSize: '24px', fontWeight: '600', color: '#ed8936' }}>
-                    {results.payback} мес.
-                  </div>
-                  <p style={{ color: '#a0a0a0', fontSize: '14px', marginTop: '4px' }}>
-                    полный возврат инвестиций
-                  </p>
-                </motion.div>
-              </div>
+                  {results.payback && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.8 }}
+                      style={{
+                        background: 'rgba(237, 137, 54, 0.1)',
+                        padding: '24px',
+                        borderRadius: '16px',
+                        border: '1px solid rgba(237, 137, 54, 0.3)'
+                      }}
+                    >
+                      <div style={{ color: '#ed8936', fontSize: '32px', marginBottom: '8px' }}>⏱️</div>
+                      <h4 style={{ color: '#e0e7ff', marginBottom: '8px' }}>Окупаемость</h4>
+                      <div style={{ fontSize: '24px', fontWeight: '600', color: '#ed8936' }}>
+                        {results.payback} мес.
+                      </div>
+                      <p style={{ color: '#a0a0a0', fontSize: '14px', marginTop: '4px' }}>
+                        полный возврат инвестиций
+                      </p>
+                    </motion.div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Benefits */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
+              transition={{ delay: 0.9 }}
               style={{
                 background: 'rgba(118, 75, 162, 0.1)',
                 padding: '32px',
@@ -285,7 +310,7 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.9 }}
+              transition={{ delay: 1.0 }}
               style={{ textAlign: 'center' }}
             >
               <p style={{ color: '#e0e7ff', marginBottom: '24px', fontSize: '18px' }}>
@@ -296,9 +321,15 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => {
-                    import('@/app/utils/aiChat').then(({ openAIChat }) => {
-                      openAIChat(`Здравствуйте! Я рассчитал ROI и получил впечатляющие ${results.roi}% за 3 года. Хочу узнать подробнее о вашем предложении для ${getIndustryText(formData.industry)}.`);
+                    // Открываем чат с предзаполненным сообщением
+                    const message = `Здравствуйте! Я рассчитал ROI для ${getIndustryText(formData.industry)} и получил впечатляющие ${results.roi}%. Хочу узнать подробнее о вашем предложении.`;
+                    
+                    // Создаем событие для открытия чата
+                    const event = new CustomEvent('openAIChat', { 
+                      detail: { message } 
                     });
+                    window.dispatchEvent(event);
+                    
                     onClose();
                   }}
                   style={{
@@ -313,7 +344,7 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                     boxShadow: '0 10px 30px rgba(102, 126, 234, 0.3)'
                   }}
                 >
-                  💬 Обсудить с AI директором
+                  💬 Обсудить проект с экспертом
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
