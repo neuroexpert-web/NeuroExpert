@@ -79,7 +79,7 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
               transform: window.innerWidth <= 480 ? 'none' : 'translate(-50%, -50%)',
               background: 'linear-gradient(180deg, rgba(20, 20, 40, 0.95) 0%, rgba(30, 30, 60, 0.95) 100%)',
               borderRadius: window.innerWidth <= 480 ? '0' : '32px',
-              padding: window.innerWidth <= 480 ? '24px' : '48px',
+              padding: window.innerWidth <= 480 ? '20px' : '48px',
               border: '1px solid rgba(102, 126, 234, 0.3)',
               boxShadow: '0 30px 60px rgba(0, 0, 0, 0.5)',
               maxWidth: window.innerWidth <= 480 ? '100%' : '800px',
@@ -221,7 +221,7 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
 
               {/* Дополнительные метрики (если есть) */}
               {(results.savings || results.growth || results.payback) && (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: window.innerWidth <= 480 ? '1fr' : 'repeat(auto-fit, minmax(200px, 1fr))', gap: window.innerWidth <= 480 ? '12px' : '16px' }}>
                   {results.savings && (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
@@ -278,31 +278,31 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
               transition={{ delay: 0.9 }}
               style={{
                 background: 'rgba(118, 75, 162, 0.1)',
-                padding: '32px',
+                padding: window.innerWidth <= 480 ? '20px' : '32px',
                 borderRadius: '20px',
-                marginBottom: '32px',
+                marginBottom: window.innerWidth <= 480 ? '20px' : '32px',
                 border: '1px solid rgba(118, 75, 162, 0.2)'
               }}
             >
-              <h3 style={{ color: '#764ba2', marginBottom: '20px', fontSize: '24px' }}>
+              <h3 style={{ color: '#764ba2', marginBottom: window.innerWidth <= 480 ? '16px' : '20px', fontSize: window.innerWidth <= 480 ? '20px' : '24px' }}>
                 🚀 Что вы получите с NeuroExpert:
               </h3>
-              <div style={{ display: 'grid', gap: '16px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ fontSize: '24px' }}>✅</span>
-                  <span style={{ color: '#e0e7ff' }}>Автоматизация до 80% рутинных операций</span>
+              <div style={{ display: 'grid', gap: window.innerWidth <= 480 ? '12px' : '16px' }}>
+                <div style={{ display: 'flex', alignItems: window.innerWidth <= 480 ? 'flex-start' : 'center', gap: window.innerWidth <= 480 ? '8px' : '12px' }}>
+                  <span style={{ fontSize: window.innerWidth <= 480 ? '20px' : '24px', flexShrink: 0 }}>✅</span>
+                  <span style={{ color: '#e0e7ff', fontSize: window.innerWidth <= 480 ? '14px' : '16px', lineHeight: '1.5' }}>Автоматизация до 80% рутинных операций</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ fontSize: '24px' }}>✅</span>
-                  <span style={{ color: '#e0e7ff' }}>Увеличение конверсии на 40-60%</span>
+                <div style={{ display: 'flex', alignItems: window.innerWidth <= 480 ? 'flex-start' : 'center', gap: window.innerWidth <= 480 ? '8px' : '12px' }}>
+                  <span style={{ fontSize: window.innerWidth <= 480 ? '20px' : '24px', flexShrink: 0 }}>✅</span>
+                  <span style={{ color: '#e0e7ff', fontSize: window.innerWidth <= 480 ? '14px' : '16px', lineHeight: '1.5' }}>Увеличение конверсии на 40-60%</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ fontSize: '24px' }}>✅</span>
-                  <span style={{ color: '#e0e7ff' }}>Снижение затрат на маркетинг до 35%</span>
+                <div style={{ display: 'flex', alignItems: window.innerWidth <= 480 ? 'flex-start' : 'center', gap: window.innerWidth <= 480 ? '8px' : '12px' }}>
+                  <span style={{ fontSize: window.innerWidth <= 480 ? '20px' : '24px', flexShrink: 0 }}>✅</span>
+                  <span style={{ color: '#e0e7ff', fontSize: window.innerWidth <= 480 ? '14px' : '16px', lineHeight: '1.5' }}>Снижение затрат на маркетинг до 35%</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ fontSize: '24px' }}>✅</span>
-                  <span style={{ color: '#e0e7ff' }}>Рост лояльности клиентов на 50%</span>
+                <div style={{ display: 'flex', alignItems: window.innerWidth <= 480 ? 'flex-start' : 'center', gap: window.innerWidth <= 480 ? '8px' : '12px' }}>
+                  <span style={{ fontSize: window.innerWidth <= 480 ? '20px' : '24px', flexShrink: 0 }}>✅</span>
+                  <span style={{ color: '#e0e7ff', fontSize: window.innerWidth <= 480 ? '14px' : '16px', lineHeight: '1.5' }}>Рост лояльности клиентов на 50%</span>
                 </div>
               </div>
             </motion.div>
