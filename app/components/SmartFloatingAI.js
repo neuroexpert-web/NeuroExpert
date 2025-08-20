@@ -668,6 +668,32 @@ function SmartFloatingAI() {
           transform: rotate(90deg);
         }
 
+        @media (max-width: 480px) {
+          .ai-chat-window {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            max-width: 100% !important;
+            max-height: 100% !important;
+            border-radius: 0 !important;
+            margin: 0 !important;
+          }
+          
+          .ai-close-btn {
+            position: fixed !important;
+            top: 20px !important;
+            right: 20px !important;
+            z-index: 10000 !important;
+            font-size: 28px !important;
+            width: 44px !important;
+            height: 44px !important;
+          }
+        }
+
         .ai-messages {
           flex: 1;
           overflow-y: auto;
