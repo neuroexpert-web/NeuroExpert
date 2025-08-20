@@ -396,33 +396,39 @@ export default function NeuroExpertHero() {
         .hero-content {
           position: relative;
           z-index: 2;
-          padding: 20px;
-          max-width: 1200px;
+          padding: 40px 20px;
+          max-width: 1400px;
           margin: 0 auto;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          gap: 40px;
         }
 
         .pre-header {
           font-family: 'Orbitron', monospace;
           font-weight: 400;
-          font-size: 14px;
+          font-size: 16px;
           color: #60A5FA;
-          letter-spacing: 0.3em;
+          letter-spacing: 0.4em;
           text-transform: uppercase;
-          margin-bottom: 30px;
+          margin-bottom: 50px;
           opacity: 0;
           animation: slideInTop 1s 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
-          text-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
+          text-shadow: 0 0 30px rgba(96, 165, 250, 0.6);
         }
 
         .main-header {
           font-family: 'Orbitron', monospace;
           font-weight: 900;
-          font-size: clamp(60px, 12vw, 120px);
+          font-size: clamp(80px, 14vw, 140px);
           margin: 0;
           line-height: 1;
           text-transform: uppercase;
-          margin-bottom: 30px;
+          margin-bottom: 60px;
           perspective: 1000px;
+          letter-spacing: 0.05em;
         }
 
         .letter-wrapper {
@@ -467,64 +473,67 @@ export default function NeuroExpertHero() {
         .sub-header {
           font-family: 'Inter', sans-serif;
           font-weight: 600;
-          font-size: clamp(20px, 4vw, 32px);
+          font-size: clamp(24px, 4.5vw, 36px);
           background: linear-gradient(90deg, #60A5FA, #A855F7);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
           text-transform: uppercase;
-          margin-bottom: 20px;
+          margin-bottom: 40px;
+          margin-top: -20px;
           opacity: 0;
           animation: slideInBottom 1s 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
-          letter-spacing: 0.1em;
+          letter-spacing: 0.15em;
         }
 
         .description {
           font-weight: 400;
-          font-size: clamp(16px, 2.5vw, 22px);
-          color: rgba(209, 213, 219, 0.9);
-          max-width: 700px;
-          line-height: 1.6;
-          margin: 0 auto 50px;
+          font-size: clamp(18px, 2.8vw, 24px);
+          color: rgba(209, 213, 219, 0.95);
+          max-width: 800px;
+          line-height: 1.8;
+          margin: 0 auto 60px;
           opacity: 0;
           animation: fadeIn 1s 0.7s ease-out forwards;
           text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+          letter-spacing: 0.02em;
         }
 
         .cta-button {
           position: relative;
           display: inline-block;
-          padding: 20px 50px;
+          padding: 22px 60px;
           font-family: 'Orbitron', monospace;
-          font-size: 18px;
+          font-size: 20px;
           font-weight: 700;
           text-transform: uppercase;
-          letter-spacing: 0.1em;
+          letter-spacing: 0.2em;
           color: #FFFFFF;
           text-decoration: none;
           background: transparent;
-          border: 2px solid transparent;
-          border-radius: 50px;
-          overflow: hidden;
+          border: none;
+          border-radius: 60px;
+          overflow: visible;
           cursor: pointer;
-          transition: all 0.3s ease;
+          transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
           opacity: 0;
           animation: pulseIn 1s 0.9s ease-out forwards;
+          margin-top: 20px;
         }
 
         .cta-button::before {
           content: '';
           position: absolute;
-          top: -2px;
-          left: -2px;
-          right: -2px;
-          bottom: -2px;
-          background: linear-gradient(45deg, #00FFFF, #6366F1, #A855F7, #00FFFF);
-          background-size: 400% 400%;
-          border-radius: 50px;
-          z-index: -2;
-          animation: gradientRotate 3s linear infinite;
-          filter: blur(5px);
+          top: -3px;
+          left: -3px;
+          right: -3px;
+          bottom: -3px;
+          background: linear-gradient(90deg, #00FFFF, #6366F1, #A855F7, #00FFFF);
+          background-size: 300% 300%;
+          border-radius: 60px;
+          z-index: -1;
+          animation: gradientRotate 4s linear infinite;
+          opacity: 1;
         }
 
         .cta-button::after {
@@ -534,23 +543,37 @@ export default function NeuroExpertHero() {
           left: 0;
           right: 0;
           bottom: 0;
-          background: rgba(10, 5, 26, 0.9);
-          border-radius: 48px;
+          background: rgba(10, 5, 26, 0.95);
+          border-radius: 57px;
           z-index: -1;
-          transition: background 0.3s ease;
+          transition: all 0.4s ease;
+        }
+
+        .cta-button span {
+          position: relative;
+          z-index: 1;
+          background: linear-gradient(90deg, #00FFFF, #FFFFFF, #A855F7);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          filter: brightness(1.2);
         }
 
         .cta-button:hover {
-          transform: translateY(-3px) scale(1.05);
-          text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+          transform: translateY(-5px) scale(1.08);
+          filter: brightness(1.3);
+          box-shadow: 
+            0 10px 40px rgba(0, 255, 255, 0.4),
+            0 20px 60px rgba(168, 85, 247, 0.3);
         }
 
         .cta-button:hover::after {
-          background: rgba(10, 5, 26, 0.7);
+          background: rgba(10, 5, 26, 0.5);
         }
 
         .cta-button:hover::before {
-          filter: blur(8px);
+          background-size: 400% 400%;
+          filter: brightness(1.5);
         }
 
         @keyframes gradientRotate {
@@ -635,18 +658,35 @@ export default function NeuroExpertHero() {
 
         /* Мобильная адаптация */
         @media (max-width: 768px) {
+          .hero-content {
+            padding: 30px 20px;
+            gap: 30px;
+          }
+
+          .pre-header {
+            font-size: 14px;
+            margin-bottom: 30px;
+          }
+
           .main-header {
-            font-size: clamp(40px, 10vw, 80px);
+            font-size: clamp(50px, 12vw, 80px);
+            margin-bottom: 40px;
+          }
+
+          .sub-header {
+            font-size: clamp(20px, 5vw, 28px);
+            margin-bottom: 30px;
           }
 
           .cta-button {
-            padding: 16px 40px;
+            padding: 18px 45px;
             font-size: 16px;
           }
 
           .description {
             font-size: 16px;
             margin-bottom: 40px;
+            line-height: 1.6;
           }
         }
       `}</style>
@@ -661,7 +701,7 @@ export default function NeuroExpertHero() {
             Автоматизируйте бизнес-процессы, увеличивайте прибыль и опережайте конкурентов с помощью передовых ИИ технологий.
           </p>
           <a href="/smart-ai" className="cta-button">
-            НАЧАТЬ БЕСПЛАТНО
+            <span>НАЧАТЬ БЕСПЛАТНО</span>
           </a>
         </div>
       </section>
