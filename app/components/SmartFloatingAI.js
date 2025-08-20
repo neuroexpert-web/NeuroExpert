@@ -79,20 +79,20 @@ function SmartFloatingAI() {
   useEffect(() => {
     const handleOpenChat = (event) => {
       setIsOpen(true);
-      // Если есть предзаполненное сообщение, устанавливаем его
+      // Если есть предзаполненное сообщение, отправляем его автоматически
       if (event.detail && event.detail.message) {
         setTimeout(() => {
-          setInput(event.detail.message);
-          // Авто-отправка сообщения через 200 мс после открытия
-          setTimeout(() => {
-            sendMessage();
-          }, 200);
+          // Создаем сообщение пользователя без заполнения поля ввода
+          const userMessage = event.detail.message;
+          setMessages(prev => [...prev, { type: 'user', text: userMessage }]);
+          // Отправляем запрос к API
+          handleAutoMessage(userMessage);
         }, 100);
       }
     };
     window.addEventListener('openAIChat', handleOpenChat);
     return () => window.removeEventListener('openAIChat', handleOpenChat);
-  }, []);
+  }, [selectedModel, dialogHistory, context, isLoading, isTyping]);
 
   const typewriterEffect = (text, model, callback) => {
     let i = 0;
@@ -114,6 +114,63 @@ function SmartFloatingAI() {
         if (callback) callback();
       }
     }, 20);
+  };
+
+  const handleAutoMessage = async (userMessage) => {
+    if (isLoading || isTyping) return;
+    
+    setIsLoading(true);
+    const startTime = Date.now();
+
+    try {
+      const response = await fetch('/api/assistant', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-neuroexpert-csrf': 'browser'
+        },
+        body: JSON.stringify({ 
+          userMessage: userMessage,
+          model: selectedModel,
+          history: dialogHistory,
+          context: {
+            ...context,
+            previousInteractions: context.previousInteractions + 1
+          }
+        })
+      });
+
+      if (!response.ok) throw new Error('API Error');
+
+      const data = await response.json();
+      const responseTime = data.responseTime || (Date.now() - startTime);
+      
+      setContext(prev => ({
+        ...prev,
+        sessionDuration: prev.sessionDuration + responseTime,
+        totalTokens: prev.totalTokens + (data.tokensUsed || 0),
+        averageResponseTime: (prev.averageResponseTime * prev.previousInteractions + responseTime) / (prev.previousInteractions + 1),
+        ...data.context
+      }));
+      
+      // Обновляем историю диалога
+      setDialogHistory(prev => [
+        ...prev,
+        { role: 'user', content: userMessage },
+        { role: 'assistant', content: data.response }
+      ]);
+      
+      typewriterEffect(data.response || 'Извините, произошла ошибка.', selectedModel);
+    } catch (error) {
+      console.error('Error:', error);
+      setMessages(prev => [...prev, { 
+        type: 'assistant', 
+        text: 'Извините, произошла ошибка. Попробуйте еще раз.',
+        model: selectedModel
+      }]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const sendMessage = useCallback(async () => {
@@ -321,8 +378,8 @@ function SmartFloatingAI() {
                   <button
                     key={idx}
                     onClick={() => {
-                      setInput(q);
-                      sendMessage();
+                      setMessages(prev => [...prev, { type: 'user', text: q }]);
+                      handleAutoMessage(q);
                     }}
                     disabled={isLoading}
                   >
