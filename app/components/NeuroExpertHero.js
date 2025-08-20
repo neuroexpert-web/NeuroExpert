@@ -1,14 +1,26 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Script from 'next/script';
 
 export default function NeuroExpertHero() {
   const vantaRef = useRef(null);
   const heroRef = useRef(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    // Инициализация Vanta.js после загрузки скриптов
+    // Отслеживание мыши для параллакс эффекта
+    const handleMouseMove = (e) => {
+      const { clientX, clientY } = e;
+      const x = (clientX / window.innerWidth - 0.5) * 2;
+      const y = (clientY / window.innerHeight - 0.5) * 2;
+      setMousePosition({ x, y });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    // Инициализация Vanta.js с улучшенными параметрами
     const initVanta = () => {
       if (window.VANTA && !vantaRef.current) {
         vantaRef.current = window.VANTA.NET({
@@ -20,23 +32,24 @@ export default function NeuroExpertHero() {
           minWidth: 200.00,
           scale: 1.00,
           scaleMobile: 1.00,
-          color: 0x6366f1, // Синий цвет из градиента
-          backgroundColor: 0x0a051a, // Цвет фона #0A051A
-          points: 10.00,
-          maxDistance: 25.00,
-          spacing: 18.00
+          color: 0x6366f1,
+          backgroundColor: 0x0a051a,
+          points: 15.00, // Увеличено для большей детализации
+          maxDistance: 30.00,
+          spacing: 16.00,
+          showDots: true
         });
+        setIsLoaded(true);
       }
     };
 
-    // Проверяем загружены ли скрипты
     if (window.VANTA) {
       initVanta();
     } else {
       window.vantaInit = initVanta;
     }
 
-    // Анимация заголовка
+    // Премиальная анимация заголовка с 3D эффектом
     const animateHeader = () => {
       const header = document.getElementById('animated-main-header');
       if (!header) return;
@@ -44,21 +57,26 @@ export default function NeuroExpertHero() {
       const text = header.textContent;
       header.innerHTML = '';
       
-      // Создаем span для каждой буквы
       text.split('').forEach((char, i) => {
         const span = document.createElement('span');
         span.textContent = char;
-        span.style.opacity = '0';
-        span.style.display = 'inline-block';
-        span.style.animation = `letterFadeIn 0.5s ${i * 0.1}s forwards`;
+        span.style.cssText = `
+          display: inline-block;
+          opacity: 0;
+          transform: translateY(50px) rotateX(90deg) scale(0.5);
+          animation: premiumLetterReveal 1s ${i * 0.08}s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+          transform-style: preserve-3d;
+          transition: transform 0.3s ease;
+        `;
+        span.classList.add('header-letter');
         header.appendChild(span);
       });
     };
 
-    animateHeader();
+    setTimeout(animateHeader, 300);
 
-    // Cleanup
     return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
       if (vantaRef.current) {
         vantaRef.current.destroy();
       }
@@ -67,18 +85,18 @@ export default function NeuroExpertHero() {
 
   const handleStartClick = (e) => {
     e.preventDefault();
-    // Открываем AI чат
+    // Добавляем пульсирующий эффект перед открытием
+    e.target.classList.add('pulse-effect');
     setTimeout(() => {
       const aiButton = document.querySelector('.ai-float-button');
       if (aiButton) {
         aiButton.click();
       }
-    }, 100);
+    }, 300);
   };
 
   return (
     <>
-      {/* Загружаем Three.js и Vanta.js */}
       <Script
         src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"
         strategy="beforeInteractive"
@@ -94,27 +112,67 @@ export default function NeuroExpertHero() {
       />
 
       <section className="hero-section" ref={heroRef}>
-        <div className="hero-content">
-          <p className="pre-header">ЦИФРОВАЯ AI ПЛАТФОРМА ДЛЯ БИЗНЕСА</p>
-          <h1 className="main-header" id="animated-main-header">NeuroExpert</h1>
-          <h2 className="sub-header">СОЗДАЙТЕ ЦИФРОВОЕ ПОЗИЦИОНИРОВАНИЕ</h2>
-          <p className="description">
-            Автоматизируйте бизнес-процессы, увеличивайте прибыль и опережайте конкурентов с помощью передовых ИИ технологий.
+        {/* Дополнительные слои для глубины */}
+        <div className="gradient-overlay" />
+        <div className="noise-overlay" />
+        
+        <div 
+          className="hero-content"
+          style={{
+            transform: `translate(${mousePosition.x * 10}px, ${mousePosition.y * 10}px)`
+          }}
+        >
+          <p className="pre-header">
+            <span className="pre-header-line" />
+            ЦИФРОВАЯ AI ПЛАТФОРМА ДЛЯ БИЗНЕСА
+            <span className="pre-header-line" />
           </p>
+          
+          <h1 className="main-header" id="animated-main-header">NeuroExpert</h1>
+          
+          <div className="header-glow" />
+          
+          <h2 className="sub-header">
+            <span className="sub-header-word">СОЗДАЙТЕ</span>
+            <span className="sub-header-word">ЦИФРОВОЕ</span>
+            <span className="sub-header-word">ПОЗИЦИОНИРОВАНИЕ</span>
+          </h2>
+          
+          <p className="description">
+            Автоматизируйте бизнес-процессы, увеличивайте прибыль и опережайте конкурентов 
+            с помощью передовых ИИ технологий.
+          </p>
+          
           <div className="cta-buttons">
             <a href="#benefits" className="cta-button cta-calculator">
-              <span className="button-icon">🧮</span>
-              Калькулятор
+              <span className="button-bg" />
+              <span className="button-content">
+                <span className="button-icon">🧮</span>
+                <span className="button-text">Калькулятор</span>
+              </span>
+              <span className="button-border" />
             </a>
+            
             <a 
               href="#" 
               className="cta-button cta-start"
               onClick={handleStartClick}
             >
-              <span className="button-icon">🚀</span>
-              Начать бесплатно
+              <span className="button-bg" />
+              <span className="button-content">
+                <span className="button-icon">🚀</span>
+                <span className="button-text">Начать бесплатно</span>
+              </span>
+              <span className="button-border" />
             </a>
           </div>
+        </div>
+
+        {/* Декоративные элементы */}
+        <div className="floating-particles">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className={`particle particle-${i + 1}`} />
+          ))}
         </div>
       </section>
 
@@ -128,6 +186,31 @@ export default function NeuroExpertHero() {
           text-align: center;
           overflow: hidden;
           background-color: #0A051A;
+          perspective: 1000px;
+        }
+
+        /* Слои для глубины */
+        .gradient-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: radial-gradient(ellipse at center, transparent 0%, rgba(10, 5, 26, 0.4) 100%);
+          pointer-events: none;
+          z-index: 1;
+        }
+
+        .noise-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          opacity: 0.03;
+          z-index: 1;
+          pointer-events: none;
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
         }
 
         .hero-content {
@@ -136,117 +219,263 @@ export default function NeuroExpertHero() {
           padding: 20px;
           max-width: 1200px;
           width: 100%;
+          transition: transform 0.15s ease-out;
+          will-change: transform;
         }
 
+        /* Премиальный pre-header */
         .pre-header {
           font-weight: 500;
           font-size: 14px;
           color: #A0A3B5;
-          letter-spacing: 0.1em;
+          letter-spacing: 0.2em;
           text-transform: uppercase;
-          margin-bottom: 24px;
-          animation: fadeInUp 0.8s ease-out;
+          margin-bottom: 32px;
+          opacity: 0;
+          animation: fadeInDown 1s ease-out forwards;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 20px;
         }
 
+        .pre-header-line {
+          display: inline-block;
+          width: 50px;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, #A0A3B5, transparent);
+          animation: expandLine 1.5s ease-out forwards;
+        }
+
+        /* Главный заголовок с премиальными эффектами */
         .main-header {
           font-weight: 700;
-          font-size: clamp(48px, 10vw, 80px);
+          font-size: clamp(48px, 10vw, 96px);
           margin: 0;
-          background: linear-gradient(90deg, #A855F7, #6366F1);
+          background: linear-gradient(135deg, #A855F7 0%, #6366F1 50%, #60A5FA 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
-          text-fill-color: transparent;
           position: relative;
-          filter: drop-shadow(0 0 30px rgba(168, 85, 247, 0.5));
+          transform-style: preserve-3d;
+          perspective: 1000px;
         }
 
+        /* Свечение заголовка */
+        .header-glow {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 100%;
+          height: 100%;
+          background: radial-gradient(ellipse at center, rgba(168, 85, 247, 0.3) 0%, transparent 70%);
+          filter: blur(40px);
+          animation: glow-pulse 4s ease-in-out infinite;
+          pointer-events: none;
+        }
+
+        /* Подзаголовок с раздельной анимацией слов */
         .sub-header {
           font-weight: 600;
-          font-size: clamp(24px, 5vw, 36px);
+          font-size: clamp(24px, 5vw, 40px);
           color: #60A5FA;
           text-transform: uppercase;
-          margin-top: 24px;
-          margin-bottom: 16px;
-          animation: fadeInUp 0.8s 0.2s ease-out both;
-        }
-
-        .description {
-          font-weight: 400;
-          font-size: clamp(16px, 3vw, 20px);
-          color: #D1D5DB;
-          max-width: 600px;
-          line-height: 1.6;
-          margin: 24px auto 40px auto;
-          animation: fadeInUp 0.8s 0.4s ease-out both;
-        }
-
-        .cta-buttons {
+          margin-top: 28px;
+          margin-bottom: 20px;
           display: flex;
-          gap: 20px;
+          gap: 12px;
           justify-content: center;
           flex-wrap: wrap;
-          animation: fadeInUp 0.8s 0.6s ease-out both;
+        }
+
+        .sub-header-word {
+          display: inline-block;
+          opacity: 0;
+          transform: translateY(20px);
+          animation: wordReveal 0.8s ease-out forwards;
+        }
+
+        .sub-header-word:nth-child(1) { animation-delay: 0.8s; }
+        .sub-header-word:nth-child(2) { animation-delay: 0.95s; }
+        .sub-header-word:nth-child(3) { animation-delay: 1.1s; }
+
+        /* Описание с элегантной анимацией */
+        .description {
+          font-weight: 400;
+          font-size: clamp(16px, 3vw, 22px);
+          color: #D1D5DB;
+          max-width: 650px;
+          line-height: 1.7;
+          margin: 28px auto 48px auto;
+          opacity: 0;
+          transform: translateY(20px);
+          animation: fadeInUp 1s 1.3s ease-out forwards;
+          text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Премиальные кнопки */
+        .cta-buttons {
+          display: flex;
+          gap: 24px;
+          justify-content: center;
+          flex-wrap: wrap;
+          opacity: 0;
+          transform: translateY(30px);
+          animation: fadeInUp 1s 1.5s ease-out forwards;
         }
 
         .cta-button {
+          position: relative;
           display: inline-flex;
           align-items: center;
-          gap: 10px;
-          padding: 18px 40px;
-          border-radius: 50px;
+          padding: 0;
           border: none;
           text-decoration: none;
           font-size: 16px;
           font-weight: 600;
           color: #FFFFFF;
           text-transform: uppercase;
-          position: relative;
-          overflow: hidden;
-          transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
           cursor: pointer;
+          isolation: isolate;
+          overflow: hidden;
+          transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .cta-calculator {
-          background: linear-gradient(90deg, #6366F1, #8B5CF6);
-          box-shadow: 0 10px 30px -5px rgba(99, 102, 241, 0.4);
+        .button-content {
+          position: relative;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 20px 45px;
+          z-index: 2;
+          transition: transform 0.3s ease;
         }
 
-        .cta-start {
-          background: linear-gradient(90deg, #A855F7, #EC4899);
-          box-shadow: 0 10px 30px -5px rgba(168, 85, 247, 0.4);
-        }
-
-        .cta-button::before {
-          content: '';
+        .button-bg {
           position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-          transition: left 0.5s;
+          inset: 0;
+          border-radius: 60px;
+          z-index: 1;
+          transition: all 0.3s ease;
+        }
+
+        .cta-calculator .button-bg {
+          background: linear-gradient(135deg, #6366F1, #8B5CF6);
+          box-shadow: 0 10px 40px -10px rgba(99, 102, 241, 0.5);
+        }
+
+        .cta-start .button-bg {
+          background: linear-gradient(135deg, #A855F7, #EC4899);
+          box-shadow: 0 10px 40px -10px rgba(168, 85, 247, 0.5);
+        }
+
+        .button-border {
+          position: absolute;
+          inset: -2px;
+          border-radius: 60px;
+          background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          z-index: 0;
         }
 
         .cta-button:hover {
-          transform: translateY(-3px) scale(1.05);
+          transform: translateY(-3px) scale(1.02);
         }
 
-        .cta-calculator:hover {
-          box-shadow: 0 15px 35px -5px rgba(99, 102, 241, 0.6);
+        .cta-button:hover .button-bg {
+          filter: brightness(1.1);
         }
 
-        .cta-start:hover {
-          box-shadow: 0 15px 35px -5px rgba(168, 85, 247, 0.6);
+        .cta-button:hover .button-border {
+          opacity: 1;
         }
 
-        .cta-button:hover::before {
-          left: 100%;
+        .cta-calculator:hover .button-bg {
+          box-shadow: 0 15px 50px -10px rgba(99, 102, 241, 0.7);
+        }
+
+        .cta-start:hover .button-bg {
+          box-shadow: 0 15px 50px -10px rgba(168, 85, 247, 0.7);
+        }
+
+        .cta-button:active {
+          transform: translateY(-1px) scale(0.98);
         }
 
         .button-icon {
-          font-size: 20px;
-          filter: drop-shadow(0 0 5px currentColor);
+          font-size: 22px;
+          filter: drop-shadow(0 0 10px currentColor);
+          animation: icon-float 3s ease-in-out infinite;
+        }
+
+        .button-text {
+          letter-spacing: 0.05em;
+        }
+
+        /* Парящие частицы */
+        .floating-particles {
+          position: absolute;
+          inset: 0;
+          overflow: hidden;
+          pointer-events: none;
+        }
+
+        .particle {
+          position: absolute;
+          width: 4px;
+          height: 4px;
+          background: rgba(168, 85, 247, 0.6);
+          border-radius: 50%;
+          filter: blur(1px);
+        }
+
+        .particle-1 {
+          top: 10%;
+          left: 10%;
+          animation: float-1 20s infinite ease-in-out;
+        }
+
+        .particle-2 {
+          top: 20%;
+          right: 15%;
+          animation: float-2 25s infinite ease-in-out;
+        }
+
+        .particle-3 {
+          bottom: 30%;
+          left: 20%;
+          animation: float-3 30s infinite ease-in-out;
+        }
+
+        .particle-4 {
+          bottom: 20%;
+          right: 10%;
+          animation: float-4 22s infinite ease-in-out;
+        }
+
+        .particle-5 {
+          top: 50%;
+          left: 50%;
+          animation: float-5 28s infinite ease-in-out;
+        }
+
+        /* Эффект пульсации при клике */
+        .pulse-effect {
+          animation: pulse-click 0.6s ease-out;
+        }
+
+        /* Анимации */
+        @keyframes fadeInDown {
+          from {
+            opacity: 0;
+            transform: translateY(-30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
 
         @keyframes fadeInUp {
@@ -260,18 +489,114 @@ export default function NeuroExpertHero() {
           }
         }
 
-        @keyframes letterFadeIn {
-          from {
+        @keyframes premiumLetterReveal {
+          0% {
             opacity: 0;
-            transform: translateY(20px) rotateX(90deg);
+            transform: translateY(50px) rotateX(90deg) scale(0.5);
+            filter: blur(10px);
           }
-          to {
+          50% {
+            opacity: 0.5;
+            filter: blur(5px);
+          }
+          100% {
             opacity: 1;
-            transform: translateY(0) rotateX(0);
+            transform: translateY(0) rotateX(0) scale(1);
+            filter: blur(0) drop-shadow(0 0 20px rgba(168, 85, 247, 0.4));
           }
         }
 
-        /* Мобильная адаптация */
+        @keyframes wordReveal {
+          from {
+            opacity: 0;
+            transform: translateY(20px) scale(0.9);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+
+        @keyframes expandLine {
+          from {
+            width: 0;
+            opacity: 0;
+          }
+          to {
+            width: 50px;
+            opacity: 1;
+          }
+        }
+
+        @keyframes glow-pulse {
+          0%, 100% {
+            opacity: 0.5;
+            transform: translate(-50%, -50%) scale(1);
+          }
+          50% {
+            opacity: 0.8;
+            transform: translate(-50%, -50%) scale(1.2);
+          }
+        }
+
+        @keyframes icon-float {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-3px);
+          }
+        }
+
+        @keyframes float-1 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          33% { transform: translate(100px, 50px) rotate(120deg); }
+          66% { transform: translate(-50px, 100px) rotate(240deg); }
+        }
+
+        @keyframes float-2 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          33% { transform: translate(-80px, 80px) rotate(-120deg); }
+          66% { transform: translate(120px, -40px) rotate(120deg); }
+        }
+
+        @keyframes float-3 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          33% { transform: translate(70px, -70px) rotate(180deg); }
+          66% { transform: translate(-100px, 30px) rotate(-90deg); }
+        }
+
+        @keyframes float-4 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          33% { transform: translate(-60px, -90px) rotate(90deg); }
+          66% { transform: translate(90px, 60px) rotate(-180deg); }
+        }
+
+        @keyframes float-5 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          33% { transform: translate(50px, 80px) rotate(150deg); }
+          66% { transform: translate(-80px, -50px) rotate(-150deg); }
+        }
+
+        @keyframes pulse-click {
+          0% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(0.95);
+          }
+          100% {
+            transform: scale(1);
+          }
+        }
+
+        /* Hover эффект для букв заголовка */
+        :global(.header-letter:hover) {
+          transform: translateY(-5px) scale(1.1) !important;
+          filter: brightness(1.2);
+        }
+
+        /* Мобильная адаптация с сохранением премиальности */
         @media (max-width: 768px) {
           .hero-section {
             min-height: 100vh;
@@ -283,43 +608,48 @@ export default function NeuroExpertHero() {
           }
 
           .pre-header {
-            font-size: 12px;
-            margin-bottom: 16px;
+            font-size: 11px;
+            margin-bottom: 24px;
+          }
+
+          .pre-header-line {
+            width: 30px;
           }
 
           .main-header {
-            font-size: clamp(36px, 12vw, 60px);
+            font-size: clamp(40px, 13vw, 72px);
             line-height: 1.1;
           }
 
           .sub-header {
-            font-size: clamp(18px, 5vw, 28px);
-            margin-top: 16px;
-            margin-bottom: 12px;
-            line-height: 1.2;
+            font-size: clamp(18px, 5vw, 32px);
+            margin-top: 20px;
+            margin-bottom: 16px;
           }
 
           .description {
-            font-size: clamp(14px, 4vw, 18px);
-            margin: 16px auto 30px auto;
-            padding: 0 10px;
+            font-size: clamp(15px, 4vw, 18px);
+            margin: 20px auto 36px auto;
+            padding: 0 15px;
           }
 
           .cta-buttons {
             flex-direction: column;
             align-items: center;
-            gap: 15px;
+            gap: 16px;
+          }
+
+          .button-content {
+            padding: 18px 36px;
           }
 
           .cta-button {
             width: 100%;
             max-width: 280px;
-            padding: 16px 30px;
-            font-size: 14px;
           }
 
-          .button-icon {
-            font-size: 18px;
+          .floating-particles {
+            display: none; /* Отключаем на мобильных для производительности */
           }
         }
 
@@ -330,66 +660,71 @@ export default function NeuroExpertHero() {
           }
 
           .main-header {
-            font-size: 60px;
+            font-size: 72px;
           }
 
           .sub-header {
-            font-size: 30px;
+            font-size: 32px;
           }
 
           .description {
-            font-size: 18px;
+            font-size: 19px;
           }
         }
 
-        /* Маленькие мобильные устройства */
+        /* Маленькие устройства с сохранением читаемости */
         @media (max-width: 375px) {
           .pre-header {
-            font-size: 11px;
-            letter-spacing: 0.08em;
+            font-size: 10px;
+            letter-spacing: 0.15em;
           }
 
           .main-header {
-            font-size: 32px;
+            font-size: 36px;
           }
 
           .sub-header {
             font-size: 16px;
+            gap: 8px;
           }
 
           .description {
             font-size: 14px;
-            line-height: 1.5;
+            line-height: 1.6;
           }
 
-          .cta-button {
-            padding: 14px 24px;
-            font-size: 13px;
+          .button-content {
+            padding: 16px 28px;
+            font-size: 14px;
+          }
+
+          .button-icon {
+            font-size: 18px;
           }
         }
 
-        /* Ландшафтная ориентация мобильных устройств */
+        /* Ландшафтная ориентация */
         @media (max-height: 600px) and (orientation: landscape) {
           .hero-section {
             min-height: auto;
-            padding: 40px 0;
-          }
-
-          .pre-header {
-            margin-bottom: 12px;
+            padding: 30px 0;
           }
 
           .main-header {
-            margin-bottom: 12px;
-          }
-
-          .sub-header {
-            margin-top: 12px;
-            margin-bottom: 8px;
+            font-size: clamp(36px, 8vw, 64px);
           }
 
           .description {
-            margin: 12px auto 20px auto;
+            margin: 16px auto 24px auto;
+          }
+        }
+
+        /* Оптимизация производительности для слабых устройств */
+        @media (prefers-reduced-motion: reduce) {
+          * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
           }
         }
       `}</style>
