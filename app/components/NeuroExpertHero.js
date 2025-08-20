@@ -63,19 +63,23 @@ export default function NeuroExpertHero() {
     const config = {
       nodeCount: width > 768 ? 150 : 80,
       nodeSize: 3,
-      connectionDistance: 200,
+      connectionDistance: 250,
       mouseRadius: 300,
-      baseSpeed: 0.3,
-      pulseSpeed: 0.02,
+      baseSpeed: 0.2,
+      pulseSpeed: 0.015,
       glowIntensity: 1.5,
       particleTrails: true,
-      electricArcs: true
+      electricArcs: true,
+      connectionOpacity: 0.15,
+      signalSpeed: 0.005,
+      maxConnections: 4
     };
 
     const nodes = [];
     const electricArcs = [];
     const particles = [];
     const connections = new Map();
+    const signals = [];
 
     // СУПЕРУЗЕЛ
     class SuperNode {
@@ -215,18 +219,80 @@ export default function NeuroExpertHero() {
       }
     }
 
+    // НЕЙРОННЫЕ СИГНАЛЫ
+    class NeuralSignal {
+      constructor(startNode, endNode) {
+        this.start = startNode;
+        this.end = endNode;
+        this.progress = 0;
+        this.speed = config.signalSpeed + Math.random() * 0.003;
+        this.size = 2 + Math.random() * 2;
+        this.hue = 180 + Math.random() * 40;
+        this.trail = [];
+        this.maxTrailLength = 20;
+      }
+
+      update() {
+        this.progress += this.speed;
+        
+        const x = this.start.x + (this.end.x - this.start.x) * this.progress;
+        const y = this.start.y + (this.end.y - this.start.y) * this.progress;
+        
+        this.trail.push({ x, y, life: 1 });
+        if (this.trail.length > this.maxTrailLength) {
+          this.trail.shift();
+        }
+        
+        this.trail.forEach(point => {
+          point.life -= 0.05;
+        });
+      }
+
+      draw() {
+        // Рисуем след
+        this.trail.forEach((point, index) => {
+          const opacity = point.life * 0.5 * (index / this.trail.length);
+          ctx.fillStyle = `hsla(${this.hue}, 100%, 70%, ${opacity})`;
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, this.size * (index / this.trail.length), 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // Рисуем сам сигнал
+        const x = this.start.x + (this.end.x - this.start.x) * this.progress;
+        const y = this.start.y + (this.end.y - this.start.y) * this.progress;
+
+        ctx.save();
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = `hsla(${this.hue}, 100%, 70%, 1)`;
+        
+        const gradient = ctx.createRadialGradient(x, y, 0, x, y, this.size * 3);
+        gradient.addColorStop(0, `hsla(${this.hue}, 100%, 100%, 1)`);
+        gradient.addColorStop(0.5, `hsla(${this.hue}, 100%, 70%, 0.8)`);
+        gradient.addColorStop(1, `hsla(${this.hue}, 100%, 50%, 0)`);
+        
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(x, y, this.size * 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
     // ЭЛЕКТРИЧЕСКИЕ ДУГИ
     class ElectricArc {
       constructor(node1, node2) {
         this.node1 = node1;
         this.node2 = node2;
         this.life = 0.5 + Math.random() * 0.5;
-        this.segments = 8;
-        this.amplitude = 20;
+        this.segments = 12;
+        this.amplitude = 15;
+        this.phase = Math.random() * Math.PI * 2;
       }
 
       update() {
         this.life -= 0.02;
+        this.phase += 0.1;
       }
 
       draw() {
@@ -234,9 +300,9 @@ export default function NeuroExpertHero() {
 
         ctx.save();
         ctx.globalCompositeOperation = 'lighter';
-        ctx.strokeStyle = `hsla(190, 100%, 70%, ${this.life})`;
-        ctx.lineWidth = 2;
-        ctx.shadowBlur = 10;
+        ctx.strokeStyle = `hsla(190, 100%, 70%, ${this.life * 0.7})`;
+        ctx.lineWidth = 1.5;
+        ctx.shadowBlur = 15;
         ctx.shadowColor = `hsla(190, 100%, 70%, ${this.life})`;
 
         ctx.beginPath();
@@ -244,12 +310,13 @@ export default function NeuroExpertHero() {
 
         const dx = this.node2.x - this.node1.x;
         const dy = this.node2.y - this.node1.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
 
         for (let i = 1; i <= this.segments; i++) {
           const t = i / this.segments;
-          const offset = Math.sin(t * Math.PI) * this.amplitude * (Math.random() - 0.5);
-          const perpX = -dy / Math.sqrt(dx * dx + dy * dy);
-          const perpY = dx / Math.sqrt(dx * dx + dy * dy);
+          const offset = Math.sin(t * Math.PI + this.phase) * this.amplitude * (1 - t) * Math.sin(this.life * Math.PI);
+          const perpX = -dy / distance;
+          const perpY = dx / distance;
           
           ctx.lineTo(
             this.node1.x + dx * t + perpX * offset,
@@ -293,43 +360,82 @@ export default function NeuroExpertHero() {
       nodes.forEach((node, i) => {
         node.update(mouseRef.current.x, mouseRef.current.y);
         
-        // Поиск ближайших узлов
-        nodes.slice(i + 1).forEach(other => {
-          const dx = other.x - node.x;
-          const dy = other.y - node.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+        // Поиск ближайших узлов с ограничением количества
+        let nodeConnections = 0;
+        const nearbyNodes = nodes
+          .filter((other, j) => j !== i)
+          .map(other => {
+            const dx = other.x - node.x;
+            const dy = other.y - node.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            return { other, distance };
+          })
+          .filter(({ distance }) => distance < config.connectionDistance)
+          .sort((a, b) => a.distance - b.distance)
+          .slice(0, config.maxConnections);
+        
+        nearbyNodes.forEach(({ other, distance }) => {
+          const strength = 1 - distance / config.connectionDistance;
+          const key = `${Math.min(i, nodes.indexOf(other))}-${Math.max(i, nodes.indexOf(other))}`;
           
-          if (distance < config.connectionDistance) {
-            const strength = 1 - distance / config.connectionDistance;
-            connections.set(`${i}-${nodes.indexOf(other)}`, { node, other, strength, distance });
+          if (!connections.has(key)) {
+            connections.set(key, { node, other, strength, distance });
             
-            // Создаем электрические дуги
-            if (config.electricArcs && Math.random() < 0.001 && electricArcs.length < 5) {
+            // Создаем электрические дуги для сильных связей
+            if (config.electricArcs && strength > 0.7 && Math.random() < 0.002 && electricArcs.length < 3) {
               electricArcs.push(new ElectricArc(node, other));
             }
           }
         });
       });
 
-      // Рисуем соединения
+      // Рисуем соединения с плавными кривыми
       ctx.save();
-      ctx.globalCompositeOperation = 'lighter';
+      ctx.globalCompositeOperation = 'screen';
       
-      connections.forEach(({ node, other, strength }) => {
+      connections.forEach(({ node, other, strength, distance }) => {
+        // Рассчитываем контрольные точки для кривой Безье
+        const dx = other.x - node.x;
+        const dy = other.y - node.y;
+        const midX = (node.x + other.x) / 2;
+        const midY = (node.y + other.y) / 2;
+        
+        // Добавляем небольшое искривление для реализма
+        const curve = Math.sin(Date.now() * 0.0001 + node.x + other.y) * 20;
+        const perpX = -dy / distance * curve;
+        const perpY = dx / distance * curve;
+        
+        // Мягкий градиент для связи
         const gradient = ctx.createLinearGradient(node.x, node.y, other.x, other.y);
-        gradient.addColorStop(0, `hsla(${node.hue}, 100%, 50%, ${strength * 0.3})`);
-        gradient.addColorStop(0.5, `hsla(${(node.hue + other.hue) / 2}, 100%, 60%, ${strength * 0.5})`);
-        gradient.addColorStop(1, `hsla(${other.hue}, 100%, 50%, ${strength * 0.3})`);
+        const opacity = strength * config.connectionOpacity;
+        gradient.addColorStop(0, `hsla(${node.hue}, 70%, 60%, ${opacity})`);
+        gradient.addColorStop(0.3, `hsla(${node.hue}, 80%, 65%, ${opacity * 1.2})`);
+        gradient.addColorStop(0.7, `hsla(${other.hue}, 80%, 65%, ${opacity * 1.2})`);
+        gradient.addColorStop(1, `hsla(${other.hue}, 70%, 60%, ${opacity})`);
         
         ctx.strokeStyle = gradient;
-        ctx.lineWidth = Math.max(0.5, strength * 2);
+        ctx.lineWidth = Math.max(0.3, strength * 1.5);
         ctx.beginPath();
         ctx.moveTo(node.x, node.y);
-        ctx.lineTo(other.x, other.y);
+        ctx.quadraticCurveTo(midX + perpX, midY + perpY, other.x, other.y);
         ctx.stroke();
+        
+        // Создаем сигналы для активных связей
+        if (Math.random() < 0.001 && signals.length < 30) {
+          signals.push(new NeuralSignal(node, other));
+        }
       });
       
       ctx.restore();
+
+      // Рисуем сигналы
+      signals.forEach((signal, index) => {
+        signal.update();
+        signal.draw();
+        if (signal.progress > 1) {
+          signals.splice(index, 1);
+        }
+      });
 
       // Рисуем электрические дуги
       electricArcs.forEach((arc, index) => {
