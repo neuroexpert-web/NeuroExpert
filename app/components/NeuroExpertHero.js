@@ -397,13 +397,14 @@ export default function NeuroExpertHero() {
           position: relative;
           z-index: 2;
           padding: 40px 20px;
+          padding-top: 10vh;
           max-width: 1400px;
           margin: 0 auto;
           min-height: 100vh;
           display: flex;
           flex-direction: column;
-          justify-content: center;
-          gap: 40px;
+          justify-content: flex-start;
+          gap: 30px;
         }
 
         .pre-header {
