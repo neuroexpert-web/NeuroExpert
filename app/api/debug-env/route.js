@@ -18,7 +18,12 @@ export async function GET() {
     
     // Проверяем другие важные переменные
     otherVars: {
-      hasGeminiKey: !!process.env.GEMINI_API_KEY,
+      hasGeminiKey: !!process.env.GOOGLE_GEMINI_API_KEY || !!process.env.GEMINI_API_KEY,
+      geminiKeyVariants: {
+        GOOGLE_GEMINI_API_KEY: !!process.env.GOOGLE_GEMINI_API_KEY,
+        GEMINI_API_KEY: !!process.env.GEMINI_API_KEY,
+        NEXT_PUBLIC_GEMINI_API_KEY: !!process.env.NEXT_PUBLIC_GEMINI_API_KEY
+      },
       hasAnthropicKey: !!process.env.ANTHROPIC_API_KEY,
       hasDatabaseUrl: !!process.env.DATABASE_URL,
       hasJwtSecret: !!process.env.JWT_SECRET,
