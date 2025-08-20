@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+    
+    <!-- Главная страница -->
+    <url>
+        <loc>https://neuroexpert.ai/</loc>
+        <lastmod>2025-01-18</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    
+    <!-- AI Директор -->
+    <url>
+        <loc>https://neuroexpert.ai/#ai-director</loc>
+        <lastmod>2025-01-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    
+    <!-- Калькулятор ROI -->
+    <url>
+        <loc>https://neuroexpert.ai/#calculator</loc>
+        <lastmod>2025-01-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <!-- Цены -->
+    <url>
+        <loc>https://neuroexpert.ai/#pricing</loc>
+        <lastmod>2025-01-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <!-- Контакты -->
+    <url>
+        <loc>https://neuroexpert.ai/#contact</loc>
+        <lastmod>2025-01-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <!-- Почему мы -->
+    <url>
+        <loc>https://neuroexpert.ai/#why-us</loc>
+        <lastmod>2025-01-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <!-- Путь к результату -->
+    <url>
+        <loc>https://neuroexpert.ai/#journey</loc>
+        <lastmod>2025-01-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <!-- Политика конфиденциальности (будет добавлена) -->
+    <url>
+        <loc>https://neuroexpert.ai/privacy</loc>
+        <lastmod>2025-01-18</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    
+    <!-- Пользовательское соглашение (будет добавлено) -->
+    <url>
+        <loc>https://neuroexpert.ai/terms</loc>
+        <lastmod>2025-01-18</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.5</priority>
+    </url>
+</urlset>
