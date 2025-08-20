@@ -3,7 +3,7 @@
 import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import PremiumGlassBackground from './components/PremiumGlassBackground';
-import PremiumHero from './components/PremiumHero';
+import NeuroExpertHero from './components/NeuroExpertHero';
 import JourneySection from './components/JourneySection';
 import WhyUsSection from './components/WhyUsSection';
 import PricingSection from './components/PricingSection';
