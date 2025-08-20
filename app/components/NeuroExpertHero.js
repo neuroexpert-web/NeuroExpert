@@ -4,39 +4,48 @@ import { useEffect, useRef } from 'react';
 
 export default function NeuroExpertHero() {
   const canvasRef = useRef(null);
-  const vantaRef = useRef(null);
+  const mouseRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
-    // Анимация заголовка из ТЗ
-    const animateHeader = () => {
-      const header = document.getElementById('animated-main-header');
-      if (header && header.children.length === 0) {
-        const text = header.textContent;
-        header.innerHTML = '';
+    // Супер анимация заголовка
+    const animateTitle = () => {
+      const title = document.getElementById('animated-main-header');
+      if (title) {
+        const text = title.textContent;
+        title.innerHTML = '';
         
-        text.split('').forEach(char => {
-          const span = document.createElement('span');
-          span.className = 'char';
-          span.textContent = char;
-          header.appendChild(span);
-        });
-
-        const chars = document.querySelectorAll('.char');
-        chars.forEach((char, index) => {
-          setTimeout(() => {
-            char.classList.add('visible');
-          }, 300 + index * 70);
+        // Создаем 3D эффект для каждой буквы
+        text.split('').forEach((char, i) => {
+          const wrapper = document.createElement('span');
+          wrapper.className = 'letter-wrapper';
+          wrapper.style.cssText = `
+            display: inline-block;
+            position: relative;
+            transform-style: preserve-3d;
+            animation-delay: ${i * 50}ms;
+          `;
+          
+          const letter = document.createElement('span');
+          letter.className = 'letter-3d';
+          letter.textContent = char;
+          letter.style.cssText = `
+            display: inline-block;
+            position: relative;
+          `;
+          
+          wrapper.appendChild(letter);
+          title.appendChild(wrapper);
         });
       }
     };
 
-    animateHeader();
+    setTimeout(animateTitle, 100);
 
-    // Создаем свою мощную анимацию нейросети
+    // МОЩНАЯ НЕЙРОСЕТЬ
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: false });
     let width = window.innerWidth;
     let height = window.innerHeight;
 
@@ -47,175 +56,299 @@ export default function NeuroExpertHero() {
     canvas.style.height = height + 'px';
     ctx.scale(dpr, dpr);
 
-    // Параметры для мощной визуализации
-    const neurons = [];
-    const connections = [];
-    const particleCount = window.innerWidth > 768 ? 80 : 40;
-    const connectionDistance = 150;
-    const pulseWaves = [];
+    // Оптимизация для производительности
+    ctx.imageSmoothingEnabled = false;
 
-    // Класс для нейронов
-    class Neuron {
+    // ПАРАМЕТРЫ МОЩНОЙ ВИЗУАЛИЗАЦИИ
+    const config = {
+      nodeCount: width > 768 ? 150 : 80,
+      nodeSize: 3,
+      connectionDistance: 200,
+      mouseRadius: 300,
+      baseSpeed: 0.3,
+      pulseSpeed: 0.02,
+      glowIntensity: 1.5,
+      particleTrails: true,
+      electricArcs: true
+    };
+
+    const nodes = [];
+    const electricArcs = [];
+    const particles = [];
+    const connections = new Map();
+
+    // СУПЕРУЗЕЛ
+    class SuperNode {
       constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.vx = (Math.random() - 0.5) * 0.5;
-        this.vy = (Math.random() - 0.5) * 0.5;
-        this.radius = Math.random() * 2 + 2;
-        this.pulse = 0;
+        this.baseX = x;
+        this.baseY = y;
+        this.vx = (Math.random() - 0.5) * config.baseSpeed;
+        this.vy = (Math.random() - 0.5) * config.baseSpeed;
+        this.radius = config.nodeSize;
         this.energy = Math.random();
-        this.brightness = 0;
+        this.pulse = Math.random() * Math.PI * 2;
+        this.type = Math.random() < 0.1 ? 'core' : 'normal';
+        this.connections = [];
+        this.hue = this.type === 'core' ? 180 : 200 + Math.random() * 60;
+        this.brightness = 0.5 + Math.random() * 0.5;
+        this.trail = [];
       }
 
-      update() {
+      update(mouseX, mouseY) {
+        // Физика движения
         this.x += this.vx;
         this.y += this.vy;
 
-        if (this.x < 0 || this.x > width) this.vx *= -1;
-        if (this.y < 0 || this.y > height) this.vy *= -1;
+        // Отталкивание от краев
+        if (this.x < 50) this.vx += 0.5;
+        if (this.x > width - 50) this.vx -= 0.5;
+        if (this.y < 50) this.vy += 0.5;
+        if (this.y > height - 50) this.vy -= 0.5;
 
-        this.energy += (Math.random() - 0.5) * 0.02;
-        this.energy = Math.max(0, Math.min(1, this.energy));
+        // Магнитное притяжение к мыши
+        const dx = mouseX - this.x;
+        const dy = mouseY - this.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
         
-        this.pulse += 0.05;
-        this.brightness = 0.5 + Math.sin(this.pulse) * 0.3 + this.energy * 0.2;
+        if (distance < config.mouseRadius) {
+          const force = (1 - distance / config.mouseRadius) * 0.1;
+          this.vx += dx * force * 0.01;
+          this.vy += dy * force * 0.01;
+        }
+
+        // Ограничение скорости
+        const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+        if (speed > 2) {
+          this.vx = (this.vx / speed) * 2;
+          this.vy = (this.vy / speed) * 2;
+        }
+
+        // Пульсация энергии
+        this.pulse += config.pulseSpeed;
+        this.energy = 0.5 + Math.sin(this.pulse) * 0.3 + Math.random() * 0.2;
+        
+        // След частицы
+        if (config.particleTrails && Math.random() < 0.1) {
+          this.trail.push({ x: this.x, y: this.y, life: 1 });
+        }
+        
+        this.trail = this.trail.filter(point => {
+          point.life -= 0.02;
+          return point.life > 0;
+        });
       }
 
       draw() {
-        // Внешнее яркое свечение
-        const glow = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius * 20);
-        glow.addColorStop(0, `rgba(0, 255, 255, ${this.brightness * 0.3})`);
-        glow.addColorStop(0.3, `rgba(99, 102, 241, ${this.brightness * 0.2})`);
-        glow.addColorStop(1, 'rgba(168, 85, 247, 0)');
+        // Рисуем след
+        if (this.trail.length > 0) {
+          ctx.save();
+          this.trail.forEach((point, i) => {
+            const opacity = point.life * 0.3;
+            ctx.fillStyle = `hsla(${this.hue}, 100%, 70%, ${opacity})`;
+            ctx.beginPath();
+            ctx.arc(point.x, point.y, 1, 0, Math.PI * 2);
+            ctx.fill();
+          });
+          ctx.restore();
+        }
+
+        // ЭПИЧЕСКОЕ СВЕЧЕНИЕ
+        const glowSize = this.radius * (this.type === 'core' ? 30 : 20) * this.energy;
         
-        ctx.fillStyle = glow;
-        ctx.fillRect(this.x - this.radius * 20, this.y - this.radius * 20, this.radius * 40, this.radius * 40);
+        // Внешнее свечение
+        const outerGlow = ctx.createRadialGradient(
+          this.x, this.y, 0,
+          this.x, this.y, glowSize
+        );
+        outerGlow.addColorStop(0, `hsla(${this.hue}, 100%, 50%, ${0.1 * this.energy})`);
+        outerGlow.addColorStop(0.5, `hsla(${this.hue}, 80%, 40%, ${0.05 * this.energy})`);
+        outerGlow.addColorStop(1, 'transparent');
+        
+        ctx.fillStyle = outerGlow;
+        ctx.fillRect(this.x - glowSize, this.y - glowSize, glowSize * 2, glowSize * 2);
+
+        // Среднее свечение
+        const midGlow = ctx.createRadialGradient(
+          this.x, this.y, 0,
+          this.x, this.y, glowSize * 0.5
+        );
+        midGlow.addColorStop(0, `hsla(${this.hue}, 100%, 60%, ${0.3 * this.energy})`);
+        midGlow.addColorStop(0.7, `hsla(${this.hue}, 100%, 50%, ${0.1 * this.energy})`);
+        midGlow.addColorStop(1, 'transparent');
+        
+        ctx.fillStyle = midGlow;
+        ctx.fillRect(this.x - glowSize/2, this.y - glowSize/2, glowSize, glowSize);
 
         // Яркое ядро
-        const core = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius * 3);
-        core.addColorStop(0, `rgba(255, 255, 255, ${this.brightness})`);
-        core.addColorStop(0.5, `rgba(0, 255, 255, ${this.brightness * 0.8})`);
-        core.addColorStop(1, `rgba(99, 102, 241, ${this.brightness * 0.3})`);
+        if (this.type === 'core') {
+          // Дополнительные кольца для core узлов
+          for (let i = 0; i < 3; i++) {
+            ctx.strokeStyle = `hsla(${this.hue}, 100%, 70%, ${0.3 * this.energy / (i + 1)})`;
+            ctx.lineWidth = 2 - i * 0.5;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius * (3 + i * 2), 0, Math.PI * 2);
+            ctx.stroke();
+          }
+        }
+
+        // Центральное ядро
+        const coreGradient = ctx.createRadialGradient(
+          this.x, this.y, 0,
+          this.x, this.y, this.radius * 3
+        );
+        coreGradient.addColorStop(0, `hsla(0, 0%, 100%, ${this.brightness})`);
+        coreGradient.addColorStop(0.3, `hsla(${this.hue}, 100%, 70%, ${this.brightness})`);
+        coreGradient.addColorStop(1, `hsla(${this.hue}, 100%, 50%, ${this.brightness * 0.5})`);
         
-        ctx.fillStyle = core;
+        ctx.fillStyle = coreGradient;
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius * 3, 0, Math.PI * 2);
+        ctx.arc(this.x, this.y, this.radius * 2, 0, Math.PI * 2);
         ctx.fill();
 
-        // Центральная точка
-        ctx.fillStyle = `rgba(255, 255, 255, ${this.brightness})`;
+        // Белая точка в центре
+        ctx.fillStyle = `hsla(0, 0%, 100%, ${this.brightness})`;
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.arc(this.x, this.y, this.radius * 0.5, 0, Math.PI * 2);
         ctx.fill();
       }
     }
 
-    // Класс для импульсов
-    class PulseWave {
-      constructor(startNeuron, endNeuron) {
-        this.start = startNeuron;
-        this.end = endNeuron;
-        this.progress = 0;
-        this.speed = 0.02;
-        this.opacity = 1;
+    // ЭЛЕКТРИЧЕСКИЕ ДУГИ
+    class ElectricArc {
+      constructor(node1, node2) {
+        this.node1 = node1;
+        this.node2 = node2;
+        this.life = 0.5 + Math.random() * 0.5;
+        this.segments = 8;
+        this.amplitude = 20;
       }
 
       update() {
-        this.progress += this.speed;
-        if (this.progress > 1) {
-          this.progress = 0;
-          this.opacity = Math.random() * 0.5 + 0.5;
-        }
+        this.life -= 0.02;
       }
 
       draw() {
-        const x = this.start.x + (this.end.x - this.start.x) * this.progress;
-        const y = this.start.y + (this.end.y - this.start.y) * this.progress;
+        if (this.life <= 0) return;
 
-        const gradient = ctx.createRadialGradient(x, y, 0, x, y, 10);
-        gradient.addColorStop(0, `rgba(0, 255, 255, ${this.opacity})`);
-        gradient.addColorStop(1, 'rgba(0, 255, 255, 0)');
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.strokeStyle = `hsla(190, 100%, 70%, ${this.life})`;
+        ctx.lineWidth = 2;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = `hsla(190, 100%, 70%, ${this.life})`;
 
-        ctx.fillStyle = gradient;
         ctx.beginPath();
-        ctx.arc(x, y, 10, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.moveTo(this.node1.x, this.node1.y);
+
+        const dx = this.node2.x - this.node1.x;
+        const dy = this.node2.y - this.node1.y;
+
+        for (let i = 1; i <= this.segments; i++) {
+          const t = i / this.segments;
+          const offset = Math.sin(t * Math.PI) * this.amplitude * (Math.random() - 0.5);
+          const perpX = -dy / Math.sqrt(dx * dx + dy * dy);
+          const perpY = dx / Math.sqrt(dx * dx + dy * dy);
+          
+          ctx.lineTo(
+            this.node1.x + dx * t + perpX * offset,
+            this.node1.y + dy * t + perpY * offset
+          );
+        }
+
+        ctx.stroke();
+        ctx.restore();
       }
     }
 
-    // Создаем нейроны
-    for (let i = 0; i < particleCount; i++) {
-      neurons.push(new Neuron(
+    // Создаем узлы
+    for (let i = 0; i < config.nodeCount; i++) {
+      nodes.push(new SuperNode(
         Math.random() * width,
         Math.random() * height
       ));
     }
 
-    // Создаем импульсы
-    function createPulses() {
-      if (pulseWaves.length < 10 && Math.random() < 0.1) {
-        const n1 = neurons[Math.floor(Math.random() * neurons.length)];
-        const n2 = neurons[Math.floor(Math.random() * neurons.length)];
-        if (n1 !== n2) {
-          pulseWaves.push(new PulseWave(n1, n2));
-        }
-      }
-    }
+    // Отслеживание мыши
+    const handleMouseMove = (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseRef.current = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
+    };
 
-    // Анимация
+    canvas.addEventListener('mousemove', handleMouseMove);
+
+    // ГЛАВНЫЙ ЦИКЛ АНИМАЦИИ
     function animate() {
-      ctx.fillStyle = 'rgba(10, 5, 26, 0.1)';
+      // Очистка с эффектом следа
+      ctx.fillStyle = 'rgba(10, 5, 26, 0.05)';
       ctx.fillRect(0, 0, width, height);
 
-      // Рисуем соединения
-      neurons.forEach((n1, i) => {
-        neurons.slice(i + 1).forEach(n2 => {
-          const distance = Math.hypot(n2.x - n1.x, n2.y - n1.y);
-          if (distance < connectionDistance) {
-            const opacity = (1 - distance / connectionDistance) * 0.3;
+      // Обновляем и находим соединения
+      connections.clear();
+      
+      nodes.forEach((node, i) => {
+        node.update(mouseRef.current.x, mouseRef.current.y);
+        
+        // Поиск ближайших узлов
+        nodes.slice(i + 1).forEach(other => {
+          const dx = other.x - node.x;
+          const dy = other.y - node.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < config.connectionDistance) {
+            const strength = 1 - distance / config.connectionDistance;
+            connections.set(`${i}-${nodes.indexOf(other)}`, { node, other, strength, distance });
             
-            ctx.save();
-            ctx.shadowBlur = 5;
-            ctx.shadowColor = 'rgba(0, 255, 255, 0.5)';
-            
-            const gradient = ctx.createLinearGradient(n1.x, n1.y, n2.x, n2.y);
-            gradient.addColorStop(0, `rgba(99, 102, 241, ${opacity})`);
-            gradient.addColorStop(0.5, `rgba(0, 255, 255, ${opacity * 1.2})`);
-            gradient.addColorStop(1, `rgba(168, 85, 247, ${opacity})`);
-            
-            ctx.strokeStyle = gradient;
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            ctx.moveTo(n1.x, n1.y);
-            ctx.lineTo(n2.x, n2.y);
-            ctx.stroke();
-            ctx.restore();
+            // Создаем электрические дуги
+            if (config.electricArcs && Math.random() < 0.001 && electricArcs.length < 5) {
+              electricArcs.push(new ElectricArc(node, other));
+            }
           }
         });
       });
 
-      // Обновляем и рисуем нейроны
-      neurons.forEach(neuron => {
-        neuron.update();
-        neuron.draw();
+      // Рисуем соединения
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      
+      connections.forEach(({ node, other, strength }) => {
+        const gradient = ctx.createLinearGradient(node.x, node.y, other.x, other.y);
+        gradient.addColorStop(0, `hsla(${node.hue}, 100%, 50%, ${strength * 0.3})`);
+        gradient.addColorStop(0.5, `hsla(${(node.hue + other.hue) / 2}, 100%, 60%, ${strength * 0.5})`);
+        gradient.addColorStop(1, `hsla(${other.hue}, 100%, 50%, ${strength * 0.3})`);
+        
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = Math.max(0.5, strength * 2);
+        ctx.beginPath();
+        ctx.moveTo(node.x, node.y);
+        ctx.lineTo(other.x, other.y);
+        ctx.stroke();
       });
+      
+      ctx.restore();
 
-      // Обновляем и рисуем импульсы
-      createPulses();
-      pulseWaves.forEach((pulse, index) => {
-        pulse.update();
-        pulse.draw();
-        if (pulse.progress > 1) {
-          pulseWaves.splice(index, 1);
+      // Рисуем электрические дуги
+      electricArcs.forEach((arc, index) => {
+        arc.update();
+        arc.draw();
+        if (arc.life <= 0) {
+          electricArcs.splice(index, 1);
         }
       });
+
+      // Рисуем узлы
+      nodes.forEach(node => node.draw());
 
       requestAnimationFrame(animate);
     }
 
     animate();
 
-    // Обработка изменения размера окна
+    // Обработка изменения размера
     const handleResize = () => {
       width = window.innerWidth;
       height = window.innerHeight;
@@ -230,12 +363,15 @@ export default function NeuroExpertHero() {
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      canvas.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
 
   return (
     <>
       <style jsx>{`
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
         .hero-section {
           position: relative;
           min-height: 100vh;
@@ -244,7 +380,7 @@ export default function NeuroExpertHero() {
           justify-content: center;
           text-align: center;
           overflow: hidden;
-          background-color: #0A051A;
+          background: #0A051A;
         }
 
         .neural-canvas {
@@ -254,6 +390,7 @@ export default function NeuroExpertHero() {
           width: 100%;
           height: 100%;
           z-index: 1;
+          cursor: crosshair;
         }
 
         .hero-content {
@@ -264,117 +401,174 @@ export default function NeuroExpertHero() {
           margin: 0 auto;
         }
 
-        /* Типография из ТЗ */
         .pre-header {
-          font-weight: 500;
+          font-family: 'Orbitron', monospace;
+          font-weight: 400;
           font-size: 14px;
-          color: #A0A3B5;
-          letter-spacing: 0.1em;
+          color: #60A5FA;
+          letter-spacing: 0.3em;
           text-transform: uppercase;
-          margin-bottom: 24px;
+          margin-bottom: 30px;
           opacity: 0;
-          animation: fadeIn 1s 0.3s ease-out forwards;
+          animation: slideInTop 1s 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+          text-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
         }
 
         .main-header {
-          font-weight: 700;
-          font-size: clamp(48px, 10vw, 80px);
+          font-family: 'Orbitron', monospace;
+          font-weight: 900;
+          font-size: clamp(60px, 12vw, 120px);
           margin: 0;
-          background: linear-gradient(90deg, #A855F7, #6366F1);
+          line-height: 1;
+          text-transform: uppercase;
+          margin-bottom: 30px;
+          perspective: 1000px;
+        }
+
+        .letter-wrapper {
+          animation: letterFloat 3s ease-in-out infinite;
+          animation-delay: var(--delay);
+        }
+
+        .letter-3d {
+          background: linear-gradient(135deg, #00FFFF, #6366F1, #A855F7);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          text-shadow: 
+            0 0 40px rgba(0, 255, 255, 0.8),
+            0 0 80px rgba(99, 102, 241, 0.6),
+            0 0 120px rgba(168, 85, 247, 0.4);
+          filter: brightness(1.5);
+          animation: letterGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes letterFloat {
+          0%, 100% {
+            transform: translateY(0) rotateX(0) rotateY(0);
+          }
+          25% {
+            transform: translateY(-10px) rotateX(10deg) rotateY(-10deg);
+          }
+          75% {
+            transform: translateY(5px) rotateX(-5deg) rotateY(5deg);
+          }
+        }
+
+        @keyframes letterGlow {
+          from {
+            filter: brightness(1.5) contrast(1);
+          }
+          to {
+            filter: brightness(2) contrast(1.2);
+          }
+        }
+
+        .sub-header {
+          font-family: 'Inter', sans-serif;
+          font-weight: 600;
+          font-size: clamp(20px, 4vw, 32px);
+          background: linear-gradient(90deg, #60A5FA, #A855F7);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
           text-transform: uppercase;
-          margin-bottom: 24px;
-        }
-
-        .sub-header {
-          font-weight: 600;
-          font-size: clamp(24px, 5vw, 36px);
-          color: #60A5FA;
-          text-transform: uppercase;
-          margin-top: 24px;
-          margin-bottom: 16px;
+          margin-bottom: 20px;
           opacity: 0;
-          animation: fadeIn 1s 0.5s ease-out forwards;
+          animation: slideInBottom 1s 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+          letter-spacing: 0.1em;
         }
 
         .description {
           font-weight: 400;
-          font-size: clamp(16px, 3vw, 20px);
-          color: #D1D5DB;
-          max-width: 600px;
+          font-size: clamp(16px, 2.5vw, 22px);
+          color: rgba(209, 213, 219, 0.9);
+          max-width: 700px;
           line-height: 1.6;
-          margin: 24px auto 40px auto;
+          margin: 0 auto 50px;
           opacity: 0;
-          animation: fadeIn 1s 0.6s ease-out forwards;
+          animation: fadeIn 1s 0.7s ease-out forwards;
+          text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
         }
 
-        /* Кнопка из ТЗ с градиентом */
         .cta-button {
-          display: inline-block;
-          padding: 18px 40px;
-          border-radius: 50px;
-          border: none;
-          text-decoration: none;
-          font-size: 16px;
-          font-weight: 600;
-          color: #FFFFFF;
-          text-transform: uppercase;
-          background: linear-gradient(90deg, #6366F1, #A855F7);
-          box-shadow: 0 10px 30px -5px rgba(168, 85, 247, 0.4);
-          transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
-                      box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-          cursor: pointer;
           position: relative;
+          display: inline-block;
+          padding: 20px 50px;
+          font-family: 'Orbitron', monospace;
+          font-size: 18px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: #FFFFFF;
+          text-decoration: none;
+          background: transparent;
+          border: 2px solid transparent;
+          border-radius: 50px;
           overflow: hidden;
+          cursor: pointer;
+          transition: all 0.3s ease;
           opacity: 0;
-          animation: fadeIn 1s 0.8s ease-out forwards;
+          animation: pulseIn 1s 0.9s ease-out forwards;
         }
 
         .cta-button::before {
           content: '';
           position: absolute;
+          top: -2px;
+          left: -2px;
+          right: -2px;
+          bottom: -2px;
+          background: linear-gradient(45deg, #00FFFF, #6366F1, #A855F7, #00FFFF);
+          background-size: 400% 400%;
+          border-radius: 50px;
+          z-index: -2;
+          animation: gradientRotate 3s linear infinite;
+          filter: blur(5px);
+        }
+
+        .cta-button::after {
+          content: '';
+          position: absolute;
           top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, 
-            transparent, 
-            rgba(255, 255, 255, 0.3), 
-            transparent);
-          transition: left 0.6s;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(10, 5, 26, 0.9);
+          border-radius: 48px;
+          z-index: -1;
+          transition: background 0.3s ease;
         }
 
         .cta-button:hover {
           transform: translateY(-3px) scale(1.05);
-          box-shadow: 0 15px 35px -5px rgba(168, 85, 247, 0.5);
+          text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        }
+
+        .cta-button:hover::after {
+          background: rgba(10, 5, 26, 0.7);
         }
 
         .cta-button:hover::before {
-          left: 100%;
+          filter: blur(8px);
         }
 
-        /* Анимация букв из ТЗ */
-        .char {
-          position: relative;
-          display: inline-block;
-          opacity: 0;
-          transform: translateY(20px);
-          transition: opacity 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), 
-                      transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+        @keyframes gradientRotate {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
         }
 
-        .char.visible {
-          opacity: 1;
-          transform: translateY(0);
-        }
-
-        /* Анимации */
-        @keyframes fadeIn {
+        @keyframes slideInTop {
           from {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(-50px);
           }
           to {
             opacity: 1;
@@ -382,42 +576,77 @@ export default function NeuroExpertHero() {
           }
         }
 
-        @keyframes pulse {
-          0%, 100% {
-            transform: scale(1);
-            filter: brightness(1);
+        @keyframes slideInBottom {
+          from {
+            opacity: 0;
+            transform: translateY(50px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes pulseIn {
+          0% {
+            opacity: 0;
+            transform: scale(0.8);
           }
           50% {
-            transform: scale(1.05);
-            filter: brightness(1.2);
+            transform: scale(1.1);
           }
+          100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        /* Эффект глитча для заголовка */
+        @keyframes glitch {
+          0%, 100% {
+            text-shadow: 
+              0 0 40px rgba(0, 255, 255, 0.8),
+              0 0 80px rgba(99, 102, 241, 0.6);
+          }
+          20% {
+            text-shadow: 
+              2px 2px 40px rgba(255, 0, 255, 0.8),
+              -2px -2px 80px rgba(0, 255, 255, 0.6);
+          }
+          40% {
+            text-shadow: 
+              -2px 2px 40px rgba(0, 255, 255, 0.8),
+              2px -2px 80px rgba(255, 255, 0, 0.6);
+          }
+        }
+
+        .main-header:hover .letter-3d {
+          animation: glitch 0.3s ease-in-out infinite;
         }
 
         /* Мобильная адаптация */
         @media (max-width: 768px) {
-          .hero-content {
-            padding: 20px;
-          }
-
-          .pre-header {
-            font-size: 12px;
-          }
-
           .main-header {
-            font-size: clamp(36px, 8vw, 60px);
-          }
-
-          .sub-header {
-            font-size: clamp(18px, 4vw, 28px);
-          }
-
-          .description {
-            font-size: clamp(14px, 2.5vw, 18px);
+            font-size: clamp(40px, 10vw, 80px);
           }
 
           .cta-button {
-            padding: 16px 32px;
-            font-size: 14px;
+            padding: 16px 40px;
+            font-size: 16px;
+          }
+
+          .description {
+            font-size: 16px;
+            margin-bottom: 40px;
           }
         }
       `}</style>
