@@ -117,7 +117,7 @@ export default function ContactForm() {
 
   return (
     <section id="contact" style={{
-      padding: isMobile ? '40px 20px' : '80px 20px',
+      padding: isMobile ? '40px 0' : '80px 20px',
       background: 'linear-gradient(180deg, rgba(5, 7, 15, 0.9) 0%, rgba(15, 20, 40, 0.95) 100%)',
       position: 'relative',
       overflow: 'hidden',
@@ -147,6 +147,14 @@ export default function ContactForm() {
             font-size: 16px !important;
             -webkit-text-size-adjust: 100%;
           }
+          
+          #contact {
+            padding: 0 !important;
+          }
+          
+          #contact > div {
+            border-radius: 0 !important;
+          }
         }
       `}</style>
 
@@ -166,22 +174,24 @@ export default function ContactForm() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
         style={{
-          maxWidth: '600px',
+          maxWidth: isMobile ? '100%' : '600px',
           width: '100%',
           position: 'relative',
-          zIndex: 10
+          zIndex: 10,
+          padding: isMobile ? '0' : '0 20px'
         }}
         className={isMobile ? 'mobile-focused' : ''}
       >
         <h2 style={{
-          fontSize: isMobile ? '32px' : '48px',
+          fontSize: isMobile ? '28px' : '48px',
           fontWeight: '800',
           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           marginBottom: '16px',
           textAlign: 'center',
-          fontFamily: 'Inter, sans-serif'
+          fontFamily: 'Inter, sans-serif',
+          padding: isMobile ? '0 16px' : '0'
         }}>
           Начните трансформацию
         </h2>
@@ -190,9 +200,10 @@ export default function ContactForm() {
           fontSize: isMobile ? '16px' : '18px',
           color: '#94a3b8',
           textAlign: 'center',
-          marginBottom: '48px',
+          marginBottom: isMobile ? '32px' : '48px',
           lineHeight: '1.6',
-          fontFamily: 'Inter, sans-serif'
+          fontFamily: 'Inter, sans-serif',
+          padding: isMobile ? '0 16px' : '0'
         }}>
           Оставьте заявку и получите персональную консультацию по внедрению AI
         </p>
@@ -200,10 +211,13 @@ export default function ContactForm() {
         <div style={{
           background: 'rgba(17, 24, 39, 0.6)',
           backdropFilter: 'blur(20px)',
-          borderRadius: '24px',
-          padding: isMobile ? '32px 24px' : '48px',
-          border: '1px solid rgba(102, 126, 234, 0.2)',
-          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3)'
+          borderRadius: isMobile ? '0' : '24px',
+          padding: isMobile ? '32px 16px' : '48px',
+          border: isMobile ? 'none' : '1px solid rgba(102, 126, 234, 0.2)',
+          boxShadow: isMobile ? 'none' : '0 20px 40px rgba(0, 0, 0, 0.3)',
+          width: isMobile ? '100%' : 'auto',
+          maxWidth: isMobile ? '100%' : '600px',
+          minHeight: isMobile ? '100vh' : 'auto'
         }}>
           <div style={{
             display: 'flex',
