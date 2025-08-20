@@ -88,7 +88,7 @@ export default function ContactForm() {
           transition={{ duration: 0.6 }}
           className="contact-wrapper"
           style={{
-            maxWidth: isMobile ? '100%' : '600px',
+            maxWidth: isMobile ? '100%' : '800px',
             margin: '0 auto',
             padding: isMobile ? '0' : '0 20px'
           }}
@@ -114,6 +114,18 @@ export default function ContactForm() {
             }}>
               Оставьте заявку и мы свяжемся с вами в течение 15 минут
             </p>
+            <p style={{
+              fontSize: '14px',
+              color: '#48bb78',
+              marginTop: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px'
+            }}>
+              <span style={{ fontSize: '16px' }}>✅</span>
+              Уведомления в Telegram настроены
+            </p>
           </div>
 
           <motion.div
@@ -124,11 +136,11 @@ export default function ContactForm() {
               background: 'rgba(20, 20, 40, 0.8)',
               backdropFilter: 'blur(20px)',
               borderRadius: isMobile ? '0' : '24px',
-              padding: isMobile ? '32px 16px' : '48px',
+              padding: isMobile ? '32px 20px' : '56px',
               border: isMobile ? 'none' : '1px solid rgba(102, 126, 234, 0.2)',
               boxShadow: isMobile ? 'none' : '0 20px 40px rgba(0, 0, 0, 0.3)',
               width: isMobile ? '100%' : 'auto',
-              maxWidth: isMobile ? '100%' : '600px',
+              maxWidth: isMobile ? '100%' : '800px',
               minHeight: isMobile ? '100vh' : 'auto'
             }}
           >
@@ -181,67 +193,6 @@ export default function ContactForm() {
                   onChange={handleInputChange}
                   required
                   placeholder="+7 (999) 123-45-67"
-                  style={{
-                    width: '100%',
-                    padding: '16px',
-                    fontSize: '16px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '12px',
-                    color: 'white',
-                    transition: 'all 0.3s ease',
-                    outline: 'none'
-                  }}
-                />
-              </div>
-
-              <div style={{ marginBottom: '24px' }}>
-                <label style={{
-                  display: 'block',
-                  marginBottom: '8px',
-                  fontSize: '14px',
-                  color: '#a0a0a0',
-                  fontWeight: '500'
-                }}>
-                  Email *
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="ivan@company.ru"
-                  style={{
-                    width: '100%',
-                    padding: '16px',
-                    fontSize: '16px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '12px',
-                    color: 'white',
-                    transition: 'all 0.3s ease',
-                    outline: 'none'
-                  }}
-                />
-              </div>
-
-              <div style={{ marginBottom: '24px' }}>
-                <label style={{
-                  display: 'block',
-                  marginBottom: '8px',
-                  fontSize: '14px',
-                  color: '#a0a0a0',
-                  fontWeight: '500'
-                }}>
-                  Компания
-                </label>
-                <input
-                  type="text"
-                  name="company"
-                  value={formData.company}
-                  onChange={handleInputChange}
-                  placeholder="ООО Компания"
                   style={{
                     width: '100%',
                     padding: '16px',
