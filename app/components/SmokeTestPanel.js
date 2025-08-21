@@ -1113,6 +1113,8 @@ function SmokeTestPanel() {
   );
 }
 
-// Экспортируем для использования в других компонентах
+// DEPRECATED: Этот файл устарел и будет удален
+// Используйте новую модульную версию: import SmokeTestPanel from './SmokeTest'
+// Экспортируем для обратной совместимости
 export { globalSmokeTestRunner as SmokeTestRunner, SmokeTestPanel };
 export default SmokeTestPanel;
