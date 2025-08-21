@@ -1,6 +1,7 @@
 'use client';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ROIResults } from '../../types';
+import { useState, useEffect } from 'react';
 
 interface ROIResultModalProps {
   isOpen: boolean;
@@ -14,6 +15,15 @@ interface ROIResultModalProps {
 }
 
 export default function ROIResultModal({ isOpen, onClose, results, formData }: ROIResultModalProps) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 640);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
   const formatCurrency = (num: number): string => {
     return new Intl.NumberFormat('ru-RU', {
       style: 'currency',
@@ -73,17 +83,18 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             style={{
               position: 'fixed',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
+              top: isMobile ? 0 : '50%',
+              left: isMobile ? 0 : '50%',
+              transform: isMobile ? 'none' : 'translate(-50%, -50%)',
               background: 'linear-gradient(180deg, rgba(20, 20, 40, 0.95) 0%, rgba(30, 30, 60, 0.95) 100%)',
-              borderRadius: '32px',
-              padding: '48px',
-              border: '1px solid rgba(102, 126, 234, 0.3)',
-              boxShadow: '0 30px 60px rgba(0, 0, 0, 0.5)',
-              maxWidth: '800px',
-              width: '90%',
-              maxHeight: '90vh',
+              borderRadius: isMobile ? 0 : '32px',
+              padding: isMobile ? '24px 16px 32px' : '48px',
+              border: isMobile ? 'none' : '1px solid rgba(102, 126, 234, 0.3)',
+              boxShadow: isMobile ? 'none' : '0 30px 60px rgba(0, 0, 0, 0.5)',
+              maxWidth: isMobile ? '100%' : '800px',
+              width: isMobile ? '100%' : '90%',
+              height: isMobile ? '100vh' : 'auto',
+              maxHeight: isMobile ? '100vh' : '90vh',
               overflow: 'auto',
               zIndex: 1001
             }}
