@@ -29,9 +29,9 @@ const AdminPanel = dynamic(() => import('./components/AdminPanel'), {
   loading: () => <div>Загрузка админ-панели...</div>
 });
 
-const AIDirectorCapabilities = dynamic(() => import('./components/AIDirectorCapabilities'), {
+const AIManagerCapabilities = dynamic(() => import('./components/AIManagerCapabilities'), {
   ssr: false,
-  loading: () => <div className="loading-skeleton">Загрузка AI директора...</div>
+  loading: () => <div className="loading-skeleton">Загрузка AI дуправляющийа...</div>
 });
 
 export default function Home() {
@@ -40,9 +40,9 @@ export default function Home() {
       {/* Новый Hero блок с анимацией нейросети */}
       <NeuroExpertHero />
       
-      {/* AI Управляющий директор */}
+      {/* AI Управляющий дуправляющий */}
       <Suspense fallback={<div className="loading-skeleton">Загрузка...</div>}>
-        <AIDirectorCapabilities />
+        <AIManagerCapabilities />
       </Suspense>
       
       {/* Калькулятор ROI - сразу после Hero */}
@@ -85,7 +85,7 @@ export default function Home() {
               Попробуйте <span className="heading-gold">демо</span> прямо сейчас
             </h2>
             <p className="demo-description">
-              Наш цифровой директор покажет возможности платформы
+              Наш цифровой дуправляющий покажет возможности платформы
             </p>
             <button 
               className="btn-luxury btn-gold btn-large"
@@ -95,7 +95,7 @@ export default function Home() {
                   aiButton.click();
                 } else {
                   // Если кнопка AI еще не загрузилась, показываем алерт
-                  alert('AI директор загружается, попробуйте через секунду...');
+                  alert('AI дуправляющий загружается, попробуйте через секунду...');
                 }
               }}
             >
@@ -133,7 +133,7 @@ export default function Home() {
         </div>
       </section>
       
-      {/* AI Управляющий - Цифровой директор */}
+      {/* AI Управляющий - Цифровой дуправляющий */}
       <Suspense fallback={null}>
         <SmartFloatingAI />
       </Suspense>

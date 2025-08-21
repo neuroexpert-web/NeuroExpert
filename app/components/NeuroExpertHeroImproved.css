@@ -1,0 +1,248 @@
+/* Улучшенные стили для NeuroExpertHero */
+
+/* Основной контейнер Hero */
+.hero-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #0a0a0a;
+}
+
+/* Контент Hero */
+.hero-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px; /* Уменьшен отступ */
+}
+
+/* Предзаголовок */
+.pre-header {
+  font-size: clamp(0.875rem, 2vw, 1.125rem);
+  color: #64ffda;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 0.5rem;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
+  animation-delay: 0.2s;
+}
+
+/* Главный заголовок */
+.main-header {
+  font-size: clamp(2rem, 5vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #fff 0%, #64ffda 50%, #fff 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
+  animation-delay: 0.4s;
+}
+
+/* Подзаголовок */
+.sub-header {
+  font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 800px;
+  margin: 0 auto 2rem;
+  line-height: 1.6;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
+  animation-delay: 0.6s;
+}
+
+/* Анимация для букв */
+.letter-wrapper {
+  display: inline-block;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: letterFloat 3s ease-in-out infinite;
+}
+
+.letter-3d {
+  display: inline-block;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* Hover эффект для букв */
+.letter-wrapper:hover .letter-3d {
+  transform: translateY(-5px) rotateX(10deg) rotateY(10deg);
+  text-shadow: 
+    0 5px 10px rgba(100, 255, 218, 0.5),
+    0 10px 20px rgba(100, 255, 218, 0.3);
+}
+
+/* Кнопки */
+.hero-buttons {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 1rem;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
+  animation-delay: 0.8s;
+}
+
+.hero-button {
+  padding: 1rem 2.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-button.primary {
+  background: linear-gradient(135deg, #64ffda 0%, #00d4ff 100%);
+  color: #0a0a0a;
+  box-shadow: 0 5px 20px rgba(100, 255, 218, 0.4);
+}
+
+.hero-button.primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(100, 255, 218, 0.6);
+}
+
+.hero-button.secondary {
+  background: transparent;
+  color: #64ffda;
+  border: 2px solid #64ffda;
+}
+
+.hero-button.secondary:hover {
+  background: rgba(100, 255, 218, 0.1);
+  transform: translateY(-3px);
+}
+
+/* Фичи */
+.hero-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+  width: 100%;
+  max-width: 1000px;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
+  animation-delay: 1s;
+}
+
+.feature-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(100, 255, 218, 0.2);
+  border-radius: 15px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  background: rgba(100, 255, 218, 0.05);
+  border-color: rgba(100, 255, 218, 0.5);
+  box-shadow: 0 10px 30px rgba(100, 255, 218, 0.2);
+}
+
+/* Анимации */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes letterFloat {
+  0%, 100% {
+    transform: translateY(0) rotateX(0) rotateY(0);
+  }
+  25% {
+    transform: translateY(-2px) rotateX(2deg) rotateY(-2deg);
+  }
+  75% {
+    transform: translateY(2px) rotateX(-2deg) rotateY(2deg);
+  }
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .hero-content {
+    padding: 1rem;
+    gap: 15px;
+  }
+  
+  .main-header {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .sub-header {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .hero-buttons {
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
+  }
+  
+  .hero-button {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .hero-features {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+}
+
+/* Убираем лишние отступы */
+.hero-section > * {
+  margin-bottom: 0;
+}
+
+/* Исправляем высоту для полноэкранного отображения */
+@media (min-height: 700px) {
+  .hero-section {
+    min-height: 100vh;
+    padding-bottom: 0;
+  }
+}
+
+/* Плавный скролл */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Убираем отступы у body */
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}

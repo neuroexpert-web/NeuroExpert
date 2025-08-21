@@ -35,7 +35,7 @@ const Footer = dynamic(() => import('./components/Footer'));
 const PremiumHero = lazy(() => import('./components/PremiumHero'));
 const BenefitsShowcase = lazy(() => import('./components/BenefitsShowcase'));
 const PersonalizationModule = lazy(() => import('./components/PersonalizationModule'));
-const AIDirectorCapabilities = lazy(() => import('./components/AIDirectorCapabilities'));
+const AIManagerCapabilities = lazy(() => import('./components/AIManagerCapabilities'));
 const ConfirmationModal = lazy(() => import('./components/ConfirmationModal'));
 
 export default function OptimizedHome() {
@@ -51,10 +51,10 @@ export default function OptimizedHome() {
         <PremiumHero />
       </Suspense>
       
-      {/* AI Директор - загружается при прокрутке */}
+      {/* AI Дуправляющий - загружается при прокрутке */}
       <Suspense fallback={<div className="skeleton-section" />}>
         <section id="ai-director" className="py-20 px-4 bg-slate-900/50">
-          <AIDirectorCapabilities />
+          <AIManagerCapabilities />
         </section>
       </Suspense>
       

@@ -28,7 +28,13 @@
     "check:security": "bash scripts/security-check.sh",
     "lint:report": "eslint . --ext .js,.jsx,.ts,.tsx --format json --output-file eslint-report.json || true",
     "test:ci": "jest --ci --coverage --maxWorkers=2",
-    "sonar": "sonar-scanner"
+    "sonar": "sonar-scanner",
+    "analyze": "ANALYZE=true next build",
+    "build:analyze": "ANALYZE=true next build",
+    "build:profile": "NEXT_PROFILE=true next build",
+    "lighthouse": "npx lighthouse http://localhost:3000 --view",
+    "sitemap": "node scripts/generate-sitemap.js",
+    "seo:check": "npx lighthouse http://localhost:3000 --only-categories=seo"
   },
   "dependencies": {
     "@google/generative-ai": "^0.15.0",
