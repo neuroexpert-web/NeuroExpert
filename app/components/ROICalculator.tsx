@@ -43,17 +43,28 @@ export default function ROICalculator(): JSX.Element {
   };
 
   const calculateROI = async (): Promise<void> => {
-    const { businessSize, industry, budget } = formData;
-    
-    // Расчеты на основе множителей
-    const baseROI = sizeMultipliers[businessSize] * industryMultipliers[industry];
-    const roi = Math.round(baseROI * 100);
-    const savings = Math.round(budget * 0.35);
-    const growth = Math.round(budget * baseROI);
-    const payback = Math.round(budget / (savings / 12));
-    
-    setResults({ roi, savings, growth, payback });
-    setShowResult(true);
+    try {
+      const { businessSize, industry, budget } = formData;
+      
+      // Проверка на корректность данных
+      if (!budget || budget <= 0) {
+        alert('Пожалуйста, укажите корректный бюджет');
+        return;
+      }
+      
+      // Расчеты на основе множителей
+      const baseROI = sizeMultipliers[businessSize] * industryMultipliers[industry];
+      const roi = Math.round(baseROI * 100);
+      const savings = Math.round(budget * 0.35);
+      const growth = Math.round(budget * baseROI);
+      const payback = savings > 0 ? Math.round(budget / (savings / 12)) : 0;
+      
+      setResults({ roi, savings, growth, payback });
+      setShowResult(true);
+    } catch (error) {
+      console.error('Ошибка при расчете ROI:', error);
+      alert('Произошла ошибка при расчете. Попробуйте еще раз.');
+    }
   };
 
   const formatCurrency = (num: number): string => {
