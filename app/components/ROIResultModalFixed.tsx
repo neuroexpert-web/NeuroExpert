@@ -248,7 +248,7 @@ export default function ROIResultModalFixed({ isOpen, onClose, results, formData
                   gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', 
                   gap: isMobile ? '16px' : '24px' 
                 }}>
-                  {/* Annual Savings */}
+                  {/* Savings */}
                   <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -265,18 +265,18 @@ export default function ROIResultModalFixed({ isOpen, onClose, results, formData
                       marginBottom: '12px', 
                       fontSize: isMobile ? '16px' : '18px' 
                     }}>
-                      💰 Экономия в год
+                      💰 Экономия за 3 года
                     </h4>
                     <div style={{ 
                       fontSize: isMobile ? '24px' : '32px', 
                       fontWeight: '700', 
                       color: '#e0e7ff' 
                     }}>
-                      {formatCurrency(results.annualSavings)}
+                      {formatCurrency(results.savings)}
                     </div>
                   </motion.div>
 
-                  {/* Additional Revenue */}
+                  {/* Growth */}
                   <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -293,17 +293,46 @@ export default function ROIResultModalFixed({ isOpen, onClose, results, formData
                       marginBottom: '12px', 
                       fontSize: isMobile ? '16px' : '18px' 
                     }}>
-                      📈 Доп. доход в год
+                      📈 Рост выручки
                     </h4>
                     <div style={{ 
                       fontSize: isMobile ? '24px' : '32px', 
                       fontWeight: '700', 
                       color: '#e9d5ff' 
                     }}>
-                      {formatCurrency(results.additionalRevenue)}
+                      {formatCurrency(results.growth)}
                     </div>
                   </motion.div>
                 </div>
+
+                {/* Payback Period */}
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7 }}
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(237, 137, 54, 0.1) 0%, rgba(236, 201, 75, 0.1) 100%)',
+                    padding: isMobile ? '20px' : '24px',
+                    borderRadius: '16px',
+                    border: '1px solid rgba(237, 137, 54, 0.3)',
+                    textAlign: 'center'
+                  }}
+                >
+                  <h4 style={{ 
+                    color: '#ed8936', 
+                    marginBottom: '8px', 
+                    fontSize: isMobile ? '16px' : '18px' 
+                  }}>
+                    ⏰ Срок окупаемости
+                  </h4>
+                  <div style={{ 
+                    fontSize: isMobile ? '32px' : '40px', 
+                    fontWeight: '700', 
+                    color: '#fbd38d' 
+                  }}>
+                    {results.payback} мес.
+                  </div>
+                </motion.div>
               </div>
 
               {/* Benefits */}
@@ -326,10 +355,11 @@ export default function ROIResultModalFixed({ isOpen, onClose, results, formData
                 </h3>
                 <div style={{ display: 'grid', gap: '16px' }}>
                   {[
-                    { icon: '⏱️', text: `Экономия ${results.timeSaved} часов в месяц на рутинных операциях` },
-                    { icon: '🚀', text: `Рост эффективности бизнес-процессов на ${results.efficiencyGain}%` },
+                    { icon: '⏱️', text: `Экономия времени на рутинных операциях до 40%` },
+                    { icon: '🚀', text: `Рост эффективности бизнес-процессов на ${Math.round(results.roi / 3)}%` },
                     { icon: '💡', text: 'Автоматизация отчетности и аналитики' },
-                    { icon: '🎯', text: 'Персональный цифровой директор 24/7' }
+                    { icon: '🎯', text: 'Персональный цифровой директор 24/7' },
+                    { icon: '📊', text: `Окупаемость всего за ${results.payback} месяцев` }
                   ].map((benefit, index) => (
                     <motion.div
                       key={index}
