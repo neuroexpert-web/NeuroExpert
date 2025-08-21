@@ -1,0 +1,117 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #fbbf24;
+  --ifm-color-primary-dark: #f59e0b;
+  --ifm-color-primary-darker: #d97706;
+  --ifm-color-primary-darkest: #b45309;
+  --ifm-color-primary-light: #fcd34d;
+  --ifm-color-primary-lighter: #fde68a;
+  --ifm-color-primary-lightest: #fef3c7;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #fbbf24;
+  --ifm-color-primary-dark: #f59e0b;
+  --ifm-color-primary-darker: #d97706;
+  --ifm-color-primary-darkest: #b45309;
+  --ifm-color-primary-light: #fcd34d;
+  --ifm-color-primary-lighter: #fde68a;
+  --ifm-color-primary-lightest: #fef3c7;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --ifm-background-color: #0a0a0a;
+  --ifm-background-surface-color: #1a1a1a;
+}
+
+/* Custom styles for NeuroExpert docs */
+.hero {
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+  color: white;
+}
+
+.button--primary {
+  background: linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-dark) 100%);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.button--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(251, 191, 36, 0.3);
+}
+
+/* Code blocks */
+.prism-code {
+  background: #1a1a1a !important;
+  border: 1px solid #2a2a2a;
+}
+
+/* Tables */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+table th {
+  background: var(--ifm-color-primary-darkest);
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem;
+}
+
+table td {
+  padding: 0.75rem;
+  border: 1px solid var(--ifm-table-border-color);
+}
+
+/* Admonitions */
+.admonition {
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.admonition-note {
+  border-left-color: var(--ifm-color-primary);
+}
+
+/* Sidebar */
+.menu__link--active {
+  background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.1));
+  border-left: 3px solid var(--ifm-color-primary);
+}
+
+/* Search */
+.DocSearch-Button {
+  background: var(--ifm-background-surface-color) !important;
+  border: 1px solid var(--ifm-color-primary-darkest) !important;
+}
+
+/* Footer */
+.footer {
+  background: #0a0a0a;
+  border-top: 1px solid #2a2a2a;
+}
+
+/* Custom components */
+.feature-card {
+  background: var(--ifm-background-surface-color);
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border-color: var(--ifm-color-primary);
+}
