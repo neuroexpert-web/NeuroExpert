@@ -46,6 +46,7 @@ export default function ROICalculator(): JSX.Element {
   };
 
   const calculateROI = () => {
+    console.log('calculateROI called with formData:', formData);
     const { businessSize, industry, budget } = formData;
 
     // Расчеты на основе множителей
@@ -55,8 +56,10 @@ export default function ROICalculator(): JSX.Element {
     const growth = Math.round(budget * baseROI);
     const payback = Math.round(budget / (savings / 12));
 
+    console.log('Calculated results:', { roi, savings, growth, payback });
     setResults({ roi, savings, growth, payback });
     setShowResult(true);
+    console.log('Modal should be shown now, showResult:', true);
   };
 
   const formatCurrency = (num: number): string => {
@@ -218,7 +221,10 @@ export default function ROICalculator(): JSX.Element {
 
                 {/* Кнопка расчета */}
                 <motion.button
-                  onClick={calculateROI}
+                  onClick={() => {
+                    console.log('ROI Calculate button clicked');
+                    calculateROI();
+                  }}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   animate={{
@@ -246,6 +252,8 @@ export default function ROICalculator(): JSX.Element {
                     cursor: 'pointer',
                     marginTop: '32px',
                   }}
+                  type="button"
+                  className="roi-calculate-button"
                 >
                   Рассчитать ROI
                 </motion.button>

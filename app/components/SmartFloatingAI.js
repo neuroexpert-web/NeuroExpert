@@ -155,7 +155,7 @@ export default function SmartFloatingAI() {
       {/* Кнопка открытия чата */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`fixed bottom-8 right-8 z-50 p-4 rounded-full shadow-2xl transition-all duration-300 transform hover:scale-110 ${
+        className={`ai-float-button fixed bottom-8 right-8 z-50 p-4 rounded-full shadow-2xl transition-all duration-300 transform hover:scale-110 ${
           isOpen
             ? 'bg-red-600 hover:bg-red-700'
             : 'bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700'

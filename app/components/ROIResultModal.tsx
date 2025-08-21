@@ -13,32 +13,47 @@ interface ROIResultModalProps {
   };
 }
 
-export default function ROIResultModal({ isOpen, onClose, results, formData }: ROIResultModalProps) {
+export default function ROIResultModal({
+  isOpen,
+  onClose,
+  results,
+  formData,
+}: ROIResultModalProps) {
   const formatCurrency = (num: number): string => {
     return new Intl.NumberFormat('ru-RU', {
       style: 'currency',
       currency: 'RUB',
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(num);
   };
 
   const getBusinessSizeText = (size: string) => {
-    switch(size) {
-      case 'small': return 'Малый бизнес (до 50 сотрудников)';
-      case 'medium': return 'Средний бизнес (50-250 сотрудников)';
-      case 'large': return 'Крупный бизнес (250+ сотрудников)';
-      default: return size;
+    switch (size) {
+      case 'small':
+        return 'Малый бизнес (до 50 сотрудников)';
+      case 'medium':
+        return 'Средний бизнес (50-250 сотрудников)';
+      case 'large':
+        return 'Крупный бизнес (250+ сотрудников)';
+      default:
+        return size;
     }
   };
 
   const getIndustryText = (industry: string) => {
-    switch(industry) {
-      case 'retail': return 'Розничная торговля';
-      case 'services': return 'Услуги';
-      case 'production': return 'Производство';
-      case 'it': return 'IT и технологии';
-      case 'other': return 'Другое';
-      default: return industry;
+    switch (industry) {
+      case 'retail':
+        return 'Розничная торговля';
+      case 'services':
+        return 'Услуги';
+      case 'production':
+        return 'Производство';
+      case 'it':
+        return 'IT и технологии';
+      case 'other':
+        return 'Другое';
+      default:
+        return industry;
     }
   };
 
@@ -61,7 +76,7 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
               background: 'rgba(0, 0, 0, 0.8)',
               backdropFilter: 'blur(10px)',
               zIndex: 1000,
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
           />
 
@@ -71,12 +86,14 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 50 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className="roi-modal"
             style={{
               position: 'fixed',
-              top: '50%',
+              top: '5vh',
               left: '50%',
-              transform: 'translate(-50%, -50%)',
-              background: 'linear-gradient(180deg, rgba(20, 20, 40, 0.95) 0%, rgba(30, 30, 60, 0.95) 100%)',
+              transform: 'translateX(-50%)',
+              background:
+                'linear-gradient(180deg, rgba(20, 20, 40, 0.95) 0%, rgba(30, 30, 60, 0.95) 100%)',
               borderRadius: '32px',
               padding: '48px',
               border: '1px solid rgba(102, 126, 234, 0.3)',
@@ -84,8 +101,8 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
               maxWidth: '800px',
               width: '90%',
               maxHeight: '90vh',
-              overflow: 'auto',
-              zIndex: 1001
+              overflowY: 'auto',
+              zIndex: 1001,
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -99,15 +116,17 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
               >
                 🎉
               </motion.div>
-              <h2 style={{
-                fontSize: '36px',
-                fontWeight: '700',
-                marginBottom: '16px',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-              }}>
+              <h2
+                style={{
+                  fontSize: '36px',
+                  fontWeight: '700',
+                  marginBottom: '16px',
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                }}
+              >
                 Ваш потенциал роста
               </h2>
               <p style={{ color: '#a0a0a0', fontSize: '18px' }}>
@@ -125,7 +144,7 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                 padding: '24px',
                 borderRadius: '16px',
                 marginBottom: '32px',
-                border: '1px solid rgba(102, 126, 234, 0.2)'
+                border: '1px solid rgba(102, 126, 234, 0.2)',
               }}
             >
               <h3 style={{ color: '#667eea', marginBottom: '16px', fontSize: '20px' }}>
@@ -133,13 +152,16 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
               </h3>
               <div style={{ display: 'grid', gap: '12px' }}>
                 <div style={{ color: '#e0e7ff' }}>
-                  <span style={{ color: '#a0a0a0' }}>Размер компании:</span> {getBusinessSizeText(formData.businessSize)}
+                  <span style={{ color: '#a0a0a0' }}>Размер компании:</span>{' '}
+                  {getBusinessSizeText(formData.businessSize)}
                 </div>
                 <div style={{ color: '#e0e7ff' }}>
-                  <span style={{ color: '#a0a0a0' }}>Отрасль:</span> {getIndustryText(formData.industry)}
+                  <span style={{ color: '#a0a0a0' }}>Отрасль:</span>{' '}
+                  {getIndustryText(formData.industry)}
                 </div>
                 <div style={{ color: '#e0e7ff' }}>
-                  <span style={{ color: '#a0a0a0' }}>Инвестиции в цифровизацию:</span> {formatCurrency(formData.budget)}
+                  <span style={{ color: '#a0a0a0' }}>Инвестиции в цифровизацию:</span>{' '}
+                  {formatCurrency(formData.budget)}
                 </div>
               </div>
             </motion.div>
@@ -152,34 +174,41 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.4 }}
                 style={{
-                  background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2))',
+                  background:
+                    'linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2))',
                   padding: '32px',
                   borderRadius: '20px',
                   border: '1px solid rgba(102, 126, 234, 0.3)',
-                  textAlign: 'center'
+                  textAlign: 'center',
                 }}
               >
                 <h3 style={{ color: '#a0a0a0', marginBottom: '8px', fontSize: '18px' }}>
                   Возврат инвестиций (ROI)
                 </h3>
-                <div style={{
-                  fontSize: '64px',
-                  fontWeight: '700',
-                  background: 'linear-gradient(135deg, #667eea, #764ba2)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                  marginBottom: '8px'
-                }}>
+                <div
+                  style={{
+                    fontSize: '64px',
+                    fontWeight: '700',
+                    background: 'linear-gradient(135deg, #667eea, #764ba2)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                    marginBottom: '8px',
+                  }}
+                >
                   {results.roi}%
                 </div>
-                <p style={{ color: '#e0e7ff', fontSize: '16px' }}>
-                  за 3 года работы с нами
-                </p>
+                <p style={{ color: '#e0e7ff', fontSize: '16px' }}>за 3 года работы с нами</p>
               </motion.div>
 
               {/* Detailed Metrics */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                  gap: '16px',
+                }}
+              >
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -188,7 +217,7 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                     background: 'rgba(72, 187, 120, 0.1)',
                     padding: '24px',
                     borderRadius: '16px',
-                    border: '1px solid rgba(72, 187, 120, 0.3)'
+                    border: '1px solid rgba(72, 187, 120, 0.3)',
                   }}
                 >
                   <div style={{ color: '#48bb78', fontSize: '32px', marginBottom: '8px' }}>💰</div>
@@ -209,7 +238,7 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                     background: 'rgba(66, 153, 225, 0.1)',
                     padding: '24px',
                     borderRadius: '16px',
-                    border: '1px solid rgba(66, 153, 225, 0.3)'
+                    border: '1px solid rgba(66, 153, 225, 0.3)',
                   }}
                 >
                   <div style={{ color: '#4299e1', fontSize: '32px', marginBottom: '8px' }}>📈</div>
@@ -230,7 +259,7 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                     background: 'rgba(237, 137, 54, 0.1)',
                     padding: '24px',
                     borderRadius: '16px',
-                    border: '1px solid rgba(237, 137, 54, 0.3)'
+                    border: '1px solid rgba(237, 137, 54, 0.3)',
                   }}
                 >
                   <div style={{ color: '#ed8936', fontSize: '32px', marginBottom: '8px' }}>⏱️</div>
@@ -255,7 +284,7 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                 padding: '32px',
                 borderRadius: '20px',
                 marginBottom: '32px',
-                border: '1px solid rgba(118, 75, 162, 0.2)'
+                border: '1px solid rgba(118, 75, 162, 0.2)',
               }}
             >
               <h3 style={{ color: '#764ba2', marginBottom: '20px', fontSize: '24px' }}>
@@ -291,15 +320,29 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
               <p style={{ color: '#e0e7ff', marginBottom: '24px', fontSize: '18px' }}>
                 Готовы увеличить прибыль на {results.roi}%?
               </p>
-              <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <div
+                style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}
+              >
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => {
-                    import('@/app/utils/aiChat').then(({ openAIChat }) => {
-                      openAIChat(`Здравствуйте! Я рассчитал ROI и получил впечатляющие ${results.roi}% за 3 года. Хочу узнать подробнее о вашем предложении для ${getIndustryText(formData.industry)}.`);
-                    });
-                    onClose();
+                  onClick={async () => {
+                    try {
+                      console.log('Opening AI chat from ROI modal');
+                      const { openAIChat } = await import('@/app/utils/aiChat');
+                      openAIChat(
+                        `Здравствуйте! Я рассчитал ROI и получил впечатляющие ${results.roi}% за 3 года. Хочу узнать подробнее о вашем предложении для ${getIndustryText(formData.industry)}.`
+                      );
+                      onClose();
+                    } catch (error) {
+                      console.error('Error opening AI chat:', error);
+                      // Fallback - try to click the AI button directly
+                      const aiButton = document.querySelector('.ai-float-button');
+                      if (aiButton) {
+                        aiButton.click();
+                        onClose();
+                      }
+                    }
                   }}
                   style={{
                     padding: '16px 40px',
@@ -310,8 +353,9 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                     fontSize: '18px',
                     fontWeight: '600',
                     cursor: 'pointer',
-                    boxShadow: '0 10px 30px rgba(102, 126, 234, 0.3)'
+                    boxShadow: '0 10px 30px rgba(102, 126, 234, 0.3)',
                   }}
+                  type="button"
                 >
                   💬 Обсудить с AI директором
                 </motion.button>
@@ -319,7 +363,17 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => {
-                    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                    console.log('Scrolling to consultation form');
+                    const consultationSection = document.getElementById('consultation');
+                    if (consultationSection) {
+                      consultationSection.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                      // Try contact section as fallback
+                      const contactSection = document.getElementById('contact');
+                      if (contactSection) {
+                        contactSection.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }
                     onClose();
                   }}
                   style={{
@@ -330,8 +384,9 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                     color: '#667eea',
                     fontSize: '18px',
                     fontWeight: '600',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
                   }}
+                  type="button"
                 >
                   📞 Получить консультацию
                 </motion.button>
@@ -357,12 +412,22 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                 justifyContent: 'center',
                 cursor: 'pointer',
                 color: '#a0a0a0',
-                fontSize: '20px'
+                fontSize: '20px',
               }}
             >
               ✕
             </motion.button>
           </motion.div>
+          <style jsx>{`
+            @media (max-width: 768px) {
+              .roi-modal {
+                top: 2vh !important;
+                width: 95% !important;
+                padding: 24px !important;
+                max-height: 96vh !important;
+              }
+            }
+          `}</style>
         </>
       )}
     </AnimatePresence>

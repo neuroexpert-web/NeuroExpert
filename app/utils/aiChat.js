@@ -3,24 +3,30 @@
  * Утилита для управления диалогом с AI ассистентом
  */
 
-export const openAIChat = (message) => {
-  // Создаем кастомное событие для открытия чата
-  const event = new CustomEvent('openAIChat', {
-    detail: message ? { message } : null
-  });
-  
-  // Отправляем событие
-  window.dispatchEvent(event);
-  
-  // Отправляем аналитику
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', 'open_ai_chat', {
-      event_category: 'engagement',
-      event_label: message ? 'with_message' : 'direct_open',
-      value: 1
-    });
+export function openAIChat(message) {
+  // Находим кнопку AI чата
+  const aiButton = document.querySelector('.ai-float-button');
+
+  if (aiButton) {
+    // Кликаем по кнопке чтобы открыть чат
+    aiButton.click();
+
+    // Если передано сообщение, устанавливаем его в поле ввода
+    if (message) {
+      setTimeout(() => {
+        const input = document.querySelector('input[placeholder*="вопрос"]');
+        if (input) {
+          input.value = message;
+          // Триггерим событие изменения
+          const event = new Event('input', { bubbles: true });
+          input.dispatchEvent(event);
+        }
+      }, 500);
+    }
+  } else {
+    console.warn('AI чат еще не загружен');
   }
-};
+}
 
 // Предустановленные сообщения для разных сценариев
 export const AI_CHAT_MESSAGES = {
@@ -30,7 +36,7 @@ export const AI_CHAT_MESSAGES = {
   CONTACT_SUPPORT: 'Нужна консультация по внедрению NeuroExpert',
   CUSTOM_SOLUTION: 'Нужно индивидуальное решение для моей компании',
   DEMO_REQUEST: 'Хочу посмотреть демо платформы',
-  TECHNICAL_QUESTION: 'У меня технический вопрос по интеграции'
+  TECHNICAL_QUESTION: 'У меня технический вопрос по интеграции',
 };
 
 // Хелпер для быстрого открытия чата с предустановленным сообщением

@@ -3598,3 +3598,105 @@ button:disabled {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* КРИТИЧЕСКИЕ ИСПРАВЛЕНИЯ UI */
+
+/* Исправление кнопок */
+button {
+  cursor: pointer !important;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:disabled {
+  cursor: not-allowed !important;
+  opacity: 0.6;
+}
+
+/* Исправление модальных окон */
+[style*='position: fixed'] {
+  z-index: 9999 !important;
+}
+
+/* Исправление калькулятора */
+#roi-calculator button {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+/* Исправление AI чата */
+.ai-float-button {
+  z-index: 10000 !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+}
+
+/* Исправление заголовков на главной */
+h1,
+h2,
+h3 {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.main-header {
+  font-size: clamp(48px, 8vw, 120px) !important;
+  line-height: 1.1 !important;
+}
+
+/* Мобильные исправления */
+@media (max-width: 768px) {
+  .main-header {
+    font-size: clamp(36px, 10vw, 60px) !important;
+  }
+
+  .sub-header {
+    font-size: clamp(18px, 5vw, 24px) !important;
+  }
+
+  .description {
+    font-size: 16px !important;
+    padding: 0 20px;
+  }
+
+  /* Модальные окна на мобильных */
+  [style*='position: fixed'][style*='max-width'] {
+    max-width: 95% !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+  }
+
+  /* AI чат на мобильных */
+  .ai-float-button {
+    bottom: 20px !important;
+    right: 20px !important;
+  }
+}
+
+/* Анимации для кнопок */
+button:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+button:not(:disabled):active {
+  transform: translateY(0);
+  transition: all 0.1s ease;
+}
+
+/* Исправление z-index конфликтов */
+.hero-section {
+  position: relative;
+  z-index: 1;
+}
+
+.neural-canvas {
+  position: absolute !important;
+  z-index: 0 !important;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
