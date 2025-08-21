@@ -31,7 +31,7 @@ const AdminPanel = dynamic(() => import('./components/AdminPanel'), {
 
 const AIDirectorCapabilities = dynamic(() => import('./components/AIDirectorCapabilities'), {
   ssr: false,
-  loading: () => <div className="loading-skeleton">Загрузка AI директора...</div>
+  loading: () => <div className="loading-skeleton">Загрузка AI управляющего платформы...</div>
 });
 
 export default function Home() {
@@ -40,7 +40,7 @@ export default function Home() {
       {/* Новый Hero блок с анимацией нейросети */}
       <NeuroExpertHero />
       
-      {/* AI Управляющий директор */}
+      {/* AI Управляющий платформы */}
       <Suspense fallback={<div className="loading-skeleton">Загрузка...</div>}>
         <AIDirectorCapabilities />
       </Suspense>
@@ -85,7 +85,7 @@ export default function Home() {
               Попробуйте <span className="heading-gold">демо</span> прямо сейчас
             </h2>
             <p className="demo-description">
-              Наш цифровой директор покажет возможности платформы
+              Наш AI управляющий платформы покажет возможности
             </p>
             <button 
               className="btn-luxury btn-gold btn-large"
@@ -95,7 +95,7 @@ export default function Home() {
                   aiButton.click();
                 } else {
                   // Если кнопка AI еще не загрузилась, показываем алерт
-                  alert('AI директор загружается, попробуйте через секунду...');
+                  alert('AI управляющий платформы загружается, попробуйте через секунду...');
                 }
               }}
             >
@@ -133,7 +133,7 @@ export default function Home() {
         </div>
       </section>
       
-      {/* AI Управляющий - Цифровой директор */}
+      {/* AI Управляющий платформы */}
       <Suspense fallback={null}>
         <SmartFloatingAI />
       </Suspense>

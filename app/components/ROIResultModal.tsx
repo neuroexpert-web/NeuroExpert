@@ -313,7 +313,7 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                     boxShadow: '0 10px 30px rgba(102, 126, 234, 0.3)'
                   }}
                 >
-                  💬 Обсудить с AI директором
+                  💬 Обсудить с AI управляющим платформы
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.05 }}

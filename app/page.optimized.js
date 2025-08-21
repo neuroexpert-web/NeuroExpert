@@ -51,7 +51,7 @@ export default function OptimizedHome() {
         <PremiumHero />
       </Suspense>
       
-      {/* AI Директор - загружается при прокрутке */}
+      {/* AI Управляющий платформы - загружается при прокрутке */}
       <Suspense fallback={<div className="skeleton-section" />}>
         <section id="ai-director" className="py-20 px-4 bg-slate-900/50">
           <AIDirectorCapabilities />

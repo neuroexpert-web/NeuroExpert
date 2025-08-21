@@ -74,7 +74,7 @@ export default function Home() {
               Попробуйте <span className="heading-gold">демо</span> прямо сейчас
             </h2>
             <p className="demo-description">
-              Наш цифровой директор покажет возможности платформы
+              Наш AI управляющий платформы покажет возможности
             </p>
             <button 
               className="btn-luxury btn-gold btn-large"
@@ -117,7 +117,7 @@ export default function Home() {
         </div>
       </section>
       
-      {/* AI Управляющий - Цифровой директор */}
+      {/* AI Управляющий платформы */}
       <Suspense fallback={null}>
         <SmartFloatingAI />
       </Suspense>
