@@ -1,0 +1,126 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    if: github.event.repository.fork == false
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Create Release Pull Request or Publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: npm run release
+          title: "chore: version packages"
+          commit: "chore: version packages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Generate Changelog
+        if: steps.changesets.outputs.published == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: releases } = await github.rest.repos.listReleases({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 2
+            });
+            
+            if (releases.length < 2) return;
+            
+            const [currentRelease, previousRelease] = releases;
+            
+            // Get commits between releases
+            const { data: commits } = await github.rest.repos.compareCommits({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              base: previousRelease.tag_name,
+              head: currentRelease.tag_name
+            });
+            
+            // Group commits by type
+            const groups = {
+              feat: { title: '✨ Features', commits: [] },
+              fix: { title: '🐛 Bug Fixes', commits: [] },
+              docs: { title: '📝 Documentation', commits: [] },
+              style: { title: '💄 Styles', commits: [] },
+              refactor: { title: '♻️ Code Refactoring', commits: [] },
+              perf: { title: '⚡ Performance Improvements', commits: [] },
+              test: { title: '✅ Tests', commits: [] },
+              chore: { title: '🔧 Chores', commits: [] },
+              security: { title: '🔒 Security', commits: [] },
+              ci: { title: '👷 CI/CD', commits: [] },
+              other: { title: '📦 Other Changes', commits: [] }
+            };
+            
+            // Parse commits
+            commits.commits.forEach(commit => {
+              const message = commit.commit.message;
+              const match = message.match(/^(\w+)(?:\(([^)]+)\))?: (.+)/);
+              
+              if (match) {
+                const [, type, scope, description] = match;
+                const group = groups[type] || groups.other;
+                group.commits.push({
+                  sha: commit.sha.substring(0, 7),
+                  scope,
+                  description,
+                  author: commit.author?.login || commit.commit.author.name
+                });
+              } else {
+                groups.other.commits.push({
+                  sha: commit.sha.substring(0, 7),
+                  description: message.split('\n')[0],
+                  author: commit.author?.login || commit.commit.author.name
+                });
+              }
+            });
+            
+            // Generate changelog
+            let changelog = `# Release ${currentRelease.tag_name}\n\n`;
+            changelog += `🗓️ ${new Date(currentRelease.created_at).toLocaleDateString()}\n\n`;
+            
+            Object.values(groups).forEach(group => {
+              if (group.commits.length > 0) {
+                changelog += `## ${group.title}\n\n`;
+                group.commits.forEach(commit => {
+                  const scope = commit.scope ? `**${commit.scope}:** ` : '';
+                  changelog += `- ${scope}${commit.description} (${commit.sha}) @${commit.author}\n`;
+                });
+                changelog += '\n';
+              }
+            });
+            
+            // Update release notes
+            await github.rest.repos.updateRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: currentRelease.id,
+              body: changelog
+            });
+            
+            console.log('Changelog generated successfully!');

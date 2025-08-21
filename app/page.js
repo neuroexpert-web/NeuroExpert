@@ -11,62 +11,71 @@ import PricingSection from './components/PricingSection';
 // Динамические импорты для оптимизации
 const ROICalculator = dynamic(() => import('./components/ROICalculator'), {
   ssr: false,
-  loading: () => <div className="loading-skeleton">Загрузка калькулятора ROI...</div>
+  loading: () => <div className="loading-skeleton">Загрузка калькулятора ROI...</div>,
 });
 
 const SmartFloatingAI = dynamic(() => import('./components/SmartFloatingAI'), {
   ssr: false,
-  loading: () => <div className="ai-loading">AI управляющий загружается...</div>
+  loading: () => <div className="ai-loading">AI управляющий загружается...</div>,
 });
 
 const ContactForm = dynamic(() => import('./components/ContactForm'), {
   ssr: false,
-  loading: () => <div className="loading-skeleton">Загрузка формы...</div>
+  loading: () => <div className="loading-skeleton">Загрузка формы...</div>,
 });
 
 const AdminPanel = dynamic(() => import('./components/AdminPanel'), {
   ssr: false,
-  loading: () => <div>Загрузка админ-панели...</div>
+  loading: () => <div>Загрузка админ-панели...</div>,
 });
 
 const AIDirectorCapabilities = dynamic(() => import('./components/AIDirectorCapabilities'), {
   ssr: false,
-  loading: () => <div className="loading-skeleton">Загрузка AI директора...</div>
+  loading: () => <div className="loading-skeleton">Загрузка AI директора...</div>,
 });
 
 export default function Home() {
   return (
-    <main className="premium-main" style={{ background: 'var(--noir-900)', minHeight: '100vh' }}>
+    <main className="premium-main" style={{ background: '#0a0a0a', minHeight: '100vh' }}>
       {/* Новый Hero блок с анимацией нейросети */}
       <NeuroExpertHero />
-      
+
       {/* AI Управляющий директор */}
       <Suspense fallback={<div className="loading-skeleton">Загрузка...</div>}>
         <AIDirectorCapabilities />
       </Suspense>
-      
-      {/* Ваш простой путь к результату */}
-      <JourneySection />
-      
-      {/* Почему NeuroExpert */}
-      <section id="why-us">
-        <WhyUsSection />
-      </section>
-      
-      {/* Тарифы */}
-      <section id="pricing">
-        <PricingSection />
-      </section>
-      
-      {/* Калькулятор ROI */}
-      <section className="roi-section" id="benefits">
+
+      {/* Калькулятор ROI - ПОСЛЕ AI управляющего */}
+      <section
+        className="roi-section"
+        id="calculator"
+        style={{ padding: '80px 0', background: 'rgba(20, 20, 40, 0.5)' }}
+      >
         <div className="container">
           <div className="section-header">
-            <h2 className="heading-luxury">
-              Рассчитайте вашу <span className="heading-gold">выгоду</span>
+            <h2
+              style={{
+                fontSize: 'clamp(32px, 5vw, 48px)',
+                fontWeight: '700',
+                marginBottom: '16px',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                textAlign: 'center',
+              }}
+            >
+              Рассчитайте вашу выгоду
             </h2>
-            <p className="section-subtitle">
-              Узнайте, сколько вы сэкономите с нашими решениями
+            <p
+              style={{
+                fontSize: '20px',
+                color: '#a0a0a0',
+                textAlign: 'center',
+                marginBottom: '40px',
+              }}
+            >
+              Узнайте, сколько вы сэкономите с нашими AI решениями
             </p>
           </div>
           <div className="roi-wrapper">
@@ -76,7 +85,20 @@ export default function Home() {
           </div>
         </div>
       </section>
-      
+
+      {/* Ваш простой путь к результату */}
+      <JourneySection />
+
+      {/* Почему NeuroExpert */}
+      <section id="why-us">
+        <WhyUsSection />
+      </section>
+
+      {/* Тарифы */}
+      <section id="pricing">
+        <PricingSection />
+      </section>
+
       {/* Демо секция */}
       <section className="demo-section" id="demo">
         <div className="container">
@@ -84,10 +106,8 @@ export default function Home() {
             <h2 className="heading-luxury">
               Попробуйте <span className="heading-gold">демо</span> прямо сейчас
             </h2>
-            <p className="demo-description">
-              Наш цифровой директор покажет возможности платформы
-            </p>
-            <button 
+            <p className="demo-description">Наш цифровой директор покажет возможности платформы</p>
+            <button
               className="btn-luxury btn-gold btn-large"
               onClick={() => {
                 const aiButton = document.querySelector('.ai-float-button');
@@ -105,7 +125,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      
+
       {/* Консультация */}
       <section className="consultation-section" id="consultation">
         <div className="container">
@@ -132,12 +152,12 @@ export default function Home() {
           </div>
         </div>
       </section>
-      
+
       {/* AI Управляющий - Цифровой директор */}
       <Suspense fallback={null}>
         <SmartFloatingAI />
       </Suspense>
-      
+
       {/* Админ панель (скрыта по умолчанию) */}
       {process.env.NODE_ENV === 'development' && (
         <Suspense fallback={null}>
@@ -279,8 +299,13 @@ export default function Home() {
         }
 
         @keyframes pulse {
-          0%, 100% { opacity: 0.6; }
-          50% { opacity: 1; }
+          0%,
+          100% {
+            opacity: 0.6;
+          }
+          50% {
+            opacity: 1;
+          }
         }
 
         /* Responsive */

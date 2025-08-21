@@ -8,59 +8,65 @@ export default function ROICalculator(): JSX.Element {
   const [formData, setFormData] = useState<ROIFormData>({
     businessSize: 'small',
     industry: 'retail',
-    budget: 200000
+    budget: 200000,
   });
-  
+
   const [showResult, setShowResult] = useState<boolean>(false);
   const [results, setResults] = useState<ROIResults>({
     roi: 0,
     savings: 0,
     growth: 0,
-    payback: 0
+    payback: 0,
   });
 
   // Множители для расчета
   const sizeMultipliers: Record<ROIFormData['businessSize'], number> = {
     small: 3.2,
     medium: 4.5,
-    large: 6.0
+    large: 6.0,
   };
-  
+
   const industryMultipliers: Record<ROIFormData['industry'], number> = {
     retail: 1.2,
     services: 1.3,
     production: 1.1,
     it: 1.5,
-    other: 1.0
+    other: 1.0,
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: name === 'budget' ? Number(value) : value
-    } as ROIFormData));
+    setFormData(
+      (prev) =>
+        ({
+          ...prev,
+          [name]: name === 'budget' ? Number(value) : value,
+        }) as ROIFormData
+    );
   };
 
-  const calculateROI = async (): Promise<void> => {
+  const calculateROI = () => {
+    console.log('calculateROI called with formData:', formData);
     const { businessSize, industry, budget } = formData;
-    
+
     // Расчеты на основе множителей
     const baseROI = sizeMultipliers[businessSize] * industryMultipliers[industry];
     const roi = Math.round(baseROI * 100);
     const savings = Math.round(budget * 0.35);
     const growth = Math.round(budget * baseROI);
     const payback = Math.round(budget / (savings / 12));
-    
+
+    console.log('Calculated results:', { roi, savings, growth, payback });
     setResults({ roi, savings, growth, payback });
     setShowResult(true);
+    console.log('Modal should be shown now, showResult:', true);
   };
 
   const formatCurrency = (num: number): string => {
     return new Intl.NumberFormat('ru-RU', {
       style: 'currency',
       currency: 'RUB',
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(num);
   };
 
@@ -74,18 +80,18 @@ export default function ROICalculator(): JSX.Element {
           className="text-center mb-12"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span style={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
-            }}>
+            <span
+              style={{
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+            >
               Калькулятор ROI
             </span>
           </h2>
-          <p className="text-xl text-gray-400">
-            Узнайте вашу выгоду от внедрения наших решений
-          </p>
+          <p className="text-xl text-gray-400">Узнайте вашу выгоду от внедрения наших решений</p>
         </motion.div>
 
         <motion.div
@@ -98,7 +104,7 @@ export default function ROICalculator(): JSX.Element {
             borderRadius: '32px',
             padding: '48px',
             border: '1px solid rgba(102, 126, 234, 0.3)',
-            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3), 0 0 40px rgba(102, 126, 234, 0.2)'
+            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3), 0 0 40px rgba(102, 126, 234, 0.2)',
           }}
         >
           <div className="grid md:grid-cols-2 gap-8">
@@ -107,7 +113,7 @@ export default function ROICalculator(): JSX.Element {
               <h3 className="text-2xl font-bold mb-6" style={{ color: '#e0e7ff' }}>
                 Введите данные о вашем бизнесе
               </h3>
-              
+
               <div className="space-y-6">
                 {/* Размер бизнеса */}
                 <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
@@ -127,14 +133,20 @@ export default function ROICalculator(): JSX.Element {
                       color: 'white',
                       fontSize: '16px',
                       outline: 'none',
-                      transition: 'all 0.3s ease'
+                      transition: 'all 0.3s ease',
                     }}
-                    onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
-                    onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
+                    onFocus={(e) => (e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)')}
+                    onBlur={(e) => (e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)')}
                   >
-                    <option value="small" style={{ background: '#1a1a2e' }}>Малый (до 50 сотрудников)</option>
-                    <option value="medium" style={{ background: '#1a1a2e' }}>Средний (50-250 сотрудников)</option>
-                    <option value="large" style={{ background: '#1a1a2e' }}>Крупный (250+ сотрудников)</option>
+                    <option value="small" style={{ background: '#1a1a2e' }}>
+                      Малый (до 50 сотрудников)
+                    </option>
+                    <option value="medium" style={{ background: '#1a1a2e' }}>
+                      Средний (50-250 сотрудников)
+                    </option>
+                    <option value="large" style={{ background: '#1a1a2e' }}>
+                      Крупный (250+ сотрудников)
+                    </option>
                   </select>
                 </motion.div>
 
@@ -156,16 +168,26 @@ export default function ROICalculator(): JSX.Element {
                       color: 'white',
                       fontSize: '16px',
                       outline: 'none',
-                      transition: 'all 0.3s ease'
+                      transition: 'all 0.3s ease',
                     }}
-                    onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
-                    onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
+                    onFocus={(e) => (e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)')}
+                    onBlur={(e) => (e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)')}
                   >
-                    <option value="retail" style={{ background: '#1a1a2e' }}>Розничная торговля</option>
-                    <option value="services" style={{ background: '#1a1a2e' }}>Услуги</option>
-                    <option value="production" style={{ background: '#1a1a2e' }}>Производство</option>
-                    <option value="it" style={{ background: '#1a1a2e' }}>IT и технологии</option>
-                    <option value="other" style={{ background: '#1a1a2e' }}>Другое</option>
+                    <option value="retail" style={{ background: '#1a1a2e' }}>
+                      Розничная торговля
+                    </option>
+                    <option value="services" style={{ background: '#1a1a2e' }}>
+                      Услуги
+                    </option>
+                    <option value="production" style={{ background: '#1a1a2e' }}>
+                      Производство
+                    </option>
+                    <option value="it" style={{ background: '#1a1a2e' }}>
+                      IT и технологии
+                    </option>
+                    <option value="other" style={{ background: '#1a1a2e' }}>
+                      Другое
+                    </option>
                   </select>
                 </motion.div>
 
@@ -190,30 +212,33 @@ export default function ROICalculator(): JSX.Element {
                       color: 'white',
                       fontSize: '16px',
                       outline: 'none',
-                      transition: 'all 0.3s ease'
+                      transition: 'all 0.3s ease',
                     }}
-                    onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
-                    onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
+                    onFocus={(e) => (e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)')}
+                    onBlur={(e) => (e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)')}
                   />
                 </motion.div>
 
                 {/* Кнопка расчета */}
                 <motion.button
-                  onClick={calculateROI}
+                  onClick={() => {
+                    console.log('ROI Calculate button clicked');
+                    calculateROI();
+                  }}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   animate={{
                     boxShadow: [
                       '0 0 20px rgba(102, 126, 234, 0.4)',
                       '0 0 40px rgba(118, 75, 162, 0.6)',
-                      '0 0 20px rgba(102, 126, 234, 0.4)'
-                    ]
+                      '0 0 20px rgba(102, 126, 234, 0.4)',
+                    ],
                   }}
                   transition={{
                     boxShadow: {
                       duration: 2,
-                      repeat: Infinity
-                    }
+                      repeat: Infinity,
+                    },
                   }}
                   style={{
                     width: '100%',
@@ -225,14 +250,15 @@ export default function ROICalculator(): JSX.Element {
                     fontSize: '18px',
                     fontWeight: '700',
                     cursor: 'pointer',
-                    marginTop: '32px'
+                    marginTop: '32px',
                   }}
+                  type="button"
+                  className="roi-calculate-button"
                 >
                   Рассчитать ROI
                 </motion.button>
               </div>
             </div>
-
           </div>
         </motion.div>
 

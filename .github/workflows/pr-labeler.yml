@@ -1,0 +1,104 @@
+name: PR Labeler
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  label:
+    name: Label PR based on title
+    runs-on: ubuntu-latest
+    steps:
+      - name: Label PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = context.payload.pull_request.title;
+            const labels = [];
+            
+            // Type labels
+            if (title.startsWith('feat:') || title.includes('feat(')) labels.push('feature');
+            if (title.startsWith('fix:') || title.includes('fix(')) labels.push('bug');
+            if (title.startsWith('docs:') || title.includes('docs(')) labels.push('documentation');
+            if (title.startsWith('style:') || title.includes('style(')) labels.push('style');
+            if (title.startsWith('refactor:') || title.includes('refactor(')) labels.push('refactor');
+            if (title.startsWith('perf:') || title.includes('perf(')) labels.push('performance');
+            if (title.startsWith('test:') || title.includes('test(')) labels.push('test');
+            if (title.startsWith('chore:') || title.includes('chore(')) labels.push('chore');
+            if (title.startsWith('ci:') || title.includes('ci(')) labels.push('ci/cd');
+            if (title.startsWith('security:') || title.includes('security(')) labels.push('security');
+            
+            // Scope labels
+            if (title.includes('(api)')) labels.push('scope: api');
+            if (title.includes('(ui)')) labels.push('scope: ui');
+            if (title.includes('(auth)')) labels.push('scope: auth');
+            if (title.includes('(deps)')) labels.push('dependencies');
+            if (title.includes('(sentry)')) labels.push('monitoring');
+            if (title.includes('(deploy)')) labels.push('deployment');
+            
+            // Size labels based on changed files
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+            
+            const additions = pr.additions;
+            const deletions = pr.deletions;
+            const total = additions + deletions;
+            
+            if (total < 10) labels.push('size: XS');
+            else if (total < 50) labels.push('size: S');
+            else if (total < 150) labels.push('size: M');
+            else if (total < 500) labels.push('size: L');
+            else labels.push('size: XL');
+            
+            // Add labels to PR
+            if (labels.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                labels: labels
+              });
+            }
+            
+            console.log(`Added labels: ${labels.join(', ')}`);
+      
+      - name: Auto-assign reviewers
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = context.payload.pull_request.title;
+            const reviewers = [];
+            
+            // Assign reviewers based on type/scope
+            // Customize this based on your team structure
+            if (title.includes('security') || title.includes('auth')) {
+              // Add security team reviewers
+              // reviewers.push('security-reviewer');
+            }
+            
+            if (title.includes('api') || title.includes('backend')) {
+              // Add backend team reviewers
+              // reviewers.push('backend-reviewer');
+            }
+            
+            if (title.includes('ui') || title.includes('frontend')) {
+              // Add frontend team reviewers
+              // reviewers.push('frontend-reviewer');
+            }
+            
+            // Only request reviewers if there are any to add
+            if (reviewers.length > 0) {
+              await github.rest.pulls.requestReviewers({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.issue.number,
+                reviewers: reviewers
+              });
+            }

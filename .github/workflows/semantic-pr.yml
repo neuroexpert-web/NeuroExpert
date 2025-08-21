@@ -1,0 +1,127 @@
+name: Semantic Pull Request
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - synchronize
+
+permissions:
+  pull-requests: read
+  statuses: write
+
+jobs:
+  semantic-pr:
+    name: Validate PR title
+    runs-on: ubuntu-latest
+    steps:
+      - name: Semantic Pull Request
+        uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # Configure which types are allowed
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            perf
+            test
+            chore
+            revert
+            ci
+            build
+            security
+          # Configure which scopes are allowed
+          scopes: |
+            api
+            ui
+            auth
+            deps
+            config
+            docs
+            tests
+            ci
+            sentry
+            deploy
+            security
+            performance
+          # Require scope
+          requireScope: false
+          # Disable validation of the PR body
+          validateSingleCommit: false
+          # Custom error messages
+          subjectPattern: ^(?![A-Z]).+$
+          subjectPatternError: |
+            The subject "{subject}" found in the pull request title "{title}"
+            didn't match the configured pattern. Please ensure that the subject
+            doesn't start with an uppercase character.
+          
+      - name: Check PR Title Examples
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = context.payload.pull_request.title;
+            const comment = `
+            ❌ **Pull Request title doesn't follow the Conventional Commits specification**
+            
+            Current title: \`${title}\`
+            
+            ### Valid format:
+            \`<type>(<scope>): <subject>\`
+            
+            ### Examples of valid titles:
+            - \`feat: add user authentication\`
+            - \`feat(auth): implement JWT tokens\`
+            - \`fix: resolve memory leak in worker\`
+            - \`fix(api): handle null response correctly\`
+            - \`docs: update API documentation\`
+            - \`style: format code with prettier\`
+            - \`refactor(ui): simplify component structure\`
+            - \`perf: optimize image loading\`
+            - \`test: add unit tests for auth service\`
+            - \`chore: update dependencies\`
+            - \`chore(deps): bump next.js to v14\`
+            - \`ci: add semantic PR validation\`
+            - \`security: fix XSS vulnerability\`
+            
+            ### Allowed types:
+            - **feat**: A new feature
+            - **fix**: A bug fix
+            - **docs**: Documentation only changes
+            - **style**: Code style changes (formatting, etc)
+            - **refactor**: Code change that neither fixes a bug nor adds a feature
+            - **perf**: Performance improvements
+            - **test**: Adding or updating tests
+            - **chore**: Maintenance tasks
+            - **revert**: Revert a previous commit
+            - **ci**: Changes to CI configuration
+            - **build**: Changes to build system
+            - **security**: Security improvements
+            
+            Please update your PR title to match the format.
+            `;
+            
+            // Check if we already commented
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            const botComment = comments.find(comment => 
+              comment.user.type === 'Bot' && comment.body.includes('Pull Request title doesn\'t follow')
+            );
+            
+            if (!botComment) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: comment
+              });
+            }
