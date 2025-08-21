@@ -853,8 +853,8 @@ export default function NeuroExpertHero() {
           letter-spacing: 0.4em;
           text-transform: uppercase;
           margin-bottom: 50px;
-          opacity: 0;
-          animation: slideInTop 1s 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+          opacity: 1;
+          animation: slideInTop 1s 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) both;
           text-shadow: 0 0 30px rgba(96, 165, 250, 0.6);
         }
 
