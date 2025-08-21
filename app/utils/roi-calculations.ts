@@ -4,7 +4,14 @@
  */
 
 // Отраслевые коэффициенты на основе исследований McKinsey, Gartner, IDC
-export const INDUSTRY_COEFFICIENTS = {
+export const INDUSTRY_COEFFICIENTS: Record<string, {
+  name: string;
+  baseROI: number;
+  avgDigitalMaturity: number;
+  growthPotential: number;
+  description: string;
+  benchmarks: Record<string, number>;
+}> = {
   retail: {
     name: 'Розничная торговля',
     baseROI: 1.8,
@@ -128,7 +135,13 @@ export const INDUSTRY_COEFFICIENTS = {
 };
 
 // Коэффициенты масштаба компании
-export const SCALE_COEFFICIENTS = {
+export const SCALE_COEFFICIENTS: Record<string, {
+  name: string;
+  employeeRange: string;
+  coefficient: number;
+  implementationSpeed: number;
+  complexityFactor: number;
+}> = {
   micro: {
     name: 'Микробизнес (1-10)',
     employeeRange: '1-10',
@@ -175,7 +188,7 @@ export const TIME_FACTORS = {
 };
 
 // Риск-факторы
-export const RISK_FACTORS = {
+export const RISK_FACTORS: Record<string, number> = {
   low: 0.9,    // Низкий риск (зрелая индустрия, простое решение)
   medium: 0.8, // Средний риск
   high: 0.7    // Высокий риск (новая технология, сложная интеграция)
