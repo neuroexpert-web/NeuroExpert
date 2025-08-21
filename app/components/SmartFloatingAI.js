@@ -621,18 +621,35 @@ export default function SmartFloatingAI() {
           color: #94a3b8;
           font-size: 13px;
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transform: translateY(0);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .model-btn:hover {
-          background: rgba(255, 255, 255, 0.1);
+          background: rgba(255, 255, 255, 0.12);
           color: white;
+          transform: translateY(-2px) scale(1.02);
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+          border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .model-btn:active {
+          transform: translateY(0) scale(0.98);
+          transition: transform 0.1s ease;
         }
 
         .model-btn.active {
           background: linear-gradient(135deg, #60a5fa, #a78bfa);
           border-color: transparent;
           color: white;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 20px rgba(96, 165, 250, 0.4);
+        }
+
+        .model-btn.active:hover {
+          transform: translateY(-3px) scale(1.03);
+          box-shadow: 0 6px 24px rgba(96, 165, 250, 0.5);
         }
 
         .model-icon {
