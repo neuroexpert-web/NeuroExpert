@@ -95,25 +95,34 @@ export default function SmartFloatingAI() {
   }, []);
 
   const typewriterEffect = (text, model, callback) => {
+    // If text is long – show instantly to avoid long wait
+    if (text.length > 500) {
+      setMessages(prev => [...prev, { type: 'assistant', text, model }]);
+      if (callback) callback();
+      return;
+    }
+
     let i = 0;
+    const step = 3; // chars per tick
     setIsTyping(true);
     const tempMessage = { type: 'assistant', text: '', model };
     setMessages(prev => [...prev, tempMessage]);
-    
+
     const timer = setInterval(() => {
       if (i < text.length) {
+        const nextIndex = Math.min(i + step, text.length);
         setMessages(prev => {
           const newMessages = [...prev];
-          newMessages[newMessages.length - 1].text = text.substring(0, i + 1);
+          newMessages[newMessages.length - 1].text = text.substring(0, nextIndex);
           return newMessages;
         });
-        i++;
+        i = nextIndex;
       } else {
         clearInterval(timer);
         setIsTyping(false);
         if (callback) callback();
       }
-    }, 20);
+    }, 10);
   };
 
   const sendMessage = async () => {
