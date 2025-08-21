@@ -1,7 +1,7 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo, memo } from 'react';
 
-export default function SmartFloatingAI() {
+function SmartFloatingAI() {
   const [isOpen, setIsOpen] = useState(false);
   // История сообщений хранится в localStorage -> диалог не пропадает после перезагрузки
   const [messages, setMessages] = useState(() => {
@@ -79,20 +79,20 @@ export default function SmartFloatingAI() {
   useEffect(() => {
     const handleOpenChat = (event) => {
       setIsOpen(true);
-      // Если есть предзаполненное сообщение, устанавливаем его
+      // Если есть предзаполненное сообщение, отправляем его автоматически
       if (event.detail && event.detail.message) {
         setTimeout(() => {
-          setInput(event.detail.message);
-          // Авто-отправка сообщения через 200 мс после открытия
-          setTimeout(() => {
-            sendMessage();
-          }, 200);
+          // Создаем сообщение пользователя без заполнения поля ввода
+          const userMessage = event.detail.message;
+          setMessages(prev => [...prev, { type: 'user', text: userMessage }]);
+          // Отправляем запрос к API
+          handleAutoMessage(userMessage);
         }, 100);
       }
     };
     window.addEventListener('openAIChat', handleOpenChat);
     return () => window.removeEventListener('openAIChat', handleOpenChat);
-  }, []);
+  }, [selectedModel, dialogHistory, context, isLoading, isTyping]);
 
   const typewriterEffect = (text, model, callback) => {
     let i = 0;
@@ -113,10 +113,67 @@ export default function SmartFloatingAI() {
         setIsTyping(false);
         if (callback) callback();
       }
-    }, 20);
+    }, 5); // Ускорено с 20мс до 5мс - в 4 раза быстрее
   };
 
-  const sendMessage = async () => {
+  const handleAutoMessage = async (userMessage) => {
+    if (isLoading || isTyping) return;
+    
+    setIsLoading(true);
+    const startTime = Date.now();
+
+    try {
+      const response = await fetch('/api/assistant', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-neuroexpert-csrf': 'browser'
+        },
+        body: JSON.stringify({ 
+          userMessage: userMessage,
+          model: selectedModel,
+          history: dialogHistory,
+          context: {
+            ...context,
+            previousInteractions: context.previousInteractions + 1
+          }
+        })
+      });
+
+      if (!response.ok) throw new Error('API Error');
+
+      const data = await response.json();
+      const responseTime = data.responseTime || (Date.now() - startTime);
+      
+      setContext(prev => ({
+        ...prev,
+        sessionDuration: prev.sessionDuration + responseTime,
+        totalTokens: prev.totalTokens + (data.tokensUsed || 0),
+        averageResponseTime: (prev.averageResponseTime * prev.previousInteractions + responseTime) / (prev.previousInteractions + 1),
+        ...data.context
+      }));
+      
+      // Обновляем историю диалога
+      setDialogHistory(prev => [
+        ...prev,
+        { role: 'user', content: userMessage },
+        { role: 'assistant', content: data.response }
+      ]);
+      
+      typewriterEffect(data.response || 'Извините, произошла ошибка.', selectedModel);
+    } catch (error) {
+      console.error('Error:', error);
+      setMessages(prev => [...prev, { 
+        type: 'assistant', 
+        text: 'Извините, произошла ошибка. Попробуйте еще раз.',
+        model: selectedModel
+      }]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const sendMessage = useCallback(async () => {
     if (!input.trim() || isLoading || isTyping) return;
 
     const userMessage = input.trim();
@@ -194,7 +251,7 @@ export default function SmartFloatingAI() {
         selectedModel
       );
     }
-  };
+  }, [input, isLoading, isTyping, selectedModel, dialogHistory, context]);
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -243,38 +300,33 @@ export default function SmartFloatingAI() {
               </div>
             </div>
             <div className="ai-header-right">
-              <div className="model-selector">
-                <button 
-                  className={`model-btn ${selectedModel === 'gemini' ? 'active' : ''}`}
-                  onClick={() => {
-                    setSelectedModel('gemini');
-                    setDialogHistory([]); // Очищаем историю при смене модели
-                  }}
-                  title="Google Gemini Pro"
-                >
-                  <span className="model-icon">✨</span>
-                  <span className="model-text">Gemini</span>
-                </button>
-                <button 
-                  className={`model-btn ${selectedModel === 'claude' ? 'active' : ''}`}
-                  onClick={() => {
-                    setSelectedModel('claude');
-                    setDialogHistory([]); // Очищаем историю при смене модели
-                  }}
-                  title="Claude Opus"
-                >
-                  <span className="model-icon">🧠</span>
-                  <span className="model-text">Claude</span>
-                </button>
-              </div>
+              <button 
+                className={`model-btn ${selectedModel === 'gemini' ? 'active' : ''}`}
+                onClick={() => {
+                  setSelectedModel('gemini');
+                  setDialogHistory([]); // Очищаем историю при смене модели
+                }}
+                title="Google Gemini Pro"
+              >
+                ✨
+              </button>
+              <button 
+                className={`model-btn ${selectedModel === 'claude' ? 'active' : ''}`}
+                onClick={() => {
+                  setSelectedModel('claude');
+                  setDialogHistory([]); // Очищаем историю при смене модели
+                }}
+                title="Claude 3"
+              >
+                🧠
+              </button>
               <button 
                 onClick={() => setIsOpen(false)}
                 className="ai-close-btn"
                 aria-label="Закрыть чат"
+                title="Закрыть"
               >
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M13 1L1 13M1 1L13 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+                ✕
               </button>
             </div>
           </div>
@@ -326,8 +378,8 @@ export default function SmartFloatingAI() {
                   <button
                     key={idx}
                     onClick={() => {
-                      setInput(q);
-                      sendMessage();
+                      setMessages(prev => [...prev, { type: 'user', text: q }]);
+                      handleAutoMessage(q);
                     }}
                     disabled={isLoading}
                   >
@@ -596,7 +648,7 @@ export default function SmartFloatingAI() {
         .ai-header-right {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 8px;
         }
 
         .model-selector {
@@ -607,13 +659,15 @@ export default function SmartFloatingAI() {
         .model-btn {
           display: flex;
           align-items: center;
-          gap: 4px;
-          padding: 8px 14px;
+          justify-content: center;
+          width: 36px;
+          height: 36px;
+          padding: 0;
           background: rgba(255, 255, 255, 0.05);
           border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 20px;
+          border-radius: 50%;
           color: #94a3b8;
-          font-size: 13px;
+          font-size: 18px;
           cursor: pointer;
           transition: all 0.2s ease;
         }
@@ -621,12 +675,23 @@ export default function SmartFloatingAI() {
         .model-btn:hover {
           background: rgba(255, 255, 255, 0.1);
           color: white;
+          transform: scale(1.05);
         }
 
         .model-btn.active {
           background: linear-gradient(135deg, #60a5fa, #a78bfa);
           border-color: transparent;
           color: white;
+          animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+          0%, 100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: .8;
+          }
         }
 
         .model-icon {
@@ -640,12 +705,13 @@ export default function SmartFloatingAI() {
         }
 
         .ai-close-btn {
-          width: 40px;
-          height: 40px;
-          border-radius: 12px;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
           background: rgba(255, 255, 255, 0.08);
           border: 1px solid rgba(255, 255, 255, 0.12);
           color: #94a3b8;
+          font-size: 18px;
           cursor: pointer;
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           display: flex;
@@ -667,6 +733,47 @@ export default function SmartFloatingAI() {
         
         .ai-close-btn:hover svg {
           transform: rotate(90deg);
+        }
+
+        @media (max-width: 480px) {
+          .ai-chat-window {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            max-width: 100% !important;
+            max-height: 100% !important;
+            border-radius: 0 !important;
+            margin: 0 !important;
+          }
+          
+          .ai-header-right {
+            display: flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+          }
+          
+          .model-btn,
+          .ai-close-btn {
+            width: 32px !important;
+            height: 32px !important;
+            min-width: 32px !important;
+            font-size: 16px !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            position: relative !important;
+            top: auto !important;
+            right: auto !important;
+            z-index: auto !important;
+          }
+          
+          .ai-close-btn {
+            background: rgba(239, 68, 68, 0.1) !important;
+            border-color: rgba(239, 68, 68, 0.2) !important;
+          }
         }
 
         .ai-messages {
@@ -897,3 +1004,5 @@ export default function SmartFloatingAI() {
     </>
   );
 }
+
+export default memo(SmartFloatingAI);

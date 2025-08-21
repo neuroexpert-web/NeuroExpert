@@ -1,0 +1,39 @@
+# Robots.txt для NeuroExpert.ai
+# https://neuroexpert.ai
+
+# Разрешаем доступ всем поисковым роботам
+User-agent: *
+Allow: /
+
+# Запрещаем доступ к техническим директориям
+Disallow: /api/
+Disallow: /_next/
+Disallow: /admin/
+Disallow: /.next/
+Disallow: /node_modules/
+
+# Запрещаем доступ к тестовым страницам
+Disallow: /test*
+Disallow: /*test*
+Disallow: /ai-test.html
+Disallow: /vanta-test.html
+Disallow: /telegram-*.html
+
+# Специальные правила для основных поисковиков
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Yandex
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Указываем расположение карты сайта
+Sitemap: https://neuroexpert.ai/sitemap.xml
+
+# Указываем хост (для Яндекса)
+Host: https://neuroexpert.ai

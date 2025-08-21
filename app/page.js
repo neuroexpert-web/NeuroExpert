@@ -2,6 +2,7 @@
 
 import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
+// Критические компоненты загружаем статически для быстрого отображения
 import PremiumGlassBackground from './components/PremiumGlassBackground';
 import NeuroExpertHero from './components/NeuroExpertHero';
 import JourneySection from './components/JourneySection';
@@ -30,7 +31,7 @@ const AdminPanel = dynamic(() => import('./components/AdminPanel'), {
 });
 
 const AIDirectorCapabilities = dynamic(() => import('./components/AIDirectorCapabilities'), {
-  ssr: false,
+  ssr: true, // Включаем SSR для важного контента
   loading: () => <div className="loading-skeleton">Загрузка AI директора...</div>
 });
 
@@ -293,13 +294,15 @@ export default function Home() {
 
         @media (max-width: 768px) {
           section {
-            padding: 80px 0;
+            padding: 40px 20px;
           }
 
           .section-header {
             margin-bottom: 40px;
           }
         }
+
+
       `}</style>
     </main>
   );

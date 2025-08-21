@@ -1,11 +1,8 @@
 /**
- * Professional Logging System for NeuroExpert
- * Supports multiple log levels, structured logging, and external services
+ * Enhanced logging utility with context support
+ * Provides colored output in development and structured logging
  */
 
-import { format } from 'date-fns';
-
-// Log levels
 const LOG_LEVELS = {
   ERROR: 0,
   WARN: 1,
@@ -14,11 +11,7 @@ const LOG_LEVELS = {
   TRACE: 4
 };
 
-// Current log level from environment
-const CURRENT_LOG_LEVEL = LOG_LEVELS[process.env.LOG_LEVEL?.toUpperCase()] ?? LOG_LEVELS.INFO;
-
-// Colors for console output
-const COLORS = {
+const LOG_COLORS = {
   ERROR: '\x1b[31m', // Red
   WARN: '\x1b[33m',  // Yellow
   INFO: '\x1b[36m',  // Cyan
@@ -30,101 +23,73 @@ const COLORS = {
 class Logger {
   constructor(context = 'App') {
     this.context = context;
-    this.requestId = null;
+    // Безопасная проверка для клиентской стороны
+    this.isDevelopment = typeof process !== 'undefined' 
+      ? process.env.NODE_ENV !== 'production'
+      : false;
+    this.logLevel = this.isDevelopment ? LOG_LEVELS.DEBUG : LOG_LEVELS.ERROR;
   }
 
-  setRequestId(requestId) {
-    this.requestId = requestId;
-  }
-
-  _formatMessage(level, message, data = {}) {
-    const timestamp = format(new Date(), 'yyyy-MM-dd HH:mm:ss.SSS');
-    const logEntry = {
-      timestamp,
-      level,
-      context: this.context,
-      message,
-      ...(this.requestId && { requestId: this.requestId }),
-      ...(Object.keys(data).length > 0 && { data }),
-      ...(process.env.NODE_ENV === 'production' && { env: 'production' })
-    };
-
-    return logEntry;
+  _formatMessage(level, message, data) {
+    const timestamp = new Date().toISOString();
+    const color = LOG_COLORS[level] || '';
+    const reset = LOG_COLORS.RESET;
+    
+    if (this.isDevelopment) {
+      // Colored output for development
+      const contextStr = `[${this.context}]`;
+      const levelStr = `[${level}]`;
+      return `${color}${timestamp} ${levelStr} ${contextStr} ${message}${reset}`;
+    } else {
+      // Structured logging for production
+      return JSON.stringify({
+        timestamp,
+        level,
+        context: this.context,
+        message,
+        ...data
+      });
+    }
   }
 
   _shouldLog(level) {
-    return LOG_LEVELS[level] <= CURRENT_LOG_LEVEL;
+    return LOG_LEVELS[level] <= this.logLevel;
   }
 
-  _log(level, message, data) {
+  _log(level, message, data = {}) {
     if (!this._shouldLog(level)) return;
 
-    const logEntry = this._formatMessage(level, message, data);
-
-    // Console output
-    if (process.env.NODE_ENV !== 'production') {
-      const color = COLORS[level];
-      const prefix = `${color}[${level}]${COLORS.RESET}`;
-      console.log(`${prefix} ${logEntry.timestamp} [${logEntry.context}] ${message}`);
-      if (Object.keys(data).length > 0) {
-        console.log('  Data:', JSON.stringify(data, null, 2));
-      }
-    } else {
-      // Production: structured JSON logs
-      console.log(JSON.stringify(logEntry));
-    }
-
-    // Send to external services in production
-    if (process.env.NODE_ENV === 'production') {
-      this._sendToExternalService(logEntry);
-    }
-  }
-
-  async _sendToExternalService(logEntry) {
-    // Send critical errors to Telegram
-    if (logEntry.level === 'ERROR' && process.env.TELEGRAM_BOT_TOKEN) {
-      try {
-        const message = `
-🚨 ERROR in ${logEntry.context}
-${logEntry.message}
-${logEntry.data ? JSON.stringify(logEntry.data, null, 2) : ''}
-Time: ${logEntry.timestamp}
-        `;
-
-        await fetch(
-          `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              chat_id: process.env.TELEGRAM_CHAT_ID,
-              text: message,
-              parse_mode: 'HTML'
-            })
-          }
-        );
-      } catch (error) {
-        console.error('Failed to send error to Telegram:', error);
-      }
-    }
-
-    // Send to Sentry if configured
-    if (process.env.SENTRY_DSN && typeof window !== 'undefined' && window.Sentry) {
-      if (logEntry.level === 'ERROR') {
-        window.Sentry.captureException(new Error(logEntry.message), {
-          extra: logEntry.data,
-          tags: {
-            context: logEntry.context
-          }
-        });
-      } else if (logEntry.level === 'WARN') {
-        window.Sentry.captureMessage(logEntry.message, 'warning');
-      }
+    const formattedMessage = this._formatMessage(level, message, data);
+    
+    switch (level) {
+      case 'ERROR':
+        console.error(formattedMessage);
+        if (data && Object.keys(data).length > 0) {
+          console.error(data);
+        }
+        break;
+      case 'WARN':
+        console.warn(formattedMessage);
+        if (data && Object.keys(data).length > 0) {
+          console.warn(data);
+        }
+        break;
+      default:
+        console.log(formattedMessage);
+        if (data && Object.keys(data).length > 0) {
+          console.log(data);
+        }
     }
   }
 
-  error(message, data = {}) {
-    this._log('ERROR', message, data);
+  error(message, error) {
+    const errorData = error instanceof Error ? {
+      error: error.message,
+      stack: error.stack,
+      name: error.name
+    } : { error };
+    
+    this._log('ERROR', message, errorData);
   }
 
   warn(message, data = {}) {
@@ -143,6 +108,17 @@ Time: ${logEntry.timestamp}
     this._log('TRACE', message, data);
   }
 
+  // Convenience methods
+  log(message, data = {}) {
+    this.info(message, data);
+  }
+
+  critical(message, error) {
+    // Always log critical errors regardless of environment
+    console.error(`[CRITICAL] [${this.context}] ${message}`, error);
+    // Here you can add Sentry or other error tracking
+  }
+
   // Performance logging
   time(label) {
     if (this._shouldLog('DEBUG')) {
@@ -156,23 +132,9 @@ Time: ${logEntry.timestamp}
     }
   }
 
-  // Metrics logging
-  metric(name, value, unit = '') {
-    this._log('INFO', `Metric: ${name}`, { value, unit });
-  }
-
-  // Security event logging
-  security(event, details = {}) {
-    this._log('WARN', `Security Event: ${event}`, details);
-  }
-
-  // API request logging
-  apiRequest(method, url, data = {}) {
-    this._log('INFO', `API Request: ${method} ${url}`, data);
-  }
-
-  apiResponse(method, url, status, duration) {
-    this._log('INFO', `API Response: ${method} ${url}`, { status, duration });
+  // Create child logger with new context
+  child(context) {
+    return new Logger(`${this.context}:${context}`);
   }
 }
 
@@ -182,63 +144,9 @@ export function createLogger(context) {
 }
 
 // Default logger instance
-export const logger = new Logger('Default');
+const defaultLogger = new Logger();
 
-// Express/Next.js middleware
-export function loggerMiddleware(req, res, next) {
-  const start = Date.now();
-  const requestId = Math.random().toString(36).substring(7);
-  
-  const logger = new Logger('HTTP');
-  logger.setRequestId(requestId);
-  
-  // Attach logger to request
-  req.logger = logger;
-  
-  // Log request
-  logger.info(`${req.method} ${req.url}`, {
-    ip: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress,
-    userAgent: req.headers['user-agent']
-  });
-  
-  // Override res.end to log response
-  const originalEnd = res.end;
-  res.end = function(...args) {
-    const duration = Date.now() - start;
-    logger.info(`Response: ${req.method} ${req.url}`, {
-      status: res.statusCode,
-      duration: `${duration}ms`
-    });
-    
-    // Log slow requests
-    if (duration > 1000) {
-      logger.warn('Slow request detected', {
-        url: req.url,
-        duration: `${duration}ms`
-      });
-    }
-    
-    originalEnd.apply(res, args);
-  };
-  
-  next();
-}
+export default defaultLogger;
 
-// Utility functions
-export function logError(error, context = 'Unknown') {
-  const logger = new Logger(context);
-  logger.error(error.message || 'Unknown error', {
-    stack: error.stack,
-    code: error.code,
-    ...error
-  });
-}
-
-export function logPerformance(operation, duration, context = 'Performance') {
-  const logger = new Logger(context);
-  if (duration > 1000) {
-    logger.warn(`Slow operation: ${operation}`, { duration: `${duration}ms` });
-  } else {
-    logger.debug(`Operation completed: ${operation}`, { duration: `${duration}ms` });
-  }
-}
+// Export individual methods for convenience
+export const { log, error, warn, info, debug, trace, critical } = defaultLogger;

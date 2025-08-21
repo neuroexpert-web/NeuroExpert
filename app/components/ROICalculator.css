@@ -231,4 +231,28 @@
     gap: 16px;
     text-align: center;
   }
+  
+  /* Адаптация калькулятора ROI */
+  .roi-calculator section {
+    padding: 40px 16px;
+  }
+  
+  .roi-calculator h2 {
+    font-size: 28px;
+  }
+  
+  .roi-calculator p {
+    font-size: 16px;
+  }
+  
+  .roi-calculator input,
+  .roi-calculator select {
+    font-size: 16px !important;
+    padding: 14px !important;
+  }
+  
+  .roi-calculator button {
+    font-size: 16px !important;
+    padding: 16px !important;
+  }
 }

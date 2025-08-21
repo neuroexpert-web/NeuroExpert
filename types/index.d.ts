@@ -15,16 +15,17 @@ export interface AuthToken {
 }
 
 export interface ROIFormData {
-  businessSize: 'small' | 'medium' | 'large';
-  industry: 'retail' | 'services' | 'production' | 'it' | 'other';
-  budget: number;
+  industry: 'retail' | 'production' | 'it' | 'finance' | 'construction' | 'medicine' | 'logistics' | 'services' | 'other';
+  employeeCount: 'up10' | 'from11to50' | 'from51to250' | 'over250';
+  investment: number;
 }
 
 export interface ROIResults {
   roi: number;
-  savings: number;
-  growth: number;
-  payback: number;
+  profit: number;
+  savings?: number;
+  growth?: number;
+  payback?: number;
 }
 
 export interface ChatMessage {

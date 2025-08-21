@@ -3,27 +3,34 @@
 // Netlify automatically detects and optimizes for serverless deployment
 
 // Sentry temporarily disabled until properly configured
+const crypto = require('crypto');
 
-// Content Security Policy configuration
-const ContentSecurityPolicy = `
+// Content Security Policy configuration - улучшенная безопасность
+const isDevelopment = process.env.NODE_ENV === 'development';
+
+const ContentSecurityPolicy = isDevelopment ? `
+  default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;
+  script-src * 'unsafe-inline' 'unsafe-eval';
+  style-src * 'unsafe-inline';
+  img-src * data: blob:;
+  font-src *;
+  connect-src *;
+  frame-src *;
+  worker-src * blob:;
+` : `
   default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' *.google.com *.googleapis.com *.gstatic.com *.google-analytics.com *.googletagmanager.com mc.yandex.ru *.yandex.net ${process.env.NODE_ENV === 'development' ? "'unsafe-eval'" : ''};
-  style-src 'self' 'unsafe-inline' *.googleapis.com fonts.googleapis.com;
-  img-src 'self' blob: data: *.google.com *.googleapis.com *.gstatic.com *.google-analytics.com api.dicebear.com;
-  font-src 'self' fonts.gstatic.com;
-  connect-src 'self' *.google.com *.googleapis.com *.google-analytics.com mc.yandex.ru *.yandex.net generativelanguage.googleapis.com ${process.env.NODE_ENV === 'development' ? 'ws://localhost:*' : ''};
-  media-src 'self';
+  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://mc.yandex.ru https://vercel.live;
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  img-src 'self' data: blob: https: https://api.dicebear.com;
+  font-src 'self' https://fonts.gstatic.com data:;
+  connect-src 'self' https: wss: https://generativelanguage.googleapis.com https://vercel.live;
+  frame-src 'self' https://vercel.live;
+  worker-src 'self' blob:;
   object-src 'none';
-  child-src 'self';
-  frame-src 'self' *.google.com;
-  frame-ancestors 'self';
   base-uri 'self';
   form-action 'self';
-  manifest-src 'self';
-  worker-src 'self' blob:;
+  frame-ancestors 'none';
   upgrade-insecure-requests;
-  block-all-mixed-content;
-  report-uri ${process.env.CSP_REPORT_URI || '/api/csp-report'};
 `;
 
 const nextConfig = {
@@ -73,7 +80,14 @@ const nextConfig = {
   // Улучшение производительности сборки
   experimental: {
     optimizeCss: true,
-    optimizePackageImports: ['@google/generative-ai', 'framer-motion', 'date-fns'],
+    optimizePackageImports: [
+      '@google/generative-ai', 
+      'framer-motion', 
+      'date-fns',
+      'bcryptjs',
+      'jsonwebtoken',
+      'styled-jsx'
+    ],
     turbo: {
       rules: {
         '*.svg': ['@svgr/webpack'],
@@ -136,24 +150,72 @@ const nextConfig = {
           },
         ],
       },
+      {
+        source: '/_next/static/css/:path*',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'text/css',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/app/globals.css',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'text/css',
+          },
+        ],
+      },
     ];
   },
   
   // Webpack оптимизации
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, dev }) => {
     // Оптимизация bundle size
     if (!isServer) {
+      // Улучшенное разделение кода
       config.optimization.splitChunks = {
         chunks: 'all',
         cacheGroups: {
           default: false,
           vendors: false,
+          // Отдельный бандл для фреймворка
+          framework: {
+            name: 'framework',
+            chunks: 'all',
+            test: /[\\/]node_modules[\\/](react|react-dom|next)[\\/]/,
+            priority: 40,
+            enforce: true
+          },
+          // Библиотеки
+          lib: {
+            test(module) {
+              return module.size() > 160000 &&
+                /node_modules[/\\]/.test(module.identifier());
+            },
+            name(module) {
+              const hash = crypto.createHash('sha1');
+              hash.update(module.identifier());
+              return hash.digest('hex').substring(0, 8);
+            },
+            priority: 30,
+            minChunks: 1,
+            reuseExistingChunk: true,
+          },
+          // Общий vendor код
           vendor: {
             name: 'vendor',
             chunks: 'all',
             test: /node_modules/,
             priority: 20
           },
+          // Общий код приложения
           common: {
             name: 'common',
             minChunks: 2,
@@ -164,7 +226,20 @@ const nextConfig = {
           }
         }
       };
+
+      // Минимизация только в production
+      if (!dev) {
+        config.optimization.minimize = true;
+        config.optimization.usedExports = true;
+        config.optimization.sideEffects = false;
+      }
     }
+    
+    // Алиасы для оптимизации импортов
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'lodash': 'lodash-es',
+    };
     
     return config;
   },
