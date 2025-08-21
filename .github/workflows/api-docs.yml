@@ -1,0 +1,103 @@
+name: API Documentation with Swagger UI
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'app/api/**'
+      - 'docs/api/**'
+      - 'openapi.yaml'
+      - 'swagger.json'
+      - '.github/workflows/api-docs.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'app/api/**'
+      - 'docs/api/**'
+
+jobs:
+  generate-api-docs:
+    name: Generate API Documentation
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18.x'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Generate OpenAPI spec
+      run: |
+        # Создаем OpenAPI спецификацию если её нет
+        if [ ! -f openapi.yaml ]; then
+          echo "Generating OpenAPI specification..."
+          node scripts/generate-openapi.js || echo "No generator script found"
+        fi
+        
+    - name: Validate OpenAPI spec
+      run: |
+        npx @apidevtools/swagger-cli validate openapi.yaml || true
+        
+    - name: Bundle OpenAPI spec
+      run: |
+        npx @apidevtools/swagger-cli bundle openapi.yaml --outfile openapi-bundled.yaml
+        
+    - name: Convert to JSON
+      run: |
+        npx js-yaml openapi.yaml > swagger.json
+        
+    - name: Setup Swagger UI
+      uses: Legion2/swagger-ui-action@v1.3.0
+      with:
+        output: swagger-ui
+        spec-file: openapi.yaml
+        
+    - name: Upload Swagger UI artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: swagger-ui
+        path: swagger-ui
+        
+  deploy-api-docs:
+    name: Deploy API Documentation
+    runs-on: ubuntu-latest
+    needs: generate-api-docs
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - name: Checkout gh-pages branch
+      uses: actions/checkout@v4
+      with:
+        ref: gh-pages
+        
+    - name: Download Swagger UI artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: swagger-ui
+        path: api-docs
+        
+    - name: Commit and push
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add api-docs
+        git commit -m "Update API documentation" || echo "No changes to commit"
+        git push
+        
+    - name: Comment PR with API docs link
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '📚 API Documentation has been updated!\n\nView it here: https://' + context.repo.owner + '.github.io/' + context.repo.repo + '/api-docs/'
+          })

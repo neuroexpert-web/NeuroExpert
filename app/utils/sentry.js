@@ -65,22 +65,28 @@ export function setUserContext(user) {
  * Измерение производительности операции
  */
 export async function measurePerformance(operationName, operation) {
-  const transaction = Sentry.startTransaction({
-    op: 'function',
-    name: operationName,
-  });
-  
-  Sentry.getCurrentHub().configureScope(scope => scope.setSpan(transaction));
-  
+  // Временно упрощенная версия для совместимости
   try {
+    const startTime = Date.now();
     const result = await operation();
-    transaction.setStatus('ok');
+    const duration = Date.now() - startTime;
+    
+    addBreadcrumb({
+      category: 'performance',
+      message: `${operationName} completed in ${duration}ms`,
+      level: 'info',
+      data: { duration }
+    });
+    
     return result;
   } catch (error) {
-    transaction.setStatus('internal_error');
+    captureException(error, {
+      performance: {
+        operation: operationName,
+        failed: true
+      }
+    });
     throw error;
-  } finally {
-    transaction.finish();
   }
 }
 
@@ -88,10 +94,7 @@ export async function measurePerformance(operationName, operation) {
  * Обертка для API вызовов с автоматическим логированием ошибок
  */
 export async function sentryFetch(url, options = {}) {
-  const transaction = Sentry.startTransaction({
-    op: 'http.client',
-    name: `${options.method || 'GET'} ${url}`,
-  });
+  const startTime = Date.now();
   
   try {
     addBreadcrumb({
@@ -101,6 +104,18 @@ export async function sentryFetch(url, options = {}) {
     });
     
     const response = await fetch(url, options);
+    const duration = Date.now() - startTime;
+    
+    addBreadcrumb({
+      category: 'fetch',
+      message: `Response ${response.status} in ${duration}ms`,
+      level: response.ok ? 'info' : 'warning',
+      data: {
+        status: response.status,
+        duration,
+        url
+      }
+    });
     
     if (!response.ok) {
       const error = new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -113,26 +128,23 @@ export async function sentryFetch(url, options = {}) {
           method: options.method || 'GET',
           status: response.status,
           statusText: response.statusText,
+          duration
         }
       });
     }
     
-    transaction.setHttpStatus(response.status);
-    transaction.setStatus('ok');
-    
     return response;
   } catch (error) {
-    transaction.setStatus('internal_error');
+    const duration = Date.now() - startTime;
     captureException(error, {
       fetch: {
         url,
         method: options.method || 'GET',
         error: error.message,
+        duration
       }
     });
     throw error;
-  } finally {
-    transaction.finish();
   }
 }
 
