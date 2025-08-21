@@ -1,4 +1,5 @@
 'use client';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ROIResults } from '../../types';
 
@@ -14,6 +15,18 @@ interface ROIResultModalProps {
 }
 
 export default function ROIResultModal({ isOpen, onClose, results, formData }: ROIResultModalProps) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   const formatCurrency = (num: number): string => {
     return new Intl.NumberFormat('ru-RU', {
       style: 'currency',
@@ -77,30 +90,31 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
               left: '50%',
               transform: 'translate(-50%, -50%)',
               background: 'linear-gradient(180deg, rgba(20, 20, 40, 0.95) 0%, rgba(30, 30, 60, 0.95) 100%)',
-              borderRadius: '32px',
-              padding: '48px',
+              borderRadius: isMobile ? '16px' : '32px',
+              padding: isMobile ? '24px' : '48px',
               border: '1px solid rgba(102, 126, 234, 0.3)',
               boxShadow: '0 30px 60px rgba(0, 0, 0, 0.5)',
               maxWidth: '800px',
-              width: '90%',
-              maxHeight: '90vh',
+              width: isMobile ? '95%' : '90%',
+              maxHeight: isMobile ? '85vh' : '90vh',
               overflow: 'auto',
-              zIndex: 1001
+              zIndex: 1001,
+              WebkitOverflowScrolling: 'touch'
             }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+            <div style={{ textAlign: 'center', marginBottom: isMobile ? '24px' : '40px' }}>
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: 'spring' }}
-                style={{ fontSize: '80px', marginBottom: '20px' }}
+                style={{ fontSize: isMobile ? '60px' : '80px', marginBottom: isMobile ? '16px' : '20px' }}
               >
                 🎉
               </motion.div>
               <h2 style={{
-                fontSize: '36px',
+                fontSize: isMobile ? '28px' : '36px',
                 fontWeight: '700',
                 marginBottom: '16px',
                 background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',

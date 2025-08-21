@@ -5,10 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function ContactForm() {
   const [formData, setFormData] = useState({
     name: '',
-    phone: '',
-    email: '',
-    company: '',
-    message: ''
+    phone: ''
   });
   
   const [status, setStatus] = useState({
@@ -21,7 +18,6 @@ export default function ContactForm() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // Определяем мобильное устройство
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
     };
@@ -43,7 +39,12 @@ export default function ContactForm() {
           'Content-Type': 'application/json',
           'x-neuroexpert-csrf': '1'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          ...formData,
+          email: '',
+          company: '',
+          message: ''
+        })
       });
 
       const result = await response.json();
@@ -53,18 +54,28 @@ export default function ContactForm() {
           loading: false,
           success: true,
           error: false,
-          message: result.message || 'Спасибо! Мы свяжемся с вами в ближайшее время.'
+          message: '✅ Заявка отправлена! Звоним через 5 минут.'
         });
-        setFormData({ name: '', phone: '', email: '', company: '', message: '' });
+        
+        setFormData({ name: '', phone: '' });
+        
+        setTimeout(() => {
+          setStatus({ loading: false, success: false, error: false, message: '' });
+        }, 5000);
       } else {
-        throw new Error(result.error || 'Ошибка отправки формы');
+        setStatus({
+          loading: false,
+          success: false,
+          error: true,
+          message: result.error || '❌ Ошибка. Попробуйте еще раз.'
+        });
       }
     } catch (error) {
       setStatus({
         loading: false,
         success: false,
         error: true,
-        message: error.message || 'Ошибка отправки. Попробуйте позже.'
+        message: '❌ Проверьте интернет-соединение.'
       });
     }
   };
@@ -75,75 +86,131 @@ export default function ContactForm() {
   };
 
   return (
-    <section 
-      id="contact" 
-      className="contact-section"
-      style={{
-        padding: isMobile ? '40px 0' : '80px 20px',
-        backgroundColor: 'transparent'
-      }}
-    >
-      <div className="container" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+    <section id="contact" style={{ padding: isMobile ? '0' : '80px 20px' }}>
+      <div style={{ maxWidth: '500px', margin: '0 auto' }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="contact-wrapper"
           style={{
-            maxWidth: isMobile ? '100%' : '600px',
-            margin: '0 auto',
-            padding: isMobile ? '0' : '0 20px'
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '40px'
           }}
         >
-          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-            <h2 style={{
-              fontSize: isMobile ? '32px' : '48px',
-              fontWeight: '700',
-              marginBottom: '16px',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              padding: isMobile ? '0 16px' : '0'
-            }}>
-              Начните прямо сейчас
-            </h2>
-            <p style={{
-              fontSize: isMobile ? '16px' : '18px',
-              color: '#a0a0a0',
-              lineHeight: '1.6',
-              padding: isMobile ? '0 16px' : '0'
-            }}>
-              Оставьте заявку и мы свяжемся с вами в течение 15 минут
-            </p>
+          {/* Заголовок */}
+          <div style={{ textAlign: 'center', maxWidth: '700px' }}>
+            <motion.h2 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              style={{
+                fontSize: isMobile ? '36px' : '52px',
+                fontWeight: '700',
+                marginBottom: '16px',
+                background: 'linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                padding: isMobile ? '0 16px' : '0'
+              }}
+            >
+              Оставьте заявку за 30 секунд
+            </motion.h2>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                gap: '40px',
+                marginTop: '24px',
+                flexWrap: 'wrap'
+              }}
+            >
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '8px',
+                fontSize: isMobile ? '16px' : '18px',
+                color: '#94a3b8'
+              }}>
+                <span style={{ fontSize: '24px' }}>⚡</span>
+                <span>Звонок через 5 минут</span>
+              </div>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '8px',
+                fontSize: isMobile ? '16px' : '18px',
+                color: '#94a3b8'
+              }}>
+                <span style={{ fontSize: '24px' }}>🎯</span>
+                <span>Бесплатная консультация</span>
+              </div>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '8px',
+                fontSize: isMobile ? '16px' : '18px',
+                color: '#94a3b8'
+              }}>
+                <span style={{ fontSize: '24px' }}>🚀</span>
+                <span>Расчет ROI за 1 день</span>
+              </div>
+            </motion.div>
           </div>
 
+          {/* Форма */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
             style={{
-              background: 'rgba(20, 20, 40, 0.8)',
+              background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9))',
               backdropFilter: 'blur(20px)',
-              borderRadius: isMobile ? '0' : '24px',
+              borderRadius: isMobile ? '0' : '32px',
               padding: isMobile ? '32px 16px' : '48px',
-              border: isMobile ? 'none' : '1px solid rgba(102, 126, 234, 0.2)',
-              boxShadow: isMobile ? 'none' : '0 20px 40px rgba(0, 0, 0, 0.3)',
-              width: isMobile ? '100%' : 'auto',
-              maxWidth: isMobile ? '100%' : '600px',
-              minHeight: isMobile ? '100vh' : 'auto'
+              border: '1px solid rgba(96, 165, 250, 0.2)',
+              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3), 0 0 80px rgba(96, 165, 250, 0.1)',
+              width: '100%',
+              position: 'relative',
+              overflow: 'hidden'
             }}
           >
+            {/* Декоративный градиент */}
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: '3px',
+              background: 'linear-gradient(90deg, #60a5fa, #a78bfa, #60a5fa)',
+              backgroundSize: '200% 100%',
+              animation: 'gradient 3s ease infinite'
+            }} />
+
             <form onSubmit={handleSubmit} className="contact-form">
-              <div style={{ marginBottom: '24px' }}>
+              {/* Поле имени */}
+              <motion.div 
+                style={{ marginBottom: '24px' }}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.4 }}
+              >
                 <label style={{
-                  display: 'block',
-                  marginBottom: '8px',
-                  fontSize: '14px',
-                  color: '#a0a0a0',
-                  fontWeight: '500'
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  marginBottom: '12px',
+                  fontSize: '16px',
+                  color: '#e2e8f0',
+                  fontWeight: '600'
                 }}>
-                  Ваше имя *
+                  <span style={{ fontSize: '20px' }}>👤</span>
+                  <span>Как вас зовут?</span>
                 </label>
                 <input
                   type="text"
@@ -151,30 +218,47 @@ export default function ContactForm() {
                   value={formData.name}
                   onChange={handleInputChange}
                   required
-                  placeholder="Иван Иванов"
+                  placeholder="Иван"
                   style={{
                     width: '100%',
-                    padding: '16px',
-                    fontSize: '16px',
+                    padding: '18px 20px',
+                    fontSize: '18px',
                     backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '12px',
+                    border: '2px solid rgba(255, 255, 255, 0.1)',
+                    borderRadius: '16px',
                     color: 'white',
                     transition: 'all 0.3s ease',
                     outline: 'none'
                   }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = 'rgba(96, 165, 250, 0.5)';
+                    e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.08)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                    e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+                  }}
                 />
-              </div>
+              </motion.div>
 
-              <div style={{ marginBottom: '24px' }}>
+              {/* Поле телефона */}
+              <motion.div 
+                style={{ marginBottom: '32px' }}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.5 }}
+              >
                 <label style={{
-                  display: 'block',
-                  marginBottom: '8px',
-                  fontSize: '14px',
-                  color: '#a0a0a0',
-                  fontWeight: '500'
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  marginBottom: '12px',
+                  fontSize: '16px',
+                  color: '#e2e8f0',
+                  fontWeight: '600'
                 }}>
-                  Телефон *
+                  <span style={{ fontSize: '20px' }}>📱</span>
+                  <span>Ваш телефон</span>
                 </label>
                 <input
                   type="tel"
@@ -185,111 +269,27 @@ export default function ContactForm() {
                   placeholder="+7 (999) 123-45-67"
                   style={{
                     width: '100%',
-                    padding: '16px',
-                    fontSize: '16px',
+                    padding: '18px 20px',
+                    fontSize: '18px',
                     backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '12px',
+                    border: '2px solid rgba(255, 255, 255, 0.1)',
+                    borderRadius: '16px',
                     color: 'white',
                     transition: 'all 0.3s ease',
                     outline: 'none'
                   }}
-                />
-              </div>
-
-              <div style={{ marginBottom: '24px' }}>
-                <label style={{
-                  display: 'block',
-                  marginBottom: '8px',
-                  fontSize: '14px',
-                  color: '#a0a0a0',
-                  fontWeight: '500'
-                }}>
-                  Email *
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="ivan@company.ru"
-                  style={{
-                    width: '100%',
-                    padding: '16px',
-                    fontSize: '16px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '12px',
-                    color: 'white',
-                    transition: 'all 0.3s ease',
-                    outline: 'none'
+                  onFocus={(e) => {
+                    e.target.style.borderColor = 'rgba(96, 165, 250, 0.5)';
+                    e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.08)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                    e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
                   }}
                 />
-              </div>
+              </motion.div>
 
-              <div style={{ marginBottom: '24px' }}>
-                <label style={{
-                  display: 'block',
-                  marginBottom: '8px',
-                  fontSize: '14px',
-                  color: '#a0a0a0',
-                  fontWeight: '500'
-                }}>
-                  Компания
-                </label>
-                <input
-                  type="text"
-                  name="company"
-                  value={formData.company}
-                  onChange={handleInputChange}
-                  placeholder="ООО Компания"
-                  style={{
-                    width: '100%',
-                    padding: '16px',
-                    fontSize: '16px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '12px',
-                    color: 'white',
-                    transition: 'all 0.3s ease',
-                    outline: 'none'
-                  }}
-                />
-              </div>
-
-              <div style={{ marginBottom: '32px' }}>
-                <label style={{
-                  display: 'block',
-                  marginBottom: '8px',
-                  fontSize: '14px',
-                  color: '#a0a0a0',
-                  fontWeight: '500'
-                }}>
-                  Сообщение
-                </label>
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  rows={4}
-                  placeholder="Расскажите о вашей задаче..."
-                  style={{
-                    width: '100%',
-                    padding: '16px',
-                    fontSize: '16px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '12px',
-                    color: 'white',
-                    resize: 'vertical',
-                    minHeight: '120px',
-                    transition: 'all 0.3s ease',
-                    outline: 'none'
-                  }}
-                />
-              </div>
-
+              {/* Сообщение о статусе */}
               <AnimatePresence mode="wait">
                 {status.message && (
                   <motion.div
@@ -298,18 +298,18 @@ export default function ContactForm() {
                     exit={{ opacity: 0, y: -10 }}
                     style={{
                       padding: '16px',
-                      borderRadius: '12px',
+                      borderRadius: '16px',
                       marginBottom: '24px',
                       textAlign: 'center',
-                      fontSize: '14px',
-                      fontWeight: '500',
+                      fontSize: '16px',
+                      fontWeight: '600',
                       backgroundColor: status.success 
-                        ? 'rgba(72, 187, 120, 0.1)' 
-                        : 'rgba(245, 101, 101, 0.1)',
-                      border: `1px solid ${status.success 
-                        ? 'rgba(72, 187, 120, 0.3)' 
-                        : 'rgba(245, 101, 101, 0.3)'}`,
-                      color: status.success ? '#48bb78' : '#f56565'
+                        ? 'rgba(34, 197, 94, 0.1)' 
+                        : 'rgba(239, 68, 68, 0.1)',
+                      border: `2px solid ${status.success 
+                        ? 'rgba(34, 197, 94, 0.3)' 
+                        : 'rgba(239, 68, 68, 0.3)'}`,
+                      color: status.success ? '#22c55e' : '#ef4444'
                     }}
                   >
                     {status.message}
@@ -317,41 +317,49 @@ export default function ContactForm() {
                 )}
               </AnimatePresence>
 
+              {/* Кнопка отправки */}
               <motion.button
                 type="submit"
                 disabled={status.loading}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.6 }}
                 style={{
                   width: '100%',
                   padding: '20px',
-                  fontSize: '18px',
-                  fontWeight: '600',
+                  fontSize: '20px',
+                  fontWeight: '700',
                   background: status.loading 
-                    ? 'rgba(102, 126, 234, 0.5)' 
-                    : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    ? 'linear-gradient(135deg, rgba(96, 165, 250, 0.5), rgba(167, 139, 250, 0.5))' 
+                    : 'linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%)',
                   border: 'none',
-                  borderRadius: '16px',
+                  borderRadius: '20px',
                   color: 'white',
                   cursor: status.loading ? 'not-allowed' : 'pointer',
                   transition: 'all 0.3s ease',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '10px',
-                  boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)'
+                  gap: '12px',
+                  boxShadow: status.loading 
+                    ? 'none'
+                    : '0 8px 24px rgba(96, 165, 250, 0.4), 0 0 40px rgba(167, 139, 250, 0.2)',
+                  position: 'relative',
+                  overflow: 'hidden'
                 }}
               >
                 {status.loading ? (
                   <>
-                    <span>Отправка...</span>
+                    <span>Отправляем</span>
                     <motion.div
                       animate={{ rotate: 360 }}
                       transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                       style={{
                         width: '20px',
                         height: '20px',
-                        border: '2px solid white',
+                        border: '3px solid white',
                         borderTopColor: 'transparent',
                         borderRadius: '50%'
                       }}
@@ -359,39 +367,71 @@ export default function ContactForm() {
                   </>
                 ) : (
                   <>
-                    <span>Отправить заявку</span>
-                    <span style={{ fontSize: '24px' }}>→</span>
+                    <span>Получить консультацию</span>
+                    <motion.span 
+                      style={{ fontSize: '24px' }}
+                      animate={{ x: [0, 5, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                    >
+                      →
+                    </motion.span>
                   </>
                 )}
               </motion.button>
+
+              {/* Текст под кнопкой */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4, delay: 0.7 }}
+                style={{
+                  textAlign: 'center',
+                  marginTop: '16px',
+                  fontSize: '14px',
+                  color: '#94a3b8'
+                }}
+              >
+                Нажимая кнопку, вы соглашаетесь с обработкой данных
+              </motion.p>
             </form>
           </motion.div>
         </motion.div>
       </div>
 
       <style jsx>{`
+        @keyframes gradient {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+
         @media (max-width: 768px) {
           #contact {
             padding: 0 !important;
           }
           
-          #contact > div {
-            border-radius: 0 !important;
-          }
-          
-          input, textarea {
+          input {
             font-size: 16px !important;
             -webkit-text-size-adjust: 100%;
           }
         }
         
-        input:focus, textarea:focus {
-          border-color: rgba(102, 126, 234, 0.5) !important;
-          background-color: rgba(255, 255, 255, 0.08) !important;
+        input::placeholder {
+          color: rgba(255, 255, 255, 0.4);
         }
-        
-        input::placeholder, textarea::placeholder {
-          color: rgba(255, 255, 255, 0.3);
+
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus {
+          -webkit-box-shadow: 0 0 0px 1000px rgba(30, 41, 59, 0.9) inset;
+          -webkit-text-fill-color: white;
+          transition: background-color 5000s ease-in-out 0s;
         }
       `}</style>
     </section>

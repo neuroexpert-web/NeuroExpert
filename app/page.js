@@ -40,25 +40,7 @@ export default function Home() {
       {/* Новый Hero блок с анимацией нейросети */}
       <NeuroExpertHero />
       
-      {/* AI Управляющий директор */}
-      <Suspense fallback={<div className="loading-skeleton">Загрузка...</div>}>
-        <AIDirectorCapabilities />
-      </Suspense>
-      
-      {/* Ваш простой путь к результату */}
-      <JourneySection />
-      
-      {/* Почему NeuroExpert */}
-      <section id="why-us">
-        <WhyUsSection />
-      </section>
-      
-      {/* Тарифы */}
-      <section id="pricing">
-        <PricingSection />
-      </section>
-      
-      {/* Калькулятор ROI */}
+      {/* Калькулятор ROI - перенесен сюда для большей видимости */}
       <section className="roi-section" id="benefits">
         <div className="container">
           <div className="section-header">
@@ -75,6 +57,24 @@ export default function Home() {
             </Suspense>
           </div>
         </div>
+      </section>
+      
+      {/* AI Управляющий директор */}
+      <Suspense fallback={<div className="loading-skeleton">Загрузка...</div>}>
+        <AIDirectorCapabilities />
+      </Suspense>
+      
+      {/* Ваш простой путь к результату */}
+      <JourneySection />
+      
+      {/* Почему NeuroExpert */}
+      <section id="why-us">
+        <WhyUsSection />
+      </section>
+      
+      {/* Тарифы */}
+      <section id="pricing">
+        <PricingSection />
       </section>
       
       {/* Демо секция */}

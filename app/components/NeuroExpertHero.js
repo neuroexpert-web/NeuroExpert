@@ -700,9 +700,15 @@ export default function NeuroExpertHero() {
           <p className="description">
             Автоматизируйте бизнес-процессы, увеличивайте прибыль и опережайте конкурентов с помощью передовых ИИ технологий.
           </p>
-          <a href="/smart-ai" className="cta-button">
+          <button 
+            className="cta-button"
+            onClick={() => {
+              // Открываем AI управляющего
+              window.dispatchEvent(new CustomEvent('openAIChat'));
+            }}
+          >
             <span>НАЧАТЬ БЕСПЛАТНО</span>
-          </a>
+          </button>
         </div>
       </section>
     </>
