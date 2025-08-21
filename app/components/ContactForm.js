@@ -93,18 +93,25 @@ export default function ContactForm() {
           }}
         >
           <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-            <h2 style={{
-              fontSize: isMobile ? '32px' : '48px',
-              fontWeight: '700',
-              marginBottom: '16px',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              padding: isMobile ? '0 16px' : '0'
-            }}>
-              Начните прямо сейчас
-            </h2>
+            <motion.h2
+              initial={{ backgroundPosition: '0% 50%' }}
+              animate={{ backgroundPosition: '200% 50%' }}
+              transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
+              style={{
+                fontSize: isMobile ? '34px' : '52px',
+                fontWeight: 800,
+                marginBottom: '24px',
+                background: 'linear-gradient(270deg, #00eaff, #ff00e0, #00eaff)',
+                backgroundSize: '400% 400%',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                letterSpacing: 1,
+                padding: isMobile ? '0 16px' : '0'
+              }}
+            >
+              Готовы к росту?
+            </motion.h2>
             <p style={{
               fontSize: isMobile ? '16px' : '18px',
               color: '#a0a0a0',
@@ -225,14 +232,11 @@ export default function ContactForm() {
               <motion.button
                 type="submit"
                 disabled={status.loading}
-                whileHover={{ scale: 1.05, boxShadow: '0 0 25px rgba(118, 75, 162, 0.6)' }}
+                whileHover={{ scale: 1.08, boxShadow: '0 0 40px rgba(0, 238, 255, 0.7)' }}
                 whileTap={{ scale: 0.95 }}
                 animate={{
-                  backgroundPosition: [
-                    '0% 50%',
-                    '100% 50%',
-                    '0% 50%'
-                  ]
+                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                  textShadow: ['0 0 10px #00eaff', '0 0 20px #ff00e0', '0 0 10px #00eaff']
                 }}
                 transition={{
                   duration: 4,
@@ -245,8 +249,8 @@ export default function ContactForm() {
                   fontSize: '18px',
                   fontWeight: '600',
                   background: status.loading 
-                    ? 'rgba(102, 126, 234, 0.5)' 
-                    : 'linear-gradient(270deg, #667eea, #764ba2, #667eea)',
+                    ? 'rgba(0, 238, 255, 0.4)' 
+                    : 'linear-gradient(270deg, #00eaff, #ff00e0, #00eaff)',
                   backgroundSize: '400% 400%',
                   border: 'none',
                   borderRadius: '16px',
@@ -257,7 +261,7 @@ export default function ContactForm() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '10px',
-                  boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)'
+                  boxShadow: '0 0 25px rgba(0, 238, 255, 0.4)'
                 }}
               >
                 {status.loading ? (
@@ -277,8 +281,14 @@ export default function ContactForm() {
                   </>
                 ) : (
                   <>
-                    <span>Отправить заявку</span>
-                    <span style={{ fontSize: '24px' }}>→</span>
+                    <span style={{ fontWeight: 700, letterSpacing: 1 }}>Оставить заявку</span>
+                    <motion.span
+                      animate={{ x: [0, 4, 0] }}
+                      transition={{ repeat: Infinity, duration: 1.5 }}
+                      style={{ fontSize: 24 }}
+                    >
+                      →
+                    </motion.span>
                   </>
                 )}
               </motion.button>
