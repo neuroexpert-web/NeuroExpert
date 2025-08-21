@@ -479,20 +479,20 @@ export default function SmartFloatingAI() {
           }
           
           .ai-chat-header {
-            padding: 10px;
+            padding: 10px 12px;
             border-radius: 20px 20px 0 0;
             gap: 8px;
           }
           
           .ai-header-right {
-            gap: 6px;
+            gap: 4px;
           }
           
           .ai-close-btn {
             width: 32px;
             height: 32px;
-            margin-right: 0;
             border-radius: 8px;
+            flex-shrink: 0;
           }
           
           .ai-close-btn svg {
@@ -506,6 +506,12 @@ export default function SmartFloatingAI() {
           
           .ai-header-left {
             gap: 8px;
+            min-width: 0;
+          }
+          
+          .ai-header-info {
+            min-width: 0;
+            flex: 1;
           }
           
           .ai-avatar-circle {
@@ -522,12 +528,33 @@ export default function SmartFloatingAI() {
           }
           
           .model-btn {
-            padding: 6px 10px;
+            padding: 6px 8px;
             font-size: 12px;
+            min-width: auto;
           }
           
           .ai-subtitle {
             display: none;
+          }
+        }
+        
+        @media (max-width: 380px) {
+          .ai-header-info h3 {
+            font-size: 14px;
+          }
+          
+          .model-btn {
+            padding: 5px 6px;
+            font-size: 11px;
+          }
+          
+          .ai-avatar-circle {
+            width: 32px;
+            height: 32px;
+          }
+          
+          .ai-avatar-emoji {
+            font-size: 18px;
           }
         }
 
@@ -546,12 +573,15 @@ export default function SmartFloatingAI() {
           border-bottom: 1px solid rgba(255, 255, 255, 0.1);
           background: rgba(30, 41, 59, 0.5);
           border-radius: 24px 24px 0 0;
+          gap: 12px;
         }
 
         .ai-header-left {
           display: flex;
           align-items: center;
           gap: 12px;
+          flex: 1;
+          min-width: 0;
         }
 
         .ai-avatar-circle {
@@ -585,6 +615,9 @@ export default function SmartFloatingAI() {
           font-size: 16px;
           font-weight: 600;
           color: white;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         .ai-subtitle {
@@ -596,7 +629,8 @@ export default function SmartFloatingAI() {
         .ai-header-right {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 8px;
+          flex-shrink: 0;
         }
 
         .model-selector {
@@ -634,7 +668,7 @@ export default function SmartFloatingAI() {
         }
 
         .model-text {
-          @media (max-width: 480px) {
+          @media (max-width: 400px) {
             display: none;
           }
         }
