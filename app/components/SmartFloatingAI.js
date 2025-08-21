@@ -80,7 +80,7 @@ export default function SmartFloatingAI() {
     const handleOpenChat = (event) => {
       setIsOpen(true);
       // Если есть предзаполненное сообщение, устанавливаем его
-      if (event.detail && event.detail.message) {
+      if (event.detail && event.detail.message && event.detail.message.trim() !== '') {
         setTimeout(() => {
           setInput(event.detail.message);
           // Авто-отправка сообщения через 200 мс после открытия
@@ -88,6 +88,9 @@ export default function SmartFloatingAI() {
             sendMessage();
           }, 200);
         }, 100);
+      } else {
+        // Очищаем поле ввода при открытии без сообщения
+        setInput('');
       }
     };
     window.addEventListener('openAIChat', handleOpenChat);
@@ -218,7 +221,10 @@ export default function SmartFloatingAI() {
       {/* Кнопка открытия чата */}
       <button
         className={`ai-float-button ${isOpen ? 'hidden' : ''}`}
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          setIsOpen(true);
+          setInput(''); // Очищаем поле ввода при открытии
+        }}
         aria-label="Открыть AI помощника"
       >
         <div className="ai-button-content">
