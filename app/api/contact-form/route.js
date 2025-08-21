@@ -8,20 +8,22 @@ async function handler(request) {
     // Validate required fields
     const { name, email, phone, message } = data;
     
-    if (!name || !email || !message) {
+    if (!name || (!email && !phone)) {
       return NextResponse.json(
         { error: 'Пожалуйста, заполните все обязательные поля' },
         { status: 400 }
       );
     }
     
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: 'Пожалуйста, введите корректный email' },
-        { status: 400 }
-      );
+    // Email validation (if provided)
+    if (email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return NextResponse.json(
+          { error: 'Пожалуйста, введите корректный email' },
+          { status: 400 }
+        );
+      }
     }
     
     // Phone validation (optional but if provided, should be valid)
@@ -70,9 +72,9 @@ async function handler(request) {
 🔔 Новая заявка с сайта NeuroExpert
 
 👤 Имя: ${name}
-📧 Email: ${email}
+📧 Email: ${email || 'Не указан'}
 📱 Телефон: ${phone || 'Не указан'}
-💬 Сообщение: ${message}
+💬 Сообщение: ${message || 'Не указано'}
 🕐 Время: ${new Date().toLocaleString('ru-RU')}
         `;
         

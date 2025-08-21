@@ -5,10 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function ContactForm() {
   const [formData, setFormData] = useState({
     name: '',
-    phone: '',
-    email: '',
-    company: '',
-    message: ''
+    phone: ''
   });
   
   const [status, setStatus] = useState({
@@ -43,7 +40,7 @@ export default function ContactForm() {
           'Content-Type': 'application/json',
           'x-neuroexpert-csrf': '1'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({ name: formData.name, phone: formData.phone })
       });
 
       const result = await response.json();
@@ -55,7 +52,7 @@ export default function ContactForm() {
           error: false,
           message: result.message || 'Спасибо! Мы свяжемся с вами в ближайшее время.'
         });
-        setFormData({ name: '', phone: '', email: '', company: '', message: '' });
+        setFormData({ name: '', phone: '' });
       } else {
         throw new Error(result.error || 'Ошибка отправки формы');
       }
@@ -96,18 +93,25 @@ export default function ContactForm() {
           }}
         >
           <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-            <h2 style={{
-              fontSize: isMobile ? '32px' : '48px',
-              fontWeight: '700',
-              marginBottom: '16px',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              padding: isMobile ? '0 16px' : '0'
-            }}>
-              Начните прямо сейчас
-            </h2>
+            <motion.h2
+              initial={{ backgroundPosition: '0% 50%' }}
+              animate={{ backgroundPosition: '200% 50%' }}
+              transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
+              style={{
+                fontSize: isMobile ? '34px' : '52px',
+                fontWeight: 800,
+                marginBottom: '24px',
+                background: 'linear-gradient(270deg, #00eaff, #ff00e0, #00eaff)',
+                backgroundSize: '400% 400%',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                letterSpacing: 1,
+                padding: isMobile ? '0 16px' : '0'
+              }}
+            >
+              Готовы к росту?
+            </motion.h2>
             <p style={{
               fontSize: isMobile ? '16px' : '18px',
               color: '#a0a0a0',
@@ -197,98 +201,6 @@ export default function ContactForm() {
                 />
               </div>
 
-              <div style={{ marginBottom: '24px' }}>
-                <label style={{
-                  display: 'block',
-                  marginBottom: '8px',
-                  fontSize: '14px',
-                  color: '#a0a0a0',
-                  fontWeight: '500'
-                }}>
-                  Email *
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="ivan@company.ru"
-                  style={{
-                    width: '100%',
-                    padding: '16px',
-                    fontSize: '16px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '12px',
-                    color: 'white',
-                    transition: 'all 0.3s ease',
-                    outline: 'none'
-                  }}
-                />
-              </div>
-
-              <div style={{ marginBottom: '24px' }}>
-                <label style={{
-                  display: 'block',
-                  marginBottom: '8px',
-                  fontSize: '14px',
-                  color: '#a0a0a0',
-                  fontWeight: '500'
-                }}>
-                  Компания
-                </label>
-                <input
-                  type="text"
-                  name="company"
-                  value={formData.company}
-                  onChange={handleInputChange}
-                  placeholder="ООО Компания"
-                  style={{
-                    width: '100%',
-                    padding: '16px',
-                    fontSize: '16px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '12px',
-                    color: 'white',
-                    transition: 'all 0.3s ease',
-                    outline: 'none'
-                  }}
-                />
-              </div>
-
-              <div style={{ marginBottom: '32px' }}>
-                <label style={{
-                  display: 'block',
-                  marginBottom: '8px',
-                  fontSize: '14px',
-                  color: '#a0a0a0',
-                  fontWeight: '500'
-                }}>
-                  Сообщение
-                </label>
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  rows={4}
-                  placeholder="Расскажите о вашей задаче..."
-                  style={{
-                    width: '100%',
-                    padding: '16px',
-                    fontSize: '16px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '12px',
-                    color: 'white',
-                    resize: 'vertical',
-                    minHeight: '120px',
-                    transition: 'all 0.3s ease',
-                    outline: 'none'
-                  }}
-                />
-              </div>
 
               <AnimatePresence mode="wait">
                 {status.message && (
@@ -320,16 +232,26 @@ export default function ContactForm() {
               <motion.button
                 type="submit"
                 disabled={status.loading}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                whileHover={{ scale: 1.08, boxShadow: '0 0 40px rgba(0, 238, 255, 0.7)' }}
+                whileTap={{ scale: 0.95 }}
+                animate={{
+                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                  textShadow: ['0 0 10px #00eaff', '0 0 20px #ff00e0', '0 0 10px #00eaff']
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: 'linear'
+                }}
                 style={{
                   width: '100%',
                   padding: '20px',
                   fontSize: '18px',
                   fontWeight: '600',
                   background: status.loading 
-                    ? 'rgba(102, 126, 234, 0.5)' 
-                    : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    ? 'rgba(0, 238, 255, 0.4)' 
+                    : 'linear-gradient(270deg, #00eaff, #ff00e0, #00eaff)',
+                  backgroundSize: '400% 400%',
                   border: 'none',
                   borderRadius: '16px',
                   color: 'white',
@@ -339,7 +261,7 @@ export default function ContactForm() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '10px',
-                  boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)'
+                  boxShadow: '0 0 25px rgba(0, 238, 255, 0.4)'
                 }}
               >
                 {status.loading ? (
@@ -359,8 +281,14 @@ export default function ContactForm() {
                   </>
                 ) : (
                   <>
-                    <span>Отправить заявку</span>
-                    <span style={{ fontSize: '24px' }}>→</span>
+                    <span style={{ fontWeight: 700, letterSpacing: 1 }}>Оставить заявку</span>
+                    <motion.span
+                      animate={{ x: [0, 4, 0] }}
+                      transition={{ repeat: Infinity, duration: 1.5 }}
+                      style={{ fontSize: 24 }}
+                    >
+                      →
+                    </motion.span>
                   </>
                 )}
               </motion.button>
