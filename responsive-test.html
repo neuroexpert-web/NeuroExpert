@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тест адаптивности NeuroExpert</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #0a0a0a;
+      color: #fff;
+    }
+    .device-frame {
+      margin: 20px 0;
+      padding: 20px;
+      border: 2px solid #fbbf24;
+      border-radius: 10px;
+      background: #1a1a1a;
+    }
+    .device-name {
+      font-size: 18px;
+      color: #fbbf24;
+      margin-bottom: 10px;
+    }
+    iframe {
+      border: 1px solid #333;
+      border-radius: 5px;
+      background: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔍 Тест адаптивности NeuroExpert</h1>
+  
+  <div class="device-frame">
+    <div class="device-name">📱 iPhone 12 Pro (390x844)</div>
+    <iframe src="http://localhost:3000" width="390" height="844"></iframe>
+  </div>
+  
+  <div class="device-frame">
+    <div class="device-name">📱 iPad (768x1024)</div>
+    <iframe src="http://localhost:3000" width="768" height="1024"></iframe>
+  </div>
+  
+  <div class="device-frame">
+    <div class="device-name">💻 Laptop (1366x768)</div>
+    <iframe src="http://localhost:3000" width="1366" height="768"></iframe>
+  </div>
+  
+  <div class="device-frame">
+    <div class="device-name">🖥️ Desktop (1920x1080)</div>
+    <iframe src="http://localhost:3000" width="1920" height="1080"></iframe>
+  </div>
+</body>
+</html>
