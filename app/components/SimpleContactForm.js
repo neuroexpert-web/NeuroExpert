@@ -5,14 +5,14 @@ import { motion } from 'framer-motion';
 export default function SimpleContactForm() {
   const [formData, setFormData] = useState({
     name: '',
-    phone: ''
+    phone: '',
   });
-  
+
   const [status, setStatus] = useState({
     loading: false,
     success: false,
     error: false,
-    message: ''
+    message: '',
   });
 
   const handleSubmit = async (e) => {
@@ -22,16 +22,16 @@ export default function SimpleContactForm() {
     try {
       const response = await fetch('/api/contact-form', {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
-          'x-neuroexpert-csrf': '1'
+          'x-neuroexpert-csrf': '1',
         },
         body: JSON.stringify({
           ...formData,
           email: '', // Пустое значение для совместимости с API
           company: '',
-          message: 'Быстрая заявка'
-        })
+          message: 'Быстрая заявка',
+        }),
       });
 
       const result = await response.json();
@@ -41,10 +41,10 @@ export default function SimpleContactForm() {
           loading: false,
           success: true,
           error: false,
-          message: 'Спасибо! Мы перезвоним вам в течение 15 минут.'
+          message: 'Спасибо! Мы перезвоним вам в течение 15 минут.',
         });
         setFormData({ name: '', phone: '' });
-        
+
         // Сбрасываем статус через 5 секунд
         setTimeout(() => {
           setStatus({ loading: false, success: false, error: false, message: '' });
@@ -57,14 +57,14 @@ export default function SimpleContactForm() {
         loading: false,
         success: false,
         error: true,
-        message: 'Ошибка отправки. Попробуйте позже.'
+        message: 'Ошибка отправки. Попробуйте позже.',
       });
     }
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   // Форматирование телефона
@@ -78,15 +78,15 @@ export default function SimpleContactForm() {
   };
 
   const handlePhoneChange = (e) => {
-    let value = e.target.value;
+    const value = e.target.value;
     // Если пользователь стирает символы, не форматируем
     if (value.length < formData.phone.length) {
-      setFormData(prev => ({ ...prev, phone: value }));
+      setFormData((prev) => ({ ...prev, phone: value }));
       return;
     }
     // Форматируем только при вводе
     const formatted = formatPhone(value);
-    setFormData(prev => ({ ...prev, phone: formatted }));
+    setFormData((prev) => ({ ...prev, phone: formatted }));
   };
 
   return (
@@ -153,11 +153,7 @@ export default function SimpleContactForm() {
               </motion.div>
             )}
 
-            <button
-              type="submit"
-              className="submit-button"
-              disabled={status.loading}
-            >
+            <button type="submit" className="submit-button" disabled={status.loading}>
               {status.loading ? (
                 <span className="loading">
                   <span className="loading-dot"></span>
@@ -306,7 +302,9 @@ export default function SimpleContactForm() {
         }
 
         @keyframes loading-bounce {
-          0%, 80%, 100% {
+          0%,
+          80%,
+          100% {
             transform: scale(0);
           }
           40% {

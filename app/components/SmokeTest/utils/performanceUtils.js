@@ -8,11 +8,11 @@ export const performanceUtils = {
    */
   getPageLoadTime() {
     const navigation = performance.getEntriesByType('navigation')[0];
-    
+
     if (navigation) {
       return Math.round(navigation.loadEventEnd - navigation.fetchStart);
     }
-    
+
     // Fallback для старых браузеров
     return Math.round(performance.timing.loadEventEnd - performance.timing.fetchStart);
   },
@@ -22,13 +22,13 @@ export const performanceUtils = {
    */
   async measureFPS(duration = 1000) {
     let frameCount = 0;
-    let lastTime = performance.now();
+    const lastTime = performance.now();
     let fps = 0;
-    
+
     return new Promise((resolve) => {
       const countFrames = (currentTime) => {
         frameCount++;
-        
+
         if (currentTime - lastTime >= duration) {
           fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
           resolve(fps);
@@ -36,7 +36,7 @@ export const performanceUtils = {
           requestAnimationFrame(countFrames);
         }
       };
-      
+
       requestAnimationFrame(countFrames);
     });
   },
@@ -48,23 +48,23 @@ export const performanceUtils = {
     const metrics = {
       // Время до первого байта
       ttfb: this.getTimeToFirstByte(),
-      
+
       // Время до первой отрисовки
       fcp: this.getFirstContentfulPaint(),
-      
+
       // Время до интерактивности
       tti: this.getTimeToInteractive(),
-      
+
       // Количество ресурсов
       resourceCount: performance.getEntriesByType('resource').length,
-      
+
       // Размер переданных данных
       transferSize: this.getTotalTransferSize(),
-      
+
       // Использование памяти (если доступно)
-      memory: this.getMemoryUsage()
+      memory: this.getMemoryUsage(),
     };
-    
+
     return metrics;
   },
 
@@ -73,11 +73,11 @@ export const performanceUtils = {
    */
   getTimeToFirstByte() {
     const navigation = performance.getEntriesByType('navigation')[0];
-    
+
     if (navigation && navigation.responseStart) {
       return Math.round(navigation.responseStart - navigation.fetchStart);
     }
-    
+
     return null;
   },
 
@@ -86,8 +86,8 @@ export const performanceUtils = {
    */
   getFirstContentfulPaint() {
     const paintEntries = performance.getEntriesByType('paint');
-    const fcp = paintEntries.find(entry => entry.name === 'first-contentful-paint');
-    
+    const fcp = paintEntries.find((entry) => entry.name === 'first-contentful-paint');
+
     return fcp ? Math.round(fcp.startTime) : null;
   },
 
@@ -98,11 +98,11 @@ export const performanceUtils = {
     // Упрощенная метрика TTI
     const loadTime = this.getPageLoadTime();
     const fcp = this.getFirstContentfulPaint();
-    
+
     if (loadTime && fcp) {
       return Math.max(loadTime, fcp + 500); // Добавляем 500ms после FCP
     }
-    
+
     return null;
   },
 
@@ -111,7 +111,7 @@ export const performanceUtils = {
    */
   getTotalTransferSize() {
     const resources = performance.getEntriesByType('resource');
-    
+
     return resources.reduce((total, resource) => {
       return total + (resource.transferSize || 0);
     }, 0);
@@ -125,10 +125,10 @@ export const performanceUtils = {
       return {
         usedJSHeapSize: Math.round(performance.memory.usedJSHeapSize / 1048576), // MB
         totalJSHeapSize: Math.round(performance.memory.totalJSHeapSize / 1048576), // MB
-        limit: Math.round(performance.memory.jsHeapSizeLimit / 1048576) // MB
+        limit: Math.round(performance.memory.jsHeapSizeLimit / 1048576), // MB
       };
     }
-    
+
     return null;
   },
 
@@ -143,9 +143,9 @@ export const performanceUtils = {
         }
       }
     });
-    
+
     observer.observe({ entryTypes: ['longtask'] });
-    
+
     // Отключаем через 5 секунд
     setTimeout(() => observer.disconnect(), 5000);
   },
@@ -157,29 +157,29 @@ export const performanceUtils = {
     const startMark = `${label}-start`;
     const endMark = `${label}-end`;
     const measureName = `${label}-duration`;
-    
+
     performance.mark(startMark);
-    
+
     try {
       const result = await fn();
-      
+
       performance.mark(endMark);
       performance.measure(measureName, startMark, endMark);
-      
+
       const measure = performance.getEntriesByName(measureName)[0];
-      
+
       // Очищаем метки
       performance.clearMarks(startMark);
       performance.clearMarks(endMark);
       performance.clearMeasures(measureName);
-      
+
       return {
         result,
-        duration: measure.duration
+        duration: measure.duration,
       };
     } catch (error) {
       performance.clearMarks(startMark);
       throw error;
     }
-  }
+  },
 };
