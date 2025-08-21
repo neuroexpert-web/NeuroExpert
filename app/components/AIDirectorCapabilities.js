@@ -12,7 +12,7 @@ export default function AIDirectorCapabilities() {
       icon: '👨‍💼',
       content: {
         name: 'Александр Нейронов',
-        role: 'Управляющий директор NeuroExpert',
+        role: 'AI управляющий платформы NeuroExpert',
         experience: '15+ лет в IT и цифровой трансформации',
         achievements: [
           'Многолетний опыт цифровой трансформации',
@@ -67,7 +67,7 @@ export default function AIDirectorCapabilities() {
           className="text-center mb-12"
         >
           <h2 className="text-4xl font-bold mb-4">
-            <span className="gradient-text">AI Управляющий директор</span>
+            <span className="gradient-text">AI Управляющий платформы</span>
           </h2>
           <p className="text-xl text-gray-400">
             Интеллектуальный помощник, который понимает ваш бизнес
@@ -278,7 +278,7 @@ export default function AIDirectorCapabilities() {
           transition={{ delay: 0.8 }}
         >
           <p className="text-gray-400 mb-6">
-            Попробуйте пообщаться с AI директором прямо сейчас!
+            Попробуйте пообщаться с AI управляющим платформы прямо сейчас!
           </p>
           <motion.button
             onClick={() => {
@@ -360,7 +360,7 @@ export default function AIDirectorCapabilities() {
                 ease: 'linear'
               }}
             >
-              Начать диалог с AI директором
+              Начать диалог с AI управляющим платформы
             </motion.span>
             
             {/* Морфинг иконок */}

@@ -3,12 +3,17 @@ import { useState, ChangeEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ROIFormData, ROIResults } from '../../types';
 import ROIResultModal from './ROIResultModal';
+import { 
+  calculateSimpleROI, 
+  INDUSTRY_COEFFICIENTS, 
+  SCALE_COEFFICIENTS 
+} from '../utils/roi-calculations';
 
 export default function ROICalculator(): JSX.Element {
   const [formData, setFormData] = useState<ROIFormData>({
     businessSize: 'small',
     industry: 'retail',
-    budget: 200000
+    budget: 500000
   });
   
   const [showResult, setShowResult] = useState<boolean>(false);
@@ -18,21 +23,6 @@ export default function ROICalculator(): JSX.Element {
     growth: 0,
     payback: 0
   });
-
-  // Множители для расчета
-  const sizeMultipliers: Record<ROIFormData['businessSize'], number> = {
-    small: 3.2,
-    medium: 4.5,
-    large: 6.0
-  };
-  
-  const industryMultipliers: Record<ROIFormData['industry'], number> = {
-    retail: 1.2,
-    services: 1.3,
-    production: 1.1,
-    it: 1.5,
-    other: 1.0
-  };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
     const { name, value } = e.target;
@@ -45,14 +35,10 @@ export default function ROICalculator(): JSX.Element {
   const calculateROI = async (): Promise<void> => {
     const { businessSize, industry, budget } = formData;
     
-    // Расчеты на основе множителей
-    const baseROI = sizeMultipliers[businessSize] * industryMultipliers[industry];
-    const roi = Math.round(baseROI * 100);
-    const savings = Math.round(budget * 0.35);
-    const growth = Math.round(budget * baseROI);
-    const payback = Math.round(budget / (savings / 12));
+    // Используем новую продвинутую систему расчетов
+    const calculatedResults = calculateSimpleROI(budget, industry, businessSize);
     
-    setResults({ roi, savings, growth, payback });
+    setResults(calculatedResults);
     setShowResult(true);
   };
 
@@ -80,11 +66,11 @@ export default function ROICalculator(): JSX.Element {
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text'
             }}>
-              Калькулятор ROI
+              Калькулятор потенциала роста
             </span>
           </h2>
           <p className="text-xl text-gray-400">
-            Узнайте вашу выгоду от внедрения наших решений
+            Оценка эффективности цифровой трансформации на основе реальных данных рынка
           </p>
         </motion.div>
 
@@ -100,48 +86,20 @@ export default function ROICalculator(): JSX.Element {
             border: '1px solid rgba(102, 126, 234, 0.3)',
             boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3), 0 0 40px rgba(102, 126, 234, 0.2)'
           }}
+          className="roi-calculator-container"
         >
           <div className="grid md:grid-cols-2 gap-8">
             {/* Форма ввода */}
             <div>
               <h3 className="text-2xl font-bold mb-6" style={{ color: '#e0e7ff' }}>
-                Введите данные о вашем бизнесе
+                Параметры вашего бизнеса
               </h3>
               
               <div className="space-y-6">
-                {/* Размер бизнеса */}
-                <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
-                  <label className="block text-sm font-medium mb-2" style={{ color: '#a0a9cc' }}>
-                    Размер бизнеса
-                  </label>
-                  <select
-                    name="businessSize"
-                    value={formData.businessSize}
-                    onChange={handleInputChange}
-                    style={{
-                      width: '100%',
-                      padding: '16px',
-                      background: 'rgba(102, 126, 234, 0.1)',
-                      border: '1px solid rgba(102, 126, 234, 0.3)',
-                      borderRadius: '12px',
-                      color: 'white',
-                      fontSize: '16px',
-                      outline: 'none',
-                      transition: 'all 0.3s ease'
-                    }}
-                    onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
-                    onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
-                  >
-                    <option value="small" style={{ background: '#1a1a2e' }}>Малый (до 50 сотрудников)</option>
-                    <option value="medium" style={{ background: '#1a1a2e' }}>Средний (50-250 сотрудников)</option>
-                    <option value="large" style={{ background: '#1a1a2e' }}>Крупный (250+ сотрудников)</option>
-                  </select>
-                </motion.div>
-
                 {/* Отрасль */}
                 <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
                   <label className="block text-sm font-medium mb-2" style={{ color: '#a0a9cc' }}>
-                    Отрасль
+                    Отрасль вашего бизнеса
                   </label>
                   <select
                     name="industry"
@@ -158,29 +116,30 @@ export default function ROICalculator(): JSX.Element {
                       outline: 'none',
                       transition: 'all 0.3s ease'
                     }}
+                    className="roi-select"
                     onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
                     onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
                   >
-                    <option value="retail" style={{ background: '#1a1a2e' }}>Розничная торговля</option>
-                    <option value="services" style={{ background: '#1a1a2e' }}>Услуги</option>
-                    <option value="production" style={{ background: '#1a1a2e' }}>Производство</option>
-                    <option value="it" style={{ background: '#1a1a2e' }}>IT и технологии</option>
-                    <option value="other" style={{ background: '#1a1a2e' }}>Другое</option>
+                    {Object.entries(INDUSTRY_COEFFICIENTS).map(([key, data]) => (
+                      <option key={key} value={key} style={{ background: '#1a1a2e' }}>
+                        {data.name}
+                      </option>
+                    ))}
                   </select>
+                  <p className="mt-2 text-xs" style={{ color: '#64748b' }}>
+                    {INDUSTRY_COEFFICIENTS[formData.industry]?.description}
+                  </p>
                 </motion.div>
 
-                {/* Желаемые инвестиции в цифровизацию */}
+                {/* Размер компании */}
                 <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
                   <label className="block text-sm font-medium mb-2" style={{ color: '#a0a9cc' }}>
-                    Желаемые инвестиции в цифровизацию (₽)
+                    Количество сотрудников
                   </label>
-                  <input
-                    type="number"
-                    name="budget"
-                    value={formData.budget}
+                  <select
+                    name="businessSize"
+                    value={formData.businessSize}
                     onChange={handleInputChange}
-                    min="0"
-                    step="10000"
                     style={{
                       width: '100%',
                       padding: '16px',
@@ -192,9 +151,51 @@ export default function ROICalculator(): JSX.Element {
                       outline: 'none',
                       transition: 'all 0.3s ease'
                     }}
+                    className="roi-select"
+                    onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
+                    onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
+                  >
+                    {Object.entries(SCALE_COEFFICIENTS).map(([key, data]) => (
+                      <option key={key} value={key} style={{ background: '#1a1a2e' }}>
+                        {data.name} сотрудников
+                      </option>
+                    ))}
+                  </select>
+                  <p className="mt-2 text-xs" style={{ color: '#64748b' }}>
+                    Срок внедрения: ~{SCALE_COEFFICIENTS[formData.businessSize]?.implementationSpeed} месяцев
+                  </p>
+                </motion.div>
+
+                {/* Планируемые инвестиции */}
+                <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
+                  <label className="block text-sm font-medium mb-2" style={{ color: '#a0a9cc' }}>
+                    Планируемая сумма инвестиций (₽)
+                  </label>
+                  <input
+                    type="number"
+                    name="budget"
+                    value={formData.budget}
+                    onChange={handleInputChange}
+                    min="100000"
+                    step="50000"
+                    style={{
+                      width: '100%',
+                      padding: '16px',
+                      background: 'rgba(102, 126, 234, 0.1)',
+                      border: '1px solid rgba(102, 126, 234, 0.3)',
+                      borderRadius: '12px',
+                      color: 'white',
+                      fontSize: '16px',
+                      outline: 'none',
+                      transition: 'all 0.3s ease'
+                    }}
+                    className="roi-input"
                     onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
                     onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
                   />
+                  <p className="mt-2 text-xs" style={{ color: '#64748b' }}>
+                    Рекомендуемый минимум: {formatCurrency(100000)}
+                  </p>
                 </motion.div>
 
                 {/* Кнопка расчета */}
@@ -202,12 +203,13 @@ export default function ROICalculator(): JSX.Element {
                   onClick={calculateROI}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  disabled={formData.budget < 100000}
                   animate={{
-                    boxShadow: [
+                    boxShadow: formData.budget >= 100000 ? [
                       '0 0 20px rgba(102, 126, 234, 0.4)',
                       '0 0 40px rgba(118, 75, 162, 0.6)',
                       '0 0 20px rgba(102, 126, 234, 0.4)'
-                    ]
+                    ] : '0 0 10px rgba(102, 126, 234, 0.2)'
                   }}
                   transition={{
                     boxShadow: {
@@ -218,21 +220,105 @@ export default function ROICalculator(): JSX.Element {
                   style={{
                     width: '100%',
                     padding: '18px',
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    background: formData.budget >= 100000 
+                      ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                      : 'linear-gradient(135deg, #4a5568 0%, #2d3748 100%)',
                     border: 'none',
                     borderRadius: '50px',
                     color: 'white',
                     fontSize: '18px',
                     fontWeight: '700',
-                    cursor: 'pointer',
-                    marginTop: '32px'
+                    cursor: formData.budget >= 100000 ? 'pointer' : 'not-allowed',
+                    marginTop: '32px',
+                    opacity: formData.budget >= 100000 ? 1 : 0.6
                   }}
+                  className="roi-calculate-btn"
                 >
-                  Рассчитать ROI
+                  Рассчитать потенциал
                 </motion.button>
               </div>
             </div>
 
+            {/* Информационная панель */}
+            <div className="space-y-6">
+              <h3 className="text-2xl font-bold mb-6" style={{ color: '#e0e7ff' }}>
+                Как это работает?
+              </h3>
+              
+              <div className="space-y-4">
+                <motion.div 
+                  className="info-card"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.3 }}
+                  style={{
+                    background: 'rgba(102, 126, 234, 0.1)',
+                    padding: '20px',
+                    borderRadius: '16px',
+                    border: '1px solid rgba(102, 126, 234, 0.2)'
+                  }}
+                >
+                  <h4 style={{ color: '#667eea', marginBottom: '8px', fontWeight: '600' }}>
+                    📊 Основано на реальных данных
+                  </h4>
+                  <p style={{ color: '#a0a9cc', fontSize: '14px' }}>
+                    Используем бенчмарки McKinsey, Gartner и IDC для точной оценки потенциала вашей отрасли
+                  </p>
+                </motion.div>
+
+                <motion.div 
+                  className="info-card"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.4 }}
+                  style={{
+                    background: 'rgba(72, 187, 120, 0.1)',
+                    padding: '20px',
+                    borderRadius: '16px',
+                    border: '1px solid rgba(72, 187, 120, 0.2)'
+                  }}
+                >
+                  <h4 style={{ color: '#48bb78', marginBottom: '8px', fontWeight: '600' }}>
+                    💰 Комплексный анализ ROI
+                  </h4>
+                  <p style={{ color: '#a0a9cc', fontSize: '14px' }}>
+                    Учитываем операционную экономию, рост выручки и повышение эффективности процессов
+                  </p>
+                </motion.div>
+
+                <motion.div 
+                  className="info-card"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.5 }}
+                  style={{
+                    background: 'rgba(237, 137, 54, 0.1)',
+                    padding: '20px',
+                    borderRadius: '16px',
+                    border: '1px solid rgba(237, 137, 54, 0.2)'
+                  }}
+                >
+                  <h4 style={{ color: '#ed8936', marginBottom: '8px', fontWeight: '600' }}>
+                    ⚡ Адаптация под ваш бизнес
+                  </h4>
+                  <p style={{ color: '#a0a9cc', fontSize: '14px' }}>
+                    Коэффициенты масштаба и отраслевая специфика для максимально точного прогноза
+                  </p>
+                </motion.div>
+              </div>
+
+              <div style={{
+                marginTop: '32px',
+                padding: '16px',
+                background: 'rgba(66, 153, 225, 0.1)',
+                borderRadius: '12px',
+                border: '1px solid rgba(66, 153, 225, 0.2)'
+              }}>
+                <p style={{ color: '#4299e1', fontSize: '13px', textAlign: 'center' }}>
+                  💡 <strong>Совет:</strong> Результаты основаны на 3-летнем периоде внедрения и оптимизации цифровых решений
+                </p>
+              </div>
+            </div>
           </div>
         </motion.div>
 
@@ -244,6 +330,26 @@ export default function ROICalculator(): JSX.Element {
           formData={formData}
         />
       </div>
+
+      {/* Адаптивные стили */}
+      <style jsx>{`
+        @media (max-width: 768px) {
+          .roi-calculator-container {
+            padding: 24px !important;
+          }
+          
+          .roi-select,
+          .roi-input {
+            font-size: 14px !important;
+            padding: 12px !important;
+          }
+          
+          .roi-calculate-btn {
+            font-size: 16px !important;
+            padding: 14px !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }
