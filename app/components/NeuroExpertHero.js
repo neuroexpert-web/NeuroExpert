@@ -948,8 +948,8 @@ export default function NeuroExpertHero() {
           text-transform: uppercase;
           margin-bottom: 40px;
           margin-top: -20px;
-          opacity: 0;
-          animation: slideInBottom 1s 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+          opacity: 1;
+          animation: slideInBottom 1s 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) both;
           letter-spacing: 0.15em;
         }
 
@@ -960,8 +960,8 @@ export default function NeuroExpertHero() {
           max-width: 800px;
           line-height: 1.8;
           margin: 0 auto 60px;
-          opacity: 0;
-          animation: fadeIn 1s 0.7s ease-out forwards;
+          opacity: 1;
+          animation: fadeIn 1s 0.7s ease-out both;
           text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
           letter-spacing: 0.02em;
         }
@@ -983,8 +983,8 @@ export default function NeuroExpertHero() {
           overflow: visible;
           cursor: pointer;
           transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-          opacity: 0;
-          animation: pulseIn 1s 0.9s ease-out forwards;
+          opacity: 1;
+          animation: pulseIn 1s 0.9s ease-out both;
           margin-top: 20px;
         }
 
