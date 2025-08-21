@@ -403,7 +403,8 @@ export default function NeuroExpertHero() {
           display: flex;
           flex-direction: column;
           justify-content: center;
-          gap: 40px;
+          align-items: center;
+          gap: 20px;
         }
 
         .pre-header {

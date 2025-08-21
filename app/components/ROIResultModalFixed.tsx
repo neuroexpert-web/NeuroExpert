@@ -66,8 +66,8 @@ export default function ROIResultModalFixed({ isOpen, onClose, results, formData
     }
   };
 
-  const modalStyle = {
-    position: 'fixed' as const,
+  const modalStyle: React.CSSProperties = {
+    position: 'fixed',
     top: isMobile ? '0' : '2vh',
     left: isMobile ? '0' : '50%',
     right: isMobile ? '0' : 'auto',
@@ -83,10 +83,10 @@ export default function ROIResultModalFixed({ isOpen, onClose, results, formData
     width: isMobile ? '100%' : '90%',
     height: isMobile ? '100%' : 'auto',
     maxHeight: isMobile ? '100%' : '96vh',
-    overflowY: 'auto',
-    overflowX: 'hidden',
+    overflowY: 'auto' as const,
+    overflowX: 'hidden' as const,
     zIndex: 1001,
-    WebkitOverflowScrolling: 'touch' as any,
+    WebkitOverflowScrolling: 'touch',
   };
 
   return (
