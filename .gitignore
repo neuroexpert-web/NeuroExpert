@@ -108,4 +108,5 @@ venv/
 .vscode/
 .DS_Store
 Thumbs.db
-*.swp
+*.swp.env.production
+.env.development
