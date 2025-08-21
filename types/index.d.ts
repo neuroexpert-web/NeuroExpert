@@ -15,8 +15,8 @@ export interface AuthToken {
 }
 
 export interface ROIFormData {
-  businessSize: 'small' | 'medium' | 'large';
-  industry: 'retail' | 'services' | 'production' | 'it' | 'other';
+  businessSize: 'micro' | 'small' | 'medium' | 'large' | 'enterprise';
+  industry: 'retail' | 'services' | 'production' | 'logistics' | 'finance' | 'healthcare' | 'education' | 'realestate' | 'it' | 'other';
   budget: number;
 }
 
