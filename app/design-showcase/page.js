@@ -44,7 +44,7 @@ export default function DesignShowcase() {
 
   return (
     <div className="design-showcase">
-      <ParticlesBackground />
+      {/* ParticlesBackground временно отключен */}
       <NotificationSystem />
       <ConfettiEffect active={confettiActive} />
       

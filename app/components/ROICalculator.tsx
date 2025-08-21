@@ -42,8 +42,23 @@ export default function ROICalculator(): JSX.Element {
     } as ROIFormData));
   };
 
-  const calculateROI = async (): Promise<void> => {
-    const { businessSize, industry, budget } = formData;
+  const calculateROI = () => {
+          const employees = parseInt(formData.employees) || 0;
+          const avgSalary = parseInt(formData.avgSalary) || 0;
+          const industry = formData.industry || 'tech';
+          
+          // Базовая формула расчета ROI
+          const timeSaved = employees * 5; // часов в неделю
+          const moneySaved = timeSaved * (avgSalary / 160); // почасовая ставка
+          const productivity = moneySaved * 1.3; // 30% прирост продуктивности
+          
+          setResults({
+            timeSaved,
+            moneySaved: Math.round(moneySaved),
+            productivity: Math.round(productivity),
+            totalBenefit: Math.round(moneySaved + productivity)
+          });
+        } = formData;
     
     // Расчеты на основе множителей
     const baseROI = sizeMultipliers[businessSize] * industryMultipliers[industry];

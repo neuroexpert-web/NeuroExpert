@@ -2,6 +2,27 @@
 import { useState, useEffect, useRef } from 'react';
 
 export default function SmartFloatingAI() {
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState('');
+  
+  const handleSendMessage = async () => {
+    if (!input.trim()) return;
+    
+    const userMessage = { role: 'user', content: input };
+    setMessages(prev => [...prev, userMessage]);
+    setInput('');
+    
+    // Временный ответ бота
+    setTimeout(() => {
+      const botMessage = { 
+        role: 'assistant', 
+        content: 'Спасибо за ваше сообщение! Наш AI ассистент временно недоступен. Пожалуйста, свяжитесь с нами через форму обратной связи.' 
+      };
+      setMessages(prev => [...prev, botMessage]);
+    }, 1000);
+  };
+  
+  // Продолжение компонента...() {
   const [isOpen, setIsOpen] = useState(false);
   // История сообщений хранится в localStorage -> диалог не пропадает после перезагрузки
   const [messages, setMessages] = useState(() => {
