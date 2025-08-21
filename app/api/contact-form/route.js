@@ -6,22 +6,25 @@ async function handler(request) {
     const data = await request.json();
     
     // Validate required fields
-    const { name, email, phone, message } = data;
+    const { name, email, phone, message, company } = data;
     
-    if (!name || !email || !message) {
+    // Для оптимизированной формы требуются только имя и телефон
+    if (!name || !phone) {
       return NextResponse.json(
-        { error: 'Пожалуйста, заполните все обязательные поля' },
+        { error: 'Пожалуйста, укажите имя и телефон' },
         { status: 400 }
       );
     }
     
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: 'Пожалуйста, введите корректный email' },
-        { status: 400 }
-      );
+    // Email validation (optional now)
+    if (email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return NextResponse.json(
+          { error: 'Пожалуйста, введите корректный email' },
+          { status: 400 }
+        );
+      }
     }
     
     // Phone validation (optional but if provided, should be valid)
@@ -70,10 +73,13 @@ async function handler(request) {
 🔔 Новая заявка с сайта NeuroExpert
 
 👤 Имя: ${name}
-📧 Email: ${email}
-📱 Телефон: ${phone || 'Не указан'}
-💬 Сообщение: ${message}
+📱 Телефон: ${phone}
+${email ? `📧 Email: ${email}` : ''}
+${company ? `🏢 Компания: ${company}` : ''}
+${message ? `💬 Сообщение: ${message}` : ''}
 🕐 Время: ${new Date().toLocaleString('ru-RU')}
+
+⚡ Перезвоните в течение 5 минут!
         `;
         
         const telegramUrl = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`;
