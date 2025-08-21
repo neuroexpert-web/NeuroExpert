@@ -1,0 +1,170 @@
+# Cursor AI Rules for NeuroExpert Project
+
+## Project Context
+This is a Next.js 14 application using:
+- TypeScript
+- Tailwind CSS
+- App Router
+- Server Components
+- React 18
+- Framer Motion
+- Google Gemini AI API
+
+## Code Style Guidelines
+
+### General
+- Use functional components with TypeScript
+- Prefer named exports for components
+- Use 'use client' directive only when necessary
+- Follow ESLint and Prettier configurations
+
+### Naming Conventions
+- Components: PascalCase (e.g., `UserProfile`)
+- Hooks: camelCase with 'use' prefix (e.g., `useAuth`)
+- Utilities: camelCase (e.g., `formatDate`)
+- Constants: UPPER_SNAKE_CASE (e.g., `API_ENDPOINT`)
+- Types/Interfaces: PascalCase with 'I' prefix for interfaces
+
+### File Structure
+```
+app/
+  components/
+    ComponentName/
+      index.ts
+      ComponentName.tsx
+      ComponentName.test.tsx
+      ComponentName.css
+```
+
+### TypeScript
+- Always define proper types for props
+- Avoid using 'any' type
+- Use interfaces for object shapes
+- Use type for unions and primitives
+
+### React Best Practices
+- Use React.memo() for expensive components
+- Implement proper error boundaries
+- Use Suspense for async components
+- Optimize with dynamic imports
+
+### Next.js Specific
+- Use Image component for images
+- Implement proper metadata
+- Use Server Actions when possible
+- Optimize for Core Web Vitals
+
+### Performance
+- Lazy load heavy components
+- Use proper caching strategies
+- Minimize bundle size
+- Implement proper loading states
+
+### Security
+- Never expose API keys in client code
+- Validate all user inputs
+- Use environment variables
+- Implement proper authentication
+
+### Testing
+- Write tests for critical paths
+- Use React Testing Library
+- Aim for 80% coverage
+- Test edge cases
+
+### Comments
+- Use JSDoc for functions
+- Explain complex logic
+- Document API responses
+- Add TODO with ticket numbers
+
+## AI Assistant Behavior
+
+### When generating code:
+1. Always use TypeScript
+2. Include proper error handling
+3. Add loading and error states
+4. Follow the existing patterns
+5. Optimize for performance
+
+### When refactoring:
+1. Maintain backward compatibility
+2. Update tests accordingly
+3. Document breaking changes
+4. Consider migration path
+
+### When debugging:
+1. Check console for errors first
+2. Verify environment variables
+3. Check network requests
+4. Review recent changes
+
+### Common patterns to use:
+```typescript
+// Component with loading state
+const [loading, setLoading] = useState(false);
+const [error, setError] = useState<Error | null>(null);
+
+// API calls with error handling
+try {
+  setLoading(true);
+  const data = await fetchData();
+  // handle data
+} catch (err) {
+  setError(err as Error);
+} finally {
+  setLoading(false);
+}
+
+// Memoized values
+const memoizedValue = useMemo(() => {
+  return expensiveOperation(data);
+}, [data]);
+```
+
+## Specific Instructions
+
+### For Components:
+- Always include proper TypeScript types
+- Use Tailwind classes for styling
+- Implement responsive design
+- Add proper ARIA labels
+
+### For API Routes:
+- Validate request data
+- Return proper status codes
+- Include error messages
+- Log errors appropriately
+
+### For Tests:
+- Test user interactions
+- Mock external dependencies
+- Test error scenarios
+- Use meaningful descriptions
+
+## Do NOT:
+- Use console.log in production code
+- Hardcode sensitive data
+- Create overly complex components
+- Ignore TypeScript errors
+- Skip error handling
+- Use deprecated APIs
+- Create files larger than 500 lines
+
+## Preferred Libraries:
+- State: Zustand or React Context
+- Forms: React Hook Form + Zod
+- Animations: Framer Motion
+- Utilities: clsx, date-fns
+- Icons: Lucide React
+- UI: Tailwind CSS + Radix UI
+
+## Git Commit Messages:
+Follow conventional commits:
+- feat: new feature
+- fix: bug fix
+- docs: documentation
+- style: formatting
+- refactor: code restructuring
+- test: adding tests
+- chore: maintenance

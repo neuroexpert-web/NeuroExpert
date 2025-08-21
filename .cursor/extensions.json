@@ -1,0 +1,111 @@
+{
+  "recommendations": [
+    // Основные для разработки
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "ms-vscode.vscode-typescript-next",
+    
+    // React/Next.js
+    "dsznajder.es7-react-js-snippets",
+    "burkeholland.simple-react-snippets",
+    "pulkitgangwar.nextjs-snippets",
+    
+    // Tailwind CSS
+    "bradlc.vscode-tailwindcss",
+    "austenc.tailwind-docs",
+    "bourhaouta.tailwindshades",
+    
+    // Утилиты
+    "christian-kohler.path-intellisense",
+    "christian-kohler.npm-intellisense",
+    "formulahendry.auto-rename-tag",
+    "formulahendry.auto-close-tag",
+    "steoates.autoimport",
+    "wix.vscode-import-cost",
+    "naumovs.color-highlight",
+    "vincaslt.highlight-matching-tag",
+    
+    // Git
+    "eamodio.gitlens",
+    "donjayamanne.githistory",
+    "mhutchie.git-graph",
+    
+    // Тестирование
+    "orta.vscode-jest",
+    "firsttris.vscode-jest-runner",
+    "ms-playwright.playwright",
+    
+    // AI и продуктивность (специфично для Cursor)
+    "github.copilot",
+    "github.copilot-chat",
+    "visualstudioexptteam.vscodeintellicode",
+    "visualstudioexptteam.intellicode-api-usage-examples",
+    
+    // Отладка
+    "msjsdiag.debugger-for-chrome",
+    "firefox-devtools.vscode-firefox-debug",
+    
+    // Качество кода
+    "sonarsource.sonarlint-vscode",
+    "streetsidesoftware.code-spell-checker",
+    "usernamehw.errorlens",
+    "ibm.output-colorizer",
+    
+    // Markdown
+    "yzhang.markdown-all-in-one",
+    "davidanson.vscode-markdownlint",
+    "bierner.markdown-mermaid",
+    
+    // Файлы и навигация
+    "sleistner.vscode-fileutils",
+    "alexcvzz.vscode-sqlite",
+    "mkxml.vscode-filesize",
+    
+    // Темы и иконки
+    "pkief.material-icon-theme",
+    "zhuangtongfa.material-theme",
+    "dracula-theme.theme-dracula",
+    
+    // Docker
+    "ms-azuretools.vscode-docker",
+    "ms-vscode-remote.remote-containers",
+    
+    // REST API
+    "rangav.vscode-thunder-client",
+    "humao.rest-client",
+    
+    // База данных
+    "prisma.prisma",
+    "mtxr.sqltools",
+    
+    // Безопасность
+    "snyk-security.snyk-vulnerability-scanner",
+    
+    // Производительность
+    "kisstkondoros.vscode-gutter-preview",
+    "wayou.vscode-todo-highlight",
+    "gruntfuggly.todo-tree",
+    
+    // Форматирование
+    "editorconfig.editorconfig",
+    "foxundermoon.shell-format",
+    
+    // Дополнительно для Next.js проектов
+    "william-voyek.vscode-nginx",
+    "mikestead.dotenv",
+    "csstools.postcss",
+    
+    // Специфично для Cursor AI
+    "continue.continue",
+    "anysphere.cursor-tools"
+  ],
+  
+  "unwantedRecommendations": [
+    // Расширения, которые могут конфликтовать
+    "hookyqr.beautify",
+    "hex-ci.stylelint-plus",
+    "shinnn.stylelint",
+    "eg2.vscode-npm-script",
+    "jasonnutter.search-node-modules"
+  ]
+}

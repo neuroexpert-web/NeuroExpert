@@ -1,0 +1,328 @@
+{
+  // Cursor AI Settings
+  "cursor.aiEnabled": true,
+  "cursor.copilotEnabled": true,
+  "cursor.chatEnabled": true,
+  "cursor.inlineCompletionsEnabled": true,
+  "cursor.contextLines": 100,
+  "cursor.maxTokens": 2048,
+  "cursor.temperature": 0.2,
+  "cursor.autoSuggestDelay": 100,
+  
+  // AI-assisted coding preferences
+  "cursor.aiCodeActions": {
+    "enableRefactoring": true,
+    "enableDocumentation": true,
+    "enableTestGeneration": true,
+    "enableBugFixes": true,
+    "enableOptimization": true
+  },
+  
+  // Context awareness
+  "cursor.contextProviders": {
+    "files": true,
+    "symbols": true,
+    "diagnostics": true,
+    "gitHistory": true,
+    "terminal": true,
+    "problems": true
+  },
+  
+  // Chat settings
+  "cursor.chat": {
+    "defaultModel": "claude-3-opus",
+    "streamResponses": true,
+    "saveHistory": true,
+    "contextWindow": 8192,
+    "includeWorkspaceContext": true
+  },
+  
+  // Code completion
+  "cursor.completion": {
+    "enableSmartCompletion": true,
+    "enableChainCompletion": true,
+    "debounceDelay": 150,
+    "maxSuggestions": 5,
+    "includeSnippets": true
+  },
+  
+  // Editor settings optimized for Cursor
+  "editor.inlineSuggest.enabled": true,
+  "editor.suggestSelection": "first",
+  "editor.acceptSuggestionOnCommitCharacter": true,
+  "editor.acceptSuggestionOnEnter": "smart",
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": true,
+    "strings": true
+  },
+  "editor.parameterHints.enabled": true,
+  "editor.suggest.snippetsPreventQuickSuggestions": false,
+  
+  // Основные настройки редактора
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.organizeImports": true,
+    "source.addMissingImports": true
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": true,
+  "editor.fontLigatures": true,
+  "editor.minimap.enabled": true,
+  "editor.stickyScroll.enabled": true,
+  "editor.linkedEditing": true,
+  
+  // Настройки для JavaScript/TypeScript
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.suggest.completeFunctionCalls": true
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.suggest.completeFunctionCalls": true
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.suggest.completeFunctionCalls": true
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.suggest.completeFunctionCalls": true
+  },
+  
+  // Настройки для JSON
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  
+  // Настройки для CSS/SCSS
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.suggest.insertMode": "replace"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.suggest.insertMode": "replace"
+  },
+  
+  // ESLint
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "eslint.run": "onType",
+  "eslint.probe": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "eslint.format.enable": true,
+  "eslint.lintTask.enable": true,
+  "eslint.codeActionsOnSave.rules": null,
+  
+  // TypeScript
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.preferences.includePackageJsonAutoImports": "on",
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.suggest.autoImports": true,
+  "typescript.suggest.completeFunctionCalls": true,
+  "typescript.inlayHints.parameterNames.enabled": "all",
+  "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
+  
+  // JavaScript
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "javascript.preferences.importModuleSpecifier": "relative",
+  "javascript.suggest.autoImports": true,
+  "javascript.suggest.completeFunctionCalls": true,
+  "javascript.inlayHints.parameterNames.enabled": "all",
+  "javascript.inlayHints.functionLikeReturnTypes.enabled": true,
+  
+  // Файлы и папки
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/out": true,
+    "**/build": true,
+    "**/dist": true,
+    "**/.env.local": true,
+    "**/.env.production": true,
+    "**/.turbo": true,
+    "**/.vercel": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/out": true,
+    "**/build": true,
+    "**/dist": true,
+    "**/.git": true,
+    "**/coverage": true,
+    "**/.turbo": true,
+    "**/package-lock.json": true,
+    "**/yarn.lock": true,
+    "**/pnpm-lock.yaml": true
+  },
+  
+  // Авто-сохранение
+  "files.autoSave": "onFocusChange",
+  "files.autoSaveDelay": 1000,
+  
+  // Git
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  "git.autoStash": true,
+  "git.followTagsWhenSync": true,
+  "git.pruneOnFetch": true,
+  "git.pullTags": true,
+  
+  // Терминал
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.defaultProfile.windows": "powershell",
+  "terminal.integrated.fontSize": 14,
+  "terminal.integrated.fontFamily": "JetBrains Mono, Consolas, 'Courier New', monospace",
+  "terminal.integrated.copyOnSelection": true,
+  "terminal.integrated.cursorBlinking": true,
+  
+  // Prettier
+  "prettier.requireConfig": true,
+  "prettier.useEditorConfig": true,
+  
+  // Отладка
+  "debug.javascript.autoAttachFilter": "smart",
+  "debug.javascript.automaticallyTunnelRemoteServer": true,
+  "debug.javascript.codelens.npmScripts": "all",
+  
+  // Next.js специфичные настройки
+  "files.associations": {
+    "*.css": "tailwindcss",
+    "*.scss": "tailwindcss"
+  },
+  
+  // Tailwind CSS
+  "tailwindCSS.includeLanguages": {
+    "plaintext": "html",
+    "javascriptreact": "html",
+    "typescriptreact": "html"
+  },
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.classAttributes": [
+    "class",
+    "className",
+    "ngClass",
+    "styles"
+  ],
+  
+  // Emmet
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact",
+    "typescript": "typescriptreact"
+  },
+  "emmet.triggerExpansionOnTab": true,
+  
+  // Проверка орфографии
+  "cSpell.words": [
+    "neuroexpert",
+    "nextjs",
+    "tailwindcss",
+    "vercel",
+    "trpc",
+    "prisma",
+    "zod",
+    "clsx",
+    "framer",
+    "lucide",
+    "radix",
+    "shadcn",
+    "tanstack",
+    "zustand",
+    "jotai",
+    "valtio"
+  ],
+  "cSpell.ignorePaths": [
+    "node_modules",
+    ".git",
+    ".next",
+    "*.min.*",
+    "*.lock"
+  ],
+  
+  // Безопасность
+  "security.workspace.trust.untrustedFiles": "open",
+  
+  // Производительность
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/.next/**": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/out/**": true,
+    "**/.turbo/**": true
+  },
+  
+  // Расширения браузера предпросмотра
+  "liveServer.settings.donotShowInfoMsg": true,
+  "liveServer.settings.donotVerifyTags": true,
+  
+  // Форматирование
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.renderWhitespace": "selection",
+  "editor.trimAutoWhitespace": true,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  
+  // IntelliSense
+  "editor.suggest.showMethods": true,
+  "editor.suggest.showFunctions": true,
+  "editor.suggest.showConstructors": true,
+  "editor.suggest.showFields": true,
+  "editor.suggest.showVariables": true,
+  "editor.suggest.showClasses": true,
+  "editor.suggest.showStructs": true,
+  "editor.suggest.showInterfaces": true,
+  "editor.suggest.showModules": true,
+  "editor.suggest.showProperties": true,
+  "editor.suggest.showEvents": true,
+  "editor.suggest.showOperators": true,
+  "editor.suggest.showUnits": true,
+  "editor.suggest.showValues": true,
+  "editor.suggest.showConstants": true,
+  "editor.suggest.showEnums": true,
+  "editor.suggest.showEnumMembers": true,
+  "editor.suggest.showKeywords": true,
+  "editor.suggest.showWords": true,
+  "editor.suggest.showColors": true,
+  "editor.suggest.showFiles": true,
+  "editor.suggest.showReferences": true,
+  "editor.suggest.showCustomcolors": true,
+  "editor.suggest.showFolders": true,
+  "editor.suggest.showTypeParameters": true,
+  "editor.suggest.showSnippets": true,
+  
+  // Дополнительные AI настройки для Cursor
+  "cursor.experimental": {
+    "contextualCodeActions": true,
+    "smartRename": true,
+    "enhancedDiff": true,
+    "codebaseIndexing": true,
+    "semanticHighlighting": true
+  }
+}
