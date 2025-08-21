@@ -19,7 +19,7 @@ const SmartFloatingAI = dynamic(() => import('./components/SmartFloatingAI'), {
   loading: () => <div className="ai-loading">AI управляющий загружается...</div>
 });
 
-const ContactForm = dynamic(() => import('./components/ContactForm'), {
+const SimpleContactForm = dynamic(() => import('./components/SimpleContactForm'), {
   ssr: false,
   loading: () => <div className="loading-skeleton">Загрузка формы...</div>
 });
@@ -45,20 +45,7 @@ export default function Home() {
         <AIDirectorCapabilities />
       </Suspense>
       
-      {/* Ваш простой путь к результату */}
-      <JourneySection />
-      
-      {/* Почему NeuroExpert */}
-      <section id="why-us">
-        <WhyUsSection />
-      </section>
-      
-      {/* Тарифы */}
-      <section id="pricing">
-        <PricingSection />
-      </section>
-      
-      {/* Калькулятор ROI */}
+      {/* Калькулятор ROI - сразу после Hero */}
       <section className="roi-section" id="benefits">
         <div className="container">
           <div className="section-header">
@@ -75,6 +62,19 @@ export default function Home() {
             </Suspense>
           </div>
         </div>
+      </section>
+      
+      {/* Ваш простой путь к результату */}
+      <JourneySection />
+      
+      {/* Почему NeuroExpert */}
+      <section id="why-us">
+        <WhyUsSection />
+      </section>
+      
+      {/* Тарифы */}
+      <section id="pricing">
+        <PricingSection />
       </section>
       
       {/* Демо секция */}
@@ -126,7 +126,7 @@ export default function Home() {
             </div>
             <div className="consultation-form">
               <Suspense fallback={<div>Загрузка формы...</div>}>
-                <ContactForm />
+                <SimpleContactForm />
               </Suspense>
             </div>
           </div>
