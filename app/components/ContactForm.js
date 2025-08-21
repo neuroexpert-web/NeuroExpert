@@ -225,8 +225,20 @@ export default function ContactForm() {
               <motion.button
                 type="submit"
                 disabled={status.loading}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                whileHover={{ scale: 1.05, boxShadow: '0 0 25px rgba(118, 75, 162, 0.6)' }}
+                whileTap={{ scale: 0.95 }}
+                animate={{
+                  backgroundPosition: [
+                    '0% 50%',
+                    '100% 50%',
+                    '0% 50%'
+                  ]
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: 'linear'
+                }}
                 style={{
                   width: '100%',
                   padding: '20px',
@@ -234,7 +246,8 @@ export default function ContactForm() {
                   fontWeight: '600',
                   background: status.loading 
                     ? 'rgba(102, 126, 234, 0.5)' 
-                    : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    : 'linear-gradient(270deg, #667eea, #764ba2, #667eea)',
+                  backgroundSize: '400% 400%',
                   border: 'none',
                   borderRadius: '16px',
                   color: 'white',
