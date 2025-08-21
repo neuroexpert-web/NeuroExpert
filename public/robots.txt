@@ -1,0 +1,14 @@
+# Robots.txt для NeuroExpert
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /.next/
+Disallow: /_next/
+Disallow: /node_modules/
+
+# Sitemap
+Sitemap: https://neuroexpert.ai/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1

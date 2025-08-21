@@ -1,0 +1,156 @@
+name: Dependabot Auto-Merge
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  repository-projects: write
+
+jobs:
+  dependabot:
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Fetch Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v2.4.0
+        with:
+          github-token: '${{ secrets.GITHUB_TOKEN }}'
+
+      - name: Approve PR
+        if: |
+          steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
+          steps.metadata.outputs.update-type == 'version-update:semver-minor'
+        run: gh pr review --approve "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Enable auto-merge for Dependabot PRs
+        if: |
+          steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
+          steps.metadata.outputs.update-type == 'version-update:semver-minor'
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add labels based on update type
+        run: |
+          if [[ "${{ steps.metadata.outputs.update-type }}" == "version-update:semver-major" ]]; then
+            gh pr edit "$PR_URL" --add-label "major-update,needs-review"
+          elif [[ "${{ steps.metadata.outputs.update-type }}" == "version-update:semver-minor" ]]; then
+            gh pr edit "$PR_URL" --add-label "minor-update,auto-merge"
+          elif [[ "${{ steps.metadata.outputs.update-type }}" == "version-update:semver-patch" ]]; then
+            gh pr edit "$PR_URL" --add-label "patch-update,auto-merge"
+          fi
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment on PR with metadata
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const metadata = {
+              packageEcosystem: '${{ steps.metadata.outputs.package-ecosystem }}',
+              dependencyName: '${{ steps.metadata.outputs.dependency-names }}',
+              updateType: '${{ steps.metadata.outputs.update-type }}',
+              compatScore: '${{ steps.metadata.outputs.compatibility-score }}',
+              cvss: '${{ steps.metadata.outputs.cvss }}',
+              ghsaId: '${{ steps.metadata.outputs.ghsa-id }}',
+              previousVersion: '${{ steps.metadata.outputs.previous-version }}',
+              newVersion: '${{ steps.metadata.outputs.new-version }}',
+            };
+
+            let comment = `## 🤖 Dependabot Metadata\n\n`;
+            comment += `| Property | Value |\n`;
+            comment += `|----------|-------|\n`;
+            comment += `| 📦 Package | **${metadata.dependencyName}** |\n`;
+            comment += `| 🔄 Update Type | ${metadata.updateType} |\n`;
+            comment += `| 📊 Previous Version | ${metadata.previousVersion} |\n`;
+            comment += `| 📈 New Version | ${metadata.newVersion} |\n`;
+            comment += `| 🏷️ Ecosystem | ${metadata.packageEcosystem} |\n`;
+
+            if (metadata.cvss && metadata.cvss !== '') {
+              comment += `| ⚠️ CVSS Score | **${metadata.cvss}** |\n`;
+            }
+
+            if (metadata.ghsaId && metadata.ghsaId !== '') {
+              comment += `| 🔐 GHSA ID | ${metadata.ghsaId} |\n`;
+            }
+
+            if (metadata.compatScore && metadata.compatScore !== '') {
+              comment += `| ✅ Compatibility | ${metadata.compatScore} |\n`;
+            }
+
+            // Add auto-merge status
+            if (metadata.updateType === 'version-update:semver-patch' || 
+                metadata.updateType === 'version-update:semver-minor') {
+              comment += `\n### ✅ Auto-merge enabled\n`;
+              comment += `This ${metadata.updateType.split(':')[1]} update will be automatically merged after checks pass.\n`;
+            } else if (metadata.updateType === 'version-update:semver-major') {
+              comment += `\n### ⚠️ Major update - Manual review required\n`;
+              comment += `This major version update requires manual review before merging.\n`;
+            }
+
+            // Add security notice if applicable
+            if (metadata.cvss && parseFloat(metadata.cvss) > 0) {
+              comment += `\n### 🔐 Security Update\n`;
+              comment += `This update includes security fixes with CVSS score: ${metadata.cvss}\n`;
+            }
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+      - name: Auto-approve and merge security updates
+        if: |
+          steps.metadata.outputs.ghsa-id != '' ||
+          (steps.metadata.outputs.cvss != '' && steps.metadata.outputs.cvss != '0.0')
+        run: |
+          echo "Security update detected - auto-approving and merging"
+          gh pr review --approve "$PR_URL"
+          gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Additional job for handling grouped updates
+  handle-grouped-updates:
+    runs-on: ubuntu-latest
+    if: |
+      github.actor == 'dependabot[bot]' &&
+      contains(github.event.pull_request.title, 'Bump the')
+
+    steps:
+      - name: Fetch metadata for grouped updates
+        id: metadata
+        uses: dependabot/fetch-metadata@v2.4.0
+        with:
+          github-token: '${{ secrets.GITHUB_TOKEN }}'
+
+      - name: Approve grouped development dependencies
+        if: |
+          contains(steps.metadata.outputs.dependency-names, 'eslint') ||
+          contains(steps.metadata.outputs.dependency-names, 'prettier') ||
+          contains(steps.metadata.outputs.dependency-names, '@types/')
+        run: |
+          echo "Development dependencies update - auto-approving"
+          gh pr review --approve "$PR_URL"
+          gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

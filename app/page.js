@@ -19,7 +19,7 @@ const SmartFloatingAI = dynamic(() => import('./components/SmartFloatingAI'), {
   loading: () => <div className="ai-loading">AI управляющий загружается...</div>
 });
 
-const ContactForm = dynamic(() => import('./components/ContactForm'), {
+const SimpleContactForm = dynamic(() => import('./components/SimpleContactForm'), {
   ssr: false,
   loading: () => <div className="loading-skeleton">Загрузка формы...</div>
 });
@@ -29,9 +29,9 @@ const AdminPanel = dynamic(() => import('./components/AdminPanel'), {
   loading: () => <div>Загрузка админ-панели...</div>
 });
 
-const AIDirectorCapabilities = dynamic(() => import('./components/AIDirectorCapabilities'), {
+const AIManagerCapabilities = dynamic(() => import('./components/AIManagerCapabilities'), {
   ssr: false,
-  loading: () => <div className="loading-skeleton">Загрузка AI директора...</div>
+  loading: () => <div className="loading-skeleton">Загрузка AI дуправляющийа...</div>
 });
 
 export default function Home() {
@@ -40,25 +40,12 @@ export default function Home() {
       {/* Новый Hero блок с анимацией нейросети */}
       <NeuroExpertHero />
       
-      {/* AI Управляющий директор */}
+      {/* AI Управляющий дуправляющий */}
       <Suspense fallback={<div className="loading-skeleton">Загрузка...</div>}>
-        <AIDirectorCapabilities />
+        <AIManagerCapabilities />
       </Suspense>
       
-      {/* Ваш простой путь к результату */}
-      <JourneySection />
-      
-      {/* Почему NeuroExpert */}
-      <section id="why-us">
-        <WhyUsSection />
-      </section>
-      
-      {/* Тарифы */}
-      <section id="pricing">
-        <PricingSection />
-      </section>
-      
-      {/* Калькулятор ROI */}
+      {/* Калькулятор ROI - сразу после Hero */}
       <section className="roi-section" id="benefits">
         <div className="container">
           <div className="section-header">
@@ -77,6 +64,19 @@ export default function Home() {
         </div>
       </section>
       
+      {/* Ваш простой путь к результату */}
+      <JourneySection />
+      
+      {/* Почему NeuroExpert */}
+      <section id="why-us">
+        <WhyUsSection />
+      </section>
+      
+      {/* Тарифы */}
+      <section id="pricing">
+        <PricingSection />
+      </section>
+      
       {/* Демо секция */}
       <section className="demo-section" id="demo">
         <div className="container">
@@ -85,7 +85,7 @@ export default function Home() {
               Попробуйте <span className="heading-gold">демо</span> прямо сейчас
             </h2>
             <p className="demo-description">
-              Наш цифровой директор покажет возможности платформы
+              Наш цифровой дуправляющий покажет возможности платформы
             </p>
             <button 
               className="btn-luxury btn-gold btn-large"
@@ -95,7 +95,7 @@ export default function Home() {
                   aiButton.click();
                 } else {
                   // Если кнопка AI еще не загрузилась, показываем алерт
-                  alert('AI директор загружается, попробуйте через секунду...');
+                  alert('AI дуправляющий загружается, попробуйте через секунду...');
                 }
               }}
             >
@@ -126,14 +126,14 @@ export default function Home() {
             </div>
             <div className="consultation-form">
               <Suspense fallback={<div>Загрузка формы...</div>}>
-                <ContactForm />
+                <SimpleContactForm />
               </Suspense>
             </div>
           </div>
         </div>
       </section>
       
-      {/* AI Управляющий - Цифровой директор */}
+      {/* AI Управляющий - Цифровой дуправляющий */}
       <Suspense fallback={null}>
         <SmartFloatingAI />
       </Suspense>

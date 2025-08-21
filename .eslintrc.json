@@ -1,50 +1,105 @@
 {
   "extends": [
     "next/core-web-vitals",
-    "plugin:security/recommended",
+    "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:security/recommended",
     "prettier"
   ],
-  "plugins": ["security", "@typescript-eslint"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2022,
     "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    },
     "project": "./tsconfig.json"
   },
+  "plugins": [
+    "@typescript-eslint",
+    "react",
+    "react-hooks",
+    "security",
+    "import"
+  ],
   "rules": {
-    // Security rules
-    "security/detect-object-injection": "warn",
-    "security/detect-non-literal-fs-filename": "error",
-    "security/detect-eval-with-expression": "error",
-    "security/detect-no-csrf-before-method-override": "error",
-    "security/detect-possible-timing-attacks": "warn",
-    
-    // Console logs
-    "no-console": ["warn", { "allow": ["warn", "error"] }],
-    
-    // Code quality
-    "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
-    "@typescript-eslint/explicit-module-boundary-types": "off",
+    // TypeScript rules
+    "@typescript-eslint/no-unused-vars": ["error", { 
+      "argsIgnorePattern": "^_",
+      "varsIgnorePattern": "^_"
+    }],
     "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-empty-function": "warn",
+    "@typescript-eslint/no-non-null-assertion": "warn",
     
-    // React specific
+    // React rules
+    "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
+    "react/display-name": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     
-    // Best practices
-    "no-eval": "error",
-    "no-implied-eval": "error",
-    "no-new-func": "error",
-    "no-return-await": "error",
-    "prefer-const": "error",
-    "require-await": "error",
+    // Security rules
+    "security/detect-object-injection": "warn",
+    "security/detect-non-literal-fs-filename": "warn",
+    "security/detect-eval-with-expression": "error",
+    "security/detect-no-csrf-before-method-override": "error",
     
-    // Security patterns
-    "no-hardcoded-passwords": "off",
-    "no-secrets": "off"
+    // General rules
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "no-debugger": "error",
+    "no-alert": "error",
+    "no-var": "error",
+    "prefer-const": "error",
+    "prefer-template": "warn",
+    "no-param-reassign": ["error", { "props": false }],
+    
+    // Import rules
+    "import/order": ["error", {
+      "groups": [
+        "builtin",
+        "external",
+        "internal",
+        "parent",
+        "sibling",
+        "index"
+      ],
+      "newlines-between": "always",
+      "alphabetize": {
+        "order": "asc",
+        "caseInsensitive": true
+      }
+    }],
+    "import/no-duplicates": "error",
+    "import/newline-after-import": "error",
+    
+    // Code quality
+    "complexity": ["warn", 20],
+    "max-lines": ["warn", {
+      "max": 500,
+      "skipBlankLines": true,
+      "skipComments": true
+    }],
+    "max-lines-per-function": ["warn", {
+      "max": 100,
+      "skipBlankLines": true,
+      "skipComments": true
+    }]
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "env": {
+    "browser": true,
+    "es2022": true,
+    "node": true,
+    "jest": true
   },
   "overrides": [
     {
@@ -52,15 +107,26 @@
       "rules": {
         "@typescript-eslint/no-var-requires": "off"
       }
+    },
+    {
+      "files": ["**/*.test.js", "**/*.test.jsx", "**/*.test.ts", "**/*.test.tsx"],
+      "env": {
+        "jest": true
+      },
+      "rules": {
+        "max-lines": "off",
+        "max-lines-per-function": "off"
+      }
     }
   ],
   "ignorePatterns": [
     "node_modules/",
     ".next/",
     "out/",
-    "public/",
-    "*.config.js",
+    "build/",
+    "dist/",
     "coverage/",
-    "dist/"
+    "*.min.js",
+    "neuroexpert-showcase.disabled/"
   ]
 }

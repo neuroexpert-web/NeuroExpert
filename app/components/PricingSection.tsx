@@ -22,7 +22,7 @@ export default function PricingSection(): JSX.Element {
 
   const handlePlanSelect = (planName: string) => {
     setSelectedPlan(planName);
-    // Открываем чат с AI директором с предзаполненным сообщением
+    // Открываем чат с AI дуправляющийом с предзаполненным сообщением
     setTimeout(() => {
       import('@/app/utils/aiChat').then(({ openAIChat }) => {
         openAIChat(`Здравствуйте! Меня интересует тариф "${planName}". Расскажите подробнее о возможностях и как начать работу.`);
@@ -169,7 +169,7 @@ export default function PricingSection(): JSX.Element {
           
           <div className="contact-promo">
             <h3>Нужна консультация?</h3>
-            <p>Поговорите с AI директором или оставьте заявку</p>
+            <p>Поговорите с AI дуправляющийом или оставьте заявку</p>
             <div className="contact-buttons">
               <button 
                 className="btn-luxury btn-gold"

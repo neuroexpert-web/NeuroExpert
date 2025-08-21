@@ -73,18 +73,19 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             style={{
               position: 'fixed',
-              top: '50%',
+              top: '5vh',
               left: '50%',
-              transform: 'translate(-50%, -50%)',
+              transform: 'translateX(-50%)',
               background: 'linear-gradient(180deg, rgba(20, 20, 40, 0.95) 0%, rgba(30, 30, 60, 0.95) 100%)',
               borderRadius: '32px',
-              padding: '48px',
+              padding: '40px',
               border: '1px solid rgba(102, 126, 234, 0.3)',
               boxShadow: '0 30px 60px rgba(0, 0, 0, 0.5)',
               maxWidth: '800px',
               width: '90%',
-              maxHeight: '90vh',
-              overflow: 'auto',
+              maxHeight: '85vh',
+              overflowY: 'auto',
+              overflowX: 'hidden',
               zIndex: 1001
             }}
             onClick={(e) => e.stopPropagation()}
@@ -313,7 +314,7 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                     boxShadow: '0 10px 30px rgba(102, 126, 234, 0.3)'
                   }}
                 >
-                  💬 Обсудить с AI директором
+                  💬 Обсудить с AI дуправляющийом
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.05 }}

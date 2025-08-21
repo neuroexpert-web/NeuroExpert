@@ -1,28 +1,53 @@
-// Learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom'
+// Jest setup file
+import '@testing-library/jest-dom';
 
-// Mock window.matchMedia
-Object.defineProperty(window, 'matchMedia', {
-  writable: true,
-  value: jest.fn().mockImplementation(query => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: jest.fn(), // deprecated
-    removeListener: jest.fn(), // deprecated
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
-  })),
-});
+// Мокаем next/router
+jest.mock('next/router', () => ({
+  useRouter() {
+    return {
+      route: '/',
+      pathname: '',
+      query: '',
+      asPath: '',
+      push: jest.fn(),
+      replace: jest.fn(),
+      reload: jest.fn(),
+      back: jest.fn(),
+      prefetch: jest.fn(),
+      beforePopState: jest.fn(),
+      events: {
+        on: jest.fn(),
+        off: jest.fn(),
+        emit: jest.fn(),
+      },
+    };
+  },
+}));
 
-// Mock IntersectionObserver
+// Мокаем next/image
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: (props) => {
+    // eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element
+    return <img {...props} />;
+  },
+}));
+
+// Глобальные моки для браузерных API
+global.matchMedia =
+  global.matchMedia ||
+  function () {
+    return {
+      matches: false,
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+    };
+  };
+
+// Мок для IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
   constructor() {}
   disconnect() {}
   observe() {}
   unobserve() {}
 };
-
-// Mock scrollIntoView
-Element.prototype.scrollIntoView = jest.fn();

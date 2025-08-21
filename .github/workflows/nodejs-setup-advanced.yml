@@ -1,0 +1,263 @@
+name: Advanced Node.js Setup Example
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # Пример с базовой настройкой
+  basic-setup:
+    name: Basic Node.js Setup
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3.9.1
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+  # Пример с использованием .nvmrc
+  nvm-setup:
+    name: Node.js with .nvmrc
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js from .nvmrc
+        uses: actions/setup-node@v3.9.1
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Install and test
+        run: |
+          npm ci
+          npm test
+
+  # Пример с матрицей версий
+  matrix-setup:
+    name: Test on Node.js ${{ matrix.node }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node: ['16.x', '18.x', '20.x']
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v3.9.1
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'npm'
+          check-latest: true
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+  # Пример с приватным реестром
+  private-registry:
+    name: Private Registry Setup
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js with Registry
+        uses: actions/setup-node@v3.9.1
+        with:
+          node-version: '18.x'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@myorg'
+          always-auth: true
+
+      - name: Install from private registry
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Пример с Yarn
+  yarn-setup:
+    name: Yarn Setup
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js with Yarn cache
+        uses: actions/setup-node@v3.9.1
+        with:
+          node-version: '18.x'
+          cache: 'yarn'
+          cache-dependency-path: 'yarn.lock'
+
+      - name: Install with Yarn
+        run: yarn install --frozen-lockfile
+
+  # Пример с pnpm
+  pnpm-setup:
+    name: PNPM Setup
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node.js with pnpm cache
+        uses: actions/setup-node@v3.9.1
+        with:
+          node-version: '18.x'
+          cache: 'pnpm'
+
+      - name: Install with pnpm
+        run: pnpm install --frozen-lockfile
+
+  # Пример с разными архитектурами
+  architecture-setup:
+    name: Different Architectures
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        architecture: [x64, x86]
+        exclude:
+          - os: macos-latest
+            architecture: x86
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js for ${{ matrix.architecture }}
+        uses: actions/setup-node@v3.9.1
+        with:
+          node-version: '18.x'
+          architecture: ${{ matrix.architecture }}
+          cache: 'npm'
+
+      - name: Show Node.js info
+        run: |
+          node --version
+          npm --version
+          node -p "process.arch"
+
+  # Пример с монорепозиторием
+  monorepo-setup:
+    name: Monorepo with Multiple Lock Files
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js with multiple caches
+        uses: actions/setup-node@v3.9.1
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+          cache-dependency-path: |
+            package-lock.json
+            packages/*/package-lock.json
+
+      - name: Install all dependencies
+        run: |
+          npm ci
+          npm run bootstrap
+
+  # Продвинутый пример с кэшированием
+  advanced-caching:
+    name: Advanced Caching Strategy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3.9.1
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        shell: bash
+        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+
+      - name: Additional cache for build artifacts
+        uses: actions/cache@v3
+        id: build-cache
+        with:
+          path: |
+            .next/cache
+            node_modules/.cache
+            ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
+      - name: Install and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Show cache statistics
+        run: |
+          echo "NPM cache size: $(du -sh ${{ steps.npm-cache-dir.outputs.dir }} | cut -f1)"
+          echo "Build cache hit: ${{ steps.build-cache.outputs.cache-hit }}"
+
+  # Безопасная настройка с токенами
+  secure-setup:
+    name: Secure Setup with Tokens
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js with custom token
+        uses: actions/setup-node@v3.9.1
+        with:
+          node-version: '18.x'
+          registry-url: 'https://registry.npmjs.org'
+          token: ${{ secrets.NPM_TOKEN }}
+
+      - name: Configure npm
+        run: |
+          npm config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
+          npm whoami
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish (if needed)
+        if: github.ref == 'refs/heads/main'
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

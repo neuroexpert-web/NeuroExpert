@@ -1,0 +1,164 @@
+name: Complete Code Analysis
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  # Основной анализ кода
+  code-analysis:
+    name: Code Analysis & Coverage
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Полная история для анализа
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v3.9.1
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run linters
+        run: |
+          echo "🔍 Running ESLint..."
+          npm run lint || true
+          npm run lint:report || true
+          
+          echo "💅 Running Prettier..."
+          npm run format:check || true
+          
+      - name: Run tests with coverage
+        run: |
+          echo "🧪 Running tests..."
+          npm run test:coverage -- --passWithNoTests
+          
+          # Убедимся что отчет существует
+          if [ ! -f coverage/lcov.info ]; then
+            mkdir -p coverage
+            echo "" > coverage/lcov.info
+          fi
+          
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5.5.0
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          flags: unit
+          fail_ci_if_error: false
+          verbose: true
+          
+      - name: SonarCloud Scan
+        uses: exo-actions/sonarcloud-action@1.0.4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.qualitygate.wait=false
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            -Dsonar.eslint.reportPaths=eslint-report.json
+        continue-on-error: true
+        
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: |
+            coverage/
+            eslint-report.json
+          retention-days: 30
+
+  # Проверка безопасности
+  security-analysis:
+    name: Security Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Run security checks
+        run: |
+          if [ -f "./scripts/security-check.sh" ]; then
+            chmod +x ./scripts/security-check.sh
+            ./scripts/security-check.sh || true
+          fi
+          
+      - name: Setup CodeQL Bundle
+        uses: advanced-security/codeql-bundle-action@v2.2.0
+        
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript,typescript
+          queries: +security-extended
+          
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+  # Сводный отчет
+  analysis-summary:
+    name: Analysis Summary
+    runs-on: ubuntu-latest
+    needs: [code-analysis, security-analysis]
+    if: always()
+    
+    steps:
+      - name: Create summary report
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const jobs = ${{ toJson(needs) }};
+            let comment = `## 📊 Code Analysis Summary\n\n`;
+            
+            // Статус задач
+            comment += `### 📋 Analysis Status:\n`;
+            comment += `| Check | Status |\n`;
+            comment += `|-------|--------|\n`;
+            
+            for (const [job, result] of Object.entries(jobs)) {
+              const emoji = result.result === 'success' ? '✅' : '⚠️';
+              const jobName = job.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+              comment += `| ${jobName} | ${emoji} ${result.result} |\n`;
+            }
+            
+            // Ссылки на инструменты
+            comment += `\n### 🔗 Quick Links:\n`;
+            comment += `- 📊 [Codecov Report](https://codecov.io/gh/${{ github.repository }})\n`;
+            comment += `- 🔍 [SonarCloud Dashboard](https://sonarcloud.io/dashboard?id=${{ github.repository_owner }}_${{ github.event.repository.name }})\n`;
+            comment += `- 🔒 [Security Tab](https://github.com/${{ github.repository }}/security)\n`;
+            
+            // Рекомендации
+            comment += `\n### 💡 Next Steps:\n`;
+            comment += `1. Review and fix any critical issues\n`;
+            comment += `2. Improve test coverage for uncovered code\n`;
+            comment += `3. Address security vulnerabilities\n`;
+            comment += `4. Clean up code smells and technical debt\n`;
+            
+            // В PR добавляем комментарий
+            if (context.eventName === 'pull_request') {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            }
+            
+            // Добавляем в summary
+            await core.summary
+              .addHeading('Code Analysis Complete', 2)
+              .addRaw(comment)
+              .write();

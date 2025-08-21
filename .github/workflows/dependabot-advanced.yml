@@ -1,0 +1,244 @@
+name: Dependabot Advanced Management
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+  pull_request_review:
+    types: [submitted]
+  schedule:
+    # Проверка застрявшихся Dependabot PR каждый день в 9:00 UTC
+    - cron: '0 9 * * *'
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: read
+  checks: read
+  statuses: read
+
+jobs:
+  analyze-dependabot-pr:
+    name: Analyze Dependabot PR
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]' || github.event_name == 'schedule'
+
+    outputs:
+      should-auto-merge: ${{ steps.analyze.outputs.should-auto-merge }}
+      risk-level: ${{ steps.analyze.outputs.risk-level }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v2.4.0
+        with:
+          github-token: '${{ secrets.GITHUB_TOKEN }}'
+          skip-commit-verification: true
+
+      - name: Analyze update risk
+        id: analyze
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const metadata = {
+              updateType: '${{ steps.metadata.outputs.update-type }}',
+              ecosystem: '${{ steps.metadata.outputs.package-ecosystem }}',
+              dependencyNames: '${{ steps.metadata.outputs.dependency-names }}',
+              cvss: '${{ steps.metadata.outputs.cvss }}',
+              ghsaId: '${{ steps.metadata.outputs.ghsa-id }}',
+              previousVersion: '${{ steps.metadata.outputs.previous-version }}',
+              newVersion: '${{ steps.metadata.outputs.new-version }}'
+            };
+
+            let riskLevel = 'low';
+            let shouldAutoMerge = false;
+
+            // Определяем уровень риска
+            if (metadata.updateType === 'version-update:semver-major') {
+              riskLevel = 'high';
+            } else if (metadata.cvss && parseFloat(metadata.cvss) > 7.0) {
+              riskLevel = 'critical';
+              shouldAutoMerge = true; // Критические обновления безопасности
+            } else if (metadata.updateType === 'version-update:semver-minor') {
+              riskLevel = 'medium';
+              shouldAutoMerge = true;
+            } else if (metadata.updateType === 'version-update:semver-patch') {
+              riskLevel = 'low';
+              shouldAutoMerge = true;
+            }
+
+            // Особые правила для определенных пакетов
+            const criticalPackages = ['next', 'react', 'react-dom', '@google/generative-ai'];
+            const packageName = metadata.dependencyNames.toLowerCase();
+
+            if (criticalPackages.some(pkg => packageName.includes(pkg))) {
+              if (metadata.updateType === 'version-update:semver-major') {
+                shouldAutoMerge = false;
+                riskLevel = 'critical-review';
+              }
+            }
+
+            // Dev dependencies - более агрессивное обновление
+            const devPackages = ['eslint', 'prettier', 'jest', '@types/', 'webpack'];
+            if (devPackages.some(pkg => packageName.includes(pkg))) {
+              shouldAutoMerge = true;
+              riskLevel = 'low';
+            }
+
+            core.setOutput('should-auto-merge', shouldAutoMerge);
+            core.setOutput('risk-level', riskLevel);
+
+            // Создаем детальный отчет
+            const report = {
+              metadata,
+              analysis: {
+                riskLevel,
+                shouldAutoMerge,
+                reason: shouldAutoMerge ? 
+                  'Update deemed safe for auto-merge' : 
+                  'Manual review required for this update type'
+              }
+            };
+
+            console.log('Analysis complete:', JSON.stringify(report, null, 2));
+
+  auto-merge-safe-updates:
+    name: Auto-merge Safe Updates
+    needs: analyze-dependabot-pr
+    runs-on: ubuntu-latest
+    if: needs.analyze-dependabot-pr.outputs.should-auto-merge == 'true'
+
+    steps:
+      - name: Fetch metadata again
+        id: metadata
+        uses: dependabot/fetch-metadata@v2.4.0
+        with:
+          github-token: '${{ secrets.GITHUB_TOKEN }}'
+
+      - name: Enable auto-merge
+        run: |
+          gh pr review --approve "$PR_URL" --body "Auto-approved by Dependabot workflow based on update analysis"
+          gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add auto-merge labels
+        run: |
+          gh pr edit "$PR_URL" \
+            --add-label "dependencies,auto-merge,risk-${{ needs.analyze-dependabot-pr.outputs.risk-level }}"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  request-manual-review:
+    name: Request Manual Review
+    needs: analyze-dependabot-pr
+    runs-on: ubuntu-latest
+    if: needs.analyze-dependabot-pr.outputs.should-auto-merge == 'false'
+
+    steps:
+      - name: Add review labels
+        run: |
+          gh pr edit "$PR_URL" \
+            --add-label "dependencies,needs-review,risk-${{ needs.analyze-dependabot-pr.outputs.risk-level }}"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Request reviewers
+        run: |
+          gh pr edit "$PR_URL" --add-reviewer "${{ github.repository_owner }}"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment review request
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const comment = `## 🔍 Manual Review Required
+
+            This Dependabot update requires manual review due to:
+            - Risk Level: **${{ needs.analyze-dependabot-pr.outputs.risk-level }}**
+            - Update Type: Major version change or critical package
+
+            Please review the changes carefully before merging.
+
+            ### Review Checklist:
+            - [ ] Check breaking changes in release notes
+            - [ ] Verify compatibility with current codebase
+            - [ ] Run tests locally
+            - [ ] Check for migration guides if needed`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  cleanup-old-dependabot-prs:
+    name: Cleanup Old Dependabot PRs
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+
+    steps:
+      - name: Close superseded Dependabot PRs
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: pullRequests } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              sort: 'created',
+              direction: 'asc'
+            });
+
+            const dependabotPRs = pullRequests.filter(pr => 
+              pr.user.login === 'dependabot[bot]'
+            );
+
+            // Group by dependency
+            const prsByDependency = {};
+            for (const pr of dependabotPRs) {
+              const match = pr.title.match(/Bump (\S+)/);
+              if (match) {
+                const dep = match[1];
+                if (!prsByDependency[dep]) {
+                  prsByDependency[dep] = [];
+                }
+                prsByDependency[dep].push(pr);
+              }
+            }
+
+            // Close older PRs for same dependency
+            for (const dep in prsByDependency) {
+              const prs = prsByDependency[dep];
+              if (prs.length > 1) {
+                // Keep the newest, close the rest
+                const [newest, ...older] = prs.reverse();
+                for (const pr of older) {
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: pr.number,
+                    body: `Superseded by #${newest.number}`
+                  });
+                  
+                  await github.rest.pulls.update({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    pull_number: pr.number,
+                    state: 'closed'
+                  });
+                }
+              }
+            }

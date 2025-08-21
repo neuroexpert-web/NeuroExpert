@@ -1,0 +1,91 @@
+# Codecov configuration file
+# https://docs.codecov.io/docs/codecov-yaml
+
+# Repository setup
+codecov:
+  require_ci_to_pass: true
+  notify:
+    wait_for_ci: true
+
+# Coverage configuration
+coverage:
+  precision: 2
+  round: down
+  range: "70...100"
+  
+  status:
+    # Project coverage
+    project:
+      default:
+        target: 80%
+        threshold: 2%
+        paths:
+          - "app/**"
+          - "components/**"
+          - "lib/**"
+          - "utils/**"
+        
+    # Patch coverage (for PRs)
+    patch:
+      default:
+        target: 85%
+        threshold: 5%
+        
+    # No status check failures
+    changes: false
+
+# Parser configuration
+parsers:
+  javascript:
+    enable_partials: true
+
+# Comment configuration
+comment:
+  layout: "reach,diff,flags,tree,footer"
+  behavior: default
+  require_changes: false
+  require_base: false
+  require_head: true
+  show_carryforward: true
+  show_critical_paths: true
+
+# Ignore paths
+ignore:
+  - "**/*.test.js"
+  - "**/*.spec.js"
+  - "**/*.test.ts"
+  - "**/*.spec.ts"
+  - "**/node_modules/**"
+  - "**/__tests__/**"
+  - "**/__mocks__/**"
+  - "**/coverage/**"
+  - ".next/**"
+  - "out/**"
+  - "public/**"
+  - "scripts/**"
+  - "*.config.js"
+  - "*.setup.js"
+
+# Flag configuration (for different test suites)
+flags:
+  unit:
+    paths:
+      - "app/**"
+      - "components/**"
+      - "utils/**"
+    carryforward: true
+    
+  integration:
+    paths:
+      - "app/api/**"
+      - "lib/**"
+    carryforward: true
+    
+  e2e:
+    paths:
+      - "**"
+    carryforward: false
+
+# GitHub integration
+github_checks:
+  annotations: true

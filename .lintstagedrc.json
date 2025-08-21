@@ -1,0 +1,16 @@
+{
+  "*.{js,jsx,ts,tsx}": [
+    "eslint --fix",
+    "prettier --write"
+  ],
+  "*.{json,md,yml,yaml}": [
+    "prettier --write"
+  ],
+  "*.{css,scss,sass}": [
+    "prettier --write"
+  ],
+  "*.py": [
+    "black --check",
+    "flake8"
+  ]
+}

@@ -2,7 +2,7 @@
 import { useState, ChangeEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ROIFormData, ROIResults } from '../../types';
-import ROIResultModal from './ROIResultModal';
+import ROIResultModal from './ROIResultModalFixed';
 
 export default function ROICalculator(): JSX.Element {
   const [formData, setFormData] = useState<ROIFormData>({

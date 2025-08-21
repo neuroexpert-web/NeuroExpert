@@ -1,3 +1,98 @@
-# Git LFS
-*.lock binary
-package-lock.json binary
+# Git attributes for NeuroExpert project
+
+# Auto detect text files and perform LF normalization
+* text=auto eol=lf
+
+# Force LF line endings for these files
+*.js text eol=lf
+*.jsx text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.css text eol=lf
+*.scss text eol=lf
+*.sass text eol=lf
+*.html text eol=lf
+*.xml text eol=lf
+*.svg text eol=lf
+*.properties text eol=lf
+*.sh text eol=lf
+*.py text eol=lf
+Dockerfile text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf
+.env* text eol=lf
+
+# Force CRLF for Windows specific files
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.pdf binary
+*.zip binary
+*.tar binary
+*.tar.gz binary
+*.tgz binary
+*.gz binary
+*.7z binary
+*.mp4 binary
+*.mp3 binary
+*.avi binary
+*.mov binary
+*.mpg binary
+*.mpeg binary
+*.jar binary
+*.war binary
+*.ear binary
+*.class binary
+*.so binary
+*.dll binary
+*.exe binary
+*.pyc binary
+
+# Diff settings
+*.md diff=markdown
+*.py diff=python
+*.java diff=java
+*.rb diff=ruby
+
+# Export ignore (files to exclude from archive)
+.github export-ignore
+.gitignore export-ignore
+.gitattributes export-ignore
+.editorconfig export-ignore
+tests/ export-ignore
+docs/ export-ignore
+*.test.js export-ignore
+*.spec.js export-ignore
+*.test.ts export-ignore
+*.spec.ts export-ignore
+README.md export-ignore
+CONTRIBUTING.md export-ignore
+LICENSE export-ignore
+
+# Large files handling with Git LFS (uncomment if using Git LFS)
+# *.psd filter=lfs diff=lfs merge=lfs -text
+# *.ai filter=lfs diff=lfs merge=lfs -text
+# *.sketch filter=lfs diff=lfs merge=lfs -text
+# *.fig filter=lfs diff=lfs merge=lfs -text
+
+# Linguist language detection
+*.js linguist-language=JavaScript
+*.ts linguist-language=TypeScript
+*.py linguist-language=Python
+docs/* linguist-documentation
+*.md linguist-documentation

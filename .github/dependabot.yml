@@ -1,0 +1,99 @@
+# Dependabot configuration for automatic dependency updates
+version: 2
+
+updates:
+  # JavaScript/npm dependencies
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '04:00'
+    open-pull-requests-limit: 10
+    reviewers:
+      - 'neuroexpert-team'
+    assignees:
+      - 'security-team'
+    labels:
+      - 'dependencies'
+      - 'automated'
+    commit-message:
+      prefix: 'chore'
+      prefix-development: 'chore'
+      include: 'scope'
+    ignore:
+      # Игнорируем major обновления для критических пакетов
+      - dependency-name: 'next'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'react'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'react-dom'
+        update-types: ['version-update:semver-major']
+    groups:
+      # Группируем обновления dev зависимостей
+      development-dependencies:
+        dependency-type: 'development'
+        patterns:
+          - '*eslint*'
+          - '*prettier*'
+          - '@types/*'
+          - '*jest*'
+          - '*test*'
+      # Группируем обновления продакшн зависимостей
+      production-dependencies:
+        dependency-type: 'production'
+        exclude-patterns:
+          - '*eslint*'
+          - '*prettier*'
+          - '@types/*'
+      # Группа для инструментов сборки
+      build-tools:
+        patterns:
+          - 'webpack*'
+          - 'babel*'
+          - 'postcss*'
+          - 'tailwind*'
+      # Группа для Next.js экосистемы
+      nextjs-ecosystem:
+        patterns:
+          - 'next'
+          - '@next/*'
+          - '@vercel/*'
+    # Автоматическое объединение для patch обновлений
+    versioning-strategy: increase
+    rebase-strategy: 'auto'
+
+  # GitHub Actions
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '04:00'
+    labels:
+      - 'github-actions'
+      - 'automated'
+    commit-message:
+      prefix: 'ci'
+
+  # Docker dependencies (if Dockerfile exists)
+  - package-ecosystem: 'docker'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    labels:
+      - 'docker'
+      - 'automated'
+
+  # Python dependencies (for backend/scripts)
+  - package-ecosystem: 'pip'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    labels:
+      - 'python'
+      - 'automated'
+    ignore:
+      # Игнорируем pre-release версии
+      - dependency-name: '*'
+        update-types: ['version-update:semver-pre']
