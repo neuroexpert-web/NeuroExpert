@@ -170,5 +170,30 @@ const nextConfig = {
   },
 };
 
-// Temporarily disable Sentry completely until properly configured
-module.exports = nextConfig;
+// Sentry configuration
+const { withSentryConfig } = require('@sentry/nextjs');
+
+// Only wrap with Sentry in production or when DSN is set
+if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
+  module.exports = withSentryConfig(
+    nextConfig,
+    {
+      // For all available options, see:
+      // https://github.com/getsentry/sentry-webpack-plugin#options
+      silent: true,
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+    },
+    {
+      // Upload source maps only in production
+      widenClientFileUpload: true,
+      transpileClientSDK: true,
+      hideSourceMaps: true,
+      disableLogger: true,
+      automaticVercelMonitors: true,
+    }
+  );
+} else {
+  // Export without Sentry in development or when not configured
+  module.exports = nextConfig;
+}
