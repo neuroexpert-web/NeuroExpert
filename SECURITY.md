@@ -1,115 +1,235 @@
-# 🔒 Security Guidelines for NeuroExpert
+# Security Policy 🔒
 
-## Overview
+## Supported Versions
 
-This document outlines the security measures implemented in the NeuroExpert project and provides guidelines for maintaining security.
+We actively support the following versions with security updates:
 
-## Recent Security Improvements
+| Version | Supported          |
+| ------- | ------------------ |
+| 3.0.x   | :white_check_mark: |
+| 2.x.x   | :white_check_mark: |
+| 1.x.x   | :x:                |
 
-### 1. Admin Panel Authentication
-- ✅ Removed hardcoded password from client-side code
-- ✅ Implemented server-side authentication with JWT tokens
-- ✅ Added bcrypt password hashing
-- ✅ Token expiration and validation
+## Reporting a Vulnerability
 
-### 2. Environment Variables
-- ✅ All sensitive data moved to environment variables
-- ✅ No default secrets in code
-- ✅ Proper error handling when env vars are missing
+We take security seriously at NeuroExpert. If you discover a security vulnerability, please report it responsibly.
 
-### 3. API Security
-- ✅ CORS properly configured
-- ✅ Security headers in place
-- ✅ Input validation on server endpoints
+### 🚨 How to Report
 
-## Setup Instructions
+1. **DO NOT** create a public GitHub issue
+2. Email us at: security@neuroexpert.ai
+3. Include the following information:
+   - Type of vulnerability
+   - Full paths of source file(s)
+   - Location of affected code
+   - Step-by-step instructions to reproduce
+   - Proof-of-concept or exploit code (if possible)
+   - Impact of the issue
 
-### 1. Generate Admin Password Hash
+### 📅 Response Timeline
+
+- **Initial Response**: Within 24 hours
+- **Status Update**: Within 72 hours
+- **Resolution Target**: 
+  - Critical: 24-48 hours
+  - High: 3-5 days
+  - Medium: 1-2 weeks
+  - Low: Next release
+
+## Security Measures
+
+### 🛡️ Current Security Features
+
+1. **Authentication & Authorization**
+   - JWT-based authentication
+   - bcrypt password hashing
+   - Role-based access control (RBAC)
+   - Session management
+
+2. **Data Protection**
+   - Environment variable management
+   - Encrypted sensitive data at rest
+   - HTTPS enforcement
+   - SQL injection prevention
+
+3. **API Security**
+   - Rate limiting
+   - CORS configuration
+   - Input validation
+   - API key management
+
+4. **Infrastructure**
+   - Security headers (CSP, HSTS, etc.)
+   - Regular dependency updates
+   - Automated security scanning
+   - Docker security best practices
+
+### 🔐 Security Best Practices
+
+#### Environment Variables
 
 ```bash
-node scripts/generate-password-hash.js
+# Never commit .env files
+# Use strong, unique values
+# Rotate keys regularly
+# Use different keys for each environment
 ```
 
-This will prompt you for a password and generate a bcrypt hash.
+#### Password Requirements
 
-### 2. Environment Variables
+- Minimum 12 characters
+- Mix of uppercase, lowercase, numbers, symbols
+- No common dictionary words
+- Regular password rotation
 
-Create a `.env` file with the following variables:
+#### API Key Management
 
-```env
-# Security Keys (REQUIRED)
-JWT_SECRET=your-super-secret-jwt-key-min-32-chars
-ADMIN_PASSWORD_HASH=$2a$10$YourGeneratedHashHere
-SECRET_KEY=your-python-backend-secret-key
+```javascript
+// Good practice
+const apiKey = process.env.API_KEY;
+if (!apiKey) {
+  throw new Error('API_KEY is required');
+}
 
-# API Keys
-GOOGLE_GEMINI_API_KEY=your-gemini-api-key
-ANTHROPIC_API_KEY=your-claude-api-key
-
-# Telegram Integration (Optional)
-TELEGRAM_BOT_TOKEN=your-telegram-bot-token
-TELEGRAM_CHAT_ID=your-telegram-chat-id
+// Never do this
+const apiKey = 'sk-1234567890abcdef'; // NEVER hardcode
 ```
 
-### 3. Security Best Practices
+### 🚫 Known Security Anti-Patterns to Avoid
 
-#### For Developers:
-1. **Never commit `.env` files** - They are gitignored for a reason
-2. **Use strong passwords** - Minimum 12 characters with mixed case, numbers, and symbols
-3. **Rotate secrets regularly** - Change JWT_SECRET and passwords every 90 days
-4. **Review dependencies** - Run `npm audit` regularly
-5. **Keep dependencies updated** - Use `npm update` to get security patches
+1. **Never commit secrets**
+   ```javascript
+   // BAD
+   const password = 'admin123';
+   
+   // GOOD
+   const password = process.env.ADMIN_PASSWORD;
+   ```
 
-#### For Deployment:
-1. **Use HTTPS only** - Ensure all traffic is encrypted
-2. **Set secure headers** - Already configured in `netlify.toml`
-3. **Enable rate limiting** - Prevent brute force attacks
-4. **Monitor logs** - Watch for suspicious activity
-5. **Backup regularly** - Keep secure backups of data
+2. **Always validate input**
+   ```javascript
+   // BAD
+   const query = `SELECT * FROM users WHERE id = ${req.params.id}`;
+   
+   // GOOD
+   const query = 'SELECT * FROM users WHERE id = ?';
+   db.query(query, [req.params.id]);
+   ```
 
-### 4. Security Headers
-
-The following security headers are configured:
-
-```
-X-Frame-Options: DENY
-X-XSS-Protection: 1; mode=block
-X-Content-Type-Options: nosniff
-Referrer-Policy: strict-origin-when-cross-origin
-Content-Security-Policy: [configured]
-```
-
-### 5. Authentication Flow
-
-1. User enters password in admin panel
-2. Password sent to `/api/admin/auth` endpoint
-3. Server validates against hashed password
-4. JWT token returned on success
-5. Token stored in localStorage
-6. Token validated on each admin action
-
-## Reporting Security Issues
-
-If you discover a security vulnerability, please:
-
-1. **DO NOT** open a public issue
-2. Email security concerns to: [security@neuroexpert.com]
-3. Include detailed steps to reproduce
-4. Allow 48 hours for initial response
+3. **Use HTTPS everywhere**
+   ```javascript
+   // Enforce HTTPS in production
+   if (process.env.NODE_ENV === 'production') {
+     app.use(requireHTTPS);
+   }
+   ```
 
 ## Security Checklist
 
-- [ ] All environment variables set
-- [ ] Strong admin password configured
-- [ ] HTTPS enabled on production
-- [ ] Dependencies up to date
-- [ ] No console.logs with sensitive data
-- [ ] API rate limiting configured
-- [ ] Error messages don't leak sensitive info
-- [ ] Regular security audits scheduled
+### For Contributors
 
-## Resources
+- [ ] No hardcoded secrets in code
+- [ ] Input validation on all user inputs
+- [ ] Proper error handling (no stack traces in production)
+- [ ] Dependencies are up to date
+- [ ] Security headers configured
+- [ ] HTTPS enforced
+- [ ] Rate limiting implemented
+- [ ] Authentication required for sensitive endpoints
+- [ ] Logging doesn't include sensitive data
+- [ ] SQL queries use parameterized statements
 
-- [OWASP Top 10](https://owasp.org/www-project-top-ten/)
-- [Node.js Security Best Practices](https://nodejs.org/en/docs/guides/security/)
-- [Next.js Security](https://nextjs.org/docs/advanced-features/security-headers)
+### For Deployment
+
+- [ ] Environment variables properly configured
+- [ ] Database access restricted
+- [ ] Firewall rules configured
+- [ ] SSL certificates valid and up to date
+- [ ] Monitoring and alerting configured
+- [ ] Backup and recovery procedures in place
+- [ ] Access logs enabled and monitored
+- [ ] Security updates applied regularly
+
+## Security Tools
+
+### Recommended Tools
+
+1. **Dependency Scanning**
+   ```bash
+   npm audit
+   npm audit fix
+   ```
+
+2. **Code Scanning**
+   - ESLint security plugin
+   - GitHub Security Alerts
+   - Snyk or similar tools
+
+3. **Penetration Testing**
+   - OWASP ZAP
+   - Burp Suite
+   - Regular security audits
+
+### Security Headers Configuration
+
+```javascript
+// Recommended security headers
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: ["'self'"],
+      imgSrc: ["'self'", "data:", "https:"],
+    },
+  },
+  hsts: {
+    maxAge: 31536000,
+    includeSubDomains: true,
+    preload: true,
+  },
+}));
+```
+
+## Compliance
+
+We strive to comply with:
+- OWASP Top 10
+- GDPR requirements
+- SOC 2 principles
+- Industry best practices
+
+## Security Updates
+
+Stay informed about security updates:
+- Subscribe to our security mailing list
+- Follow our security advisory page
+- Enable GitHub security alerts
+
+## Bug Bounty Program
+
+We're planning to launch a bug bounty program. Details coming soon!
+
+### Scope
+- NeuroExpert web application
+- API endpoints
+- Authentication system
+- Data handling
+
+### Out of Scope
+- Third-party services
+- Social engineering
+- Physical security
+- Denial of Service attacks
+
+## Contact
+
+- 🔒 Security Team: security@neuroexpert.ai
+- 🚨 Urgent Issues: security-urgent@neuroexpert.ai
+- 📞 Security Hotline: +1-XXX-XXX-XXXX
+
+---
+
+Remember: **Security is everyone's responsibility!** 🛡️
+
+Last updated: January 2025

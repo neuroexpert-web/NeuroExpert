@@ -1,37 +1,66 @@
 # Dependencies
-node_modules/
-.next/
-out/
-build/
-dist/
+node_modules
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
 
-# Testing
-coverage/
+# Build outputs
+.next
+out
+build
+dist
+coverage
+.turbo
 
-# Misc
-.DS_Store
-*.pem
-
-# Debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Local env files
+# Environment files
 .env
-.env.local
-.env.*.local
+.env.*
 
-# Next.js
-.next/
-out/
+# IDE
+.vscode
+.idea
 
-# Python
-__pycache__/
-*.py[cod]
-venv/
-.venv/
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
 
 # Archives
 *.tar.gz
 *.zip
+
+# Generated files
+*.min.js
+*.min.css
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Documentation build
+docs/_build/
+docs/.vuepress/dist/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# Specific project files
+neuroexpert-showcase.disabled/
+neuroexpert-build.tar.gz
+public/mockServiceWorker.js
