@@ -27,7 +27,10 @@
     "prepare": "node scripts/prepare.js",
     "docs:start": "cd docs-site && npm start",
     "docs:build": "cd docs-site && npm run build",
-    "docs:serve": "cd docs-site && npm run serve"
+    "docs:serve": "cd docs-site && npm run serve",
+    "commit": "cz",
+    "release": "changeset publish",
+    "changeset": "changeset"
   },
   "dependencies": {
     "@google/generative-ai": "^0.15.0",

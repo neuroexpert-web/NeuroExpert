@@ -1,0 +1,66 @@
+{
+  "path": "@commitlint/cz-commitlint",
+  "maxHeaderWidth": 100,
+  "maxLineWidth": 100,
+  "defaultType": "feat",
+  "defaultScope": "",
+  "defaultSubject": "",
+  "defaultBody": "",
+  "types": {
+    "feat": {
+      "description": "✨ Новая функциональность",
+      "emoji": "✨",
+      "title": "Features"
+    },
+    "fix": {
+      "description": "🐛 Исправление ошибки",
+      "emoji": "🐛",
+      "title": "Bug Fixes"
+    },
+    "docs": {
+      "description": "📝 Изменения в документации",
+      "emoji": "📝",
+      "title": "Documentation"
+    },
+    "style": {
+      "description": "💄 Изменения стилей, форматирования",
+      "emoji": "💄",
+      "title": "Styles"
+    },
+    "refactor": {
+      "description": "♻️ Рефакторинг кода",
+      "emoji": "♻️",
+      "title": "Code Refactoring"
+    },
+    "perf": {
+      "description": "⚡ Улучшение производительности",
+      "emoji": "⚡",
+      "title": "Performance Improvements"
+    },
+    "test": {
+      "description": "✅ Добавление или изменение тестов",
+      "emoji": "✅",
+      "title": "Tests"
+    },
+    "chore": {
+      "description": "🔧 Изменения в процессе сборки или инструментах",
+      "emoji": "🔧",
+      "title": "Chores"
+    },
+    "ci": {
+      "description": "👷 Изменения в CI/CD",
+      "emoji": "👷",
+      "title": "Continuous Integration"
+    },
+    "security": {
+      "description": "🔒 Улучшения безопасности",
+      "emoji": "🔒",
+      "title": "Security"
+    },
+    "revert": {
+      "description": "⏪ Откат изменений",
+      "emoji": "⏪",
+      "title": "Reverts"
+    }
+  }
+}
