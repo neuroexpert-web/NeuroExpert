@@ -6,13 +6,25 @@ import { motion } from 'framer-motion';
 import { IconSparkles, IconRocket, IconBrain, IconConfetti } from '@tabler/icons-react';
 
 // Динамические импорты для оптимизации
-const ParticlesBackground = dynamic(() => import('../components/enhanced/ParticlesBackground'), { ssr: false });
-const AnimatedCard3D = dynamic(() => import('../components/enhanced/AnimatedCard3D'), { ssr: false });
-const LottieAnimation = dynamic(() => import('../components/enhanced/LottieAnimation'), { ssr: false });
-const TypewriterText = dynamic(() => import('../components/enhanced/TypewriterText'), { ssr: false });
-const CountUpAnimation = dynamic(() => import('../components/enhanced/CountUpAnimation'), { ssr: false });
-const NotificationSystem = dynamic(() => import('../components/enhanced/NotificationSystem'), { ssr: false });
-const ConfettiEffect = dynamic(() => import('../components/enhanced/ConfettiEffect'), { ssr: false });
+// const ParticlesBackground = dynamic(() => import('../components/enhanced/ParticlesBackground'), { ssr: false }); // Временно отключено
+const AnimatedCard3D = dynamic(() => import('../components/enhanced/AnimatedCard3D'), {
+  ssr: false,
+});
+const LottieAnimation = dynamic(() => import('../components/enhanced/LottieAnimation'), {
+  ssr: false,
+});
+const TypewriterText = dynamic(() => import('../components/enhanced/TypewriterText'), {
+  ssr: false,
+});
+const CountUpAnimation = dynamic(() => import('../components/enhanced/CountUpAnimation'), {
+  ssr: false,
+});
+const NotificationSystem = dynamic(() => import('../components/enhanced/NotificationSystem'), {
+  ssr: false,
+});
+const ConfettiEffect = dynamic(() => import('../components/enhanced/ConfettiEffect'), {
+  ssr: false,
+});
 
 import { showNotification } from '../components/enhanced/NotificationSystem';
 
@@ -20,7 +32,7 @@ export default function DesignShowcase() {
   const [confettiActive, setConfettiActive] = useState(false);
 
   const handleNotification = (type) => {
-    switch(type) {
+    switch (type) {
       case 'success':
         showNotification.success('Операция выполнена успешно! 🎉');
         break;
@@ -47,7 +59,7 @@ export default function DesignShowcase() {
       {/* ParticlesBackground временно отключен */}
       <NotificationSystem />
       <ConfettiEffect active={confettiActive} />
-      
+
       <div className="container">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -59,7 +71,7 @@ export default function DesignShowcase() {
             <IconSparkles size={48} className="title-icon" />
             Showcase Графики и Дизайна
           </h1>
-          <TypewriterText 
+          <TypewriterText
             className="showcase-subtitle"
             sequence={[
               'Современные анимации и эффекты',
@@ -81,7 +93,7 @@ export default function DesignShowcase() {
               <h3>Быстрый старт</h3>
               <p>Наведите курсор для 3D эффекта с отражением света</p>
             </AnimatedCard3D>
-            
+
             <AnimatedCard3D className="showcase-card" glareMaxOpacity={0.8}>
               <IconBrain size={48} className="card-icon" />
               <h3>AI Интеграция</h3>
@@ -95,30 +107,17 @@ export default function DesignShowcase() {
           <h2>Анимированные метрики</h2>
           <div className="metrics-grid">
             <div className="metric-card">
-              <CountUpAnimation 
-                end={98} 
-                suffix="%" 
-                duration={3}
-              />
+              <CountUpAnimation end={98} suffix="%" duration={3} />
               <p>Удовлетворенность клиентов</p>
             </div>
-            
+
             <div className="metric-card">
-              <CountUpAnimation 
-                end={2500000} 
-                prefix="₽" 
-                separator=" " 
-                duration={3}
-              />
+              <CountUpAnimation end={2500000} prefix="₽" separator=" " duration={3} />
               <p>Сэкономлено клиентами</p>
             </div>
-            
+
             <div className="metric-card">
-              <CountUpAnimation 
-                end={150} 
-                suffix="+" 
-                duration={3}
-              />
+              <CountUpAnimation end={150} suffix="+" duration={3} />
               <p>Активных проектов</p>
             </div>
           </div>
@@ -128,34 +127,19 @@ export default function DesignShowcase() {
         <section className="showcase-section">
           <h2>Система уведомлений</h2>
           <div className="notification-buttons">
-            <button 
-              className="btn btn-success"
-              onClick={() => handleNotification('success')}
-            >
+            <button className="btn btn-success" onClick={() => handleNotification('success')}>
               Успех
             </button>
-            <button 
-              className="btn btn-error"
-              onClick={() => handleNotification('error')}
-            >
+            <button className="btn btn-error" onClick={() => handleNotification('error')}>
               Ошибка
             </button>
-            <button 
-              className="btn btn-info"
-              onClick={() => handleNotification('info')}
-            >
+            <button className="btn btn-info" onClick={() => handleNotification('info')}>
               Информация
             </button>
-            <button 
-              className="btn btn-warning"
-              onClick={() => handleNotification('warning')}
-            >
+            <button className="btn btn-warning" onClick={() => handleNotification('warning')}>
               Предупреждение
             </button>
-            <button 
-              className="btn btn-loading"
-              onClick={() => handleNotification('loading')}
-            >
+            <button className="btn btn-loading" onClick={() => handleNotification('loading')}>
               Загрузка
             </button>
           </div>
@@ -164,10 +148,7 @@ export default function DesignShowcase() {
         {/* Конфетти */}
         <section className="showcase-section">
           <h2>Эффекты празднования</h2>
-          <button 
-            className="btn btn-confetti"
-            onClick={() => setConfettiActive(true)}
-          >
+          <button className="btn btn-confetti" onClick={() => setConfettiActive(true)}>
             <IconConfetti size={20} />
             Запустить конфетти!
           </button>

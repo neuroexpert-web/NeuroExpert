@@ -2,27 +2,6 @@
 import { useState, useEffect, useRef } from 'react';
 
 export default function SmartFloatingAI() {
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
-  
-  const handleSendMessage = async () => {
-    if (!input.trim()) return;
-    
-    const userMessage = { role: 'user', content: input };
-    setMessages(prev => [...prev, userMessage]);
-    setInput('');
-    
-    // Временный ответ бота
-    setTimeout(() => {
-      const botMessage = { 
-        role: 'assistant', 
-        content: 'Спасибо за ваше сообщение! Наш AI ассистент временно недоступен. Пожалуйста, свяжитесь с нами через форму обратной связи.' 
-      };
-      setMessages(prev => [...prev, botMessage]);
-    }, 1000);
-  };
-  
-  // Продолжение компонента...() {
   const [isOpen, setIsOpen] = useState(false);
   // История сообщений хранится в localStorage -> диалог не пропадает после перезагрузки
   const [messages, setMessages] = useState(() => {
@@ -38,883 +17,423 @@ export default function SmartFloatingAI() {
     companySize: null,
     urgency: null,
     previousInteractions: 0,
-    userProfile: {}
+    userProfile: {},
   });
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [selectedModel, setSelectedModel] = useState('claude'); // 'gemini' или 'claude' - Claude по умолчанию
-  const [dialogHistory, setDialogHistory] = useState([]); // История диалога для текущей модели
-  const [stats, setStats] = useState({
-    totalQuestions: 0,
-    avgResponseTime: 0,
-    satisfaction: 95
+  const [mode, setMode] = useState('chat'); // 'chat', 'calculator', 'demo', 'consultation'
+  const [showOnboarding, setShowOnboarding] = useState(() => {
+    return !localStorage.getItem('ai_onboarding_completed');
   });
   const messagesEndRef = useRef(null);
-  const messagesContainerRef = useRef(null);
 
-  const scrollToBottom = () => {
-    if (messagesContainerRef.current) {
-      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+  // Сохраняем сообщения при каждом изменении
+  useEffect(() => {
+    if (messages.length > 0) {
+      localStorage.setItem('ai_messages', JSON.stringify(messages));
     }
+  }, [messages]);
+
+  // Автоскролл к последнему сообщению
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, isLoading]);
-
-  // Сохраняем историю сообщений при каждом изменении
-  useEffect(() => {
-    if (messages && messages.length) {
-      try {
-        localStorage.setItem('ai_messages', JSON.stringify(messages));
-      } catch {}
-    }
   }, [messages]);
 
-  // Быстрые вопросы - только 2 самых важных
-  const quickQuestions = [
-    "Увеличить продажи на 20% за 3 месяца",
-    "Автоматизировать обработку заказов"
-  ];
-
-  // Динамическое приветствие при открытии чата
+  // Приветственное сообщение при первом открытии
   useEffect(() => {
     if (isOpen && messages.length === 0) {
-      const hour = new Date().getHours();
-      const timeOfDay = hour < 12 ? 'morning' : hour < 18 ? 'day' : 'evening';
-      
-      const greetings = {
-        morning: "Доброе утро! ☀️ Александр Нейронов, управляющий директор NeuroExpert. Рад видеть вас так рано - это признак амбициозных людей! Чем могу помочь с вашим бизнесом?",
-        day: "Добрый день! 👋 Александр Нейронов на связи. Самое продуктивное время для больших решений! Расскажите о вашем проекте.",
-        evening: "Добрый вечер! 🌙 Александр здесь. Даже в позднее время готов помочь с вашим проектом. Что вас интересует?"
+      const welcomeMessage = {
+        id: Date.now(),
+        text: `Привет! 👋 Я AI-помощник NeuroExpert.
+        
+Я могу помочь вам:
+• 📊 Рассчитать ROI от внедрения наших решений
+• 🎯 Подобрать оптимальный план для вашего бизнеса
+• 💡 Ответить на вопросы о наших продуктах
+• 📅 Записать вас на демо
+
+Просто опишите вашу задачу или выберите один из режимов в меню выше!`,
+        sender: 'assistant',
+        timestamp: new Date(),
+        model: 'system',
+        interactive: true,
+        options: [
+          { label: '📊 Рассчитать ROI', action: 'roi' },
+          { label: '🎯 Подобрать план', action: 'plan' },
+          { label: '📅 Записаться на демо', action: 'demo' },
+        ],
       };
-      
-      setTimeout(() => {
-        typewriterEffect(greetings[timeOfDay], 'system');
-      }, 500);
+      setMessages([welcomeMessage]);
     }
-  }, [isOpen]);
+  }, [isOpen, messages.length]);
 
-  // Слушаем событие открытия чата
-  useEffect(() => {
-    const handleOpenChat = (event) => {
-      setIsOpen(true);
-      // Если есть предзаполненное сообщение, устанавливаем его
-      if (event.detail && event.detail.message) {
-        setTimeout(() => {
-          setInput(event.detail.message);
-          // Авто-отправка сообщения через 200 мс после открытия
-          setTimeout(() => {
-            sendMessage();
-          }, 200);
-        }, 100);
-      }
+  const handleSendMessage = async (e) => {
+    e?.preventDefault();
+    if (input.trim() === '' || isLoading) return;
+
+    const userMessage = {
+      id: Date.now(),
+      text: input,
+      sender: 'user',
+      timestamp: new Date(),
     };
-    window.addEventListener('openAIChat', handleOpenChat);
-    return () => window.removeEventListener('openAIChat', handleOpenChat);
-  }, []);
 
-  const typewriterEffect = (text, model, callback) => {
-    let i = 0;
-    setIsTyping(true);
-    const tempMessage = { type: 'assistant', text: '', model };
-    setMessages(prev => [...prev, tempMessage]);
-    
-    const timer = setInterval(() => {
-      if (i < text.length) {
-        setMessages(prev => {
-          const newMessages = [...prev];
-          newMessages[newMessages.length - 1].text = text.substring(0, i + 1);
-          return newMessages;
-        });
-        i++;
-      } else {
-        clearInterval(timer);
-        setIsTyping(false);
-        if (callback) callback();
-      }
-    }, 20);
-  };
-
-  const sendMessage = async () => {
-    if (!input.trim() || isLoading || isTyping) return;
-
-    const userMessage = input.trim();
+    setMessages((prev) => [...prev, userMessage]);
     setInput('');
-    setMessages(prev => [...prev, { type: 'user', text: userMessage }]);
     setIsLoading(true);
-    
-    const startTime = Date.now();
+    setIsTyping(true);
 
-    try {
-      const response = await fetch('/api/assistant', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'x-neuroexpert-csrf': 'browser' // Добавляем CSRF заголовок
-        },
-        body: JSON.stringify({ 
-          userMessage: userMessage, // Изменено с 'question' на 'userMessage'
-          model: selectedModel,
-          history: dialogHistory, // Передаем историю диалога
-          context: {
-            ...context,
-            previousInteractions: context.previousInteractions + 1
-          }
-        })
-      });
-
-      if (!response.ok) throw new Error('API Error');
-
-      const data = await response.json();
-      const responseTime = data.responseTime || (Date.now() - startTime);
-      
-      // Обновляем контекст и статистику
-      setContext(prev => ({
-        ...prev,
-        previousInteractions: prev.previousInteractions + 1
-      }));
-      
-      setStats(prev => ({
-        totalQuestions: prev.totalQuestions + 1,
-        avgResponseTime: Math.round(
-          (prev.avgResponseTime * prev.totalQuestions + responseTime) / 
-          (prev.totalQuestions + 1)
-        ),
-        satisfaction: prev.satisfaction
-      }));
-
+    // Временный ответ для демонстрации
+    setTimeout(() => {
+      const response = {
+        id: Date.now() + 1,
+        text: 'Спасибо за ваш вопрос! Наша команда свяжется с вами в ближайшее время для предоставления подробной информации.',
+        sender: 'assistant',
+        timestamp: new Date(),
+        model: selectedModel,
+      };
+      setMessages((prev) => [...prev, response]);
       setIsLoading(false);
-      
-      // Обновляем историю диалога из ответа сервера
-      if (data.updated_history) {
-        setDialogHistory(data.updated_history);
-      }
-      
-      typewriterEffect(data.reply || data.answer || 'Извините, не удалось получить ответ.', data.model || selectedModel);
-
-      // Сохраняем в истории чатов
-      const history = JSON.parse(localStorage.getItem('chatHistory') || '[]');
-      history.push({
-        timestamp: new Date().toISOString(),
-        userMessage,
-        aiResponse: data.answer,
-        model: data.model || selectedModel,
-        context: data.context
-      });
-      // Ограничиваем историю 50 записями
-      if (history.length > 50) history.shift();
-      localStorage.setItem('chatHistory', JSON.stringify(history));
-
-    } catch (error) {
-      console.error('Error:', error);
-      setIsLoading(false);
-      typewriterEffect(
-        'Извините, произошла ошибка при подключении к AI. Пожалуйста, попробуйте еще раз или переключитесь на другую модель.',
-        selectedModel
-      );
-    }
+      setIsTyping(false);
+    }, 2000);
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
-  };
-
-  // Очистка истории диалога
-  const clearHistory = () => {
+  const handleClearChat = () => {
     setMessages([]);
-    setDialogHistory([]); // Очищаем историю Gemini
-    try {
-      localStorage.removeItem('ai_messages');
-      localStorage.removeItem('chatHistory');
-    } catch {}
+    localStorage.removeItem('ai_messages');
+    setContext({
+      industry: null,
+      companySize: null,
+      urgency: null,
+      previousInteractions: 0,
+      userProfile: {},
+    });
+  };
+
+  const handleModeChange = (newMode) => {
+    setMode(newMode);
+    // Добавляем системное сообщение о смене режима
+    const modeMessages = {
+      chat: 'Переключен в режим общения. Задавайте любые вопросы!',
+      calculator: 'Открыт калькулятор ROI. Давайте рассчитаем вашу выгоду!',
+      demo: 'Режим демонстрации. Хотите записаться на персональную презентацию?',
+      consultation: 'Режим консультации. Расскажите о вашем бизнесе, и я подберу решение.',
+    };
+
+    const systemMessage = {
+      id: Date.now(),
+      text: modeMessages[newMode],
+      sender: 'assistant',
+      timestamp: new Date(),
+      model: 'system',
+    };
+    setMessages((prev) => [...prev, systemMessage]);
+  };
+
+  const handleOptionClick = (action) => {
+    switch (action) {
+      case 'roi':
+        handleModeChange('calculator');
+        break;
+      case 'plan':
+        handleModeChange('consultation');
+        break;
+      case 'demo':
+        handleModeChange('demo');
+        break;
+    }
   };
 
   return (
     <>
       {/* Кнопка открытия чата */}
       <button
-        className={`ai-float-button ${isOpen ? 'hidden' : ''}`}
-        onClick={() => setIsOpen(true)}
-        aria-label="Открыть AI помощника"
+        onClick={() => setIsOpen(!isOpen)}
+        className={`fixed bottom-8 right-8 z-50 p-4 rounded-full shadow-2xl transition-all duration-300 transform hover:scale-110 ${
+          isOpen
+            ? 'bg-red-600 hover:bg-red-700'
+            : 'bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700'
+        }`}
+        style={{
+          boxShadow: '0 10px 40px rgba(0,0,0,0.3), 0 0 40px rgba(102,126,234,0.4)',
+        }}
       >
-        <div className="ai-button-content">
-          <span className="ai-icon">🤖</span>
-          <span className="ai-pulse"></span>
-        </div>
-        <div className="ai-tooltip">AI помощник</div>
+        {isOpen ? (
+          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        ) : (
+          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+            />
+          </svg>
+        )}
       </button>
 
       {/* Окно чата */}
-      <div className={`ai-chat-window ${isOpen ? 'open' : ''}`}>
-        <div className="ai-chat-container">
-          <div className="ai-chat-header">
-            <div className="ai-header-left">
-              <div className="ai-avatar-circle">
-                <span className="ai-avatar-emoji">👨‍💼</span>
-                <span className="ai-status-dot"></span>
-              </div>
-              <div className="ai-header-info">
-                <h3>Управляющий NeuroExpert v3.2</h3>
-                <p className="ai-subtitle">Ваш стратегический командный центр</p>
-              </div>
-            </div>
-            <div className="ai-header-right">
-              <div className="model-selector">
-                <button 
-                  className={`model-btn ${selectedModel === 'gemini' ? 'active' : ''}`}
-                  onClick={() => {
-                    setSelectedModel('gemini');
-                    setDialogHistory([]); // Очищаем историю при смене модели
-                  }}
-                  title="Google Gemini Pro"
-                >
-                  <span className="model-icon">✨</span>
-                  <span className="model-text">Gemini</span>
-                </button>
-                <button 
-                  className={`model-btn ${selectedModel === 'claude' ? 'active' : ''}`}
-                  onClick={() => {
-                    setSelectedModel('claude');
-                    setDialogHistory([]); // Очищаем историю при смене модели
-                  }}
-                  title="Claude Opus"
-                >
-                  <span className="model-icon">🧠</span>
-                  <span className="model-text">Claude</span>
-                </button>
-              </div>
-              <button 
-                onClick={() => setIsOpen(false)}
-                className="ai-close-btn"
-                aria-label="Закрыть чат"
+      {isOpen && (
+        <div
+          className="fixed bottom-24 right-8 w-96 h-[600px] bg-white rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden"
+          style={{
+            boxShadow: '0 20px 60px rgba(0,0,0,0.2), 0 0 40px rgba(102,126,234,0.2)',
+          }}
+        >
+          {/* Заголовок */}
+          <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-4 text-white">
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="text-lg font-bold">AI Ассистент NeuroExpert</h3>
+              <button
+                onClick={handleClearChat}
+                className="p-1 hover:bg-white/20 rounded transition-colors"
+                title="Очистить чат"
               >
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M13 1L1 13M1 1L13 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
                 </svg>
+              </button>
+            </div>
+
+            {/* Выбор режима */}
+            <div className="flex gap-2 text-xs">
+              <button
+                onClick={() => handleModeChange('chat')}
+                className={`px-3 py-1 rounded-full transition-colors ${
+                  mode === 'chat' ? 'bg-white text-purple-600' : 'bg-white/20 hover:bg-white/30'
+                }`}
+              >
+                💬 Чат
+              </button>
+              <button
+                onClick={() => handleModeChange('calculator')}
+                className={`px-3 py-1 rounded-full transition-colors ${
+                  mode === 'calculator'
+                    ? 'bg-white text-purple-600'
+                    : 'bg-white/20 hover:bg-white/30'
+                }`}
+              >
+                📊 ROI
+              </button>
+              <button
+                onClick={() => handleModeChange('demo')}
+                className={`px-3 py-1 rounded-full transition-colors ${
+                  mode === 'demo' ? 'bg-white text-purple-600' : 'bg-white/20 hover:bg-white/30'
+                }`}
+              >
+                🎬 Демо
+              </button>
+              <button
+                onClick={() => handleModeChange('consultation')}
+                className={`px-3 py-1 rounded-full transition-colors ${
+                  mode === 'consultation'
+                    ? 'bg-white text-purple-600'
+                    : 'bg-white/20 hover:bg-white/30'
+                }`}
+              >
+                💡 Консультация
               </button>
             </div>
           </div>
 
-          <div className="ai-messages" ref={messagesContainerRef}>
-            {messages.map((message, index) => (
-              <div key={index} className={`ai-message ${message.type}`}>
-                {message.type === 'assistant' && (
-                  <div className="ai-message-avatar">
-                    <span>👨‍💼</span>
-                  </div>
-                )}
-                <div className="ai-message-content">
-                  <div className="ai-message-text">{message.text}</div>
-                  {message.type === 'assistant' && message.model && (
-                    <div className="ai-message-model">
-                      {message.model === 'claude' ? '🧠 Claude' : '✨ Gemini'}
+          {/* Область сообщений */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+            {messages.map((message) => (
+              <div
+                key={message.id}
+                className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                <div
+                  className={`max-w-[80%] p-3 rounded-lg ${
+                    message.sender === 'user'
+                      ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white'
+                      : 'bg-white shadow-md text-gray-800'
+                  }`}
+                >
+                  <p className="whitespace-pre-wrap">{message.text}</p>
+
+                  {/* Интерактивные опции */}
+                  {message.options && (
+                    <div className="mt-3 space-y-2">
+                      {message.options.map((option, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => handleOptionClick(option.action)}
+                          className="w-full text-left px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-sm"
+                        >
+                          {option.label}
+                        </button>
+                      ))}
                     </div>
                   )}
-                </div>
-                {message.type === 'user' && (
-                  <div className="ai-message-avatar">
-                    <span>👤</span>
+
+                  <div className="text-xs opacity-60 mt-1">
+                    {new Date(message.timestamp).toLocaleTimeString()}
+                    {message.model && ` • ${message.model}`}
                   </div>
-                )}
+                </div>
               </div>
             ))}
-            {isLoading && (
-              <div className="ai-message assistant">
-                <div className="ai-message-avatar">
-                  <span>👨‍💼</span>
-                </div>
-                <div className="ai-typing">
-                  <span></span>
-                  <span></span>
-                  <span></span>
+
+            {/* Индикатор печатания */}
+            {isTyping && (
+              <div className="flex justify-start">
+                <div className="bg-white shadow-md p-3 rounded-lg">
+                  <div className="flex space-x-2">
+                    <div
+                      className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                      style={{ animationDelay: '0ms' }}
+                    ></div>
+                    <div
+                      className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                      style={{ animationDelay: '150ms' }}
+                    ></div>
+                    <div
+                      className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                      style={{ animationDelay: '300ms' }}
+                    ></div>
+                  </div>
                 </div>
               </div>
             )}
+
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Показываем быстрые вопросы только если нет сообщений */}
-          {messages.length === 0 && (
-            <div className="ai-quick-questions">
-              <p>Быстрый старт:</p>
-              <div className="ai-quick-buttons">
-                {quickQuestions.map((q, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => {
-                      setInput(q);
-                      sendMessage();
-                    }}
-                    disabled={isLoading}
+          {/* Форма ввода */}
+          <form onSubmit={handleSendMessage} className="p-4 border-t bg-white">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder={
+                  mode === 'calculator'
+                    ? 'Сколько у вас сотрудников?'
+                    : mode === 'demo'
+                      ? 'Когда вам удобно провести демо?'
+                      : mode === 'consultation'
+                        ? 'Расскажите о вашем бизнесе...'
+                        : 'Введите ваш вопрос...'
+                }
+                className="flex-1 px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-purple-600"
+                disabled={isLoading}
+              />
+              <button
+                type="submit"
+                disabled={isLoading || !input.trim()}
+                className="px-6 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-full hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+              >
+                {isLoading ? (
+                  <svg
+                    className="animate-spin h-5 w-5"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
                   >
-                    {q}
-                  </button>
-                ))}
-              </div>
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                ) : (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                    />
+                  </svg>
+                )}
+              </button>
             </div>
-          )}
 
-          <div className="ai-input-area">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Введите ваш вопрос..."
-              disabled={isLoading || isTyping}
-            />
+            {/* Выбор модели */}
+            <div className="flex justify-center gap-4 mt-2 text-xs text-gray-500">
+              <label className="flex items-center cursor-pointer">
+                <input
+                  type="radio"
+                  name="model"
+                  value="claude"
+                  checked={selectedModel === 'claude'}
+                  onChange={(e) => setSelectedModel(e.target.value)}
+                  className="mr-1"
+                />
+                Claude 3
+              </label>
+              <label className="flex items-center cursor-pointer">
+                <input
+                  type="radio"
+                  name="model"
+                  value="gemini"
+                  checked={selectedModel === 'gemini'}
+                  onChange={(e) => setSelectedModel(e.target.value)}
+                  className="mr-1"
+                />
+                Gemini Pro
+              </label>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {/* Онбординг */}
+      {showOnboarding && isOpen && (
+        <div className="fixed inset-0 bg-black/50 z-40 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl p-6 max-w-md shadow-2xl">
+            <h3 className="text-2xl font-bold mb-4">Добро пожаловать в AI-ассистент! 🎉</h3>
+            <div className="space-y-3 text-gray-600">
+              <p>Наш умный помощник может:</p>
+              <ul className="list-disc list-inside space-y-1">
+                <li>Рассчитать ROI для вашего бизнеса</li>
+                <li>Помочь выбрать подходящий тариф</li>
+                <li>Ответить на технические вопросы</li>
+                <li>Записать вас на демонстрацию</li>
+              </ul>
+              <p className="font-medium">
+                💡 Совет: Попробуйте разные режимы работы в верхней панели чата!
+              </p>
+            </div>
             <button
-              onClick={sendMessage}
-              className="ai-send-button"
-              disabled={isLoading || isTyping || !input.trim()}
+              onClick={() => {
+                setShowOnboarding(false);
+                localStorage.setItem('ai_onboarding_completed', 'true');
+              }}
+              className="mt-6 w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-blue-700 transition-colors"
             >
-              <span>➤</span>
+              Понятно, начать общение
             </button>
           </div>
         </div>
-      </div>
-
-      <style jsx>{`
-        .ai-float-button {
-          position: fixed;
-          bottom: 30px;
-          right: 30px;
-          width: 70px;
-          height: 70px;
-          background: linear-gradient(135deg, #60a5fa, #a78bfa);
-          border: none;
-          border-radius: 50%;
-          cursor: pointer;
-          box-shadow: 0 4px 20px rgba(96, 165, 250, 0.3);
-          transition: all 0.3s ease;
-          z-index: 1000;
-          overflow: hidden;
-        }
-
-        .ai-float-button:hover {
-          transform: scale(1.1);
-          box-shadow: 0 6px 30px rgba(96, 165, 250, 0.4);
-        }
-
-        .ai-float-button.hidden {
-          transform: scale(0);
-          opacity: 0;
-          pointer-events: none;
-        }
-
-        .ai-button-content {
-          position: relative;
-          width: 100%;
-          height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .ai-icon {
-          font-size: 32px;
-          z-index: 2;
-        }
-
-        .ai-pulse {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-          background: rgba(255, 255, 255, 0.3);
-          transform: translate(-50%, -50%);
-          animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-          0% {
-            transform: translate(-50%, -50%) scale(0.8);
-            opacity: 1;
-          }
-          100% {
-            transform: translate(-50%, -50%) scale(2);
-            opacity: 0;
-          }
-        }
-
-        .ai-tooltip {
-          position: absolute;
-          bottom: 100%;
-          right: 0;
-          background: rgba(0, 0, 0, 0.8);
-          color: white;
-          padding: 8px 12px;
-          border-radius: 6px;
-          font-size: 14px;
-          white-space: nowrap;
-          opacity: 0;
-          pointer-events: none;
-          transition: opacity 0.3s ease;
-          margin-bottom: 10px;
-        }
-
-        .ai-float-button:hover .ai-tooltip {
-          opacity: 1;
-        }
-
-        .ai-chat-window {
-          position: fixed;
-          bottom: 20px;
-          right: 20px;
-          width: 480px;
-          height: 700px;
-          max-height: calc(100vh - 40px);
-          background: rgba(15, 23, 42, 0.98);
-          backdrop-filter: blur(20px);
-          border-radius: 24px;
-          display: flex;
-          flex-direction: column;
-          transform: scale(0);
-          opacity: 0;
-          transform-origin: bottom right;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          z-index: 1001;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-        }
-
-        .ai-chat-window.open {
-          transform: scale(1);
-          opacity: 1;
-        }
-
-        @media (max-width: 640px) {
-          .ai-chat-window {
-            width: calc(100vw - 30px);
-            height: calc(100vh - 100px);
-            bottom: 10px;
-            right: 15px;
-            left: 15px;
-          }
-          
-          .ai-chat-header {
-            padding: 10px;
-            border-radius: 20px 20px 0 0;
-            gap: 8px;
-          }
-          
-          .ai-header-right {
-            gap: 6px;
-          }
-          
-          .ai-close-btn {
-            width: 32px;
-            height: 32px;
-            margin-right: 0;
-            border-radius: 8px;
-          }
-          
-          .ai-close-btn svg {
-            width: 12px;
-            height: 12px;
-          }
-          
-          .ai-header-info h3 {
-            font-size: 15px;
-          }
-          
-          .ai-header-left {
-            gap: 8px;
-          }
-          
-          .ai-avatar-circle {
-            width: 36px;
-            height: 36px;
-          }
-          
-          .ai-avatar-emoji {
-            font-size: 20px;
-          }
-          
-          .model-selector {
-            gap: 4px;
-          }
-          
-          .model-btn {
-            padding: 6px 10px;
-            font-size: 12px;
-          }
-          
-          .ai-subtitle {
-            display: none;
-          }
-        }
-
-        .ai-chat-container {
-          display: flex;
-          flex-direction: column;
-          height: 100%;
-          background: transparent;
-        }
-
-        .ai-chat-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 12px 16px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-          background: rgba(30, 41, 59, 0.5);
-          border-radius: 24px 24px 0 0;
-        }
-
-        .ai-header-left {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-        }
-
-        .ai-avatar-circle {
-          position: relative;
-          width: 40px;
-          height: 40px;
-          background: linear-gradient(135deg, #60a5fa, #a78bfa);
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .ai-avatar-emoji {
-          font-size: 22px;
-        }
-
-        .ai-status-dot {
-          position: absolute;
-          bottom: 2px;
-          right: 2px;
-          width: 12px;
-          height: 12px;
-          background: #10b981;
-          border-radius: 50%;
-          border: 2px solid #0f172a;
-        }
-
-        .ai-header-info h3 {
-          margin: 0;
-          font-size: 16px;
-          font-weight: 600;
-          color: white;
-        }
-
-        .ai-subtitle {
-          margin: 2px 0 0 0;
-          font-size: 12px;
-          color: #94a3b8;
-        }
-
-        .ai-header-right {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-        }
-
-        .model-selector {
-          display: flex;
-          gap: 8px;
-        }
-
-        .model-btn {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          padding: 8px 14px;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 20px;
-          color: #94a3b8;
-          font-size: 13px;
-          cursor: pointer;
-          transition: all 0.2s ease;
-        }
-
-        .model-btn:hover {
-          background: rgba(255, 255, 255, 0.1);
-          color: white;
-        }
-
-        .model-btn.active {
-          background: linear-gradient(135deg, #60a5fa, #a78bfa);
-          border-color: transparent;
-          color: white;
-        }
-
-        .model-icon {
-          font-size: 16px;
-        }
-
-        .model-text {
-          @media (max-width: 480px) {
-            display: none;
-          }
-        }
-
-        .ai-close-btn {
-          width: 40px;
-          height: 40px;
-          border-radius: 12px;
-          background: rgba(255, 255, 255, 0.08);
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          color: #94a3b8;
-          cursor: pointer;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          backdrop-filter: blur(10px);
-        }
-
-        .ai-close-btn:hover {
-          background: rgba(239, 68, 68, 0.15);
-          border-color: rgba(239, 68, 68, 0.4);
-          color: #ef4444;
-          transform: scale(1.05);
-        }
-        
-        .ai-close-btn svg {
-          transition: transform 0.3s ease;
-        }
-        
-        .ai-close-btn:hover svg {
-          transform: rotate(90deg);
-        }
-
-        .ai-messages {
-          flex: 1;
-          overflow-y: auto;
-          padding: 24px;
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-          scroll-behavior: smooth;
-        }
-
-        .ai-messages::-webkit-scrollbar {
-          width: 6px;
-        }
-
-        .ai-messages::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.05);
-          border-radius: 3px;
-        }
-
-        .ai-messages::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.2);
-          border-radius: 3px;
-        }
-
-        .ai-messages::-webkit-scrollbar-thumb:hover {
-          background: rgba(255, 255, 255, 0.3);
-        }
-
-        .ai-message {
-          display: flex;
-          gap: 12px;
-          align-items: flex-start;
-          animation: messageSlide 0.3s ease;
-        }
-
-        @keyframes messageSlide {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .ai-message.user {
-          justify-content: flex-end;
-        }
-
-        .ai-message-avatar {
-          width: 36px;
-          height: 36px;
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 20px;
-          flex-shrink: 0;
-        }
-
-        .ai-message.user .ai-message-avatar {
-          background: linear-gradient(135deg, #60a5fa, #a78bfa);
-        }
-
-        .ai-message-content {
-          max-width: 75%;
-        }
-
-        .ai-message-text {
-          background: rgba(255, 255, 255, 0.05);
-          padding: 14px 18px;
-          border-radius: 20px;
-          color: #e2e8f0;
-          font-size: 15px;
-          line-height: 1.6;
-          word-wrap: break-word;
-        }
-
-        .ai-message.user .ai-message-text {
-          background: linear-gradient(135deg, #60a5fa, #a78bfa);
-          color: white;
-        }
-
-        .ai-message-model {
-          font-size: 11px;
-          color: rgba(255, 255, 255, 0.4);
-          margin-top: 6px;
-          padding-left: 18px;
-          display: flex;
-          align-items: center;
-          gap: 4px;
-        }
-
-        .ai-typing {
-          display: flex;
-          gap: 4px;
-          padding: 14px 18px;
-          background: rgba(255, 255, 255, 0.05);
-          border-radius: 20px;
-        }
-
-        .ai-typing span {
-          width: 8px;
-          height: 8px;
-          background: #94a3b8;
-          border-radius: 50%;
-          animation: typing 1.4s infinite ease-in-out;
-        }
-
-        .ai-typing span:nth-child(2) {
-          animation-delay: 0.2s;
-        }
-
-        .ai-typing span:nth-child(3) {
-          animation-delay: 0.4s;
-        }
-
-        @keyframes typing {
-          0%, 80%, 100% {
-            transform: scale(1);
-            opacity: 0.5;
-          }
-          40% {
-            transform: scale(1.3);
-            opacity: 1;
-          }
-        }
-
-        .ai-quick-questions {
-          padding: 16px 24px;
-          border-top: 1px solid rgba(255, 255, 255, 0.1);
-          background: rgba(30, 41, 59, 0.3);
-        }
-
-        .ai-quick-questions p {
-          margin: 0 0 10px 0;
-          color: #94a3b8;
-          font-size: 13px;
-          font-weight: 500;
-        }
-
-        .ai-quick-buttons {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 8px;
-        }
-
-        .ai-quick-buttons button {
-          padding: 10px 16px;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 20px;
-          color: #e2e8f0;
-          font-size: 14px;
-          cursor: pointer;
-          transition: all 0.2s ease;
-        }
-
-        .ai-quick-buttons button:hover:not(:disabled) {
-          background: rgba(255, 255, 255, 0.1);
-          transform: translateY(-1px);
-        }
-
-        .ai-quick-buttons button:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-
-        .ai-input-area {
-          display: flex;
-          gap: 12px;
-          padding: 20px;
-          border-top: 1px solid rgba(255, 255, 255, 0.1);
-          background: rgba(30, 41, 59, 0.3);
-          border-radius: 0 0 24px 24px;
-        }
-
-        .ai-input-area input {
-          flex: 1;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 24px;
-          padding: 14px 20px;
-          color: white;
-          font-size: 15px;
-          outline: none;
-          transition: all 0.2s ease;
-        }
-
-        .ai-input-area input:focus {
-          border-color: rgba(96, 165, 250, 0.5);
-          background: rgba(255, 255, 255, 0.08);
-        }
-
-        .ai-input-area input::placeholder {
-          color: #64748b;
-        }
-
-        .ai-send-button {
-          width: 48px;
-          height: 48px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, #60a5fa, #a78bfa);
-          border: none;
-          color: white;
-          font-size: 20px;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .ai-send-button:hover:not(:disabled) {
-          transform: scale(1.05);
-          box-shadow: 0 4px 20px rgba(96, 165, 250, 0.3);
-        }
-
-        .ai-send-button:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-      `}</style>
+      )}
     </>
   );
 }
