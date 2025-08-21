@@ -25,7 +25,10 @@
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
     "generate:password": "node scripts/generate-password.js",
     "audit": "npm audit --production",
-    "check:security": "bash scripts/security-check.sh"
+    "check:security": "bash scripts/security-check.sh",
+    "lint:report": "eslint . --ext .js,.jsx,.ts,.tsx --format json --output-file eslint-report.json || true",
+    "test:ci": "jest --ci --coverage --maxWorkers=2",
+    "sonar": "sonar-scanner"
   },
   "dependencies": {
     "@google/generative-ai": "^0.15.0",
