@@ -1,0 +1,198 @@
+# Code Agent Configuration
+# https://github.com/potproject/code-agent
+
+version: 1
+
+# Основные настройки
+settings:
+  # AI модель для анализа
+  model: gpt-4
+  temperature: 0.7
+  max_tokens: 2000
+  
+  # Язык отчетов
+  language: russian
+  
+  # Уровень детализации
+  verbosity: detailed
+  
+  # Автоматические исправления
+  auto_fix:
+    enabled: false
+    create_pr: true
+    pr_title_prefix: "🤖 [Code Agent]"
+    
+# Правила анализа
+rules:
+  # Безопасность
+  security:
+    enabled: true
+    priority: high
+    checks:
+      - no_hardcoded_secrets
+      - secure_api_endpoints
+      - validate_user_input
+      - check_auth_middleware
+      - xss_prevention
+      - sql_injection_prevention
+      - secure_headers
+      
+  # Производительность
+  performance:
+    enabled: true
+    priority: medium
+    checks:
+      - optimize_bundle_size
+      - lazy_loading
+      - image_optimization
+      - code_splitting
+      - memoization
+      - avoid_memory_leaks
+      - optimize_re_renders
+      
+  # Лучшие практики
+  best_practices:
+    enabled: true
+    priority: medium
+    checks:
+      - consistent_naming
+      - proper_error_handling
+      - clean_code_principles
+      - solid_principles
+      - dry_principle
+      - kiss_principle
+      
+  # Документация
+  documentation:
+    enabled: true
+    priority: low
+    checks:
+      - jsdoc_comments
+      - readme_completeness
+      - api_documentation
+      - component_documentation
+      
+  # Next.js специфичные правила
+  nextjs:
+    enabled: true
+    priority: high
+    checks:
+      - use_client_directive
+      - app_router_best_practices
+      - server_components_optimization
+      - metadata_api_usage
+      - image_component_usage
+      - font_optimization
+      - api_route_validation
+      
+  # React специфичные правила
+  react:
+    enabled: true
+    priority: high
+    checks:
+      - hooks_rules
+      - component_optimization
+      - state_management
+      - side_effects_handling
+      - accessibility
+      
+# Пользовательские правила
+custom_rules:
+  - name: "Check Russian Comments"
+    description: "Убедиться, что комментарии на русском языке информативны"
+    severity: low
+    
+  - name: "Validate ROI Calculator"
+    description: "Проверить корректность расчетов в калькуляторе ROI"
+    severity: high
+    pattern: "ROICalculator"
+    
+  - name: "AI Integration Security"
+    description: "Проверить безопасность интеграции с AI сервисами"
+    severity: critical
+    pattern: "api/ai-agent|api/assistant"
+    
+  - name: "Environment Variables"
+    description: "Проверить использование переменных окружения"
+    severity: high
+    pattern: "process.env"
+
+# Игнорируемые файлы и папки
+ignore:
+  paths:
+    - node_modules/
+    - .next/
+    - build/
+    - dist/
+    - coverage/
+    - "*.min.js"
+    - "*.map"
+    - ".env*"
+    
+  issues:
+    - "TODO comments"
+    - "console.log in development"
+    - "Experimental features warning"
+    
+# Интеграции
+integrations:
+  # Отправка уведомлений
+  notifications:
+    slack:
+      enabled: false
+      webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+      
+    email:
+      enabled: false
+      recipients:
+        - team@neuroexpert.com
+        
+  # Интеграция с другими инструментами
+  tools:
+    sonarqube:
+      enabled: false
+      
+    sentry:
+      enabled: true
+      create_issues: true
+      
+    jira:
+      enabled: false
+      project_key: NEURO
+      
+# Форматирование отчетов
+reports:
+  format:
+    - json
+    - html
+    - markdown
+    
+  include:
+    - summary
+    - detailed_issues
+    - suggestions
+    - metrics
+    - trends
+    
+  # Метрики для отслеживания
+  metrics:
+    - code_quality_score
+    - security_score
+    - performance_score
+    - test_coverage
+    - bundle_size
+    - accessibility_score
+    
+# Пороговые значения
+thresholds:
+  # Не пропускать PR если:
+  block_pr:
+    critical_issues: 0
+    high_issues: 3
+    security_score: 80
+    
+  # Предупреждения если:
+  warnings:
+    medium_issues: 10
+    performance_score: 70
+    bundle_size_increase: 10 # процентов
