@@ -5,10 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function ContactForm() {
   const [formData, setFormData] = useState({
     name: '',
-    phone: '',
-    email: '',
-    company: '',
-    message: ''
+    phone: ''
   });
   
   const [status, setStatus] = useState({
@@ -43,7 +40,7 @@ export default function ContactForm() {
           'Content-Type': 'application/json',
           'x-neuroexpert-csrf': '1'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({ name: formData.name, phone: formData.phone })
       });
 
       const result = await response.json();
@@ -55,7 +52,7 @@ export default function ContactForm() {
           error: false,
           message: result.message || 'Спасибо! Мы свяжемся с вами в ближайшее время.'
         });
-        setFormData({ name: '', phone: '', email: '', company: '', message: '' });
+        setFormData({ name: '', phone: '' });
       } else {
         throw new Error(result.error || 'Ошибка отправки формы');
       }
@@ -197,98 +194,6 @@ export default function ContactForm() {
                 />
               </div>
 
-              <div style={{ marginBottom: '24px' }}>
-                <label style={{
-                  display: 'block',
-                  marginBottom: '8px',
-                  fontSize: '14px',
-                  color: '#a0a0a0',
-                  fontWeight: '500'
-                }}>
-                  Email *
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="ivan@company.ru"
-                  style={{
-                    width: '100%',
-                    padding: '16px',
-                    fontSize: '16px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '12px',
-                    color: 'white',
-                    transition: 'all 0.3s ease',
-                    outline: 'none'
-                  }}
-                />
-              </div>
-
-              <div style={{ marginBottom: '24px' }}>
-                <label style={{
-                  display: 'block',
-                  marginBottom: '8px',
-                  fontSize: '14px',
-                  color: '#a0a0a0',
-                  fontWeight: '500'
-                }}>
-                  Компания
-                </label>
-                <input
-                  type="text"
-                  name="company"
-                  value={formData.company}
-                  onChange={handleInputChange}
-                  placeholder="ООО Компания"
-                  style={{
-                    width: '100%',
-                    padding: '16px',
-                    fontSize: '16px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '12px',
-                    color: 'white',
-                    transition: 'all 0.3s ease',
-                    outline: 'none'
-                  }}
-                />
-              </div>
-
-              <div style={{ marginBottom: '32px' }}>
-                <label style={{
-                  display: 'block',
-                  marginBottom: '8px',
-                  fontSize: '14px',
-                  color: '#a0a0a0',
-                  fontWeight: '500'
-                }}>
-                  Сообщение
-                </label>
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  rows={4}
-                  placeholder="Расскажите о вашей задаче..."
-                  style={{
-                    width: '100%',
-                    padding: '16px',
-                    fontSize: '16px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '12px',
-                    color: 'white',
-                    resize: 'vertical',
-                    minHeight: '120px',
-                    transition: 'all 0.3s ease',
-                    outline: 'none'
-                  }}
-                />
-              </div>
 
               <AnimatePresence mode="wait">
                 {status.message && (
