@@ -5,10 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function ContactForm() {
   const [formData, setFormData] = useState({
     name: '',
-    phone: '',
-    email: '',
-    company: '',
-    message: ''
+    phone: ''
   });
   
   const [status, setStatus] = useState({
