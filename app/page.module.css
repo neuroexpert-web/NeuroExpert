@@ -1,0 +1,470 @@
+/* Основные переменные */
+:root {
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --dark-bg: #050510;
+  --card-bg: rgba(255, 255, 255, 0.03);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-muted: rgba(255, 255, 255, 0.5);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --glow-purple: rgba(102, 126, 234, 0.6);
+  --glow-pink: rgba(240, 147, 251, 0.6);
+}
+
+/* Основной контейнер */
+.main {
+  min-height: 100vh;
+  background: var(--dark-bg);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Фоновые эффекты */
+.backgroundEffects {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.gradientOrb1,
+.gradientOrb2,
+.gradientOrb3 {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.5;
+  animation: float 20s ease-in-out infinite;
+}
+
+.gradientOrb1 {
+  width: 600px;
+  height: 600px;
+  background: var(--primary-gradient);
+  top: -200px;
+  left: -200px;
+  animation-duration: 25s;
+}
+
+.gradientOrb2 {
+  width: 800px;
+  height: 800px;
+  background: var(--secondary-gradient);
+  bottom: -300px;
+  right: -300px;
+  animation-duration: 30s;
+  animation-delay: -10s;
+}
+
+.gradientOrb3 {
+  width: 500px;
+  height: 500px;
+  background: var(--accent-gradient);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation-duration: 35s;
+  animation-delay: -20s;
+}
+
+.gridPattern {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.5;
+}
+
+/* Hero секция */
+.heroSection {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.content {
+  text-align: center;
+  max-width: 1200px;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.content.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Премиум тег */
+.premiumTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 2rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 50px;
+  backdrop-filter: blur(10px);
+  margin-bottom: 3rem;
+  animation: fadeInUp 1s ease-out;
+}
+
+.tagIcon {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.tagText {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* Заголовок */
+.mainTitle {
+  position: relative;
+  font-size: clamp(3rem, 10vw, 7rem);
+  font-weight: 900;
+  margin: 0 0 2rem 0;
+  line-height: 1;
+  animation: fadeInUp 1s ease-out 0.2s both;
+}
+
+.titleGradient {
+  background: linear-gradient(
+    135deg,
+    #667eea 0%,
+    #764ba2 20%,
+    #f093fb 40%,
+    #f5576c 60%,
+    #4facfe 80%,
+    #00f2fe 100%
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 8s ease-in-out infinite;
+}
+
+.titleGlow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: blur(20px);
+  opacity: 0.5;
+  z-index: -1;
+}
+
+/* Подзаголовок */
+.subtitle {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 300;
+  color: var(--text-secondary);
+  margin: 0 0 1.5rem 0;
+  line-height: 1.4;
+  animation: fadeInUp 1s ease-out 0.4s both;
+}
+
+.highlightText {
+  font-weight: 600;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Описание */
+.description {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: var(--text-muted);
+  max-width: 700px;
+  margin: 0 auto 3rem;
+  line-height: 1.7;
+  animation: fadeInUp 1s ease-out 0.6s both;
+}
+
+/* Кнопки */
+.actions {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 4rem;
+  animation: fadeInUp 1s ease-out 0.8s both;
+}
+
+.primaryButton,
+.secondaryButton {
+  position: relative;
+  padding: 1.25rem 2.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.primaryButton {
+  background: var(--primary-gradient);
+  color: white;
+  box-shadow: 
+    0 10px 30px -10px var(--glow-purple),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+
+.primaryButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 20px 40px -10px var(--glow-purple),
+    0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+}
+
+.secondaryButton {
+  background: var(--card-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(10px);
+}
+
+.secondaryButton:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.buttonText {
+  position: relative;
+  z-index: 1;
+}
+
+.buttonIcon {
+  font-size: 1.25rem;
+  transition: transform 0.3s ease;
+}
+
+.primaryButton:hover .buttonIcon {
+  transform: translateX(4px);
+}
+
+.buttonGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  transform: translate(-50%, -50%);
+  background: var(--primary-gradient);
+  opacity: 0;
+  filter: blur(20px);
+  transition: opacity 0.3s ease;
+}
+
+.primaryButton:hover .buttonGlow {
+  opacity: 0.3;
+}
+
+/* Статистика */
+.stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  animation: fadeInUp 1s ease-out 1s both;
+}
+
+.statItem {
+  text-align: center;
+}
+
+.statValue {
+  display: block;
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.statLabel {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.statDivider {
+  width: 1px;
+  height: 50px;
+  background: var(--border-color);
+}
+
+/* Частицы */
+.particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0;
+  animation: particleFloat linear infinite;
+}
+
+/* Анимации */
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  33% {
+    transform: translate(30px, -30px) rotate(120deg);
+  }
+  66% {
+    transform: translate(-20px, 20px) rotate(240deg);
+  }
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translateY(100vh) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(100px);
+    opacity: 0;
+  }
+}
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+  .heroSection {
+    padding: 1rem;
+  }
+
+  .premiumTag {
+    padding: 0.5rem 1.5rem;
+    font-size: 0.75rem;
+  }
+
+  .mainTitle {
+    font-size: clamp(2.5rem, 12vw, 4rem);
+    margin-bottom: 1.5rem;
+  }
+
+  .subtitle {
+    font-size: clamp(1.25rem, 5vw, 1.75rem);
+    margin-bottom: 1rem;
+  }
+
+  .description {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .actions {
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto 3rem;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .stats {
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+
+  .statDivider {
+    display: none;
+  }
+
+  .statValue {
+    font-size: 2rem;
+  }
+
+  .gradientOrb1 {
+    width: 300px;
+    height: 300px;
+  }
+
+  .gradientOrb2 {
+    width: 400px;
+    height: 400px;
+  }
+
+  .gradientOrb3 {
+    width: 250px;
+    height: 250px;
+  }
+}
