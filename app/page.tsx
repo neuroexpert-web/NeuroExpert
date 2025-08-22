@@ -10,12 +10,6 @@ const Navigation = dynamic(
   { ssr: false }
 )
 
-declare global {
-  interface Window {
-    openAIManager: () => void
-  }
-}
-
 export default function HomePage() {
   const [mounted, setMounted] = useState(false)
   const router = useRouter()
@@ -33,7 +27,7 @@ export default function HomePage() {
         if (chatButton) {
           (chatButton as HTMLButtonElement).click()
         }
-      }, 100) // Уменьшили задержку
+      }, 100)
     }
   }
 
@@ -41,58 +35,150 @@ export default function HomePage() {
     setMounted(true)
   }, [])
 
-  if (!mounted) return (
-    // Статичная версия для первичного рендера
-    <section className="hero-section">
-      <div className="hero-content">
-        <p className="pre-header">ЦИФРОВАЯ AI БИЗНЕС ПЛАТФОРМА</p>
-        <h1 className="main-header">NeuroExpert</h1>
-        <h2 className="sub-header">ЦИФРОВИЗАЦИЯ БИЗНЕСА<br />С ИСКУССТВЕННЫМ ИНТЕЛЛЕКТОМ</h2>
-        <p className="description">Автоматизируйте бизнес-процессы, увеличивайте прибыль и опережайте конкурентов, используя передовые AI технологии</p>
-        <button className="cta-button">НАЧАТЬ С AI УПРАВЛЯЮЩИМ</button>
-      </div>
-    </section>
-  )
-
   return (
     <>
       <Navigation />
-      <section className="hero-section">
-        {/* Простой градиентный фон вместо Vanta.js */}
-        <div className="hero-background" />
+      <section 
+        className="hero-section"
+        style={{
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'linear-gradient(135deg, #0a051a 0%, #1a0f3a 50%, #0f0520 100%)',
+          position: 'relative',
+          overflow: 'hidden'
+        }}
+      >
+        {/* Простой фоновый эффект */}
+        <div 
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: `
+              radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.15) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(255, 119, 198, 0.1) 0%, transparent 50%)
+            `,
+            pointerEvents: 'none'
+          }}
+        />
         
-        <div className="hero-content">
-          <p className="pre-header premium-text animate-fade-in-fast" style={{ animationDelay: '0.1s' }}>
+        <div 
+          className="hero-content"
+          style={{
+            textAlign: 'center',
+            padding: '20px',
+            position: 'relative',
+            zIndex: 10,
+            maxWidth: '1200px',
+            margin: '0 auto',
+            opacity: mounted ? 1 : 0,
+            transform: mounted ? 'translateY(0)' : 'translateY(20px)',
+            transition: 'all 0.8s ease-out'
+          }}
+        >
+          <p 
+            className="pre-header"
+            style={{
+              fontSize: 'clamp(12px, 2.5vw, 14px)',
+              fontWeight: 500,
+              color: '#00ffff',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              marginBottom: '24px',
+              opacity: mounted ? 1 : 0,
+              transition: 'opacity 0.6s ease-out 0.2s'
+            }}
+          >
             ЦИФРОВАЯ AI БИЗНЕС ПЛАТФОРМА
           </p>
           
-          <h1 className="main-header neural-network-title animate-scale-in" style={{ animationDelay: '0.3s' }}>
+          <h1 
+            className="main-header"
+            style={{
+              fontSize: 'clamp(48px, 12vw, 120px)',
+              fontWeight: 800,
+              marginBottom: '24px',
+              background: 'linear-gradient(135deg, #00ffff 0%, #ff00ff 50%, #00ff88 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              opacity: mounted ? 1 : 0,
+              transform: mounted ? 'scale(1)' : 'scale(0.9)',
+              transition: 'all 0.8s ease-out 0.3s'
+            }}
+          >
             NeuroExpert
           </h1>
           
-          <h2 className="sub-header premium-subtitle animate-slide-up-fast" style={{ animationDelay: '0.5s' }}>
+          <h2 
+            className="sub-header"
+            style={{
+              fontSize: 'clamp(18px, 4vw, 36px)',
+              fontWeight: 600,
+              color: '#00ff88',
+              textTransform: 'uppercase',
+              marginTop: '24px',
+              marginBottom: '16px',
+              opacity: mounted ? 1 : 0,
+              transition: 'opacity 0.6s ease-out 0.4s'
+            }}
+          >
             ЦИФРОВИЗАЦИЯ БИЗНЕСА<br />С ИСКУССТВЕННЫМ ИНТЕЛЛЕКТОМ
           </h2>
           
-          <p className="description premium-description animate-fade-in-fast" style={{ animationDelay: '0.7s' }}>
+          <p 
+            className="description"
+            style={{
+              fontSize: 'clamp(14px, 2.5vw, 20px)',
+              fontWeight: 400,
+              color: '#ffaa00',
+              maxWidth: '600px',
+              lineHeight: 1.6,
+              margin: '24px auto 40px auto',
+              opacity: mounted ? 1 : 0,
+              transition: 'opacity 0.6s ease-out 0.5s'
+            }}
+          >
             Автоматизируйте бизнес-процессы, увеличивайте прибыль и опережайте конкурентов, используя передовые AI технологии
           </p>
           
           <button 
             onClick={handleStartAI}
-            className="cta-button premium-button animate-fade-in-fast"
+            className="cta-button"
             aria-label="Начать работу с AI управляющим"
-            style={{ animationDelay: '0.9s' }}
+            style={{
+              display: 'inline-block',
+              padding: '18px 40px',
+              borderRadius: '50px',
+              border: '2px solid #ff0080',
+              fontSize: '16px',
+              fontWeight: 600,
+              color: '#ffffff',
+              textTransform: 'uppercase',
+              background: 'linear-gradient(90deg, #ff0080, #8000ff, #0080ff)',
+              boxShadow: '0 0 30px rgba(255, 0, 128, 0.6)',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              opacity: mounted ? 1 : 0,
+              transform: mounted ? 'translateY(0)' : 'translateY(10px)',
+              position: 'relative',
+              overflow: 'hidden'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-3px) scale(1.05)'
+              e.currentTarget.style.boxShadow = '0 0 40px rgba(255, 0, 128, 0.8)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0) scale(1)'
+              e.currentTarget.style.boxShadow = '0 0 30px rgba(255, 0, 128, 0.6)'
+            }}
           >
             НАЧАТЬ С AI УПРАВЛЯЮЩИМ
           </button>
-        </div>
-
-        {/* Легкие частицы без тяжелых анимаций */}
-        <div className="particles-container" aria-hidden="true">
-          {[...Array(5)].map((_, i) => (
-            <div key={i} className="particle" style={{ animationDelay: `${i * 0.5}s` }} />
-          ))}
         </div>
 
         {/* Скрытый контейнер для AI чата */}
@@ -100,191 +186,43 @@ export default function HomePage() {
       </section>
       
       {/* Ссылка на полную платформу */}
-      <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-40">
+      <div 
+        style={{
+          position: 'fixed',
+          bottom: '32px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 40
+        }}
+      >
         <button
           onClick={() => router.push('/platform')}
-          className="platform-link-button"
+          style={{
+            padding: '12px 24px',
+            background: 'rgba(99, 102, 241, 0.1)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(99, 102, 241, 0.3)',
+            borderRadius: '50px',
+            color: 'rgba(255, 255, 255, 0.9)',
+            fontSize: '14px',
+            fontWeight: 500,
+            cursor: 'pointer',
+            transition: 'all 0.2s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'rgba(99, 102, 241, 0.2)'
+            e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.5)'
+            e.currentTarget.style.transform = 'translateX(-50%) translateY(-2px)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'rgba(99, 102, 241, 0.1)'
+            e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.3)'
+            e.currentTarget.style.transform = 'translateX(-50%) translateY(0)'
+          }}
         >
           Перейти к полной платформе →
         </button>
       </div>
-
-      <style jsx>{`
-        .hero-background {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: linear-gradient(135deg, #0a051a 0%, #1a0f3a 50%, #0f0520 100%);
-          z-index: -1;
-        }
-
-        .hero-background::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-image: 
-            radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.2) 0%, transparent 50%),
-            radial-gradient(circle at 80% 80%, rgba(255, 119, 198, 0.15) 0%, transparent 50%),
-            radial-gradient(circle at 40% 20%, rgba(120, 219, 255, 0.15) 0%, transparent 50%);
-          animation: gradientShift 20s ease-in-out infinite;
-        }
-
-        @keyframes gradientShift {
-          0%, 100% { transform: rotate(0deg) scale(1); }
-          50% { transform: rotate(5deg) scale(1.1); }
-        }
-
-        /* Анимации для элементов */
-        :global(.animate-fade-in-fast) {
-          animation: fadeInFast 0.5s ease-out forwards;
-          opacity: 0;
-          animation-fill-mode: both;
-        }
-
-        :global(.animate-scale-in) {
-          animation: scaleIn 0.6s ease-out forwards;
-          opacity: 0;
-          animation-fill-mode: both;
-        }
-
-        :global(.animate-slide-up-fast) {
-          animation: slideUpFast 0.5s ease-out forwards;
-          opacity: 0;
-          animation-fill-mode: both;
-        }
-
-        @keyframes fadeInFast {
-          from { 
-            opacity: 0; 
-            transform: translateY(10px); 
-          }
-          to { 
-            opacity: 1; 
-            transform: translateY(0); 
-          }
-        }
-
-        @keyframes scaleIn {
-          from { 
-            opacity: 0; 
-            transform: scale(0.9); 
-          }
-          to { 
-            opacity: 1; 
-            transform: scale(1); 
-          }
-        }
-
-        @keyframes slideUpFast {
-          from { 
-            opacity: 0; 
-            transform: translateY(20px); 
-          }
-          to { 
-            opacity: 1; 
-            transform: translateY(0); 
-          }
-        }
-
-        .particles-container {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          overflow: hidden;
-          pointer-events: none;
-        }
-
-        .particle {
-          position: absolute;
-          width: 4px;
-          height: 4px;
-          background: rgba(255, 255, 255, 0.5);
-          border-radius: 50%;
-          animation: float 10s linear infinite;
-        }
-
-        .particle:nth-child(1) { left: 10%; top: 20%; }
-        .particle:nth-child(2) { left: 30%; top: 40%; }
-        .particle:nth-child(3) { left: 50%; top: 60%; }
-        .particle:nth-child(4) { left: 70%; top: 30%; }
-        .particle:nth-child(5) { left: 90%; top: 50%; }
-
-        @keyframes float {
-          0% { transform: translateY(0) translateX(0); opacity: 0; }
-          10% { opacity: 1; }
-          90% { opacity: 1; }
-          100% { transform: translateY(-100vh) translateX(30px); opacity: 0; }
-        }
-
-
-
-        .platform-link-button {
-          padding: 12px 24px;
-          background: rgba(99, 102, 241, 0.1);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(99, 102, 241, 0.3);
-          border-radius: 50px;
-          color: rgba(255, 255, 255, 0.9);
-          font-size: 14px;
-          font-weight: 500;
-          transition: all 0.2s ease;
-          cursor: pointer;
-        }
-
-        .platform-link-button:hover {
-          background: rgba(99, 102, 241, 0.2);
-          border-color: rgba(99, 102, 241, 0.5);
-          transform: translateY(-2px);
-        }
-
-        /* Упрощенная анимация для кнопки CTA */
-        :global(.cta-button) {
-          position: relative;
-          overflow: hidden;
-          transition: all 0.3s ease;
-          animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-          0%, 100% {
-            box-shadow: 0 0 30px rgba(255, 0, 128, 0.6), 0 10px 30px -5px rgba(128, 0, 255, 0.4);
-          }
-          50% {
-            box-shadow: 0 0 40px rgba(255, 0, 128, 0.8), 0 15px 35px -5px rgba(128, 0, 255, 0.6);
-          }
-        }
-
-        :global(.cta-button)::before {
-          content: '';
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          width: 0;
-          height: 0;
-          border-radius: 50%;
-          background: rgba(255, 255, 255, 0.2);
-          transform: translate(-50%, -50%);
-          transition: width 0.6s ease, height 0.6s ease;
-        }
-
-        :global(.cta-button:hover)::before {
-          width: 300px;
-          height: 300px;
-        }
-
-        :global(.cta-button:hover) {
-          transform: translateY(-2px);
-          animation: none;
-          box-shadow: 0 10px 40px rgba(139, 92, 246, 0.4);
-        }
-      `}</style>
     </>
   )
 }
