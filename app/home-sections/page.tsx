@@ -4,6 +4,12 @@ import { Suspense } from 'react'
 import dynamic from 'next/dynamic'
 import HomePage from '../page'
 
+declare global {
+  interface Window {
+    openAIManager?: () => void
+  }
+}
+
 // Динамические импорты
 const ROICalculator = dynamic(
   () => import('../components/ROICalculator'),
