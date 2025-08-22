@@ -5,6 +5,12 @@ import './styles/premium-design-system.css'
 import './styles/premium-glass-sections.css'
 import './styles/mobile-fixes.css'
 import Script from 'next/script'
+import { setupProductionLogging } from './utils/logger'
+
+// Setup production logging
+if (typeof window === 'undefined') {
+  setupProductionLogging();
+}
 
 // Оптимизированная загрузка шрифта
 const inter = Inter({ 

@@ -3,6 +3,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { assistantRateLimit } from '@/app/middleware/rateLimit';
 import fs from 'fs';
 import path from 'path';
+import { createLogger } from '@/app/utils/logger';
 // import { 
 //   DIRECTOR_KNOWLEDGE_BASE, 
 //   analyzeUserIntent,
@@ -10,6 +11,9 @@ import path from 'path';
 //   generateFollowUpQuestions,
 //   addEmotionalTone
 // } from '../../utils/ai-director-system';
+
+// Create logger instance
+const logger = createLogger('AssistantAPI');
 
 // Поддерживаем несколько названий переменных среды для ключа Gemini,
 // чтобы избежать ошибки из-за опечаток в панели хостинга
@@ -19,13 +23,13 @@ const GEMINI_API_KEY = process.env.GOOGLE_GEMINI_API_KEY
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 
 if (!GEMINI_API_KEY && !ANTHROPIC_API_KEY) {
-  console.error('No AI API keys configured. Please check environment variables.');
+  logger.error('No AI API keys configured. Please check environment variables.');
 }
 
 const genAI = GEMINI_API_KEY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null;
 
 // Debug logging
-console.log('API Keys check:', {
+logger.debug('API Keys check:', {
   hasGeminiKey: !!GEMINI_API_KEY,
   hasAnthropicKey: !!ANTHROPIC_API_KEY,
   genAIInitialized: !!genAI,
@@ -41,12 +45,12 @@ let SYSTEM_PROMPT = '';
 // Check if file exists
 try {
   if (fs.existsSync(PROMPT_PATH)) {
-    console.log('Prompt file exists at:', PROMPT_PATH);
+    logger.info('Prompt file exists at:', { path: PROMPT_PATH });
     SYSTEM_PROMPT = fs.readFileSync(PROMPT_PATH, 'utf-8');
-    console.log('System prompt loaded successfully, length:', SYSTEM_PROMPT.length);
-    console.log('System prompt preview:', SYSTEM_PROMPT.substring(0, 200) + '...');
+    logger.info('System prompt loaded successfully', { length: SYSTEM_PROMPT.length });
+    logger.debug('System prompt preview:', { preview: SYSTEM_PROMPT.substring(0, 200) + '...' });
   } else {
-    console.error('Prompt file does not exist at:', PROMPT_PATH);
+    logger.error('Prompt file does not exist at:', { path: PROMPT_PATH });
     // Try alternative paths
     const altPaths = [
       path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v3_2.md'),
@@ -56,17 +60,19 @@ try {
     
     for (const altPath of altPaths) {
       if (fs.existsSync(altPath)) {
-        console.log('Found prompt file at alternative path:', altPath);
+        logger.info('Found prompt file at alternative path:', { path: altPath });
         SYSTEM_PROMPT = fs.readFileSync(altPath, 'utf-8');
         break;
       }
     }
   }
 } catch (e) {
-  console.error('Failed to load system prompt for assistant:', e);
-  console.error('Prompt path:', PROMPT_PATH);
-  console.error('Current working directory:', process.cwd());
-  console.error('Available files in utils:', fs.readdirSync(path.join(process.cwd(), 'app', 'utils')).join(', '));
+  logger.error('Failed to load system prompt for assistant:', { error: e.message, stack: e.stack });
+  logger.error('Debug info:', {
+    promptPath: PROMPT_PATH,
+    cwd: process.cwd(),
+    utilsFiles: fs.readdirSync(path.join(process.cwd(), 'app', 'utils')).join(', ')
+  });
 }
 
 async function sendTelegramNotification(question, answer, model) {
@@ -100,10 +106,10 @@ async function sendTelegramNotification(question, answer, model) {
     );
 
     if (!response.ok) {
-      console.error('Failed to send Telegram notification');
+      logger.error('Failed to send Telegram notification');
     }
   } catch (error) {
-    console.error('Telegram notification error:', error);
+    logger.error('Telegram notification error:', { error: error.message });
   }
 }
 
@@ -141,7 +147,7 @@ async function getClaudeResponse(prompt, history = []) {
 
     if (!response.ok) {
       const errorData = await response.text();
-      console.error('Claude API error response:', errorData);
+      logger.error('Claude API error response:', { errorData, status: response.status });
       throw new Error(`Claude API error: ${response.status}`);
     }
 
@@ -156,7 +162,7 @@ async function getClaudeResponse(prompt, history = []) {
       }]
     };
   } catch (error) {
-    console.error('Claude API error:', error);
+    logger.error('Claude API error:', { error: error.message, stack: error.stack });
     throw error;
   }
 }
@@ -168,7 +174,7 @@ async function handler(request) {
     const { userMessage: question, model = 'gemini', history = [] } = await request.json();
     
     // Debug logging
-    console.log('Assistant API called:', { 
+    logger.debug('Assistant API called:', { 
       model, 
       questionLength: question?.length,
       hasAnthropicKey: !!ANTHROPIC_API_KEY,
@@ -192,18 +198,22 @@ async function handler(request) {
       // Выбираем модель на основе запроса пользователя
       if (model === 'claude' && ANTHROPIC_API_KEY) {
         // Используем Claude с историей
-        console.log('Using Claude with system prompt');
-        console.log('ANTHROPIC_API_KEY exists:', !!ANTHROPIC_API_KEY);
-        console.log('ANTHROPIC_API_KEY length:', ANTHROPIC_API_KEY ? ANTHROPIC_API_KEY.length : 0);
+        logger.info('Using Claude with system prompt');
+        logger.debug('Claude API configuration', {
+          hasKey: !!ANTHROPIC_API_KEY,
+          keyLength: ANTHROPIC_API_KEY ? ANTHROPIC_API_KEY.length : 0
+        });
         const claudeResponse = await getClaudeResponse(question, history);
         answer = claudeResponse.text;
         updatedHistory = claudeResponse.updatedHistory;
         usedModel = 'claude';
       } else if (model === 'gemini' && genAI && GEMINI_API_KEY) {
         // Используем Gemini с системным промптом v3.2
-        console.log('Using Gemini with system prompt, length:', SYSTEM_PROMPT.length);
-        console.log('Gemini API key exists:', !!GEMINI_API_KEY);
-        console.log('genAI initialized:', !!genAI);
+        logger.info('Using Gemini with system prompt', {
+          promptLength: SYSTEM_PROMPT.length,
+          hasApiKey: !!GEMINI_API_KEY,
+          genAIInitialized: !!genAI
+        });
         
         try {
           const geminiModel = genAI.getGenerativeModel({ 
@@ -216,21 +226,21 @@ async function handler(request) {
           answer = result.response.text();
           updatedHistory = await chat.getHistory();
           usedModel = 'gemini';
-          console.log('Gemini answer generated, length:', answer.length);
+          logger.info('Gemini answer generated', { answerLength: answer.length });
         } catch (geminiError) {
-          console.error('Gemini API call failed:', geminiError);
+          logger.error('Gemini API call failed:', { error: geminiError.message, stack: geminiError.stack });
           throw geminiError;
         }
       } else if (ANTHROPIC_API_KEY && model !== 'gemini') {
         // Fallback на Claude если Gemini недоступен
-        console.log('Fallback to Claude (Gemini not available)');
+        logger.info('Fallback to Claude (Gemini not available)');
         const claudeResponse = await getClaudeResponse(question, history);
         answer = claudeResponse.text;
         updatedHistory = claudeResponse.updatedHistory;
         usedModel = 'claude';
       } else {
         // Принудительно используем Gemini даже без API ключа (для тестирования)
-        console.log('Forcing Gemini usage for testing...');
+        logger.warn('Forcing Gemini usage for testing...');
         try {
           // Создаем временный API ключ для тестирования
           const tempGenAI = new GoogleGenerativeAI('test-key-for-debugging');
@@ -244,9 +254,9 @@ async function handler(request) {
           answer = result.response.text();
           updatedHistory = await chat.getHistory();
           usedModel = 'gemini-forced';
-          console.log('Forced Gemini answer generated, length:', answer.length);
+          logger.warn('Forced Gemini answer generated', { answerLength: answer.length });
         } catch (error) {
-          console.error('Forced Gemini failed:', error);
+          logger.error('Forced Gemini failed:', { error: error.message });
           // Fallback на базовый ответ по промпту
           answer = `Здравствуйте. Я Управляющий NeuroExpert v3.2. 
 
@@ -257,7 +267,7 @@ ${SYSTEM_PROMPT ? 'Системный промпт загружен успешн
         }
       }
     } catch (error) {
-      console.error('AI API Error:', error);
+      logger.error('AI API Error:', { error: error.message, stack: error.stack });
       answer = 'Извините, произошла техническая ошибка. Пожалуйста, позвоните нам по телефону +7 (996) 009-63-34 или напишите на neuroexpertai@gmail.com. Мы обязательно поможем!';
       usedModel = 'error';
     }
@@ -274,7 +284,9 @@ ${SYSTEM_PROMPT ? 'Системный промпт загружен успешн
     const responseTime = Date.now() - startTime;
 
     // Отправляем уведомление в Telegram
-    sendTelegramNotification(question, finalAnswer, usedModel).catch(console.error);
+    sendTelegramNotification(question, finalAnswer, usedModel).catch(err => 
+      logger.error('Failed to send Telegram notification', { error: err.message })
+    );
 
     // Анализируем интент для follow-up
     // const intent = analyzeUserIntent(question);
@@ -291,7 +303,7 @@ ${SYSTEM_PROMPT ? 'Системный промпт загружен успешн
     });
 
   } catch (error) {
-    console.error('Assistant API error:', error);
+    logger.error('Assistant API error:', { error: error.message, stack: error.stack });
     return NextResponse.json(
       { error: 'Внутренняя ошибка сервера' },
       { status: 500 }

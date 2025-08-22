@@ -242,3 +242,55 @@ export function logPerformance(operation, duration, context = 'Performance') {
     logger.debug(`Operation completed: ${operation}`, { duration: `${duration}ms` });
   }
 }
+
+// Production console override
+export function setupProductionLogging() {
+  if (process.env.NODE_ENV === 'production') {
+    // Save original console methods
+    const originalConsole = {
+      log: console.log,
+      error: console.error,
+      warn: console.warn,
+      debug: console.debug,
+      info: console.info
+    };
+
+    // Override console methods
+    console.log = (...args) => {
+      const logger = new Logger('Console');
+      logger.debug(args.join(' '));
+    };
+
+    console.error = (...args) => {
+      const logger = new Logger('Console');
+      logger.error(args.join(' '));
+    };
+
+    console.warn = (...args) => {
+      const logger = new Logger('Console');
+      logger.warn(args.join(' '));
+    };
+
+    console.debug = (...args) => {
+      const logger = new Logger('Console');
+      logger.debug(args.join(' '));
+    };
+
+    console.info = (...args) => {
+      const logger = new Logger('Console');
+      logger.info(args.join(' '));
+    };
+
+    // Return function to restore original console
+    return () => {
+      console.log = originalConsole.log;
+      console.error = originalConsole.error;
+      console.warn = originalConsole.warn;
+      console.debug = originalConsole.debug;
+      console.info = originalConsole.info;
+    };
+  }
+}
+
+// Client-side logger for browser
+export const clientLogger = typeof window !== 'undefined' ? new Logger('Client') : null;
