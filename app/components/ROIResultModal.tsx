@@ -71,46 +71,31 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 50 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            style={{
-              position: 'fixed',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              background: 'linear-gradient(180deg, rgba(20, 20, 40, 0.95) 0%, rgba(30, 30, 60, 0.95) 100%)',
-              borderRadius: '32px',
-              padding: '48px',
-              border: '1px solid rgba(102, 126, 234, 0.3)',
-              boxShadow: '0 30px 60px rgba(0, 0, 0, 0.5)',
-              maxWidth: '800px',
-              width: '90%',
-              maxHeight: '90vh',
-              overflow: 'auto',
-              zIndex: 1001
-            }}
+            className="fixed inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2
+                       bg-gradient-to-b from-gray-900/95 to-gray-800/95 backdrop-blur-xl
+                       rounded-2xl md:rounded-3xl p-4 sm:p-6 md:p-8 lg:p-12
+                       border border-purple-500/30 shadow-2xl
+                       max-w-full md:max-w-3xl w-full
+                       max-h-[calc(100vh-2rem)] md:max-h-[90vh] overflow-y-auto
+                       z-[1001]"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+            <div className="text-center mb-6 md:mb-10">
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: 'spring' }}
-                style={{ fontSize: '80px', marginBottom: '20px' }}
+                className="text-5xl md:text-7xl mb-3 md:mb-5"
               >
                 🎉
               </motion.div>
-              <h2 style={{
-                fontSize: '36px',
-                fontWeight: '700',
-                marginBottom: '16px',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-              }}>
+              <h2 className="text-2xl md:text-4xl font-bold mb-2 md:mb-4 
+                           bg-gradient-to-r from-purple-400 to-purple-600 
+                           bg-clip-text text-transparent">
                 Ваш потенциал роста
               </h2>
-              <p style={{ color: '#a0a0a0', fontSize: '18px' }}>
+              <p className="text-gray-400 text-sm md:text-lg">
                 Персональный расчет эффективности цифровизации
               </p>
             </div>
@@ -120,83 +105,64 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
-              style={{
-                background: 'rgba(102, 126, 234, 0.1)',
-                padding: '24px',
-                borderRadius: '16px',
-                marginBottom: '32px',
-                border: '1px solid rgba(102, 126, 234, 0.2)'
-              }}
+              className="bg-purple-500/10 p-4 md:p-6 rounded-xl md:rounded-2xl mb-6 md:mb-8 
+                       border border-purple-500/20"
             >
-              <h3 style={{ color: '#667eea', marginBottom: '16px', fontSize: '20px' }}>
+              <h3 className="text-purple-400 mb-3 md:mb-4 text-lg md:text-xl font-semibold">
                 📊 Ваши параметры:
               </h3>
-              <div style={{ display: 'grid', gap: '12px' }}>
-                <div style={{ color: '#e0e7ff' }}>
-                  <span style={{ color: '#a0a0a0' }}>Размер компании:</span> {getBusinessSizeText(formData.businessSize)}
+              <div className="grid gap-2 md:gap-3">
+                <div className="text-indigo-200 text-sm md:text-base">
+                  <span className="text-gray-400">Размер компании:</span> {getBusinessSizeText(formData.businessSize)}
                 </div>
-                <div style={{ color: '#e0e7ff' }}>
-                  <span style={{ color: '#a0a0a0' }}>Отрасль:</span> {getIndustryText(formData.industry)}
+                <div className="text-indigo-200 text-sm md:text-base">
+                  <span className="text-gray-400">Отрасль:</span> {getIndustryText(formData.industry)}
                 </div>
-                <div style={{ color: '#e0e7ff' }}>
-                  <span style={{ color: '#a0a0a0' }}>Инвестиции в цифровизацию:</span> {formatCurrency(formData.budget)}
+                <div className="text-indigo-200 text-sm md:text-base">
+                  <span className="text-gray-400">Инвестиции в цифровизацию:</span> {formatCurrency(formData.budget)}
                 </div>
               </div>
             </motion.div>
 
             {/* Main Results */}
-            <div style={{ display: 'grid', gap: '24px', marginBottom: '32px' }}>
+            <div className="grid gap-4 md:gap-6 mb-6 md:mb-8">
               {/* ROI */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.4 }}
-                style={{
-                  background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2))',
-                  padding: '32px',
-                  borderRadius: '20px',
-                  border: '1px solid rgba(102, 126, 234, 0.3)',
-                  textAlign: 'center'
-                }}
+                className="bg-gradient-to-br from-purple-500/20 to-purple-600/20 
+                         p-6 md:p-8 rounded-xl md:rounded-2xl border border-purple-500/30 
+                         text-center"
               >
-                <h3 style={{ color: '#a0a0a0', marginBottom: '8px', fontSize: '18px' }}>
+                <h3 className="text-gray-400 mb-2 text-base md:text-lg">
                   Возврат инвестиций (ROI)
                 </h3>
-                <div style={{
-                  fontSize: '64px',
-                  fontWeight: '700',
-                  background: 'linear-gradient(135deg, #667eea, #764ba2)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                  marginBottom: '8px'
-                }}>
+                <div className="text-4xl sm:text-5xl md:text-6xl font-bold mb-2 
+                              bg-gradient-to-r from-purple-400 to-purple-600 
+                              bg-clip-text text-transparent">
                   {results.roi}%
                 </div>
-                <p style={{ color: '#e0e7ff', fontSize: '16px' }}>
+                <p className="text-indigo-200 text-sm md:text-base">
                   за 3 года работы с нами
                 </p>
               </motion.div>
 
               {/* Detailed Metrics */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
-                  style={{
-                    background: 'rgba(72, 187, 120, 0.1)',
-                    padding: '24px',
-                    borderRadius: '16px',
-                    border: '1px solid rgba(72, 187, 120, 0.3)'
-                  }}
+                  className="bg-green-500/10 p-4 md:p-6 rounded-xl md:rounded-2xl 
+                           border border-green-500/30"
                 >
-                  <div style={{ color: '#48bb78', fontSize: '32px', marginBottom: '8px' }}>💰</div>
-                  <h4 style={{ color: '#e0e7ff', marginBottom: '8px' }}>Годовая экономия</h4>
-                  <div style={{ fontSize: '24px', fontWeight: '600', color: '#48bb78' }}>
+                  <div className="text-green-400 text-2xl md:text-3xl mb-2">💰</div>
+                  <h4 className="text-indigo-200 mb-2 text-sm md:text-base">Годовая экономия</h4>
+                  <div className="text-xl md:text-2xl font-semibold text-green-400">
                     {formatCurrency(results.savings)}
                   </div>
-                  <p style={{ color: '#a0a0a0', fontSize: '14px', marginTop: '4px' }}>
+                  <p className="text-gray-400 text-xs md:text-sm mt-1">
                     на оптимизации процессов
                   </p>
                 </motion.div>
@@ -205,19 +171,15 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6 }}
-                  style={{
-                    background: 'rgba(66, 153, 225, 0.1)',
-                    padding: '24px',
-                    borderRadius: '16px',
-                    border: '1px solid rgba(66, 153, 225, 0.3)'
-                  }}
+                  className="bg-blue-500/10 p-4 md:p-6 rounded-xl md:rounded-2xl 
+                           border border-blue-500/30"
                 >
-                  <div style={{ color: '#4299e1', fontSize: '32px', marginBottom: '8px' }}>📈</div>
-                  <h4 style={{ color: '#e0e7ff', marginBottom: '8px' }}>Рост доходов</h4>
-                  <div style={{ fontSize: '24px', fontWeight: '600', color: '#4299e1' }}>
+                  <div className="text-blue-400 text-2xl md:text-3xl mb-2">📈</div>
+                  <h4 className="text-indigo-200 mb-2 text-sm md:text-base">Рост доходов</h4>
+                  <div className="text-xl md:text-2xl font-semibold text-blue-400">
                     {formatCurrency(results.growth)}
                   </div>
-                  <p style={{ color: '#a0a0a0', fontSize: '14px', marginTop: '4px' }}>
+                  <p className="text-gray-400 text-xs md:text-sm mt-1">
                     дополнительной прибыли
                   </p>
                 </motion.div>
@@ -226,19 +188,15 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7 }}
-                  style={{
-                    background: 'rgba(237, 137, 54, 0.1)',
-                    padding: '24px',
-                    borderRadius: '16px',
-                    border: '1px solid rgba(237, 137, 54, 0.3)'
-                  }}
+                  className="bg-orange-500/10 p-4 md:p-6 rounded-xl md:rounded-2xl 
+                           border border-orange-500/30"
                 >
-                  <div style={{ color: '#ed8936', fontSize: '32px', marginBottom: '8px' }}>⏱️</div>
-                  <h4 style={{ color: '#e0e7ff', marginBottom: '8px' }}>Окупаемость</h4>
-                  <div style={{ fontSize: '24px', fontWeight: '600', color: '#ed8936' }}>
+                  <div className="text-orange-400 text-2xl md:text-3xl mb-2">⏱️</div>
+                  <h4 className="text-indigo-200 mb-2 text-sm md:text-base">Окупаемость</h4>
+                  <div className="text-xl md:text-2xl font-semibold text-orange-400">
                     {results.payback} мес.
                   </div>
-                  <p style={{ color: '#a0a0a0', fontSize: '14px', marginTop: '4px' }}>
+                  <p className="text-gray-400 text-xs md:text-sm mt-1">
                     полный возврат инвестиций
                   </p>
                 </motion.div>
@@ -250,33 +208,28 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 }}
-              style={{
-                background: 'rgba(118, 75, 162, 0.1)',
-                padding: '32px',
-                borderRadius: '20px',
-                marginBottom: '32px',
-                border: '1px solid rgba(118, 75, 162, 0.2)'
-              }}
+              className="bg-purple-600/10 p-4 md:p-8 rounded-xl md:rounded-2xl mb-6 md:mb-8
+                       border border-purple-600/20"
             >
-              <h3 style={{ color: '#764ba2', marginBottom: '20px', fontSize: '24px' }}>
+              <h3 className="text-purple-400 mb-4 md:mb-5 text-lg md:text-2xl font-semibold">
                 🚀 Что вы получите с NeuroExpert:
               </h3>
-              <div style={{ display: 'grid', gap: '16px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ fontSize: '24px' }}>✅</span>
-                  <span style={{ color: '#e0e7ff' }}>Автоматизация до 80% рутинных операций</span>
+              <div className="grid gap-3 md:gap-4">
+                <div className="flex items-center gap-2 md:gap-3">
+                  <span className="text-xl md:text-2xl">✅</span>
+                  <span className="text-indigo-200 text-sm md:text-base">Автоматизация до 80% рутинных операций</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ fontSize: '24px' }}>✅</span>
-                  <span style={{ color: '#e0e7ff' }}>Увеличение конверсии на 40-60%</span>
+                <div className="flex items-center gap-2 md:gap-3">
+                  <span className="text-xl md:text-2xl">✅</span>
+                  <span className="text-indigo-200 text-sm md:text-base">Увеличение конверсии на 40-60%</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ fontSize: '24px' }}>✅</span>
-                  <span style={{ color: '#e0e7ff' }}>Снижение затрат на маркетинг до 35%</span>
+                <div className="flex items-center gap-2 md:gap-3">
+                  <span className="text-xl md:text-2xl">✅</span>
+                  <span className="text-indigo-200 text-sm md:text-base">Снижение затрат на маркетинг до 35%</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ fontSize: '24px' }}>✅</span>
-                  <span style={{ color: '#e0e7ff' }}>Рост лояльности клиентов на 50%</span>
+                <div className="flex items-center gap-2 md:gap-3">
+                  <span className="text-xl md:text-2xl">✅</span>
+                  <span className="text-indigo-200 text-sm md:text-base">Рост лояльности клиентов на 50%</span>
                 </div>
               </div>
             </motion.div>
@@ -286,12 +239,12 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.9 }}
-              style={{ textAlign: 'center' }}
+              className="text-center"
             >
-              <p style={{ color: '#e0e7ff', marginBottom: '24px', fontSize: '18px' }}>
+              <p className="text-indigo-200 mb-4 md:mb-6 text-base md:text-lg">
                 Готовы увеличить прибыль на {results.roi}%?
               </p>
-              <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -301,17 +254,12 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                     });
                     onClose();
                   }}
-                  style={{
-                    padding: '16px 40px',
-                    background: 'linear-gradient(135deg, #667eea, #764ba2)',
-                    border: 'none',
-                    borderRadius: '50px',
-                    color: 'white',
-                    fontSize: '18px',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    boxShadow: '0 10px 30px rgba(102, 126, 234, 0.3)'
-                  }}
+                  className="px-6 md:px-10 py-3 md:py-4 
+                           bg-gradient-to-r from-purple-500 to-purple-700
+                           border-none rounded-full text-white 
+                           text-sm md:text-lg font-semibold cursor-pointer
+                           shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40
+                           transition-all duration-300 w-full sm:w-auto"
                 >
                   💬 Обсудить с AI директором
                 </motion.button>
@@ -322,16 +270,12 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
                     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
                     onClose();
                   }}
-                  style={{
-                    padding: '16px 40px',
-                    background: 'transparent',
-                    border: '2px solid rgba(102, 126, 234, 0.5)',
-                    borderRadius: '50px',
-                    color: '#667eea',
-                    fontSize: '18px',
-                    fontWeight: '600',
-                    cursor: 'pointer'
-                  }}
+                  className="px-6 md:px-10 py-3 md:py-4 
+                           bg-transparent border-2 border-purple-500/50
+                           rounded-full text-purple-400 
+                           text-sm md:text-lg font-semibold cursor-pointer
+                           hover:border-purple-400 hover:text-purple-300
+                           transition-all duration-300 w-full sm:w-auto"
                 >
                   📞 Получить консультацию
                 </motion.button>
@@ -343,22 +287,13 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
               whileHover={{ scale: 1.1, rotate: 90 }}
               whileTap={{ scale: 0.9 }}
               onClick={onClose}
-              style={{
-                position: 'absolute',
-                top: '24px',
-                right: '24px',
-                background: 'rgba(255, 255, 255, 0.1)',
-                border: 'none',
-                borderRadius: '50%',
-                width: '40px',
-                height: '40px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                color: '#a0a0a0',
-                fontSize: '20px'
-              }}
+              className="absolute top-3 right-3 md:top-6 md:right-6
+                       bg-white/10 border-none rounded-full
+                       w-8 h-8 md:w-10 md:h-10 
+                       flex items-center justify-center
+                       cursor-pointer text-gray-400 hover:text-white
+                       text-base md:text-xl
+                       transition-colors duration-300"
             >
               ✕
             </motion.button>

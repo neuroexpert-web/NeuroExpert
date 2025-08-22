@@ -215,18 +215,11 @@ export default function ROICalculator(): JSX.Element {
                       repeat: Infinity
                     }
                   }}
-                  style={{
-                    width: '100%',
-                    padding: '18px',
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    border: 'none',
-                    borderRadius: '50px',
-                    color: 'white',
-                    fontSize: '18px',
-                    fontWeight: '700',
-                    cursor: 'pointer',
-                    marginTop: '32px'
-                  }}
+                  className="w-full px-6 py-3 md:py-4 mt-6 md:mt-8
+                           bg-gradient-to-r from-purple-500 to-purple-700
+                           border-none rounded-full text-white
+                           text-base md:text-lg font-bold cursor-pointer
+                           shadow-lg hover:shadow-xl transition-all duration-300"
                 >
                   Рассчитать ROI
                 </motion.button>
