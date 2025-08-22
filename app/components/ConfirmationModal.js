@@ -3,23 +3,22 @@
 import { useEffect } from 'react';
 
 function ConfirmationModal({ isOpen, onClose, type = 'contact' }) {
-  
   useEffect(() => {
     if (isOpen) {
       // Закрытие через 4 секунды
       const timer = setTimeout(() => {
         onClose();
       }, 4000);
-      
+
       // Заблокировать скролл
       document.body.style.overflow = 'hidden';
-      
+
       // Закрытие по Escape
       const handleEscape = (e) => {
         if (e.key === 'Escape') onClose();
       };
       document.addEventListener('keydown', handleEscape);
-      
+
       return () => {
         clearTimeout(timer);
         document.body.style.overflow = 'unset';
@@ -40,8 +39,8 @@ function ConfirmationModal({ isOpen, onClose, type = 'contact' }) {
           features: [
             { icon: '🎯', text: 'Сообщение обработано ИИ' },
             { icon: '📞', text: 'Звонок в течение 15 минут' },
-            { icon: '💬', text: 'Уведомление в Telegram отправлено' }
-          ]
+            { icon: '💬', text: 'Уведомление в Telegram отправлено' },
+          ],
         };
       default:
         return {
@@ -51,8 +50,8 @@ function ConfirmationModal({ isOpen, onClose, type = 'contact' }) {
           features: [
             { icon: '⚡', text: 'Ответ в течение 15 минут' },
             { icon: '📊', text: 'Персональный ROI расчет готовится' },
-            { icon: '🔒', text: 'Данные надежно защищены' }
-          ]
+            { icon: '🔒', text: 'Данные надежно защищены' },
+          ],
         };
     }
   };
@@ -72,27 +71,31 @@ function ConfirmationModal({ isOpen, onClose, type = 'contact' }) {
               <div className="ring ring-3"></div>
             </div>
           </div>
-          
+
           {/* Заголовок */}
           <h2 className="confirmation-title">{content.title}</h2>
           <p className="confirmation-subtitle">{content.subtitle}</p>
-          
+
           {/* Особенности */}
           <div className="confirmation-features">
             {content.features.map((feature, index) => (
-              <div key={index} className="feature-item" style={{animationDelay: `${index * 0.2}s`}}>
+              <div
+                key={index}
+                className="feature-item"
+                style={{ animationDelay: `${index * 0.2}s` }}
+              >
                 <span className="feature-icon">{feature.icon}</span>
                 <span className="feature-text">{feature.text}</span>
               </div>
             ))}
           </div>
-          
+
           {/* Прогресс бар автозакрытия */}
           <div className="auto-close-progress">
             <div className="progress-bar"></div>
             <p className="progress-text">Окно закроется автоматически</p>
           </div>
-          
+
           {/* Кнопка закрытия */}
           <button className="close-confirmation-btn" onClick={onClose}>
             ✨ Понятно, спасибо!
@@ -118,13 +121,18 @@ function ConfirmationModal({ isOpen, onClose, type = 'contact' }) {
         }
 
         @keyframes overlayFadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
         }
 
         .confirmation-modal {
-          background: linear-gradient(135deg, 
-            rgba(5, 8, 16, 0.98), 
+          background: linear-gradient(
+            135deg,
+            rgba(5, 8, 16, 0.98),
             rgba(10, 15, 26, 0.98),
             rgba(30, 41, 59, 0.95)
           );
@@ -135,7 +143,7 @@ function ConfirmationModal({ isOpen, onClose, type = 'contact' }) {
           width: 100%;
           max-height: 90vh;
           overflow: hidden;
-          box-shadow: 
+          box-shadow:
             0 25px 50px -12px rgba(0, 0, 0, 0.6),
             0 0 80px rgba(0, 255, 163, 0.15),
             inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -175,15 +183,15 @@ function ConfirmationModal({ isOpen, onClose, type = 'contact' }) {
         }
 
         @keyframes iconBounce {
-          0% { 
-            transform: scale(0) rotate(-180deg); 
+          0% {
+            transform: scale(0) rotate(-180deg);
             opacity: 0;
           }
-          50% { 
-            transform: scale(1.2) rotate(-90deg); 
+          50% {
+            transform: scale(1.2) rotate(-90deg);
           }
-          100% { 
-            transform: scale(1) rotate(0deg); 
+          100% {
+            transform: scale(1) rotate(0deg);
             opacity: 1;
           }
         }
@@ -277,10 +285,7 @@ function ConfirmationModal({ isOpen, onClose, type = 'contact' }) {
           justify-content: center;
           gap: 15px;
           padding: 15px 20px;
-          background: linear-gradient(135deg, 
-            rgba(0, 255, 163, 0.08), 
-            rgba(77, 216, 255, 0.06)
-          );
+          background: linear-gradient(135deg, rgba(0, 255, 163, 0.08), rgba(77, 216, 255, 0.06));
           border: 1px solid rgba(0, 255, 163, 0.2);
           border-radius: 12px;
           color: rgba(240, 249, 255, 0.95);
@@ -289,10 +294,7 @@ function ConfirmationModal({ isOpen, onClose, type = 'contact' }) {
         }
 
         .feature-item:hover {
-          background: linear-gradient(135deg, 
-            rgba(0, 255, 163, 0.12), 
-            rgba(77, 216, 255, 0.1)
-          );
+          background: linear-gradient(135deg, rgba(0, 255, 163, 0.12), rgba(77, 216, 255, 0.1));
           border-color: rgba(0, 255, 163, 0.4);
           transform: translateY(-2px);
         }
@@ -338,17 +340,18 @@ function ConfirmationModal({ isOpen, onClose, type = 'contact' }) {
           left: 0;
           top: 0;
           height: 100%;
-          background: linear-gradient(90deg, 
-            var(--neural-aurora-green), 
-            var(--neural-ice-blue)
-          );
+          background: linear-gradient(90deg, var(--neural-aurora-green), var(--neural-ice-blue));
           border-radius: 2px;
           animation: progressFill 4s linear;
         }
 
         @keyframes progressFill {
-          from { width: 100%; }
-          to { width: 0%; }
+          from {
+            width: 100%;
+          }
+          to {
+            width: 0%;
+          }
         }
 
         .progress-text {
@@ -359,10 +362,7 @@ function ConfirmationModal({ isOpen, onClose, type = 'contact' }) {
 
         /* Кнопка закрытия */
         .close-confirmation-btn {
-          background: linear-gradient(135deg, 
-            var(--neural-aurora-green), 
-            var(--neural-ice-blue)
-          );
+          background: linear-gradient(135deg, var(--neural-aurora-green), var(--neural-ice-blue));
           border: none;
           border-radius: 15px;
           color: white;
@@ -383,11 +383,7 @@ function ConfirmationModal({ isOpen, onClose, type = 'contact' }) {
           left: -100%;
           width: 100%;
           height: 100%;
-          background: linear-gradient(90deg, 
-            transparent, 
-            rgba(255, 255, 255, 0.3), 
-            transparent
-          );
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
           transition: left 0.5s ease;
         }
 
@@ -398,10 +394,7 @@ function ConfirmationModal({ isOpen, onClose, type = 'contact' }) {
         .close-confirmation-btn:hover {
           transform: translateY(-2px);
           box-shadow: 0 10px 25px rgba(0, 255, 163, 0.3);
-          background: linear-gradient(135deg, 
-            var(--neural-ice-blue), 
-            var(--neural-aurora-green)
-          );
+          background: linear-gradient(135deg, var(--neural-ice-blue), var(--neural-aurora-green));
         }
 
         /* Мобильная адаптация */
@@ -442,9 +435,21 @@ function ConfirmationModal({ isOpen, onClose, type = 'contact' }) {
             font-size: 3rem;
           }
 
-          .ring-1 { width: 60px; height: 60px; margin: -30px 0 0 -30px; }
-          .ring-2 { width: 90px; height: 90px; margin: -45px 0 0 -45px; }
-          .ring-3 { width: 120px; height: 120px; margin: -60px 0 0 -60px; }
+          .ring-1 {
+            width: 60px;
+            height: 60px;
+            margin: -30px 0 0 -30px;
+          }
+          .ring-2 {
+            width: 90px;
+            height: 90px;
+            margin: -45px 0 0 -45px;
+          }
+          .ring-3 {
+            width: 120px;
+            height: 120px;
+            margin: -60px 0 0 -60px;
+          }
         }
       `}</style>
     </div>

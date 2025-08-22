@@ -8,14 +8,14 @@ class ContentAutomation {
     this.automationRules = new Map();
     this.lastUpdateCheck = Date.now();
     this.updateInterval = 5 * 60 * 1000; // 5 минут
-    
+
     this.initializeAutomation();
   }
 
   initializeAutomation() {
     // Загружаем правила автоматизации
     this.loadAutomationRules();
-    
+
     // Запускаем периодическую проверку обновлений
     setInterval(() => {
       this.checkForUpdates();
@@ -23,7 +23,7 @@ class ContentAutomation {
 
     // Автоматическое обновление популярности FAQ
     this.startFAQPopularityTracking();
-    
+
     // Автоматическое обновление рекомендаций
     this.startRecommendationEngine();
   }
@@ -32,7 +32,7 @@ class ContentAutomation {
     const savedRules = localStorage.getItem('automation_rules');
     if (savedRules) {
       const rules = JSON.parse(savedRules);
-      rules.forEach(rule => {
+      rules.forEach((rule) => {
         this.automationRules.set(rule.id, rule);
       });
     } else {
@@ -53,8 +53,8 @@ class ContentAutomation {
         frequency: 'realtime',
         conditions: {
           minInteractions: 5,
-          timeWindow: 24 * 60 * 60 * 1000 // 24 часа
-        }
+          timeWindow: 24 * 60 * 60 * 1000, // 24 часа
+        },
       },
       {
         id: 'auto_add_trending_faq',
@@ -66,8 +66,8 @@ class ContentAutomation {
         frequency: 'daily',
         conditions: {
           minOccurrences: 3,
-          timeWindow: 7 * 24 * 60 * 60 * 1000 // 7 дней
-        }
+          timeWindow: 7 * 24 * 60 * 60 * 1000, // 7 дней
+        },
       },
       {
         id: 'personalization_update',
@@ -78,8 +78,8 @@ class ContentAutomation {
         action: 'update_recommendations',
         frequency: 'realtime',
         conditions: {
-          minActions: 1
-        }
+          minActions: 1,
+        },
       },
       {
         id: 'content_freshness_check',
@@ -90,15 +90,15 @@ class ContentAutomation {
         action: 'flag_outdated_content',
         frequency: 'weekly',
         conditions: {
-          maxAge: 30 * 24 * 60 * 60 * 1000 // 30 дней
-        }
-      }
+          maxAge: 30 * 24 * 60 * 60 * 1000, // 30 дней
+        },
+      },
     ];
 
-    defaultRules.forEach(rule => {
+    defaultRules.forEach((rule) => {
       this.automationRules.set(rule.id, rule);
     });
-    
+
     this.saveAutomationRules();
   }
 
@@ -125,25 +125,25 @@ class ContentAutomation {
 
     // Получаем текущие данные FAQ
     const faqData = this.getCurrentFAQData();
-    const question = faqData.find(q => q.id === questionId);
-    
+    const question = faqData.find((q) => q.id === questionId);
+
     if (question) {
       question.popularity = (question.popularity || 0) + 1;
       question.lastViewed = Date.now();
-      
+
       // Обновляем в localStorage
       this.updateFAQData(faqData);
-      
+
       console.log(`📈 FAQ popularity updated for question ${questionId}`);
     }
   }
 
   trackSearchQuery(query) {
     const searchQueries = JSON.parse(localStorage.getItem('search_queries') || '[]');
-    
+
     searchQueries.push({
       query: query.toLowerCase(),
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
 
     // Храним только последние 1000 запросов
@@ -166,9 +166,10 @@ class ContentAutomation {
     const cutoffTime = Date.now() - timeWindow;
 
     // Подсчитываем частоту похожих запросов
-    const similarQueries = searchQueries.filter(sq => {
-      return sq.timestamp > cutoffTime && 
-             this.calculateSimilarity(sq.query, query.toLowerCase()) > 0.7;
+    const similarQueries = searchQueries.filter((sq) => {
+      return (
+        sq.timestamp > cutoffTime && this.calculateSimilarity(sq.query, query.toLowerCase()) > 0.7
+      );
     });
 
     if (similarQueries.length >= rule.conditions.minOccurrences) {
@@ -180,7 +181,7 @@ class ContentAutomation {
     // Простая функция подсчета схожести строк
     const words1 = str1.split(' ');
     const words2 = str2.split(' ');
-    const commonWords = words1.filter(word => words2.includes(word));
+    const commonWords = words1.filter((word) => words2.includes(word));
     return commonWords.length / Math.max(words1.length, words2.length);
   }
 
@@ -189,11 +190,12 @@ class ContentAutomation {
       id: `auto_${Date.now()}`,
       category: 'Автогенерация',
       question: this.beautifyQuery(query),
-      answer: 'Этот вопрос был добавлен автоматически на основе запросов пользователей. Пожалуйста, добавьте подробный ответ.',
+      answer:
+        'Этот вопрос был добавлен автоматически на основе запросов пользователей. Пожалуйста, добавьте подробный ответ.',
       popularity: frequency,
       isActive: false, // Требует модерации
       isAutoGenerated: true,
-      generatedAt: Date.now()
+      generatedAt: Date.now(),
     };
 
     const faqData = this.getCurrentFAQData();
@@ -222,7 +224,7 @@ class ContentAutomation {
       type: 'auto_faq',
       item,
       createdAt: Date.now(),
-      status: 'pending'
+      status: 'pending',
     });
     localStorage.setItem('moderation_queue', JSON.stringify(moderationQueue));
   }
@@ -246,26 +248,28 @@ class ContentAutomation {
     userProfile.actions.push({
       type: actionData.type,
       data: actionData.data,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
 
     // Генерируем новые рекомендации
     const recommendations = this.generateRecommendations(userProfile);
     userProfile.recommendations = recommendations;
-    
+
     this.saveUserProfile(userId, userProfile);
   }
 
   getUserProfile(userId) {
     const profiles = JSON.parse(localStorage.getItem('user_profiles') || '{}');
-    return profiles[userId] || {
-      id: userId,
-      createdAt: Date.now(),
-      actions: [],
-      preferences: {},
-      recommendations: [],
-      segment: 'unknown'
-    };
+    return (
+      profiles[userId] || {
+        id: userId,
+        createdAt: Date.now(),
+        actions: [],
+        preferences: {},
+        recommendations: [],
+        segment: 'unknown',
+      }
+    );
   }
 
   saveUserProfile(userId, profile) {
@@ -276,18 +280,18 @@ class ContentAutomation {
 
   generateRecommendations(userProfile) {
     const recommendations = [];
-    
+
     // Анализируем действия пользователя
     const recentActions = userProfile.actions.slice(-10);
-    const actionTypes = recentActions.map(a => a.type);
-    
+    const actionTypes = recentActions.map((a) => a.type);
+
     // Рекомендации на основе поведения
     if (actionTypes.includes('service_viewed')) {
       recommendations.push({
         type: 'service',
         title: 'Персональная консультация',
         reason: 'На основе просмотренных услуг',
-        priority: 8
+        priority: 8,
       });
     }
 
@@ -296,7 +300,7 @@ class ContentAutomation {
         type: 'course',
         title: 'Углубленный курс по цифровизации',
         reason: 'Вы показали интерес к обучению',
-        priority: 7
+        priority: 7,
       });
     }
 
@@ -305,7 +309,7 @@ class ContentAutomation {
         type: 'consultation',
         title: 'Бесплатная консультация',
         reason: 'У вас есть вопросы - мы поможем',
-        priority: 9
+        priority: 9,
       });
     }
 
@@ -322,9 +326,9 @@ class ContentAutomation {
 
     // Проверяем FAQ
     const faqData = this.getCurrentFAQData();
-    const outdatedFAQ = faqData.filter(item => {
+    const outdatedFAQ = faqData.filter((item) => {
       const lastUpdated = item.lastUpdated || item.createdAt || 0;
-      return (now - lastUpdated) > maxAge;
+      return now - lastUpdated > maxAge;
     });
 
     if (outdatedFAQ.length > 0) {
@@ -333,9 +337,9 @@ class ContentAutomation {
 
     // Проверяем услуги
     const servicesData = this.getCurrentServicesData();
-    const outdatedServices = servicesData.filter(item => {
+    const outdatedServices = servicesData.filter((item) => {
       const lastUpdated = item.lastUpdated || item.createdAt || 0;
-      return (now - lastUpdated) > maxAge;
+      return now - lastUpdated > maxAge;
     });
 
     if (outdatedServices.length > 0) {
@@ -345,15 +349,15 @@ class ContentAutomation {
 
   flagOutdatedContent(type, items) {
     const flags = JSON.parse(localStorage.getItem('content_flags') || '[]');
-    
-    items.forEach(item => {
+
+    items.forEach((item) => {
       flags.push({
         id: `flag_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         type,
         itemId: item.id,
         reason: 'Устаревший контент',
         createdAt: Date.now(),
-        status: 'active'
+        status: 'active',
       });
     });
 
@@ -386,30 +390,36 @@ class ContentAutomation {
 
   // Публичные методы для интеграции с компонентами
   trackFAQView(questionId) {
-    document.dispatchEvent(new CustomEvent('faq_question_viewed', {
-      detail: { questionId }
-    }));
+    document.dispatchEvent(
+      new CustomEvent('faq_question_viewed', {
+        detail: { questionId },
+      })
+    );
   }
 
   trackFAQSearch(query) {
-    document.dispatchEvent(new CustomEvent('faq_question_searched', {
-      detail: { query }
-    }));
+    document.dispatchEvent(
+      new CustomEvent('faq_question_searched', {
+        detail: { query },
+      })
+    );
   }
 
   trackUserAction(type, data, userId = 'anonymous') {
-    document.dispatchEvent(new CustomEvent('user_action', {
-      detail: { type, data, userId }
-    }));
+    document.dispatchEvent(
+      new CustomEvent('user_action', {
+        detail: { type, data, userId },
+      })
+    );
   }
 
   getAutomationStatus() {
     return {
       totalRules: this.automationRules.size,
-      activeRules: Array.from(this.automationRules.values()).filter(r => r.enabled).length,
+      activeRules: Array.from(this.automationRules.values()).filter((r) => r.enabled).length,
       lastUpdateCheck: this.lastUpdateCheck,
       queueSize: this.updateQueue.length,
-      moderationQueue: JSON.parse(localStorage.getItem('moderation_queue') || '[]').length
+      moderationQueue: JSON.parse(localStorage.getItem('moderation_queue') || '[]').length,
     };
   }
 
@@ -419,30 +429,30 @@ class ContentAutomation {
 
   approveModeration(itemId) {
     const queue = this.getModerationQueue();
-    const item = queue.find(q => q.id === itemId);
-    
+    const item = queue.find((q) => q.id === itemId);
+
     if (item && item.type === 'auto_faq') {
       // Активируем автогенерированный FAQ
       const faqData = this.getCurrentFAQData();
-      const faq = faqData.find(f => f.id === item.id);
+      const faq = faqData.find((f) => f.id === item.id);
       if (faq) {
         faq.isActive = true;
         this.updateFAQData(faqData);
       }
-      
+
       // Удаляем из очереди модерации
-      const updatedQueue = queue.filter(q => q.id !== itemId);
+      const updatedQueue = queue.filter((q) => q.id !== itemId);
       localStorage.setItem('moderation_queue', JSON.stringify(updatedQueue));
-      
+
       console.log('✅ Auto-generated FAQ approved:', itemId);
     }
   }
 
   rejectModeration(itemId) {
     const queue = this.getModerationQueue();
-    const updatedQueue = queue.filter(q => q.id !== itemId);
+    const updatedQueue = queue.filter((q) => q.id !== itemId);
     localStorage.setItem('moderation_queue', JSON.stringify(updatedQueue));
-    
+
     console.log('❌ Auto-generated content rejected:', itemId);
   }
 }
@@ -482,7 +492,7 @@ function AutomationStatus() {
 
   return (
     <>
-      <button 
+      <button
         className="automation-toggle"
         onClick={() => setIsVisible(!isVisible)}
         title="Статус автоматизации"
@@ -503,7 +513,9 @@ function AutomationStatus() {
           <div className="automation-stats">
             <div className="stat">
               <span>Правил активно:</span>
-              <span>{status.activeRules}/{status.totalRules}</span>
+              <span>
+                {status.activeRules}/{status.totalRules}
+              </span>
             </div>
             <div className="stat">
               <span>В очереди модерации:</span>
@@ -518,23 +530,17 @@ function AutomationStatus() {
           {moderationQueue.length > 0 && (
             <div className="moderation-section">
               <h4>📋 Требует модерации</h4>
-              {moderationQueue.map(item => (
+              {moderationQueue.map((item) => (
                 <div key={item.id} className="moderation-item">
                   <div className="item-info">
                     <strong>{item.item.question}</strong>
                     <small>Автогенерация от {new Date(item.createdAt).toLocaleString()}</small>
                   </div>
                   <div className="item-actions">
-                    <button 
-                      onClick={() => handleApprove(item.id)}
-                      className="approve-btn"
-                    >
+                    <button onClick={() => handleApprove(item.id)} className="approve-btn">
                       ✅
                     </button>
-                    <button 
-                      onClick={() => handleReject(item.id)}
-                      className="reject-btn"
-                    >
+                    <button onClick={() => handleReject(item.id)} className="reject-btn">
                       ❌
                     </button>
                   </div>
@@ -595,7 +601,7 @@ function AutomationStatus() {
           padding: 16px;
           z-index: 1001;
           overflow-y: auto;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
           animation: slideUp 0.3s ease-out;
         }
 

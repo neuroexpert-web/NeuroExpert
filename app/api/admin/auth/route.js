@@ -11,17 +11,19 @@ import { authRateLimit } from '@/app/middleware/rateLimit';
 const isTest = process.env.NODE_ENV === 'test';
 
 const JWT_SECRET = process.env.JWT_SECRET ?? (isTest ? 'test-jwt-secret' : null);
-const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH ?? (isTest
-  ? '$2a$10$Jpej8chn4pPh2aCi0qDEr.F4GzOAxIawVq2KXUMKwWEVxNPBz9.s2' // hash for "test-password"
-  : null);
+const ADMIN_PASSWORD_HASH =
+  process.env.ADMIN_PASSWORD_HASH ??
+  (isTest
+    ? '$2a$10$Jpej8chn4pPh2aCi0qDEr.F4GzOAxIawVq2KXUMKwWEVxNPBz9.s2' // hash for "test-password"
+    : null);
 
 // Check will be performed at runtime instead of build time
 if (!JWT_SECRET || !ADMIN_PASSWORD_HASH) {
   if (process.env.NODE_ENV === 'production' && typeof window === 'undefined') {
     console.error(
       'WARNING: Environment variables JWT_SECRET and ADMIN_PASSWORD_HASH must be set in production.\n' +
-      'Generate a secure ADMIN_PASSWORD_HASH via "npm run generate:password -- <password>" and\n' +
-      'place both values into your hosting provider dashboard or a local .env file.'
+        'Generate a secure ADMIN_PASSWORD_HASH via "npm run generate:password -- <password>" and\n' +
+        'place both values into your hosting provider dashboard or a local .env file.'
     );
   }
 }
@@ -50,8 +52,7 @@ function resetAttempts(ip) {
 export async function POST(request) {
   try {
     // Rate-limit check (based on x-forwarded-for header)
-    const ip =
-      request.headers.get('x-forwarded-for')?.split(',')[0].trim() || 'unknown';
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() || 'unknown';
 
     // Increment attempts *before* password validation – we will reset on success.
     const attemptCount = registerAttempt(ip);
@@ -65,20 +66,14 @@ export async function POST(request) {
     const { password } = await request.json();
 
     if (!password) {
-      return NextResponse.json(
-        { error: 'Password is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Password is required' }, { status: 400 });
     }
 
     // Проверяем пароль против хешированного значения
     const isValidPassword = await bcrypt.compare(password, ADMIN_PASSWORD_HASH);
 
     if (!isValidPassword) {
-      return NextResponse.json(
-        { error: 'Invalid credentials' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
     // Успешный вход — сбрасываем счётчик попыток
@@ -101,10 +96,7 @@ export async function POST(request) {
     });
   } catch (error) {
     console.error('Admin auth error:', error);
-    return NextResponse.json(
-      { error: 'Authentication failed' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Authentication failed' }, { status: 500 });
   }
 }
 
@@ -112,33 +104,24 @@ export async function POST(request) {
 export async function GET(request) {
   try {
     const authHeader = request.headers.get('authorization');
-    
+
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return NextResponse.json(
-        { valid: false },
-        { status: 401 }
-      );
+      return NextResponse.json({ valid: false }, { status: 401 });
     }
 
     const token = authHeader.substring(7);
-    
+
     try {
       const decoded = jwt.verify(token, JWT_SECRET);
       return NextResponse.json({
         valid: true,
-        role: decoded.role
+        role: decoded.role,
       });
     } catch (error) {
-      return NextResponse.json(
-        { valid: false },
-        { status: 401 }
-      );
+      return NextResponse.json({ valid: false }, { status: 401 });
     }
   } catch (error) {
     console.error('Token verification error:', error);
-    return NextResponse.json(
-      { valid: false },
-      { status: 500 }
-    );
+    return NextResponse.json({ valid: false }, { status: 500 });
   }
 }

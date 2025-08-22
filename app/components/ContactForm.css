@@ -245,16 +245,16 @@
   .form-row {
     grid-template-columns: 1fr;
   }
-  
+
   .contact-form {
     padding: 24px;
   }
-  
+
   .benefits-list li {
     flex-direction: column;
     text-align: center;
   }
-  
+
   .contact-info {
     padding: 24px;
   }

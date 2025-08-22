@@ -8,14 +8,14 @@ export default function ContactForm() {
     phone: '',
     email: '',
     company: '',
-    message: ''
+    message: '',
   });
-  
+
   const [status, setStatus] = useState({
     loading: false,
     success: false,
     error: false,
-    message: ''
+    message: '',
   });
 
   const [isMobile, setIsMobile] = useState(false);
@@ -25,10 +25,10 @@ export default function ContactForm() {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    
+
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
@@ -39,11 +39,11 @@ export default function ContactForm() {
     try {
       const response = await fetch('/api/contact-form', {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
-          'x-neuroexpert-csrf': '1'
+          'x-neuroexpert-csrf': '1',
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
 
       const result = await response.json();
@@ -53,7 +53,7 @@ export default function ContactForm() {
           loading: false,
           success: true,
           error: false,
-          message: result.message || 'Спасибо! Мы свяжемся с вами в ближайшее время.'
+          message: result.message || 'Спасибо! Мы свяжемся с вами в ближайшее время.',
         });
         setFormData({ name: '', phone: '', email: '', company: '', message: '' });
       } else {
@@ -64,23 +64,23 @@ export default function ContactForm() {
         loading: false,
         success: false,
         error: true,
-        message: error.message || 'Ошибка отправки. Попробуйте позже.'
+        message: error.message || 'Ошибка отправки. Попробуйте позже.',
       });
     }
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
-    <section 
-      id="contact" 
+    <section
+      id="contact"
       className="contact-section"
       style={{
         padding: isMobile ? '40px 0' : '80px 20px',
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
       }}
     >
       <div className="container" style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -92,28 +92,32 @@ export default function ContactForm() {
           style={{
             maxWidth: isMobile ? '100%' : '600px',
             margin: '0 auto',
-            padding: isMobile ? '0' : '0 20px'
+            padding: isMobile ? '0' : '0 20px',
           }}
         >
           <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-            <h2 style={{
-              fontSize: isMobile ? '32px' : '48px',
-              fontWeight: '700',
-              marginBottom: '16px',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              padding: isMobile ? '0 16px' : '0'
-            }}>
+            <h2
+              style={{
+                fontSize: isMobile ? '32px' : '48px',
+                fontWeight: '700',
+                marginBottom: '16px',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                padding: isMobile ? '0 16px' : '0',
+              }}
+            >
               Начните прямо сейчас
             </h2>
-            <p style={{
-              fontSize: isMobile ? '16px' : '18px',
-              color: '#a0a0a0',
-              lineHeight: '1.6',
-              padding: isMobile ? '0 16px' : '0'
-            }}>
+            <p
+              style={{
+                fontSize: isMobile ? '16px' : '18px',
+                color: '#a0a0a0',
+                lineHeight: '1.6',
+                padding: isMobile ? '0 16px' : '0',
+              }}
+            >
               Оставьте заявку и мы свяжемся с вами в течение 15 минут
             </p>
           </div>
@@ -131,18 +135,20 @@ export default function ContactForm() {
               boxShadow: isMobile ? 'none' : '0 20px 40px rgba(0, 0, 0, 0.3)',
               width: isMobile ? '100%' : 'auto',
               maxWidth: isMobile ? '100%' : '600px',
-              minHeight: isMobile ? '100vh' : 'auto'
+              minHeight: isMobile ? '100vh' : 'auto',
             }}
           >
             <form onSubmit={handleSubmit} className="contact-form">
               <div style={{ marginBottom: '24px' }}>
-                <label style={{
-                  display: 'block',
-                  marginBottom: '8px',
-                  fontSize: '14px',
-                  color: '#a0a0a0',
-                  fontWeight: '500'
-                }}>
+                <label
+                  style={{
+                    display: 'block',
+                    marginBottom: '8px',
+                    fontSize: '14px',
+                    color: '#a0a0a0',
+                    fontWeight: '500',
+                  }}
+                >
                   Ваше имя *
                 </label>
                 <input
@@ -161,19 +167,21 @@ export default function ContactForm() {
                     borderRadius: '12px',
                     color: 'white',
                     transition: 'all 0.3s ease',
-                    outline: 'none'
+                    outline: 'none',
                   }}
                 />
               </div>
 
               <div style={{ marginBottom: '24px' }}>
-                <label style={{
-                  display: 'block',
-                  marginBottom: '8px',
-                  fontSize: '14px',
-                  color: '#a0a0a0',
-                  fontWeight: '500'
-                }}>
+                <label
+                  style={{
+                    display: 'block',
+                    marginBottom: '8px',
+                    fontSize: '14px',
+                    color: '#a0a0a0',
+                    fontWeight: '500',
+                  }}
+                >
                   Телефон *
                 </label>
                 <input
@@ -192,19 +200,21 @@ export default function ContactForm() {
                     borderRadius: '12px',
                     color: 'white',
                     transition: 'all 0.3s ease',
-                    outline: 'none'
+                    outline: 'none',
                   }}
                 />
               </div>
 
               <div style={{ marginBottom: '24px' }}>
-                <label style={{
-                  display: 'block',
-                  marginBottom: '8px',
-                  fontSize: '14px',
-                  color: '#a0a0a0',
-                  fontWeight: '500'
-                }}>
+                <label
+                  style={{
+                    display: 'block',
+                    marginBottom: '8px',
+                    fontSize: '14px',
+                    color: '#a0a0a0',
+                    fontWeight: '500',
+                  }}
+                >
                   Email *
                 </label>
                 <input
@@ -223,19 +233,21 @@ export default function ContactForm() {
                     borderRadius: '12px',
                     color: 'white',
                     transition: 'all 0.3s ease',
-                    outline: 'none'
+                    outline: 'none',
                   }}
                 />
               </div>
 
               <div style={{ marginBottom: '24px' }}>
-                <label style={{
-                  display: 'block',
-                  marginBottom: '8px',
-                  fontSize: '14px',
-                  color: '#a0a0a0',
-                  fontWeight: '500'
-                }}>
+                <label
+                  style={{
+                    display: 'block',
+                    marginBottom: '8px',
+                    fontSize: '14px',
+                    color: '#a0a0a0',
+                    fontWeight: '500',
+                  }}
+                >
                   Компания
                 </label>
                 <input
@@ -253,19 +265,21 @@ export default function ContactForm() {
                     borderRadius: '12px',
                     color: 'white',
                     transition: 'all 0.3s ease',
-                    outline: 'none'
+                    outline: 'none',
                   }}
                 />
               </div>
 
               <div style={{ marginBottom: '32px' }}>
-                <label style={{
-                  display: 'block',
-                  marginBottom: '8px',
-                  fontSize: '14px',
-                  color: '#a0a0a0',
-                  fontWeight: '500'
-                }}>
+                <label
+                  style={{
+                    display: 'block',
+                    marginBottom: '8px',
+                    fontSize: '14px',
+                    color: '#a0a0a0',
+                    fontWeight: '500',
+                  }}
+                >
                   Сообщение
                 </label>
                 <textarea
@@ -285,7 +299,7 @@ export default function ContactForm() {
                     resize: 'vertical',
                     minHeight: '120px',
                     transition: 'all 0.3s ease',
-                    outline: 'none'
+                    outline: 'none',
                   }}
                 />
               </div>
@@ -303,13 +317,13 @@ export default function ContactForm() {
                       textAlign: 'center',
                       fontSize: '14px',
                       fontWeight: '500',
-                      backgroundColor: status.success 
-                        ? 'rgba(72, 187, 120, 0.1)' 
+                      backgroundColor: status.success
+                        ? 'rgba(72, 187, 120, 0.1)'
                         : 'rgba(245, 101, 101, 0.1)',
-                      border: `1px solid ${status.success 
-                        ? 'rgba(72, 187, 120, 0.3)' 
-                        : 'rgba(245, 101, 101, 0.3)'}`,
-                      color: status.success ? '#48bb78' : '#f56565'
+                      border: `1px solid ${
+                        status.success ? 'rgba(72, 187, 120, 0.3)' : 'rgba(245, 101, 101, 0.3)'
+                      }`,
+                      color: status.success ? '#48bb78' : '#f56565',
                     }}
                   >
                     {status.message}
@@ -327,8 +341,8 @@ export default function ContactForm() {
                   padding: '20px',
                   fontSize: '18px',
                   fontWeight: '600',
-                  background: status.loading 
-                    ? 'rgba(102, 126, 234, 0.5)' 
+                  background: status.loading
+                    ? 'rgba(102, 126, 234, 0.5)'
                     : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                   border: 'none',
                   borderRadius: '16px',
@@ -339,7 +353,7 @@ export default function ContactForm() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '10px',
-                  boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)'
+                  boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)',
                 }}
               >
                 {status.loading ? (
@@ -347,13 +361,13 @@ export default function ContactForm() {
                     <span>Отправка...</span>
                     <motion.div
                       animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
                       style={{
                         width: '20px',
                         height: '20px',
                         border: '2px solid white',
                         borderTopColor: 'transparent',
-                        borderRadius: '50%'
+                        borderRadius: '50%',
                       }}
                     />
                   </>
@@ -374,23 +388,26 @@ export default function ContactForm() {
           #contact {
             padding: 0 !important;
           }
-          
+
           #contact > div {
             border-radius: 0 !important;
           }
-          
-          input, textarea {
+
+          input,
+          textarea {
             font-size: 16px !important;
             -webkit-text-size-adjust: 100%;
           }
         }
-        
-        input:focus, textarea:focus {
+
+        input:focus,
+        textarea:focus {
           border-color: rgba(102, 126, 234, 0.5) !important;
           background-color: rgba(255, 255, 255, 0.08) !important;
         }
-        
-        input::placeholder, textarea::placeholder {
+
+        input::placeholder,
+        textarea::placeholder {
           color: rgba(255, 255, 255, 0.3);
         }
       `}</style>

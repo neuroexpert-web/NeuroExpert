@@ -19,21 +19,21 @@
     "security/detect-eval-with-expression": "error",
     "security/detect-no-csrf-before-method-override": "error",
     "security/detect-possible-timing-attacks": "warn",
-    
+
     // Console logs
     "no-console": ["warn", { "allow": ["warn", "error"] }],
-    
+
     // Code quality
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "warn",
-    
+
     // React specific
     "react/prop-types": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    
+
     // Best practices
     "no-eval": "error",
     "no-implied-eval": "error",
@@ -41,7 +41,7 @@
     "no-return-await": "error",
     "prefer-const": "error",
     "require-await": "error",
-    
+
     // Security patterns
     "no-hardcoded-passwords": "off",
     "no-secrets": "off"

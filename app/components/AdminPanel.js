@@ -10,7 +10,7 @@ function AdminPanel() {
     faq: [],
     services: [],
     courses: [],
-    testimonials: []
+    testimonials: [],
   });
 
   // Проверка авторизации
@@ -21,8 +21,8 @@ function AdminPanel() {
         try {
           const response = await fetch('/api/admin/auth', {
             headers: {
-              'Authorization': `Bearer ${token}`
-            }
+              Authorization: `Bearer ${token}`,
+            },
           });
           const data = await response.json();
           if (data.valid) {
@@ -86,9 +86,10 @@ function AdminPanel() {
             id: 1,
             category: 'Общие',
             question: 'Что такое цифровизация бизнеса?',
-            answer: 'Цифровизация — это процесс интеграции цифровых технологий во все сферы бизнеса.',
+            answer:
+              'Цифровизация — это процесс интеграции цифровых технологий во все сферы бизнеса.',
             popularity: 45,
-            isActive: true
+            isActive: true,
           },
           {
             id: 2,
@@ -96,8 +97,8 @@ function AdminPanel() {
             question: 'Сколько стоит базовая автоматизация?',
             answer: 'Базовая автоматизация для малого бизнеса начинается от 50,000₽.',
             popularity: 38,
-            isActive: true
-          }
+            isActive: true,
+          },
         ],
         services: [
           {
@@ -107,8 +108,8 @@ function AdminPanel() {
             price: 150000,
             description: 'CRM + базовая автоматизация',
             isActive: true,
-            features: ['CRM-система', 'Автоматизация продаж', 'Базовая аналитика']
-          }
+            features: ['CRM-система', 'Автоматизация продаж', 'Базовая аналитика'],
+          },
         ],
         courses: [
           {
@@ -117,8 +118,8 @@ function AdminPanel() {
             category: 'Начальный',
             duration: '5 мин',
             content: 'Изучите базовые принципы цифровизации',
-            isActive: true
-          }
+            isActive: true,
+          },
         ],
         testimonials: [
           {
@@ -127,9 +128,9 @@ function AdminPanel() {
             company: 'ТехноСтарт',
             text: 'Отличное решение для автоматизации!',
             rating: 5,
-            isActive: true
-          }
-        ]
+            isActive: true,
+          },
+        ],
       });
     }
   };
@@ -143,12 +144,12 @@ function AdminPanel() {
     const newItem = {
       id: Date.now(),
       isActive: true,
-      ...getDefaultItem(type)
+      ...getDefaultItem(type),
     };
-    
-    setContent(prev => ({
+
+    setContent((prev) => ({
       ...prev,
-      [type]: [...prev[type], newItem]
+      [type]: [...prev[type], newItem],
     }));
   };
 
@@ -159,7 +160,7 @@ function AdminPanel() {
           category: 'Общие',
           question: 'Новый вопрос',
           answer: 'Новый ответ',
-          popularity: 0
+          popularity: 0,
         };
       case 'services':
         return {
@@ -167,21 +168,21 @@ function AdminPanel() {
           category: 'Малый бизнес',
           price: 0,
           description: 'Описание услуги',
-          features: []
+          features: [],
         };
       case 'courses':
         return {
           title: 'Новый курс',
           category: 'Начальный',
           duration: '5 мин',
-          content: 'Содержание курса'
+          content: 'Содержание курса',
         };
       case 'testimonials':
         return {
           name: 'Новый клиент',
           company: 'Компания',
           text: 'Отзыв',
-          rating: 5
+          rating: 5,
         };
       default:
         return {};
@@ -189,19 +190,17 @@ function AdminPanel() {
   };
 
   const updateItem = (type, id, field, value) => {
-    setContent(prev => ({
+    setContent((prev) => ({
       ...prev,
-      [type]: prev[type].map(item => 
-        item.id === id ? { ...item, [field]: value } : item
-      )
+      [type]: prev[type].map((item) => (item.id === id ? { ...item, [field]: value } : item)),
     }));
   };
 
   const deleteItem = (type, id) => {
     if (confirm('Удалить этот элемент?')) {
-      setContent(prev => ({
+      setContent((prev) => ({
         ...prev,
-        [type]: prev[type].filter(item => item.id !== id)
+        [type]: prev[type].filter((item) => item.id !== id),
       }));
     }
   };
@@ -340,8 +339,8 @@ function AdminPanel() {
           { id: 'faq', label: '❓ FAQ', count: content.faq.length },
           { id: 'services', label: '🛍️ Услуги', count: content.services.length },
           { id: 'courses', label: '📚 Курсы', count: content.courses.length },
-          { id: 'testimonials', label: '💬 Отзывы', count: content.testimonials.length }
-        ].map(tab => (
+          { id: 'testimonials', label: '💬 Отзывы', count: content.testimonials.length },
+        ].map((tab) => (
           <button
             key={tab.id}
             className={`tab ${activeTab === tab.id ? 'active' : ''}`}
@@ -360,16 +359,13 @@ function AdminPanel() {
             {activeTab === 'courses' && '📚 Управление курсами'}
             {activeTab === 'testimonials' && '💬 Управление отзывами'}
           </h2>
-          <button 
-            onClick={() => addItem(activeTab)}
-            className="add-btn"
-          >
+          <button onClick={() => addItem(activeTab)} className="add-btn">
             ➕ Добавить
           </button>
         </div>
 
         <div className="items-list">
-          {content[activeTab].map(item => (
+          {content[activeTab].map((item) => (
             <div key={item.id} className="item-card">
               <div className="item-header">
                 <span className="item-id">#{item.id}</span>
@@ -382,10 +378,7 @@ function AdminPanel() {
                     />
                     Активно
                   </label>
-                  <button 
-                    onClick={() => deleteItem(activeTab, item.id)}
-                    className="delete-btn"
-                  >
+                  <button onClick={() => deleteItem(activeTab, item.id)} className="delete-btn">
                     🗑️
                   </button>
                 </div>
@@ -414,7 +407,9 @@ function AdminPanel() {
                     type="number"
                     placeholder="Популярность"
                     value={item.popularity}
-                    onChange={(e) => updateItem(activeTab, item.id, 'popularity', parseInt(e.target.value))}
+                    onChange={(e) =>
+                      updateItem(activeTab, item.id, 'popularity', parseInt(e.target.value))
+                    }
                   />
                 </div>
               )}
@@ -435,7 +430,9 @@ function AdminPanel() {
                     type="number"
                     placeholder="Цена"
                     value={item.price}
-                    onChange={(e) => updateItem(activeTab, item.id, 'price', parseInt(e.target.value))}
+                    onChange={(e) =>
+                      updateItem(activeTab, item.id, 'price', parseInt(e.target.value))
+                    }
                   />
                   <textarea
                     placeholder="Описание"
@@ -496,7 +493,9 @@ function AdminPanel() {
                     max="5"
                     placeholder="Рейтинг"
                     value={item.rating}
-                    onChange={(e) => updateItem(activeTab, item.id, 'rating', parseInt(e.target.value))}
+                    onChange={(e) =>
+                      updateItem(activeTab, item.id, 'rating', parseInt(e.target.value))
+                    }
                   />
                 </div>
               )}

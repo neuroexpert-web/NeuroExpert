@@ -41,31 +41,34 @@ export default function AIAgentsDashboard() {
       const response = await fetch('/api/ai-agent', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           query: testQuery,
           conversationId,
           context: {
-            testMode: true
+            testMode: true,
           },
-          agentPreference: selectedAgent
-        })
+          agentPreference: selectedAgent,
+        }),
       });
 
       const data = await response.json();
       if (data.success) {
         setTestResult(data.data);
         setConversationId(data.data.conversationId);
-        
+
         // Обновляем историю
-        setHistory(prev => [...prev, {
-          query: testQuery,
-          response: data.data.content,
-          agent: data.data.agent,
-          quality: data.data.quality.score,
-          timestamp: new Date().toISOString()
-        }]);
+        setHistory((prev) => [
+          ...prev,
+          {
+            query: testQuery,
+            response: data.data.content,
+            agent: data.data.agent,
+            quality: data.data.quality.score,
+            timestamp: new Date().toISOString(),
+          },
+        ]);
       } else {
         setTestResult({ error: data.error });
       }
@@ -88,11 +91,16 @@ export default function AIAgentsDashboard() {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'excellent': return '#4CAF50';
-      case 'good': return '#8BC34A';
-      case 'fair': return '#FFC107';
-      case 'poor': return '#F44336';
-      default: return '#9E9E9E';
+      case 'excellent':
+        return '#4CAF50';
+      case 'good':
+        return '#8BC34A';
+      case 'fair':
+        return '#FFC107';
+      case 'poor':
+        return '#F44336';
+      default:
+        return '#9E9E9E';
     }
   };
 
@@ -118,7 +126,7 @@ export default function AIAgentsDashboard() {
             >
               <div className={styles.agentHeader}>
                 <h3>{agentName.toUpperCase()}</h3>
-                <div 
+                <div
                   className={styles.statusIndicator}
                   style={{ backgroundColor: getStatusColor(status) }}
                 />
@@ -127,15 +135,11 @@ export default function AIAgentsDashboard() {
               <div className={styles.metrics}>
                 <div className={styles.metric}>
                   <span className={styles.metricLabel}>Удовлетворенность</span>
-                  <span className={styles.metricValue}>
-                    {metrics.satisfaction.avg.toFixed(1)}%
-                  </span>
+                  <span className={styles.metricValue}>{metrics.satisfaction.avg.toFixed(1)}%</span>
                 </div>
                 <div className={styles.metric}>
                   <span className={styles.metricLabel}>Точность</span>
-                  <span className={styles.metricValue}>
-                    {metrics.accuracy.avg.toFixed(1)}%
-                  </span>
+                  <span className={styles.metricValue}>{metrics.accuracy.avg.toFixed(1)}%</span>
                 </div>
                 <div className={styles.metric}>
                   <span className={styles.metricLabel}>Время ответа</span>
@@ -145,9 +149,7 @@ export default function AIAgentsDashboard() {
                 </div>
                 <div className={styles.metric}>
                   <span className={styles.metricLabel}>Взаимодействий</span>
-                  <span className={styles.metricValue}>
-                    {metrics.totalInteractions}
-                  </span>
+                  <span className={styles.metricValue}>{metrics.totalInteractions}</span>
                 </div>
               </div>
 
@@ -161,7 +163,7 @@ export default function AIAgentsDashboard() {
 
       <div className={styles.testSection}>
         <h2>🧪 Тестирование агентов</h2>
-        
+
         <div className={styles.testControls}>
           <textarea
             className={styles.testInput}
@@ -171,8 +173,8 @@ export default function AIAgentsDashboard() {
             onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && testAgent()}
             rows={3}
           />
-          
-          <button 
+
+          <button
             className={styles.testButton}
             onClick={testAgent}
             disabled={loading || !testQuery.trim()}
@@ -196,26 +198,18 @@ export default function AIAgentsDashboard() {
               exit={{ opacity: 0, y: -20 }}
             >
               {testResult.error ? (
-                <div className={styles.error}>
-                  ❌ Ошибка: {testResult.error}
-                </div>
+                <div className={styles.error}>❌ Ошибка: {testResult.error}</div>
               ) : (
                 <>
                   <div className={styles.resultHeader}>
-                    <span className={styles.agentBadge}>
-                      {testResult.agent}
-                    </span>
+                    <span className={styles.agentBadge}>{testResult.agent}</span>
                     <span className={styles.qualityScore}>
                       Качество: {testResult.quality.score.toFixed(0)}%
                     </span>
-                    <span className={styles.responseTime}>
-                      {testResult.responseTime}мс
-                    </span>
+                    <span className={styles.responseTime}>{testResult.responseTime}мс</span>
                   </div>
-                  
-                  <div className={styles.responseContent}>
-                    {testResult.content}
-                  </div>
+
+                  <div className={styles.responseContent}>{testResult.content}</div>
 
                   {testResult.suggestions?.length > 0 && (
                     <div className={styles.suggestions}>
@@ -235,11 +229,11 @@ export default function AIAgentsDashboard() {
                         <div key={key} className={styles.qualityMetric}>
                           <span>{getMetricLabel(key)}</span>
                           <div className={styles.progressBar}>
-                            <div 
+                            <div
                               className={styles.progressFill}
-                              style={{ 
+                              style={{
                                 width: `${value}%`,
-                                backgroundColor: getProgressColor(value)
+                                backgroundColor: getProgressColor(value),
                               }}
                             />
                           </div>
@@ -258,25 +252,26 @@ export default function AIAgentsDashboard() {
           <div className={styles.historySection}>
             <h3>📜 История взаимодействий</h3>
             <div className={styles.historyList}>
-              {history.slice(-5).reverse().map((item, idx) => (
-                <div key={idx} className={styles.historyItem}>
-                  <div className={styles.historyHeader}>
-                    <span className={styles.historyAgent}>{item.agent}</span>
-                    <span className={styles.historyQuality}>
-                      Качество: {item.quality}%
-                    </span>
-                    <span className={styles.historyTime}>
-                      {new Date(item.timestamp).toLocaleTimeString()}
-                    </span>
+              {history
+                .slice(-5)
+                .reverse()
+                .map((item, idx) => (
+                  <div key={idx} className={styles.historyItem}>
+                    <div className={styles.historyHeader}>
+                      <span className={styles.historyAgent}>{item.agent}</span>
+                      <span className={styles.historyQuality}>Качество: {item.quality}%</span>
+                      <span className={styles.historyTime}>
+                        {new Date(item.timestamp).toLocaleTimeString()}
+                      </span>
+                    </div>
+                    <div className={styles.historyQuery}>
+                      <strong>Запрос:</strong> {item.query}
+                    </div>
+                    <div className={styles.historyResponse}>
+                      <strong>Ответ:</strong> {item.response.substring(0, 200)}...
+                    </div>
                   </div>
-                  <div className={styles.historyQuery}>
-                    <strong>Запрос:</strong> {item.query}
-                  </div>
-                  <div className={styles.historyResponse}>
-                    <strong>Ответ:</strong> {item.response.substring(0, 200)}...
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
         )}
@@ -327,11 +322,11 @@ function ResponsiveChart({ data }) {
 
   return (
     <div className={styles.miniChart}>
-      <div 
+      <div
         className={styles.chartBar}
-        style={{ 
+        style={{
           height: `${barHeight}%`,
-          backgroundColor: getProgressColor(satisfactionHistory)
+          backgroundColor: getProgressColor(satisfactionHistory),
         }}
       />
     </div>
@@ -344,7 +339,7 @@ function getMetricLabel(key) {
     relevance: 'Релевантность',
     helpfulness: 'Полезность',
     tone: 'Тон общения',
-    completeness: 'Полнота ответа'
+    completeness: 'Полнота ответа',
   };
   return labels[key] || key;
 }

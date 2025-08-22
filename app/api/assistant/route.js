@@ -3,8 +3,8 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { assistantRateLimit } from '@/app/middleware/rateLimit';
 import fs from 'fs';
 import path from 'path';
-// import { 
-//   DIRECTOR_KNOWLEDGE_BASE, 
+// import {
+//   DIRECTOR_KNOWLEDGE_BASE,
 //   analyzeUserIntent,
 //   personalizeResponse,
 //   generateFollowUpQuestions,
@@ -13,9 +13,10 @@ import path from 'path';
 
 // Поддерживаем несколько названий переменных среды для ключа Gemini,
 // чтобы избежать ошибки из-за опечаток в панели хостинга
-const GEMINI_API_KEY = process.env.GOOGLE_GEMINI_API_KEY
-  || process.env.GEMINI_API_KEY
-  || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+const GEMINI_API_KEY =
+  process.env.GOOGLE_GEMINI_API_KEY ||
+  process.env.GEMINI_API_KEY ||
+  process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 
 if (!GEMINI_API_KEY && !ANTHROPIC_API_KEY) {
@@ -29,7 +30,7 @@ console.log('API Keys check:', {
   hasGeminiKey: !!GEMINI_API_KEY,
   hasAnthropicKey: !!ANTHROPIC_API_KEY,
   genAIInitialized: !!genAI,
-  geminiKeyLength: GEMINI_API_KEY ? GEMINI_API_KEY.length : 0
+  geminiKeyLength: GEMINI_API_KEY ? GEMINI_API_KEY.length : 0,
 });
 
 // Load system prompt for NeuroExpert v3.2 (used as systemInstruction)
@@ -51,9 +52,9 @@ try {
     const altPaths = [
       path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v3_2.md'),
       path.join(process.cwd(), 'neuroexpert_v3_2.md'),
-      path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v3_2.md')
+      path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v3_2.md'),
     ];
-    
+
     for (const altPath of altPaths) {
       if (fs.existsSync(altPath)) {
         console.log('Found prompt file at alternative path:', altPath);
@@ -66,7 +67,10 @@ try {
   console.error('Failed to load system prompt for assistant:', e);
   console.error('Prompt path:', PROMPT_PATH);
   console.error('Current working directory:', process.cwd());
-  console.error('Available files in utils:', fs.readdirSync(path.join(process.cwd(), 'app', 'utils')).join(', '));
+  console.error(
+    'Available files in utils:',
+    fs.readdirSync(path.join(process.cwd(), 'app', 'utils')).join(', ')
+  );
 }
 
 async function sendTelegramNotification(question, answer, model) {
@@ -94,8 +98,8 @@ async function sendTelegramNotification(question, answer, model) {
         body: JSON.stringify({
           chat_id: process.env.TELEGRAM_CHAT_ID,
           text: message,
-          parse_mode: 'HTML'
-        })
+          parse_mode: 'HTML',
+        }),
       }
     );
 
@@ -116,11 +120,11 @@ async function getClaudeResponse(prompt, history = []) {
   try {
     // Подготавливаем историю для Claude
     const messages = history.length > 0 ? history : [];
-    
+
     // Добавляем текущее сообщение
     messages.push({
       role: 'user',
-      content: prompt
+      content: prompt,
     });
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -128,15 +132,15 @@ async function getClaudeResponse(prompt, history = []) {
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01'
+        'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
         model: 'claude-3-haiku-20240307',
         max_tokens: 2048,
         system: SYSTEM_PROMPT, // Claude поддерживает system prompt напрямую!
         messages: messages,
-        temperature: 0.7
-      })
+        temperature: 0.7,
+      }),
     });
 
     if (!response.ok) {
@@ -146,14 +150,17 @@ async function getClaudeResponse(prompt, history = []) {
     }
 
     const data = await response.json();
-    
+
     // Возвращаем ответ и обновленную историю
     return {
       text: data.content[0].text,
-      updatedHistory: [...messages, {
-        role: 'assistant',
-        content: data.content[0].text
-      }]
+      updatedHistory: [
+        ...messages,
+        {
+          role: 'assistant',
+          content: data.content[0].text,
+        },
+      ],
     };
   } catch (error) {
     console.error('Claude API error:', error);
@@ -163,31 +170,31 @@ async function getClaudeResponse(prompt, history = []) {
 
 async function handler(request) {
   const startTime = Date.now();
-  
+
   try {
     const { userMessage: question, model = 'gemini', history = [] } = await request.json();
-    
+
     // Debug logging
-    console.log('Assistant API called:', { 
-      model, 
+    console.log('Assistant API called:', {
+      model,
       questionLength: question?.length,
       hasAnthropicKey: !!ANTHROPIC_API_KEY,
       hasGeminiKey: !!GEMINI_API_KEY,
       anthropicKeyLength: ANTHROPIC_API_KEY ? ANTHROPIC_API_KEY.length : 0,
-      nodeEnv: process.env.NODE_ENV
+      nodeEnv: process.env.NODE_ENV,
     });
-    
+
     if (!question) {
       return NextResponse.json({ error: 'Вопрос обязателен' }, { status: 400 });
     }
 
     // Создаём улучшенный промпт
     // const enhancedPrompt = createEnhancedPrompt(question, context);
-    
+
     let answer;
     let usedModel = model;
     let updatedHistory = history; // Initialize updatedHistory
-    
+
     try {
       // Выбираем модель на основе запроса пользователя
       if (model === 'claude' && ANTHROPIC_API_KEY) {
@@ -204,13 +211,13 @@ async function handler(request) {
         console.log('Using Gemini with system prompt, length:', SYSTEM_PROMPT.length);
         console.log('Gemini API key exists:', !!GEMINI_API_KEY);
         console.log('genAI initialized:', !!genAI);
-        
+
         try {
-          const geminiModel = genAI.getGenerativeModel({ 
-            model: "gemini-1.5-pro-latest",
-            systemInstruction: SYSTEM_PROMPT
+          const geminiModel = genAI.getGenerativeModel({
+            model: 'gemini-1.5-pro-latest',
+            systemInstruction: SYSTEM_PROMPT,
           });
-          
+
           const chat = geminiModel.startChat({ history: history || [] });
           const result = await chat.sendMessage(question);
           answer = result.response.text();
@@ -234,11 +241,13 @@ async function handler(request) {
         try {
           // Создаем временный API ключ для тестирования
           const tempGenAI = new GoogleGenerativeAI('test-key-for-debugging');
-          const geminiModel = tempGenAI.getGenerativeModel({ 
-            model: "gemini-1.5-pro-latest",
-            systemInstruction: SYSTEM_PROMPT || 'Ты — Управляющий NeuroExpert v3.2. Начинай с вопроса о бизнес-цели.',
+          const geminiModel = tempGenAI.getGenerativeModel({
+            model: 'gemini-1.5-pro-latest',
+            systemInstruction:
+              SYSTEM_PROMPT ||
+              'Ты — Управляющий NeuroExpert v3.2. Начинай с вопроса о бизнес-цели.',
           });
-          
+
           const chat = geminiModel.startChat({ history: history || [] });
           const result = await chat.sendMessage(question);
           answer = result.response.text();
@@ -258,7 +267,8 @@ ${SYSTEM_PROMPT ? 'Системный промпт загружен успешн
       }
     } catch (error) {
       console.error('AI API Error:', error);
-      answer = 'Извините, произошла техническая ошибка. Пожалуйста, позвоните нам по телефону +7 (996) 009-63-34 или напишите на neuroexpertai@gmail.com. Мы обязательно поможем!';
+      answer =
+        'Извините, произошла техническая ошибка. Пожалуйста, позвоните нам по телефону +7 (996) 009-63-34 или напишите на neuroexpertai@gmail.com. Мы обязательно поможем!';
       usedModel = 'error';
     }
 
@@ -289,13 +299,9 @@ ${SYSTEM_PROMPT ? 'Системный промпт загружен успешн
       // followUpQuestions,
       // emotion: 'professional' // Можно добавить анализ эмоций
     });
-
   } catch (error) {
     console.error('Assistant API error:', error);
-    return NextResponse.json(
-      { error: 'Внутренняя ошибка сервера' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Внутренняя ошибка сервера' }, { status: 500 });
   }
 }
 
@@ -310,11 +316,11 @@ export async function POST(request) {
 export async function GET() {
   try {
     const PROMPT_PATH = path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v3_2.md');
-    
+
     let fileExists = false;
     let promptContent = '';
     let error = null;
-    
+
     try {
       fileExists = fs.existsSync(PROMPT_PATH);
       if (fileExists) {
@@ -323,7 +329,7 @@ export async function GET() {
     } catch (e) {
       error = e.message;
     }
-    
+
     return NextResponse.json({
       success: true,
       fileExists,
@@ -334,16 +340,23 @@ export async function GET() {
       error: error || null,
       env: {
         hasGeminiKey: !!process.env.GOOGLE_GEMINI_API_KEY,
-        geminiKeyLength: process.env.GOOGLE_GEMINI_API_KEY ? process.env.GOOGLE_GEMINI_API_KEY.length : 0,
+        geminiKeyLength: process.env.GOOGLE_GEMINI_API_KEY
+          ? process.env.GOOGLE_GEMINI_API_KEY.length
+          : 0,
         hasAnthropicKey: !!process.env.ANTHROPIC_API_KEY,
-        anthropicKeyLength: process.env.ANTHROPIC_API_KEY ? process.env.ANTHROPIC_API_KEY.length : 0,
-        nodeEnv: process.env.NODE_ENV
-      }
+        anthropicKeyLength: process.env.ANTHROPIC_API_KEY
+          ? process.env.ANTHROPIC_API_KEY.length
+          : 0,
+        nodeEnv: process.env.NODE_ENV,
+      },
     });
   } catch (error) {
-    return NextResponse.json({
-      success: false,
-      error: error.message
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        error: error.message,
+      },
+      { status: 500 }
+    );
   }
 }

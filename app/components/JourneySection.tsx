@@ -16,40 +16,40 @@ export default function JourneySection(): JSX.Element {
 
   const steps: JourneyStep[] = [
     {
-      number: "01",
-      title: "Глубокий аудит бизнеса",
-      description: "Смотрим все аспекты и выявляем точки роста",
-      icon: "🔍",
-      duration: "3-5 дней"
+      number: '01',
+      title: 'Глубокий аудит бизнеса',
+      description: 'Смотрим все аспекты и выявляем точки роста',
+      icon: '🔍',
+      duration: '3-5 дней',
     },
     {
-      number: "02", 
-      title: "Персональная стратегия развития",
-      description: "Шаг за шагом к вашей цели",
-      icon: "📈",
-      duration: "2-3 дня"
+      number: '02',
+      title: 'Персональная стратегия развития',
+      description: 'Шаг за шагом к вашей цели',
+      icon: '📈',
+      duration: '2-3 дня',
     },
     {
-      number: "03",
-      title: "Разработка цифрового продукта",
-      description: "Сайт, интернет-магазин или приложение, идеально подходящее бизнесу",
-      icon: "💻",
-      duration: "1-2 недели"
+      number: '03',
+      title: 'Разработка цифрового продукта',
+      description: 'Сайт, интернет-магазин или приложение, идеально подходящее бизнесу',
+      icon: '💻',
+      duration: '1-2 недели',
     },
     {
-      number: "04",
-      title: "Внедрение CRM и автоматизация",
-      description: "Умные инструменты для общения с клиентами и повышения продаж",
-      icon: "🤖",
-      duration: "3-5 дней"
+      number: '04',
+      title: 'Внедрение CRM и автоматизация',
+      description: 'Умные инструменты для общения с клиентами и повышения продаж',
+      icon: '🤖',
+      duration: '3-5 дней',
     },
     {
-      number: "05",
-      title: "Обучение и постоянная поддержка",
-      description: "Вы спокойно развиваетесь, мы сопровождаем",
-      icon: "🎓",
-      duration: "Постоянно"
-    }
+      number: '05',
+      title: 'Обучение и постоянная поддержка',
+      description: 'Вы спокойно развиваетесь, мы сопровождаем',
+      icon: '🎓',
+      duration: 'Постоянно',
+    },
   ];
 
   useEffect(() => {
@@ -78,14 +78,12 @@ export default function JourneySection(): JSX.Element {
           <h2 className="heading-luxury">
             Ваш простой путь к <span className="heading-gold">результату</span>
           </h2>
-          <p className="section-subtitle">
-            От идеи до готового решения за 2-4 недели
-          </p>
+          <p className="section-subtitle">От идеи до готового решения за 2-4 недели</p>
         </div>
 
         <div className="journey-timeline">
           <div className="timeline-line" />
-          
+
           {steps.map((step, index) => (
             <div
               key={step.number}
@@ -99,8 +97,8 @@ export default function JourneySection(): JSX.Element {
                 <div className="marker-line" />
               </div>
 
-              <PremiumCard 
-                glowColor={index === 2 ? 'gold' : 'blue'} 
+              <PremiumCard
+                glowColor={index === 2 ? 'gold' : 'blue'}
                 className="step-card"
                 interactive={true}
               >
@@ -119,14 +117,14 @@ export default function JourneySection(): JSX.Element {
         </div>
 
         <div className="journey-cta">
-          <p className="cta-text">
-            Готовы начать свой путь к цифровой трансформации?
-          </p>
+          <p className="cta-text">Готовы начать свой путь к цифровой трансформации?</p>
           <motion.button
             onClick={() => {
               // Открываем AI чат с предзаполненным сообщением
               import('@/app/utils/aiChat').then(({ openAIChat }) => {
-                openAIChat('Здравствуйте! Меня интересует бесплатный аудит бизнеса. Расскажите подробнее, что входит в аудит и как его получить?');
+                openAIChat(
+                  'Здравствуйте! Меня интересует бесплатный аудит бизнеса. Расскажите подробнее, что входит в аудит и как его получить?'
+                );
               });
             }}
             whileHover={{ scale: 1.05 }}
@@ -135,15 +133,15 @@ export default function JourneySection(): JSX.Element {
               boxShadow: [
                 '0 0 40px rgba(102, 126, 234, 0.6), 0 0 80px rgba(118, 75, 162, 0.4)',
                 '0 0 60px rgba(118, 75, 162, 0.8), 0 0 120px rgba(102, 126, 234, 0.6)',
-                '0 0 40px rgba(102, 126, 234, 0.6), 0 0 80px rgba(118, 75, 162, 0.4)'
-              ]
+                '0 0 40px rgba(102, 126, 234, 0.6), 0 0 80px rgba(118, 75, 162, 0.4)',
+              ],
             }}
             transition={{
               boxShadow: {
                 duration: 2,
                 repeat: Infinity,
-                ease: 'easeInOut'
-              }
+                ease: 'easeInOut',
+              },
             }}
             style={{
               position: 'relative',
@@ -160,7 +158,7 @@ export default function JourneySection(): JSX.Element {
               alignItems: 'center',
               gap: '16px',
               overflow: 'hidden',
-              marginTop: '24px'
+              marginTop: '24px',
             }}
           >
             {/* Волна света */}
@@ -172,19 +170,19 @@ export default function JourneySection(): JSX.Element {
                 width: '200%',
                 height: '200%',
                 background: 'radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%)',
-                pointerEvents: 'none'
+                pointerEvents: 'none',
               }}
               animate={{
                 x: ['-50%', '150%'],
-                opacity: [0, 1, 0]
+                opacity: [0, 1, 0],
               }}
               transition={{
                 duration: 2,
                 repeat: Infinity,
-                ease: 'easeInOut'
+                ease: 'easeInOut',
               }}
             />
-            
+
             {/* Текст с градиентом */}
             <motion.span
               style={{
@@ -195,20 +193,20 @@ export default function JourneySection(): JSX.Element {
                 backgroundClip: 'text',
                 filter: 'drop-shadow(0 0 12px rgba(255, 255, 255, 0.6))',
                 position: 'relative',
-                zIndex: 1
+                zIndex: 1,
               }}
               animate={{
-                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
+                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
               }}
               transition={{
                 duration: 3,
                 repeat: Infinity,
-                ease: 'linear'
+                ease: 'linear',
               }}
             >
               Начать с бесплатного аудита
             </motion.span>
-            
+
             {/* Анимированная стрелка */}
             <motion.span
               animate={{ x: [0, 8, 0] }}
@@ -216,12 +214,12 @@ export default function JourneySection(): JSX.Element {
               style={{
                 fontSize: '28px',
                 position: 'relative',
-                zIndex: 1
+                zIndex: 1,
               }}
             >
               →
             </motion.span>
-            
+
             {/* Дополнительный неоновый эффект */}
             <motion.div
               style={{
@@ -231,14 +229,14 @@ export default function JourneySection(): JSX.Element {
                 borderRadius: '60px',
                 opacity: 0.5,
                 filter: 'blur(8px)',
-                zIndex: -1
+                zIndex: -1,
               }}
               animate={{
-                opacity: [0.3, 0.6, 0.3]
+                opacity: [0.3, 0.6, 0.3],
               }}
               transition={{
                 duration: 2,
-                repeat: Infinity
+                repeat: Infinity,
               }}
             />
           </motion.button>
@@ -302,7 +300,7 @@ export default function JourneySection(): JSX.Element {
           margin-bottom: 60px;
           opacity: 0;
           transform: translateX(-30px);
-          transition: all 0.8s cubic-bezier(0.23, 1, 0.320, 1);
+          transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .journey-step.visible {
@@ -310,11 +308,21 @@ export default function JourneySection(): JSX.Element {
           transform: translateX(0);
         }
 
-        .journey-step:nth-child(2) { transition-delay: 0.1s; }
-        .journey-step:nth-child(3) { transition-delay: 0.2s; }
-        .journey-step:nth-child(4) { transition-delay: 0.3s; }
-        .journey-step:nth-child(5) { transition-delay: 0.4s; }
-        .journey-step:nth-child(6) { transition-delay: 0.5s; }
+        .journey-step:nth-child(2) {
+          transition-delay: 0.1s;
+        }
+        .journey-step:nth-child(3) {
+          transition-delay: 0.2s;
+        }
+        .journey-step:nth-child(4) {
+          transition-delay: 0.3s;
+        }
+        .journey-step:nth-child(5) {
+          transition-delay: 0.4s;
+        }
+        .journey-step:nth-child(6) {
+          transition-delay: 0.5s;
+        }
 
         .step-marker {
           position: relative;

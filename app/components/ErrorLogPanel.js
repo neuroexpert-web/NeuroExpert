@@ -27,7 +27,7 @@ class ErrorLogger {
         lineno: event.lineno,
         colno: event.colno,
         error: event.error,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
     });
 
@@ -37,7 +37,7 @@ class ErrorLogger {
         type: 'promise',
         message: event.reason?.message || event.reason,
         stack: event.reason?.stack,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
     });
 
@@ -47,7 +47,7 @@ class ErrorLogger {
       this.logWarning({
         type: 'console',
         message: args.join(' '),
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
       originalError.apply(console, args);
     };
@@ -61,7 +61,7 @@ class ErrorLogger {
   logError(errorData) {
     this.errors.unshift(errorData);
     this.errors = this.errors.slice(0, this.maxLogs);
-    
+
     // Добавляем в глобальный массив для совместимости (только в браузере)
     if (typeof window !== 'undefined' && window.consoleErrors) {
       window.consoleErrors.unshift(errorData.message);
@@ -74,7 +74,7 @@ class ErrorLogger {
   logWarning(warningData) {
     this.warnings.unshift(warningData);
     this.warnings = this.warnings.slice(0, this.maxLogs);
-    
+
     console.warn('⚠️ Logged warning:', warningData);
   }
 
@@ -99,13 +99,13 @@ class ErrorLogger {
       totalErrors: this.errors.length,
       totalWarnings: this.warnings.length,
       recentErrors: this.errors.slice(0, 5),
-      errorTypes: this.groupErrorsByType()
+      errorTypes: this.groupErrorsByType(),
     };
   }
 
   groupErrorsByType() {
     const types = {};
-    this.errors.forEach(error => {
+    this.errors.forEach((error) => {
       types[error.type] = (types[error.type] || 0) + 1;
     });
     return types;
@@ -120,12 +120,12 @@ function getErrorLogger() {
   if (typeof window === 'undefined') {
     return null;
   }
-  
+
   if (!globalErrorLogger) {
     globalErrorLogger = new ErrorLogger();
     globalErrorLogger.initializeErrorHandling();
   }
-  
+
   return globalErrorLogger;
 }
 
@@ -140,7 +140,7 @@ function safeExecute(fn, fallback = null, context = '') {
         type: 'safe_execute',
         message: `Error in ${context}: ${error.message}`,
         stack: error.stack,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
     }
     return fallback;
@@ -152,7 +152,7 @@ function safeQuerySelector(selector, parent = null) {
   if (typeof document === 'undefined') {
     return null;
   }
-  
+
   try {
     const targetParent = parent || document;
     return targetParent.querySelector(selector);
@@ -162,7 +162,7 @@ function safeQuerySelector(selector, parent = null) {
       logger.logWarning({
         type: 'dom_query',
         message: `Invalid selector: ${selector}`,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
     }
     return null;
@@ -174,7 +174,7 @@ function safeLocalStorage(action, key, value = null) {
   if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
     return null;
   }
-  
+
   try {
     switch (action) {
       case 'get':
@@ -195,7 +195,7 @@ function safeLocalStorage(action, key, value = null) {
       logger.logWarning({
         type: 'localStorage',
         message: `LocalStorage ${action} error for key ${key}: ${error.message}`,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
     }
     return null;
@@ -212,7 +212,7 @@ function ErrorLogPanel() {
     // Инициализируем логгер только в браузере
     const errorLogger = getErrorLogger();
     setLogger(errorLogger);
-    
+
     if (errorLogger) {
       const updateSummary = () => {
         setErrorSummary(errorLogger.getErrorSummary());
@@ -220,7 +220,7 @@ function ErrorLogPanel() {
 
       updateSummary();
       const interval = setInterval(updateSummary, 5000);
-      
+
       return () => clearInterval(interval);
     }
   }, []);
@@ -236,7 +236,7 @@ function ErrorLogPanel() {
 
   return (
     <>
-      <button 
+      <button
         className="error-log-toggle"
         onClick={() => setIsVisible(!isVisible)}
         title="Логи ошибок"
@@ -252,7 +252,9 @@ function ErrorLogPanel() {
           <div className="error-log-header">
             <h3>🐛 Логи ошибок</h3>
             <div className="header-actions">
-              <button onClick={clearAllLogs} className="clear-btn">Очистить</button>
+              <button onClick={clearAllLogs} className="clear-btn">
+                Очистить
+              </button>
               <button onClick={() => setIsVisible(false)}>✕</button>
             </div>
           </div>
@@ -355,7 +357,7 @@ function ErrorLogPanel() {
           padding: 16px;
           z-index: 1001;
           overflow-y: auto;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
           animation: slideUp 0.3s ease-out;
         }
 
@@ -419,7 +421,8 @@ function ErrorLogPanel() {
           color: var(--text);
         }
 
-        .recent-errors h4, .error-types h4 {
+        .recent-errors h4,
+        .error-types h4 {
           margin: 0 0 8px 0;
           font-size: 12px;
           color: var(--text);
@@ -506,11 +509,11 @@ function ErrorLogPanel() {
   );
 }
 
-export { 
-  globalErrorLogger as ErrorLogger, 
-  ErrorLogPanel, 
-  safeExecute, 
-  safeQuerySelector, 
-  safeLocalStorage 
+export {
+  globalErrorLogger as ErrorLogger,
+  ErrorLogPanel,
+  safeExecute,
+  safeQuerySelector,
+  safeLocalStorage,
 };
 export default ErrorLogPanel;

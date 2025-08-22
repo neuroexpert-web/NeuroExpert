@@ -15,14 +15,13 @@ async function testClaude() {
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
   };
-  
 
   const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
-  
+
   if (!ANTHROPIC_API_KEY) {
-    return NextResponse.json({ 
+    return NextResponse.json({
       error: 'ANTHROPIC_API_KEY not set',
-      hasKey: false 
+      hasKey: false,
     });
   }
 
@@ -32,38 +31,39 @@ async function testClaude() {
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01'
+        'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
         model: 'claude-3-haiku-20240307',
         max_tokens: 100,
-        messages: [{
-          role: 'user',
-          content: 'Say hello in one sentence'
-        }]
-      })
+        messages: [
+          {
+            role: 'user',
+            content: 'Say hello in one sentence',
+          },
+        ],
+      }),
     });
 
     const data = await response.json();
-    
+
     if (!response.ok) {
-      return NextResponse.json({ 
+      return NextResponse.json({
         error: 'Claude API error',
         status: response.status,
-        details: data
+        details: data,
       });
     }
 
     return NextResponse.json({
       success: true,
       response: data.content[0].text,
-      model: data.model
+      model: data.model,
     });
-    
   } catch (error) {
     return NextResponse.json({
       error: 'Request failed',
-      message: error.message
+      message: error.message,
     });
   }
 }

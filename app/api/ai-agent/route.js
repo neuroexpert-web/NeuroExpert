@@ -17,19 +17,16 @@ export async function POST(request) {
     }
 
     const body = await request.json();
-    const { 
-      query, 
-      conversationId, 
-      context = {},
-      agentPreference,
-      requireCapabilities = []
-    } = body;
+    const { query, conversationId, context = {}, agentPreference, requireCapabilities = [] } = body;
 
     if (!query) {
-      return NextResponse.json({
-        error: 'Query is required',
-        code: 'MISSING_QUERY'
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: 'Query is required',
+          code: 'MISSING_QUERY',
+        },
+        { status: 400 }
+      );
     }
 
     // Обработка запроса через AI Agents Manager
@@ -37,39 +34,44 @@ export async function POST(request) {
       conversationId,
       ...context,
       agentPreference,
-      requireCapabilities
+      requireCapabilities,
     });
 
     // Логирование для аналитики
     logger.info('AI Agent query processed', {
       agent: result.agent,
       quality: result.quality.score,
-      responseTime: result.responseTime
+      responseTime: result.responseTime,
     });
 
-    return NextResponse.json({
-      success: true,
-      data: result,
-      metadata: {
-        timestamp: new Date().toISOString(),
-        version: '1.0.0'
+    return NextResponse.json(
+      {
+        success: true,
+        data: result,
+        metadata: {
+          timestamp: new Date().toISOString(),
+          version: '1.0.0',
+        },
+      },
+      {
+        headers: {
+          'X-Agent-Used': result.agent,
+          'X-Quality-Score': result.quality.score.toString(),
+          ...rateLimitResult.headers,
+        },
       }
-    }, {
-      headers: {
-        'X-Agent-Used': result.agent,
-        'X-Quality-Score': result.quality.score.toString(),
-        ...rateLimitResult.headers
-      }
-    });
-
+    );
   } catch (error) {
     logger.error('AI Agent API error', { error: error.message });
-    
-    return NextResponse.json({
-      error: 'Failed to process query',
-      message: error.message,
-      code: 'PROCESSING_ERROR'
-    }, { status: 500 });
+
+    return NextResponse.json(
+      {
+        error: 'Failed to process query',
+        message: error.message,
+        code: 'PROCESSING_ERROR',
+      },
+      { status: 500 }
+    );
   }
 }
 
@@ -88,8 +90,8 @@ export async function GET(request) {
         data: {
           conversationId,
           history,
-          messageCount: history.length
-        }
+          messageCount: history.length,
+        },
       });
     }
 
@@ -97,25 +99,28 @@ export async function GET(request) {
       // Получение метрик конкретного агента
       const metrics = await agentsManager.getAgentMetrics(agentName);
       if (!metrics) {
-        return NextResponse.json({
-          error: 'Agent not found',
-          code: 'AGENT_NOT_FOUND'
-        }, { status: 404 });
+        return NextResponse.json(
+          {
+            error: 'Agent not found',
+            code: 'AGENT_NOT_FOUND',
+          },
+          { status: 404 }
+        );
       }
 
       return NextResponse.json({
         success: true,
         data: {
           agent: agentName,
-          metrics
-        }
+          metrics,
+        },
       });
     }
 
     // Получение общей информации о всех агентах
     const agents = ['openai', 'claude', 'gemini', 'custom'];
     const allMetrics = {};
-    
+
     for (const agent of agents) {
       const metrics = await agentsManager.getAgentMetrics(agent);
       if (metrics) {
@@ -129,19 +134,21 @@ export async function GET(request) {
         agents: allMetrics,
         summary: {
           totalAgents: Object.keys(allMetrics).length,
-          bestPerforming: getBestPerformingAgent(allMetrics)
-        }
-      }
+          bestPerforming: getBestPerformingAgent(allMetrics),
+        },
+      },
     });
-
   } catch (error) {
     logger.error('AI Agent metrics error', { error: error.message });
-    
-    return NextResponse.json({
-      error: 'Failed to get metrics',
-      message: error.message,
-      code: 'METRICS_ERROR'
-    }, { status: 500 });
+
+    return NextResponse.json(
+      {
+        error: 'Failed to get metrics',
+        message: error.message,
+        code: 'METRICS_ERROR',
+      },
+      { status: 500 }
+    );
   }
 }
 
@@ -158,6 +165,6 @@ function getBestPerformingAgent(metrics) {
 
   return {
     agent: bestAgent,
-    satisfactionScore: bestScore
+    satisfactionScore: bestScore,
   };
 }

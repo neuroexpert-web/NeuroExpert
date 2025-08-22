@@ -17,8 +17,8 @@ async function sendTelegramMessage(text) {
         chat_id: TELEGRAM_CHAT_ID,
         text,
         parse_mode: 'Markdown',
-        disable_web_page_preview: true
-      })
+        disable_web_page_preview: true,
+      }),
     });
 
     const data = await response.json();
@@ -32,47 +32,47 @@ async function sendTelegramMessage(text) {
 export async function POST(request) {
   try {
     const { type, data } = await request.json();
-    
+
     let message = '';
-    
+
     switch (type) {
       case 'roi_calculation':
-        message = `🧮 *Новый расчет ROI*\n\n` +
+        message =
+          `🧮 *Новый расчет ROI*\n\n` +
           `💰 Доход: ${data.revenue.toLocaleString('ru-RU')}₽\n` +
           `📊 Затраты: ${data.costs.toLocaleString('ru-RU')}₽\n` +
           `📈 ROI: ${data.roi}%\n` +
           `⏱ Время: ${data.timestamp}`;
         break;
-        
+
       case 'contact_form':
-        message = `📬 *Новая заявка*\n\n` +
+        message =
+          `📬 *Новая заявка*\n\n` +
           `👤 Имя: ${data.name}\n` +
           `📞 Телефон: ${data.phone || 'Не указан'}\n` +
           `📧 Email: ${data.email || 'Не указан'}\n` +
           `💬 Сообщение: ${data.message || 'Нет сообщения'}\n` +
           `⏱ Время: ${data.timestamp}`;
         break;
-        
+
       case 'ai_chat':
-        message = `🤖 *AI чат активность*\n\n` +
+        message =
+          `🤖 *AI чат активность*\n\n` +
           `❓ Вопрос: ${data.question}\n` +
           `💡 Ответ: ${data.answer}\n` +
           `🎯 Модель: ${data.model}\n` +
           `⏱ Время: ${data.timestamp}`;
         break;
-        
+
       default:
         message = `📢 *Уведомление*\n\n${JSON.stringify(data, null, 2)}`;
     }
-    
+
     const success = await sendTelegramMessage(message);
-    
+
     return NextResponse.json({ success });
   } catch (error) {
     console.error('Telegram notify API error:', error);
-    return NextResponse.json(
-      { error: 'Failed to send notification' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to send notification' }, { status: 500 });
   }
 }
