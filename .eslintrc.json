@@ -20,8 +20,8 @@
     "security/detect-no-csrf-before-method-override": "error",
     "security/detect-possible-timing-attacks": "warn",
     
-    // Console logs
-    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    // Console logs - use logger instead
+    "no-console": ["error", { "allow": [] }],
     
     // Code quality
     "no-unused-vars": "off",

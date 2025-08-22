@@ -31,15 +31,21 @@
     "@types/react": "^18.2.46",
     "@types/react-dom": "^18.2.18",
     "bcryptjs": "^2.4.3",
+    "clsx": "^2.1.1",
     "critters": "^0.0.23",
     "date-fns": "^3.2.0",
     "framer-motion": "^10.18.0",
     "jsonwebtoken": "^9.0.2",
     "next": "^14.2.0",
+    "next-themes": "^0.4.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "styled-jsx": "^5.1.7",
-    "typescript": "^5.3.3"
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.3.3",
+    "postcss": "^8.4.32",
+    "autoprefixer": "^10.4.16"
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^5.0.0",
@@ -58,6 +64,7 @@
     "eslint-plugin-security": "^1.7.1",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "postcss-nested": "^7.0.2",
     "prettier": "^3.1.1"
   },
   "engines": {
