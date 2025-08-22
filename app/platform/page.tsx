@@ -14,7 +14,7 @@ const ROICalculator = dynamic(
 )
 
 const ContactForm = dynamic(
-  () => import('../components/ContactForm.tsx'),
+  () => import('../components/ContactForm'),
   { 
     ssr: false,
     loading: () => <div className="animate-pulse bg-muted h-64 rounded-lg" />
