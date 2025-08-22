@@ -23,11 +23,11 @@ if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
   
   // You can remove this option if you're not planning to use the Sentry Session Replay feature:
   integrations: [
-    new Sentry.Replay({
-      // Additional Replay configuration goes in here
-      maskAllText: true,
-      blockAllMedia: true,
-    }),
+    // Replay integration temporarily disabled for compatibility
+    // new Sentry.Replay({
+    //   maskAllText: true,
+    //   blockAllMedia: true,
+    // }),
   ],
   
   // Additional client options
