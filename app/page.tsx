@@ -14,6 +14,7 @@ export default function HomePage() {
   const [mounted, setMounted] = useState(false)
   const [vantaEffect, setVantaEffect] = useState<any>(null)
   const router = useRouter()
+  const [isClient, setIsClient] = useState(false)
 
   // Функция для открытия AI управляющего
   const handleStartAI = () => {
@@ -37,6 +38,7 @@ export default function HomePage() {
 
   useEffect(() => {
     setMounted(true)
+    setIsClient(true)
 
     const loadVanta = async () => {
       // Загружаем Three.js
@@ -215,11 +217,21 @@ export default function HomePage() {
     }
   }, [vantaEffect])
 
-  if (!mounted) return null
+  if (!mounted) return (
+    <section className="hero-section">
+      <div className="hero-content">
+        <p className="pre-header">ЦИФРОВАЯ AI БИЗНЕС ПЛАТФОРМА</p>
+        <h1 className="main-header" style={{ fontSize: 'clamp(48px, 12vw, 120px)' }}>NeuroExpert</h1>
+        <h2 className="sub-header">ЦИФРОВИЗАЦИЯ БИЗНЕСА<br />С ИСКУССТВЕННЫМ ИНТЕЛЛЕКТОМ</h2>
+        <p className="description">Автоматизируйте бизнес-процессы, увеличивайте прибыль и опережайте конкурентов, используя передовые AI технологии</p>
+        <button className="cta-button">НАЧАТЬ С AI УПРАВЛЯЮЩИМ</button>
+      </div>
+    </section>
+  )
 
   return (
     <section className="hero-section">
-      <div id="vanta-background"></div>
+      {isClient && <div id="vanta-background"></div>}
       <div className="hero-content">
         <p
           className="pre-header premium-text holographic-text animate-fade-in"
