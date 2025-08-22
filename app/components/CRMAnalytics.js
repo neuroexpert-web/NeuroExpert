@@ -15,17 +15,17 @@ class CRMAnalytics {
         avgSessionTime: 0,
         popularServices: {},
         npsScore: 0,
-        satisfactionScore: 0
-      }
+        satisfactionScore: 0,
+      },
     };
-    
+
     this.crmData = {
       leads: [],
       customers: [],
       interactions: [],
-      feedback: []
+      feedback: [],
     };
-    
+
     this.initializeTracking();
   }
 
@@ -33,14 +33,14 @@ class CRMAnalytics {
     // Отслеживание сессий пользователей
     const sessionId = this.generateSessionId();
     const startTime = Date.now();
-    
+
     this.analytics.sessions.set(sessionId, {
       id: sessionId,
       startTime,
       events: [],
       userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'Server',
       referrer: typeof document !== 'undefined' ? document.referrer : '',
-      isActive: true
+      isActive: true,
     });
 
     // Автосохранение данных каждые 30 секунд
@@ -66,12 +66,12 @@ class CRMAnalytics {
       timestamp: Date.now(),
       data,
       sessionId: this.getCurrentSessionId(),
-      userId: this.getCurrentUserId()
+      userId: this.getCurrentUserId(),
     };
 
     this.analytics.events.push(event);
     this.updateMetrics(event);
-    
+
     // Отправляем в CRM если это важное событие
     if (['lead_generated', 'form_submitted', 'service_requested'].includes(eventType)) {
       this.addToCRM(event);
@@ -89,7 +89,7 @@ class CRMAnalytics {
       data: event.data,
       status: 'new',
       priority: this.calculatePriority(event),
-      source: 'neuroexpert_website'
+      source: 'neuroexpert_website',
     };
 
     if (event.type === 'lead_generated' || event.type === 'form_submitted') {
@@ -104,12 +104,12 @@ class CRMAnalytics {
 
   calculatePriority(event) {
     const priorityMap = {
-      'service_requested': 'high',
-      'form_submitted': 'high',
-      'lead_generated': 'medium',
-      'voice_feedback': 'medium',
-      'quiz_completed': 'low',
-      'page_view': 'low'
+      service_requested: 'high',
+      form_submitted: 'high',
+      lead_generated: 'medium',
+      voice_feedback: 'medium',
+      quiz_completed: 'low',
+      page_view: 'low',
     };
     return priorityMap[event.type] || 'low';
   }
@@ -122,7 +122,7 @@ class CRMAnalytics {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       });
 
       if (response.ok) {
@@ -144,7 +144,7 @@ class CRMAnalytics {
   // Обновление метрик
   updateMetrics(event) {
     const metrics = this.analytics.metrics;
-    
+
     // Общие метрики
     if (event.type === 'session_start') {
       metrics.totalUsers++;
@@ -158,7 +158,7 @@ class CRMAnalytics {
 
     // Популярные услуги
     if (event.type === 'service_viewed' && event.data.serviceType) {
-      metrics.popularServices[event.data.serviceType] = 
+      metrics.popularServices[event.data.serviceType] =
         (metrics.popularServices[event.data.serviceType] || 0) + 1;
     }
 
@@ -176,7 +176,7 @@ class CRMAnalytics {
     const existingScores = JSON.parse(localStorage.getItem('nps_scores') || '[]');
     existingScores.push(score);
     localStorage.setItem('nps_scores', JSON.stringify(existingScores));
-    
+
     // Пересчитываем средний NPS
     const total = existingScores.reduce((sum, s) => sum + s, 0);
     this.analytics.metrics.npsScore = Math.round(total / existingScores.length);
@@ -186,10 +186,11 @@ class CRMAnalytics {
     const existingRatings = JSON.parse(localStorage.getItem('satisfaction_ratings') || '[]');
     existingRatings.push(rating);
     localStorage.setItem('satisfaction_ratings', JSON.stringify(existingRatings));
-    
+
     // Пересчитываем средний рейтинг
     const total = existingRatings.reduce((sum, r) => sum + r, 0);
-    this.analytics.metrics.satisfactionScore = Math.round((total / existingRatings.length) * 10) / 10;
+    this.analytics.metrics.satisfactionScore =
+      Math.round((total / existingRatings.length) * 10) / 10;
   }
 
   // Получение аналитических данных
@@ -197,13 +198,13 @@ class CRMAnalytics {
     return {
       summary: this.analytics.metrics,
       recentEvents: this.analytics.events.slice(-50),
-      activeSessions: Array.from(this.analytics.sessions.values()).filter(s => s.isActive),
+      activeSessions: Array.from(this.analytics.sessions.values()).filter((s) => s.isActive),
       crmSummary: {
         totalLeads: this.crmData.leads.length,
         totalCustomers: this.crmData.customers.length,
         totalInteractions: this.crmData.interactions.length,
-        pendingActions: this.crmData.leads.filter(l => l.status === 'new').length
-      }
+        pendingActions: this.crmData.leads.filter((l) => l.status === 'new').length,
+      },
     };
   }
 
@@ -213,9 +214,9 @@ class CRMAnalytics {
   }
 
   trackFormSubmission(formType, formData) {
-    this.trackEvent('form_submitted', { 
-      formType, 
-      formData: this.sanitizeFormData(formData) 
+    this.trackEvent('form_submitted', {
+      formType,
+      formData: this.sanitizeFormData(formData),
     });
   }
 
@@ -243,13 +244,13 @@ class CRMAnalytics {
     return {
       hasPhone: !!data.phone,
       hasEmail: !!data.email,
-      fieldsCount: Object.keys(data).length
+      fieldsCount: Object.keys(data).length,
     };
   }
 
   getCurrentSessionId() {
-    return Array.from(this.analytics.sessions.keys()).find(id => 
-      this.analytics.sessions.get(id).isActive
+    return Array.from(this.analytics.sessions.keys()).find(
+      (id) => this.analytics.sessions.get(id).isActive
     );
   }
 
@@ -263,10 +264,9 @@ class CRMAnalytics {
       session.isActive = false;
       session.endTime = Date.now();
       session.duration = session.endTime - session.startTime;
-      
+
       // Обновляем среднее время сессии
-      const activeSessions = Array.from(this.analytics.sessions.values())
-        .filter(s => s.endTime);
+      const activeSessions = Array.from(this.analytics.sessions.values()).filter((s) => s.endTime);
       const totalDuration = activeSessions.reduce((sum, s) => sum + s.duration, 0);
       this.analytics.metrics.avgSessionTime = Math.round(totalDuration / activeSessions.length);
     }
@@ -274,11 +274,14 @@ class CRMAnalytics {
 
   saveToLocalStorage() {
     try {
-      localStorage.setItem('neuroexpert_analytics', JSON.stringify({
-        metrics: this.analytics.metrics,
-        recentEvents: this.analytics.events.slice(-100),
-        crmData: this.crmData
-      }));
+      localStorage.setItem(
+        'neuroexpert_analytics',
+        JSON.stringify({
+          metrics: this.analytics.metrics,
+          recentEvents: this.analytics.events.slice(-100),
+          crmData: this.crmData,
+        })
+      );
     } catch (error) {
       console.error('Failed to save analytics to localStorage:', error);
     }
@@ -323,7 +326,7 @@ function AnalyticsDashboard() {
   return (
     <>
       {/* Кнопка для открытия панели аналитики */}
-      <button 
+      <button
         className="analytics-toggle"
         onClick={() => setIsVisible(!isVisible)}
         title="Открыть панель аналитики"
@@ -335,10 +338,7 @@ function AnalyticsDashboard() {
         <div className="analytics-dashboard">
           <div className="analytics-header">
             <h3>📊 Аналитика NeuroExpert</h3>
-            <button 
-              className="close-btn"
-              onClick={() => setIsVisible(false)}
-            >
+            <button className="close-btn" onClick={() => setIsVisible(false)}>
               ✕
             </button>
           </div>
@@ -396,7 +396,7 @@ function AnalyticsDashboard() {
           <div className="recent-events">
             <h4>📝 Последние события</h4>
             <div className="events-list">
-              {analytics.recentEvents.slice(-5).map(event => (
+              {analytics.recentEvents.slice(-5).map((event) => (
                 <div key={event.id} className="event-item">
                   <span className="event-type">{event.type}</span>
                   <span className="event-time">
@@ -444,7 +444,7 @@ function AnalyticsDashboard() {
           padding: 20px;
           z-index: 1001;
           overflow-y: auto;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
           animation: slideUp 0.3s ease-out;
         }
 

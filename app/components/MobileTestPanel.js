@@ -8,7 +8,7 @@ class MobileTester {
     this.touchEvents = [];
     this.performanceData = {};
     this.testResults = [];
-    
+
     this.initializeDeviceProfiles();
     this.startMobileMonitoring();
   }
@@ -22,7 +22,7 @@ class MobileTester {
         dpr: 2,
         userAgent: 'iPhone',
         touchSupport: true,
-        category: 'small_mobile'
+        category: 'small_mobile',
       },
       {
         id: 'iphone_12',
@@ -31,7 +31,7 @@ class MobileTester {
         dpr: 3,
         userAgent: 'iPhone',
         touchSupport: true,
-        category: 'mobile'
+        category: 'mobile',
       },
       {
         id: 'pixel_6',
@@ -40,7 +40,7 @@ class MobileTester {
         dpr: 2.75,
         userAgent: 'Android',
         touchSupport: true,
-        category: 'mobile'
+        category: 'mobile',
       },
       {
         id: 'ipad',
@@ -49,7 +49,7 @@ class MobileTester {
         dpr: 2,
         userAgent: 'iPad',
         touchSupport: true,
-        category: 'tablet'
+        category: 'tablet',
       },
       {
         id: 'galaxy_tab',
@@ -58,11 +58,11 @@ class MobileTester {
         dpr: 2,
         userAgent: 'Android',
         touchSupport: true,
-        category: 'tablet'
-      }
+        category: 'tablet',
+      },
     ];
 
-    profiles.forEach(profile => {
+    profiles.forEach((profile) => {
       this.deviceProfiles.set(profile.id, profile);
     });
   }
@@ -86,7 +86,7 @@ class MobileTester {
         memory: 'unknown',
         connection: 'unknown',
         battery: false,
-        deviceCategory: 'desktop'
+        deviceCategory: 'desktop',
       };
     }
 
@@ -95,13 +95,14 @@ class MobileTester {
       devicePixelRatio: window.devicePixelRatio || 1,
       viewport: {
         width: window.innerWidth,
-        height: window.innerHeight
+        height: window.innerHeight,
       },
-      orientation: typeof screen !== 'undefined' && screen.orientation ? screen.orientation.type : 'unknown',
+      orientation:
+        typeof screen !== 'undefined' && screen.orientation ? screen.orientation.type : 'unknown',
       userAgent: navigator.userAgent,
       memory: navigator.deviceMemory || 'unknown',
       connection: navigator.connection?.effectiveType || 'unknown',
-      battery: 'getBattery' in navigator
+      battery: 'getBattery' in navigator,
     };
 
     // Определяем тип устройства
@@ -127,67 +128,75 @@ class MobileTester {
       touchMoveCount: 0,
       touchEndCount: 0,
       gestureData: [],
-      responseTime: []
+      responseTime: [],
     };
 
-    ['touchstart', 'touchmove', 'touchend'].forEach(eventType => {
-      document.addEventListener(eventType, (event) => {
-        const timestamp = performance.now();
-        
-        touchMetrics[eventType.replace('touch', 'touch') + 'Count']++;
-        
-        if (eventType === 'touchstart') {
-          this.touchStartTime = timestamp;
-        }
-        
-        if (eventType === 'touchend' && this.touchStartTime) {
-          const responseTime = timestamp - this.touchStartTime;
-          touchMetrics.responseTime.push(responseTime);
-          
-          if (responseTime > 100) {
-            console.warn(`Slow touch response: ${responseTime}ms`);
-          }
-        }
+    ['touchstart', 'touchmove', 'touchend'].forEach((eventType) => {
+      document.addEventListener(
+        eventType,
+        (event) => {
+          const timestamp = performance.now();
 
-        // Записываем жесты
-        if (event.touches && event.touches.length > 1) {
-          touchMetrics.gestureData.push({
-            type: 'multitouch',
-            touchCount: event.touches.length,
-            timestamp
-          });
-        }
-      }, { passive: true });
+          touchMetrics[eventType.replace('touch', 'touch') + 'Count']++;
+
+          if (eventType === 'touchstart') {
+            this.touchStartTime = timestamp;
+          }
+
+          if (eventType === 'touchend' && this.touchStartTime) {
+            const responseTime = timestamp - this.touchStartTime;
+            touchMetrics.responseTime.push(responseTime);
+
+            if (responseTime > 100) {
+              console.warn(`Slow touch response: ${responseTime}ms`);
+            }
+          }
+
+          // Записываем жесты
+          if (event.touches && event.touches.length > 1) {
+            touchMetrics.gestureData.push({
+              type: 'multitouch',
+              touchCount: event.touches.length,
+              timestamp,
+            });
+          }
+        },
+        { passive: true }
+      );
     });
 
     this.performanceData.touch = touchMetrics;
   }
 
   trackScrollPerformance() {
-            const scrollMetrics = {
+    const scrollMetrics = {
       scrollEvents: 0,
       jankyFrames: 0,
       scrollVelocity: [],
-      lastScrollTime: 0
+      lastScrollTime: 0,
     };
 
-    window.addEventListener('scroll', () => {
-      const now = performance.now();
-      scrollMetrics.scrollEvents++;
-      
-      if (scrollMetrics.lastScrollTime > 0) {
-        const timeDiff = now - scrollMetrics.lastScrollTime;
-        
-        // Если между scroll событиями прошло больше 32ms (менее 30 FPS)
-        if (timeDiff > 32) {
-          scrollMetrics.jankyFrames++;
+    window.addEventListener(
+      'scroll',
+      () => {
+        const now = performance.now();
+        scrollMetrics.scrollEvents++;
+
+        if (scrollMetrics.lastScrollTime > 0) {
+          const timeDiff = now - scrollMetrics.lastScrollTime;
+
+          // Если между scroll событиями прошло больше 32ms (менее 30 FPS)
+          if (timeDiff > 32) {
+            scrollMetrics.jankyFrames++;
+          }
+
+          scrollMetrics.scrollVelocity.push(timeDiff);
         }
-        
-        scrollMetrics.scrollVelocity.push(timeDiff);
-      }
-      
-      scrollMetrics.lastScrollTime = now;
-    }, { passive: true });
+
+        scrollMetrics.lastScrollTime = now;
+      },
+      { passive: true }
+    );
 
     this.performanceData.scroll = scrollMetrics;
   }
@@ -198,19 +207,19 @@ class MobileTester {
       { name: 'medium', min: 576, max: 767 },
       { name: 'large', min: 768, max: 991 },
       { name: 'xlarge', min: 992, max: 1199 },
-      { name: 'xxlarge', min: 1200, max: Infinity }
+      { name: 'xxlarge', min: 1200, max: Infinity },
     ];
 
     const currentWidth = window.innerWidth;
-    const activeBreakpoint = breakpoints.find(bp => 
-      currentWidth >= bp.min && currentWidth <= bp.max
+    const activeBreakpoint = breakpoints.find(
+      (bp) => currentWidth >= bp.min && currentWidth <= bp.max
     );
 
     this.performanceData.responsive = {
       currentBreakpoint: activeBreakpoint?.name || 'unknown',
       viewportWidth: currentWidth,
       viewportHeight: window.innerHeight,
-      aspectRatio: (currentWidth / window.innerHeight).toFixed(2)
+      aspectRatio: (currentWidth / window.innerHeight).toFixed(2),
     };
   }
 
@@ -223,7 +232,7 @@ class MobileTester {
       this.testTextReadability,
       this.testButtonSizes,
       this.testFormUsability,
-      this.testLoadingPerformance
+      this.testLoadingPerformance,
     ];
 
     const results = [];
@@ -237,7 +246,7 @@ class MobileTester {
           testName: test.name,
           status: 'error',
           error: error.message,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         });
       }
     }
@@ -248,28 +257,30 @@ class MobileTester {
 
   async testTouchInteractions() {
     const issues = [];
-    
+
     // Проверяем размеры тач-таргетов
-    const clickableElements = document.querySelectorAll('button, a, input[type="submit"], input[type="button"], [role="button"]');
-    
+    const clickableElements = document.querySelectorAll(
+      'button, a, input[type="submit"], input[type="button"], [role="button"]'
+    );
+
     clickableElements.forEach((element, index) => {
       const rect = element.getBoundingClientRect();
       const size = Math.min(rect.width, rect.height);
-      
-      if (size < 44) { // Минимальный размер по Apple HIG
+
+      if (size < 44) {
+        // Минимальный размер по Apple HIG
         issues.push(`Элемент ${index + 1} слишком маленький для касания: ${size}px`);
       }
-      
+
       // Проверяем расстояние между элементами
       const siblings = element.parentElement?.children || [];
-      Array.from(siblings).forEach(sibling => {
+      Array.from(siblings).forEach((sibling) => {
         if (sibling !== element && sibling.tagName === element.tagName) {
           const siblingRect = sibling.getBoundingClientRect();
           const distance = Math.sqrt(
-            Math.pow(rect.left - siblingRect.left, 2) + 
-            Math.pow(rect.top - siblingRect.top, 2)
+            Math.pow(rect.left - siblingRect.left, 2) + Math.pow(rect.top - siblingRect.top, 2)
           );
-          
+
           if (distance < 8) {
             issues.push(`Элементы слишком близко: ${distance}px`);
           }
@@ -282,21 +293,21 @@ class MobileTester {
       status: issues.length === 0 ? 'passed' : 'failed',
       issues,
       elementsChecked: clickableElements.length,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }
 
   async testScrolling() {
     const issues = [];
-    
+
     // Проверяем overflow элементы
     const elements = document.querySelectorAll('*');
     let horizontalOverflow = 0;
-    
-    elements.forEach(el => {
+
+    elements.forEach((el) => {
       const style = window.getComputedStyle(el);
       const rect = el.getBoundingClientRect();
-      
+
       if (rect.width > window.innerWidth && style.overflow !== 'hidden') {
         horizontalOverflow++;
       }
@@ -309,7 +320,9 @@ class MobileTester {
     // Тестируем плавность скролла
     const scrollMetrics = this.performanceData.scroll;
     if (scrollMetrics && scrollMetrics.jankyFrames > scrollMetrics.scrollEvents * 0.1) {
-      issues.push(`Прерывистый скролл: ${scrollMetrics.jankyFrames} из ${scrollMetrics.scrollEvents} событий`);
+      issues.push(
+        `Прерывистый скролл: ${scrollMetrics.jankyFrames} из ${scrollMetrics.scrollEvents} событий`
+      );
     }
 
     return {
@@ -317,7 +330,7 @@ class MobileTester {
       status: issues.length === 0 ? 'passed' : 'failed',
       issues,
       horizontalOverflow,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }
 
@@ -329,15 +342,15 @@ class MobileTester {
       issues.push('Отсутствует meta viewport');
     } else {
       const content = viewportMeta.getAttribute('content') || '';
-      
+
       if (!content.includes('width=device-width')) {
         issues.push('viewport meta не содержит width=device-width');
       }
-      
+
       if (!content.includes('initial-scale=1')) {
         issues.push('viewport meta не содержит initial-scale=1');
       }
-      
+
       if (content.includes('user-scalable=no')) {
         issues.push('Запрещено масштабирование (проблема доступности)');
       }
@@ -348,7 +361,7 @@ class MobileTester {
       status: issues.length === 0 ? 'passed' : 'failed',
       issues,
       viewport: viewportMeta ? viewportMeta.getAttribute('content') : null,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }
 
@@ -360,11 +373,11 @@ class MobileTester {
     images.forEach((img, index) => {
       const hasSourceSet = img.hasAttribute('srcset');
       const hasSizes = img.hasAttribute('sizes');
-      
+
       if (hasSourceSet || hasSizes) {
         adaptiveImages++;
       }
-      
+
       const rect = img.getBoundingClientRect();
       if (rect.width > window.innerWidth) {
         issues.push(`Изображение ${index + 1} превышает ширину экрана`);
@@ -380,7 +393,7 @@ class MobileTester {
       totalImages: images.length,
       adaptiveImages,
       adaptivePercent: Math.round(adaptivePercent),
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }
 
@@ -393,19 +406,20 @@ class MobileTester {
       const style = window.getComputedStyle(element);
       const fontSize = parseFloat(style.fontSize);
       const lineHeight = parseFloat(style.lineHeight) || fontSize * 1.2;
-      
+
       if (fontSize < 16) {
         issues.push(`Текст ${index + 1} слишком мелкий: ${fontSize}px`);
       } else {
         readableTexts++;
       }
-      
+
       if (lineHeight < fontSize * 1.2) {
         issues.push(`Текст ${index + 1} имеет слишком малую высоту строки`);
       }
     });
 
-    const readabilityPercent = textElements.length > 0 ? (readableTexts / textElements.length) * 100 : 100;
+    const readabilityPercent =
+      textElements.length > 0 ? (readableTexts / textElements.length) * 100 : 100;
 
     return {
       testName: 'testTextReadability',
@@ -414,19 +428,21 @@ class MobileTester {
       totalElements: textElements.length,
       readableElements: readableTexts,
       readabilityPercent: Math.round(readabilityPercent),
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }
 
   async testButtonSizes() {
-    const buttons = document.querySelectorAll('button, input[type="submit"], input[type="button"], [role="button"]');
+    const buttons = document.querySelectorAll(
+      'button, input[type="submit"], input[type="button"], [role="button"]'
+    );
     const issues = [];
     let appropriateButtons = 0;
 
     buttons.forEach((button, index) => {
       const rect = button.getBoundingClientRect();
       const minSize = Math.min(rect.width, rect.height);
-      
+
       if (minSize >= 44) {
         appropriateButtons++;
       } else {
@@ -443,35 +459,42 @@ class MobileTester {
       totalButtons: buttons.length,
       appropriateButtons,
       compliance: Math.round(compliance),
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }
 
   async testFormUsability() {
     const forms = document.querySelectorAll('form');
     const issues = [];
-    
+
     forms.forEach((form, formIndex) => {
       const inputs = form.querySelectorAll('input, textarea, select');
-      
+
       inputs.forEach((input, inputIndex) => {
         // Проверяем наличие labels
         const hasLabel = input.labels && input.labels.length > 0;
         const hasPlaceholder = input.hasAttribute('placeholder');
-        
+
         if (!hasLabel && !hasPlaceholder) {
-          issues.push(`Форма ${formIndex + 1}, поле ${inputIndex + 1}: нет подписи или placeholder`);
+          issues.push(
+            `Форма ${formIndex + 1}, поле ${inputIndex + 1}: нет подписи или placeholder`
+          );
         }
-        
+
         // Проверяем размер полей ввода
         const rect = input.getBoundingClientRect();
         if (rect.height < 44) {
-          issues.push(`Форма ${formIndex + 1}, поле ${inputIndex + 1}: слишком маленькое поле ввода`);
+          issues.push(
+            `Форма ${formIndex + 1}, поле ${inputIndex + 1}: слишком маленькое поле ввода`
+          );
         }
-        
+
         // Проверяем тип input
-        if (input.type === 'text' && input.name && 
-            (input.name.includes('email') || input.name.includes('mail'))) {
+        if (
+          input.type === 'text' &&
+          input.name &&
+          (input.name.includes('email') || input.name.includes('mail'))
+        ) {
           issues.push(`Форма ${formIndex + 1}, поле ${inputIndex + 1}: используйте type="email"`);
         }
       });
@@ -482,14 +505,14 @@ class MobileTester {
       status: issues.length === 0 ? 'passed' : 'failed',
       issues,
       formsChecked: forms.length,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }
 
   async testLoadingPerformance() {
     const issues = [];
     const metrics = this.performanceData.capabilities;
-    
+
     // Проверяем время загрузки
     const loadTime = performance.timing?.loadEventEnd - performance.timing?.navigationStart;
     if (loadTime > 5000) {
@@ -501,16 +524,18 @@ class MobileTester {
     let totalSize = 0;
     let largeResources = 0;
 
-    resources.forEach(resource => {
+    resources.forEach((resource) => {
       if (resource.transferSize) {
         totalSize += resource.transferSize;
-        if (resource.transferSize > 500000) { // 500KB
+        if (resource.transferSize > 500000) {
+          // 500KB
           largeResources++;
         }
       }
     });
 
-    if (totalSize > 2000000) { // 2MB
+    if (totalSize > 2000000) {
+      // 2MB
       issues.push(`Большой размер страницы: ${Math.round(totalSize / 1024)}KB`);
     }
 
@@ -525,7 +550,7 @@ class MobileTester {
       loadTime,
       totalSize: Math.round(totalSize / 1024),
       largeResources,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }
 
@@ -556,7 +581,7 @@ class MobileTester {
       viewport: this.performanceData.capabilities?.viewport || {},
       testResults: this.testResults,
       issues: this.testResults.reduce((acc, test) => acc.concat(test.issues || []), []),
-      overallScore: this.calculateMobileScore()
+      overallScore: this.calculateMobileScore(),
     };
 
     return summary;
@@ -565,9 +590,9 @@ class MobileTester {
   calculateMobileScore() {
     if (this.testResults.length === 0) return 0;
 
-    const passedTests = this.testResults.filter(test => test.status === 'passed').length;
-    const warningTests = this.testResults.filter(test => test.status === 'warning').length;
-    
+    const passedTests = this.testResults.filter((test) => test.status === 'passed').length;
+    const warningTests = this.testResults.filter((test) => test.status === 'warning').length;
+
     const score = ((passedTests + warningTests * 0.5) / this.testResults.length) * 100;
     return Math.round(score);
   }
@@ -593,7 +618,7 @@ function MobileTestPanel() {
     if (globalMobileTester.performanceData.capabilities?.deviceCategory !== 'desktop') {
       runMobileTests();
     }
-    
+
     updateReport();
   }, []);
 
@@ -626,7 +651,7 @@ function MobileTestPanel() {
 
   return (
     <>
-      <button 
+      <button
         className="mobile-toggle"
         onClick={() => setIsVisible(!isVisible)}
         title="Мобильное тестирование"
@@ -661,18 +686,16 @@ function MobileTestPanel() {
             </div>
             <div className="device-stat">
               <span className="label">Оценка:</span>
-              <span className={`score ${mobileReport.overallScore > 80 ? 'good' : mobileReport.overallScore > 60 ? 'ok' : 'bad'}`}>
+              <span
+                className={`score ${mobileReport.overallScore > 80 ? 'good' : mobileReport.overallScore > 60 ? 'ok' : 'bad'}`}
+              >
                 {mobileReport.overallScore}%
               </span>
             </div>
           </div>
 
           <div className="test-controls">
-            <button 
-              onClick={runMobileTests}
-              disabled={isRunning}
-              className="run-tests-btn"
-            >
+            <button onClick={runMobileTests} disabled={isRunning} className="run-tests-btn">
               {isRunning ? '🔄 Тестирование...' : '▶️ Запустить тесты'}
             </button>
           </div>
@@ -680,7 +703,7 @@ function MobileTestPanel() {
           <div className="device-simulator">
             <h4>Симуляция устройств:</h4>
             <div className="device-buttons">
-              {globalMobileTester.getDeviceProfiles().map(device => (
+              {globalMobileTester.getDeviceProfiles().map((device) => (
                 <button
                   key={device.id}
                   onClick={() => simulateDevice(device.id)}
@@ -699,8 +722,7 @@ function MobileTestPanel() {
                 <div className="test-header">
                   <span className="test-name">{result.testName}</span>
                   <span className={`test-status ${result.status}`}>
-                    {result.status === 'passed' ? '✅' : 
-                     result.status === 'warning' ? '⚠️' : '❌'}
+                    {result.status === 'passed' ? '✅' : result.status === 'warning' ? '⚠️' : '❌'}
                   </span>
                 </div>
                 {result.issues && result.issues.length > 0 && (
@@ -713,9 +735,7 @@ function MobileTestPanel() {
                   </div>
                 )}
                 {result.compliance && (
-                  <div className="test-metrics">
-                    Соответствие: {result.compliance}%
-                  </div>
+                  <div className="test-metrics">Соответствие: {result.compliance}%</div>
                 )}
               </div>
             ))}
@@ -784,7 +804,7 @@ function MobileTestPanel() {
           padding: 16px;
           z-index: 1001;
           overflow-y: auto;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
           animation: slideUp 0.3s ease-out;
         }
 
@@ -822,9 +842,15 @@ function MobileTestPanel() {
           color: var(--text);
         }
 
-        .score.good { color: #22c55e; }
-        .score.ok { color: #f59e0b; }
-        .score.bad { color: #ef4444; }
+        .score.good {
+          color: #22c55e;
+        }
+        .score.ok {
+          color: #f59e0b;
+        }
+        .score.bad {
+          color: #ef4444;
+        }
 
         .test-controls {
           text-align: center;

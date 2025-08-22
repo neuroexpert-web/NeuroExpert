@@ -1,0 +1,53 @@
+{
+  "meta": {
+    "title": "NeuroExpert - Business Digitalization with AI",
+    "description": "Platform for business process automation using artificial intelligence"
+  },
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "about": "About",
+    "contact": "Contact",
+    "pricing": "Pricing"
+  },
+  "hero": {
+    "title": "Business Digitalization with AI",
+    "subtitle": "Automate processes, increase profits, stay ahead of competitors",
+    "cta": {
+      "primary": "Start Free",
+      "secondary": "Learn More"
+    }
+  },
+  "features": {
+    "title": "Our Features",
+    "ai_director": {
+      "title": "AI Director",
+      "description": "Intelligent assistant for decision making"
+    },
+    "roi_calculator": {
+      "title": "ROI Calculator",
+      "description": "Calculate the economic efficiency of implementation"
+    },
+    "analytics": {
+      "title": "Analytics",
+      "description": "Complete picture of your business in real time"
+    }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "form": {
+      "name": "Your Name",
+      "email": "Email",
+      "phone": "Phone",
+      "message": "Message",
+      "submit": "Send",
+      "success": "Thank you! We will contact you soon.",
+      "error": "An error occurred. Please try again."
+    }
+  },
+  "footer": {
+    "copyright": "© 2025 NeuroExpert. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  }
+}

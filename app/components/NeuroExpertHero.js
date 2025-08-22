@@ -13,7 +13,7 @@ export default function NeuroExpertHero() {
       if (title) {
         const text = title.textContent;
         title.innerHTML = '';
-        
+
         // Создаем 3D эффект для каждой буквы
         text.split('').forEach((char, i) => {
           const wrapper = document.createElement('span');
@@ -24,7 +24,7 @@ export default function NeuroExpertHero() {
             transform-style: preserve-3d;
             animation-delay: ${i * 50}ms;
           `;
-          
+
           const letter = document.createElement('span');
           letter.className = 'letter-3d';
           letter.textContent = char;
@@ -32,7 +32,7 @@ export default function NeuroExpertHero() {
             display: inline-block;
             position: relative;
           `;
-          
+
           wrapper.appendChild(letter);
           title.appendChild(wrapper);
         });
@@ -69,7 +69,7 @@ export default function NeuroExpertHero() {
       pulseSpeed: 0.02,
       glowIntensity: 1.5,
       particleTrails: true,
-      electricArcs: true
+      electricArcs: true,
     };
 
     const nodes = [];
@@ -111,7 +111,7 @@ export default function NeuroExpertHero() {
         const dx = mouseX - this.x;
         const dy = mouseY - this.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
-        
+
         if (distance < config.mouseRadius) {
           const force = (1 - distance / config.mouseRadius) * 0.1;
           this.vx += dx * force * 0.01;
@@ -128,13 +128,13 @@ export default function NeuroExpertHero() {
         // Пульсация энергии
         this.pulse += config.pulseSpeed;
         this.energy = 0.5 + Math.sin(this.pulse) * 0.3 + Math.random() * 0.2;
-        
+
         // След частицы
         if (config.particleTrails && Math.random() < 0.1) {
           this.trail.push({ x: this.x, y: this.y, life: 1 });
         }
-        
-        this.trail = this.trail.filter(point => {
+
+        this.trail = this.trail.filter((point) => {
           point.life -= 0.02;
           return point.life > 0;
         });
@@ -156,36 +156,30 @@ export default function NeuroExpertHero() {
 
         // ЭПИЧЕСКОЕ СВЕЧЕНИЕ
         const glowSize = this.radius * (this.type === 'core' ? 30 : 20) * this.energy;
-        
+
         // Внешнее свечение
-        const outerGlow = ctx.createRadialGradient(
-          this.x, this.y, 0,
-          this.x, this.y, glowSize
-        );
+        const outerGlow = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, glowSize);
         outerGlow.addColorStop(0, `hsla(${this.hue}, 100%, 50%, ${0.1 * this.energy})`);
         outerGlow.addColorStop(0.5, `hsla(${this.hue}, 80%, 40%, ${0.05 * this.energy})`);
         outerGlow.addColorStop(1, 'transparent');
-        
+
         ctx.fillStyle = outerGlow;
         ctx.fillRect(this.x - glowSize, this.y - glowSize, glowSize * 2, glowSize * 2);
 
         // Среднее свечение
-        const midGlow = ctx.createRadialGradient(
-          this.x, this.y, 0,
-          this.x, this.y, glowSize * 0.5
-        );
+        const midGlow = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, glowSize * 0.5);
         midGlow.addColorStop(0, `hsla(${this.hue}, 100%, 60%, ${0.3 * this.energy})`);
         midGlow.addColorStop(0.7, `hsla(${this.hue}, 100%, 50%, ${0.1 * this.energy})`);
         midGlow.addColorStop(1, 'transparent');
-        
+
         ctx.fillStyle = midGlow;
-        ctx.fillRect(this.x - glowSize/2, this.y - glowSize/2, glowSize, glowSize);
+        ctx.fillRect(this.x - glowSize / 2, this.y - glowSize / 2, glowSize, glowSize);
 
         // Яркое ядро
         if (this.type === 'core') {
           // Дополнительные кольца для core узлов
           for (let i = 0; i < 3; i++) {
-            ctx.strokeStyle = `hsla(${this.hue}, 100%, 70%, ${0.3 * this.energy / (i + 1)})`;
+            ctx.strokeStyle = `hsla(${this.hue}, 100%, 70%, ${(0.3 * this.energy) / (i + 1)})`;
             ctx.lineWidth = 2 - i * 0.5;
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.radius * (3 + i * 2), 0, Math.PI * 2);
@@ -195,13 +189,17 @@ export default function NeuroExpertHero() {
 
         // Центральное ядро
         const coreGradient = ctx.createRadialGradient(
-          this.x, this.y, 0,
-          this.x, this.y, this.radius * 3
+          this.x,
+          this.y,
+          0,
+          this.x,
+          this.y,
+          this.radius * 3
         );
         coreGradient.addColorStop(0, `hsla(0, 0%, 100%, ${this.brightness})`);
         coreGradient.addColorStop(0.3, `hsla(${this.hue}, 100%, 70%, ${this.brightness})`);
         coreGradient.addColorStop(1, `hsla(${this.hue}, 100%, 50%, ${this.brightness * 0.5})`);
-        
+
         ctx.fillStyle = coreGradient;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius * 2, 0, Math.PI * 2);
@@ -250,7 +248,7 @@ export default function NeuroExpertHero() {
           const offset = Math.sin(t * Math.PI) * this.amplitude * (Math.random() - 0.5);
           const perpX = -dy / Math.sqrt(dx * dx + dy * dy);
           const perpY = dx / Math.sqrt(dx * dx + dy * dy);
-          
+
           ctx.lineTo(
             this.node1.x + dx * t + perpX * offset,
             this.node1.y + dy * t + perpY * offset
@@ -264,10 +262,7 @@ export default function NeuroExpertHero() {
 
     // Создаем узлы
     for (let i = 0; i < config.nodeCount; i++) {
-      nodes.push(new SuperNode(
-        Math.random() * width,
-        Math.random() * height
-      ));
+      nodes.push(new SuperNode(Math.random() * width, Math.random() * height));
     }
 
     // Отслеживание мыши
@@ -275,7 +270,7 @@ export default function NeuroExpertHero() {
       const rect = canvas.getBoundingClientRect();
       mouseRef.current = {
         x: e.clientX - rect.left,
-        y: e.clientY - rect.top
+        y: e.clientY - rect.top,
       };
     };
 
@@ -289,20 +284,20 @@ export default function NeuroExpertHero() {
 
       // Обновляем и находим соединения
       connections.clear();
-      
+
       nodes.forEach((node, i) => {
         node.update(mouseRef.current.x, mouseRef.current.y);
-        
+
         // Поиск ближайших узлов
-        nodes.slice(i + 1).forEach(other => {
+        nodes.slice(i + 1).forEach((other) => {
           const dx = other.x - node.x;
           const dy = other.y - node.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
-          
+
           if (distance < config.connectionDistance) {
             const strength = 1 - distance / config.connectionDistance;
             connections.set(`${i}-${nodes.indexOf(other)}`, { node, other, strength, distance });
-            
+
             // Создаем электрические дуги
             if (config.electricArcs && Math.random() < 0.001 && electricArcs.length < 5) {
               electricArcs.push(new ElectricArc(node, other));
@@ -314,13 +309,16 @@ export default function NeuroExpertHero() {
       // Рисуем соединения
       ctx.save();
       ctx.globalCompositeOperation = 'lighter';
-      
+
       connections.forEach(({ node, other, strength }) => {
         const gradient = ctx.createLinearGradient(node.x, node.y, other.x, other.y);
         gradient.addColorStop(0, `hsla(${node.hue}, 100%, 50%, ${strength * 0.3})`);
-        gradient.addColorStop(0.5, `hsla(${(node.hue + other.hue) / 2}, 100%, 60%, ${strength * 0.5})`);
+        gradient.addColorStop(
+          0.5,
+          `hsla(${(node.hue + other.hue) / 2}, 100%, 60%, ${strength * 0.5})`
+        );
         gradient.addColorStop(1, `hsla(${other.hue}, 100%, 50%, ${strength * 0.3})`);
-        
+
         ctx.strokeStyle = gradient;
         ctx.lineWidth = Math.max(0.5, strength * 2);
         ctx.beginPath();
@@ -328,7 +326,7 @@ export default function NeuroExpertHero() {
         ctx.lineTo(other.x, other.y);
         ctx.stroke();
       });
-      
+
       ctx.restore();
 
       // Рисуем электрические дуги
@@ -341,7 +339,7 @@ export default function NeuroExpertHero() {
       });
 
       // Рисуем узлы
-      nodes.forEach(node => node.draw());
+      nodes.forEach((node) => node.draw());
 
       requestAnimationFrame(animate);
     }
@@ -380,7 +378,7 @@ export default function NeuroExpertHero() {
           justify-content: center;
           text-align: center;
           overflow: hidden;
-          background: #0A051A;
+          background: #0a051a;
         }
 
         .neural-canvas {
@@ -410,7 +408,7 @@ export default function NeuroExpertHero() {
           font-family: 'Orbitron', monospace;
           font-weight: 400;
           font-size: 16px;
-          color: #60A5FA;
+          color: #60a5fa;
           letter-spacing: 0.4em;
           text-transform: uppercase;
           margin-bottom: 50px;
@@ -437,11 +435,11 @@ export default function NeuroExpertHero() {
         }
 
         .letter-3d {
-          background: linear-gradient(135deg, #00FFFF, #6366F1, #A855F7);
+          background: linear-gradient(135deg, #00ffff, #6366f1, #a855f7);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
-          text-shadow: 
+          text-shadow:
             0 0 40px rgba(0, 255, 255, 0.8),
             0 0 80px rgba(99, 102, 241, 0.6),
             0 0 120px rgba(168, 85, 247, 0.4);
@@ -450,7 +448,8 @@ export default function NeuroExpertHero() {
         }
 
         @keyframes letterFloat {
-          0%, 100% {
+          0%,
+          100% {
             transform: translateY(0) rotateX(0) rotateY(0);
           }
           25% {
@@ -474,7 +473,7 @@ export default function NeuroExpertHero() {
           font-family: 'Inter', sans-serif;
           font-weight: 600;
           font-size: clamp(24px, 4.5vw, 36px);
-          background: linear-gradient(90deg, #60A5FA, #A855F7);
+          background: linear-gradient(90deg, #60a5fa, #a855f7);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
@@ -508,7 +507,7 @@ export default function NeuroExpertHero() {
           font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 0.2em;
-          color: #FFFFFF;
+          color: #ffffff;
           text-decoration: none;
           background: transparent;
           border: none;
@@ -528,7 +527,7 @@ export default function NeuroExpertHero() {
           left: -3px;
           right: -3px;
           bottom: -3px;
-          background: linear-gradient(90deg, #00FFFF, #6366F1, #A855F7, #00FFFF);
+          background: linear-gradient(90deg, #00ffff, #6366f1, #a855f7, #00ffff);
           background-size: 300% 300%;
           border-radius: 60px;
           z-index: -1;
@@ -552,7 +551,7 @@ export default function NeuroExpertHero() {
         .cta-button span {
           position: relative;
           z-index: 1;
-          background: linear-gradient(90deg, #00FFFF, #FFFFFF, #A855F7);
+          background: linear-gradient(90deg, #00ffff, #ffffff, #a855f7);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
@@ -562,7 +561,7 @@ export default function NeuroExpertHero() {
         .cta-button:hover {
           transform: translateY(-5px) scale(1.08);
           filter: brightness(1.3);
-          box-shadow: 
+          box-shadow:
             0 10px 40px rgba(0, 255, 255, 0.4),
             0 20px 60px rgba(168, 85, 247, 0.3);
         }
@@ -635,18 +634,19 @@ export default function NeuroExpertHero() {
 
         /* Эффект глитча для заголовка */
         @keyframes glitch {
-          0%, 100% {
-            text-shadow: 
+          0%,
+          100% {
+            text-shadow:
               0 0 40px rgba(0, 255, 255, 0.8),
               0 0 80px rgba(99, 102, 241, 0.6);
           }
           20% {
-            text-shadow: 
+            text-shadow:
               2px 2px 40px rgba(255, 0, 255, 0.8),
               -2px -2px 80px rgba(0, 255, 255, 0.6);
           }
           40% {
-            text-shadow: 
+            text-shadow:
               -2px 2px 40px rgba(0, 255, 255, 0.8),
               2px -2px 80px rgba(255, 255, 0, 0.6);
           }
@@ -695,10 +695,13 @@ export default function NeuroExpertHero() {
         <canvas ref={canvasRef} className="neural-canvas" />
         <div className="hero-content">
           <p className="pre-header">ЦИФРОВАЯ AI ПЛАТФОРМА ДЛЯ БИЗНЕСА</p>
-          <h1 className="main-header" id="animated-main-header">NeuroExpert</h1>
+          <h1 className="main-header" id="animated-main-header">
+            NeuroExpert
+          </h1>
           <h2 className="sub-header">СОЗДАЙТЕ ЦИФРОВОЕ ПОЗИЦИОНИРОВАНИЕ</h2>
           <p className="description">
-            Автоматизируйте бизнес-процессы, увеличивайте прибыль и опережайте конкурентов с помощью передовых ИИ технологий.
+            Автоматизируйте бизнес-процессы, увеличивайте прибыль и опережайте конкурентов с помощью
+            передовых ИИ технологий.
           </p>
           <a href="/smart-ai" className="cta-button">
             <span>НАЧАТЬ БЕСПЛАТНО</span>

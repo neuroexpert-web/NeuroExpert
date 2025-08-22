@@ -38,8 +38,8 @@ export default function HeroSection(): JSX.Element {
 
         {/* Subtitle */}
         <p className={`hero-subtitle ${isVisible ? 'visible' : ''}`}>
-          Аудит, стратегия, готовый сайт или приложение и мощная CRM — 
-          всё в одном месте, без лишних сложностей и больших затрат.
+          Аудит, стратегия, готовый сайт или приложение и мощная CRM — всё в одном месте, без лишних
+          сложностей и больших затрат.
         </p>
 
         {/* Mission badge */}
@@ -49,23 +49,17 @@ export default function HeroSection(): JSX.Element {
 
         {/* CTA Buttons */}
         <div className={`hero-buttons ${isVisible ? 'visible' : ''}`}>
-          <button 
-            className="btn-luxury btn-primary"
-            onClick={() => scrollToSection('benefits')}
-          >
+          <button className="btn-luxury btn-primary" onClick={() => scrollToSection('benefits')}>
             <span>Узнать выгоды</span>
             <span className="btn-arrow">→</span>
           </button>
-          
-          <button 
-            className="btn-luxury btn-gold"
-            onClick={() => scrollToSection('demo')}
-          >
+
+          <button className="btn-luxury btn-gold" onClick={() => scrollToSection('demo')}>
             <span>Попробовать демо</span>
             <span className="btn-star">⭐</span>
           </button>
-          
-          <button 
+
+          <button
             className="btn-luxury btn-outline"
             onClick={() => scrollToSection('consultation')}
           >
@@ -122,7 +116,7 @@ export default function HeroSection(): JSX.Element {
           display: block;
           opacity: 0;
           transform: translateY(30px);
-          transition: all 0.8s cubic-bezier(0.23, 1, 0.320, 1);
+          transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .visible .title-line:nth-child(1) {
@@ -144,7 +138,11 @@ export default function HeroSection(): JSX.Element {
         }
 
         .title-line.gradient {
-          background: linear-gradient(135deg, var(--royal-gradient-start), var(--royal-gradient-end));
+          background: linear-gradient(
+            135deg,
+            var(--royal-gradient-start),
+            var(--royal-gradient-end)
+          );
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
@@ -160,7 +158,7 @@ export default function HeroSection(): JSX.Element {
           line-height: 1.6;
           opacity: 0;
           transform: translateY(20px);
-          transition: all 0.8s cubic-bezier(0.23, 1, 0.320, 1);
+          transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
           transition-delay: 0.4s;
         }
 
@@ -179,7 +177,7 @@ export default function HeroSection(): JSX.Element {
           margin-bottom: 48px;
           opacity: 0;
           transform: scale(0.9);
-          transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+          transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
           transition-delay: 0.5s;
         }
 
@@ -207,7 +205,7 @@ export default function HeroSection(): JSX.Element {
           margin-bottom: 80px;
           opacity: 0;
           transform: translateY(20px);
-          transition: all 0.8s cubic-bezier(0.23, 1, 0.320, 1);
+          transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
           transition-delay: 0.6s;
         }
 
@@ -217,7 +215,11 @@ export default function HeroSection(): JSX.Element {
         }
 
         .btn-primary {
-          background: linear-gradient(135deg, var(--royal-gradient-start), var(--royal-gradient-end));
+          background: linear-gradient(
+            135deg,
+            var(--royal-gradient-start),
+            var(--royal-gradient-end)
+          );
           padding: 18px 40px;
           font-size: 18px;
         }
@@ -258,7 +260,7 @@ export default function HeroSection(): JSX.Element {
           margin: 0 auto;
           opacity: 0;
           transform: translateY(40px);
-          transition: all 1s cubic-bezier(0.23, 1, 0.320, 1);
+          transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
           transition-delay: 0.7s;
         }
 
@@ -332,12 +334,13 @@ export default function HeroSection(): JSX.Element {
         }
 
         @keyframes pulseGlow {
-          0%, 100% { 
-            filter: brightness(1) drop-shadow(0 0 10px currentColor); 
+          0%,
+          100% {
+            filter: brightness(1) drop-shadow(0 0 10px currentColor);
             transform: scale(1);
           }
-          50% { 
-            filter: brightness(1.1) drop-shadow(0 0 20px currentColor); 
+          50% {
+            filter: brightness(1.1) drop-shadow(0 0 20px currentColor);
             transform: scale(1.02);
           }
         }

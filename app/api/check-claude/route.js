@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
-  
+
   if (!ANTHROPIC_API_KEY) {
     return NextResponse.json({ error: 'No API key' });
   }
@@ -10,11 +10,11 @@ export async function GET() {
   // Проверяем разные модели Claude
   const models = [
     'claude-3-opus-20240229',
-    'claude-3-sonnet-20240229', 
+    'claude-3-sonnet-20240229',
     'claude-3-haiku-20240307',
     'claude-2.1',
     'claude-2.0',
-    'claude-instant-1.2'
+    'claude-instant-1.2',
   ];
 
   const results = [];
@@ -26,32 +26,34 @@ export async function GET() {
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': ANTHROPIC_API_KEY,
-          'anthropic-version': '2023-06-01'
+          'anthropic-version': '2023-06-01',
         },
         body: JSON.stringify({
           model: model,
           max_tokens: 10,
-          messages: [{
-            role: 'user',
-            content: 'Hi'
-          }]
-        })
+          messages: [
+            {
+              role: 'user',
+              content: 'Hi',
+            },
+          ],
+        }),
       });
 
       const data = await response.json();
-      
+
       results.push({
         model: model,
         status: response.status,
         works: response.ok,
-        error: data.error?.message || null
+        error: data.error?.message || null,
       });
     } catch (e) {
       results.push({
         model: model,
         status: 'error',
         works: false,
-        error: e.message
+        error: e.message,
       });
     }
   }
@@ -59,6 +61,6 @@ export async function GET() {
   return NextResponse.json({
     apiKeyLength: ANTHROPIC_API_KEY.length,
     apiKeyPrefix: ANTHROPIC_API_KEY.substring(0, 15) + '...',
-    results: results
+    results: results,
   });
 }
