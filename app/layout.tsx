@@ -5,6 +5,13 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { setupProductionLogging } from './utils/logger'
 import Script from 'next/script'
+import dynamic from 'next/dynamic'
+
+// Динамический импорт AI Manager Integration
+const AIManagerIntegration = dynamic(
+  () => import('./components/AIManagerIntegration'),
+  { ssr: false }
+)
 
 // Setup production logging
 if (typeof window === 'undefined') {
@@ -107,6 +114,7 @@ html {
           disableTransitionOnChange
         >
           {children}
+          <AIManagerIntegration />
         </ThemeProvider>
       </body>
     </html>
