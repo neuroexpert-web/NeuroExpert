@@ -156,7 +156,9 @@ export default function HomePage() {
               marginTop: '24px',
               marginBottom: '16px',
               opacity: mounted ? 1 : 0,
-              transition: 'opacity 0.6s ease-out 0.4s'
+              transition: 'opacity 0.6s ease-out 0.4s',
+              textShadow: '0 0 25px rgba(0, 255, 136, 0.6)',
+              letterSpacing: '0.05em'
             }}
           >
             ЦИФРОВИЗАЦИЯ БИЗНЕСА<br />С ИСКУССТВЕННЫМ ИНТЕЛЛЕКТОМ
@@ -169,10 +171,12 @@ export default function HomePage() {
               fontWeight: 400,
               color: '#ffaa00',
               maxWidth: '600px',
-              lineHeight: 1.6,
+              lineHeight: 1.8,
               margin: '24px auto 40px auto',
               opacity: mounted ? 1 : 0,
-              transition: 'opacity 0.6s ease-out 0.5s'
+              transition: 'opacity 0.6s ease-out 0.5s',
+              textShadow: '0 0 15px rgba(255, 170, 0, 0.4)',
+              padding: '0 20px'
             }}
           >
             Автоматизируйте бизнес-процессы, увеличивайте прибыль и опережайте конкурентов, используя передовые AI технологии
@@ -211,6 +215,26 @@ export default function HomePage() {
           >
             НАЧАТЬ С AI УПРАВЛЯЮЩИМ
           </button>
+        </div>
+
+        {/* Плавающие частицы для профессионального вида */}
+        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+          {mounted && [...Array(20)].map((_, i) => (
+            <div
+              key={i}
+              style={{
+                position: 'absolute',
+                width: Math.random() * 4 + 2 + 'px',
+                height: Math.random() * 4 + 2 + 'px',
+                background: `radial-gradient(circle, rgba(255, 255, 255, ${Math.random() * 0.8 + 0.2}) 0%, transparent 70%)`,
+                borderRadius: '50%',
+                left: Math.random() * 100 + '%',
+                top: Math.random() * 100 + '%',
+                animation: `float ${Math.random() * 20 + 20}s linear infinite`,
+                animationDelay: Math.random() * 20 + 's'
+              }}
+            />
+          ))}
         </div>
 
         {/* Скрытый контейнер для AI чата */}
@@ -255,6 +279,88 @@ export default function HomePage() {
           Перейти к полной платформе →
         </button>
       </div>
+
+      <style jsx global>{`
+        @keyframes gradientMove {
+          0% {
+            transform: translate(0, 0) rotate(0deg) scale(1);
+          }
+          33% {
+            transform: translate(30px, -30px) rotate(120deg) scale(1.1);
+          }
+          66% {
+            transform: translate(-20px, 20px) rotate(240deg) scale(0.9);
+          }
+          100% {
+            transform: translate(0, 0) rotate(360deg) scale(1);
+          }
+        }
+
+        @keyframes shimmer {
+          0% {
+            background-position: -200% center;
+          }
+          100% {
+            background-position: 200% center;
+          }
+        }
+
+        @keyframes pulse {
+          0%, 100% {
+            box-shadow: 
+              0 0 30px rgba(255, 0, 128, 0.6),
+              0 0 60px rgba(128, 0, 255, 0.4),
+              0 0 90px rgba(0, 128, 255, 0.2);
+          }
+          50% {
+            box-shadow: 
+              0 0 40px rgba(255, 0, 128, 0.8),
+              0 0 80px rgba(128, 0, 255, 0.6),
+              0 0 120px rgba(0, 128, 255, 0.4);
+          }
+        }
+
+        @keyframes float {
+          0% {
+            transform: translateY(100vh) translateX(0);
+            opacity: 0;
+          }
+          10% {
+            opacity: 1;
+          }
+          90% {
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(-100vh) translateX(100px);
+            opacity: 0;
+          }
+        }
+
+        .cta-button {
+          animation: pulse 3s ease-in-out infinite;
+        }
+
+        .cta-button::after {
+          content: '';
+          position: absolute;
+          top: -2px;
+          left: -2px;
+          right: -2px;
+          bottom: -2px;
+          background: linear-gradient(90deg, #ff0080, #8000ff, #0080ff, #ff0080);
+          border-radius: 50px;
+          opacity: 0;
+          z-index: -1;
+          transition: opacity 0.3s ease;
+          background-size: 300% 100%;
+          animation: shimmer 3s linear infinite;
+        }
+
+        .cta-button:hover::after {
+          opacity: 0.7;
+        }
+      `}</style>
     </>
   )
 }
