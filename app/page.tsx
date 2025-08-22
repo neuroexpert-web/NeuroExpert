@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 
@@ -12,224 +12,41 @@ const Navigation = dynamic(
 
 declare global {
   interface Window {
-    VANTA: any
-    THREE: any
     openAIManager: () => void
   }
 }
 
 export default function HomePage() {
   const [mounted, setMounted] = useState(false)
-  const [vantaEffect, setVantaEffect] = useState<any>(null)
   const router = useRouter()
-  const [isClient, setIsClient] = useState(false)
 
   // Функция для открытия AI управляющего
   const handleStartAI = () => {
-    // Используем глобальную функцию для открытия AI управляющего
     if (typeof window !== 'undefined' && (window as any).openAIManager) {
       (window as any).openAIManager()
     } else {
-      // Fallback: диспатчим событие для открытия чата
       const event = new CustomEvent('openAIChat')
       window.dispatchEvent(event)
       
-      // Если чат еще не загружен, ждем и пробуем снова
       setTimeout(() => {
         const chatButton = document.querySelector('.smart-floating-ai-button')
         if (chatButton) {
           (chatButton as HTMLButtonElement).click()
         }
-      }, 1000)
+      }, 100) // Уменьшили задержку
     }
   }
 
   useEffect(() => {
     setMounted(true)
-    setIsClient(true)
-
-    const loadVanta = async () => {
-      // Загружаем Three.js
-      if (!window.THREE) {
-        const threeScript = document.createElement("script")
-        threeScript.src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"
-        document.head.appendChild(threeScript)
-
-        await new Promise((resolve) => {
-          threeScript.onload = resolve
-        })
-      }
-
-      // Загружаем Vanta.js
-      if (!window.VANTA) {
-        const vantaScript = document.createElement("script")
-        vantaScript.src = "https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"
-        document.head.appendChild(vantaScript)
-
-        await new Promise((resolve) => {
-          vantaScript.onload = resolve
-        })
-      }
-
-      if (window.VANTA && window.THREE) {
-        const effect = window.VANTA.NET({
-          el: "#vanta-background",
-          mouseControls: true,
-          touchControls: true,
-          gyroControls: false,
-          minHeight: 200.0,
-          minWidth: 200.0,
-          scale: 1.0,
-          scaleMobile: 1.0,
-          color: 0x6366f1,
-          backgroundColor: 0x0a051a,
-          points: 15.0,
-          maxDistance: 30.0,
-          spacing: 15.0,
-        })
-        setVantaEffect(effect)
-      }
-
-      setTimeout(() => {
-        const preHeader = document.querySelector(".pre-header")
-        if (preHeader) {
-          preHeader.classList.add("holographic-text", "animate-fade-in")
-          preHeader.setAttribute("data-text", preHeader.textContent || "")
-        }
-
-        const mainHeader = document.getElementById("animated-main-header")
-        if (mainHeader) {
-          mainHeader.classList.add("quantum-text", "holographic-projection")
-          mainHeader.setAttribute("data-text", mainHeader.textContent || "")
-
-          const text = mainHeader.textContent || ""
-          mainHeader.innerHTML = ""
-
-          // Создаем голографический эффект для каждой буквы
-          text.split("").forEach((char, index) => {
-            const span = document.createElement("span")
-            span.className = "char dimensional-text"
-            span.textContent = char === " " ? "\u00A0" : char
-            span.style.animationDelay = `${index * 0.1}s`
-            span.setAttribute("data-text", char === " " ? "\u00A0" : char)
-            mainHeader.appendChild(span)
-          })
-
-          const chars = document.querySelectorAll("#animated-main-header .char")
-          chars.forEach((char, index) => {
-            setTimeout(() => {
-              char.classList.add("visible")
-            }, index * 100)
-          })
-        }
-
-        const subHeader = document.querySelector(".sub-header")
-        if (subHeader) {
-          setTimeout(() => {
-            subHeader.classList.add("holographic-text", "animate-slide-up")
-            subHeader.setAttribute("data-text", subHeader.textContent || "")
-          }, 1000)
-        }
-
-        const description = document.querySelector(".description")
-        if (description) {
-          setTimeout(() => {
-            description.classList.add("quantum-text", "animate-fade-in-up")
-            description.setAttribute("data-text", description.textContent || "")
-
-            // Добавляем голографический эффект печатной машинки
-            const originalText = description.textContent || ""
-            description.textContent = ""
-
-            let i = 0
-            const typeInterval = setInterval(() => {
-              if (i < originalText.length) {
-                description.textContent += originalText.charAt(i)
-                i++
-              } else {
-                clearInterval(typeInterval)
-              }
-            }, 50)
-          }, 2000)
-        }
-
-        const ctaButton = document.querySelector(".cta-button")
-        if (ctaButton) {
-          setTimeout(() => {
-            ctaButton.classList.add("holographic-projection", "animate-pulse-glow")
-          }, 3000)
-        }
-
-        createFloatingParticles()
-        createBinaryRain()
-      }, 500)
-    }
-
-    const createBinaryRain = () => {
-      const heroContent = document.querySelector(".hero-content")
-      if (!heroContent) return
-
-      const binaryRain = document.createElement("div")
-      binaryRain.className = "binary-rain"
-      heroContent.appendChild(binaryRain)
-
-      // Уменьшаем количество символов на мобильных
-      const isMobile = window.innerWidth < 768
-      const charCount = isMobile ? 8 : 15
-
-      for (let i = 0; i < charCount; i++) {
-        const binaryChar = document.createElement("div")
-        binaryChar.className = "binary-char"
-        binaryChar.textContent = Math.random() > 0.5 ? "1" : "0"
-        binaryChar.style.left = Math.random() * 100 + "%"
-        binaryChar.style.animationDelay = Math.random() * 2 + "s"
-        binaryChar.style.animationDuration = 3 + Math.random() * 2 + "s"
-        binaryRain.appendChild(binaryChar)
-      }
-    }
-
-    const createFloatingParticles = () => {
-      // Не создаем частицы на мобильных устройствах
-      if (window.innerWidth < 768) return
-
-      const heroContent = document.querySelector(".hero-content")
-      if (!heroContent) return
-
-      for (let i = 0; i < 20; i++) {
-        const particle = document.createElement("div")
-        particle.className = "floating-particle"
-        particle.style.left = Math.random() * 100 + "%"
-        particle.style.top = Math.random() * 100 + "%"
-        particle.style.animationDelay = Math.random() * 4 + "s"
-        particle.style.animationDuration = 3 + Math.random() * 4 + "s"
-        heroContent.appendChild(particle)
-      }
-    }
-
-    loadVanta()
-
-    // Обработка изменения размера окна
-    const handleResize = () => {
-      if (vantaEffect) {
-        vantaEffect.resize()
-      }
-    }
-
-    window.addEventListener('resize', handleResize)
-
-    return () => {
-      window.removeEventListener('resize', handleResize)
-      if (vantaEffect) {
-        vantaEffect.destroy()
-      }
-    }
-  }, [vantaEffect])
+  }, [])
 
   if (!mounted) return (
+    // Статичная версия для первичного рендера
     <section className="hero-section">
       <div className="hero-content">
         <p className="pre-header">ЦИФРОВАЯ AI БИЗНЕС ПЛАТФОРМА</p>
-        <h1 className="main-header" style={{ fontSize: 'clamp(48px, 12vw, 120px)' }}>NeuroExpert</h1>
+        <h1 className="main-header">NeuroExpert</h1>
         <h2 className="sub-header">ЦИФРОВИЗАЦИЯ БИЗНЕСА<br />С ИСКУССТВЕННЫМ ИНТЕЛЛЕКТОМ</h2>
         <p className="description">Автоматизируйте бизнес-процессы, увеличивайте прибыль и опережайте конкурентов, используя передовые AI технологии</p>
         <button className="cta-button">НАЧАТЬ С AI УПРАВЛЯЮЩИМ</button>
@@ -241,43 +58,41 @@ export default function HomePage() {
     <>
       <Navigation />
       <section className="hero-section">
-        {isClient && <div id="vanta-background"></div>}
+        {/* Простой градиентный фон вместо Vanta.js */}
+        <div className="hero-background" />
+        
         <div className="hero-content">
-        <p
-          className="pre-header premium-text holographic-text animate-fade-in"
-          data-text="ЦИФРОВАЯ AI БИЗНЕС ПЛАТФОРМА"
-        >
-          ЦИФРОВАЯ AI БИЗНЕС ПЛАТФОРМА
-        </p>
-        <h1
-          className="main-header neural-network-title quantum-text holographic-projection"
-          id="animated-main-header"
-          data-text="NeuroExpert"
-        >
-          NeuroExpert
-        </h1>
-        <h2
-          className="sub-header premium-subtitle holographic-text animate-slide-up"
-          data-text="ЦИФРОВИЗАЦИЯ БИЗНЕСА С ИСКУССТВЕННЫМ ИНТЕЛЛЕКТОМ"
-        >
-          ЦИФРОВИЗАЦИЯ БИЗНЕСА
-          <br />С ИСКУССТВЕННЫМ ИНТЕЛЛЕКТОМ
-        </h2>
-        <p
-          className="description premium-description quantum-text animate-fade-in-up"
-          data-text="Автоматизируйте бизнес-процессы, увеличивайте прибыль и опережайте конкурентов, используя передовые AI технологии"
-        >
-          Автоматизируйте бизнес-процессы, увеличивайте прибыль и опережайте конкурентов, используя передовые AI
-          технологии
-        </p>
-        <button 
-          onClick={handleStartAI}
-          className="cta-button premium-button holographic-projection animate-pulse-glow"
-          aria-label="Начать работу с AI управляющим"
-        >
-          НАЧАТЬ С AI УПРАВЛЯЮЩИМ
-        </button>
-      </div>
+          <p className="pre-header premium-text animate-fade-in-fast">
+            ЦИФРОВАЯ AI БИЗНЕС ПЛАТФОРМА
+          </p>
+          
+          <h1 className="main-header neural-network-title animate-scale-in">
+            NeuroExpert
+          </h1>
+          
+          <h2 className="sub-header premium-subtitle animate-slide-up-fast">
+            ЦИФРОВИЗАЦИЯ БИЗНЕСА<br />С ИСКУССТВЕННЫМ ИНТЕЛЛЕКТОМ
+          </h2>
+          
+          <p className="description premium-description animate-fade-in-fast">
+            Автоматизируйте бизнес-процессы, увеличивайте прибыль и опережайте конкурентов, используя передовые AI технологии
+          </p>
+          
+          <button 
+            onClick={handleStartAI}
+            className="cta-button premium-button animate-fade-in-fast"
+            aria-label="Начать работу с AI управляющим"
+          >
+            НАЧАТЬ С AI УПРАВЛЯЮЩИМ
+          </button>
+        </div>
+
+        {/* Легкие частицы без тяжелых анимаций */}
+        <div className="particles-container" aria-hidden="true">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="particle" style={{ animationDelay: `${i * 0.5}s` }} />
+          ))}
+        </div>
 
         {/* Скрытый контейнер для AI чата */}
         <div id="smart-floating-ai-portal" style={{ display: 'none' }}></div>
@@ -287,13 +102,152 @@ export default function HomePage() {
       <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-40">
         <button
           onClick={() => router.push('/platform')}
-          className="px-6 py-3 bg-accent/20 hover:bg-accent/30 border border-accent rounded-full 
-                     text-sm font-medium text-foreground/80 hover:text-foreground
-                     transition-all duration-300 backdrop-blur-sm"
+          className="platform-link-button"
         >
           Перейти к полной платформе →
         </button>
       </div>
+
+      <style jsx>{`
+        .hero-background {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(135deg, #0a051a 0%, #1a0f3a 50%, #0f0520 100%);
+          z-index: -1;
+        }
+
+        .hero-background::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-image: 
+            radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.2) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(255, 119, 198, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 40% 20%, rgba(120, 219, 255, 0.15) 0%, transparent 50%);
+          animation: gradientShift 20s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+          0%, 100% { transform: rotate(0deg) scale(1); }
+          50% { transform: rotate(5deg) scale(1.1); }
+        }
+
+        .particles-container {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          overflow: hidden;
+          pointer-events: none;
+        }
+
+        .particle {
+          position: absolute;
+          width: 4px;
+          height: 4px;
+          background: rgba(255, 255, 255, 0.5);
+          border-radius: 50%;
+          animation: float 10s linear infinite;
+        }
+
+        .particle:nth-child(1) { left: 10%; top: 20%; }
+        .particle:nth-child(2) { left: 30%; top: 40%; }
+        .particle:nth-child(3) { left: 50%; top: 60%; }
+        .particle:nth-child(4) { left: 70%; top: 30%; }
+        .particle:nth-child(5) { left: 90%; top: 50%; }
+
+        @keyframes float {
+          0% { transform: translateY(0) translateX(0); opacity: 0; }
+          10% { opacity: 1; }
+          90% { opacity: 1; }
+          100% { transform: translateY(-100vh) translateX(30px); opacity: 0; }
+        }
+
+        .animate-fade-in-fast {
+          animation: fadeInFast 0.5s ease-out forwards;
+        }
+
+        .animate-scale-in {
+          animation: scaleIn 0.6s ease-out forwards;
+        }
+
+        .animate-slide-up-fast {
+          animation: slideUpFast 0.5s ease-out forwards;
+          animation-delay: 0.2s;
+          opacity: 0;
+        }
+
+        @keyframes fadeInFast {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleIn {
+          from { opacity: 0; transform: scale(0.9); }
+          to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes slideUpFast {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        .platform-link-button {
+          padding: 12px 24px;
+          background: rgba(99, 102, 241, 0.1);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(99, 102, 241, 0.3);
+          border-radius: 50px;
+          color: rgba(255, 255, 255, 0.9);
+          font-size: 14px;
+          font-weight: 500;
+          transition: all 0.2s ease;
+          cursor: pointer;
+        }
+
+        .platform-link-button:hover {
+          background: rgba(99, 102, 241, 0.2);
+          border-color: rgba(99, 102, 241, 0.5);
+          transform: translateY(-2px);
+        }
+
+        /* Упрощенная анимация для кнопки CTA */
+        .cta-button {
+          position: relative;
+          overflow: hidden;
+          transition: all 0.3s ease;
+        }
+
+        .cta-button::before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 0;
+          height: 0;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.2);
+          transform: translate(-50%, -50%);
+          transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .cta-button:hover::before {
+          width: 300px;
+          height: 300px;
+        }
+
+        .cta-button:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+        }
+      `}</style>
     </>
   )
 }
