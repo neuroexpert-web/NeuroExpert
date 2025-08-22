@@ -1,8 +1,12 @@
 import type React from "react"
+import { Suspense } from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
+import "./styles/premium-design-system.css"
+import "./styles/premium-glass-sections.css"
+import "./styles/mobile-fixes.css"
+import { ThemeProvider } from "../components/theme-provider"
 import { setupProductionLogging } from './utils/logger'
 import Script from 'next/script'
 import dynamic from 'next/dynamic'
@@ -11,6 +15,15 @@ import dynamic from 'next/dynamic'
 const AIManagerIntegration = dynamic(
   () => import('./components/AIManagerIntegration'),
   { ssr: false }
+)
+
+// Динамический импорт SmartFloatingAI
+const SmartFloatingAI = dynamic(
+  () => import('./components/SmartFloatingAI'),
+  { 
+    ssr: false,
+    loading: () => null
+  }
 )
 
 // Setup production logging
@@ -114,6 +127,9 @@ html {
           disableTransitionOnChange
         >
           {children}
+          <Suspense fallback={null}>
+            <SmartFloatingAI />
+          </Suspense>
           <AIManagerIntegration />
         </ThemeProvider>
       </body>
