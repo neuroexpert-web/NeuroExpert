@@ -50,7 +50,7 @@ export default function HomePage() {
           overflow: 'hidden'
         }}
       >
-        {/* Простой фоновый эффект */}
+        {/* Профессиональный фоновый эффект */}
         <div 
           style={{
             position: 'absolute',
@@ -59,8 +59,26 @@ export default function HomePage() {
             right: 0,
             bottom: 0,
             background: `
-              radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.15) 0%, transparent 50%),
-              radial-gradient(circle at 80% 80%, rgba(255, 119, 198, 0.1) 0%, transparent 50%)
+              radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 40%),
+              radial-gradient(circle at 80% 80%, rgba(255, 119, 198, 0.2) 0%, transparent 40%),
+              radial-gradient(circle at 40% 20%, rgba(120, 219, 255, 0.2) 0%, transparent 40%),
+              radial-gradient(circle at 60% 60%, rgba(255, 0, 128, 0.15) 0%, transparent 40%)
+            `,
+            pointerEvents: 'none',
+            animation: 'gradientMove 20s ease-in-out infinite'
+          }}
+        />
+        
+        {/* Дополнительный слой для глубины */}
+        <div
+          style={{
+            position: 'absolute',
+            top: '-50%',
+            left: '-50%',
+            right: '-50%',
+            bottom: '-50%',
+            background: `
+              radial-gradient(circle at center, transparent 0%, rgba(10, 5, 26, 0.8) 70%)
             `,
             pointerEvents: 'none'
           }}
@@ -86,11 +104,18 @@ export default function HomePage() {
               fontSize: 'clamp(12px, 2.5vw, 14px)',
               fontWeight: 500,
               color: '#00ffff',
-              letterSpacing: '0.1em',
+              letterSpacing: '0.3em',
               textTransform: 'uppercase',
               marginBottom: '24px',
               opacity: mounted ? 1 : 0,
-              transition: 'opacity 0.6s ease-out 0.2s'
+              transition: 'opacity 0.6s ease-out 0.2s',
+              textShadow: '0 0 20px rgba(0, 255, 255, 0.8)',
+              background: 'linear-gradient(90deg, #00ffff, #00ccff, #00ffff)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              backgroundSize: '200% auto',
+              animation: mounted ? 'shimmer 3s linear infinite' : 'none'
             }}
           >
             ЦИФРОВАЯ AI БИЗНЕС ПЛАТФОРМА
@@ -108,7 +133,14 @@ export default function HomePage() {
               backgroundClip: 'text',
               opacity: mounted ? 1 : 0,
               transform: mounted ? 'scale(1)' : 'scale(0.9)',
-              transition: 'all 0.8s ease-out 0.3s'
+              transition: 'all 0.8s ease-out 0.3s',
+              textShadow: `
+                0 0 30px rgba(0, 255, 255, 0.5),
+                0 0 60px rgba(255, 0, 255, 0.3),
+                0 0 90px rgba(0, 255, 136, 0.2)
+              `,
+              filter: 'drop-shadow(0 0 20px rgba(0, 255, 255, 0.5))',
+              letterSpacing: '0.02em'
             }}
           >
             NeuroExpert
