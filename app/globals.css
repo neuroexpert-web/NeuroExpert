@@ -1,6 +1,8 @@
 /* app/globals.css - Премиум стили NeuroExpert 3.2 - Fixed loader issue January 2025 */
 
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @custom-variant dark (&:is(.dark *));
 
