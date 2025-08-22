@@ -2,11 +2,19 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from 'next/navigation'
+import dynamic from 'next/dynamic'
+
+// Динамический импорт навигации
+const Navigation = dynamic(
+  () => import('./components/Navigation'),
+  { ssr: false }
+)
 
 declare global {
   interface Window {
     VANTA: any
     THREE: any
+    openAIManager: () => void
   }
 }
 
@@ -230,9 +238,11 @@ export default function HomePage() {
   )
 
   return (
-    <section className="hero-section">
-      {isClient && <div id="vanta-background"></div>}
-      <div className="hero-content">
+    <>
+      <Navigation />
+      <section className="hero-section">
+        {isClient && <div id="vanta-background"></div>}
+        <div className="hero-content">
         <p
           className="pre-header premium-text holographic-text animate-fade-in"
           data-text="ЦИФРОВАЯ AI БИЗНЕС ПЛАТФОРМА"
@@ -269,8 +279,21 @@ export default function HomePage() {
         </button>
       </div>
 
-      {/* Скрытый контейнер для AI чата */}
-      <div id="smart-floating-ai-portal" style={{ display: 'none' }}></div>
-    </section>
+        {/* Скрытый контейнер для AI чата */}
+        <div id="smart-floating-ai-portal" style={{ display: 'none' }}></div>
+      </section>
+      
+      {/* Ссылка на полную платформу */}
+      <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-40">
+        <button
+          onClick={() => router.push('/platform')}
+          className="px-6 py-3 bg-accent/20 hover:bg-accent/30 border border-accent rounded-full 
+                     text-sm font-medium text-foreground/80 hover:text-foreground
+                     transition-all duration-300 backdrop-blur-sm"
+        >
+          Перейти к полной платформе →
+        </button>
+      </div>
+    </>
   )
 }
