@@ -62,19 +62,19 @@ export default function HomePage() {
         <div className="hero-background" />
         
         <div className="hero-content">
-          <p className="pre-header premium-text animate-fade-in-fast">
+          <p className="pre-header premium-text animate-fade-in-fast" style={{ animationDelay: '0.1s' }}>
             ЦИФРОВАЯ AI БИЗНЕС ПЛАТФОРМА
           </p>
           
-          <h1 className="main-header neural-network-title animate-scale-in">
+          <h1 className="main-header neural-network-title animate-scale-in" style={{ animationDelay: '0.3s' }}>
             NeuroExpert
           </h1>
           
-          <h2 className="sub-header premium-subtitle animate-slide-up-fast">
+          <h2 className="sub-header premium-subtitle animate-slide-up-fast" style={{ animationDelay: '0.5s' }}>
             ЦИФРОВИЗАЦИЯ БИЗНЕСА<br />С ИСКУССТВЕННЫМ ИНТЕЛЛЕКТОМ
           </h2>
           
-          <p className="description premium-description animate-fade-in-fast">
+          <p className="description premium-description animate-fade-in-fast" style={{ animationDelay: '0.7s' }}>
             Автоматизируйте бизнес-процессы, увеличивайте прибыль и опережайте конкурентов, используя передовые AI технологии
           </p>
           
@@ -82,6 +82,7 @@ export default function HomePage() {
             onClick={handleStartAI}
             className="cta-button premium-button animate-fade-in-fast"
             aria-label="Начать работу с AI управляющим"
+            style={{ animationDelay: '0.9s' }}
           >
             НАЧАТЬ С AI УПРАВЛЯЮЩИМ
           </button>
@@ -138,6 +139,58 @@ export default function HomePage() {
           50% { transform: rotate(5deg) scale(1.1); }
         }
 
+        /* Анимации для элементов */
+        :global(.animate-fade-in-fast) {
+          animation: fadeInFast 0.5s ease-out forwards;
+          opacity: 0;
+          animation-fill-mode: both;
+        }
+
+        :global(.animate-scale-in) {
+          animation: scaleIn 0.6s ease-out forwards;
+          opacity: 0;
+          animation-fill-mode: both;
+        }
+
+        :global(.animate-slide-up-fast) {
+          animation: slideUpFast 0.5s ease-out forwards;
+          opacity: 0;
+          animation-fill-mode: both;
+        }
+
+        @keyframes fadeInFast {
+          from { 
+            opacity: 0; 
+            transform: translateY(10px); 
+          }
+          to { 
+            opacity: 1; 
+            transform: translateY(0); 
+          }
+        }
+
+        @keyframes scaleIn {
+          from { 
+            opacity: 0; 
+            transform: scale(0.9); 
+          }
+          to { 
+            opacity: 1; 
+            transform: scale(1); 
+          }
+        }
+
+        @keyframes slideUpFast {
+          from { 
+            opacity: 0; 
+            transform: translateY(20px); 
+          }
+          to { 
+            opacity: 1; 
+            transform: translateY(0); 
+          }
+        }
+
         .particles-container {
           position: absolute;
           top: 0;
@@ -170,34 +223,7 @@ export default function HomePage() {
           100% { transform: translateY(-100vh) translateX(30px); opacity: 0; }
         }
 
-        .animate-fade-in-fast {
-          animation: fadeInFast 0.5s ease-out forwards;
-        }
 
-        .animate-scale-in {
-          animation: scaleIn 0.6s ease-out forwards;
-        }
-
-        .animate-slide-up-fast {
-          animation: slideUpFast 0.5s ease-out forwards;
-          animation-delay: 0.2s;
-          opacity: 0;
-        }
-
-        @keyframes fadeInFast {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes scaleIn {
-          from { opacity: 0; transform: scale(0.9); }
-          to { opacity: 1; transform: scale(1); }
-        }
-
-        @keyframes slideUpFast {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
 
         .platform-link-button {
           padding: 12px 24px;
@@ -219,13 +245,23 @@ export default function HomePage() {
         }
 
         /* Упрощенная анимация для кнопки CTA */
-        .cta-button {
+        :global(.cta-button) {
           position: relative;
           overflow: hidden;
           transition: all 0.3s ease;
+          animation: pulse 2s ease-in-out infinite;
         }
 
-        .cta-button::before {
+        @keyframes pulse {
+          0%, 100% {
+            box-shadow: 0 0 30px rgba(255, 0, 128, 0.6), 0 10px 30px -5px rgba(128, 0, 255, 0.4);
+          }
+          50% {
+            box-shadow: 0 0 40px rgba(255, 0, 128, 0.8), 0 15px 35px -5px rgba(128, 0, 255, 0.6);
+          }
+        }
+
+        :global(.cta-button)::before {
           content: '';
           position: absolute;
           top: 50%;
@@ -238,14 +274,15 @@ export default function HomePage() {
           transition: width 0.6s ease, height 0.6s ease;
         }
 
-        .cta-button:hover::before {
+        :global(.cta-button:hover)::before {
           width: 300px;
           height: 300px;
         }
 
-        .cta-button:hover {
+        :global(.cta-button:hover) {
           transform: translateY(-2px);
-          box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+          animation: none;
+          box-shadow: 0 10px 40px rgba(139, 92, 246, 0.4);
         }
       `}</style>
     </>
