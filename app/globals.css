@@ -3568,4 +3568,13 @@ button:disabled {
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
+/* Утилиты для анимаций */
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
 

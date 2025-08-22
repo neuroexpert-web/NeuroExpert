@@ -1,14 +1,26 @@
 import { NextResponse } from 'next/server';
 import { apiRateLimit } from '@/app/middleware/rateLimit';
 
+const serviceLabels = {
+  'ai-integration': '🤖 Внедрение AI',
+  'automation': '⚡ Автоматизация процессов',
+  'analytics': '📊 Аналитика и отчёты',
+  'consulting': '💡 Консультация',
+  'other': '📝 Другое'
+};
+
+function getServiceLabel(service) {
+  return serviceLabels[service] || service;
+}
+
 async function handler(request) {
   try {
     const data = await request.json();
     
     // Validate required fields
-    const { name, email, phone, message } = data;
+    const { name, email, phone, message, company, service } = data;
     
-    if (!name || !email || !message) {
+    if (!name || !email || !phone) {
       return NextResponse.json(
         { error: 'Пожалуйста, заполните все обязательные поля' },
         { status: 400 }
@@ -40,7 +52,9 @@ async function handler(request) {
       name,
       email,
       phone,
+      company,
       message,
+      service,
       timestamp: new Date().toISOString()
     });
     
@@ -49,7 +63,9 @@ async function handler(request) {
       name,
       email,
       phone,
+      company,
       message,
+      service,
       timestamp: new Date().toISOString(),
       hasToken: !!process.env.TELEGRAM_BOT_TOKEN,
       hasChatId: !!process.env.TELEGRAM_CHAT_ID
@@ -72,7 +88,9 @@ async function handler(request) {
 👤 Имя: ${name}
 📧 Email: ${email}
 📱 Телефон: ${phone || 'Не указан'}
-💬 Сообщение: ${message}
+🏢 Компания: ${company || 'Не указана'}
+📌 Услуга: ${service ? getServiceLabel(service) : 'Не выбрана'}
+💬 Сообщение: ${message || 'Не указано'}
 🕐 Время: ${new Date().toLocaleString('ru-RU')}
         `;
         
