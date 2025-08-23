@@ -1,0 +1,256 @@
+.cardWrapper {
+  position: relative;
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+/* Фон карточки */
+.cardBackground {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--dark-card);
+  z-index: 0;
+}
+
+/* Свечение */
+.cardGlow {
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  opacity: 0.5;
+  filter: blur(20px);
+  transition: all 0.3s ease;
+  z-index: -1;
+}
+
+/* Цвета свечения */
+.glow-blue .cardGlow {
+  background: linear-gradient(135deg, #00D9FF, #0099CC);
+}
+
+.glow-purple .cardGlow {
+  background: linear-gradient(135deg, #BD00FF, #9400D3);
+}
+
+.glow-green .cardGlow {
+  background: linear-gradient(135deg, #00FF88, #00CC6F);
+}
+
+.glow-pink .cardGlow {
+  background: linear-gradient(135deg, #FF00AA, #CC0088);
+}
+
+/* Граница */
+.cardBorder {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 217, 255, 0.3),
+    rgba(189, 0, 255, 0.3)
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: 1;
+}
+
+/* Контент */
+.cardContent {
+  position: relative;
+  padding: 2rem;
+  z-index: 2;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.cardIcon {
+  flex-shrink: 0;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 0.75rem;
+  box-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+}
+
+.cardTitles {
+  flex: 1;
+}
+
+.cardTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  background: linear-gradient(135deg, #00D9FF, #BD00FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.cardSubtitle {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0.25rem 0 0 0;
+}
+
+.cardBody {
+  color: var(--text-primary);
+}
+
+/* Варианты */
+
+/* Стеклянный эффект */
+.glass .cardBackground {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.glass .cardBorder {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.05)
+  );
+}
+
+/* Голографический эффект */
+.holographic .cardBackground {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 217, 255, 0.1),
+    rgba(189, 0, 255, 0.1),
+    rgba(255, 0, 170, 0.1),
+    rgba(0, 255, 136, 0.1)
+  );
+}
+
+.holographicOverlay {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 70%
+  );
+  background-size: 200% 200%;
+  animation: holographic-shift 4s ease infinite;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Неоновый эффект */
+.neon .cardBackground {
+  background: rgba(10, 5, 26, 0.9);
+}
+
+.neon .cardBorder {
+  padding: 2px;
+  background: linear-gradient(
+    90deg,
+    #00D9FF,
+    #BD00FF,
+    #FF00AA,
+    #00FF88,
+    #00D9FF
+  );
+  background-size: 200% 100%;
+  animation: neon-border 3s linear infinite;
+}
+
+@keyframes neon-border {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.neonCorner {
+  position: absolute;
+  width: 3rem;
+  height: 3rem;
+  border: 2px solid var(--primary);
+  z-index: 4;
+}
+
+.neonCorner[data-corner="top-left"] {
+  top: -1px;
+  left: -1px;
+  border-right: none;
+  border-bottom: none;
+  border-top-left-radius: 1rem;
+}
+
+.neonCorner[data-corner="top-right"] {
+  top: -1px;
+  right: -1px;
+  border-left: none;
+  border-bottom: none;
+  border-top-right-radius: 1rem;
+}
+
+.neonCorner[data-corner="bottom-left"] {
+  bottom: -1px;
+  left: -1px;
+  border-right: none;
+  border-top: none;
+  border-bottom-left-radius: 1rem;
+}
+
+.neonCorner[data-corner="bottom-right"] {
+  bottom: -1px;
+  right: -1px;
+  border-left: none;
+  border-top: none;
+  border-bottom-right-radius: 1rem;
+}
+
+/* Hover эффекты */
+.cardWrapper:hover .cardGlow {
+  opacity: 1;
+  filter: blur(30px);
+}
+
+.cardWrapper:hover .cardBorder {
+  opacity: 1;
+}
+
+.cardWrapper:hover .neonCorner {
+  box-shadow: 0 0 10px currentColor;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .cardContent {
+    padding: 1.5rem;
+  }
+
+  .cardTitle {
+    font-size: 1.25rem;
+  }
+
+  .cardIcon {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}

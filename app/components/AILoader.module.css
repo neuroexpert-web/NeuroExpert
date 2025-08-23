@@ -1,0 +1,286 @@
+.loaderContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* Размеры */
+.small {
+  --loader-size: 60px;
+}
+
+.medium {
+  --loader-size: 100px;
+}
+
+.large {
+  --loader-size: 150px;
+}
+
+/* Текст загрузчика */
+.loaderText {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0;
+  text-align: center;
+  animation: textPulse 2s ease-in-out infinite;
+}
+
+@keyframes textPulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Neural Network Variant */
+.neuralNetwork {
+  filter: drop-shadow(0 0 10px var(--primary));
+}
+
+.centralNode {
+  fill: var(--primary);
+  filter: drop-shadow(0 0 20px var(--primary));
+  animation: nodePulse 2s ease-in-out infinite;
+}
+
+.outerNode {
+  fill: var(--secondary);
+  filter: drop-shadow(0 0 10px var(--secondary));
+  animation: nodePulse 2s ease-in-out infinite;
+}
+
+.connection {
+  stroke: var(--primary);
+  stroke-width: 2;
+  fill: none;
+  opacity: 0.3;
+  stroke-dasharray: 50;
+  stroke-dashoffset: 50;
+  animation: connectionFlow 2s linear infinite;
+}
+
+@keyframes nodePulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes connectionFlow {
+  0% {
+    stroke-dashoffset: 50;
+    opacity: 0.3;
+  }
+  50% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: -50;
+    opacity: 0.3;
+  }
+}
+
+.pulseRing {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 1;
+  opacity: 0;
+  animation: ringPulse 2s ease-in-out infinite;
+}
+
+@keyframes ringPulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Pulse Variant */
+.pulseLoader {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  height: var(--loader-size);
+}
+
+.pulseDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 20px var(--primary);
+  animation: dotPulse 1.5s ease-in-out infinite;
+}
+
+.pulseDot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.pulseDot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes dotPulse {
+  0%, 60%, 100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  30% {
+    transform: scale(1.5);
+    opacity: 1;
+  }
+}
+
+/* Quantum Variant */
+.quantumLoader {
+  position: relative;
+  width: var(--loader-size);
+  height: var(--loader-size);
+}
+
+.quantumOrbit {
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(0, 217, 255, 0.2);
+  border-radius: 50%;
+}
+
+.quantumParticle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--primary);
+  border-radius: 50%;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 
+    0 0 20px var(--primary),
+    0 0 40px var(--primary);
+}
+
+.quantumOrbit:nth-child(2) {
+  inset: 20%;
+  border-color: rgba(189, 0, 255, 0.2);
+}
+
+.quantumOrbit:nth-child(2) .quantumParticle {
+  background: var(--secondary);
+  box-shadow: 
+    0 0 20px var(--secondary),
+    0 0 40px var(--secondary);
+}
+
+.quantumCore {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(
+    circle,
+    var(--primary) 0%,
+    var(--secondary) 50%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  filter: blur(2px);
+  animation: corePulse 2s ease-in-out infinite;
+}
+
+@keyframes corePulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 1;
+  }
+}
+
+/* Data Stream Variant */
+.dataStreamLoader {
+  position: relative;
+  width: var(--loader-size);
+  height: var(--loader-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.dataStream {
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--primary) 50%,
+    transparent 100%
+  );
+  animation: dataFlow 2s ease-in-out infinite;
+}
+
+.dataStream:nth-child(2) {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--secondary) 50%,
+    transparent 100%
+  );
+}
+
+.dataStream:nth-child(3) {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--accent) 50%,
+    transparent 100%
+  );
+}
+
+.dataStream:nth-child(4) {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--neon-pink) 50%,
+    transparent 100%
+  );
+}
+
+@keyframes dataFlow {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
