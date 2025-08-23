@@ -1,0 +1,36 @@
+.main {
+  position: relative;
+  min-height: 100vh;
+  background: var(--dark-bg);
+  padding: 4rem 0;
+}
+
+/* Секции */
+.main > * {
+  margin-bottom: 6rem;
+}
+
+.main > *:last-child {
+  margin-bottom: 0;
+}
+
+/* Loader */
+.loader-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.loader {
+  width: 60px;
+  height: 60px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
