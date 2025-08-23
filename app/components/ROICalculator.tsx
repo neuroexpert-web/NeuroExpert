@@ -45,8 +45,18 @@ export default function ROICalculator(): JSX.Element {
     } as ROIFormData));
   };
 
-  const calculateROI = async (): Promise<void> => {
+  const calculateROI = async (e?: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    if (e) {
+      e.preventDefault();
+    }
+    
     const { businessSize, industry, budget } = formData;
+    
+    // Проверка на корректность данных
+    if (!budget || budget <= 0) {
+      alert('Пожалуйста, введите корректный бюджет');
+      return;
+    }
     
     // Расчеты на основе множителей
     const baseROI = sizeMultipliers[businessSize] * industryMultipliers[industry];

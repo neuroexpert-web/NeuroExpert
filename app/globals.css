@@ -75,47 +75,24 @@ body {
 
 /* CSS переменные */
 :root {
-  /* Основные цвета - ОБНОВЛЕНО ДЛЯ ФУТУРИСТИЧЕСКОГО СТИЛЯ */
-  --primary: #00D9FF;           /* Неоновый голубой */
-  --primary-dark: #0099CC;      /* Темный неоновый голубой */
-  --primary-light: #66E5FF;     /* Светлый неоновый голубой */
-  --secondary: #BD00FF;         /* Неоновый фиолетовый */
-  --secondary-dark: #9400D3;    /* Темный неоновый фиолетовый */
-  --secondary-light: #E066FF;   /* Светлый неоновый фиолетовый */
-  --accent: #00FF88;            /* Неоновый зеленый */
+  /* Основные цвета - ФУТУРИСТИЧЕСКИЕ */
+  --primary: #00D9FF;
+  --secondary: #BD00FF;
+  --accent: #00FF88;
+  --danger: #FF4444;
   
-  /* Темная тема - КОСМИЧЕСКИЙ ФОН */
-  --dark-bg: #0A051A;           /* Глубокий космический */
-  --dark-bg-secondary: #0F0A2A; /* Вторичный космический */
-  --dark-card: rgba(255, 255, 255, 0.03); /* Прозрачные карточки */
-  --dark-border: rgba(0, 217, 255, 0.2);  /* Неоновые границы */
+  /* Темная тема - ГЛУБОКИЕ ТОНА */
+  --dark-bg: #0a0a0f;
+  --dark-surface: #12121a;
+  --dark-elevated: #1a1a25;
+  --dark-border: rgba(255, 255, 255, 0.08);
   
-  /* Дополнительные цвета для футуристического стиля */
-  --noir: #000000;              /* Абсолютный черный */
-  --cosmic-purple: #2A0845;     /* Космический фиолетовый */
-  --neon-pink: #FF00AA;         /* Неоновый розовый */
-  --electric-blue: #00D9FF;     /* Электрический голубой */
-  --cyber-green: #00FF88;       /* Кибер зеленый */
-  --plasma-orange: #FF6B00;     /* Плазменный оранжевый */
+  /* Текст */
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-disabled: rgba(255, 255, 255, 0.3);
   
-  /* Текущие переменные для совместимости */
-  --bg-dark: #0A051A;
-  --bg-medium: #0F0A2A;
-  --bg-light: #1A0F3A;
-  
-  /* Текст - ОБНОВЛЕНО */
-  --text-primary: #FFFFFF;      /* Чистый белый */
-  --text-secondary: #B8C5D6;    /* Светло-серый */
-  --text-muted: #7B8A9D;        /* Приглушенный */
-  --text-accent: #00D9FF;       /* Акцентный текст */
-  
-  /* Статусы - НЕОНОВЫЕ */
-  --success: #00FF88;
-  --warning: #FFAA00;
-  --danger: #FF0066;
-  --info: #00D9FF;
-  
-  /* Градиенты - ФУТУРИСТИЧЕСКИЕ */
+  /* Градиенты - БОЛЕЕ СДЕРЖАННЫЕ */
   --gradient-primary: linear-gradient(135deg, #00D9FF 0%, #0099CC 100%);
   --gradient-secondary: linear-gradient(135deg, #BD00FF 0%, #7B00CC 100%);
   --gradient-accent: linear-gradient(135deg, #00FF88 0%, #00CC55 100%);
@@ -132,27 +109,34 @@ body {
     #00D9FF 100%
   );
   
-  /* Тени и эффекты - НЕОНОВЫЕ */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 217, 255, 0.1);
-  --shadow-md: 0 4px 6px -1px rgba(0, 217, 255, 0.2);
-  --shadow-lg: 0 10px 40px rgba(0, 217, 255, 0.3);
-  --shadow-xl: 0 20px 60px rgba(189, 0, 255, 0.4);
-  --shadow-neon: 0 0 20px rgba(0, 217, 255, 0.6), 0 0 40px rgba(0, 217, 255, 0.4), 0 0 60px rgba(0, 217, 255, 0.2);
-  --shadow-neon-hover: 0 0 30px rgba(0, 217, 255, 0.8), 0 0 60px rgba(0, 217, 255, 0.6), 0 0 90px rgba(0, 217, 255, 0.4);
+  /* Эффекты - БОЛЕЕ ТОНКИЕ */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);
+  --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.25);
   
-  /* Анимации - ОБНОВЛЕНО */
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  /* Свечения - УМЕНЬШЕННЫЕ */
+  --glow-primary: 0 0 20px rgba(0, 217, 255, 0.3);
+  --glow-secondary: 0 0 20px rgba(189, 0, 255, 0.3);
+  --glow-accent: 0 0 20px rgba(0, 255, 136, 0.3);
   
-  /* Новые эффекты для футуристического дизайна */
-  --glow-sm: 0 0 10px;
-  --glow-md: 0 0 20px;
-  --glow-lg: 0 0 40px;
-  --blur-glass: blur(10px);
-  --blur-heavy: blur(20px);
+  /* Размытия */
+  --blur-sm: blur(4px);
+  --blur-md: blur(8px);
+  --blur-lg: blur(16px);
+  --blur-xl: blur(24px);
+  
+  /* Анимации */
+  --transition-fast: 150ms ease;
+  --transition-base: 300ms ease;
+  --transition-slow: 500ms ease;
+  
+  /* Скругления */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
 }
 
 /* Сброс стилей */
@@ -164,20 +148,138 @@ body {
 
 html {
   scroll-behavior: smooth;
-  font-size: 16px;
 }
 
 body {
-  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: var(--dark-bg);
   color: var(--text-primary);
   line-height: 1.6;
-  min-height: 100vh;
-  overflow-x: hidden;
-  position: relative;
-  font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Уменьшаем свечения для всех элементов */
+*:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Убираем лишние тени */
+button,
+.button,
+.card {
+  box-shadow: var(--shadow-sm);
+}
+
+button:hover,
+.button:hover,
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* Более тонкие неоновые эффекты */
+.neon-effect {
+  box-shadow: var(--glow-primary);
+}
+
+.neon-effect:hover {
+  box-shadow: 0 0 30px rgba(0, 217, 255, 0.4);
+}
+
+/* Убираем лишние анимации свечения */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+/* Стеклянные эффекты - более тонкие */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--dark-border);
+}
+
+/* Ссылки */
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: var(--transition-fast);
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+/* Заголовки */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
+h2 { font-size: clamp(2rem, 4vw, 3rem); }
+h3 { font-size: clamp(1.5rem, 3vw, 2rem); }
+
+/* Контейнеры */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Скроллбар */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--dark-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--dark-elevated);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Выделение текста */
+::selection {
+  background: var(--primary);
+  color: var(--dark-bg);
+}
+
+/* Утилиты */
+.gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.blur-bg {
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  :root {
+    --glow-primary: 0 0 10px rgba(0, 217, 255, 0.2);
+    --glow-secondary: 0 0 10px rgba(189, 0, 255, 0.2);
+    --glow-accent: 0 0 10px rgba(0, 255, 136, 0.2);
+  }
+  
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.5rem; }
 }
 
 /* Премиальный стеклянный фон */
