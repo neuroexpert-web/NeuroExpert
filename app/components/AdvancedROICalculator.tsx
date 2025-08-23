@@ -227,24 +227,23 @@ export default function AdvancedROICalculator() {
     setShowResults(true);
     setIsCalculating(false);
     
-    // Сохраняем в JSON Vault
-    const vault = getVault();
-    vault.saveROICalculation({
-      businessSize: formData.businessSize,
-      industry: formData.industry,
-      baseROI: result.baseROI,
-      optimisticROI: result.optimisticROI,
-      pessimisticROI: result.pessimisticROI,
-      recommendedPrice: result.recommendedPrice,
-      services: result.services
-    });
+    // Временно отключено для деплоя
+    // const vault = getVault();
+    // vault.saveROICalculation({
+    //   businessSize: formData.businessSize,
+    //   industry: formData.industry,
+    //   baseROI: result.baseROI,
+    //   optimisticROI: result.optimisticROI,
+    //   pessimisticROI: result.pessimisticROI,
+    //   recommendedPrice: result.recommendedPrice,
+    //   services: result.services
+    // });
     
-    // Записываем событие аналитики
-    vault.recordAnalyticsEvent('roi_calculation', {
-      businessSize: formData.businessSize,
-      industry: formData.industry,
-      baseROI: result.baseROI
-    });
+    // vault.recordAnalyticsEvent('roi_calculation', {
+    //   businessSize: formData.businessSize,
+    //   industry: formData.industry,
+    //   baseROI: result.baseROI
+    // });
   }, [formData, runMonteCarloSimulation, calculatePricing, calculateNPV, calculateIRR]);
 
   // Генерация PDF с коммерческим предложением

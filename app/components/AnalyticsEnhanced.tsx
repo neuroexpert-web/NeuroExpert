@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import Script from 'next/script';
-import { getVault } from '../lib/jsonVault.js';
+// import { getVault } from '../lib/jsonVault.js';
 
 // Типы для оконных объектов
 declare global {
@@ -31,7 +31,7 @@ interface AnalyticsConfig {
 }
 
 export default function AnalyticsEnhanced() {
-  const vault = getVault();
+  // const vault = getVault();
   
   // Конфигурация из переменных окружения
   const config: AnalyticsConfig = {
@@ -78,8 +78,8 @@ export default function AnalyticsEnhanced() {
       window.hj('event', eventName);
     }
 
-    // Сохраняем в JSON Vault
-    vault.recordAnalyticsEvent(eventName, eventData);
+    // Сохраняем в JSON Vault - временно отключено
+    // vault.recordAnalyticsEvent(eventName, eventData);
   };
 
   // Глобальная функция для использования в других компонентах
