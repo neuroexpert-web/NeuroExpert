@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { authRateLimit } from '@/app/middleware/rateLimit';
+// import { authRateLimit } from '@/app/middleware/rateLimit';
 
 // --- Security hardening -----------------------------
 // Получаем секретный ключ и хешированный пароль из переменных окружения.

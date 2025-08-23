@@ -7,39 +7,8 @@ import { jsPDF } from 'jspdf';
 // import { getVault } from '../lib/jsonVault.js';
 import styles from './AdvancedROICalculator.module.css';
 
-interface ServicePricing {
-  audit: { min: number; max: number };
-  strategy: { min: number; max: number };
-  design: { min: number; max: number };
-  development: { min: number; max: number };
-  aiIntegration: { min: number; max: number };
-  support: { min: number; max: number };
-}
-
-interface MonteCarloResult {
-  mean: number;
-  median: number;
-  percentile5: number;
-  percentile95: number;
-  standardDeviation: number;
-}
-
-interface CalculationResult {
-  baseROI: number;
-  optimisticROI: number;
-  pessimisticROI: number;
-  savings: number;
-  paybackPeriod: number;
-  npv: number;
-  irr: number;
-  breakEvenPoint: number;
-  monteCarloResult: MonteCarloResult;
-  recommendedPrice: number;
-  services: string[];
-}
-
 // Цены из ТЗ (в рублях)
-const SERVICE_PRICING: ServicePricing = {
+const SERVICE_PRICING = {
   audit: { min: 200000, max: 400000 },
   strategy: { min: 270000, max: 670000 },
   design: { min: 400000, max: 930000 },
@@ -62,11 +31,11 @@ export default function AdvancedROICalculator() {
 
   const [showResults, setShowResults] = useState(false);
   const [isCalculating, setIsCalculating] = useState(false);
-  const [results, setResults] = useState<CalculationResult | null>(null);
+  const [results, setResults] = useState(null);
 
   // Monte Carlo симуляция
-  const runMonteCarloSimulation = useCallback((baseROI: number, iterations: number = 10000): MonteCarloResult => {
-    const results: number[] = [];
+  const runMonteCarloSimulation = useCallback((baseROI, iterations = 10000) => {
+    const results = [];
     
     for (let i = 0; i < iterations; i++) {
       // Добавляем случайные факторы

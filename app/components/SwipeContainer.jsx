@@ -19,7 +19,7 @@ export default function SwipeContainer({
   const VELOCITY_THRESHOLD = 0.5;
 
   // Обработка свайпа
-  const handleSwipe = useCallback((direction: 'left' | 'right') => {
+  const handleSwipe = useCallback((direction) => {
     if (direction === 'left' && currentIndex < children.length - 1) {
       setCurrentIndex(prev => prev + 1);
     } else if (direction === 'right' && currentIndex > 0) {
@@ -28,7 +28,7 @@ export default function SwipeContainer({
   }, [currentIndex, children.length]);
 
   // Обработка окончания перетаскивания
-  const handleDragEnd = (event: any, info: PanInfo) => {
+  const handleDragEnd = (event, info) => {
     const { offset, velocity } = info;
     
     // Определяем направление на основе скорости и смещения
@@ -43,7 +43,7 @@ export default function SwipeContainer({
 
   // Обработка клавиатурной навигации
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
+          const handleKeyDown = (e) => {
       if (e.key === 'ArrowLeft') {
         handleSwipe('right');
       } else if (e.key === 'ArrowRight') {
@@ -56,11 +56,11 @@ export default function SwipeContainer({
   }, [handleSwipe]);
 
   // Обработка touch событий для мобильных
-  const handleTouchStart = (e: React.TouchEvent) => {
+  const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
   };
 
-  const handleTouchMove = (e: React.TouchEvent) => {
+  const handleTouchMove = (e) => {
     touchEndX.current = e.touches[0].clientX;
   };
 
