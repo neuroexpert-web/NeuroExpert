@@ -82,12 +82,29 @@ const nextConfig = {
     cpus: 4,
   },
   
+  // Настройки для разработки
+  devIndicators: {
+    buildActivity: true,
+    buildActivityPosition: 'bottom-right',
+  },
+  
+  // Отключаем кэш в dev режиме
+  onDemandEntries: {
+    maxInactiveAge: 1000,
+    pagesBufferLength: 2,
+  },
+  
   // Headers для безопасности и кэширования
   async headers() {
     return [
       {
         source: '/:path*',
         headers: [
+          // В dev режиме отключаем кэш полностью
+          ...(process.env.NODE_ENV === 'development' ? [{
+            key: 'Cache-Control',
+            value: 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0'
+          }] : []),
           {
             key: 'X-DNS-Prefetch-Control',
             value: 'on'
