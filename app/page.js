@@ -7,9 +7,9 @@ import SwipeContainer from './components/SwipeContainer';
 // Динамические импорты для оптимизации
 const NeuroExpertHero = lazy(() => import('./components/NeuroExpertHero'));
 const Analytics = lazy(() => import('./components/Analytics')); 
-const ROICalculator = dynamic(() => import('./components/ROICalculator'), {
+const AdvancedROICalculator = dynamic(() => import('./components/AdvancedROICalculator'), {
   ssr: false,
-  loading: () => <div className="loading-skeleton">Загрузка калькулятора ROI...</div>
+  loading: () => <div className="loading-skeleton">Загрузка продвинутого калькулятора ROI...</div>
 });
 const AIDirectorCapabilities = dynamic(() => import('./components/AIDirectorCapabilities'), {
   ssr: false,
@@ -77,7 +77,7 @@ export default function Home() {
         </div>
         <div className="roi-wrapper">
           <Suspense fallback={<div>Загрузка калькулятора...</div>}>
-            <ROICalculator />
+            <AdvancedROICalculator />
           </Suspense>
         </div>
       </div>
