@@ -34,6 +34,11 @@ const AIDirectorCapabilities = dynamic(() => import('./components/AIDirectorCapa
   loading: () => <div className="loading-skeleton">Загрузка AI директора...</div>
 });
 
+const AICursorEnhanced = dynamic(() => import('./components/AICursorEnhanced'), {
+  ssr: false,
+  loading: () => null
+});
+
 export default function Home() {
   return (
     <main className="premium-main" style={{ background: 'var(--noir-900)', minHeight: '100vh' }}>
@@ -136,6 +141,11 @@ export default function Home() {
       {/* AI Управляющий - Цифровой директор */}
       <Suspense fallback={null}>
         <FuturisticAIChat />
+      </Suspense>
+
+      {/* AI Cursor для интеллектуального выделения */}
+      <Suspense fallback={null}>
+        <AICursorEnhanced />
       </Suspense>
       
       {/* Админ панель (скрыта по умолчанию) */}

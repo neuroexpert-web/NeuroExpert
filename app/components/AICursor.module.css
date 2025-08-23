@@ -1,0 +1,309 @@
+/* Control Panel */
+.controlPanel {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  width: 300px;
+}
+
+.controlCard {
+  padding: 0;
+  overflow: hidden;
+}
+
+.controlHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: rgba(0, 217, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.controlTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.icon {
+  font-size: 1.25rem;
+}
+
+/* Toggle Switch */
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 30px;
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggleSlider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: 0.4s;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.toggleSlider:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 4px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+.toggle input:checked + .toggleSlider {
+  background: var(--gradient-primary);
+  border-color: transparent;
+}
+
+.toggle input:checked + .toggleSlider:before {
+  transform: translateX(30px);
+  box-shadow: 0 0 10px rgba(0, 217, 255, 0.8);
+}
+
+/* Control Content */
+.controlContent {
+  padding: 1.25rem;
+}
+
+.hint {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
+.stats {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.stats span {
+  color: var(--primary);
+}
+
+/* Tooltip */
+.tooltip {
+  position: fixed;
+  transform: translate(-50%, -100%);
+  background: var(--dark-bg-secondary);
+  border: 1px solid var(--primary);
+  border-radius: 0.75rem;
+  padding: 0.5rem;
+  box-shadow: 
+    0 0 20px rgba(0, 217, 255, 0.3),
+    0 10px 40px rgba(0, 0, 0, 0.5);
+  z-index: 10000;
+  min-width: 200px;
+}
+
+.tooltipActions {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.tooltipButton {
+  flex: 1;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.tooltipButton:hover:not(:disabled) {
+  background: rgba(0, 217, 255, 0.2);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.tooltipButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Analysis Result */
+.analysisResult {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.analysisResult pre {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* History Panel */
+.historyPanel {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 320px;
+  max-height: 400px;
+  z-index: 999;
+}
+
+.historyCard {
+  padding: 0;
+  overflow: hidden;
+}
+
+.historyTitle {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  background: rgba(189, 0, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.historyList {
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 0.75rem;
+}
+
+.historyItem {
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.historyItem:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--primary);
+}
+
+.historyText {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  margin: 0 0 0.25rem 0;
+  line-height: 1.4;
+}
+
+.historyAnnotation {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin: 0.25rem 0 0 0;
+}
+
+.historyBadge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background: var(--gradient-primary);
+  border-radius: 0.25rem;
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: white;
+}
+
+/* Scrollbar */
+.historyList::-webkit-scrollbar {
+  width: 4px;
+}
+
+.historyList::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.historyList::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 2px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .controlPanel {
+    width: 260px;
+    top: 10px;
+    left: 10px;
+  }
+
+  .historyPanel {
+    display: none; /* Скрываем историю на мобильных */
+  }
+
+  .tooltip {
+    min-width: 160px;
+  }
+
+  .tooltipButton {
+    font-size: 0.75rem;
+    padding: 0.375rem;
+  }
+}
+
+/* Highlight Effect for Selected Text */
+::selection {
+  background: rgba(0, 217, 255, 0.3);
+  color: var(--text-primary);
+}
+
+::-moz-selection {
+  background: rgba(0, 217, 255, 0.3);
+  color: var(--text-primary);
+}
+
+/* Cursor Highlight Animation */
+@keyframes cursorHighlight {
+  0% {
+    background: rgba(0, 217, 255, 0.2);
+  }
+  50% {
+    background: rgba(0, 217, 255, 0.4);
+  }
+  100% {
+    background: rgba(0, 217, 255, 0.2);
+  }
+}
+
+.highlighted {
+  animation: cursorHighlight 2s ease-in-out infinite;
+  border-radius: 3px;
+  padding: 0 2px;
+}
