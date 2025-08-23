@@ -1,0 +1,338 @@
+/* Основной контейнер калькулятора */
+.calculator {
+  position: relative;
+  padding: 120px 20px;
+  background: linear-gradient(180deg, #0a0a0f 0%, #141428 100%);
+  overflow: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Заголовок секции */
+.header {
+  text-align: center;
+  margin-bottom: 60px;
+  position: relative;
+}
+
+.sparklesIcon {
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.icon {
+  width: 48px;
+  height: 48px;
+  color: #667eea;
+  filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.5));
+}
+
+.title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 900;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+.gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  position: relative;
+}
+
+.gradient::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  filter: blur(20px);
+  opacity: 0.5;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: #9ca3af;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Карточка калькулятора */
+.calculatorCard {
+  position: relative;
+  background: rgba(30, 30, 50, 0.6);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border-radius: 32px;
+  padding: 60px;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  box-shadow: 
+    0 24px 48px rgba(0, 0, 0, 0.3),
+    0 0 80px rgba(102, 126, 234, 0.1),
+    inset 0 0 120px rgba(102, 126, 234, 0.05);
+  max-width: 800px;
+  margin: 0 auto;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.calculatorCard::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(135deg, #667eea, #764ba2, #f093fb, #667eea);
+  border-radius: 32px;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+  background-size: 300% 300%;
+  animation: gradientShift 8s ease infinite;
+}
+
+.calculatorCard:hover::before {
+  opacity: 0.3;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Форма */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.field {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #a0a9cc;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.fieldIcon {
+  width: 20px;
+  height: 20px;
+  color: #667eea;
+}
+
+.input,
+.select {
+  width: 100%;
+  padding: 18px 24px;
+  background: rgba(102, 126, 234, 0.08);
+  border: 2px solid rgba(102, 126, 234, 0.2);
+  border-radius: 16px;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.1),
+    inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.input::placeholder {
+  color: #6b7280;
+}
+
+.input:focus,
+.select:focus {
+  border-color: #667eea;
+  background: rgba(102, 126, 234, 0.12);
+  box-shadow: 
+    0 4px 20px rgba(102, 126, 234, 0.2),
+    0 0 40px rgba(102, 126, 234, 0.1),
+    inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.select option {
+  background: #1a1a2e;
+  color: white;
+}
+
+/* Кнопка отправки */
+.submitButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px 40px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 100px;
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 10px 30px rgba(102, 126, 234, 0.3),
+    0 0 60px rgba(102, 126, 234, 0.2);
+  margin-top: 20px;
+}
+
+.submitButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s ease;
+}
+
+.submitButton:hover::before {
+  left: 100%;
+}
+
+.submitButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 15px 40px rgba(102, 126, 234, 0.4),
+    0 0 80px rgba(102, 126, 234, 0.3);
+}
+
+.submitButton:active {
+  transform: translateY(0);
+}
+
+.submitButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.buttonText {
+  position: relative;
+  z-index: 1;
+}
+
+.buttonIcon {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Плавающие элементы */
+.floatingElement1,
+.floatingElement2 {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.floatingElement1 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, #667eea 0%, transparent 70%);
+  top: -150px;
+  right: -150px;
+}
+
+.floatingElement2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #764ba2 0%, transparent 70%);
+  bottom: -200px;
+  left: -200px;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .calculator {
+    padding: 80px 16px;
+  }
+
+  .calculatorCard {
+    padding: 40px 24px;
+    border-radius: 24px;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .input,
+  .select {
+    padding: 16px 20px;
+    font-size: 16px;
+  }
+
+  .submitButton {
+    padding: 18px 32px;
+    font-size: 16px;
+  }
+
+  .floatingElement1 {
+    width: 200px;
+    height: 200px;
+  }
+
+  .floatingElement2 {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+/* Анимация появления */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.field {
+  animation: fadeInUp 0.6s ease forwards;
+  opacity: 0;
+}
+
+.field:nth-child(1) { animation-delay: 0.1s; }
+.field:nth-child(2) { animation-delay: 0.2s; }
+.field:nth-child(3) { animation-delay: 0.3s; }
+.submitButton { animation-delay: 0.4s; animation: fadeInUp 0.6s ease forwards; opacity: 0; }

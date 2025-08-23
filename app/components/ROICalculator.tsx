@@ -3,6 +3,7 @@ import { useState, ChangeEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ROIFormData, ROIResults } from '../../types';
 import ROIResultModal from './ROIResultModal';
+import styles from './ROICalculator.module.css';
 
 export default function ROICalculator(): JSX.Element {
   const [formData, setFormData] = useState<ROIFormData>({
@@ -65,185 +66,177 @@ export default function ROICalculator(): JSX.Element {
   };
 
   return (
-    <section className="py-20 px-4" id="roi-calculator">
-      <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+    <motion.section 
+      className={styles.calculator}
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+    >
+      <div className={styles.container}>
+        <motion.div 
+          className={styles.header}
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2, duration: 0.6 }}
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span style={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
-            }}>
-              Калькулятор ROI
-            </span>
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            className={styles.sparklesIcon}
+          >
+            {/* <Sparkles className={styles.icon} /> */}
+          </motion.div>
+          <h2 className={styles.title}>
+            <span className={styles.gradient}>Рассчитайте ROI</span> вашего проекта
           </h2>
-          <p className="text-xl text-gray-400">
-            Узнайте вашу выгоду от внедрения наших решений
+          <p className={styles.subtitle}>
+            Узнайте, какую выгоду принесет внедрение AI в ваш бизнес
           </p>
         </motion.div>
 
-        <motion.div
+        <motion.div 
+          className={styles.calculatorCard}
           initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          style={{
-            background: 'rgba(20, 20, 40, 0.8)',
-            backdropFilter: 'blur(20px)',
-            borderRadius: '32px',
-            padding: '48px',
-            border: '1px solid rgba(102, 126, 234, 0.3)',
-            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3), 0 0 40px rgba(102, 126, 234, 0.2)'
-          }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.4, duration: 0.6 }}
+          whileHover={{ scale: 1.02 }}
         >
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Форма ввода */}
-            <div>
-              <h3 className="text-2xl font-bold mb-6" style={{ color: '#e0e7ff' }}>
-                Введите данные о вашем бизнесе
-              </h3>
-              
-              <div className="space-y-6">
-                {/* Размер бизнеса */}
-                <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
-                  <label className="block text-sm font-medium mb-2" style={{ color: '#a0a9cc' }}>
-                    Размер бизнеса
-                  </label>
-                  <select
-                    name="businessSize"
-                    value={formData.businessSize}
-                    onChange={handleInputChange}
-                    style={{
-                      width: '100%',
-                      padding: '16px',
-                      background: 'rgba(102, 126, 234, 0.1)',
-                      border: '1px solid rgba(102, 126, 234, 0.3)',
-                      borderRadius: '12px',
-                      color: 'white',
-                      fontSize: '16px',
-                      outline: 'none',
-                      transition: 'all 0.3s ease'
-                    }}
-                    onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
-                    onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
-                  >
-                    <option value="small" style={{ background: '#1a1a2e' }}>Малый (до 50 сотрудников)</option>
-                    <option value="medium" style={{ background: '#1a1a2e' }}>Средний (50-250 сотрудников)</option>
-                    <option value="large" style={{ background: '#1a1a2e' }}>Крупный (250+ сотрудников)</option>
-                  </select>
-                </motion.div>
+          <form className={styles.form} onSubmit={calculateROI}>
+            <motion.div 
+              className={styles.field}
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              <label htmlFor="budget" className={styles.label}>
+                {/* <DollarSign className={styles.fieldIcon} /> */}
+                Ваш бюджет на автоматизацию (₽)
+              </label>
+              <motion.input
+                type="number"
+                id="budget"
+                name="budget"
+                value={formData.budget}
+                onChange={handleInputChange}
+                className={styles.input}
+                placeholder="Например: 500000"
+                required
+                whileFocus={{ scale: 1.02 }}
+              />
+            </motion.div>
 
-                {/* Отрасль */}
-                <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
-                  <label className="block text-sm font-medium mb-2" style={{ color: '#a0a9cc' }}>
-                    Отрасль
-                  </label>
-                  <select
-                    name="industry"
-                    value={formData.industry}
-                    onChange={handleInputChange}
-                    style={{
-                      width: '100%',
-                      padding: '16px',
-                      background: 'rgba(102, 126, 234, 0.1)',
-                      border: '1px solid rgba(102, 126, 234, 0.3)',
-                      borderRadius: '12px',
-                      color: 'white',
-                      fontSize: '16px',
-                      outline: 'none',
-                      transition: 'all 0.3s ease'
-                    }}
-                    onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
-                    onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
-                  >
-                    <option value="retail" style={{ background: '#1a1a2e' }}>Розничная торговля</option>
-                    <option value="services" style={{ background: '#1a1a2e' }}>Услуги</option>
-                    <option value="production" style={{ background: '#1a1a2e' }}>Производство</option>
-                    <option value="it" style={{ background: '#1a1a2e' }}>IT и технологии</option>
-                    <option value="other" style={{ background: '#1a1a2e' }}>Другое</option>
-                  </select>
-                </motion.div>
+            <motion.div 
+              className={styles.field}
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              <label htmlFor="businessSize" className={styles.label}>
+                {/* <TrendingUp className={styles.fieldIcon} /> */}
+                Размер вашего бизнеса
+              </label>
+              <motion.select
+                id="businessSize"
+                name="businessSize"
+                value={formData.businessSize}
+                onChange={handleInputChange}
+                className={styles.select}
+                required
+                whileFocus={{ scale: 1.02 }}
+              >
+                <option value="">Выберите размер</option>
+                <option value="small">Малый (до 50 сотрудников)</option>
+                <option value="medium">Средний (50-250 сотрудников)</option>
+                <option value="large">Крупный (более 250 сотрудников)</option>
+              </motion.select>
+            </motion.div>
 
-                {/* Желаемые инвестиции в цифровизацию */}
-                <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
-                  <label className="block text-sm font-medium mb-2" style={{ color: '#a0a9cc' }}>
-                    Желаемые инвестиции в цифровизацию (₽)
-                  </label>
-                  <input
-                    type="number"
-                    name="budget"
-                    value={formData.budget}
-                    onChange={handleInputChange}
-                    min="0"
-                    step="10000"
-                    style={{
-                      width: '100%',
-                      padding: '16px',
-                      background: 'rgba(102, 126, 234, 0.1)',
-                      border: '1px solid rgba(102, 126, 234, 0.3)',
-                      borderRadius: '12px',
-                      color: 'white',
-                      fontSize: '16px',
-                      outline: 'none',
-                      transition: 'all 0.3s ease'
-                    }}
-                    onFocus={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)'}
-                    onBlur={(e) => e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)'}
-                  />
-                </motion.div>
+            <motion.div 
+              className={styles.field}
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              <label htmlFor="industry" className={styles.label}>
+                {/* <Clock className={styles.fieldIcon} /> */}
+                Ваша отрасль
+              </label>
+              <motion.select
+                id="industry"
+                name="industry"
+                value={formData.industry}
+                onChange={handleInputChange}
+                className={styles.select}
+                required
+                whileFocus={{ scale: 1.02 }}
+              >
+                <option value="">Выберите отрасль</option>
+                <option value="retail">Розничная торговля</option>
+                <option value="services">Услуги</option>
+                <option value="production">Производство</option>
+                <option value="it">IT и технологии</option>
+                <option value="other">Другое</option>
+              </motion.select>
+            </motion.div>
 
-                {/* Кнопка расчета */}
-                <motion.button
-                  onClick={calculateROI}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  animate={{
-                    boxShadow: [
-                      '0 0 20px rgba(102, 126, 234, 0.4)',
-                      '0 0 40px rgba(118, 75, 162, 0.6)',
-                      '0 0 20px rgba(102, 126, 234, 0.4)'
-                    ]
-                  }}
-                  transition={{
-                    boxShadow: {
-                      duration: 2,
-                      repeat: Infinity
-                    }
-                  }}
-                  style={{
-                    width: '100%',
-                    padding: '18px',
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    border: 'none',
-                    borderRadius: '50px',
-                    color: 'white',
-                    fontSize: '18px',
-                    fontWeight: '700',
-                    cursor: 'pointer',
-                    marginTop: '32px'
-                  }}
-                >
-                  Рассчитать ROI
-                </motion.button>
-              </div>
-            </div>
+            <motion.button
+              type="submit"
+              className={styles.submitButton}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              // disabled={isCalculating}
+            >
+              <span className={styles.buttonText}>
+                {/* {isCalculating ? 'Расчет...' : 'Рассчитать ROI'} */}
+                Рассчитать ROI
+              </span>
+              <motion.div
+                animate={{ x: 10 }}
+                transition={{ repeat: Infinity, duration: 0.5 }}
+              >
+                {/* <ChevronRight className={styles.buttonIcon} /> */}
+              </motion.div>
+            </motion.button>
+          </form>
 
-          </div>
+          {/* Анимированные декоративные элементы */}
+          <motion.div 
+            className={styles.floatingElement1}
+            animate={{ 
+              y: [-10, 10, -10],
+              rotate: [0, 180, 360]
+            }}
+            transition={{ 
+              duration: 6, 
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+          <motion.div 
+            className={styles.floatingElement2}
+            animate={{ 
+              y: [10, -10, 10],
+              rotate: [360, 180, 0]
+            }}
+            transition={{ 
+              duration: 8, 
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
         </motion.div>
 
-        {/* Модальное окно с результатами */}
-        <ROIResultModal
-          isOpen={showResult}
-          onClose={() => setShowResult(false)}
-          results={results}
-          formData={formData}
-        />
+        <AnimatePresence>
+          {showResult && (
+            <ROIResultModal
+              isOpen={showResult}
+              onClose={() => setShowResult(false)}
+              results={results}
+              formData={formData}
+            />
+          )}
+        </AnimatePresence>
       </div>
-    </section>
+    </motion.section>
   );
 }
