@@ -116,13 +116,21 @@ body {
   --info: #00D9FF;
   
   /* Градиенты - ФУТУРИСТИЧЕСКИЕ */
-  --gradient-primary: linear-gradient(135deg, #00D9FF 0%, #BD00FF 100%);
-  --gradient-secondary: linear-gradient(135deg, #BD00FF 0%, #FF00AA 100%);
-  --gradient-accent: linear-gradient(135deg, #00FF88 0%, #00D9FF 100%);
-  --gradient-dark: linear-gradient(180deg, #0A051A 0%, #1A0F3A 100%);
-  --gradient-cosmic: linear-gradient(135deg, #0A051A 0%, #2A0845 50%, #0A051A 100%);
-  --gradient-neon: linear-gradient(90deg, #00D9FF, #BD00FF, #FF00AA, #00FF88);
-  --gradient-holographic: linear-gradient(45deg, #00D9FF 0%, #BD00FF 25%, #FF00AA 50%, #00FF88 75%, #00D9FF 100%);
+  --gradient-primary: linear-gradient(135deg, #00D9FF 0%, #0099CC 100%);
+  --gradient-secondary: linear-gradient(135deg, #BD00FF 0%, #7B00CC 100%);
+  --gradient-accent: linear-gradient(135deg, #00FF88 0%, #00CC55 100%);
+  --gradient-danger: linear-gradient(135deg, #FF4444 0%, #CC0000 100%);
+  --gradient-dark: linear-gradient(135deg, #1a1a2e 0%, #0a0a0f 100%);
+  --gradient-cosmic: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-neon: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-holographic: linear-gradient(
+    45deg,
+    #00D9FF 0%,
+    #BD00FF 25%,
+    #00FF88 50%,
+    #FFD700 75%,
+    #00D9FF 100%
+  );
   
   /* Тени и эффекты - НЕОНОВЫЕ */
   --shadow-sm: 0 1px 2px 0 rgba(0, 217, 255, 0.1);
