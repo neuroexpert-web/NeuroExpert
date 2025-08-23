@@ -6,6 +6,10 @@
   "tabWidth": 2,
   "useTabs": false,
   "bracketSpacing": true,
+  "jsxBracketSameLine": false,
   "arrowParens": "always",
-  "endOfLine": "lf"
+  "endOfLine": "lf",
+  "proseWrap": "preserve",
+  "htmlWhitespaceSensitivity": "css",
+  "embeddedLanguageFormatting": "auto"
 }

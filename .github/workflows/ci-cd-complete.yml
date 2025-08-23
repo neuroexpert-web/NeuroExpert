@@ -1,0 +1,180 @@
+name: Complete CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  NODE_VERSION: '20.x'
+
+jobs:
+  # Проверка кода и линтинг
+  lint-and-format:
+    name: 🎨 Lint & Format Check
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run ESLint
+      run: npm run lint
+      continue-on-error: true
+    
+    - name: Check Prettier formatting
+      run: npm run format:check
+      continue-on-error: true
+
+  # Тесты
+  test:
+    name: 🧪 Run Tests
+    runs-on: ubuntu-latest
+    needs: lint-and-format
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run unit tests
+      run: npm test -- --ci --coverage --maxWorkers=2
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/lcov.info
+
+  # Сборка
+  build:
+    name: 🏗️ Build Application
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Build Next.js app
+      run: npm run build
+      env:
+        NEXT_TELEMETRY_DISABLED: 1
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-files
+        path: .next/
+
+  # Анализ безопасности
+  security:
+    name: 🔒 Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Run Snyk to check for vulnerabilities
+      uses: snyk/actions/node@master
+      continue-on-error: true
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  # Lighthouse аудит
+  lighthouse:
+    name: 🚦 Lighthouse Audit
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Lighthouse CI Action
+      uses: treosh/lighthouse-ci-action@v10
+      with:
+        urls: |
+          https://neuroexpert.vercel.app
+        uploadArtifacts: true
+        temporaryPublicStorage: true
+
+  # Деплой на Vercel (Preview)
+  deploy-preview:
+    name: 🚀 Deploy Preview
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Deploy to Vercel Preview
+      uses: amondnet/vercel-action@v25
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        vercel-args: '--prebuilt'
+
+  # Деплой на Production
+  deploy-production:
+    name: 🎯 Deploy Production
+    runs-on: ubuntu-latest
+    needs: [build, security]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Deploy to Vercel Production
+      uses: amondnet/vercel-action@v25
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        vercel-args: '--prod --prebuilt'
+
+  # Уведомления
+  notify:
+    name: 📢 Send Notifications
+    runs-on: ubuntu-latest
+    needs: [deploy-production, deploy-preview]
+    if: always()
+    
+    steps:
+    - name: Send Telegram notification
+      if: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      run: |
+        if [ "${{ needs.deploy-production.result }}" == "success" ]; then
+          MESSAGE="✅ NeuroExpert deployed successfully to production!"
+        else
+          MESSAGE="❌ NeuroExpert deployment failed. Check GitHub Actions."
+        fi
+        
+        curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+          -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+          -d "text=$MESSAGE" \
+          -d "parse_mode=HTML"

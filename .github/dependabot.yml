@@ -1,0 +1,44 @@
+version: 2
+updates:
+  # Автообновление npm зависимостей
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "10:00"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "aineuroexpert-cell"
+    labels:
+      - "dependencies"
+      - "npm"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    
+  # Автообновление GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    reviewers:
+      - "aineuroexpert-cell"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "ci"
+      
+  # Автообновление Python зависимостей (если есть)
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    reviewers:
+      - "aineuroexpert-cell"
+    labels:
+      - "dependencies"
+      - "python"
+    commit-message:
+      prefix: "chore"

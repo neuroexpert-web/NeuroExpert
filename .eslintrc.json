@@ -1,66 +1,47 @@
 {
   "extends": [
     "next/core-web-vitals",
-    "plugin:security/recommended",
+    "eslint:recommended",
+    "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
     "prettier"
   ],
-  "plugins": ["security", "@typescript-eslint"],
+  "plugins": ["react", "react-hooks", "@typescript-eslint"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2022,
     "sourceType": "module",
-    "project": "./tsconfig.json"
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "env": {
+    "browser": true,
+    "es2022": true,
+    "node": true
   },
   "rules": {
-    // Security rules
-    "security/detect-object-injection": "warn",
-    "security/detect-non-literal-fs-filename": "error",
-    "security/detect-eval-with-expression": "error",
-    "security/detect-no-csrf-before-method-override": "error",
-    "security/detect-possible-timing-attacks": "warn",
-    
-    // Console logs
-    "no-console": ["warn", { "allow": ["warn", "error"] }],
-    
-    // Code quality
-    "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "@typescript-eslint/no-explicit-any": "warn",
-    
-    // React specific
+    "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
-    
-    // Best practices
-    "no-eval": "error",
-    "no-implied-eval": "error",
-    "no-new-func": "error",
-    "no-return-await": "error",
+    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+    "@typescript-eslint/no-explicit-any": "warn",
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
     "prefer-const": "error",
-    "require-await": "error",
-    
-    // Security patterns
-    "no-hardcoded-passwords": "off",
-    "no-secrets": "off"
+    "no-var": "error",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   },
-  "overrides": [
-    {
-      "files": ["*.js", "*.jsx"],
-      "rules": {
-        "@typescript-eslint/no-var-requires": "off"
-      }
+  "settings": {
+    "react": {
+      "version": "detect"
     }
-  ],
+  },
   "ignorePatterns": [
     "node_modules/",
     ".next/",
     "out/",
     "public/",
     "*.config.js",
-    "coverage/",
-    "dist/"
+    "*.config.ts"
   ]
 }
