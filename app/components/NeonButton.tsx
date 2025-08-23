@@ -1,10 +1,13 @@
 'use client';
 
-import { ButtonHTMLAttributes, ReactNode } from 'react';
-import { motion } from 'framer-motion';
+import { ReactNode } from 'react';
+import { motion, MotionProps } from 'framer-motion';
 import styles from './NeonButton.module.css';
 
-interface NeonButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
+type MotionButtonProps = MotionProps & ButtonProps;
+
+interface NeonButtonProps extends MotionButtonProps {
   children: ReactNode;
   variant?: 'primary' | 'secondary' | 'accent' | 'danger';
   size?: 'small' | 'medium' | 'large';
@@ -63,6 +66,21 @@ export default function NeonButton({
     }
   };
 
+  // Извлекаем motion-специфичные пропсы
+  const { 
+    animate, initial, exit, transition, whileHover, whileTap, whileDrag,
+    whileFocus, whileInView, drag, dragConstraints, dragElastic,
+    dragMomentum, dragTransition, onDrag, onDragEnd, onDragStart,
+    layoutId, style, ...buttonProps 
+  } = props;
+
+  const motionProps = {
+    animate, initial, exit, transition, whileHover, whileTap, whileDrag,
+    whileFocus, whileInView, drag, dragConstraints, dragElastic,
+    dragMomentum, dragTransition, onDrag, onDragEnd, onDragStart,
+    layoutId, style
+  };
+
   return (
     <motion.button
       className={`
@@ -76,7 +94,8 @@ export default function NeonButton({
       variants={glitch ? glitchVariants : buttonVariants}
       whileHover="hover"
       whileTap="tap"
-      {...props}
+      {...motionProps}
+      {...buttonProps}
     >
       <span className={styles.buttonContent}>
         {icon && <span className={styles.icon}>{icon}</span>}

@@ -250,6 +250,11 @@ class AnalyticsManager {
     });
   }
 
+  // Универсальный метод для отслеживания событий
+  trackEvent(eventName: string, properties?: Record<string, any>) {
+    this.track('page_view', eventName, properties);
+  }
+
   // Установка user ID
   setUserId(userId: string) {
     this.userId = userId;
