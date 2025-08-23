@@ -68,14 +68,14 @@ export default function NeonButton({
 
   // Извлекаем motion-специфичные пропсы
   const { 
-    animate, initial, exit, transition, whileHover, whileTap, whileDrag,
+    animate, initial, exit, transition, whileDrag,
     whileFocus, whileInView, drag, dragConstraints, dragElastic,
     dragMomentum, dragTransition, onDrag, onDragEnd, onDragStart,
     layoutId, style, ...buttonProps 
   } = props;
 
   const motionProps = {
-    animate, initial, exit, transition, whileHover, whileTap, whileDrag,
+    animate, initial, exit, transition, whileDrag,
     whileFocus, whileInView, drag, dragConstraints, dragElastic,
     dragMomentum, dragTransition, onDrag, onDragEnd, onDragStart,
     layoutId, style
@@ -92,8 +92,8 @@ export default function NeonButton({
         ${className}
       `}
       variants={glitch ? glitchVariants : buttonVariants}
-      whileHover={props.whileHover || "hover"}
-      whileTap={props.whileTap || "tap"}
+      whileHover="hover"
+      whileTap="tap"
       {...motionProps}
       {...buttonProps}
     >

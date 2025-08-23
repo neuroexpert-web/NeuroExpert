@@ -1,5 +1,27 @@
 // Универсальный модуль аналитики для NeuroExpert
-import { debounce, throttle } from 'lodash-es';
+
+// Собственная реализация debounce
+function debounce<T extends (...args: any[]) => any>(func: T, wait: number): T {
+  let timeout: NodeJS.Timeout | null = null;
+  
+  return ((...args: Parameters<T>) => {
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  }) as T;
+}
+
+// Собственная реализация throttle
+function throttle<T extends (...args: any[]) => any>(func: T, limit: number): T {
+  let inThrottle = false;
+  
+  return ((...args: Parameters<T>) => {
+    if (!inThrottle) {
+      func(...args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  }) as T;
+}
 
 // Типы событий
 export type EventType = 
@@ -94,11 +116,11 @@ class AnalyticsManager {
   private initYandexMetrica() {
     if (!this.config.yandexMetrica?.id || typeof window === 'undefined') return;
 
-    (function(m: any, e: any, t: any, r: any, i: any, k: any, a: any) {
+    ((m: any, e: any, t: any, r: any, i: any) => {
       m[i] = m[i] || function() { (m[i].a = m[i].a || []).push(arguments); };
       m[i].l = 1 * new Date().getTime();
-      k = e.createElement(t);
-      a = e.getElementsByTagName(t)[0];
+      const k = e.createElement(t);
+      const a = e.getElementsByTagName(t)[0];
       k.async = 1;
       k.src = r;
       a.parentNode?.insertBefore(k, a);
