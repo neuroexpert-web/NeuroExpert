@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroExpert Preview</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0b0f17;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .info {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            margin: 20px 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            margin: 10px;
+            transition: transform 0.3s;
+        }
+        .button:hover {
+            transform: scale(1.05);
+        }
+        .status {
+            padding: 10px;
+            background: #22c55e;
+            color: white;
+            border-radius: 10px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        code {
+            background: rgba(255,255,255,0.1);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="status">✅ Приложение запущено!</div>
+        
+        <h1>NeuroExpert Platform</h1>
+        
+        <div class="info">
+            <h2>🚀 Ваше приложение работает!</h2>
+            <p>Для полного доступа к приложению в веб-версии Cursor:</p>
+            
+            <ol style="text-align: left; display: inline-block;">
+                <li>Найдите вкладку <strong>PORTS</strong> в нижней панели Cursor</li>
+                <li>Найдите порт <strong>3000</strong></li>
+                <li>Нажмите на иконку <strong>🌐</strong> или <strong>Preview</strong></li>
+                <li>Или кликните правой кнопкой → <strong>Open in Browser</strong></li>
+            </ol>
+            
+            <h3>Альтернативные способы:</h3>
+            <p>1. Используйте <code>Cmd+Shift+P</code> → <code>Ports: Focus on Ports View</code></p>
+            <p>2. Или скачайте Cursor Desktop для локальной разработки</p>
+        </div>
+        
+        <h3>📱 Основные функции платформы:</h3>
+        <div class="info">
+            <p>✅ AI Управляющий директор</p>
+            <p>✅ Калькулятор ROI</p>
+            <p>✅ Админ панель</p>
+            <p>✅ Интеграция с Telegram</p>
+            <p>✅ Аналитика и метрики</p>
+        </div>
+        
+        <a href="#" class="button" onclick="alert('Используйте PORTS в Cursor для доступа к приложению')">
+            Открыть приложение
+        </a>
+    </div>
+</body>
+</html>
