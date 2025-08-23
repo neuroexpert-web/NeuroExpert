@@ -4,19 +4,13 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import styles from './SwipeContainer.module.css';
 
-interface SwipeContainerProps {
-  children: React.ReactNode[];
-  sections: string[];
-  onSectionChange?: (index: number) => void;
-}
-
-export default function SwipeContainer({ 
-  children, 
+export default function SwipeContainer({
+  children,
   sections,
-  onSectionChange 
-}: SwipeContainerProps) {
+  onSectionChange
+}) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef(null);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
 
