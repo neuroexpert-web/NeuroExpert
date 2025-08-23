@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ROIFormData, ROIResults } from '../../types';
 import ROIResultModal from './ROIResultModal';
 import styles from './ROICalculator.module.css';
+import NeonButton from './NeonButton';
 
 export default function ROICalculator(): JSX.Element {
   const [formData, setFormData] = useState<ROIFormData>({
@@ -179,24 +180,23 @@ export default function ROICalculator(): JSX.Element {
               </motion.select>
             </motion.div>
 
-            <motion.button
-              type="submit"
-              className={styles.submitButton}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              // disabled={isCalculating}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              style={{ marginTop: '2rem' }}
             >
-              <span className={styles.buttonText}>
-                {/* {isCalculating ? 'Расчет...' : 'Рассчитать ROI'} */}
-                Рассчитать ROI
-              </span>
-              <motion.div
-                animate={{ x: 10 }}
-                transition={{ repeat: Infinity, duration: 0.5 }}
+              <NeonButton
+                type="submit"
+                variant="primary"
+                size="large"
+                fullWidth
+                pulse
+                onClick={calculateROI}
               >
-                {/* <ChevronRight className={styles.buttonIcon} /> */}
-              </motion.div>
-            </motion.button>
+                Рассчитать ROI
+              </NeonButton>
+            </motion.div>
           </form>
 
           {/* Анимированные декоративные элементы */}

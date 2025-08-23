@@ -3,7 +3,7 @@
 import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import PremiumGlassBackground from './components/PremiumGlassBackground';
-import NeuroExpertHero from './components/NeuroExpertHero';
+import FuturisticHero from './components/FuturisticHero';
 import JourneySection from './components/JourneySection';
 import WhyUsSection from './components/WhyUsSection';
 import PricingSection from './components/PricingSection';
@@ -14,9 +14,9 @@ const ROICalculator = dynamic(() => import('./components/ROICalculator'), {
   loading: () => <div className="loading-skeleton">Загрузка калькулятора ROI...</div>
 });
 
-const SmartFloatingAI = dynamic(() => import('./components/SmartFloatingAI'), {
+const FuturisticAIChat = dynamic(() => import('./components/FuturisticAIChat'), {
   ssr: false,
-  loading: () => <div className="ai-loading">AI управляющий загружается...</div>
+  loading: () => null
 });
 
 const ContactForm = dynamic(() => import('./components/ContactForm'), {
@@ -37,8 +37,8 @@ const AIDirectorCapabilities = dynamic(() => import('./components/AIDirectorCapa
 export default function Home() {
   return (
     <main className="premium-main" style={{ background: 'var(--noir-900)', minHeight: '100vh' }}>
-      {/* Новый Hero блок с анимацией нейросети */}
-      <NeuroExpertHero />
+      {/* Новый футуристический Hero блок */}
+      <FuturisticHero />
       
       {/* AI Управляющий директор */}
       <Suspense fallback={<div className="loading-skeleton">Загрузка...</div>}>
@@ -135,7 +135,7 @@ export default function Home() {
       
       {/* AI Управляющий - Цифровой директор */}
       <Suspense fallback={null}>
-        <SmartFloatingAI />
+        <FuturisticAIChat />
       </Suspense>
       
       {/* Админ панель (скрыта по умолчанию) */}
