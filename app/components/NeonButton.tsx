@@ -92,8 +92,8 @@ export default function NeonButton({
         ${className}
       `}
       variants={glitch ? glitchVariants : buttonVariants}
-      whileHover="hover"
-      whileTap="tap"
+      whileHover={props.whileHover || "hover"}
+      whileTap={props.whileTap || "tap"}
       {...motionProps}
       {...buttonProps}
     >

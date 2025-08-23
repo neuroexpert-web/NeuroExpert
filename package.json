@@ -37,6 +37,7 @@
   "dependencies": {
     "@google/generative-ai": "^0.15.0",
     "@types/lodash": "^4.17.20",
+    "@types/lodash-es": "^4.17.12",
     "@types/node": "^20.10.6",
     "@types/react": "^18.2.46",
     "@types/react-dom": "^18.2.18",
@@ -46,6 +47,7 @@
     "framer-motion": "^10.18.0",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "next": "^14.2.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
