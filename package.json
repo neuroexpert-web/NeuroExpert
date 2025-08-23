@@ -26,7 +26,13 @@
     "generate:password": "node scripts/generate-password.js",
     "type-check": "tsc --noEmit",
     "test:ci": "jest --ci --coverage",
-    "prepare": "husky install || true"
+    "prepare": "husky install || true",
+    "dev:all": "concurrently \"npm run dev\" \"npm run storybook\" \"npm run test:watch\"",
+    "test:visual": "playwright test --ui",
+    "test:visual:update": "playwright test --update-snapshots",
+    "storybook": "storybook dev -p 6006",
+    "check:all": "concurrently \"npm run lint\" \"npm run type-check\" \"npm run test\"",
+    "fix:all": "npm run lint:fix && npm run format"
   },
   "dependencies": {
     "@google/generative-ai": "^0.15.0",
