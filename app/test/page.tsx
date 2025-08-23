@@ -56,10 +56,10 @@ export default function TestPage() {
 
   return (
     <div className={styles.container}>
-      <h1>Тестирование компонентов</h1>
+      <h1 className={styles.title}>Тестирование компонентов</h1>
       
       <div className={styles.section}>
-        <h2>API Endpoints</h2>
+        <h2 className={styles.sectionTitle}>API Endpoints</h2>
         <div className={styles.tests}>
           <div className={styles.test}>
             <button onClick={() => runTest('metrics', testMetricsAPI)}>
@@ -85,18 +85,18 @@ export default function TestPage() {
       </div>
 
       <div className={styles.section}>
-        <h2>Навигация</h2>
+        <h2 className={styles.sectionTitle}>Навигация</h2>
         <p>Текущая ширина экрана: <span id="screenWidth"></span></p>
-        <p>Бургер меню должен быть видим при ширине {'<'} 768px</p>
+        <p>Бургер меню должен быть видим при ширине {'<'} 1200px</p>
       </div>
 
       <div className={styles.section}>
-        <h2>Компоненты</h2>
-        <ul>
-          <li><a href="/">Главная страница</a></li>
-          <li><a href="/dashboard">Дашборд</a></li>
-          <li><a href="/roi-pro">ROI Pro</a></li>
-          <li><a href="/showcase">Showcase</a></li>
+        <h2 className={styles.sectionTitle}>Компоненты</h2>
+        <ul className={styles.list}>
+          <li className={styles.listItem}><a href="/" className={styles.link}>Главная страница</a></li>
+          <li className={styles.listItem}><a href="/dashboard" className={styles.link}>Дашборд</a></li>
+          <li className={styles.listItem}><a href="/roi-pro" className={styles.link}>ROI Pro</a></li>
+          <li className={styles.listItem}><a href="/showcase" className={styles.link}>Showcase</a></li>
         </ul>
       </div>
 

@@ -47,7 +47,7 @@
   border-radius: 0.5rem;
 }
 
-h1 {
+.title {
   margin-bottom: 2rem;
   font-size: 2.5rem;
   background: var(--gradient-primary);
@@ -56,21 +56,21 @@ h1 {
   background-clip: text;
 }
 
-h2 {
+.sectionTitle {
   margin-bottom: 1rem;
   color: var(--primary);
 }
 
-ul {
+.list {
   list-style: none;
   padding: 0;
 }
 
-ul li {
+.listItem {
   margin-bottom: 0.5rem;
 }
 
-ul li a {
+.link {
   color: var(--text-primary);
   text-decoration: none;
   padding: 0.5rem 1rem;
@@ -80,7 +80,7 @@ ul li a {
   transition: all 0.3s ease;
 }
 
-ul li a:hover {
+.link:hover {
   background: rgba(0, 217, 255, 0.1);
   color: var(--primary);
 }
