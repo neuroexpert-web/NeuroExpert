@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import NeonButton from './NeonButton';
 import FuturisticCard from './FuturisticCard';
 import AILoader from './AILoader';
+import { analytics } from '../utils/analytics';
 import styles from './AICursorEnhanced.module.css';
 
 interface Selection {
@@ -132,6 +133,10 @@ export default function AICursorEnhanced() {
 
     setActiveCommand(command);
     setIsProcessing(true);
+    const startTime = Date.now();
+
+    // Отслеживаем начало команды
+    analytics.trackCursorSelection(currentSelection.text, command.type);
 
     try {
       const response = await fetch('/api/ai-cursor', {
@@ -163,6 +168,9 @@ export default function AICursorEnhanced() {
         setCurrentSelection(updatedSelection);
         setSelections(prev => [...prev, updatedSelection]);
         
+        // Отслеживаем успешный анализ
+        analytics.trackAIAnalysis(command.type, true, Date.now() - startTime);
+        
         // Отправляем в Telegram
         await fetch('/api/telegram', {
           method: 'POST',
@@ -174,6 +182,9 @@ export default function AICursorEnhanced() {
       }
     } catch (error) {
       console.error('AI command error:', error);
+      // Отслеживаем ошибку
+      analytics.trackAIAnalysis(command.type, false, Date.now() - startTime);
+      analytics.trackError(error as Error, 'ai_cursor_command');
     } finally {
       setIsProcessing(false);
       setShowCommand(false);

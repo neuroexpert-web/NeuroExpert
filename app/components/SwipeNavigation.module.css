@@ -1,0 +1,239 @@
+/* Container */
+.swipeContainer {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--dark-bg);
+}
+
+/* Progress Bar */
+.progressBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  z-index: 100;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--gradient-primary);
+  box-shadow: 0 0 10px rgba(0, 217, 255, 0.8);
+}
+
+/* Content Wrapper */
+.contentWrapper {
+  display: flex;
+  height: 100%;
+  cursor: grab;
+  user-select: none;
+}
+
+.contentWrapper:active {
+  cursor: grabbing;
+}
+
+/* Sections */
+.section {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Indicators */
+.indicators {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  border-radius: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 100;
+}
+
+.indicator {
+  position: relative;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.indicatorDot {
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.indicator.active .indicatorDot {
+  width: 24px;
+  border-radius: 4px;
+  background: var(--primary);
+  box-shadow: 0 0 10px var(--primary);
+}
+
+.indicatorIcon {
+  position: absolute;
+  font-size: 0.875rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.indicator.active .indicatorIcon {
+  opacity: 1;
+}
+
+/* Navigation Hints */
+.navigationHints {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1rem;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.navHint {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  color: var(--text-secondary);
+  cursor: pointer;
+  pointer-events: all;
+  transition: all 0.3s ease;
+}
+
+.navHint:hover {
+  background: rgba(0, 217, 255, 0.2);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: scale(1.1);
+}
+
+.navHintLeft {
+  margin-left: 1rem;
+}
+
+.navHintRight {
+  margin-right: 1rem;
+}
+
+/* Swipe Hint */
+.swipeHint {
+  position: absolute;
+  bottom: 6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.75rem 1.5rem;
+  background: rgba(0, 217, 255, 0.1);
+  border: 1px solid rgba(0, 217, 255, 0.3);
+  border-radius: 2rem;
+  color: var(--primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  z-index: 90;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .section {
+    padding: 1rem;
+  }
+
+  .indicators {
+    bottom: 1rem;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .indicator {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .navigationHints {
+    display: none;
+  }
+
+  .swipeHint {
+    bottom: 4rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Animations */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .contentWrapper,
+  .progressFill {
+    transition: none !important;
+  }
+  
+  .section * {
+    animation: none !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .progressBar {
+    background: white;
+  }
+
+  .progressFill {
+    background: black;
+  }
+
+  .indicators {
+    background: white;
+    border-color: black;
+  }
+
+  .indicatorDot {
+    background: black;
+  }
+
+  .indicator.active .indicatorDot {
+    background: black;
+  }
+}

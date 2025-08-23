@@ -5,6 +5,7 @@ import { ROIFormData, ROIResults } from '../../types';
 import ROIResultModal from './ROIResultModal';
 import styles from './ROICalculator.module.css';
 import NeonButton from './NeonButton';
+import { analytics } from '../utils/analytics';
 
 export default function ROICalculator(): JSX.Element {
   const [formData, setFormData] = useState<ROIFormData>({
@@ -54,8 +55,17 @@ export default function ROICalculator(): JSX.Element {
     const growth = Math.round(budget * baseROI);
     const payback = Math.round(budget / (savings / 12));
     
-    setResults({ roi, savings, growth, payback });
+    const calculatedResults = { roi, savings, growth, payback };
+    setResults(calculatedResults);
     setShowResult(true);
+
+    // Отслеживаем расчет ROI
+    analytics.trackROICalculation(formData, {
+      percentage: roi,
+      savingsAmount: savings,
+      growthAmount: growth,
+      paybackMonths: payback
+    });
   };
 
   const formatCurrency = (num: number): string => {
