@@ -45,11 +45,7 @@ export default function ROICalculator(): JSX.Element {
     } as ROIFormData));
   };
 
-  const calculateROI = async (e?: React.FormEvent<HTMLFormElement>): Promise<void> => {
-    if (e) {
-      e.preventDefault();
-    }
-    
+  const calculateROI = async (): Promise<void> => {
     const { businessSize, industry, budget } = formData;
     
     // Проверка на корректность данных
@@ -125,7 +121,7 @@ export default function ROICalculator(): JSX.Element {
           transition={{ delay: 0.4, duration: 0.6 }}
           whileHover={{ scale: 1.02 }}
         >
-          <form className={styles.form} onSubmit={calculateROI}>
+          <form className={styles.form} onSubmit={(e) => { e.preventDefault(); calculateROI(); }}>
             <motion.div 
               className={styles.field}
               whileHover={{ scale: 1.05 }}
@@ -212,7 +208,6 @@ export default function ROICalculator(): JSX.Element {
                 size="large"
                 fullWidth
                 pulse
-                onClick={calculateROI}
               >
                 Рассчитать ROI
               </NeonButton>
