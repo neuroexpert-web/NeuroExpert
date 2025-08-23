@@ -1,36 +1,181 @@
-.main {
-  position: relative;
+.pageWrapper {
   min-height: 100vh;
   background: var(--dark-bg);
-  padding: 4rem 0;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.main {
+  position: relative;
+  z-index: 1;
 }
 
 /* Секции */
-.main > * {
-  margin-bottom: 6rem;
+.section {
+  padding: 80px 0;
+  position: relative;
 }
 
-.main > *:last-child {
-  margin-bottom: 0;
+.section:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
 }
 
-/* Loader */
-.loader-container {
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Заголовки секций */
+.sectionTitle {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.accent {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.sectionSubtitle {
+  font-size: 1.25rem;
+  text-align: center;
+  color: var(--text-secondary);
+  margin-bottom: 3rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* CTA секция */
+.ctaSection {
+  padding: 120px 0;
+  background: linear-gradient(135deg, rgba(0, 217, 255, 0.05) 0%, rgba(189, 0, 255, 0.05) 100%);
+  text-align: center;
+  position: relative;
+}
+
+.ctaSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+}
+
+.ctaTitle {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 900;
+  margin-bottom: 1rem;
+  background: var(--gradient-holographic);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ctaSubtitle {
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  margin-bottom: 3rem;
+}
+
+.ctaButtons {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ctaButton,
+.ctaButtonSecondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 2.5rem;
+  border-radius: 0.75rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ctaButton {
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow: 0 0 30px rgba(0, 217, 255, 0.5);
+}
+
+.ctaButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 50px rgba(0, 217, 255, 0.8);
+}
+
+.ctaButtonSecondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+
+.ctaButtonSecondary:hover {
+  background: rgba(0, 217, 255, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 0 30px rgba(0, 217, 255, 0.3);
+}
+
+/* Состояние загрузки */
+.loadingSection {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 400px;
+  font-size: 1.125rem;
+  color: var(--text-secondary);
 }
 
-.loader {
-  width: 60px;
-  height: 60px;
-  border: 3px solid rgba(255, 255, 255, 0.1);
-  border-top-color: var(--primary);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
+/* Адаптивность */
+@media (max-width: 768px) {
+  .section {
+    padding: 60px 0;
+  }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
+  .sectionTitle {
+    font-size: 2rem;
+  }
+
+  .sectionSubtitle {
+    font-size: 1rem;
+  }
+
+  .ctaSection {
+    padding: 80px 0;
+  }
+
+  .ctaTitle {
+    font-size: 2.5rem;
+  }
+
+  .ctaSubtitle {
+    font-size: 1.125rem;
+  }
+
+  .ctaButtons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ctaButton,
+  .ctaButtonSecondary {
+    width: 100%;
+    max-width: 300px;
+    justify-content: center;
+  }
 }
