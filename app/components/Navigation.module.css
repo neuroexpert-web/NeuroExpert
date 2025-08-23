@@ -147,6 +147,18 @@
   z-index: 10001;
 }
 
+/* Временно показываем бургер всегда для отладки */
+@media (max-width: 1200px) {
+  .burger {
+    display: flex !important;
+  }
+  
+  .desktopMenu,
+  .ctaWrapper {
+    display: none !important;
+  }
+}
+
 .burger span {
   display: block;
   width: 24px;

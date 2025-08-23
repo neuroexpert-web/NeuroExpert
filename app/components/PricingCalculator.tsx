@@ -71,7 +71,10 @@ export default function PricingCalculator() {
   }, []);
 
   const calculatePrice = async () => {
-    if (!selectedService) return;
+    if (!selectedService) {
+      alert('Пожалуйста, выберите услугу');
+      return;
+    }
 
     setIsCalculating(true);
     analytics.trackEvent('pricing_calculator_used', {
@@ -82,6 +85,15 @@ export default function PricingCalculator() {
     });
 
     try {
+      console.log('Sending pricing request:', {
+        serviceType: selectedService,
+        region,
+        industry,
+        companySize,
+        urgency,
+        customRequirements
+      });
+
       const response = await fetch('/api/pricing', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -96,6 +108,7 @@ export default function PricingCalculator() {
       });
 
       const data = await response.json();
+      console.log('Pricing API response:', data);
       
       if (data.success) {
         setPricingData(data.pricing);

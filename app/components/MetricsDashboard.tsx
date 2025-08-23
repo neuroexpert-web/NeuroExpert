@@ -36,15 +36,22 @@ export default function MetricsDashboard() {
   // Загрузка метрик
   const loadMetrics = async () => {
     try {
+      setIsLoading(true);
       const response = await fetch(`/api/metrics?period=${period}`);
       const data = await response.json();
       
+      console.log('Metrics API Response:', data); // Для отладки
+      
       if (data.success) {
         setMetrics(data.data);
+      } else {
+        console.error('API returned error:', data);
+        setMetrics(null);
       }
     } catch (error) {
       console.error('Failed to load metrics:', error);
       analytics.trackError(error as Error, 'metrics_dashboard_load');
+      setMetrics(null);
     } finally {
       setIsLoading(false);
     }
