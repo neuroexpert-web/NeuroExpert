@@ -57,10 +57,10 @@ export default function Home() {
     
     // Аналитика
     <Suspense fallback={<div className="loading-section">Загрузка аналитики...</div>}>
-      <Analytics />
       <div className="analytics-dashboard">
         <h2 className="section-title">Аналитика платформы</h2>
         <p>Полная аналитика и метрики в реальном времени</p>
+        <Analytics />
       </div>
     </Suspense>,
     

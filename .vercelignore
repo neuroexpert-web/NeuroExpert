@@ -1,0 +1,50 @@
+# Test files
+__tests__
+*.test.js
+*.test.ts
+*.test.tsx
+*.spec.js
+*.spec.ts
+*.spec.tsx
+e2e
+playwright-report
+test-results
+coverage
+.nyc_output
+
+# Development files
+.husky
+.git
+.github
+.vscode
+.idea
+*.log
+*.lock
+yarn.lock
+pnpm-lock.yaml
+
+# Documentation
+*.md
+!README.md
+docs
+AUDIT_REPORTS
+
+# Scripts that are not needed in production
+scripts
+playwright.config.ts
+jest.config.js
+.eslintrc.json
+.prettierrc
+
+# Storybook
+.storybook
+storybook-static
+
+# Local env files
+.env*.local
+.env.development
+.env.test
+
+# OS files
+.DS_Store
+Thumbs.db
