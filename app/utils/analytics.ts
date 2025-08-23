@@ -1,5 +1,6 @@
 // Универсальный модуль аналитики для NeuroExpert
-import { debounce, throttle } from 'lodash';
+import debounce from 'lodash/debounce';
+import throttle from 'lodash/throttle';
 
 // Типы событий
 export type EventType = 
