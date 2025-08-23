@@ -1,0 +1,235 @@
+.neonButton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  background: transparent;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.3s ease;
+  outline: none;
+  z-index: 1;
+}
+
+.neonButton::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%) skewX(-15deg);
+  transition: transform 0.6s;
+  z-index: 1;
+}
+
+.neonButton:hover::before {
+  transform: translateX(200%) skewX(-15deg);
+}
+
+/* Размеры */
+.small {
+  padding: 0.5rem 1.5rem;
+  font-size: 0.875rem;
+  border-radius: 0.5rem;
+}
+
+.medium {
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  border-radius: 0.625rem;
+}
+
+.large {
+  padding: 1rem 3rem;
+  font-size: 1.125rem;
+  border-radius: 0.75rem;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+/* Варианты */
+.primary {
+  background: linear-gradient(135deg, #00D9FF 0%, #0099CC 100%);
+  box-shadow: 
+    0 0 20px rgba(0, 217, 255, 0.5),
+    inset 0 0 20px rgba(0, 217, 255, 0.2);
+}
+
+.primary:hover {
+  box-shadow: 
+    0 0 30px rgba(0, 217, 255, 0.8),
+    0 0 60px rgba(0, 217, 255, 0.4),
+    inset 0 0 20px rgba(0, 217, 255, 0.3);
+}
+
+.secondary {
+  background: linear-gradient(135deg, #BD00FF 0%, #9400D3 100%);
+  box-shadow: 
+    0 0 20px rgba(189, 0, 255, 0.5),
+    inset 0 0 20px rgba(189, 0, 255, 0.2);
+}
+
+.secondary:hover {
+  box-shadow: 
+    0 0 30px rgba(189, 0, 255, 0.8),
+    0 0 60px rgba(189, 0, 255, 0.4),
+    inset 0 0 20px rgba(189, 0, 255, 0.3);
+}
+
+.accent {
+  background: linear-gradient(135deg, #00FF88 0%, #00CC6F 100%);
+  box-shadow: 
+    0 0 20px rgba(0, 255, 136, 0.5),
+    inset 0 0 20px rgba(0, 255, 136, 0.2);
+}
+
+.accent:hover {
+  box-shadow: 
+    0 0 30px rgba(0, 255, 136, 0.8),
+    0 0 60px rgba(0, 255, 136, 0.4),
+    inset 0 0 20px rgba(0, 255, 136, 0.3);
+}
+
+.danger {
+  background: linear-gradient(135deg, #FF0066 0%, #CC0052 100%);
+  box-shadow: 
+    0 0 20px rgba(255, 0, 102, 0.5),
+    inset 0 0 20px rgba(255, 0, 102, 0.2);
+}
+
+.danger:hover {
+  box-shadow: 
+    0 0 30px rgba(255, 0, 102, 0.8),
+    0 0 60px rgba(255, 0, 102, 0.4),
+    inset 0 0 20px rgba(255, 0, 102, 0.3);
+}
+
+/* Содержимое кнопки */
+.buttonContent {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 3;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25em;
+  height: 1.25em;
+}
+
+.text {
+  position: relative;
+}
+
+/* Эффект свечения */
+.buttonGlow {
+  position: absolute;
+  inset: -2px;
+  opacity: 0;
+  filter: blur(10px);
+  transition: opacity 0.3s;
+  z-index: 0;
+}
+
+.primary .buttonGlow {
+  background: linear-gradient(135deg, #00D9FF 0%, #0099CC 100%);
+}
+
+.secondary .buttonGlow {
+  background: linear-gradient(135deg, #BD00FF 0%, #9400D3 100%);
+}
+
+.accent .buttonGlow {
+  background: linear-gradient(135deg, #00FF88 0%, #00CC6F 100%);
+}
+
+.danger .buttonGlow {
+  background: linear-gradient(135deg, #FF0066 0%, #CC0052 100%);
+}
+
+.neonButton:hover .buttonGlow {
+  opacity: 0.8;
+}
+
+/* Граница */
+.buttonEdge {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.05)
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: 2;
+}
+
+/* Пульсация */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Отключенное состояние */
+.neonButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(0.5);
+}
+
+.neonButton:disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.neonButton:disabled::before {
+  display: none;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .small {
+    padding: 0.375rem 1rem;
+    font-size: 0.75rem;
+  }
+
+  .medium {
+    padding: 0.625rem 1.5rem;
+    font-size: 0.875rem;
+  }
+
+  .large {
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+  }
+}

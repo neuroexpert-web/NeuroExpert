@@ -1,0 +1,108 @@
+/* Canvas для эффектов частиц */
+.canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.6;
+}
+
+/* Плавающие элементы */
+.floatingElements {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.floatingOrb {
+  position: absolute;
+  top: 20%;
+  right: 10%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle at 30% 30%, var(--primary), transparent);
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.3;
+}
+
+.floatingCube {
+  position: absolute;
+  bottom: 20%;
+  left: 10%;
+  width: 100px;
+  height: 100px;
+  background: var(--gradient-secondary);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  opacity: 0.2;
+  transform-style: preserve-3d;
+}
+
+.floatingRing {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 300px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  opacity: 0.1;
+}
+
+/* Градиентные волны */
+.waves {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.wave {
+  position: absolute;
+  bottom: 0;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(0, 217, 255, 0.1), 
+    transparent,
+    rgba(189, 0, 255, 0.1),
+    transparent
+  );
+  mask-image: linear-gradient(to top, white, transparent);
+  -webkit-mask-image: linear-gradient(to top, white, transparent);
+}
+
+.wave:nth-child(2) {
+  opacity: 0.5;
+  height: 150px;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .floatingOrb {
+    width: 100px;
+    height: 100px;
+    filter: blur(30px);
+  }
+
+  .floatingCube {
+    width: 50px;
+    height: 50px;
+  }
+
+  .floatingRing {
+    width: 150px;
+    height: 150px;
+  }
+}

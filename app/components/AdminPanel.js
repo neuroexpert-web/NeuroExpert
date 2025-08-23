@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 
 function AdminPanel() {
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(true); // ВРЕМЕННО: отключен пароль
   const [password, setPassword] = useState('');
   const [activeTab, setActiveTab] = useState('faq');
   const [content, setContent] = useState({
@@ -13,31 +13,34 @@ function AdminPanel() {
     testimonials: []
   });
 
-  // Проверка авторизации
+  // Проверка авторизации - ВРЕМЕННО ОТКЛЮЧЕНА
   useEffect(() => {
-    const checkAuth = async () => {
-      const token = localStorage.getItem('admin_token');
-      if (token) {
-        try {
-          const response = await fetch('/api/admin/auth', {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            }
-          });
-          const data = await response.json();
-          if (data.valid) {
-            setIsAuthorized(true);
-            loadContent();
-          } else {
-            localStorage.removeItem('admin_token');
-            localStorage.removeItem('admin_authorized');
-          }
-        } catch (error) {
-          console.error('Auth check error:', error);
-        }
-      }
-    };
-    checkAuth();
+    // const checkAuth = async () => {
+    //   const token = localStorage.getItem('admin_token');
+    //   if (token) {
+    //     try {
+    //       const response = await fetch('/api/admin/auth', {
+    //         headers: {
+    //           'Authorization': `Bearer ${token}`
+    //         }
+    //       });
+    //       const data = await response.json();
+    //       if (data.valid) {
+    //         setIsAuthorized(true);
+    //         loadContent();
+    //       } else {
+    //         localStorage.removeItem('admin_token');
+    //         localStorage.removeItem('admin_authorized');
+    //       }
+    //     } catch (error) {
+    //       console.error('Auth check error:', error);
+    //     }
+    //   }
+    // };
+    // checkAuth();
+    
+    // Сразу загружаем контент без проверки
+    loadContent();
   }, []);
 
   const handleLogin = async () => {
@@ -67,10 +70,13 @@ function AdminPanel() {
   };
 
   const handleLogout = () => {
-    setIsAuthorized(false);
-    localStorage.removeItem('admin_authorized');
-    localStorage.removeItem('admin_token');
-    setPassword('');
+    // ВРЕМЕННО ОТКЛЮЧЕНО
+    // setIsAuthorized(false);
+    // localStorage.removeItem('admin_authorized');
+    // localStorage.removeItem('admin_token');
+    // setPassword('');
+    
+    alert('Выход временно отключен для удобства тестирования');
   };
 
   const loadContent = () => {

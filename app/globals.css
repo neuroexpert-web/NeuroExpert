@@ -75,53 +75,68 @@ body {
 
 /* CSS переменные */
 :root {
-  /* Основные цвета */
-  --primary: #6366f1;
-  --primary-dark: #4f46e5;
-  --primary-light: #818cf8;
-  --secondary: #f59e0b;
-  --secondary-dark: #d97706;
-  --secondary-light: #fbbf24;
-  --accent: #10b981;
+  /* Основные цвета - ФУТУРИСТИЧЕСКИЕ */
+  --primary: #00D9FF;
+  --secondary: #BD00FF;
+  --accent: #00FF88;
+  --danger: #FF4444;
   
-  /* Темная тема */
-  --dark-bg: #0f172a;
-  --dark-bg-secondary: #1e293b;
-  --dark-card: rgba(255, 255, 255, 0.05);
-  --dark-border: rgba(255, 255, 255, 0.1);
-  
-  /* Текущие переменные для совместимости */
-  --bg-dark: #0f172a;
-  --bg-medium: #1e293b;
-  --bg-light: #334155;
+  /* Темная тема - ГЛУБОКИЕ ТОНА */
+  --dark-bg: #0a0a0f;
+  --dark-surface: #12121a;
+  --dark-elevated: #1a1a25;
+  --dark-border: rgba(255, 255, 255, 0.08);
   
   /* Текст */
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-disabled: rgba(255, 255, 255, 0.3);
   
-  /* Статусы */
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --info: #3b82f6;
+  /* Градиенты - БОЛЕЕ СДЕРЖАННЫЕ */
+  --gradient-primary: linear-gradient(135deg, #00D9FF 0%, #0099CC 100%);
+  --gradient-secondary: linear-gradient(135deg, #BD00FF 0%, #7B00CC 100%);
+  --gradient-accent: linear-gradient(135deg, #00FF88 0%, #00CC55 100%);
+  --gradient-danger: linear-gradient(135deg, #FF4444 0%, #CC0000 100%);
+  --gradient-dark: linear-gradient(135deg, #1a1a2e 0%, #0a0a0f 100%);
+  --gradient-cosmic: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-neon: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-holographic: linear-gradient(
+    45deg,
+    #00D9FF 0%,
+    #BD00FF 25%,
+    #00FF88 50%,
+    #FFD700 75%,
+    #00D9FF 100%
+  );
   
-  /* Градиенты */
-  --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  --gradient-accent: linear-gradient(135deg, var(--accent), var(--secondary));
-  --gradient-dark: linear-gradient(180deg, var(--dark-bg), var(--dark-bg-secondary));
+  /* Эффекты - БОЛЕЕ ТОНКИЕ */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);
+  --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.25);
   
-  /* Тени и эффекты */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);
+  /* Свечения - УМЕНЬШЕННЫЕ */
+  --glow-primary: 0 0 20px rgba(0, 217, 255, 0.3);
+  --glow-secondary: 0 0 20px rgba(189, 0, 255, 0.3);
+  --glow-accent: 0 0 20px rgba(0, 255, 136, 0.3);
+  
+  /* Размытия */
+  --blur-sm: blur(4px);
+  --blur-md: blur(8px);
+  --blur-lg: blur(16px);
+  --blur-xl: blur(24px);
   
   /* Анимации */
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: 150ms ease;
+  --transition-base: 300ms ease;
+  --transition-slow: 500ms ease;
+  
+  /* Скругления */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
 }
 
 /* Сброс стилей */
@@ -133,20 +148,138 @@ body {
 
 html {
   scroll-behavior: smooth;
-  font-size: 16px;
 }
 
 body {
-  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: var(--dark-bg);
   color: var(--text-primary);
   line-height: 1.6;
-  min-height: 100vh;
-  overflow-x: hidden;
-  position: relative;
-  font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Уменьшаем свечения для всех элементов */
+*:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Убираем лишние тени */
+button,
+.button,
+.card {
+  box-shadow: var(--shadow-sm);
+}
+
+button:hover,
+.button:hover,
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* Более тонкие неоновые эффекты */
+.neon-effect {
+  box-shadow: var(--glow-primary);
+}
+
+.neon-effect:hover {
+  box-shadow: 0 0 30px rgba(0, 217, 255, 0.4);
+}
+
+/* Убираем лишние анимации свечения */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+/* Стеклянные эффекты - более тонкие */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--dark-border);
+}
+
+/* Ссылки */
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: var(--transition-fast);
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+/* Заголовки */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
+h2 { font-size: clamp(2rem, 4vw, 3rem); }
+h3 { font-size: clamp(1.5rem, 3vw, 2rem); }
+
+/* Контейнеры */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Скроллбар */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--dark-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--dark-elevated);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Выделение текста */
+::selection {
+  background: var(--primary);
+  color: var(--dark-bg);
+}
+
+/* Утилиты */
+.gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.blur-bg {
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  :root {
+    --glow-primary: 0 0 10px rgba(0, 217, 255, 0.2);
+    --glow-secondary: 0 0 10px rgba(189, 0, 255, 0.2);
+    --glow-accent: 0 0 10px rgba(0, 255, 136, 0.2);
+  }
+  
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.5rem; }
 }
 
 /* Премиальный стеклянный фон */
@@ -3054,6 +3187,193 @@ button:disabled {
 .hover-lift:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* НОВЫЕ ФУТУРИСТИЧЕСКИЕ АНИМАЦИИ */
+@keyframes neon-pulse {
+  0%, 100% {
+    opacity: 1;
+    filter: brightness(1) drop-shadow(0 0 10px currentColor);
+  }
+  50% {
+    opacity: 0.8;
+    filter: brightness(1.2) drop-shadow(0 0 20px currentColor);
+  }
+}
+
+@keyframes holographic-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes cyber-glitch {
+  0%, 100% {
+    transform: translate(0);
+    filter: hue-rotate(0deg);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+    filter: hue-rotate(90deg);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+    filter: hue-rotate(180deg);
+  }
+  60% {
+    transform: translate(2px, 2px);
+    filter: hue-rotate(270deg);
+  }
+  80% {
+    transform: translate(2px, -2px);
+    filter: hue-rotate(360deg);
+  }
+}
+
+@keyframes energy-flow {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+@keyframes neural-network {
+  0% {
+    stroke-dashoffset: 1000;
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0.3;
+  }
+}
+
+@keyframes data-stream {
+  0% {
+    transform: translateY(100vh) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes plasma-wave {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-15deg);
+  }
+}
+
+/* Классы для анимаций */
+.neon-pulse {
+  animation: neon-pulse 2s ease-in-out infinite;
+}
+
+.holographic {
+  background-size: 400% 400%;
+  animation: holographic-shift 4s ease infinite;
+}
+
+.cyber-glitch-hover:hover {
+  animation: cyber-glitch 0.3s ease infinite;
+}
+
+.energy-flow {
+  background-size: 200% 200%;
+  animation: energy-flow 3s linear infinite;
+}
+
+/* Неоновые эффекты для текста */
+.neon-text {
+  text-shadow: 
+    0 0 10px var(--primary),
+    0 0 20px var(--primary),
+    0 0 30px var(--primary),
+    0 0 40px var(--primary);
+}
+
+.neon-text-purple {
+  text-shadow: 
+    0 0 10px var(--secondary),
+    0 0 20px var(--secondary),
+    0 0 30px var(--secondary),
+    0 0 40px var(--secondary);
+}
+
+/* Стеклянный эффект (Glassmorphism) */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 217, 255, 0.2);
+}
+
+.glass-dark {
+  background: rgba(10, 5, 26, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 217, 255, 0.2);
+  box-shadow: var(--shadow-neon);
+}
+
+/* Голографический градиент */
+.holographic-gradient {
+  background: var(--gradient-holographic);
+  background-size: 400% 400%;
+  animation: holographic-shift 4s ease infinite;
+}
+
+/* Эффект энергетического поля */
+.energy-field {
+  position: relative;
+  overflow: hidden;
+}
+
+.energy-field::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at center,
+    transparent 0%,
+    rgba(0, 217, 255, 0.1) 40%,
+    transparent 70%
+  );
+  animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 

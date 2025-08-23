@@ -5,6 +5,8 @@ import './styles/premium-design-system.css'
 import './styles/premium-glass-sections.css'
 import './styles/mobile-fixes.css'
 import Script from 'next/script'
+import Navigation from './components/Navigation'
+import WowEffects from './components/WowEffects'
 
 // Оптимизированная загрузка шрифта
 const inter = Inter({ 
@@ -170,6 +172,8 @@ export default function RootLayout({ children }) {
         <div className="loading-spinner" id="global-loader">
           <div className="spinner"></div>
         </div>
+        <WowEffects />
+        <Navigation />
         {children}
         
         {/* Google Analytics с отложенной загрузкой */}
