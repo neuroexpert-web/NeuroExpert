@@ -3,7 +3,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { jsPDF } from 'jspdf';
-import { getVault } from '../lib/jsonVault';
+import { getVault } from '../lib/jsonVault.js';
 import styles from './AdvancedROICalculator.module.css';
 
 interface ServicePricing {

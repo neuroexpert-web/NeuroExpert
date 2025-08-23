@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import Script from 'next/script';
-import { getVault } from '../lib/jsonVault';
+import { getVault } from '../lib/jsonVault.js';
 
 // Типы для оконных объектов
 declare global {
