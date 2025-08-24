@@ -51,10 +51,10 @@
   right: -0.5rem;
   width: 24px;
   height: 24px;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 50%;
   color: #fff;
   font-size: 0.8rem;
@@ -64,11 +64,11 @@
   cursor: pointer;
   transition: all 0.3s ease;
   z-index: 10;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .collapseButton:hover {
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(255, 255, 255, 0.2);
   border-color: var(--aurora-purple);
   transform: scale(1.1);
 }
@@ -105,28 +105,27 @@
   align-items: center;
   justify-content: center;
   padding: 0.5rem;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 1);
   gap: 0.2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .navItem:hover {
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(255, 255, 255, 0.1);
   border-color: var(--aurora-purple);
   color: #fff;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
 .navItemActive {
-  background: rgba(168, 85, 247, 0.3);
+  background: rgba(168, 85, 247, 0.2);
   border-color: var(--aurora-purple);
   color: #fff;
   box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
@@ -134,19 +133,20 @@
 
 .navIcon {
   font-size: 1.2rem;
-  filter: saturate(0.8);
+  filter: saturate(1) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
 }
 
 .navItemActive .navIcon {
-  filter: saturate(1.2);
+  filter: saturate(1.5) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
 }
 
 .navLabel {
   font-size: 0.6rem;
-  font-weight: 500;
+  font-weight: 600;
   text-align: center;
   line-height: 1.1;
-  opacity: 0.8;
+  opacity: 0.9;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
 }
 
 .navItemActive .navLabel {
@@ -157,10 +157,10 @@
   position: relative;
   width: 100%;
   height: 4px;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: var(--radius-sm, 0.5rem);
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: none;
   margin-top: 0.5rem;
 }
 

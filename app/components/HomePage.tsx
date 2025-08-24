@@ -200,7 +200,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 transition={{ duration: 0.8, delay: 0.8 }}
               >
                 <button 
-                  onClick={() => handleNavigation('ai-manager')} 
+                  onClick={() => onNavigate?.(3)} 
                   className={styles.btnPrimary}
                 >
                   <span className={styles.btnText}>AI управляющий</span>
