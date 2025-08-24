@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { assistantRateLimit } from '@/app/middleware/rateLimit';
+import { assistantRateLimit } from '../../middleware/rateLimit';
 import fs from 'fs';
 import path from 'path';
 // import { 

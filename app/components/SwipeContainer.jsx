@@ -141,13 +141,7 @@ export default function SwipeContainer({
 }
 
 // Компонент индикатора прогресса
-interface ProgressIndicatorProps {
-  total: number;
-  current: number;
-  sections: string[];
-}
-
-function ProgressIndicator({ total, current, sections }: ProgressIndicatorProps) {
+function ProgressIndicator({ total, current, sections }) {
   const progress = ((current + 1) / total) * 100;
 
   return (
