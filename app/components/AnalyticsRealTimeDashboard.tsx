@@ -637,7 +637,7 @@ function BenefitCard({ icon, title, description }: any) {
 
 // Компонент AI рекомендации
 function AIRecommendation({ icon, priority, title, description, metrics }: any) {
-  const priorityColors = {
+  const priorityColors: Record<string, string> = {
     high: '#ef4444',
     medium: '#f59e0b',
     low: '#10b981'
@@ -649,11 +649,11 @@ function AIRecommendation({ icon, priority, title, description, metrics }: any) 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ scale: 1.02 }}
-      style={{ borderColor: priorityColors[priority] + '40' }}
+      style={{ borderColor: priorityColors[priority as string] + '40' }}
     >
       <div className={styles.aiHeader}>
         <div className={styles.aiIcon}>{icon}</div>
-        <div className={styles.aiPriority} style={{ color: priorityColors[priority] }}>
+        <div className={styles.aiPriority} style={{ color: priorityColors[priority as string] }}>
           {priority === 'high' ? 'Высокий приоритет' : 
            priority === 'medium' ? 'Средний приоритет' : 'Низкий приоритет'}
         </div>
