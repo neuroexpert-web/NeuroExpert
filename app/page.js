@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import SwipeContainer from './components/SwipeContainer';
 
 // Динамические импорты для оптимизации
-const NeuroExpertHero = dynamic(() => import('./components/HeroSectionFinal'), {
+const HomePage = dynamic(() => import('./components/HomePage'), {
   ssr: false,
   loading: () => <div className="loading-skeleton">Загрузка главной...</div>
 });
@@ -102,7 +102,7 @@ export default function Home() {
   const sectionComponents = [
     // 1. Главная
     <Suspense key="hero" fallback={<div className="loading-section">Загрузка главной...</div>}>
-      <NeuroExpertHero />
+      <HomePage />
     </Suspense>,
     
     // 2. Аналитика
