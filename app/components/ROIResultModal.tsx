@@ -76,15 +76,16 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
               top: '50%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
-              background: 'linear-gradient(180deg, rgba(20, 20, 40, 0.95) 0%, rgba(30, 30, 60, 0.95) 100%)',
+              background: 'linear-gradient(180deg, rgba(20, 20, 40, 0.98) 0%, rgba(30, 30, 60, 0.98) 100%)',
               borderRadius: '32px',
-              padding: '48px',
+              padding: '32px',
               border: '1px solid rgba(102, 126, 234, 0.3)',
               boxShadow: '0 30px 60px rgba(0, 0, 0, 0.5)',
-              maxWidth: '800px',
-              width: '90%',
-              maxHeight: '90vh',
-              overflow: 'auto',
+              maxWidth: '700px',
+              width: '85%',
+              maxHeight: '85vh',
+              overflowY: 'auto',
+              overflowX: 'hidden',
               zIndex: 1001
             }}
             onClick={(e) => e.stopPropagation()}
