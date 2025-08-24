@@ -37,35 +37,110 @@ export default function HomePage({ onNavigate, currentPage = 0 }: HomePageProps)
     onNavigate?.(3);
   };
 
+  // Генерация звезд для млечного пути
+  const generateStars = () => {
+    const stars = [];
+    // Мелкие звезды
+    for (let i = 0; i < 300; i++) {
+      stars.push({
+        id: `small-${i}`,
+        size: Math.random() * 1.5 + 0.5,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        opacity: Math.random() * 0.8 + 0.2,
+        className: styles.starSmall
+      });
+    }
+    // Средние звезды
+    for (let i = 0; i < 100; i++) {
+      stars.push({
+        id: `medium-${i}`,
+        size: Math.random() * 2 + 1.5,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        opacity: Math.random() * 0.9 + 0.1,
+        className: styles.starMedium
+      });
+    }
+    // Крупные яркие звезды
+    for (let i = 0; i < 20; i++) {
+      stars.push({
+        id: `large-${i}`,
+        size: Math.random() * 3 + 2,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        opacity: Math.random() * 1,
+        className: styles.starLarge
+      });
+    }
+    return stars;
+  };
+
   return (
     <div className={styles.homePage} ref={containerRef}>
-      {/* Премиум фон - глубина океана */}
-      <div className={styles.oceanBackground}>
-        <div className={styles.oceanDepth1} />
-        <div className={styles.oceanDepth2} />
-        <div className={styles.oceanDepth3} />
-        <div className={styles.oceanDepth4} />
-        <div className={styles.polarNight} />
+      {/* Премиум фон - глубина космоса с млечным путем */}
+      <div className={styles.spaceBackground}>
+        {/* Базовый космический фон */}
+        <div className={styles.deepSpace} />
+        
+        {/* Млечный путь */}
+        <div className={styles.milkyWay}>
+          <div className={styles.milkyWayCore} />
+          <div className={styles.milkyWayArm1} />
+          <div className={styles.milkyWayArm2} />
+          <div className={styles.milkyWayGlow} />
+        </div>
+
+        {/* Звезды */}
+        <div className={styles.starsContainer}>
+          {generateStars().map(star => (
+            <div
+              key={star.id}
+              className={star.className}
+              style={{
+                width: `${star.size}px`,
+                height: `${star.size}px`,
+                left: `${star.x}%`,
+                top: `${star.y}%`,
+                opacity: star.opacity
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Туманности */}
+        <div className={styles.nebula1} />
+        <div className={styles.nebula2} />
+        
+        {/* Космическая пыль */}
+        <div className={styles.cosmicDust} />
       </div>
 
       {/* Основной контент */}
       <AnimatePresence>
         {isLoaded && (
           <main className={styles.mainContent}>
-            {/* Премиум логотип */}
+            {/* Особенный логотип НЕЙРОЭКСПЕРТ */}
             <motion.div
               className={styles.logoContainer}
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: "easeOut" }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
             >
-              <h1 className={styles.premiumLogo} aria-label="НЕЙРОЭКСПЕРТ">
-                <span className={styles.logoMain}>НЕЙРОЭКСПЕРТ</span>
+              <h1 className={styles.epicLogo} aria-label="НЕЙРОЭКСПЕРТ">
+                <span className={styles.logoNeuro}>НЕЙРО</span>
+                <span className={styles.logoExpert}>ЭКСПЕРТ</span>
               </h1>
-              <div className={styles.logoUnderline} />
+              <div className={styles.logoOrbit}>
+                <div className={styles.orbitRing} />
+                <div className={styles.orbitParticle1} />
+                <div className={styles.orbitParticle2} />
+                <div className={styles.orbitParticle3} />
+              </div>
+              <div className={styles.logoAura} />
             </motion.div>
 
-            {/* Заголовок миссии - улучшенная типографика */}
+            {/* Заголовок миссии - адаптированный под общий стиль */}
             <motion.h2
               className={styles.missionTitle}
               initial={{ opacity: 0, y: 20 }}
@@ -75,7 +150,7 @@ export default function HomePage({ onNavigate, currentPage = 0 }: HomePageProps)
               Цифровизация бизнеса с помощью ИИ
             </motion.h2>
 
-            {/* Дополнительный подзаголовок для премиум стиля */}
+            {/* Дополнительный подзаголовок */}
             <motion.p
               className={styles.subtitle}
               initial={{ opacity: 0 }}
@@ -85,9 +160,9 @@ export default function HomePage({ onNavigate, currentPage = 0 }: HomePageProps)
               Передовые технологии искусственного интеллекта для вашего успеха
             </motion.p>
 
-            {/* Главная кнопка действия - премиум стиль */}
+            {/* Главная кнопка действия */}
             <motion.button
-              className={styles.premiumCta}
+              className={styles.cosmicCta}
               onClick={handleMainButtonClick}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -97,7 +172,7 @@ export default function HomePage({ onNavigate, currentPage = 0 }: HomePageProps)
               aria-label="Перейти к ИИ управляющему"
             >
               <span className={styles.ctaText}>ИИ управляющий</span>
-              <div className={styles.ctaShine} />
+              <div className={styles.ctaStars} />
             </motion.button>
           </main>
         )}
