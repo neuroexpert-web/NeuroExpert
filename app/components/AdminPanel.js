@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 
 function AdminPanel() {
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(true); // Временно отключен пароль
   const [password, setPassword] = useState('');
   const [activeTab, setActiveTab] = useState('faq');
   const [content, setContent] = useState({

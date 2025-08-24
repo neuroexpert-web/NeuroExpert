@@ -108,7 +108,7 @@ export default function ContactForm() {
               {status.loading ? (
                 <span>Отправка...</span>
               ) : (
-                <span>Получить консультацию</span>
+                <span>Отправить заявку</span>
               )}
             </motion.button>
           </form>
@@ -138,16 +138,22 @@ export default function ContactForm() {
         .contact-section {
           background: #0a0a0a;
           color: white;
-          padding: 4rem 0;
-          min-height: 100vh;
+          width: 100%;
+          height: 100vh;
           display: flex;
-          align-items: center;
+          flex-direction: column;
+          overflow: hidden;
+          position: relative;
         }
 
         .container {
-          max-width: 600px;
-          margin: 0 auto;
-          padding: 0 1.5rem;
+          flex: 1;
+          overflow-y: auto;
+          overflow-x: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 3rem 1.5rem;
         }
 
         .contact-wrapper {
@@ -156,6 +162,10 @@ export default function ContactForm() {
           border-radius: 24px;
           padding: 3rem;
           text-align: center;
+          max-width: 600px;
+          width: 100%;
+          position: relative;
+          z-index: 10;
         }
 
         .contact-header {

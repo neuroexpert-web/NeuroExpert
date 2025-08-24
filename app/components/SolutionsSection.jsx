@@ -108,7 +108,7 @@ export default function SolutionsSection() {
             <span>Готовые <span className="gradient-text">решения для бизнеса</span></span>
           </h2>
           <p className="section-subtitle">
-            Выберите подходящее решение или создадим индивидуальное под ваши задачи
+                          Готовые решения для автоматизации вашего бизнеса с помощью AI технологий
           </p>
         </motion.div>
 
@@ -196,7 +196,7 @@ export default function SolutionsSection() {
           overflow-y: auto;
           overflow-x: hidden;
           scroll-behavior: smooth;
-          padding: 2rem 0 4rem;
+          padding: 4rem 0 4rem;
         }
 
         /* Custom Scrollbar */

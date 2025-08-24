@@ -154,14 +154,9 @@ export default function ROICalculator(): JSX.Element {
   );
 
   return (
-    <motion.section 
-      className={styles.calculator}
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-    >
-      <div className={styles.container}>
+    <section className={styles.calculator}>
+      <div className={styles.scrollableContent}>
+        <div className={styles.container}>
         <motion.div 
           className={styles.header}
           initial={{ opacity: 0, scale: 0.9 }}
@@ -392,6 +387,7 @@ export default function ROICalculator(): JSX.Element {
           )}
         </AnimatePresence>
       </div>
-    </motion.section>
+      </div>
+    </section>
   );
 }

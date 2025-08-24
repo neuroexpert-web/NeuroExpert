@@ -15,10 +15,10 @@ export default function AIDirectorCapabilities() {
         role: 'Управляющий директор NeuroExpert',
         experience: 'Эксперт в цифровой трансформации бизнеса',
         achievements: [
-          'Многолетний опыт цифровой трансформации',
-          'Эксперт в AI и машинном обучении',
-          'Спикер международных конференций',
-          'Автор методологии быстрой цифровизации'
+          'Специализация на цифровой трансформации',
+          'Глубокое понимание AI технологий',
+          'Индивидуальный подход к каждому клиенту',
+          'Фокус на практических результатах'
         ]
       }
     },
@@ -58,8 +58,22 @@ export default function AIDirectorCapabilities() {
   };
 
   return (
-    <section className="py-20 px-4">
-      <div className="max-w-6xl mx-auto">
+    <section style={{
+      width: '100%',
+      height: '100vh',
+      background: '#0a0a0a',
+      color: 'white',
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'hidden'
+    }}>
+      <div style={{
+        flex: 1,
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        padding: '3rem 2rem'
+      }}>
+        <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -456,6 +470,7 @@ export default function AIDirectorCapabilities() {
             </div>
           </motion.button>
         </motion.div>
+      </div>
       </div>
     </section>
   );
