@@ -1,0 +1,278 @@
+/* Кнопка бургер меню */
+.burgerButton {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  background: var(--glass-dark);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  cursor: pointer;
+  z-index: 1100;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.burgerButton:hover {
+  background: var(--glass-white);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.2);
+}
+
+.burgerLine {
+  width: 24px;
+  height: 2px;
+  background: var(--platinum-300);
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.burgerButton.active .burgerLine:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.burgerButton.active .burgerLine:nth-child(2) {
+  opacity: 0;
+  transform: translateX(-10px);
+}
+
+.burgerButton.active .burgerLine:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Оверлей */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10, 5, 26, 0.8);
+  backdrop-filter: blur(10px);
+  z-index: 1098;
+}
+
+/* Меню */
+.menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 400px;
+  max-width: 90vw;
+  height: 100vh;
+  background: var(--noir-900);
+  border-left: 1px solid var(--glass-border);
+  z-index: 1099;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Заголовок меню */
+.menuHeader {
+  padding: 24px 32px;
+  border-bottom: 1px solid var(--glass-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 80px;
+}
+
+.menuTitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--platinum-100);
+  background: linear-gradient(135deg, var(--platinum-100) 0%, var(--platinum-300) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.closeButton {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  color: var(--platinum-400);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.closeButton:hover {
+  background: var(--glass-white);
+  color: var(--platinum-200);
+  transform: rotate(90deg);
+}
+
+/* Список меню */
+.menuList {
+  flex: 1;
+  padding: 32px 0;
+  list-style: none;
+  margin: 0;
+}
+
+.menuList li {
+  margin: 0;
+}
+
+.menuItem {
+  width: 100%;
+  padding: 20px 32px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+  transition: all 0.3s;
+  overflow: hidden;
+}
+
+.menuItem::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--primary);
+  transform: translateX(-100%);
+  transition: transform 0.3s;
+}
+
+.menuItem:hover {
+  background: var(--glass-white);
+  padding-left: 40px;
+}
+
+.menuItem:hover::before {
+  transform: translateX(0);
+}
+
+.menuItemNumber {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary);
+  opacity: 0.6;
+  min-width: 25px;
+}
+
+.menuItemText {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--platinum-200);
+  letter-spacing: 0.5px;
+}
+
+.menuItem:hover .menuItemText {
+  color: var(--platinum-100);
+}
+
+/* Активный пункт */
+.menuItem.active {
+  background: var(--glass-dark);
+}
+
+.menuItem.active .menuItemNumber {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.menuItem.active .menuItemText {
+  color: var(--platinum-100);
+  font-weight: 600;
+}
+
+.activeIndicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--primary) 0%, var(--accent) 100%);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+}
+
+/* Футер меню */
+.menuFooter {
+  padding: 24px 32px;
+  border-top: 1px solid var(--glass-border);
+  background: var(--glass-dark);
+}
+
+.footerText {
+  font-size: 12px;
+  color: var(--platinum-500);
+  text-align: center;
+  margin: 0;
+}
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+  .burgerButton {
+    top: 16px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .menu {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .menuHeader {
+    padding: 20px 24px;
+  }
+
+  .menuTitle {
+    font-size: 20px;
+  }
+
+  .menuItem {
+    padding: 16px 24px;
+  }
+
+  .menuItem:hover {
+    padding-left: 32px;
+  }
+
+  .menuItemText {
+    font-size: 16px;
+  }
+}
+
+/* Анимация появления пунктов */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Доступность */
+@media (prefers-reduced-motion: reduce) {
+  .burgerButton,
+  .burgerLine,
+  .menuItem,
+  .closeButton {
+    transition: none;
+  }
+}
