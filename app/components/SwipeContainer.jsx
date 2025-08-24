@@ -39,12 +39,12 @@ export default function SwipeContainer({
   // Пороговое значение для свайпа (в пикселях)
   // Увеличиваем пороги для мобильных устройств
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-  const SWIPE_THRESHOLD = isMobile ? 100 : 50; // Увеличен порог для мобильных
-  const VELOCITY_THRESHOLD = isMobile ? 0.5 : 0.3; // Уменьшена чувствительность
+  const SWIPE_THRESHOLD = isMobile ? 150 : 50; // Значительно увеличен порог для мобильных
+  const VELOCITY_THRESHOLD = isMobile ? 0.8 : 0.3; // Сильно уменьшена чувствительность
 
     // Защита от слишком частых свайпов
   const lastSwipeTime = useRef(0);
-  const MIN_SWIPE_INTERVAL = 300; // Минимальный интервал между свайпами (мс)
+  const MIN_SWIPE_INTERVAL = isMobile ? 500 : 300; // Увеличен интервал для мобильных
 
   // Обработка свайпа с аналитикой
   const handleSwipe = useCallback((direction) => {
@@ -170,6 +170,9 @@ export default function SwipeContainer({
     const diff = touchStartX.current - touchEndX.current;
     const distance = Math.abs(diff);
     
+    // Минимальное расстояние для игнорирования случайных касаний
+    const MIN_SWIPE_DISTANCE = isMobile ? 20 : 10;
+    
     // Отслеживание завершения touch gesture
     clientAnalytics.track('touch_end', {
       start_x: touchStartX.current,
@@ -180,7 +183,8 @@ export default function SwipeContainer({
       threshold_met: distance > SWIPE_THRESHOLD
     }, { priority: 'low' });
     
-    if (distance > SWIPE_THRESHOLD) {
+    // Проверяем минимальное расстояние и порог
+    if (distance > MIN_SWIPE_DISTANCE && distance > SWIPE_THRESHOLD) {
       if (diff > 0) {
         handleSwipe('left');
       } else {
