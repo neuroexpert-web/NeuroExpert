@@ -393,6 +393,26 @@ export default function ContactForm() {
         input::placeholder, textarea::placeholder {
           color: rgba(255, 255, 255, 0.3);
         }
+
+        /* Стили для соответствия второй странице */
+        .contact-form {
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 16px;
+          padding: 2rem;
+        }
+
+        .form-container {
+          background: rgba(255, 255, 255, 0.02);
+          border-radius: 12px;
+          padding: 1.5rem;
+        }
+
+        /* Темная тема для секции */
+        .contact-section {
+          background: #0a0a0a !important;
+          color: white;
+        }
       `}</style>
     </section>
   );

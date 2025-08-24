@@ -168,10 +168,23 @@ export default function AboutSection() {
       <style jsx>{`
         .about-section {
           padding: 4rem 0;
-          background: linear-gradient(180deg, var(--noir-900) 0%, var(--noir-800) 100%);
+          background: #0a0a0a;
+          color: white;
           min-height: 100vh;
           display: flex;
           align-items: center;
+          position: relative;
+        }
+
+        .about-section::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 300px;
+          background: linear-gradient(135deg, rgba(153, 69, 255, 0.05) 0%, rgba(0, 212, 255, 0.05) 100%);
+          pointer-events: none;
         }
 
         .container {
