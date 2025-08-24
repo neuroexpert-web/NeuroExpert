@@ -337,6 +337,7 @@ export default function SwipeContainer({
 
 // Компонент индикатора прогресса с аналитикой
 function ProgressIndicator({ total, current, sections, onDotClick }) {
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const progress = ((current + 1) / total) * 100;
   
   // Иконки для каждой страницы
@@ -374,20 +375,38 @@ function ProgressIndicator({ total, current, sections, onDotClick }) {
 
   return (
     <div className={styles.progressContainer}>
-      <div className={styles.navigationGrid}>
-        {sections.map((section, index) => (
-          <motion.button
-            key={index}
-            className={`${styles.navItem} ${index === current ? styles.navItemActive : ''}`}
-            onClick={() => onDotClick(index)}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <span className={styles.navIcon}>{sectionIcons[index] || '📄'}</span>
-            <span className={styles.navLabel}>{section}</span>
-          </motion.button>
-        ))}
-      </div>
+      <button 
+        className={styles.collapseButton}
+        onClick={() => setIsCollapsed(!isCollapsed)}
+        aria-label={isCollapsed ? "Развернуть меню" : "Свернуть меню"}
+      >
+        {isCollapsed ? '→' : '←'}
+      </button>
+      
+      {!isCollapsed && (
+        <div className={styles.navigationGrid}>
+          {sections.map((section, index) => (
+            <motion.button
+              key={index}
+              className={`${styles.navItem} ${index === current ? styles.navItemActive : ''}`}
+              onClick={() => onDotClick(index)}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <span className={styles.navIcon}>{sectionIcons[index] || '📄'}</span>
+              <span className={styles.navLabel}>{section}</span>
+            </motion.button>
+          ))}
+        </div>
+      )}
+      
+      {isCollapsed && (
+        <div className={styles.collapsedIndicator}>
+          <span className={styles.currentIcon}>{sectionIcons[current]}</span>
+          <span className={styles.currentPage}>{current + 1}/{total}</span>
+        </div>
+      )}
+      
       <div 
         className={styles.progressBar}
         onClick={handleProgressClick}
