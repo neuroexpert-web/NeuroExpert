@@ -215,27 +215,117 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 </button>
               </motion.div>
 
-              {/* Метрики */}
+              {/* Метрики с улучшенным дизайном */}
               <motion.div 
                 className={styles.metrics}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 1.1 }}
               >
-                <div className={styles.metricCard}>
+                <motion.div 
+                  className={styles.metricCard}
+                  whileHover={{ scale: 1.05, rotateY: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <div className={styles.metricIcon}>
+                    <svg viewBox="0 0 60 60" fill="none">
+                      <circle cx="30" cy="30" r="28" stroke="url(#grad1)" strokeWidth="2" opacity="0.3"/>
+                      <circle cx="30" cy="30" r="20" stroke="url(#grad1)" strokeWidth="2"/>
+                      <path d="M30 15 L35 25 L25 25 Z" fill="url(#grad1)"/>
+                      <path d="M30 45 L35 35 L25 35 Z" fill="url(#grad1)"/>
+                      <path d="M15 30 L25 35 L25 25 Z" fill="url(#grad1)"/>
+                      <path d="M45 30 L35 35 L35 25 Z" fill="url(#grad1)"/>
+                      <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="#9945ff"/>
+                          <stop offset="100%" stopColor="#6366f1"/>
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                  </div>
                   <div className={styles.metricValue}>500+</div>
                   <div className={styles.metricLabel}>AI-решений</div>
+                  <div className={styles.metricDescription}>Готовые модули для вашего бизнеса</div>
                   <div className={styles.metricGlow}></div>
-                </div>
-                <div className={styles.metricCard}>
+                </motion.div>
+                
+                <motion.div 
+                  className={styles.metricCard}
+                  whileHover={{ scale: 1.05, rotateY: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <div className={styles.metricIcon}>
+                    <svg viewBox="0 0 60 60" fill="none">
+                      <circle cx="30" cy="30" r="28" stroke="url(#grad2)" strokeWidth="2" strokeDasharray="5 5" opacity="0.3"/>
+                      <circle cx="30" cy="30" r="20" fill="none" stroke="url(#grad2)" strokeWidth="3"/>
+                      <text x="30" y="35" textAnchor="middle" fill="url(#grad2)" fontSize="16" fontWeight="bold">AI</text>
+                      <defs>
+                        <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="#6366f1"/>
+                          <stop offset="100%" stopColor="#a855f7"/>
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                  </div>
                   <div className={styles.metricValue}>95%</div>
-                  <div className={styles.metricLabel}>Точность</div>
+                  <div className={styles.metricLabel}>Точность AI</div>
+                  <div className={styles.metricDescription}>Машинное обучение нового поколения</div>
                   <div className={styles.metricGlow}></div>
-                </div>
-                <div className={styles.metricCard}>
+                </motion.div>
+                
+                <motion.div 
+                  className={styles.metricCard}
+                  whileHover={{ scale: 1.05, rotateY: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <div className={styles.metricIcon}>
+                    <svg viewBox="0 0 60 60" fill="none">
+                      <circle cx="30" cy="30" r="28" stroke="url(#grad3)" strokeWidth="2" opacity="0.3"/>
+                      <circle cx="30" cy="15" r="3" fill="url(#grad3)"/>
+                      <circle cx="30" cy="45" r="3" fill="url(#grad3)"/>
+                      <circle cx="15" cy="30" r="3" fill="url(#grad3)"/>
+                      <circle cx="45" cy="30" r="3" fill="url(#grad3)"/>
+                      <path d="M30 15 L45 30 L30 45 L15 30 Z" fill="none" stroke="url(#grad3)" strokeWidth="2"/>
+                      <circle cx="30" cy="30" r="8" fill="url(#grad3)" opacity="0.5"/>
+                      <defs>
+                        <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="#a855f7"/>
+                          <stop offset="100%" stopColor="#ec4899"/>
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                  </div>
                   <div className={styles.metricValue}>24/7</div>
                   <div className={styles.metricLabel}>Поддержка</div>
+                  <div className={styles.metricDescription}>AI ассистент всегда на связи</div>
                   <div className={styles.metricGlow}></div>
+                </motion.div>
+              </motion.div>
+
+              {/* Секция преимуществ */}
+              <motion.div 
+                className={styles.advantages}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 1.4 }}
+              >
+                <h2 className={styles.advantagesTitle}>Почему выбирают NeuroExpert</h2>
+                <div className={styles.advantagesList}>
+                  <div className={styles.advantageItem}>
+                    <div className={styles.advantageIcon}>⚡</div>
+                    <h3>Быстрая интеграция</h3>
+                    <p>Запуск за 24 часа без изменения инфраструктуры</p>
+                  </div>
+                  <div className={styles.advantageItem}>
+                    <div className={styles.advantageIcon}>🛡️</div>
+                    <h3>Безопасность данных</h3>
+                    <p>Zero Trust архитектура и шифрование на всех уровнях</p>
+                  </div>
+                  <div className={styles.advantageItem}>
+                    <div className={styles.advantageIcon}>📈</div>
+                    <h3>ROI гарантия</h3>
+                    <p>Окупаемость за 3 месяца или возврат средств</p>
+                  </div>
                 </div>
               </motion.div>
 
@@ -246,7 +336,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1, delay: 1.5 }}
               >
-                <span className={styles.swipeText}>Свайпните для навигации</span>
+                <span className={styles.swipeText}>Свайп →</span>
                 <div className={styles.swipeIcon}>
                   <span className={styles.swipeArrow}></span>
                   <span className={styles.swipeArrow}></span>
