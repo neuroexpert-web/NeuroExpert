@@ -130,21 +130,9 @@ export default function Home() {
     
     // 3. ROI-калькулятор
     <section key="roi" className="roi-section" id="roi-calculator">
-      <div className="container">
-        <div className="section-header">
-          <h2 className="heading-luxury">
-            Рассчитайте вашу <span className="heading-gold">выгоду</span>
-          </h2>
-          <p className="section-subtitle">
-            Продвинутый ROI калькулятор с автоматическим ценообразованием
-          </p>
-        </div>
-        <div className="roi-wrapper">
-          <Suspense fallback={<div className="loading-skeleton">Загрузка калькулятора...</div>}>
-            <ROICalculator />
-          </Suspense>
-        </div>
-      </div>
+      <Suspense fallback={<div className="loading-skeleton">Загрузка калькулятора...</div>}>
+        <ROICalculator />
+      </Suspense>
     </section>,
     
     // 4. AI управляющий
@@ -291,7 +279,6 @@ export default function Home() {
 
         /* Секции с единым стилем */
         .analytics-section,
-        .roi-section,
         .security-section,
         .contact-section,
         .pricing-section {
@@ -299,6 +286,16 @@ export default function Home() {
           min-height: 100vh;
           display: flex;
           align-items: center;
+          background: var(--gradient-cyber, linear-gradient(135deg, #0a0e1a 0%, #1a2138 50%, #2a3757 100%));
+          position: relative;
+        }
+
+        .roi-section {
+          padding: 0;
+          min-height: 100vh;
+          height: 100vh;
+          overflow-y: auto;
+          overflow-x: hidden;
           background: var(--gradient-cyber, linear-gradient(135deg, #0a0e1a 0%, #1a2138 50%, #2a3757 100%));
           position: relative;
         }
