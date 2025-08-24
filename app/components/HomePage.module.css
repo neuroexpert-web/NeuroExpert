@@ -682,9 +682,24 @@
 
 /* Accessibility */
 @media (prefers-reduced-motion: reduce) {
-  * {
+  .homePage,
+  .homePage * {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  
+  @keyframes none {
+    to { transform: none; }
+  }
+  
+  .swipeArrow,
+  .metricGlow,
+  .titleLine1,
+  .titleLine2,
+  .btnPulse,
+  .statusSuccess,
+  .statusError {
+    animation: none !important;
   }
 }
