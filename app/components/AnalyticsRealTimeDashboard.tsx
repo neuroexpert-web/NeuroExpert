@@ -305,32 +305,30 @@ export default function AnalyticsRealTimeDashboard() {
 
   return (
     <div ref={containerRef} className={styles.dashboard}>
-      {/* Заголовок с объяснением */}
+      {/* Компактный заголовок */}
       <div className={styles.header}>
-        <motion.div 
-          className={styles.headerContent}
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          <h1 className={styles.title}>
-            <span className={styles.titleIcon}>📊</span>
-            Центр управления аналитикой
-          </h1>
-          <p className={styles.subtitle}>
-            Все ваши данные в одном месте • Обновление в реальном времени • Понятные метрики
-          </p>
-        </motion.div>
+        <div className={styles.headerContent}>
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+          >
+            <h1 className={styles.title}>
+              <span className={styles.titleIcon}>📊</span>
+              Центр управления аналитикой
+            </h1>
+          </motion.div>
 
-        {/* Демо-уведомление */}
-        <motion.div 
-          className={styles.demoNotice}
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.3 }}
-        >
-          <span className={styles.demoIcon}>✨</span>
-          <span>Демонстрационный режим: данные обновляются автоматически для показа возможностей</span>
-        </motion.div>
+          {/* Демо-уведомление */}
+          <motion.div 
+            className={styles.demoNotice}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            <span className={styles.demoIcon}>✨</span>
+            <span>Демо-режим</span>
+          </motion.div>
+        </div>
       </div>
 
       {/* Основной контент со скроллом */}
@@ -374,6 +372,44 @@ export default function AnalyticsRealTimeDashboard() {
               color="#EA4335"
               trend={-45.2}
               inverse
+            />
+          </div>
+        </section>
+
+        {/* AI Рекомендации */}
+        <section className={styles.aiSection}>
+          <h2 className={styles.sectionTitle}>
+            <span className={styles.sectionIcon}>🤖</span>
+            AI рекомендации для вашего бизнеса
+          </h2>
+          <div className={styles.aiGrid}>
+            <AIRecommendation
+              icon="🚀"
+              priority="high"
+              title="Увеличьте конверсию на 25%"
+              description="Замечен высокий процент отказов (32.5%) на странице оформления заказа. Упростите форму и добавьте прогресс-бар."
+              metrics="Потенциал: +₽2.4М/месяц"
+            />
+            <AIRecommendation
+              icon="⚡"
+              priority="medium"
+              title="Оптимизируйте скорость загрузки"
+              description="Страницы грузятся 1.2 секунды, что на 20% медленнее конкурентов. Сжатие изображений увеличит конверсию."
+              metrics="Потенциал: +15% к продажам"
+            />
+            <AIRecommendation
+              icon="📱"
+              priority="high"
+              title="Мобильная аудитория растёт"
+              description="68.5% пользователей заходят с мобильных. Адаптируйте критические страницы под мобильные устройства."
+              metrics="Потенциал: +5400 клиентов"
+            />
+            <AIRecommendation
+              icon="🎯"
+              priority="low"
+              title="Используйте ретаргетинг"
+              description="47% посетителей возвращаются. Настройте персонализированные предложения для повторных визитов."
+              metrics="Потенциал: +8% выручки"
             />
           </div>
         </section>
@@ -595,6 +631,39 @@ function BenefitCard({ icon, title, description }: any) {
       <div className={styles.benefitIcon}>{icon}</div>
       <h3 className={styles.benefitTitle}>{title}</h3>
       <p className={styles.benefitDescription}>{description}</p>
+    </motion.div>
+  );
+}
+
+// Компонент AI рекомендации
+function AIRecommendation({ icon, priority, title, description, metrics }: any) {
+  const priorityColors = {
+    high: '#ef4444',
+    medium: '#f59e0b',
+    low: '#10b981'
+  };
+
+  return (
+    <motion.div
+      className={styles.aiCard}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ scale: 1.02 }}
+      style={{ borderColor: priorityColors[priority] + '40' }}
+    >
+      <div className={styles.aiHeader}>
+        <div className={styles.aiIcon}>{icon}</div>
+        <div className={styles.aiPriority} style={{ color: priorityColors[priority] }}>
+          {priority === 'high' ? 'Высокий приоритет' : 
+           priority === 'medium' ? 'Средний приоритет' : 'Низкий приоритет'}
+        </div>
+      </div>
+      <h3 className={styles.aiTitle}>{title}</h3>
+      <p className={styles.aiDescription}>{description}</p>
+      <div className={styles.aiMetrics}>
+        <span className={styles.aiMetricsIcon}>💰</span>
+        <span>{metrics}</span>
+      </div>
     </motion.div>
   );
 }
