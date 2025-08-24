@@ -22,7 +22,8 @@
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-radius: 20px;
-  padding: 2rem;
+  padding: 3rem 2rem 2rem;
+  margin-top: 2rem;
 }
 
 /* Заголовок секции */

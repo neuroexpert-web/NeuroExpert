@@ -133,11 +133,12 @@ export default function SolutionsSection() {
 
       <style jsx>{`
         .solutions-section {
-          padding: 4rem 0;
+          padding: 4rem 2rem;
           background: linear-gradient(180deg, var(--noir-900) 0%, var(--noir-800) 100%);
           min-height: 100vh;
-          display: flex;
-          align-items: center;
+          width: 100%;
+          overflow-y: auto;
+          overflow-x: hidden;
         }
 
         .container {

@@ -30,9 +30,9 @@ const SolutionsSection = dynamic(() => import('./components/SolutionsSection'), 
   loading: () => <div className="loading-skeleton">Загрузка решений...</div>
 });
 
-const AdminPanel = dynamic(() => import('./components/AdminPanel'), {
+const SecuritySection = dynamic(() => import('./components/SecuritySection'), {
   ssr: false,
-  loading: () => <div className="loading-skeleton">Загрузка панели безопасности...</div>
+  loading: () => <div className="loading-skeleton">Загрузка раздела безопасности...</div>
 });
 
 const ContactForm = dynamic(() => import('./components/ContactForm'), {
@@ -147,19 +147,9 @@ export default function Home() {
     
     // 6. Безопасность
     <section key="security" className="security-section" id="security">
-      <div className="container">
-        <div className="section-header">
-          <h2 className="heading-luxury">
-            Безопасность и <span className="heading-gold">защита данных</span>
-          </h2>
-          <p className="section-subtitle">
-            Zero Trust архитектура, GDPR compliance, ISO 27001
-          </p>
-        </div>
-        <Suspense fallback={<div className="loading-skeleton">Загрузка панели...</div>}>
-          <AdminPanel />
-        </Suspense>
-      </div>
+      <Suspense fallback={<div className="loading-skeleton">Загрузка раздела безопасности...</div>}>
+        <SecuritySection />
+      </Suspense>
     </section>,
     
     // 7. О нас
