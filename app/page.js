@@ -15,7 +15,7 @@ const AnalyticsDashboard = dynamic(() => import('./components/AnalyticsRealTimeD
   loading: () => <div className="loading-skeleton">Загрузка аналитики...</div>
 });
 
-const ROICalculator = dynamic(() => import('./components/ROICalculator'), {
+const ROICalculator = dynamic(() => import('./components/ROICalculator.tsx'), {
   ssr: false,
   loading: () => <div className="loading-skeleton">Загрузка ROI калькулятора...</div>
 });

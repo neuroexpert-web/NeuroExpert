@@ -7,43 +7,44 @@ export default function AboutSection() {
     {
       name: 'Александр Нейронов',
       role: 'Управляющий директор',
-      experience: '15+ лет в IT',
+      experience: 'Эксперт в AI технологиях',
       avatar: '👨‍💼',
-      description: 'Эксперт в AI и цифровой трансформации'
+      description: 'Стратегическое видение развития AI в бизнесе'
     },
     {
       name: 'Екатерина',
-      role: 'Lead Experience Architect',
-      experience: '10+ лет в UX/UI',
+      role: 'Ведущий UX/UI дизайнер',
+      experience: 'Эксперт по пользовательскому опыту',
       avatar: '👩‍🎨',
-      description: 'Создает WOW-эффекты в дизайне'
+      description: 'Проектирование интуитивных интерфейсов'
     },
     {
       name: 'Степан',
-      role: 'Full-stack Developer',
-      experience: '8+ лет разработки',
+      role: 'Главный разработчик',
+      experience: 'Эксперт по интеграции AI',
       avatar: '👨‍💻',
-      description: 'AI интеграция и архитектура'
+      description: 'Разработка масштабируемых AI решений'
     },
     {
       name: 'Алексей',
-      role: 'AI Analytics Expert',
-      experience: '12+ лет в аналитике',
+      role: 'Руководитель отдела аналитики',
+      experience: 'Эксперт по анализу данных',
       avatar: '👨‍🔬',
-      description: 'Данные, метрики, прогнозы'
+      description: 'Превращение данных в бизнес-решения'
     }
   ];
 
   const achievements = [
-    { number: '500+', text: 'Реализованных проектов' },
-    { number: '50+', text: 'Отраслей опыта' },
-    { number: '95%', text: 'Довольных клиентов' },
-    { number: '300%+', text: 'Средний ROI клиентов' }
+    { number: '2024', text: 'Год основания' },
+    { number: '7+', text: 'AI технологий' },
+    { number: '24/7', text: 'Поддержка клиентов' },
+    { number: '100%', text: 'Фокус на результат' }
   ];
 
   return (
     <section className="about-section">
-      <div className="container">
+      <div className="scrollable-content">
+        <div className="container">
         <div className="section-header">
           <motion.h2 
             className="heading-luxury"
@@ -73,19 +74,20 @@ export default function AboutSection() {
           <div className="mission-content">
             <h3>🎯 Наша миссия</h3>
             <p>
-              Мы верим, что каждый бизнес заслуживает преимуществ искусственного интеллекта. 
-              Наша цель — сделать передовые AI-технологии простыми, доступными и прибыльными 
-              для компаний любого размера.
+              <strong>Цифровизация бизнеса с помощью AI инструментов.</strong><br/>
+              Мы помогаем компаниям автоматизировать процессы, внедрять искусственный интеллект 
+              и создавать современные цифровые решения. Наша цель — сделать AI-технологии 
+              понятными и доступными для каждого предпринимателя.
             </p>
           </div>
           <div className="mission-stats">
             <div className="stat-item">
-              <div className="stat-number">2019</div>
+              <div className="stat-number">2024</div>
               <div className="stat-label">Год основания</div>
             </div>
             <div className="stat-item">
-              <div className="stat-number">6</div>
-              <div className="stat-label">Лет опыта</div>
+              <div className="stat-number">∞</div>
+              <div className="stat-label">Потенциал роста</div>
             </div>
           </div>
         </motion.div>
@@ -164,14 +166,58 @@ export default function AboutSection() {
           </div>
         </motion.div>
       </div>
+      </div>
 
       <style jsx>{`
         .about-section {
-          padding: 4rem 0;
-          background: linear-gradient(180deg, var(--noir-900) 0%, var(--noir-800) 100%);
-          min-height: 100vh;
+          width: 100%;
+          height: 100vh;
+          background: #0a0a0a;
+          color: white;
           display: flex;
-          align-items: center;
+          flex-direction: column;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .about-section::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 300px;
+          background: linear-gradient(135deg, rgba(153, 69, 255, 0.05) 0%, rgba(0, 212, 255, 0.05) 100%);
+          pointer-events: none;
+          z-index: 1;
+        }
+
+        .scrollable-content {
+          flex: 1;
+          overflow-y: auto;
+          overflow-x: hidden;
+          scroll-behavior: smooth;
+          padding: 4rem 0;
+          position: relative;
+          z-index: 2;
+        }
+
+        /* Custom Scrollbar */
+        .scrollable-content::-webkit-scrollbar {
+          width: 10px;
+        }
+
+        .scrollable-content::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.05);
+        }
+
+        .scrollable-content::-webkit-scrollbar-thumb {
+          background: rgba(153, 69, 255, 0.3);
+          border-radius: 5px;
+        }
+
+        .scrollable-content::-webkit-scrollbar-thumb:hover {
+          background: rgba(153, 69, 255, 0.5);
         }
 
         .container {

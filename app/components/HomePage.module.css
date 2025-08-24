@@ -1,860 +1,442 @@
-/* HomePage Styles - NeuroExpert Design System */
-
+/* Главный контейнер */
 .homePage {
   position: relative;
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   overflow: hidden;
-  background: var(--noir-900, #0a0a0f);
-  color: #fff;
-}
-
-/* Header */
-.header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  padding: 1.5rem 2rem;
-  background: rgba(10, 10, 15, 0.8);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.headerContainer {
-  max-width: 1400px;
-  margin: 0 auto;
+  background: #000;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
-/* Logo */
-.logo {
-  font-family: var(--font-orbitron, 'Orbitron'), sans-serif;
-  font-size: 1.75rem;
-  font-weight: 900;
-  letter-spacing: -0.02em;
-  cursor: pointer;
+/* Эффект глубокого темно-синего зеркала - полярная ночь */
+.polarNightBackground {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Базовый слой - максимальная глубина */
+.deepLayer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    #000814 0%,
+    #001d3d 20%,
+    #003566 40%,
+    #001d3d 60%,
+    #000814 80%,
+    #000000 100%);
+}
+
+/* Зеркальные отражения */
+.mirrorLayer1 {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(0, 53, 102, 0.3) 10%,
+    rgba(0, 119, 182, 0.2) 30%,
+    transparent 40%,
+    transparent 60%,
+    rgba(0, 119, 182, 0.2) 70%,
+    rgba(0, 53, 102, 0.3) 90%,
+    transparent 100%);
+  transform: skewY(-5deg);
+}
+
+.mirrorLayer2 {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center,
+    transparent 0%,
+    rgba(0, 53, 102, 0.2) 40%,
+    rgba(0, 29, 61, 0.4) 70%,
+    rgba(0, 8, 20, 0.8) 100%);
+  mix-blend-mode: screen;
+}
+
+/* Северное сияние */
+.auroraLayer {
+  position: absolute;
+  inset: 0;
+  opacity: 0.3;
+}
+
+.aurora1 {
+  position: absolute;
+  top: -20%;
+  left: -10%;
+  right: -10%;
+  height: 40%;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(0, 119, 182, 0.1) 40%,
+    rgba(0, 180, 216, 0.2) 60%,
+    transparent 100%);
+  filter: blur(60px);
+  animation: auroraWave 20s ease-in-out infinite;
+}
+
+.aurora2 {
+  position: absolute;
+  top: 10%;
+  left: 20%;
+  width: 60%;
+  height: 30%;
+  background: radial-gradient(ellipse,
+    rgba(0, 180, 216, 0.3) 0%,
+    rgba(0, 119, 182, 0.1) 50%,
+    transparent 100%);
+  filter: blur(80px);
+  animation: auroraWave 25s ease-in-out infinite reverse;
+}
+
+.aurora3 {
+  position: absolute;
+  bottom: 20%;
+  right: 10%;
+  width: 40%;
+  height: 40%;
+  background: radial-gradient(circle,
+    rgba(144, 224, 239, 0.2) 0%,
+    rgba(0, 180, 216, 0.1) 50%,
+    transparent 100%);
+  filter: blur(100px);
+  animation: auroraWave 30s ease-in-out infinite;
+}
+
+@keyframes auroraWave {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+  50% { transform: translateY(-20px) scale(1.1); opacity: 0.5; }
+}
+
+/* Ледяные кристаллы */
+.crystalLayer {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(1px 1px at 10% 20%, rgba(144, 224, 239, 0.3), transparent),
+    radial-gradient(1px 1px at 30% 40%, rgba(202, 240, 248, 0.2), transparent),
+    radial-gradient(1px 1px at 50% 60%, rgba(144, 224, 239, 0.2), transparent),
+    radial-gradient(1px 1px at 70% 80%, rgba(202, 240, 248, 0.3), transparent),
+    radial-gradient(1px 1px at 90% 10%, rgba(144, 224, 239, 0.2), transparent);
+  background-size: 200px 200px;
+  opacity: 0.5;
+  animation: crystalShimmer 60s linear infinite;
+}
+
+@keyframes crystalShimmer {
+  from { transform: translateY(0); }
+  to { transform: translateY(200px); }
+}
+
+/* Глубинное свечение */
+.depthGlow {
+  position: absolute;
+  bottom: -50%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150%;
+  height: 100%;
+  background: radial-gradient(ellipse at center bottom,
+    rgba(0, 119, 182, 0.2) 0%,
+    rgba(0, 53, 102, 0.1) 30%,
+    transparent 60%);
+  filter: blur(100px);
+}
+
+/* Основной контент */
+.mainContent {
   position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  text-align: center;
+  max-width: 900px;
+}
+
+/* Футуристический логотип НЕЙРОЭКСПЕРТ */
+.logoContainer {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.futuristicLogo {
+  font-size: 5rem;
+  font-weight: 900;
+  font-family: 'Orbitron', 'Russo One', sans-serif;
+  letter-spacing: 0.25em;
+  margin: 0;
+  position: relative;
+  user-select: none;
+  line-height: 1;
 }
 
 .logoNeuro {
-  color: #fff;
-  text-shadow: 0 0 30px rgba(153, 69, 255, 0.8);
-  position: relative;
+  display: inline-block;
+  background: linear-gradient(135deg,
+    #00D4FF 0%,
+    #0099FF 50%,
+    #00D4FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 
+    0 0 30px rgba(0, 212, 255, 0.8),
+    0 0 60px rgba(0, 212, 255, 0.5),
+    0 0 90px rgba(0, 212, 255, 0.3);
+  filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.6));
+  animation: neonPulse 2s ease-in-out infinite;
 }
 
 .logoExpert {
-  background: linear-gradient(135deg, #9945ff 0%, #6366f1 50%, #a855f7 100%);
+  display: inline-block;
+  background: linear-gradient(135deg,
+    #9945FF 0%,
+    #7B2FFF 50%,
+    #9945FF 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-left: 0.25rem;
-  filter: drop-shadow(0 0 20px rgba(153, 69, 255, 0.5));
+  text-shadow: 
+    0 0 30px rgba(153, 69, 255, 0.8),
+    0 0 60px rgba(153, 69, 255, 0.5),
+    0 0 90px rgba(153, 69, 255, 0.3);
+  filter: drop-shadow(0 0 20px rgba(153, 69, 255, 0.6));
+  animation: neonPulse 2s ease-in-out infinite;
+  animation-delay: 0.5s;
 }
 
-.logo::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, #9945ff, #6366f1, #a855f7);
-  opacity: 0;
-  transform: scaleX(0);
-  transition: all 0.3s ease;
-}
-
-.logo:hover::after {
-  opacity: 1;
-  transform: scaleX(1);
-}
-
-/* Burger Menu */
-.burgerMenu {
-  width: 40px;
-  height: 40px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  padding: 0;
-}
-
-.burgerLine {
-  width: 24px;
-  height: 2px;
-  background: #fff;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  position: relative;
-  box-shadow: 0 0 10px rgba(153, 69, 255, 0.5);
-}
-
-.burgerMenu:hover .burgerLine {
-  background: linear-gradient(90deg, #9945ff, #6366f1);
-  box-shadow: 0 0 20px rgba(153, 69, 255, 0.8);
-}
-
-.burgerActive .burgerLine:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
-}
-
-.burgerActive .burgerLine:nth-child(2) {
-  opacity: 0;
-  transform: translateX(10px);
-}
-
-.burgerActive .burgerLine:nth-child(3) {
-  transform: rotate(-45deg) translate(5px, -5px);
-}
-
-/* Slide Menu */
-.slideMenu {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 320px;
-  height: 100vh;
-  background: rgba(10, 10, 15, 0.95);
-  backdrop-filter: blur(30px);
-  border-left: 1px solid rgba(153, 69, 255, 0.3);
-  z-index: 999;
-  box-shadow: -10px 0 50px rgba(153, 69, 255, 0.2);
-}
-
-.menuContent {
-  padding: 2rem;
-  height: 100%;
-  overflow-y: auto;
-}
-
-.menuClose {
-  position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  width: 40px;
-  height: 40px;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  color: #fff;
-  font-size: 1.5rem;
-}
-
-.menuClose:hover {
-  background: rgba(153, 69, 255, 0.2);
-  border-color: rgba(153, 69, 255, 0.5);
-  transform: rotate(90deg);
-}
-
-.menuList {
-  list-style: none;
-  padding: 0;
-  margin: 4rem 0 0;
-}
-
-.menuList li {
-  margin-bottom: 1rem;
-}
-
-.menuItem {
-  width: 100%;
-  padding: 1rem 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  color: #fff;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  transition: all 0.3s ease;
-  font-family: var(--font-space-grotesk, 'Space Grotesk'), sans-serif;
-  font-size: 1rem;
-  text-align: left;
-}
-
-.menuItem:hover {
-  background: rgba(153, 69, 255, 0.1);
-  border-color: rgba(153, 69, 255, 0.5);
-  transform: translateX(-5px);
-  box-shadow: 0 5px 20px rgba(153, 69, 255, 0.3);
-}
-
-.menuIcon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: rgba(153, 69, 255, 0.1);
-  border-radius: 10px;
-  flex-shrink: 0;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.menuIcon svg {
-  width: 24px;
-  height: 24px;
-}
-
-.menuText {
-  flex: 1;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-}
-
-/* Main Content */
-.mainContent {
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8rem 2rem 4rem; /* Увеличил верхний отступ чтобы заголовок не перекрывался */
-}
-
-/* Video Background */
-.videoBackground {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  overflow: hidden;
-}
-
-.bgVideo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.4;
-}
-
-.videoOverlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at center, transparent 0%, rgba(10, 10, 15, 0.4) 50%, rgba(10, 10, 15, 0.8) 100%);
-  pointer-events: none;
-}
-
-.gradientFallback {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: 
-    radial-gradient(circle at 20% 50%, rgba(153, 69, 255, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 80% 30%, rgba(99, 102, 241, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 50% 80%, rgba(236, 72, 153, 0.2) 0%, transparent 50%),
-    linear-gradient(180deg, #0a0a0f 0%, #1a1a25 100%);
-  z-index: -1;
-}
-
-/* Hero Section */
-.heroSection {
-  position: relative;
-  z-index: 10;
-  text-align: center;
-  max-width: 1200px;
-  margin: 0 auto;
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-bottom: 4rem;
-}
-
-.heroTitle {
-  font-family: var(--font-orbitron, 'Orbitron'), sans-serif;
-  font-size: clamp(2.5rem, 7vw, 5rem);
-  font-weight: 900;
-  line-height: 1.1;
-  margin-bottom: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.titleLine1 {
-  color: #fff;
-  text-shadow: 0 0 40px rgba(255, 255, 255, 0.5);
-  animation: glow 3s ease-in-out infinite alternate;
-}
-
-.titleLine2 {
-  background: linear-gradient(135deg, #9945ff 0%, #6366f1 25%, #a855f7 50%, #ec4899 75%, #9945ff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  background-size: 200% 200%;
-  animation: gradient-shift 5s ease infinite;
-  filter: drop-shadow(0 0 30px rgba(153, 69, 255, 0.5));
-}
-
-@keyframes glow {
-  from {
-    text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+@keyframes neonPulse {
+  0%, 100% { 
+    filter: drop-shadow(0 0 20px currentColor) brightness(1);
   }
-  to {
-    text-shadow: 0 0 50px rgba(255, 255, 255, 0.8), 0 0 80px rgba(153, 69, 255, 0.5);
+  50% { 
+    filter: drop-shadow(0 0 30px currentColor) brightness(1.2);
   }
 }
 
-@keyframes gradient-shift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+/* Основной заголовок - 30% меньше логотипа */
+.mainHeading {
+  font-size: 3.5rem; /* 30% меньше от 5rem */
+  font-weight: 100;
+  font-family: 'Russo One', 'Orbitron', sans-serif;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+  line-height: 1.2;
+  text-shadow: 
+    0 0 20px rgba(0, 212, 255, 0.5),
+    0 0 40px rgba(0, 212, 255, 0.3);
 }
 
-.heroSubtitle {
-  font-family: var(--font-space-grotesk, 'Space Grotesk'), sans-serif;
-  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
-  color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 3rem;
+/* Подзаголовок/описание */
+.subtitle {
+  font-size: 1.3rem;
   font-weight: 300;
-  letter-spacing: 0.02em;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  line-height: 1.6;
   max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
+  text-shadow: 0 0 15px rgba(0, 180, 216, 0.4);
 }
 
-/* CTA Buttons */
-.ctaButtons {
-  display: flex;
-  gap: 1.5rem;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: 4rem;
-}
-
-.btnPrimary,
-.btnSecondary {
+/* Неоновая кнопка AI управляющий */
+.neonButton {
   position: relative;
-  padding: 1.25rem 3rem;
-  font-family: var(--font-space-grotesk, 'Space Grotesk'), sans-serif;
-  font-size: 1.1rem;
-  font-weight: 600;
-  text-decoration: none;
-  border-radius: 12px;
-  overflow: hidden;
+  margin-top: 2.5rem;
+  padding: 1.2rem 3.5rem;
+  background: rgba(0, 29, 61, 0.3);
+  border: 2px solid;
+  border-image: linear-gradient(135deg, #00D4FF 0%, #9945FF 100%) 1;
   cursor: pointer;
+  overflow: hidden;
   transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 200px;
+  outline: none;
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 0 30px rgba(0, 212, 255, 0.5),
+    inset 0 0 20px rgba(153, 69, 255, 0.2);
 }
 
-.btnPrimary {
-  background: linear-gradient(135deg, #9945ff 0%, #6366f1 50%, #a855f7 100%);
-  color: #fff;
-  border: none;
-  box-shadow: 0 5px 30px rgba(153, 69, 255, 0.4);
-}
-
-.btnSecondary {
-  background: transparent;
-  color: #fff;
-  border: 2px solid rgba(153, 69, 255, 0.5);
-}
-
-.btnText {
+.buttonText {
   position: relative;
   z-index: 2;
-}
-
-.btnGlow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
-  transform: translate(-50%, -50%) scale(0);
-  transition: transform 0.5s ease;
-}
-
-.btnPulse {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 100%;
-  height: 100%;
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  border-radius: inherit;
-  transform: translate(-50%, -50%);
-  animation: pulse 2s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes pulse {
-  0% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(1.3);
-    opacity: 0;
-  }
-}
-
-.btnPrimary:hover .btnGlow,
-.btnSecondary:hover .btnGlow {
-  transform: translate(-50%, -50%) scale(2);
-}
-
-.btnPrimary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 40px rgba(153, 69, 255, 0.6);
-}
-
-.btnSecondary:hover {
-  background: rgba(153, 69, 255, 0.1);
-  border-color: rgba(153, 69, 255, 0.8);
-  transform: translateY(-3px);
-  box-shadow: 0 10px 40px rgba(153, 69, 255, 0.4);
-}
-
-/* Metrics */
-.metrics {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1.5rem;
-  max-width: 600px;
-  margin: 0 auto 3rem;
-}
-
-.metricCard {
-  position: relative;
-  padding: 2.5rem 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(153, 69, 255, 0.3);
-  border-radius: 20px;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  text-align: center;
-  min-height: 280px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  perspective: 1000px;
-}
-
-.metricCard:hover {
-  border-color: rgba(153, 69, 255, 0.6);
-  background: rgba(153, 69, 255, 0.1);
-  box-shadow: 0 15px 40px rgba(153, 69, 255, 0.3);
-}
-
-.metricIcon {
-  width: 60px;
-  height: 60px;
-  margin-bottom: 1.5rem;
-  position: relative;
-  animation: float 6s ease-in-out infinite;
-}
-
-.metricIcon svg {
-  width: 100%;
-  height: 100%;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-}
-
-.metricValue {
-  font-family: var(--font-orbitron, 'Orbitron'), sans-serif;
-  font-size: 2.5rem;
-  font-weight: 900;
-  background: linear-gradient(135deg, #9945ff 0%, #6366f1 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 0.5rem;
-  text-shadow: 0 0 30px rgba(153, 69, 255, 0.5);
-}
-
-.metricLabel {
-  font-family: var(--font-space-grotesk, 'Space Grotesk'), sans-serif;
-  font-size: 1rem;
-  color: rgba(255, 255, 255, 0.9);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-}
-
-.metricDescription {
-  font-family: var(--font-exo2, 'Exo 2'), sans-serif;
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.6);
-  line-height: 1.4;
-  margin-top: 0.5rem;
-}
-
-.metricGlow {
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(153, 69, 255, 0.3) 0%, transparent 70%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.metricCard:hover .metricGlow {
-  opacity: 1;
-  animation: rotate 10s linear infinite;
-}
-
-@keyframes rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-/* Advantages Section */
-.advantages {
-  width: 100%;
-  max-width: 1000px;
-  margin: 4rem auto 3rem;
-  text-align: center;
-}
-
-.advantagesTitle {
-  font-family: var(--font-orbitron, 'Orbitron'), sans-serif;
-  font-size: 2.5rem;
-  font-weight: 900;
-  margin-bottom: 3rem;
-  background: linear-gradient(135deg, #9945ff 0%, #6366f1 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.advantagesList {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-}
-
-.advantageItem {
-  padding: 2rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(153, 69, 255, 0.2);
-  border-radius: 16px;
-  transition: all 0.3s ease;
-}
-
-.advantageItem:hover {
-  transform: translateY(-5px);
-  background: rgba(153, 69, 255, 0.05);
-  border-color: rgba(153, 69, 255, 0.5);
-  box-shadow: 0 10px 30px rgba(153, 69, 255, 0.2);
-}
-
-.advantageIcon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  filter: drop-shadow(0 0 20px rgba(153, 69, 255, 0.5));
-}
-
-.advantageItem h3 {
-  font-family: var(--font-space-grotesk, 'Space Grotesk'), sans-serif;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  color: #fff;
-  margin-bottom: 0.5rem;
-}
-
-.advantageItem p {
-  font-family: var(--font-exo2, 'Exo 2'), sans-serif;
-  font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.7);
-  line-height: 1.5;
-}
-
-/* Swipe Indicator */
-.swipeIndicator {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem; /* Перемещаю в правый угол чтобы не мешал */
-  text-align: center;
-  background: rgba(10, 10, 15, 0.8);
-  padding: 1rem;
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(153, 69, 255, 0.3);
-  z-index: 50;
-}
-
-.swipeText {
-  font-family: var(--font-space-grotesk, 'Space Grotesk'), sans-serif;
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Russo One', 'Orbitron', sans-serif;
+  letter-spacing: 0.15em;
+  background: linear-gradient(135deg, #00D4FF 0%, #9945FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 0.5rem;
-  display: block;
+  filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.8));
 }
 
-.swipeIcon {
-  display: flex;
-  gap: 4px;
-  justify-content: center;
-  align-items: center;
+.buttonGlow {
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, #00D4FF, #9945FF);
+  opacity: 0.5;
+  filter: blur(10px);
+  animation: buttonGlowPulse 2s ease-in-out infinite;
 }
 
-.swipeArrow {
-  width: 8px;
-  height: 8px;
-  border-right: 2px solid rgba(153, 69, 255, 0.5);
-  border-bottom: 2px solid rgba(153, 69, 255, 0.5);
-  transform: rotate(-45deg);
-  animation: swipe-arrow 2s ease-in-out infinite;
-}
-
-.swipeArrow:nth-child(2) {
-  animation-delay: -0.2s;
-}
-
-.swipeArrow:nth-child(3) {
-  animation-delay: -0.4s;
-}
-
-@keyframes swipe-arrow {
-  0%, 100% {
-    opacity: 0;
-    transform: rotate(-45deg) translate(-5px, -5px);
-  }
-  50% {
-    opacity: 1;
-    transform: rotate(-45deg) translate(0, 0);
-  }
-}
-
-/* Position Indicator */
-.positionIndicator {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.1);
-  z-index: 100;
-}
-
-.indicatorTrack {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-}
-
-.indicatorFill {
-  height: 100%;
-  background: linear-gradient(90deg, #9945ff 0%, #6366f1 50%, #a855f7 100%);
-  box-shadow: 0 0 20px rgba(153, 69, 255, 0.8);
-  transition: width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-/* Status Indicators */
-.statusIndicators {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  display: flex;
-  gap: 0.5rem;
-  z-index: 100;
-}
-
-.statusSuccess,
-.statusError {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
+.buttonPulse {
+  position: absolute;
+  inset: -20px;
+  border: 2px solid;
+  border-image: linear-gradient(135deg, #00D4FF 0%, #9945FF 100%) 1;
   opacity: 0;
-  transition: all 0.3s ease;
+  animation: buttonPulseAnim 2s ease-out infinite;
 }
 
-.statusSuccess {
-  background: #00ff88;
-  box-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
+@keyframes buttonGlowPulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.05); }
 }
 
-.statusError {
-  background: #ff006e;
-  box-shadow: 0 0 20px rgba(255, 0, 110, 0.8);
+@keyframes buttonPulseAnim {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(1.3); opacity: 0; }
 }
 
-.statusSuccess.active,
-.statusError.active {
-  opacity: 1;
-  animation: status-pulse 0.5s ease;
+.neonButton:hover {
+  transform: translateY(-2px);
+  background: rgba(0, 53, 102, 0.4);
+  box-shadow: 
+    0 0 40px rgba(0, 212, 255, 0.7),
+    0 0 80px rgba(153, 69, 255, 0.5),
+    inset 0 0 30px rgba(0, 212, 255, 0.3);
 }
 
-@keyframes status-pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.5);
-  }
-  100% {
-    transform: scale(1);
-  }
+.neonButton:hover .buttonText {
+  filter: drop-shadow(0 0 20px rgba(0, 212, 255, 1)) brightness(1.2);
 }
 
-/* Responsive */
+.neonButton:active {
+  transform: translateY(0);
+}
+
+/* Нижние индикаторы */
+.bottomIndicators {
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  z-index: 3;
+}
+
+.pageIndicator {
+  font-size: 0.9rem;
+  font-weight: 400;
+  font-family: 'Orbitron', monospace;
+  letter-spacing: 0.1em;
+  color: rgba(0, 212, 255, 0.6);
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+.scrollHint {
+  font-size: 0.85rem;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.5);
+  animation: hintPulse 3s ease-in-out infinite;
+}
+
+@keyframes hintPulse {
+  0%, 100% { opacity: 0.5; transform: translateX(0); }
+  50% { opacity: 0.8; transform: translateX(5px); }
+}
+
+/* Адаптивность */
 @media (max-width: 768px) {
-  .header {
-    padding: 1rem;
+  .futuristicLogo {
+    font-size: 3.5rem;
   }
 
-  .logo {
-    font-size: 1.5rem;
+  .mainHeading {
+    font-size: 2.5rem;
   }
 
-  .slideMenu {
-    width: 100%;
-  }
-
-  .mainContent {
-    padding: 7rem 1rem 3rem; /* Увеличил отступ для мобильных */
-  }
-
-  .heroTitle {
-    font-size: clamp(2rem, 10vw, 3.5rem);
-  }
-
-  .heroSubtitle {
-    font-size: clamp(1rem, 3vw, 1.3rem);
-    margin-bottom: 2rem;
-  }
-
-  .ctaButtons {
-    flex-direction: column;
-    width: 100%;
-    align-items: center;
-  }
-
-  .btnPrimary,
-  .btnSecondary {
-    width: 100%;
-    max-width: 300px;
-  }
-
-  .metrics {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .metricCard {
-    padding: 1.5rem 1rem;
-  }
-
-  .metricValue {
-    font-size: 2rem;
-  }
-
-  .metricIcon {
-    width: 50px;
-    height: 50px;
-    margin-bottom: 1rem;
-  }
-
-  .metricDescription {
-    font-size: 0.75rem;
-  }
-
-  .swipeIndicator {
-    bottom: 1rem;
-    right: 1rem;
-    padding: 0.75rem;
-  }
-
-  .swipeText {
-    font-size: 0.7rem;
-  }
-
-  .advantages {
-    margin: 3rem auto 2rem;
-  }
-
-  .advantagesTitle {
-    font-size: 1.8rem;
-    margin-bottom: 2rem;
-  }
-
-  .advantagesList {
-    gap: 1rem;
-  }
-
-  .advantageItem {
-    padding: 1.5rem;
-  }
-
-  .advantageIcon {
-    font-size: 2rem;
-  }
-
-  .advantageItem h3 {
+  .subtitle {
     font-size: 1.1rem;
   }
 
-  .advantageItem p {
-    font-size: 0.85rem;
+  .neonButton {
+    padding: 1rem 2.5rem;
+  }
+
+  .buttonText {
+    font-size: 1rem;
   }
 }
 
-/* Accessibility */
+@media (max-width: 480px) {
+  .futuristicLogo {
+    font-size: 2.5rem;
+    letter-spacing: 0.15em;
+  }
+
+  .mainHeading {
+    font-size: 1.8rem;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+    padding: 0 1rem;
+  }
+
+  .neonButton {
+    padding: 0.9rem 2rem;
+  }
+
+  .buttonText {
+    font-size: 0.9rem;
+  }
+
+  .bottomIndicators {
+    bottom: 20px;
+    right: 20px;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+/* Поддержка reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .homePage,
-  .homePage * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  .aurora1,
+  .aurora2,
+  .aurora3,
+  .crystalLayer,
+  .logoNeuro,
+  .logoExpert,
+  .buttonGlow,
+  .buttonPulse {
+    animation: none;
   }
-  
-  @keyframes none {
-    to { transform: none; }
+
+  .neonButton {
+    box-shadow: 
+      0 0 20px rgba(0, 212, 255, 0.5),
+      inset 0 0 15px rgba(153, 69, 255, 0.2);
   }
-  
-  .swipeArrow,
-  .metricGlow,
-  .titleLine1,
-  .titleLine2,
-  .btnPulse,
-  .statusSuccess,
-  .statusError {
-    animation: none !important;
+
+  .scrollHint {
+    animation: none;
+    opacity: 0.6;
   }
 }
