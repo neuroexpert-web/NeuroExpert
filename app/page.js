@@ -10,7 +10,7 @@ const HomePage = dynamic(() => import('./components/HomePage'), {
   loading: () => <div className="loading-skeleton">Загрузка главной...</div>
 });
 
-const AnalyticsDashboard = dynamic(() => import('./components/AnalyticsDashboard'), {
+const AnalyticsDashboard = dynamic(() => import('./components/AnalyticsRealTimeDashboard'), {
   ssr: false,
   loading: () => <div className="loading-skeleton">Загрузка аналитики...</div>
 });
