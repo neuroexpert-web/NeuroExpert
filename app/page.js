@@ -49,6 +49,12 @@ const AnalyticsDashboard = dynamic(() => import('./components/AnalyticsDashboard
   loading: () => <div className="loading-skeleton">Загрузка дашборда...</div>
 });
 
+// Бургер меню
+const BurgerMenu = dynamic(() => import('./components/BurgerMenu'), {
+  ssr: false,
+  loading: () => null
+});
+
 export default function Home() {
   const [currentSection, setCurrentSection] = useState(0);
   const { saveContext, loadContext } = useVault();
@@ -201,6 +207,23 @@ export default function Home() {
       >
         {sectionComponents}
       </SwipeContainer>
+
+      {/* Бургер меню для навигации */}
+      <Suspense fallback={null}>
+        <BurgerMenu 
+          sections={sections}
+          currentSection={currentSection}
+          onNavigate={(index) => {
+            // Программная навигация к секции
+            const event = new KeyboardEvent('keydown', { 
+              key: index > currentSection ? 'ArrowRight' : 'ArrowLeft' 
+            });
+            for (let i = 0; i < Math.abs(index - currentSection); i++) {
+              window.dispatchEvent(event);
+            }
+          }}
+        />
+      </Suspense>
 
       {/* AI Ассистент - всегда доступен */}
       <Suspense fallback={null}>
