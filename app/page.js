@@ -34,6 +34,11 @@ const AIDirectorCapabilities = dynamic(() => import('./components/AIDirectorCapa
   loading: () => <div className="loading-skeleton">Загрузка AI директора...</div>
 });
 
+const CursorIntegration = dynamic(() => import('./components/CursorIntegration'), {
+  ssr: false,
+  loading: () => null
+});
+
 export default function Home() {
   return (
     <main className="premium-main" style={{ background: 'var(--noir-900)', minHeight: '100vh' }}>
@@ -144,6 +149,11 @@ export default function Home() {
           <AdminPanel />
         </Suspense>
       )}
+      
+      {/* Интеграция курсора Claude Opus 4 */}
+      <Suspense fallback={null}>
+        <CursorIntegration />
+      </Suspense>
 
       <style jsx>{`
         .premium-main {
