@@ -123,14 +123,17 @@ export default function SwipeContainer({
       </motion.div>
 
       {/* Точки навигации */}
-      <div className={styles.dotsContainer}>
+      <div className={styles.dotsContainer} role="navigation" aria-label="Навигация по разделам">
         {children.map((_, index) => (
-          <button
-            key={index}
-            className={`${styles.dot} ${index === currentIndex ? styles.activeDot : ''}`}
-            onClick={() => setCurrentIndex(index)}
-            aria-label={`Перейти к разделу ${sections[index]}`}
-          />
+          <div key={index} className={styles.dotWrapper}>
+            <button
+              className={`${styles.dot} ${index === currentIndex ? styles.activeDot : ''}`}
+              onClick={() => setCurrentIndex(index)}
+              aria-label={`Перейти к разделу ${sections[index]}`}
+              aria-current={index === currentIndex ? 'true' : 'false'}
+            />
+            <span className={styles.dotTooltip}>{sections[index]}</span>
+          </div>
         ))}
       </div>
     </div>
