@@ -339,6 +339,19 @@ export default function SwipeContainer({
 function ProgressIndicator({ total, current, sections, onDotClick }) {
   const progress = ((current + 1) / total) * 100;
   
+  // Иконки для каждой страницы
+  const sectionIcons = [
+    '🏠', // Главная
+    '📊', // Аналитика
+    '💰', // ROI-калькулятор
+    '🤖', // AI управляющий
+    '💡', // Решения
+    '🔒', // Безопасность
+    '👥', // О нас
+    '💎', // Калькулятор цен
+    '📞'  // Контакты
+  ];
+  
   // Отслеживание взаимодействия с прогресс-баром
   const handleProgressClick = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -361,6 +374,20 @@ function ProgressIndicator({ total, current, sections, onDotClick }) {
 
   return (
     <div className={styles.progressContainer}>
+      <div className={styles.navigationGrid}>
+        {sections.map((section, index) => (
+          <motion.button
+            key={index}
+            className={`${styles.navItem} ${index === current ? styles.navItemActive : ''}`}
+            onClick={() => onDotClick(index)}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <span className={styles.navIcon}>{sectionIcons[index] || '📄'}</span>
+            <span className={styles.navLabel}>{section}</span>
+          </motion.button>
+        ))}
+      </div>
       <div 
         className={styles.progressBar}
         onClick={handleProgressClick}

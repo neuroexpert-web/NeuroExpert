@@ -9,7 +9,7 @@
 .swipeContainer {
   position: relative;
   width: 100%;
-  height: calc(100vh - 80px);
+  height: 100vh;
   cursor: grab;
   user-select: none;
   touch-action: pan-y;
@@ -29,15 +29,77 @@
 /* Индикатор прогресса с неоновыми эффектами */
 .progressContainer {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  bottom: 2rem;
+  left: 2rem;
+  width: auto;
+  max-width: 320px;
   z-index: var(--z-modal, 100);
-  background: var(--glass-bg, rgba(255, 255, 255, 0.05));
-  backdrop-filter: var(--glass-blur, blur(20px));
-  padding: var(--space-md, 1rem) var(--space-xl, 2rem);
-  border-bottom: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
-  box-shadow: var(--glass-shadow, 0 8px 32px rgba(0, 0, 0, 0.3));
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5),
+              0 0 40px rgba(168, 85, 247, 0.2);
+}
+
+/* Сетка навигации */
+.navigationGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.navItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: rgba(255, 255, 255, 0.7);
+  gap: 0.25rem;
+}
+
+.navItem:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--aurora-purple);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.navItemActive {
+  background: rgba(168, 85, 247, 0.2);
+  border-color: var(--aurora-purple);
+  color: #fff;
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+}
+
+.navIcon {
+  font-size: 1.5rem;
+  filter: saturate(0.8);
+}
+
+.navItemActive .navIcon {
+  filter: saturate(1.2);
+}
+
+.navLabel {
+  font-size: 0.65rem;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.2;
+  opacity: 0.8;
+}
+
+.navItemActive .navLabel {
+  opacity: 1;
 }
 
 .progressBar {
@@ -48,6 +110,7 @@
   border-radius: var(--radius-sm, 0.5rem);
   overflow: hidden;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  margin-top: 0.5rem;
 }
 
 .progressFill {
