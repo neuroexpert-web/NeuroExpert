@@ -3,8 +3,21 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import styles from './SwipeContainer.module.css';
-// Импорт клиентской системы аналитики
-import clientAnalytics, { trackSwipe, trackSectionView } from '../lib/analytics/client';
+
+// Временные заглушки для аналитики
+const trackSwipe = (direction, from, to, method) => {
+  console.log(`Swipe: ${direction} from ${from} to ${to} via ${method}`);
+};
+
+const trackSectionView = (section, index, timeSpent) => {
+  console.log(`Section view: ${section} (${index}) - ${timeSpent}ms`);
+};
+
+const clientAnalytics = {
+  track: (event, data, options) => {
+    console.log(`Analytics: ${event}`, data);
+  }
+};
 
 export default function SwipeContainer({
   children,
