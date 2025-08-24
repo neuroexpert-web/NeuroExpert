@@ -1,0 +1,459 @@
+/* NeuroExpert Premium Design System v3.0 - Futuristic AI Interface */
+
+/* ===============================
+   NEURO COLOR SYSTEM - ФУТУРИСТИЧНАЯ ПАЛИТРА
+   =============================== */
+:root {
+  /* NOIR - Глубокий космический фон */
+  --noir-1000: #000000;
+  --noir-950: #0a0b0f;
+  --noir-900: #0a0e1a;
+  --noir-850: #0f1423;
+  --noir-800: #151b2e;
+  --noir-750: #1a2138;
+  --noir-700: #1f2847;
+  --noir-600: #2a3757;
+
+  /* NEON ACCENTS - Неоновые акценты */
+  --neon-blue: #00d4ff;
+  --neon-purple: #a855f7;
+  --neon-cyan: #06ffa5;
+  --neon-pink: #ff0080;
+  --neon-gold: #ffb000;
+  --neon-electric: #00ff88;
+
+  /* PREMIUM GRADIENTS - Мощные градиенты */
+  --gradient-neuro: linear-gradient(135deg, #00d4ff 0%, #a855f7 50%, #ff0080 100%);
+  --gradient-cyber: linear-gradient(135deg, #0a0e1a 0%, #1a2138 50%, #2a3757 100%);
+  --gradient-energy: linear-gradient(90deg, #00ff88 0%, #00d4ff 100%);
+  --gradient-neural: linear-gradient(135deg, #a855f7 0%, #00d4ff 50%, #06ffa5 100%);
+  --gradient-electric: linear-gradient(45deg, #ff0080 0%, #ffb000 50%, #00ff88 100%);
+  
+  /* GLASS MORPHISM - Стеклянные эффекты */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --glass-blur: blur(20px);
+
+  /* NEON GLOWS - Неоновые свечения */
+  --glow-blue: 0 0 20px rgba(0, 212, 255, 0.5), 0 0 40px rgba(0, 212, 255, 0.3);
+  --glow-purple: 0 0 20px rgba(168, 85, 247, 0.5), 0 0 40px rgba(168, 85, 247, 0.3);
+  --glow-cyan: 0 0 20px rgba(6, 255, 165, 0.5), 0 0 40px rgba(6, 255, 165, 0.3);
+  --glow-pink: 0 0 20px rgba(255, 0, 128, 0.5), 0 0 40px rgba(255, 0, 128, 0.3);
+  --glow-gold: 0 0 20px rgba(255, 176, 0, 0.5), 0 0 40px rgba(255, 176, 0, 0.3);
+
+  /* PREMIUM SHADOWS - Глубокие тени */
+  --shadow-neuro: 0 20px 60px rgba(0, 212, 255, 0.2);
+  --shadow-cyber: 0 10px 40px rgba(0, 0, 0, 0.5);
+  --shadow-energy: 0 15px 50px rgba(0, 255, 136, 0.3);
+
+  /* TYPOGRAPHY - Футуристичная типографика */
+  --font-cyber: 'Orbitron', 'Inter', monospace;
+  --font-neural: 'Inter', 'Plus Jakarta Sans', sans-serif;
+  --font-code: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* SPACING SYSTEM - Система отступов */
+  --space-xs: 0.25rem;   /* 4px */
+  --space-sm: 0.5rem;    /* 8px */
+  --space-md: 1rem;      /* 16px */
+  --space-lg: 1.5rem;    /* 24px */
+  --space-xl: 2rem;      /* 32px */
+  --space-2xl: 3rem;     /* 48px */
+  --space-3xl: 4rem;     /* 64px */
+  --space-4xl: 6rem;     /* 96px */
+
+  /* ANIMATION SYSTEM - Премиум анимации */
+  --ease-neural: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-cyber: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-electric: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-quantum: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  /* BORDER RADIUS SYSTEM */
+  --radius-sm: 0.5rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
+  --radius-full: 9999px;
+
+  /* Z-INDEX SYSTEM */
+  --z-background: -1;
+  --z-content: 1;
+  --z-overlay: 10;
+  --z-modal: 100;
+  --z-tooltip: 1000;
+  --z-toast: 10000;
+}
+
+/* ===============================
+   NEURO TYPOGRAPHY SYSTEM
+   =============================== */
+
+/* Импорт футуристичных шрифтов */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+.heading-neuro {
+  font-family: var(--font-cyber);
+  font-weight: 900;
+  background: var(--gradient-neuro);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: var(--glow-blue);
+  letter-spacing: -0.02em;
+}
+
+.heading-cyber {
+  font-family: var(--font-cyber);
+  font-weight: 700;
+  color: var(--neon-blue);
+  text-shadow: var(--glow-blue);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.text-neural {
+  font-family: var(--font-neural);
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.7;
+}
+
+.text-code {
+  font-family: var(--font-code);
+  color: var(--neon-cyan);
+  background: rgba(6, 255, 165, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(6, 255, 165, 0.2);
+}
+
+/* ===============================
+   NEURO BUTTON SYSTEM
+   =============================== */
+
+.btn-neuro {
+  position: relative;
+  padding: 1rem 2rem;
+  background: var(--glass-bg);
+  border: 2px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  color: white;
+  font-family: var(--font-cyber);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s var(--ease-neural);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+}
+
+.btn-neuro::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--gradient-energy);
+  transition: left 0.5s var(--ease-electric);
+  z-index: -1;
+}
+
+.btn-neuro:hover {
+  border-color: var(--neon-cyan);
+  box-shadow: var(--glow-cyan);
+  transform: translateY(-2px);
+}
+
+.btn-neuro:hover::before {
+  left: 0;
+}
+
+.btn-neuro:active {
+  transform: translateY(0);
+  box-shadow: var(--glow-cyan), inset 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Варианты кнопок */
+.btn-neuro-primary {
+  border-color: var(--neon-blue);
+  color: var(--neon-blue);
+}
+
+.btn-neuro-primary:hover {
+  box-shadow: var(--glow-blue);
+  border-color: var(--neon-blue);
+}
+
+.btn-neuro-danger {
+  border-color: var(--neon-pink);
+  color: var(--neon-pink);
+}
+
+.btn-neuro-danger:hover {
+  box-shadow: var(--glow-pink);
+  border-color: var(--neon-pink);
+}
+
+/* ===============================
+   NEURO CARD SYSTEM
+   =============================== */
+
+.card-neuro {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s var(--ease-neural);
+}
+
+.card-neuro::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gradient-neuro);
+  transform: scaleX(0);
+  transition: transform 0.5s var(--ease-electric);
+}
+
+.card-neuro:hover {
+  border-color: var(--neon-blue);
+  box-shadow: var(--shadow-neuro);
+  transform: translateY(-8px);
+}
+
+.card-neuro:hover::before {
+  transform: scaleX(1);
+}
+
+/* ===============================
+   NEURO FORM SYSTEM
+   =============================== */
+
+.input-neuro {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: var(--glass-bg);
+  border: 2px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  color: white;
+  font-family: var(--font-neural);
+  font-size: 1rem;
+  backdrop-filter: var(--glass-blur);
+  transition: all 0.3s var(--ease-neural);
+}
+
+.input-neuro::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.input-neuro:focus {
+  outline: none;
+  border-color: var(--neon-cyan);
+  box-shadow: var(--glow-cyan);
+  background: rgba(6, 255, 165, 0.05);
+}
+
+.input-neuro:focus::placeholder {
+  color: transparent;
+}
+
+/* ===============================
+   NEURO ANIMATION SYSTEM
+   =============================== */
+
+@keyframes neural-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes cyber-glow {
+  0%, 100% {
+    box-shadow: var(--glow-blue);
+  }
+  33% {
+    box-shadow: var(--glow-purple);
+  }
+  66% {
+    box-shadow: var(--glow-cyan);
+  }
+}
+
+@keyframes electric-flow {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-15deg);
+  }
+}
+
+@keyframes quantum-shake {
+  0%, 100% { transform: translateX(0); }
+  10% { transform: translateX(-2px) rotate(-1deg); }
+  20% { transform: translateX(2px) rotate(1deg); }
+  30% { transform: translateX(-2px) rotate(-1deg); }
+  40% { transform: translateX(2px) rotate(1deg); }
+  50% { transform: translateX(-1px) rotate(-0.5deg); }
+  60% { transform: translateX(1px) rotate(0.5deg); }
+  70% { transform: translateX(-1px) rotate(-0.5deg); }
+  80% { transform: translateX(1px) rotate(0.5deg); }
+  90% { transform: translateX(0) rotate(0deg); }
+}
+
+/* Классы анимаций */
+.animate-neural-pulse {
+  animation: neural-pulse 2s ease-in-out infinite;
+}
+
+.animate-cyber-glow {
+  animation: cyber-glow 3s ease-in-out infinite;
+}
+
+.animate-electric-flow {
+  animation: electric-flow 2s linear infinite;
+}
+
+.animate-quantum-shake {
+  animation: quantum-shake 0.5s ease-in-out;
+}
+
+/* ===============================
+   NEURO UTILITY CLASSES
+   =============================== */
+
+.bg-neuro-gradient {
+  background: var(--gradient-neuro);
+}
+
+.bg-cyber-gradient {
+  background: var(--gradient-cyber);
+}
+
+.bg-neural-gradient {
+  background: var(--gradient-neural);
+}
+
+.border-neon {
+  border: 2px solid var(--neon-blue);
+  box-shadow: var(--glow-blue);
+}
+
+.text-neon-blue {
+  color: var(--neon-blue);
+  text-shadow: var(--glow-blue);
+}
+
+.text-neon-cyan {
+  color: var(--neon-cyan);
+  text-shadow: var(--glow-cyan);
+}
+
+.text-neon-purple {
+  color: var(--neon-purple);
+  text-shadow: var(--glow-purple);
+}
+
+.glass-effect {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+}
+
+.neural-shadow {
+  box-shadow: var(--shadow-neuro);
+}
+
+.cyber-shadow {
+  box-shadow: var(--shadow-cyber);
+}
+
+/* ===============================
+   NEURO RESPONSIVE SYSTEM
+   =============================== */
+
+@media (max-width: 768px) {
+  :root {
+    --space-xs: 0.2rem;
+    --space-sm: 0.4rem;
+    --space-md: 0.8rem;
+    --space-lg: 1.2rem;
+    --space-xl: 1.6rem;
+    --space-2xl: 2.4rem;
+    --space-3xl: 3.2rem;
+    --space-4xl: 4.8rem;
+  }
+
+  .btn-neuro {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .card-neuro {
+    padding: var(--space-xl);
+  }
+
+  .heading-neuro {
+    font-size: clamp(1.8rem, 5vw, 3rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-neuro {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.8rem;
+  }
+
+  .card-neuro {
+    padding: var(--space-lg);
+  }
+
+  .input-neuro {
+    padding: 0.8rem 1rem;
+  }
+}
+
+/* ===============================
+   NEURO ACCESSIBILITY
+   =============================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-neural-pulse,
+  .animate-cyber-glow,
+  .animate-electric-flow,
+  .animate-quantum-shake {
+    animation: none;
+  }
+
+  .btn-neuro,
+  .card-neuro,
+  .input-neuro {
+    transition: none;
+  }
+}
+
+/* Высокий контраст */
+@media (prefers-contrast: high) {
+  :root {
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --neon-blue: #00e6ff;
+    --neon-cyan: #00ff99;
+    --neon-purple: #bb66ff;
+  }
+}

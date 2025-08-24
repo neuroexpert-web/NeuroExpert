@@ -1,6 +1,7 @@
 
 import { Inter } from 'next/font/google'
 import './globals.css'
+import './styles/neuro-design-system.css'
 import './styles/premium-design-system.css'
 import './styles/premium-glass-sections.css'
 import './styles/mobile-fixes.css'
@@ -97,8 +98,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ru" className={inter.variable}>
       <head>
-        {/* Premium styles fallback */}
-        <link rel="stylesheet" href="/premium-styles.css" />
+        {/* Critical CSS inline для избежания FOUC */}
+        <style dangerouslySetInnerHTML={{__html: `
+          body { margin: 0; padding: 0; background: #0a0a0f; color: white; font-family: system-ui, -apple-system, sans-serif; }
+          .container { min-height: 100vh; }
+          .loading-skeleton { background: linear-gradient(90deg, rgba(255,255,255,0.1) 25%, transparent 37%, transparent 63%, rgba(255,255,255,0.1) 75%); animation: shimmer 1.5s infinite; }
+          @keyframes shimmer { 0% { background-position: -200px 0; } 100% { background-position: calc(200px + 100%) 0; } }
+        `}} />
         
         {/* Preconnect для оптимизации загрузки */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
