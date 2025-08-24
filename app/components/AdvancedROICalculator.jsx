@@ -178,7 +178,7 @@ export default function AdvancedROICalculator() {
     // Точка безубыточности
     const breakEvenPoint = Math.ceil(recommendedPrice / (totalBenefit / 12));
     
-    const result: CalculationResult = {
+    const result = {
       baseROI: Math.round(baseROI),
       optimisticROI: Math.round(monteCarloResult.percentile95),
       pessimisticROI: Math.round(monteCarloResult.percentile5),
