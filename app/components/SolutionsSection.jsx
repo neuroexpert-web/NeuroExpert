@@ -14,23 +14,23 @@ export default function SolutionsSection() {
           name: 'AI Landing Page',
           price: 'от 79,900₽',
           timeline: '5-7 дней',
-          features: ['AI-консультант 24/7', 'Конверсия до 40%', 'A/B тестирование'],
+          features: ['AI-консультант 24/7', 'Увеличение конверсии', 'A/B тестирование'],
           popular: true,
-          metrics: { conversion: '+40%', speed: '98/100', seo: '95/100' }
+          metrics: { conversion: 'Рост', speed: 'Быстро', seo: 'SEO' }
         },
         {
           name: 'Корпоративный сайт',
           price: 'от 199,900₽',
           timeline: '14-21 день',
           features: ['AI отдел продаж', 'Многоязычность', 'База знаний компании'],
-          metrics: { leads: '+250%', time: '-70%', roi: '320%' }
+          metrics: { leads: 'Больше лидов', time: 'Экономия времени', roi: 'Окупаемость' }
         },
         {
           name: 'Интернет-магазин',
           price: 'от 299,900₽',
           timeline: '21-30 дней',
           features: ['Персональные рекомендации', 'AI-стилист', 'Умный поиск'],
-          metrics: { sales: '+180%', cart: '+45%', ltv: '+120%' }
+          metrics: { sales: 'Рост продаж', cart: 'Конверсия', ltv: 'LTV' }
         }
       ]
     },

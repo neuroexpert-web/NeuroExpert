@@ -196,7 +196,7 @@ export default function ROICalculator(): JSX.Element {
           transition={{ delay: 0.4, duration: 0.6 }}
           whileHover={{ scale: 1.02 }}
         >
-          <form className={styles.form} onSubmit={calculateROI}>
+          <form className={styles.form} onSubmit={(e) => calculateROI(e)}>
             <motion.div 
               className={styles.field}
               whileHover={{ scale: 1.05 }}

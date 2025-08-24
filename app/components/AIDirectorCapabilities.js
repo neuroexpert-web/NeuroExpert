@@ -13,7 +13,7 @@ export default function AIDirectorCapabilities() {
       content: {
         name: 'Александр Нейронов',
         role: 'Управляющий директор NeuroExpert',
-        experience: '15+ лет в IT и цифровой трансформации',
+        experience: 'Эксперт в цифровой трансформации бизнеса',
         achievements: [
           'Многолетний опыт цифровой трансформации',
           'Эксперт в AI и машинном обучении',
