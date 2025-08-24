@@ -64,14 +64,14 @@ export default function AdvancedROICalculator() {
   }, []);
 
   // Расчет NPV (Net Present Value)
-  const calculateNPV = useCallback((cashFlows: number[], discountRate: number): number => {
+  const calculateNPV = useCallback((cashFlows, discountRate) => {
     return cashFlows.reduce((npv, cashFlow, t) => {
       return npv + cashFlow / Math.pow(1 + discountRate, t);
     }, 0);
   }, []);
 
   // Расчет IRR (Internal Rate of Return)
-  const calculateIRR = useCallback((cashFlows: number[]): number => {
+  const calculateIRR = useCallback((cashFlows) => {
     let rate = 0.1;
     let lastNPV = 0;
     
@@ -93,8 +93,8 @@ export default function AdvancedROICalculator() {
   }, [calculateNPV]);
 
   // Автоматическое ценообразование
-  const calculatePricing = useCallback((formData: any): { price: number; services: string[] } => {
-    const services: string[] = [];
+  const calculatePricing = useCallback((formData) => {
+    const services = [];
     let totalPrice = 0;
     
     // Всегда включаем аудит

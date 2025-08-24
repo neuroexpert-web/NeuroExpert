@@ -283,7 +283,7 @@ export default function AIDirectorCapabilities() {
           <motion.button
             onClick={() => {
               // Открыть чат
-              import('@/app/utils/aiChat').then(({ openAIChat }) => {
+              import('../utils/aiChat').then(({ openAIChat }) => {
                 openAIChat();
               });
             }}
