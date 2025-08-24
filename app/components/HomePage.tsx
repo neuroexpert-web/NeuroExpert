@@ -31,7 +31,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
       }
       
       // Яндекс.Метрика
-      if (window.ym) {
+      if (window.ym && process.env.NEXT_PUBLIC_YM_ID) {
         window.ym(process.env.NEXT_PUBLIC_YM_ID, 'hit', window.location.href);
       }
     }
@@ -369,10 +369,3 @@ export default function HomePage({ onNavigate }: HomePageProps) {
   );
 }
 
-// Типы для window объекта
-declare global {
-  interface Window {
-    gtag?: (...args: any[]) => void;
-    ym?: (...args: any[]) => void;
-  }
-}

@@ -167,7 +167,7 @@ export class YandexMetrica implements AnalyticsService {
    * Set user parameters
    */
   setUserParams(params: Record<string, any>): void {
-    if (!this.isInitialized || typeof window === 'undefined') return;
+    if (!this.isInitialized || typeof window === 'undefined' || !window.ym) return;
 
     window.ym(this.config.counterId, 'userParams', params);
   }
@@ -176,7 +176,7 @@ export class YandexMetrica implements AnalyticsService {
    * Track file download
    */
   trackFileDownload(url: string): void {
-    if (!this.isInitialized || typeof window === 'undefined') return;
+    if (!this.isInitialized || typeof window === 'undefined' || !window.ym) return;
 
     window.ym(this.config.counterId, 'file', url);
   }
