@@ -2,6 +2,7 @@
 import { Inter, Orbitron, Exo_2, Space_Grotesk } from 'next/font/google'
 import './globals.css'
 import './styles/neuroexpert-design-system.css'
+import './styles/neuroexpert-pro.css'
 import './styles/premium-design-system.css'
 import './styles/premium-glass-sections.css'
 import './styles/mobile-fixes.css'
