@@ -45,6 +45,11 @@ const AboutSection = dynamic(() => import('./components/AboutSection'), {
   loading: () => <div className="loading-skeleton">Загрузка о нас...</div>
 });
 
+const PricingCalculator = dynamic(() => import('./components/PricingCalculator'), {
+  ssr: false,
+  loading: () => <div className="loading-skeleton">Загрузка калькулятора цен...</div>
+});
+
 // AI чат - всегда доступен
 const SmartFloatingAI = dynamic(() => import('./components/SmartFloatingAI'), {
   ssr: false,
@@ -62,8 +67,9 @@ export default function Home() {
     'AI управляющий',
     'Решения',
     'Безопасность',
-    'Контакты',
-    'О нас'
+    'О нас',
+    'Калькулятор цен',
+    'Контакты'
   ];
 
   // Сохранение состояния и аналитика
@@ -168,7 +174,21 @@ export default function Home() {
       </div>
     </section>,
     
-    // 7. Контакты
+    // 7. О нас
+    <Suspense key="about" fallback={<div className="loading-section">Загрузка...</div>}>
+      <AboutSection />
+    </Suspense>,
+    
+    // 8. Калькулятор цен
+    <section key="pricing" className="pricing-section" id="pricing-calculator">
+      <div className="container">
+        <Suspense fallback={<div className="loading-skeleton">Загрузка калькулятора цен...</div>}>
+          <PricingCalculator />
+        </Suspense>
+      </div>
+    </section>,
+    
+    // 9. Контакты
     <section key="contacts" className="contact-section" id="contacts">
       <div className="container">
         <div className="contact-content">
@@ -185,12 +205,7 @@ export default function Home() {
           </Suspense>
         </div>
       </div>
-    </section>,
-    
-    // 8. О нас
-    <Suspense key="about" fallback={<div className="loading-section">Загрузка...</div>}>
-      <AboutSection />
-    </Suspense>
+    </section>
   ];
 
   return (
@@ -278,7 +293,8 @@ export default function Home() {
         .analytics-section,
         .roi-section,
         .security-section,
-        .contact-section {
+        .contact-section,
+        .pricing-section {
           padding: var(--space-4xl, 6rem) 0;
           min-height: 100vh;
           display: flex;
@@ -290,7 +306,8 @@ export default function Home() {
         .analytics-section::before,
         .roi-section::before,
         .security-section::before,
-        .contact-section::before {
+        .contact-section::before,
+        .pricing-section::before {
           content: '';
           position: absolute;
           top: 0;

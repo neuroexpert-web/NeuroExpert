@@ -1,9 +1,14 @@
+/* ROI Calculator - Polar Night Theme */
+
 /* Основной контейнер калькулятора */
 .calculator {
   position: relative;
-  padding: 120px 20px;
-  background: linear-gradient(180deg, #0a0a0f 0%, #141428 100%);
+  padding: 4rem 2rem;
+  background: transparent;
   overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
 }
 
 .container {
@@ -11,115 +16,127 @@
   margin: 0 auto;
   position: relative;
   z-index: 1;
+  width: 100%;
 }
 
 /* Заголовок секции */
 .header {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 3rem;
   position: relative;
 }
 
 .sparklesIcon {
   display: inline-block;
-  margin-bottom: 20px;
-}
-
-.icon {
-  width: 48px;
-  height: 48px;
-  color: #667eea;
-  filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.5));
+  margin-bottom: 1rem;
+  font-size: 3rem;
+  filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.5));
 }
 
 .title {
   font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 900;
-  margin-bottom: 16px;
+  margin-bottom: 1rem;
   letter-spacing: -0.02em;
-}
-
-.gradient {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-fill-color: transparent;
-  position: relative;
-}
-
-.gradient::after {
-  content: attr(data-text);
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: -1;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-fill-color: transparent;
-  filter: blur(20px);
-  opacity: 0.5;
+  color: var(--text-primary);
 }
 
 .subtitle {
   font-size: 1.25rem;
-  color: #9ca3af;
+  color: var(--text-secondary);
   max-width: 600px;
   margin: 0 auto;
   line-height: 1.6;
 }
 
+/* Выбор сценария */
+.scenarioSelector {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.scenarioTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+}
+
+.scenarios {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.scenarioButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 2rem;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text-primary);
+}
+
+.scenarioButton:hover {
+  background: rgba(168, 85, 247, 0.1);
+  border-color: var(--aurora-purple);
+  transform: translateY(-2px);
+}
+
+.scenarioButton.active {
+  background: rgba(168, 85, 247, 0.2);
+  border-color: var(--aurora-purple);
+  box-shadow: 0 8px 24px rgba(168, 85, 247, 0.3);
+}
+
+.scenarioIcon {
+  font-size: 2rem;
+}
+
+.scenarioName {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.scenarioMultiplier {
+  font-size: 0.9rem;
+  color: var(--aurora-cyan);
+  font-weight: 700;
+}
+
 /* Карточка калькулятора */
 .calculatorCard {
   position: relative;
-  background: rgba(30, 30, 50, 0.6);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
   border-radius: 32px;
-  padding: 60px;
-  border: 1px solid rgba(102, 126, 234, 0.2);
-  box-shadow: 
-    0 24px 48px rgba(0, 0, 0, 0.3),
-    0 0 80px rgba(102, 126, 234, 0.1),
-    inset 0 0 120px rgba(102, 126, 234, 0.05);
-  max-width: 800px;
+  padding: 3rem;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  max-width: 1000px;
   margin: 0 auto;
-  transform-style: preserve-3d;
-  perspective: 1000px;
-}
-
-.calculatorCard::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background: linear-gradient(135deg, #667eea, #764ba2, #f093fb, #667eea);
-  border-radius: 32px;
-  opacity: 0;
-  z-index: -1;
-  transition: opacity 0.3s ease;
-  background-size: 300% 300%;
-  animation: gradientShift 8s ease infinite;
-}
-
-.calculatorCard:hover::before {
-  opacity: 0.3;
-}
-
-@keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
 }
 
 /* Форма */
 .form {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 2rem;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
 }
 
 .field {
@@ -131,55 +148,41 @@
 .label {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 14px;
+  gap: 0.5rem;
+  font-size: 1rem;
   font-weight: 600;
-  color: #a0a9cc;
-  margin-bottom: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.fieldIcon {
-  width: 20px;
-  height: 20px;
-  color: #667eea;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
 }
 
 .input,
 .select {
   width: 100%;
-  padding: 18px 24px;
-  background: rgba(102, 126, 234, 0.08);
-  border: 2px solid rgba(102, 126, 234, 0.2);
-  border-radius: 16px;
-  color: white;
-  font-size: 16px;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-size: 1rem;
   font-weight: 500;
   outline: none;
   transition: all 0.3s ease;
-  box-shadow: 
-    0 4px 20px rgba(0, 0, 0, 0.1),
-    inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .input::placeholder {
-  color: #6b7280;
+  color: var(--text-muted);
 }
 
 .input:focus,
 .select:focus {
-  border-color: #667eea;
-  background: rgba(102, 126, 234, 0.12);
-  box-shadow: 
-    0 4px 20px rgba(102, 126, 234, 0.2),
-    0 0 40px rgba(102, 126, 234, 0.1),
-    inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-color: var(--aurora-purple);
+  background: rgba(168, 85, 247, 0.05);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
 }
 
 .select option {
-  background: #1a1a2e;
-  color: white;
+  background: var(--polar-night-800);
+  color: var(--text-primary);
 }
 
 /* Кнопка отправки */
@@ -188,21 +191,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 20px 40px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  gap: 0.75rem;
+  padding: 1.25rem 2.5rem;
+  background: linear-gradient(135deg, var(--aurora-cyan) 0%, var(--aurora-purple) 100%);
   border: none;
   border-radius: 100px;
   color: white;
-  font-size: 18px;
+  font-size: 1.1rem;
   font-weight: 700;
   cursor: pointer;
   overflow: hidden;
   transition: all 0.3s ease;
-  box-shadow: 
-    0 10px 30px rgba(102, 126, 234, 0.3),
-    0 0 60px rgba(102, 126, 234, 0.2);
-  margin-top: 20px;
+  box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+  margin: 1rem auto 0;
+  max-width: 400px;
 }
 
 .submitButton::before {
@@ -222,18 +224,11 @@
 
 .submitButton:hover {
   transform: translateY(-2px);
-  box-shadow: 
-    0 15px 40px rgba(102, 126, 234, 0.4),
-    0 0 80px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 15px 40px rgba(168, 85, 247, 0.4);
 }
 
 .submitButton:active {
   transform: translateY(0);
-}
-
-.submitButton:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
 }
 
 .buttonText {
@@ -241,47 +236,31 @@
   z-index: 1;
 }
 
-.buttonIcon {
-  width: 24px;
-  height: 24px;
-  position: relative;
-  z-index: 1;
+/* Гарантия */
+.guarantee {
+  text-align: center;
+  margin-top: 2rem;
+  padding: 1rem;
+  background: rgba(16, 185, 129, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
-/* Плавающие элементы */
-.floatingElement1,
-.floatingElement2 {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(40px);
-  opacity: 0.6;
-  pointer-events: none;
-}
-
-.floatingElement1 {
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, #667eea 0%, transparent 70%);
-  top: -150px;
-  right: -150px;
-}
-
-.floatingElement2 {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, #764ba2 0%, transparent 70%);
-  bottom: -200px;
-  left: -200px;
+.guarantee p {
+  margin: 0;
+  color: var(--aurora-green);
+  font-weight: 600;
+  font-size: 1rem;
 }
 
 /* Адаптивность */
 @media (max-width: 768px) {
   .calculator {
-    padding: 80px 16px;
+    padding: 3rem 1rem;
   }
 
   .calculatorCard {
-    padding: 40px 24px;
+    padding: 2rem 1.5rem;
     border-radius: 24px;
   }
 
@@ -290,28 +269,27 @@
   }
 
   .subtitle {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
 
-  .input,
-  .select {
-    padding: 16px 20px;
-    font-size: 16px;
+  .scenarios {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .scenarioButton {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
   }
 
   .submitButton {
-    padding: 18px 32px;
-    font-size: 16px;
-  }
-
-  .floatingElement1 {
-    width: 200px;
-    height: 200px;
-  }
-
-  .floatingElement2 {
-    width: 250px;
-    height: 250px;
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 1rem;
   }
 }
 
@@ -335,4 +313,32 @@
 .field:nth-child(1) { animation-delay: 0.1s; }
 .field:nth-child(2) { animation-delay: 0.2s; }
 .field:nth-child(3) { animation-delay: 0.3s; }
-.submitButton { animation-delay: 0.4s; animation: fadeInUp 0.6s ease forwards; opacity: 0; }
+.field:nth-child(4) { animation-delay: 0.4s; }
+.field:nth-child(5) { animation-delay: 0.5s; }
+.field:nth-child(6) { animation-delay: 0.6s; }
+
+/* Плавающие элементы */
+.floatingElement1,
+.floatingElement2 {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.floatingElement1 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, var(--aurora-cyan) 0%, transparent 70%);
+  top: -150px;
+  right: -150px;
+}
+
+.floatingElement2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, var(--aurora-purple) 0%, transparent 70%);
+  bottom: -200px;
+  left: -200px;
+}

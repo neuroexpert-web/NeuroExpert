@@ -7,9 +7,12 @@ import styles from './ROICalculator.module.css';
 
 export default function ROICalculator(): JSX.Element {
   const [formData, setFormData] = useState<ROIFormData>({
-    businessSize: 'small',
+    businessSize: 'medium',
     industry: 'retail',
-    budget: 200000
+    budget: 500000,
+    currentRevenue: 10000000,
+    expectedGrowth: 20,
+    automationSavings: 300000
   });
   
   const [showResult, setShowResult] = useState<boolean>(false);
@@ -17,21 +20,30 @@ export default function ROICalculator(): JSX.Element {
     roi: 0,
     savings: 0,
     growth: 0,
-    payback: 0
+    payback: 0,
+    additionalRevenue: 0,
+    totalBenefit: 0
   });
 
-  // Множители для расчета
-  const sizeMultipliers: Record<ROIFormData['businessSize'], number> = {
-    small: 3.2,
-    medium: 4.5,
-    large: 6.0
+  // Сценарии ROI из бизнес-логики
+  const [selectedScenario, setSelectedScenario] = useState<'conservative' | 'ambitious' | 'breakthrough'>('ambitious');
+
+  // Множители для расчета согласно бизнес-логике
+  const scenarioMultipliers = {
+    conservative: 0.8,
+    ambitious: 1.0,
+    breakthrough: 1.5
   };
   
-  const industryMultipliers: Record<ROIFormData['industry'], number> = {
+  const industryMultipliers: Record<string, number> = {
     retail: 1.2,
     services: 1.3,
     production: 1.1,
     it: 1.5,
+    ecommerce: 1.4,
+    finance: 1.6,
+    healthcare: 1.3,
+    education: 1.2,
     other: 1.0
   };
 
@@ -39,30 +51,51 @@ export default function ROICalculator(): JSX.Element {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'budget' ? Number(value) : value
+      [name]: ['budget', 'currentRevenue', 'expectedGrowth', 'automationSavings'].includes(name) 
+        ? Number(value) 
+        : value
     } as ROIFormData));
   };
 
-  const calculateROI = async (): Promise<void> => {
-    const { businessSize, industry, budget } = formData;
+  const calculateROI = (e: React.FormEvent): void => {
+    e.preventDefault();
     
-    // Расчеты на основе множителей
-    const baseROI = sizeMultipliers[businessSize] * industryMultipliers[industry];
-    const roi = Math.round(baseROI * 100);
-    const savings = Math.round(budget * 0.35);
-    const growth = Math.round(budget * baseROI);
-    const payback = Math.round(budget / (savings / 12));
+    const { budget, currentRevenue, expectedGrowth, automationSavings, industry } = formData;
     
-    setResults({ roi, savings, growth, payback });
+    // Применяем формулу ROI из бизнес-логики:
+    // ROI = ((Дополнительные доходы + Экономия) - Инвестиции) / Инвестиции × 100%
+    
+    // Дополнительные доходы
+    const additionalRevenue = currentRevenue * (expectedGrowth / 100);
+    
+    // Применяем отраслевой коэффициент
+    const industryCoef = industryMultipliers[industry] || 1.0;
+    
+    // Применяем сценарный коэффициент
+    const scenarioCoef = scenarioMultipliers[selectedScenario];
+    
+    // Итоговые расчеты
+    const totalAdditionalRevenue = additionalRevenue * industryCoef * scenarioCoef;
+    const totalSavings = automationSavings * scenarioCoef;
+    const totalBenefit = totalAdditionalRevenue + totalSavings;
+    
+    // ROI по формуле
+    const roi = ((totalBenefit - budget) / budget) * 100;
+    
+    // Срок окупаемости в месяцах
+    const monthlyBenefit = totalBenefit / 12;
+    const payback = Math.ceil(budget / monthlyBenefit);
+    
+    setResults({
+      roi: Math.round(roi),
+      savings: Math.round(totalSavings),
+      growth: Math.round(totalAdditionalRevenue),
+      payback: payback,
+      additionalRevenue: Math.round(totalAdditionalRevenue),
+      totalBenefit: Math.round(totalBenefit)
+    });
+    
     setShowResult(true);
-  };
-
-  const formatCurrency = (num: number): string => {
-    return new Intl.NumberFormat('ru-RU', {
-      style: 'currency',
-      currency: 'RUB',
-      maximumFractionDigits: 0
-    }).format(num);
   };
 
   return (
@@ -73,7 +106,7 @@ export default function ROICalculator(): JSX.Element {
       viewport={{ once: true }}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      <div className={styles.container}>
+      <div className={`${styles.container} glass-card`}>
         <motion.div 
           className={styles.header}
           initial={{ opacity: 0, scale: 0.9 }}
@@ -86,144 +119,225 @@ export default function ROICalculator(): JSX.Element {
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
             className={styles.sparklesIcon}
           >
-            {/* <Sparkles className={styles.icon} /> */}
+            💎
           </motion.div>
           <h2 className={styles.title}>
-            <span className={styles.gradient}>Рассчитайте ROI</span> вашего проекта
+            <span className="aurora-text">Рассчитайте ROI</span> вашего проекта
           </h2>
           <p className={styles.subtitle}>
-            Узнайте, какую выгоду принесет внедрение AI в ваш бизнес
+            Прозрачный расчет окупаемости с гарантией 300%+ ROI
           </p>
         </motion.div>
 
+        {/* Выбор сценария */}
         <motion.div 
-          className={styles.calculatorCard}
+          className={styles.scenarioSelector}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+        >
+          <h3 className={styles.scenarioTitle}>Выберите сценарий развития:</h3>
+          <div className={styles.scenarios}>
+            {(['conservative', 'ambitious', 'breakthrough'] as const).map((scenario) => (
+              <motion.button
+                key={scenario}
+                className={`${styles.scenarioButton} ${selectedScenario === scenario ? styles.active : ''}`}
+                onClick={() => setSelectedScenario(scenario)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <span className={styles.scenarioIcon}>
+                  {scenario === 'conservative' ? '🛡️' : scenario === 'ambitious' ? '🚀' : '⚡'}
+                </span>
+                <span className={styles.scenarioName}>
+                  {scenario === 'conservative' ? 'Консервативный' : 
+                   scenario === 'ambitious' ? 'Амбициозный' : 'Прорывной'}
+                </span>
+                <span className={styles.scenarioMultiplier}>
+                  x{scenarioMultipliers[scenario]}
+                </span>
+              </motion.button>
+            ))}
+          </div>
+        </motion.div>
+
+        <motion.div 
+          className={`${styles.calculatorCard} glass-card-light`}
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.4, duration: 0.6 }}
-          whileHover={{ scale: 1.02 }}
         >
           <form className={styles.form} onSubmit={calculateROI}>
-            <motion.div 
-              className={styles.field}
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <label htmlFor="budget" className={styles.label}>
-                {/* <DollarSign className={styles.fieldIcon} /> */}
-                Ваш бюджет на автоматизацию (₽)
-              </label>
-              <motion.input
-                type="number"
-                id="budget"
-                name="budget"
-                value={formData.budget}
-                onChange={handleInputChange}
-                className={styles.input}
-                placeholder="Например: 500000"
-                required
-                whileFocus={{ scale: 1.02 }}
-              />
-            </motion.div>
-
-            <motion.div 
-              className={styles.field}
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <label htmlFor="businessSize" className={styles.label}>
-                {/* <TrendingUp className={styles.fieldIcon} /> */}
-                Размер вашего бизнеса
-              </label>
-              <motion.select
-                id="businessSize"
-                name="businessSize"
-                value={formData.businessSize}
-                onChange={handleInputChange}
-                className={styles.select}
-                required
-                whileFocus={{ scale: 1.02 }}
+            <div className={styles.formGrid}>
+              <motion.div 
+                className={styles.field}
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300 }}
               >
-                <option value="">Выберите размер</option>
-                <option value="small">Малый (до 50 сотрудников)</option>
-                <option value="medium">Средний (50-250 сотрудников)</option>
-                <option value="large">Крупный (более 250 сотрудников)</option>
-              </motion.select>
-            </motion.div>
+                <label htmlFor="currentRevenue" className={styles.label}>
+                  💰 Текущая годовая выручка (₽)
+                </label>
+                <motion.input
+                  type="number"
+                  id="currentRevenue"
+                  name="currentRevenue"
+                  value={formData.currentRevenue}
+                  onChange={handleInputChange}
+                  className={styles.input}
+                  placeholder="10000000"
+                  required
+                  whileFocus={{ scale: 1.02 }}
+                />
+              </motion.div>
 
-            <motion.div 
-              className={styles.field}
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <label htmlFor="industry" className={styles.label}>
-                {/* <Clock className={styles.fieldIcon} /> */}
-                Ваша отрасль
-              </label>
-              <motion.select
-                id="industry"
-                name="industry"
-                value={formData.industry}
-                onChange={handleInputChange}
-                className={styles.select}
-                required
-                whileFocus={{ scale: 1.02 }}
+              <motion.div 
+                className={styles.field}
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300 }}
               >
-                <option value="">Выберите отрасль</option>
-                <option value="retail">Розничная торговля</option>
-                <option value="services">Услуги</option>
-                <option value="production">Производство</option>
-                <option value="it">IT и технологии</option>
-                <option value="other">Другое</option>
-              </motion.select>
-            </motion.div>
+                <label htmlFor="expectedGrowth" className={styles.label}>
+                  📈 Ожидаемый рост выручки (%)
+                </label>
+                <motion.input
+                  type="number"
+                  id="expectedGrowth"
+                  name="expectedGrowth"
+                  value={formData.expectedGrowth}
+                  onChange={handleInputChange}
+                  className={styles.input}
+                  placeholder="20"
+                  min="0"
+                  max="200"
+                  required
+                  whileFocus={{ scale: 1.02 }}
+                />
+              </motion.div>
+
+              <motion.div 
+                className={styles.field}
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <label htmlFor="automationSavings" className={styles.label}>
+                  🤖 Экономия от автоматизации (₽/год)
+                </label>
+                <motion.input
+                  type="number"
+                  id="automationSavings"
+                  name="automationSavings"
+                  value={formData.automationSavings}
+                  onChange={handleInputChange}
+                  className={styles.input}
+                  placeholder="300000"
+                  required
+                  whileFocus={{ scale: 1.02 }}
+                />
+              </motion.div>
+
+              <motion.div 
+                className={styles.field}
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <label htmlFor="budget" className={styles.label}>
+                  💎 Инвестиции в проект (₽)
+                </label>
+                <motion.input
+                  type="number"
+                  id="budget"
+                  name="budget"
+                  value={formData.budget}
+                  onChange={handleInputChange}
+                  className={styles.input}
+                  placeholder="500000"
+                  required
+                  whileFocus={{ scale: 1.02 }}
+                />
+              </motion.div>
+
+              <motion.div 
+                className={styles.field}
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <label htmlFor="businessSize" className={styles.label}>
+                  🏢 Размер бизнеса
+                </label>
+                <motion.select
+                  id="businessSize"
+                  name="businessSize"
+                  value={formData.businessSize}
+                  onChange={handleInputChange}
+                  className={styles.select}
+                  required
+                  whileFocus={{ scale: 1.02 }}
+                >
+                  <option value="small">Малый (до 50 сотрудников)</option>
+                  <option value="medium">Средний (50-250 сотрудников)</option>
+                  <option value="large">Крупный (более 250 сотрудников)</option>
+                </motion.select>
+              </motion.div>
+
+              <motion.div 
+                className={styles.field}
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <label htmlFor="industry" className={styles.label}>
+                  🏭 Отрасль
+                </label>
+                <motion.select
+                  id="industry"
+                  name="industry"
+                  value={formData.industry}
+                  onChange={handleInputChange}
+                  className={styles.select}
+                  required
+                  whileFocus={{ scale: 1.02 }}
+                >
+                  <option value="retail">Розничная торговля</option>
+                  <option value="ecommerce">E-commerce</option>
+                  <option value="services">Услуги</option>
+                  <option value="production">Производство</option>
+                  <option value="it">IT и технологии</option>
+                  <option value="finance">Финансы</option>
+                  <option value="healthcare">Здравоохранение</option>
+                  <option value="education">Образование</option>
+                  <option value="other">Другое</option>
+                </motion.select>
+              </motion.div>
+            </div>
 
             <motion.button
               type="submit"
               className={styles.submitButton}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              // disabled={isCalculating}
             >
               <span className={styles.buttonText}>
-                {/* {isCalculating ? 'Расчет...' : 'Рассчитать ROI'} */}
                 Рассчитать ROI
               </span>
-              <motion.div
-                animate={{ x: 10 }}
-                transition={{ repeat: Infinity, duration: 0.5 }}
+              <motion.span
+                animate={{ x: [0, 5, 0] }}
+                transition={{ repeat: Infinity, duration: 1.5 }}
               >
-                {/* <ChevronRight className={styles.buttonIcon} /> */}
-              </motion.div>
+                →
+              </motion.span>
             </motion.button>
           </form>
 
-          {/* Анимированные декоративные элементы */}
+          {/* Информация о гарантиях */}
           <motion.div 
-            className={styles.floatingElement1}
-            animate={{ 
-              y: [-10, 10, -10],
-              rotate: [0, 180, 360]
-            }}
-            transition={{ 
-              duration: 6, 
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-          <motion.div 
-            className={styles.floatingElement2}
-            animate={{ 
-              y: [10, -10, 10],
-              rotate: [360, 180, 0]
-            }}
-            transition={{ 
-              duration: 8, 
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
+            className={styles.guarantee}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.6 }}
+          >
+            <p>🔒 Гарантируем ROI 300%+ или вернем деньги</p>
+          </motion.div>
         </motion.div>
 
         <AnimatePresence>

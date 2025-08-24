@@ -1,0 +1,180 @@
+/* Polar Night Theme - Dark Glass Effect Design System */
+
+:root {
+  /* === POLAR NIGHT COLORS === */
+  /* Основная палитра "Полярная ночь" */
+  --polar-night-1000: #000000;
+  --polar-night-900: #020617;  /* Почти черный с синим отливом */
+  --polar-night-800: #0f172a;  /* Глубокий темно-синий */
+  --polar-night-700: #1e293b;  /* Темно-синий */
+  --polar-night-600: #334155;  /* Синевато-серый */
+  --polar-night-500: #475569;  /* Средний синевато-серый */
+  
+  /* Северное сияние - акцентные цвета */
+  --aurora-cyan: #22d3ee;     /* Голубое сияние */
+  --aurora-blue: #3b82f6;     /* Синее сияние */
+  --aurora-purple: #a855f7;   /* Фиолетовое сияние */
+  --aurora-green: #10b981;    /* Зеленое сияние */
+  --aurora-pink: #ec4899;     /* Розовое сияние */
+  
+  /* === GLASS EFFECTS === */
+  /* Эффекты стекла */
+  --glass-bg: rgba(15, 23, 42, 0.7);
+  --glass-bg-light: rgba(30, 41, 59, 0.5);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  --glass-blur: blur(12px);
+  --glass-blur-heavy: blur(20px);
+  
+  /* === GRADIENTS === */
+  /* Градиенты северного сияния */
+  --gradient-aurora: linear-gradient(135deg, 
+    rgba(34, 211, 238, 0.2) 0%, 
+    rgba(168, 85, 247, 0.2) 50%, 
+    rgba(236, 72, 153, 0.2) 100%);
+  
+  --gradient-polar: linear-gradient(180deg,
+    var(--polar-night-900) 0%,
+    var(--polar-night-800) 50%,
+    var(--polar-night-900) 100%);
+    
+  --gradient-glass: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.02) 100%);
+    
+  /* === APPLICATION COLORS === */
+  /* Применение к элементам */
+  --background: var(--polar-night-900);
+  --foreground: #f8fafc;
+  --card: var(--glass-bg);
+  --card-foreground: #f8fafc;
+  --border: var(--glass-border);
+  --input: var(--glass-bg);
+  
+  /* Текстовые цвета */
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  
+  /* Акцентные цвета для UI */
+  --purple: var(--aurora-purple);
+  --accent: var(--aurora-cyan);
+  --primary: var(--aurora-blue);
+  --success: var(--aurora-green);
+  --warning: #f59e0b;
+  --danger: var(--aurora-pink);
+}
+
+/* === GLOBAL STYLES === */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  position: relative;
+}
+
+/* Фоновый эффект полярной ночи */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--gradient-polar);
+  z-index: -2;
+}
+
+/* Эффект северного сияния */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--gradient-aurora);
+  opacity: 0.3;
+  animation: aurora 20s ease-in-out infinite;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Анимация северного сияния */
+@keyframes aurora {
+  0%, 100% {
+    opacity: 0.2;
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: translateY(-20px) scale(1.1);
+  }
+}
+
+/* === GLASS CARD STYLES === */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-card-light {
+  background: var(--glass-bg-light);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+}
+
+/* === UTILITY CLASSES === */
+.polar-night-bg {
+  background: var(--gradient-polar);
+}
+
+.aurora-text {
+  background: linear-gradient(135deg, var(--aurora-cyan) 0%, var(--aurora-purple) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass-effect {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+}
+
+/* === SCROLLBAR STYLING === */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.3);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 85, 247, 0.5);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  body::after {
+    animation: aurora 30s ease-in-out infinite;
+  }
+  
+  .glass-card {
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+  }
+}

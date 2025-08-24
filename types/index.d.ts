@@ -16,8 +16,11 @@ export interface AuthToken {
 
 export interface ROIFormData {
   businessSize: 'small' | 'medium' | 'large';
-  industry: 'retail' | 'services' | 'production' | 'it' | 'other';
+  industry: 'retail' | 'services' | 'production' | 'it' | 'ecommerce' | 'finance' | 'healthcare' | 'education' | 'other';
   budget: number;
+  currentRevenue?: number;
+  expectedGrowth?: number;
+  automationSavings?: number;
 }
 
 export interface ROIResults {
@@ -25,6 +28,8 @@ export interface ROIResults {
   savings: number;
   growth: number;
   payback: number;
+  additionalRevenue?: number;
+  totalBenefit?: number;
 }
 
 export interface ChatMessage {
