@@ -26,6 +26,212 @@
   overflow: hidden; /* Позволяет дочерним элементам управлять своим скроллом */
 }
 
+/* Неоновое свайп-меню (только для первой страницы) */
+.neonSwipeMenu {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  padding: 0 2rem;
+  max-width: 100%;
+  width: auto;
+}
+
+.menuTrack {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(20px);
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.menuTrack::-webkit-scrollbar {
+  display: none;
+}
+
+.neonMenuItem {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.2rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  min-width: 80px;
+}
+
+.neonMenuItem:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.menuItemIcon {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+}
+
+.menuItemIcon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.iconGlow {
+  position: absolute;
+  inset: -8px;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.4) 0%, transparent 70%);
+  filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.menuItemNumber {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(153, 69, 255, 0.2);
+  border: 1px solid rgba(153, 69, 255, 0.5);
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #9945FF;
+}
+
+.menuItemLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.02em;
+  transition: all 0.3s ease;
+}
+
+/* Активный пункт меню */
+.neonMenuItemActive {
+  background: rgba(0, 212, 255, 0.1);
+  border-color: #00D4FF;
+}
+
+.neonMenuItemActive .menuItemIcon {
+  color: #00D4FF;
+  filter: drop-shadow(0 0 8px #00D4FF);
+}
+
+.neonMenuItemActive .iconGlow {
+  opacity: 1;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.6) 0%, transparent 70%);
+}
+
+.neonMenuItemActive .menuItemNumber {
+  background: rgba(0, 212, 255, 0.3);
+  border-color: #00D4FF;
+  color: #00D4FF;
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+.neonMenuItemActive .menuItemLabel {
+  color: #00D4FF;
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+.activeIndicator {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00D4FF, transparent);
+  animation: slideIndicator 1s ease-in-out infinite;
+}
+
+@keyframes slideIndicator {
+  0%, 100% { opacity: 0.5; transform: translateX(-50%) scaleX(0.5); }
+  50% { opacity: 1; transform: translateX(-50%) scaleX(1); }
+}
+
+/* Hover эффекты */
+.neonMenuItem:hover .menuItemIcon {
+  color: rgba(0, 212, 255, 0.8);
+  transform: scale(1.1);
+}
+
+.neonMenuItem:hover .iconGlow {
+  opacity: 0.5;
+}
+
+.neonMenuItem:hover .menuItemLabel {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Адаптивность для свайп-меню */
+@media (max-width: 768px) {
+  .neonSwipeMenu {
+    bottom: 20px;
+    padding: 0 1rem;
+    width: calc(100% - 2rem);
+  }
+
+  .menuTrack {
+    gap: 0.5rem;
+    padding: 0.75rem;
+  }
+
+  .neonMenuItem {
+    padding: 0.6rem 1rem;
+    min-width: 70px;
+  }
+
+  .menuItemLabel {
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .menuTrack {
+    gap: 0.3rem;
+    padding: 0.5rem;
+  }
+
+  .neonMenuItem {
+    padding: 0.5rem 0.8rem;
+    min-width: 60px;
+  }
+
+  .menuItemIcon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .menuItemNumber {
+    width: 16px;
+    height: 16px;
+    font-size: 0.6rem;
+    top: -6px;
+    right: -6px;
+  }
+}
+
 /* Индикатор прогресса с неоновыми эффектами */
 .progressContainer {
   position: fixed;

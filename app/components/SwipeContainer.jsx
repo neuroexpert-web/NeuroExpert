@@ -4,6 +4,47 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import styles from './SwipeContainer.module.css';
 
+// Функция для получения иконок для каждой секции
+const getIconForSection = (index) => {
+  const icons = [
+    // Главная
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+    </svg>,
+    // Аналитика
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+    </svg>,
+    // ROI-калькулятор
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+    </svg>,
+    // AI управляющий
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      <circle cx="12" cy="10" r="3" />
+    </svg>,
+    // Решения
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+    </svg>,
+    // Безопасность
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+    </svg>,
+    // Контакты
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+    </svg>,
+    // О нас
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+  ];
+  
+  return icons[index] || icons[0];
+};
+
 // Импорт аналитики - пока используем заглушки, так как client.js требует переработки
 // TODO: import { trackSwipe, trackSectionView, clientAnalytics } from '../analytics/client';
 
@@ -316,21 +357,50 @@ export default function SwipeContainer({
         </AnimatePresence>
       </motion.div>
 
-      {/* Точки навигации */}
-      <div className={styles.dotsContainer}>
-        {sections.map((section, index) => (
-          <div key={index} className={styles.dotWrapper}>
-            <button
-              className={`${styles.dot} ${index === currentIndex ? styles.activeDot : ''}`}
-              onClick={() => handleDotClick(index)}
-              aria-label={`Go to ${section.name || `section ${index + 1}`}`}
-            />
-            <div className={styles.dotTooltip}>
-              {section.name || `Section ${index + 1}`}
-            </div>
+      {/* Неоновое свайп-меню - только для первой страницы */}
+      {currentIndex === 0 && (
+        <nav className={styles.neonSwipeMenu} role="navigation" aria-label="Главная навигация">
+          <div className={styles.menuTrack}>
+            {sections.map((section, index) => (
+              <motion.button
+                key={index}
+                className={`${styles.neonMenuItem} ${index === currentIndex ? styles.neonMenuItemActive : ''}`}
+                onClick={() => handleDotClick(index)}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                aria-label={`Перейти на страницу ${section.name}`}
+                aria-current={index === currentIndex ? 'page' : undefined}
+              >
+                <div className={styles.menuItemIcon}>
+                  {getIconForSection(index)}
+                  <div className={styles.iconGlow} />
+                </div>
+                <span className={styles.menuItemNumber}>{index + 1}</span>
+                <span className={styles.menuItemLabel}>{section.name}</span>
+                {index === currentIndex && <div className={styles.activeIndicator} />}
+              </motion.button>
+            ))}
           </div>
-        ))}
-      </div>
+        </nav>
+      )}
+
+      {/* Обычные точки навигации для остальных страниц */}
+      {currentIndex !== 0 && (
+        <div className={styles.dotsContainer}>
+          {sections.map((section, index) => (
+            <div key={index} className={styles.dotWrapper}>
+              <button
+                className={`${styles.dot} ${index === currentIndex ? styles.activeDot : ''}`}
+                onClick={() => handleDotClick(index)}
+                aria-label={`Go to ${section.name || `section ${index + 1}`}`}
+              />
+              <div className={styles.dotTooltip}>
+                {section.name || `Section ${index + 1}`}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
