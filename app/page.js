@@ -108,7 +108,7 @@ export default function Home() {
   const sectionComponents = [
     // 1. Главная
     <Suspense key="hero" fallback={<div className="loading-section">Загрузка главной...</div>}>
-      <HomePage />
+      <HomePage onNavigate={() => setCurrentSection(3)} />
     </Suspense>,
     
     // 2. Аналитика

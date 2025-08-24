@@ -1,17 +1,16 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import styles from './HomePage.module.css';
 import { NeuroIcons } from './NeuroIcons';
 
 interface HomePageProps {
-  onNavigate?: (section: string) => void;
+  onNavigate?: () => void;
 }
 
 export default function HomePage({ onNavigate }: HomePageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -36,111 +35,10 @@ export default function HomePage({ onNavigate }: HomePageProps) {
     }
   }, []);
 
-  const handleNavigation = (section: string) => {
-    onNavigate?.(section);
-    setIsMenuOpen(false);
-  };
+
 
   return (
     <div className={styles.homePage} ref={containerRef}>
-      {/* Header с логотипом и бургер-меню */}
-      <header className={styles.header}>
-        <div className={styles.headerContainer}>
-          {/* Логотип */}
-          <motion.div 
-            className={styles.logo}
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          >
-            <span className={styles.logoNeuro}>Neuro</span>
-            <span className={styles.logoExpert}>Expert</span>
-          </motion.div>
-
-          {/* Бургер-меню */}
-          <motion.button
-            className={`${styles.burgerMenu} ${isMenuOpen ? styles.burgerActive : ''}`}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            aria-label="Меню навигации"
-          >
-            <span className={styles.burgerLine}></span>
-            <span className={styles.burgerLine}></span>
-            <span className={styles.burgerLine}></span>
-          </motion.button>
-        </div>
-
-        {/* Выдвижное меню */}
-        <AnimatePresence>
-          {isMenuOpen && (
-            <motion.nav
-              className={styles.slideMenu}
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            >
-              <div className={styles.menuContent}>
-                <button 
-                  className={styles.menuClose}
-                  onClick={() => setIsMenuOpen(false)}
-                  aria-label="Закрыть меню"
-                >
-                  <span>&times;</span>
-                </button>
-                
-                <ul className={styles.menuList}>
-                  <li>
-                    <button onClick={() => handleNavigation('analytics')} className={styles.menuItem}>
-                      <span className={styles.menuIcon}><NeuroIcons.Analytics /></span>
-                      <span className={styles.menuText}>Аналитика</span>
-                    </button>
-                  </li>
-                  <li>
-                    <button onClick={() => handleNavigation('roi')} className={styles.menuItem}>
-                      <span className={styles.menuIcon}><NeuroIcons.ROI /></span>
-                      <span className={styles.menuText}>ROI-калькулятор</span>
-                    </button>
-                  </li>
-                  <li>
-                    <button onClick={() => handleNavigation('ai-manager')} className={styles.menuItem}>
-                      <span className={styles.menuIcon}><NeuroIcons.AI /></span>
-                      <span className={styles.menuText}>AI управляющий</span>
-                    </button>
-                  </li>
-                  <li>
-                    <button onClick={() => handleNavigation('solutions')} className={styles.menuItem}>
-                      <span className={styles.menuIcon}><NeuroIcons.Solutions /></span>
-                      <span className={styles.menuText}>Решения</span>
-                    </button>
-                  </li>
-                  <li>
-                    <button onClick={() => handleNavigation('security')} className={styles.menuItem}>
-                      <span className={styles.menuIcon}><NeuroIcons.Security /></span>
-                      <span className={styles.menuText}>Безопасность</span>
-                    </button>
-                  </li>
-                  <li>
-                    <button onClick={() => handleNavigation('contacts')} className={styles.menuItem}>
-                      <span className={styles.menuIcon}><NeuroIcons.Contact /></span>
-                      <span className={styles.menuText}>Контакты</span>
-                    </button>
-                  </li>
-                  <li>
-                    <button onClick={() => handleNavigation('about')} className={styles.menuItem}>
-                      <span className={styles.menuIcon}><NeuroIcons.About /></span>
-                      <span className={styles.menuText}>О нас</span>
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            </motion.nav>
-          )}
-        </AnimatePresence>
-      </header>
-
       {/* Основной контент */}
       <main className={styles.mainContent}>
         {/* Видео фон "цифрового космоса" с фолбеком */}
@@ -163,8 +61,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         </div>
 
         {/* Hero контент */}
-        <AnimatePresence>
-          {isLoaded && (
+        {isLoaded && (
             <motion.section 
               className={styles.heroSection}
               initial={{ opacity: 0 }}
@@ -200,7 +97,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 transition={{ duration: 0.8, delay: 0.8 }}
               >
                 <button 
-                  onClick={() => onNavigate?.(3)} 
+                  onClick={onNavigate} 
                   className={styles.btnPrimary}
                 >
                   <span className={styles.btnText}>AI управляющий</span>
@@ -223,8 +120,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 </div>
               </motion.div>
             </motion.section>
-          )}
-        </AnimatePresence>
+        )}
       </main>
 
       {/* Индикатор позиции под меню */}
