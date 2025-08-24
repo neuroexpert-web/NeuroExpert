@@ -3,15 +3,13 @@
 /* Основной контейнер калькулятора */
 .calculator {
   position: relative;
-  padding: 6rem 2rem 4rem;
+  padding: 4rem 2rem;
   background: transparent;
-  overflow-y: auto;
-  overflow-x: hidden;
   min-height: 100vh;
-  height: 100vh;
   display: flex;
   align-items: flex-start;
   box-sizing: border-box;
+  width: 100%;
 }
 
 .container {

@@ -311,7 +311,9 @@ export default function SwipeContainer({
               duration: 0.4
             }}
           >
-            {children[currentIndex]}
+            <div className={styles.pageWrapper}>
+              {children[currentIndex]}
+            </div>
           </motion.div>
         </AnimatePresence>
       </motion.div>

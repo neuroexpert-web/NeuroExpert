@@ -224,6 +224,10 @@ export default function Home() {
           max-width: 1400px;
           margin: 0 auto;
           padding: 0 var(--space-xl, 2rem);
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          flex-grow: 1;
         }
 
         .section-header {
@@ -282,22 +286,26 @@ export default function Home() {
         .security-section,
         .contact-section,
         .pricing-section {
-          padding: var(--space-4xl, 6rem) 0;
+          padding: 4rem 2rem;
           min-height: 100vh;
           display: flex;
+          flex-direction: column;
           align-items: center;
+          justify-content: flex-start;
           background: var(--gradient-cyber, linear-gradient(135deg, #0a0e1a 0%, #1a2138 50%, #2a3757 100%));
           position: relative;
+          box-sizing: border-box;
+          width: 100%;
         }
 
         .roi-section {
           padding: 0;
           min-height: 100vh;
-          height: 100vh;
-          overflow-y: auto;
-          overflow-x: hidden;
           background: var(--gradient-cyber, linear-gradient(135deg, #0a0e1a 0%, #1a2138 50%, #2a3757 100%));
           position: relative;
+          display: flex;
+          flex-direction: column;
+          width: 100%;
         }
 
         .analytics-section::before,

@@ -155,7 +155,7 @@ export default function AIDirectorCapabilities() {
   };
 
   return (
-    <section className="py-20 px-4 min-h-screen flex items-center">
+    <section className="w-full h-full overflow-y-auto overflow-x-hidden py-20 px-4">
       <div className="max-w-7xl mx-auto w-full">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
