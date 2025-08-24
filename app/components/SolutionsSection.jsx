@@ -94,7 +94,8 @@ export default function SolutionsSection() {
 
   return (
     <section className="solutions-section">
-      <div className="container">
+      <div className="scrollable-content">
+        <div className="container">
         {/* Header Section */}
         <motion.div 
           className="section-header"
@@ -165,16 +166,18 @@ export default function SolutionsSection() {
           </motion.button>
         </motion.div>
       </div>
+      </div>
 
       <style jsx>{`
         .solutions-section {
           width: 100%;
-          min-height: 100vh;
+          height: 100vh;
           background: #0a0a0a;
           color: white;
-          padding: 2rem 0 4rem;
           position: relative;
           overflow: hidden;
+          display: flex;
+          flex-direction: column;
         }
 
         .solutions-section::before {
@@ -186,6 +189,32 @@ export default function SolutionsSection() {
           height: 300px;
           background: linear-gradient(135deg, rgba(153, 69, 255, 0.05) 0%, rgba(0, 212, 255, 0.05) 100%);
           pointer-events: none;
+        }
+
+        .scrollable-content {
+          flex: 1;
+          overflow-y: auto;
+          overflow-x: hidden;
+          scroll-behavior: smooth;
+          padding: 2rem 0 4rem;
+        }
+
+        /* Custom Scrollbar */
+        .scrollable-content::-webkit-scrollbar {
+          width: 10px;
+        }
+
+        .scrollable-content::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.05);
+        }
+
+        .scrollable-content::-webkit-scrollbar-thumb {
+          background: rgba(153, 69, 255, 0.3);
+          border-radius: 5px;
+        }
+
+        .scrollable-content::-webkit-scrollbar-thumb:hover {
+          background: rgba(153, 69, 255, 0.5);
         }
 
         .container {

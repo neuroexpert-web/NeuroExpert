@@ -458,10 +458,12 @@ function AdminPanel() {
       <style jsx>{`
         .admin-panel {
           width: 100%;
-          min-height: 100vh;
+          height: 100vh;
           background: #0a0a0a;
           color: white;
-          padding: 2rem 0;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
         }
 
         .auth-form {
@@ -522,15 +524,13 @@ function AdminPanel() {
         }
 
         .admin-header {
-          max-width: 1400px;
-          margin: 0 auto;
-          padding: 2rem 3rem;
+          padding: 1.5rem 3rem;
           display: flex;
           justify-content: space-between;
           align-items: center;
           background: linear-gradient(135deg, rgba(153, 69, 255, 0.05) 0%, rgba(0, 212, 255, 0.05) 100%);
           border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-          margin-bottom: 2rem;
+          flex-shrink: 0;
         }
 
         .admin-header h1 {
@@ -605,9 +605,29 @@ function AdminPanel() {
         }
 
         .admin-container {
-          max-width: 1400px;
-          margin: 0 auto;
-          padding: 0 3rem;
+          flex: 1;
+          overflow-y: auto;
+          overflow-x: hidden;
+          padding: 2rem 3rem;
+          scroll-behavior: smooth;
+        }
+
+        /* Custom Scrollbar */
+        .admin-container::-webkit-scrollbar {
+          width: 10px;
+        }
+
+        .admin-container::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.05);
+        }
+
+        .admin-container::-webkit-scrollbar-thumb {
+          background: rgba(153, 69, 255, 0.3);
+          border-radius: 5px;
+        }
+
+        .admin-container::-webkit-scrollbar-thumb:hover {
+          background: rgba(153, 69, 255, 0.5);
         }
 
         .admin-tabs {

@@ -43,7 +43,8 @@ export default function AboutSection() {
 
   return (
     <section className="about-section">
-      <div className="container">
+      <div className="scrollable-content">
+        <div className="container">
         <div className="section-header">
           <motion.h2 
             className="heading-luxury"
@@ -164,16 +165,18 @@ export default function AboutSection() {
           </div>
         </motion.div>
       </div>
+      </div>
 
       <style jsx>{`
         .about-section {
-          padding: 4rem 0;
+          width: 100%;
+          height: 100vh;
           background: #0a0a0a;
           color: white;
-          min-height: 100vh;
           display: flex;
-          align-items: center;
+          flex-direction: column;
           position: relative;
+          overflow: hidden;
         }
 
         .about-section::before {
@@ -185,6 +188,35 @@ export default function AboutSection() {
           height: 300px;
           background: linear-gradient(135deg, rgba(153, 69, 255, 0.05) 0%, rgba(0, 212, 255, 0.05) 100%);
           pointer-events: none;
+          z-index: 1;
+        }
+
+        .scrollable-content {
+          flex: 1;
+          overflow-y: auto;
+          overflow-x: hidden;
+          scroll-behavior: smooth;
+          padding: 4rem 0;
+          position: relative;
+          z-index: 2;
+        }
+
+        /* Custom Scrollbar */
+        .scrollable-content::-webkit-scrollbar {
+          width: 10px;
+        }
+
+        .scrollable-content::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.05);
+        }
+
+        .scrollable-content::-webkit-scrollbar-thumb {
+          background: rgba(153, 69, 255, 0.3);
+          border-radius: 5px;
+        }
+
+        .scrollable-content::-webkit-scrollbar-thumb:hover {
+          background: rgba(153, 69, 255, 0.5);
         }
 
         .container {

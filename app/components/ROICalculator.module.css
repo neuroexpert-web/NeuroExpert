@@ -1,14 +1,44 @@
 /* Основной контейнер калькулятора */
 .calculator {
   position: relative;
-  padding: 120px 20px;
-  background: linear-gradient(180deg, #0a0a0f 0%, #141428 100%);
+  width: 100%;
+  height: 100vh;
+  background: #0a0a0a;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scrollable контент */
+.calculator > * {
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+  scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar */
+.calculator > *::-webkit-scrollbar {
+  width: 10px;
+}
+
+.calculator > *::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.calculator > *::-webkit-scrollbar-thumb {
+  background: rgba(153, 69, 255, 0.3);
+  border-radius: 5px;
+}
+
+.calculator > *::-webkit-scrollbar-thumb:hover {
+  background: rgba(153, 69, 255, 0.5);
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 3rem 2rem;
   position: relative;
   z-index: 1;
 }
