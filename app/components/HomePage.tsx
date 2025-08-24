@@ -16,6 +16,12 @@ export default function HomePage({ onNavigate, currentPage = 0 }: HomePageProps)
   useEffect(() => {
     setIsLoaded(true);
     
+    // Добавляем футуристические шрифты
+    const link = document.createElement('link');
+    link.href = 'https://fonts.googleapis.com/css2?family=Russo+One&family=Orbitron:wght@400;700;900&display=swap';
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+    
     // Инициализация клавиатурной навигации
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft' && currentPage > 0) {
@@ -37,112 +43,51 @@ export default function HomePage({ onNavigate, currentPage = 0 }: HomePageProps)
     onNavigate?.(3);
   };
 
-  // Генерация звезд для млечного пути
-  const generateStars = () => {
-    const stars = [];
-    // Мелкие звезды
-    for (let i = 0; i < 300; i++) {
-      stars.push({
-        id: `small-${i}`,
-        size: Math.random() * 1.5 + 0.5,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        opacity: Math.random() * 0.8 + 0.2,
-        className: styles.starSmall
-      });
-    }
-    // Средние звезды
-    for (let i = 0; i < 100; i++) {
-      stars.push({
-        id: `medium-${i}`,
-        size: Math.random() * 2 + 1.5,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        opacity: Math.random() * 0.9 + 0.1,
-        className: styles.starMedium
-      });
-    }
-    // Крупные яркие звезды
-    for (let i = 0; i < 20; i++) {
-      stars.push({
-        id: `large-${i}`,
-        size: Math.random() * 3 + 2,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        opacity: Math.random() * 1,
-        className: styles.starLarge
-      });
-    }
-    return stars;
-  };
-
   return (
     <div className={styles.homePage} ref={containerRef}>
-      {/* Премиум фон - глубина космоса с млечным путем */}
-      <div className={styles.spaceBackground}>
-        {/* Базовый космический фон */}
-        <div className={styles.deepSpace} />
+      {/* Эффект глубокого темно-синего зеркала - полярная ночь */}
+      <div className={styles.polarNightBackground}>
+        {/* Базовый слой - глубина */}
+        <div className={styles.deepLayer} />
         
-        {/* Млечный путь */}
-        <div className={styles.milkyWay}>
-          <div className={styles.milkyWayCore} />
-          <div className={styles.milkyWayArm1} />
-          <div className={styles.milkyWayArm2} />
-          <div className={styles.milkyWayGlow} />
-        </div>
-
-        {/* Звезды */}
-        <div className={styles.starsContainer}>
-          {generateStars().map(star => (
-            <div
-              key={star.id}
-              className={star.className}
-              style={{
-                width: `${star.size}px`,
-                height: `${star.size}px`,
-                left: `${star.x}%`,
-                top: `${star.y}%`,
-                opacity: star.opacity
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Туманности */}
-        <div className={styles.nebula1} />
-        <div className={styles.nebula2} />
+        {/* Зеркальные отражения */}
+        <div className={styles.mirrorLayer1} />
+        <div className={styles.mirrorLayer2} />
         
-        {/* Космическая пыль */}
-        <div className={styles.cosmicDust} />
+        {/* Северное сияние */}
+        <div className={styles.auroraLayer}>
+          <div className={styles.aurora1} />
+          <div className={styles.aurora2} />
+          <div className={styles.aurora3} />
+        </div>
+        
+        {/* Ледяные кристаллы */}
+        <div className={styles.crystalLayer} />
+        
+        {/* Глубинное свечение */}
+        <div className={styles.depthGlow} />
       </div>
 
       {/* Основной контент */}
       <AnimatePresence>
         {isLoaded && (
           <main className={styles.mainContent}>
-            {/* Особенный логотип НЕЙРОЭКСПЕРТ */}
+            {/* Футуристический логотип НЕЙРОЭКСПЕРТ */}
             <motion.div
               className={styles.logoContainer}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
+              initial={{ opacity: 0, y: -30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: "easeOut" }}
             >
-              <h1 className={styles.epicLogo} aria-label="НЕЙРОЭКСПЕРТ">
-                <span className={styles.logoNeuro}>НЕЙРО</span>
-                <span className={styles.logoExpert}>ЭКСПЕРТ</span>
+              <h1 className={styles.futuristicLogo} aria-label="НЕЙРОЭКСПЕРТ">
+                <span className={styles.logoText}>НЕЙРОЭКСПЕРТ</span>
+                <div className={styles.logoUnderline} />
               </h1>
-              <div className={styles.logoOrbit}>
-                <div className={styles.orbitRing} />
-                <div className={styles.orbitParticle1} />
-                <div className={styles.orbitParticle2} />
-                <div className={styles.orbitParticle3} />
-              </div>
-              <div className={styles.logoAura} />
             </motion.div>
 
-            {/* Заголовок миссии - адаптированный под общий стиль */}
+            {/* Основной заголовок - 30% меньше логотипа */}
             <motion.h2
-              className={styles.missionTitle}
+              className={styles.mainHeading}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
@@ -150,29 +95,31 @@ export default function HomePage({ onNavigate, currentPage = 0 }: HomePageProps)
               Цифровизация бизнеса с помощью ИИ
             </motion.h2>
 
-            {/* Дополнительный подзаголовок */}
+            {/* Описание */}
             <motion.p
-              className={styles.subtitle}
+              className={styles.description}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.5 }}
             >
-              Передовые технологии искусственного интеллекта для вашего успеха
+              Автоматизируйте бизнес-процессы, увеличивайте прибыль<br />
+              и опережайте конкурентов с помощью передовых AI-технологий.
             </motion.p>
 
-            {/* Главная кнопка действия */}
+            {/* Неоновая кнопка AI управляющий */}
             <motion.button
-              className={styles.cosmicCta}
+              className={styles.neonButton}
               onClick={handleMainButtonClick}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.7 }}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               aria-label="Перейти к ИИ управляющему"
             >
-              <span className={styles.ctaText}>ИИ управляющий</span>
-              <div className={styles.ctaStars} />
+              <span className={styles.buttonText}>AI управляющий</span>
+              <div className={styles.buttonGlow} />
+              <div className={styles.buttonPulse} />
             </motion.button>
           </main>
         )}
