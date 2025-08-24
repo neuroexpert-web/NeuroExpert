@@ -80,8 +80,8 @@ export default function HomePage({ onNavigate, currentPage = 0 }: HomePageProps)
               transition={{ duration: 1, ease: "easeOut" }}
             >
               <h1 className={styles.futuristicLogo} aria-label="НЕЙРОЭКСПЕРТ">
-                <span className={styles.logoText}>НЕЙРОЭКСПЕРТ</span>
-                <div className={styles.logoUnderline} />
+                <span className={styles.logoNeuro}>НЕЙРО</span>
+                <span className={styles.logoExpert}>ЭКСПЕРТ</span>
               </h1>
             </motion.div>
 
@@ -97,13 +97,12 @@ export default function HomePage({ onNavigate, currentPage = 0 }: HomePageProps)
 
             {/* Описание */}
             <motion.p
-              className={styles.description}
+              className={styles.subtitle}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.5 }}
             >
-              Автоматизируйте бизнес-процессы, увеличивайте прибыль<br />
-              и опережайте конкурентов с помощью передовых AI-технологий.
+              Передовые технологии искусственного интеллекта для вашего успеха
             </motion.p>
 
             {/* Неоновая кнопка AI управляющий */}
@@ -117,7 +116,7 @@ export default function HomePage({ onNavigate, currentPage = 0 }: HomePageProps)
               whileTap={{ scale: 0.95 }}
               aria-label="Перейти к ИИ управляющему"
             >
-              <span className={styles.buttonText}>AI управляющий</span>
+              <span className={styles.buttonText}>ИИ управляющий</span>
               <div className={styles.buttonGlow} />
               <div className={styles.buttonPulse} />
             </motion.button>
