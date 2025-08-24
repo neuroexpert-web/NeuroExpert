@@ -3,8 +3,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import styles from './SwipeContainer.module.css';
-// Импорт системы аналитики
-import analyticsOrchestrator, { trackSwipe, trackSectionView } from '../lib/analytics/AnalyticsOrchestrator';
+// Импорт клиентской системы аналитики
+import clientAnalytics, { trackSwipe, trackSectionView } from '../lib/analytics/client';
 
 export default function SwipeContainer({
   children,
@@ -72,7 +72,7 @@ export default function SwipeContainer({
     const { offset, velocity } = info;
     
     // Отслеживание жестов для аналитики производительности
-    analyticsOrchestrator.track('swipe_gesture', {
+    clientAnalytics.track('swipe_gesture', {
       offsetX: offset.x,
       offsetY: offset.y,
       velocityX: velocity.x,
@@ -107,7 +107,7 @@ export default function SwipeContainer({
 
       // Отслеживание клавиатурной навигации
       if (direction) {
-        analyticsOrchestrator.track('keyboard_navigation', {
+        clientAnalytics.track('keyboard_navigation', {
           key: e.key,
           direction,
           current_section: currentIndex,
@@ -127,7 +127,7 @@ export default function SwipeContainer({
     touchStartX.current = e.touches[0].clientX;
     
     // Отслеживание начала touch gesture
-    analyticsOrchestrator.track('touch_start', {
+    clientAnalytics.track('touch_start', {
       clientX: e.touches[0].clientX,
       clientY: e.touches[0].clientY,
       current_section: currentIndex,
@@ -144,7 +144,7 @@ export default function SwipeContainer({
     const distance = Math.abs(diff);
     
     // Отслеживание завершения touch gesture
-    analyticsOrchestrator.track('touch_end', {
+    clientAnalytics.track('touch_end', {
       start_x: touchStartX.current,
       end_x: touchEndX.current,
       distance,
@@ -168,7 +168,7 @@ export default function SwipeContainer({
       const timeSpent = Date.now() - sectionStartTime.current;
       
       // Отслеживание клика по точке
-      analyticsOrchestrator.track('dot_navigation', {
+      clientAnalytics.track('dot_navigation', {
         from_section: currentIndex,
         to_section: targetIndex,
         section_name: sections[targetIndex]?.name || `Section ${targetIndex}`,
@@ -204,7 +204,7 @@ export default function SwipeContainer({
 
   // Отслеживание инициализации компонента
   useEffect(() => {
-    analyticsOrchestrator.track('swipe_container_init', {
+    clientAnalytics.track('swipe_container_init', {
       total_sections: sections.length,
       initial_section: initialSection,
       sections_list: sections.map(s => s.name || 'Unknown'),
@@ -226,7 +226,7 @@ export default function SwipeContainer({
         timeSpent
       );
 
-      analyticsOrchestrator.track('swipe_container_unmount', {
+      clientAnalytics.track('swipe_container_unmount', {
         final_section: lastSectionIndex.current,
         total_session_time: Date.now() - sectionStartTime.current,
         sections_visited: lastSectionIndex.current + 1
@@ -240,7 +240,7 @@ export default function SwipeContainer({
       if (document.hidden) {
         // Страница скрыта - фиксируем время
         const timeSpent = Date.now() - sectionStartTime.current;
-        analyticsOrchestrator.track('page_hidden', {
+        clientAnalytics.track('page_hidden', {
           current_section: currentIndex,
           time_spent: timeSpent,
           section_name: sections[currentIndex]?.name || `Section ${currentIndex}`
@@ -248,7 +248,7 @@ export default function SwipeContainer({
       } else {
         // Страница снова видима - обновляем время начала
         sectionStartTime.current = Date.now();
-        analyticsOrchestrator.track('page_visible', {
+        clientAnalytics.track('page_visible', {
           current_section: currentIndex,
           section_name: sections[currentIndex]?.name || `Section ${currentIndex}`
         });
@@ -331,7 +331,7 @@ function ProgressIndicator({ total, current, sections, onDotClick }) {
     const clickPercent = (clickX / rect.width) * 100;
     const targetSection = Math.floor((clickPercent / 100) * total);
     
-    analyticsOrchestrator.track('progress_bar_click', {
+    clientAnalytics.track('progress_bar_click', {
       click_percent: clickPercent,
       target_section: targetSection,
       current_section: current,

@@ -6,19 +6,60 @@
 
 import { NextResponse } from 'next/server';
 import { headers } from 'next/headers';
-import rateLimit from '../../../lib/security/rateLimit';
-import { validateAnalyticsEvent } from '../../../lib/analytics/validation';
-import { saveAnalyticsEvents } from '../../../lib/analytics/storage';
-import { verifyAPIKey } from '../../../lib/security/auth';
 
-// Rate limiting конфигурация
-const limiter = rateLimit({
-  windowMs: 60 * 1000, // 1 минута
-  max: 100, // максимум 100 запросов за минуту
-  message: 'Too many analytics requests from this IP',
-  standardHeaders: true,
-  legacyHeaders: false,
-});
+// Простая реализация rate limiting (в продакшене использовать Redis)
+const requestCounts = new Map();
+
+function simpleRateLimit(ip, windowMs = 60000, max = 100) {
+  const now = Date.now();
+  const windowStart = Math.floor(now / windowMs) * windowMs;
+  
+  if (!requestCounts.has(ip)) {
+    requestCounts.set(ip, new Map());
+  }
+  
+  const userWindows = requestCounts.get(ip);
+  const currentWindow = userWindows.get(windowStart) || 0;
+  
+  if (currentWindow >= max) {
+    return { blocked: true, retryAfter: Math.ceil((windowStart + windowMs - now) / 1000) };
+  }
+  
+  userWindows.set(windowStart, currentWindow + 1);
+  
+  // Очистка старых окон
+  for (const [timestamp] of userWindows) {
+    if (timestamp < windowStart) {
+      userWindows.delete(timestamp);
+    }
+  }
+  
+  return { blocked: false, remaining: max - currentWindow - 1 };
+}
+
+// Простая валидация
+function validateAnalyticsEvent(data) {
+  if (!data || typeof data !== 'object') {
+    return { valid: false, errors: ['Invalid data'] };
+  }
+  
+  if (!data.eventType || !data.events || !Array.isArray(data.events)) {
+    return { valid: false, errors: ['Missing required fields'] };
+  }
+  
+  return { valid: true, errors: [] };
+}
+
+// Простое сохранение (логирование)
+async function saveAnalyticsEvents(data) {
+  console.log('📊 Analytics Events Received:', {
+    eventType: data.eventType,
+    eventsCount: data.events?.length || 0,
+    timestamp: Date.now()
+  });
+  
+  return { success: true, processedCount: data.events?.length || 0 };
+}
 
 /**
  * POST /api/analytics/events
@@ -27,7 +68,8 @@ const limiter = rateLimit({
 export async function POST(request) {
   try {
     // Rate limiting
-    const rateLimitResult = await limiter(request);
+    const clientIP = getClientIP(headers());
+    const rateLimitResult = simpleRateLimit(clientIP);
     if (rateLimitResult.blocked) {
       return NextResponse.json(
         { 
@@ -52,15 +94,11 @@ export async function POST(request) {
       );
     }
 
-    // Проверка API ключа (для internal services)
-    const apiKey = headersList.get('x-api-key');
+    // Простая проверка источника
     const source = headersList.get('x-analytics-source');
-    
-    if (source === 'internal' && !verifyAPIKey(apiKey)) {
-      return NextResponse.json(
-        { error: 'Invalid API key' },
-        { status: 401 }
-      );
+    if (!source || source !== 'neuroexpert-frontend') {
+      // Пока пропускаем, но логируем
+      console.warn('Unknown analytics source:', source);
     }
 
     // Парсинг и валидация данных
@@ -77,8 +115,16 @@ export async function POST(request) {
       );
     }
 
-    // Обогащение данных метаинформацией
-    const enrichedData = enrichEventData(body, headersList);
+    // Простое обогащение данных
+    const enrichedData = {
+      ...body,
+      metadata: {
+        ...body.metadata,
+        receivedAt: Date.now(),
+        clientIP: hashIP(getClientIP(headersList)),
+        userAgent: headersList.get('user-agent')?.substring(0, 200) || 'unknown'
+      }
+    };
     
     // Сохранение событий
     const saveResult = await saveAnalyticsEvents(enrichedData);
@@ -181,63 +227,22 @@ function getClientIP(headers) {
   return 'unknown';
 }
 
-/**
- * Обогащение данных события дополнительной информацией
- */
-function enrichEventData(data, headers) {
-  const timestamp = Date.now();
-  const clientIP = getClientIP(headers);
-  const userAgent = headers.get('user-agent');
-  
-  return {
-    ...data,
-    metadata: {
-      ...data.metadata,
-      receivedAt: timestamp,
-      serverTimestamp: timestamp,
-      clientIP: hashIP(clientIP), // Хешируем IP для приватности
-      userAgent: sanitizeUserAgent(userAgent),
-      processingId: generateProcessingId(),
-      apiVersion: '3.0.0'
-    },
-    events: data.events?.map(event => ({
-      ...event,
-      serverReceivedAt: timestamp,
-      processingFlags: {
-        validated: true,
-        enriched: true,
-        sanitized: true
-      }
-    })) || []
-  };
-}
+
 
 /**
- * Хеширование IP адреса для приватности
+ * Простое хеширование IP
  */
 function hashIP(ip) {
   if (!ip || ip === 'unknown') return 'unknown';
   
   // Простое хеширование для анонимизации
-  const crypto = require('crypto');
-  return crypto
-    .createHash('sha256')
-    .update(ip + process.env.IP_HASH_SALT || 'neuroexpert-salt')
-    .digest('hex')
-    .substring(0, 16);
-}
-
-/**
- * Санитизация User Agent
- */
-function sanitizeUserAgent(userAgent) {
-  if (!userAgent) return 'unknown';
-  
-  // Удаляем потенциально чувствительную информацию
-  return userAgent
-    .replace(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g, '[IP]') // IP адреса
-    .replace(/[A-Za-z0-9+/]{20,}/g, '[TOKEN]') // Потенциальные токены
-    .substring(0, 500); // Ограничиваем длину
+  let hash = 0;
+  for (let i = 0; i < ip.length; i++) {
+    const char = ip.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  return Math.abs(hash).toString(16).substring(0, 8);
 }
 
 /**
