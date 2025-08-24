@@ -4,7 +4,9 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import styles from './SwipeContainer.module.css';
 
-// Временные заглушки для аналитики
+// Импорт аналитики - пока используем заглушки, так как client.js требует переработки
+// TODO: import { trackSwipe, trackSectionView, clientAnalytics } from '../analytics/client';
+
 const trackSwipe = (direction, from, to, method) => {
   console.log(`Swipe: ${direction} from ${from} to ${to} via ${method}`);
 };
