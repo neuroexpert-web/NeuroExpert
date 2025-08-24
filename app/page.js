@@ -1,8 +1,10 @@
 'use client';
 
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useState, useEffect, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import SwipeContainer from './components/SwipeContainer';
+import { useVault } from './hooks/useVault';
+import { useAnalytics } from './hooks/useAnalytics';
 
 // Динамические импорты для оптимизации
 const NeuroExpertHero = lazy(() => import('./components/NeuroExpertHero'));
@@ -35,7 +37,23 @@ const SmartFloatingAI = dynamic(() => import('./components/SmartFloatingAI'), {
   loading: () => <div className="ai-loading">AI управляющий загружается...</div>
 });
 
+// Курсор Claude Opus 4
+const CursorIntegration = dynamic(() => import('./components/CursorIntegration'), {
+  ssr: false,
+  loading: () => null
+});
+
+// Дашборд аналитики
+const AnalyticsDashboard = dynamic(() => import('./components/AnalyticsDashboard'), {
+  ssr: false,
+  loading: () => <div className="loading-skeleton">Загрузка дашборда...</div>
+});
+
 export default function Home() {
+  const [currentSection, setCurrentSection] = useState(0);
+  const { saveContext, loadContext } = useVault();
+  const { trackEvent, trackPageView } = useAnalytics();
+  
   // Определение разделов для навигации
   const sections = [
     'Главная',
@@ -48,6 +66,42 @@ export default function Home() {
     'О нас'
   ];
 
+  // Загрузка контекста при монтировании
+  useEffect(() => {
+    const savedContext = loadContext();
+    if (savedContext?.currentSection) {
+      setCurrentSection(savedContext.currentSection);
+    }
+    
+    // Отслеживание просмотра страницы
+    trackPageView('home');
+    
+    // Prefetch критических ресурсов
+    const link = document.createElement('link');
+    link.rel = 'prefetch';
+    link.href = '/api/pricing/calculate';
+    document.head.appendChild(link);
+  }, []);
+
+  // Сохранение контекста при изменении секции
+  const handleSectionChange = useCallback((index) => {
+    setCurrentSection(index);
+    
+    // Сохранение в JSON Vault
+    saveContext({
+      currentSection: index,
+      timestamp: Date.now(),
+      sectionName: sections[index]
+    });
+    
+    // Отправка события в аналитику
+    trackEvent('section_view', {
+      section_name: sections[index],
+      section_index: index,
+      navigation_type: 'swipe'
+    });
+  }, [sections, saveContext, trackEvent]);
+
   // Компоненты для каждого раздела
   const sectionComponents = [
     // Главная
@@ -55,16 +109,22 @@ export default function Home() {
       <NeuroExpertHero />
     </Suspense>,
     
-    // Аналитика
+    // Аналитика - НОВЫЙ УЛУЧШЕННЫЙ КОМПОНЕНТ
     <Suspense fallback={<div className="loading-section">Загрузка аналитики...</div>}>
-      <div className="analytics-dashboard">
-        <h2 className="section-title">Аналитика платформы</h2>
-        <p>Полная аналитика и метрики в реальном времени</p>
-        <Analytics />
-      </div>
+      <section className="analytics-section" id="analytics">
+        <div className="container">
+          <h2 className="heading-luxury">
+            Аналитика <span className="heading-gold">в реальном времени</span>
+          </h2>
+          <p className="section-subtitle">
+            Полная картина вашего бизнеса с AI-рекомендациями
+          </p>
+          <AnalyticsDashboard />
+        </div>
+      </section>
     </Suspense>,
     
-    // ROI-калькулятор
+    // ROI-калькулятор с расширенным функционалом
     <section className="roi-section" id="roi-calculator">
       <div className="container">
         <div className="section-header">
@@ -72,7 +132,7 @@ export default function Home() {
             Рассчитайте вашу <span className="heading-gold">выгоду</span>
           </h2>
           <p className="section-subtitle">
-            Узнайте, сколько вы сэкономите с нашими решениями
+            Monte Carlo симуляция, break-even анализ, автоматическое ценообразование
           </p>
         </div>
         <div className="roi-wrapper">
@@ -96,7 +156,12 @@ export default function Home() {
     // Безопасность
     <section className="security-section" id="security">
       <div className="container">
-        <h2 className="section-title">Безопасность и защита данных</h2>
+        <h2 className="heading-luxury">
+          Безопасность и <span className="heading-gold">защита данных</span>
+        </h2>
+        <p className="section-subtitle">
+          Zero Trust архитектура, GDPR compliance, ISO 27001
+        </p>
         <Suspense fallback={<div>Загрузка...</div>}>
           <AdminPanel />
         </Suspense>
@@ -128,18 +193,11 @@ export default function Home() {
 
   return (
     <main className="premium-main" style={{ background: 'var(--noir-900, #0A051A)', minHeight: '100vh' }}>
-      {/* Горизонтальный свайп контейнер */}
+      {/* Горизонтальный свайп контейнер с улучшенной производительностью */}
       <SwipeContainer 
         sections={sections}
-        onSectionChange={(index) => {
-          // Отправка события в аналитику
-          if (window.gtag) {
-            window.gtag('event', 'section_view', {
-              section_name: sections[index],
-              section_index: index
-            });
-          }
-        }}
+        onSectionChange={handleSectionChange}
+        initialSection={currentSection}
       >
         {sectionComponents}
       </SwipeContainer>
@@ -149,89 +207,122 @@ export default function Home() {
         <SmartFloatingAI />
       </Suspense>
       
-      {/* Фоновые эффекты */}
-      <div className="background-effects">
-        <div className="neon-glow-1"></div>
-        <div className="neon-glow-2"></div>
-        <div className="neural-network-bg"></div>
-      </div>
+      {/* Интеграция курсора Claude Opus 4 */}
+      <Suspense fallback={null}>
+        <CursorIntegration />
+      </Suspense>
 
       <style jsx>{`
+        .premium-main {
+          position: relative;
+          min-height: 100vh;
+          background: var(--noir-900);
+          overflow: hidden;
+        }
+
+        .container {
+          max-width: 1400px;
+          margin: 0 auto;
+          padding: 0 24px;
+        }
+
+        .section-header {
+          text-align: center;
+          margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+          font-size: clamp(36px, 5vw, 56px);
+          margin-bottom: 16px;
+        }
+
+        .heading-luxury {
+          font-family: var(--font-heading);
+          font-weight: 700;
+          background: linear-gradient(135deg, var(--platinum-100) 0%, var(--platinum-300) 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .heading-gold {
+          background: linear-gradient(135deg, var(--gold-premium) 0%, var(--gold-light) 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .section-subtitle {
+          font-family: var(--font-body);
+          font-size: 20px;
+          color: var(--platinum-400);
+          line-height: 1.6;
+        }
+
+        /* Секции */
+        .analytics-section,
+        .roi-section,
+        .security-section,
+        .contact-section {
+          padding: 80px 0;
+          min-height: calc(100vh - 160px);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .roi-wrapper {
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+
         .loading-section {
           display: flex;
           align-items: center;
           justify-content: center;
-          height: 100vh;
-          color: var(--text-primary);
-          font-size: 1.2rem;
+          min-height: 60vh;
+          font-size: 18px;
+          color: var(--platinum-400);
         }
 
-        .analytics-dashboard,
-        .security-section,
-        .contact-section {
-          padding: 4rem 2rem;
-          min-height: 100vh;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-        }
-
-        .section-title {
-          font-size: 3rem;
-          font-weight: 800;
-          background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          margin-bottom: 1rem;
+        .loading-skeleton {
+          background: var(--glass-white);
+          border-radius: 12px;
+          padding: 40px;
           text-align: center;
+          color: var(--platinum-400);
+          animation: pulse 2s ease-in-out infinite;
         }
 
-        .container {
-          max-width: 1200px;
-          margin: 0 auto;
-          width: 100%;
+        @keyframes pulse {
+          0%, 100% { opacity: 0.6; }
+          50% { opacity: 1; }
         }
 
-        .background-effects {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          pointer-events: none;
-          z-index: 0;
-        }
-
-        .neon-glow-1,
-        .neon-glow-2 {
-          position: absolute;
-          width: 500px;
-          height: 500px;
-          border-radius: 50%;
-          filter: blur(100px);
-          opacity: 0.3;
-          animation: float 20s infinite ease-in-out;
-        }
-
-        .neon-glow-1 {
-          background: var(--primary);
-          top: -250px;
-          left: -250px;
-        }
-
-        .neon-glow-2 {
-          background: var(--accent);
-          bottom: -250px;
-          right: -250px;
-          animation-delay: -10s;
-        }
-
-        @keyframes float {
-          0%, 100% {
-            transform: translate(0, 0) scale(1);
+        /* Responsive */
+        @media (max-width: 768px) {
+          .analytics-section,
+          .roi-section,
+          .security-section,
+          .contact-section {
+            padding: 60px 0;
           }
-          50% {
-            transform: translate(50px, -50px) scale(1.2);
+
+          .section-header {
+            margin-bottom: 40px;
+          }
+
+          .container {
+            padding: 0 16px;
+          }
+        }
+
+        /* Оптимизация производительности */
+        @media (prefers-reduced-motion: reduce) {
+          * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
           }
         }
       `}</style>

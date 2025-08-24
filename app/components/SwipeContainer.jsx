@@ -7,9 +7,10 @@ import styles from './SwipeContainer.module.css';
 export default function SwipeContainer({
   children,
   sections,
-  onSectionChange
+  onSectionChange,
+  initialSection = 0
 }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(initialSection);
   const containerRef = useRef(null);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
