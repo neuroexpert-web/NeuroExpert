@@ -351,7 +351,7 @@ export default function SwipeContainer({
 
 // Компонент индикатора прогресса с аналитикой
 function ProgressIndicator({ total, current, sections, onDotClick }) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const progress = ((current + 1) / total) * 100;
   
   // Иконки для каждой страницы

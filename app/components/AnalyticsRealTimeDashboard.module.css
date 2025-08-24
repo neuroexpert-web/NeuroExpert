@@ -595,31 +595,135 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .dashboard {
+    padding-top: 1rem;
+  }
+
   .header {
-    padding: 1.5rem;
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(10, 10, 25, 0.95);
+  }
+  
+  .headerContent {
+    padding: 0;
   }
   
   .title {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
+    text-align: center;
+  }
+  
+  .titleIcon {
+    font-size: 1.5rem;
   }
   
   .mainContent {
-    padding: 1.5rem;
+    padding: 1rem;
+    padding-top: 0.5rem;
   }
   
+  .sectionTitle {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Карточки обзора */
   .overviewGrid {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
   }
   
+  .overviewCard {
+    padding: 1rem;
+  }
+  
+  .overviewValue {
+    font-size: 1.75rem;
+  }
+  
+  .overviewChange {
+    font-size: 0.875rem;
+  }
+  
+  /* Сервисы */
   .servicesGrid {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
   }
   
+  .serviceCard {
+    padding: 1rem;
+  }
+  
+  .serviceName {
+    font-size: 1rem;
+  }
+  
+  /* Метрики */
   .metricsGrid {
     grid-template-columns: 1fr;
+    gap: 0.5rem;
   }
   
+  .metricCard {
+    padding: 0.75rem;
+  }
+  
+  .metricValue {
+    font-size: 1.25rem;
+  }
+  
+  .metricLabel {
+    font-size: 0.75rem;
+  }
+  
+  /* График */
+  .chartContainer {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Преимущества */
   .benefitsGrid {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .benefitCard {
+    padding: 1rem;
+  }
+  
+  .benefitIcon {
+    font-size: 2rem;
+  }
+  
+  .benefitTitle {
+    font-size: 1rem;
+  }
+  
+  .benefitDescription {
+    font-size: 0.875rem;
+  }
+  
+  /* CTA */
+  .ctaSection {
+    padding: 1.5rem 1rem;
+    margin: 1rem 0;
+  }
+  
+  .ctaTitle {
+    font-size: 1.5rem;
+  }
+  
+  .ctaDescription {
+    font-size: 0.875rem;
+  }
+  
+  .ctaButton {
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
   }
 }
