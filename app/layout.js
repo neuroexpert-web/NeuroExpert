@@ -1,18 +1,40 @@
 
-import { Inter } from 'next/font/google'
+import { Inter, Orbitron, Exo_2, Space_Grotesk } from 'next/font/google'
 import './globals.css'
+import './styles/neuroexpert-design-system.css'
 import './styles/premium-design-system.css'
 import './styles/premium-glass-sections.css'
 import './styles/mobile-fixes.css'
 import Script from 'next/script'
 
-// Оптимизированная загрузка шрифта
+// Оптимизированная загрузка шрифтов
 const inter = Inter({ 
   subsets: ['latin', 'cyrillic'],
   display: 'swap',
   variable: '--font-inter',
   preload: true,
   fallback: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif']
+})
+
+const orbitron = Orbitron({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-orbitron',
+  weight: ['400', '500', '600', '700', '800', '900']
+})
+
+const exo2 = Exo_2({
+  subsets: ['latin', 'cyrillic'],
+  display: 'swap',
+  variable: '--font-exo2',
+  weight: ['300', '400', '500', '600', '700', '800']
+})
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-space-grotesk',
+  weight: ['300', '400', '500', '600', '700']
 })
 
 export const metadata = {
@@ -95,7 +117,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ru" className={inter.variable}>
+    <html lang="ru" className={`${inter.variable} ${orbitron.variable} ${exo2.variable} ${spaceGrotesk.variable}`}>
       <head>
         {/* Premium styles fallback */}
         <link rel="stylesheet" href="/premium-styles.css" />
