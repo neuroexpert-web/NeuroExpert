@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import SwipeContainer from './components/SwipeContainer';
 
 // Динамические импорты для оптимизации
-const NeuroExpertHero = dynamic(() => import('./components/NeuroExpertHero'), {
+const NeuroExpertHero = dynamic(() => import('./components/NeuroExpertHeroEnhanced'), {
   ssr: false,
   loading: () => <div className="loading-skeleton">Загрузка главной...</div>
 });
