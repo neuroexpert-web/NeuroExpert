@@ -168,31 +168,16 @@ export default function NeuroExpertHeroPro() {
             <>
               {/* Logo/Brand mark */}
               <motion.div 
-                className="brand-mark"
-                initial={{ scale: 0, rotate: -180 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                className="brand-logo"
+                initial={{ opacity: 0, y: -30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
               >
-                <div className="brand-icon">
-                  <svg viewBox="0 0 100 100" fill="none">
-                    <defs>
-                      <linearGradient id="brand-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#6366F1" />
-                        <stop offset="50%" stopColor="#A855F7" />
-                        <stop offset="100%" stopColor="#EC4899" />
-                      </linearGradient>
-                    </defs>
-                    <path d="M50 10 L80 30 L80 70 L50 90 L20 70 L20 30 Z" 
-                          stroke="url(#brand-gradient)" 
-                          strokeWidth="2"
-                          fill="none" />
-                    <circle cx="50" cy="50" r="20" 
-                            fill="url(#brand-gradient)" 
-                            opacity="0.3" />
-                    <circle cx="50" cy="50" r="10" 
-                            fill="url(#brand-gradient)" />
-                  </svg>
+                <div className="logo-text">
+                  <span className="logo-neuro">Neuro</span>
+                  <span className="logo-expert">Expert</span>
                 </div>
+                <div className="logo-tagline">AI Platform</div>
               </motion.div>
 
               {/* Main title with individual letter animations */}
@@ -210,7 +195,7 @@ export default function NeuroExpertHeroPro() {
                         className="title-letter"
                         variants={letterVariants}
                         style={{
-                          transform: `translateX(${mousePosition.x * (i + 1) * 2}px) translateY(${mousePosition.y * (i + 1) * 2}px)`
+                          transform: `translateX(${mousePosition.x * (i + 1) * 0.5}px) translateY(${mousePosition.y * (i + 1) * 0.5}px)`
                         }}
                       >
                         {letter}
@@ -224,7 +209,7 @@ export default function NeuroExpertHeroPro() {
                         className="title-letter gradient"
                         variants={letterVariants}
                         style={{
-                          transform: `translateX(${mousePosition.x * (i + 1) * -2}px) translateY(${mousePosition.y * (i + 1) * -2}px)`
+                          transform: `translateX(${mousePosition.x * (i + 1) * -0.5}px) translateY(${mousePosition.y * (i + 1) * -0.5}px)`
                         }}
                       >
                         {letter}
@@ -274,28 +259,22 @@ export default function NeuroExpertHeroPro() {
                 </button>
               </motion.div>
 
-              {/* Floating badges */}
+              {/* Metrics badges */}
               <motion.div 
                 className="floating-badges"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 2, duration: 1 }}
               >
-                <div className="badge" style={{ 
-                  transform: `translate(${mousePosition.x * 20}px, ${mousePosition.y * 20}px)` 
-                }}>
+                <div className="badge">
                   <span className="badge-number">40%</span>
                   <span className="badge-text">Рост эффективности</span>
                 </div>
-                <div className="badge" style={{ 
-                  transform: `translate(${mousePosition.x * -30}px, ${mousePosition.y * -30}px)` 
-                }}>
+                <div className="badge">
                   <span className="badge-number">24/7</span>
                   <span className="badge-text">AI поддержка</span>
                 </div>
-                <div className="badge" style={{ 
-                  transform: `translate(${mousePosition.x * 25}px, ${mousePosition.y * -25}px)` 
-                }}>
+                <div className="badge">
                   <span className="badge-number">500+</span>
                   <span className="badge-text">Готовых решений</span>
                 </div>
@@ -373,32 +352,45 @@ export default function NeuroExpertHeroPro() {
           align-items: center;
           justify-content: center;
           padding: 2rem;
+          max-width: 1200px;
+          margin: 0 auto;
+          width: 100%;
         }
 
-        .brand-mark {
-          margin-bottom: 3rem;
-          position: relative;
+        .brand-logo {
+          margin-bottom: 1rem;
+          text-align: center;
         }
 
-        .brand-icon {
-          width: 120px;
-          height: 120px;
-          position: relative;
+        .logo-text {
+          font-family: var(--font-orbitron), 'Orbitron', sans-serif;
+          font-size: 1.8rem;
+          font-weight: 900;
+          letter-spacing: -0.02em;
+          display: inline-flex;
+          align-items: baseline;
+          gap: 0.2rem;
         }
 
-        .brand-icon::before {
-          content: '';
-          position: absolute;
-          inset: -20px;
-          background: conic-gradient(from 0deg, #6366F1, #A855F7, #EC4899, #6366F1);
-          border-radius: 50%;
-          opacity: 0.3;
-          filter: blur(20px);
-          animation: rotate 10s linear infinite;
+        .logo-neuro {
+          color: #fff;
+          text-shadow: 0 0 20px rgba(99, 102, 241, 0.8);
         }
 
-        @keyframes rotate {
-          to { transform: rotate(360deg); }
+        .logo-expert {
+          background: linear-gradient(135deg, #6366F1 0%, #A855F7 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .logo-tagline {
+          font-family: var(--font-space-grotesk), 'Space Grotesk', sans-serif;
+          font-size: 0.9rem;
+          color: rgba(255, 255, 255, 0.5);
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          margin-top: 0.3rem;
         }
 
         .hero-title-wrapper {
@@ -407,7 +399,7 @@ export default function NeuroExpertHeroPro() {
         }
 
         .hero-title {
-          font-size: clamp(4rem, 15vw, 10rem);
+          font-size: clamp(2.5rem, 8vw, 5rem);
           font-weight: 900;
           line-height: 0.9;
           letter-spacing: -0.05em;
@@ -415,6 +407,7 @@ export default function NeuroExpertHeroPro() {
           display: flex;
           flex-direction: column;
           align-items: center;
+          gap: 0.5rem;
         }
 
         .title-word {
@@ -458,16 +451,16 @@ export default function NeuroExpertHeroPro() {
 
         .hero-description {
           text-align: center;
-          max-width: 800px;
-          margin-bottom: 3rem;
+          max-width: 600px;
+          margin: 0 auto 2rem;
         }
 
         .hero-description p {
-          font-size: clamp(1.1rem, 2vw, 1.4rem);
+          font-size: clamp(1rem, 1.5vw, 1.2rem);
           line-height: 1.6;
-          color: rgba(255, 255, 255, 0.8);
+          color: rgba(255, 255, 255, 0.7);
           margin: 0.5rem 0;
-          font-family: 'Exo 2', sans-serif;
+          font-family: var(--font-exo2), 'Exo 2', sans-serif;
           font-weight: 300;
         }
 
@@ -481,10 +474,10 @@ export default function NeuroExpertHeroPro() {
 
         .cta-button {
           position: relative;
-          padding: 1.5rem 3rem;
-          font-size: 1.1rem;
-          font-weight: 700;
-          letter-spacing: 0.1em;
+          padding: 1rem 2.5rem;
+          font-size: 1rem;
+          font-weight: 600;
+          letter-spacing: 0.05em;
           text-transform: uppercase;
           border: none;
           background: none;
@@ -492,7 +485,8 @@ export default function NeuroExpertHeroPro() {
           cursor: pointer;
           overflow: hidden;
           transition: all 0.3s ease;
-          font-family: 'Orbitron', sans-serif;
+          font-family: var(--font-space-grotesk), 'Space Grotesk', sans-serif;
+          border-radius: 8px;
         }
 
         .cta-button.primary {
@@ -572,36 +566,27 @@ export default function NeuroExpertHeroPro() {
         }
 
         .floating-badges {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          pointer-events: none;
+          display: flex;
+          gap: 2rem;
+          margin-top: 3rem;
+          justify-content: center;
+          flex-wrap: wrap;
         }
 
         .badge {
-          position: absolute;
-          padding: 1.5rem;
+          padding: 1rem 1.5rem;
           background: rgba(255, 255, 255, 0.05);
           backdrop-filter: blur(20px);
           border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 20px;
-          transition: transform 0.3s ease-out;
+          border-radius: 16px;
+          transition: all 0.3s ease-out;
+          text-align: center;
         }
 
-        .badge:nth-child(1) {
-          top: 20%;
-          left: 10%;
-        }
-
-        .badge:nth-child(2) {
-          top: 20%;
-          right: 10%;
-        }
-
-        .badge:nth-child(3) {
-          bottom: 30%;
-          left: 50%;
-          transform: translateX(-50%);
+        .badge:hover {
+          transform: translateY(-5px);
+          border-color: var(--neon-blue);
+          box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
         }
 
         .badge-number {
@@ -690,28 +675,65 @@ export default function NeuroExpertHeroPro() {
         }
 
         @media (max-width: 768px) {
+          .hero-content {
+            padding: 1rem;
+          }
+
+          .brand-logo {
+            margin-bottom: 1.5rem;
+          }
+
+          .logo-text {
+            font-size: 1.5rem;
+          }
+
           .hero-title {
-            font-size: clamp(3rem, 20vw, 6rem);
+            font-size: clamp(2rem, 12vw, 3.5rem);
+          }
+
+          .hero-subtitle {
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+          }
+
+          .hero-description p {
+            font-size: 1rem;
           }
 
           .hero-actions {
             flex-direction: column;
             align-items: center;
             width: 100%;
+            gap: 1rem;
           }
 
           .cta-button {
             width: 100%;
             max-width: 300px;
+            padding: 0.875rem 2rem;
+            font-size: 0.9rem;
+          }
+
+          .floating-badges {
+            gap: 1rem;
+            margin-top: 2rem;
           }
 
           .badge {
-            display: none;
+            padding: 0.75rem 1rem;
+            min-width: 100px;
           }
 
-          .brand-icon {
-            width: 80px;
-            height: 80px;
+          .badge-number {
+            font-size: 1.8rem;
+          }
+
+          .badge-text {
+            font-size: 0.75rem;
+          }
+
+          .scroll-indicator {
+            bottom: 2rem;
           }
         }
 
