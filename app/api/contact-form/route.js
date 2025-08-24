@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { apiRateLimit } from '@/app/middleware/rateLimit';
+import { apiRateLimit } from '../../middleware/rateLimit';
 
 async function handler(request) {
   try {
