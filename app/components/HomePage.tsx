@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Link from 'next/link';
 import styles from './HomePage.module.css';
 import { NeuroIcons } from './NeuroIcons';
 
@@ -193,22 +192,16 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 Увеличьте прибыль на 40% с помощью AI-решений нового поколения
               </motion.p>
 
-              {/* CTA кнопки */}
+              {/* CTA кнопка */}
               <motion.div 
                 className={styles.ctaButtons}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.8 }}
               >
-                <Link href="/platform" className={styles.btnPrimary}>
-                  <span className={styles.btnText}>Войти в платформу</span>
-                  <span className={styles.btnGlow}></span>
-                  <span className={styles.btnPulse}></span>
-                </Link>
-                
                 <button 
                   onClick={() => handleNavigation('ai-manager')} 
-                  className={styles.btnSecondary}
+                  className={styles.btnPrimary}
                 >
                   <span className={styles.btnText}>AI управляющий</span>
                   <span className={styles.btnGlow}></span>
