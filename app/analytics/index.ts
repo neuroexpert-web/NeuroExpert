@@ -86,10 +86,13 @@ export class AnalyticsManager {
       service.track(event).catch(error => {
         console.error(`Analytics error for ${service.name}:`, error);
         // Send error to Sentry if available
-        this.services.get('sentry')?.trackError(error, {
-          service: service.name,
-          event
-        });
+        const sentryService = this.services.get('sentry');
+        if (sentryService && sentryService.trackError) {
+          sentryService.trackError(error, {
+            service: service.name,
+            event
+          });
+        }
       })
     );
 
@@ -211,10 +214,23 @@ export class AnalyticsManager {
   private convertToCSV(data: any): string {
     // Implementation for CSV conversion
     const headers = ['Service', 'Metric', 'Value', 'Timestamp'];
-    const rows = [];
+    const rows: string[] = [];
     
     // Convert data to CSV format
-    // ... implementation details
+    if (data.data && Array.isArray(data.data)) {
+      data.data.forEach((serviceData: any) => {
+        if (serviceData && serviceData.metrics) {
+          Object.entries(serviceData.metrics).forEach(([metric, value]) => {
+            rows.push([
+              serviceData.service || 'Unknown',
+              metric,
+              String(value),
+              new Date(data.timestamp).toISOString()
+            ].join(','));
+          });
+        }
+      });
+    }
     
     return [headers.join(','), ...rows].join('\n');
   }
