@@ -124,7 +124,7 @@ export class SecurityManager {
     const sanitizeObject = (obj: any): any => {
       if (!obj || typeof obj !== 'object') return obj;
 
-      const result = Array.isArray(obj) ? [] : {};
+      const result: any = Array.isArray(obj) ? [] : {};
 
       for (const [key, value] of Object.entries(obj)) {
         // Check if field is sensitive
