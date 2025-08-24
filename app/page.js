@@ -441,6 +441,21 @@ export default function Home() {
           .container {
             padding: 0 var(--space-md, 1rem);
           }
+          
+          .section-header {
+            padding-top: 3rem;
+            margin-bottom: 2rem;
+          }
+          
+          .heading-luxury {
+            font-size: 2rem;
+            line-height: 1.2;
+          }
+          
+          .section-subtitle {
+            font-size: 1rem;
+            line-height: 1.5;
+          }
 
           .analytics-section,
           .roi-section,

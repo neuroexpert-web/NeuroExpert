@@ -302,8 +302,12 @@
 
   .submitButton {
     width: 100%;
-    padding: 1rem 2rem;
-    font-size: 1rem;
+    padding: 1.25rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #06ffa5 0%, #a855f7 100%);
+    box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4);
+    margin-top: 1.5rem;
   }
 }
 
@@ -360,11 +364,12 @@
 /* Responsive styles */
 @media (max-width: 768px) {
   .calculator {
-    padding: 2rem 1rem;
+    padding: 4rem 1rem 2rem;
   }
 
   .container {
-    padding: 1rem;
+    padding: 2rem 1rem 1rem;
+    margin-top: 1rem;
   }
 
   .title {
@@ -393,8 +398,26 @@
     width: 100%;
   }
 
+  .scenarioSelector {
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .calculatorCard {
+    padding: 1.5rem;
+    margin: 0;
+  }
+
   .floatingElement1,
   .floatingElement2 {
     display: none;
+  }
+
+  .header {
+    margin-bottom: 2rem;
+  }
+
+  .sparklesIcon {
+    font-size: 2rem;
   }
 }

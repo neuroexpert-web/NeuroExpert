@@ -81,9 +81,9 @@ export default function ROIResultModal({ isOpen, onClose, results, formData }: R
               padding: '32px',
               border: '1px solid rgba(102, 126, 234, 0.3)',
               boxShadow: '0 30px 60px rgba(0, 0, 0, 0.5)',
-              maxWidth: '700px',
-              width: '85%',
-              maxHeight: '85vh',
+              maxWidth: window.innerWidth < 768 ? '95%' : '700px',
+              width: window.innerWidth < 768 ? '95%' : '85%',
+              maxHeight: window.innerWidth < 768 ? '90vh' : '85vh',
               overflowY: 'auto',
               overflowX: 'hidden',
               zIndex: 1001

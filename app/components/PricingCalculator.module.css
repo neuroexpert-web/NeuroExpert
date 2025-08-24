@@ -440,12 +440,18 @@
 }
 
 @media (max-width: 768px) {
+  .calculator {
+    padding-top: 2rem;
+  }
+
   .header {
     padding: 1rem;
+    margin-top: 2rem;
   }
 
   .title {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
+    font-weight: 700;
   }
 
   .titleIcon {
@@ -454,6 +460,7 @@
 
   .subtitle {
     font-size: 1rem;
+    line-height: 1.5;
   }
 
   .mainContent {

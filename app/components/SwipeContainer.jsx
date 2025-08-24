@@ -37,16 +37,28 @@ export default function SwipeContainer({
   const lastSectionIndex = useRef(initialSection);
 
   // Пороговое значение для свайпа (в пикселях)
-  const SWIPE_THRESHOLD = 50;
-  const VELOCITY_THRESHOLD = 0.5;
+  // Увеличиваем пороги для мобильных устройств
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const SWIPE_THRESHOLD = isMobile ? 100 : 50; // Увеличен порог для мобильных
+  const VELOCITY_THRESHOLD = isMobile ? 0.5 : 0.3; // Уменьшена чувствительность
+
+    // Защита от слишком частых свайпов
+  const lastSwipeTime = useRef(0);
+  const MIN_SWIPE_INTERVAL = 300; // Минимальный интервал между свайпами (мс)
 
   // Обработка свайпа с аналитикой
   const handleSwipe = useCallback((direction) => {
+    const now = Date.now();
+    if (now - lastSwipeTime.current < MIN_SWIPE_INTERVAL) {
+      return; // Игнорируем слишком быстрые свайпы
+    }
+    lastSwipeTime.current = now;
+
     const newIndex = direction === 'left' && currentIndex < children.length - 1 
       ? currentIndex + 1 
       : direction === 'right' && currentIndex > 0 
-        ? currentIndex - 1 
-        : currentIndex;
+      ? currentIndex - 1 
+      : currentIndex;
 
     if (newIndex !== currentIndex) {
       // Отслеживание времени на предыдущей секции
