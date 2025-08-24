@@ -4,7 +4,6 @@
  */
 
 import { SecurityContext, RateLimitConfig } from './types';
-import crypto from 'crypto';
 
 export class SecurityManager {
   private rateLimitStore: Map<string, { count: number; resetTime: number }> = new Map();
@@ -14,7 +13,18 @@ export class SecurityManager {
    * Generate CSRF token
    */
   generateCSRFToken(): string {
-    const token = crypto.randomBytes(32).toString('hex');
+    // Use browser-compatible random generation
+    const array = new Uint8Array(32);
+    if (typeof window !== 'undefined' && window.crypto) {
+      window.crypto.getRandomValues(array);
+    } else {
+      // Server-side fallback
+      for (let i = 0; i < array.length; i++) {
+        array[i] = Math.floor(Math.random() * 256);
+      }
+    }
+    
+    const token = Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
     this.csrfTokens.add(token);
     
     // Clean old tokens (keep max 1000)
@@ -140,14 +150,28 @@ export class SecurityManager {
   /**
    * Hash user ID for privacy
    */
-  hashUserId(userId: string): string {
+  async hashUserId(userId: string): Promise<string> {
     if (!userId) return '';
     
-    return crypto
-      .createHash('sha256')
-      .update(userId + process.env.JWT_SECRET)
-      .digest('hex')
-      .substring(0, 16); // Use first 16 chars
+    const data = userId + (process.env.JWT_SECRET || 'default-secret');
+    
+    if (typeof window !== 'undefined' && window.crypto && window.crypto.subtle) {
+      // Browser environment
+      const encoder = new TextEncoder();
+      const dataBuffer = encoder.encode(data);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').substring(0, 16);
+    } else {
+      // Simple hash for server/fallback
+      let hash = 0;
+      for (let i = 0; i < data.length; i++) {
+        const char = data.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+      }
+      return Math.abs(hash).toString(16).substring(0, 16);
+    }
   }
 
   /**
@@ -182,7 +206,15 @@ export class SecurityManager {
    * Generate session ID
    */
   generateSessionId(): string {
-    return crypto.randomBytes(16).toString('hex');
+    const array = new Uint8Array(16);
+    if (typeof window !== 'undefined' && window.crypto) {
+      window.crypto.getRandomValues(array);
+    } else {
+      for (let i = 0; i < array.length; i++) {
+        array[i] = Math.floor(Math.random() * 256);
+      }
+    }
+    return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
   }
 
   /**

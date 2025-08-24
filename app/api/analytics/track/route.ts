@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAnalytics } from '@/analytics';
-import { validateEvent } from '@/analytics/validation';
-import { rateLimit } from '@/security/rate-limit';
-import { verifyCSRF } from '@/security/csrf';
-import { authenticateRequest } from '@/security/auth';
+import { getAnalytics } from '../../../analytics';
+import { validateEvent } from '../../../analytics/validation';
+import { rateLimit } from '../../../security/rate-limit';
+import { verifyCSRF } from '../../../security/csrf';
+import { authenticateRequest } from '../../../security/auth';
 
 export async function POST(request: NextRequest) {
   try {

@@ -246,12 +246,41 @@ let analyticsInstance: AnalyticsManager | null = null;
  * Get or create analytics instance
  */
 export function getAnalytics(config?: AnalyticsConfig): AnalyticsManager {
-  if (!analyticsInstance && config) {
-    analyticsInstance = new AnalyticsManager(config);
-  }
-  
   if (!analyticsInstance) {
-    throw new Error('Analytics not initialized. Call with config first.');
+    // Default config for initialization
+    const defaultConfig: AnalyticsConfig = {
+      services: {
+        googleAnalytics: {
+          enabled: !!process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
+          measurementId: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || ''
+        },
+        yandexMetrica: {
+          enabled: !!process.env.NEXT_PUBLIC_YM_COUNTER_ID,
+          counterId: process.env.NEXT_PUBLIC_YM_COUNTER_ID || ''
+        }
+      },
+      queue: {
+        maxSize: 1000,
+        flushInterval: 5000,
+        maxRetries: 3,
+        batchSize: 50,
+        debounceTime: 300,
+        throttleTime: 1000
+      },
+      privacy: {
+        anonymizeIp: true,
+        respectDoNotTrack: true,
+        cookieConsent: true,
+        dataRetention: 90
+      },
+      performance: {
+        enableDebugMode: false,
+        sampleRate: 1,
+        enableAutoPageTracking: false
+      }
+    };
+    
+    analyticsInstance = new AnalyticsManager(config || defaultConfig);
   }
   
   return analyticsInstance;
