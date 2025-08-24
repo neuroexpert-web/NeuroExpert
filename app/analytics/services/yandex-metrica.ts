@@ -22,7 +22,7 @@ export class YandexMetrica implements AnalyticsService {
       m[i] = m[i] || function() {
         (m[i].a = m[i].a || []).push(arguments);
       };
-      m[i].l = 1 * new Date() as any;
+      m[i].l = +new Date();
       k = e.createElement(t as any) as HTMLScriptElement;
       a = e.getElementsByTagName(t as any)[0] as HTMLScriptElement;
       k.async = true;
@@ -158,7 +158,7 @@ export class YandexMetrica implements AnalyticsService {
    * Track e-commerce event
    */
   trackEcommerce(action: string, data: any): void {
-    if (!this.isInitialized || typeof window === 'undefined') return;
+    if (!this.isInitialized || typeof window === 'undefined' || !window.ym) return;
 
     window.ym(this.config.counterId, 'ecommerce', action, data);
   }
