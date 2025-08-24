@@ -235,76 +235,21 @@ function AdminPanel() {
 
   if (!isAuthorized) {
     return (
-      <div className="admin-login">
-        <div className="login-form">
+      <div className="admin-panel">
+        <div className="auth-form">
           <h2>🔐 Админ-панель NeuroExpert</h2>
           <input
             type="password"
+            className="password-input"
             placeholder="Введите пароль"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
           />
-          <button onClick={handleLogin}>Войти</button>
+          <button className="login-btn" onClick={handleLogin}>Войти</button>
         </div>
 
-        <style jsx>{`
-          .admin-login {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-          }
 
-          .login-form {
-            background: var(--card);
-            padding: 40px;
-            border-radius: 16px;
-            border: 2px solid var(--accent);
-            text-align: center;
-            min-width: 300px;
-          }
-
-          .login-form h2 {
-            margin: 0 0 24px 0;
-            color: var(--text);
-          }
-
-          .login-form input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 16px;
-            border: 1px solid rgba(125, 211, 252, 0.3);
-            border-radius: 8px;
-            background: rgba(125, 211, 252, 0.05);
-            color: var(--text);
-            font-size: 16px;
-          }
-
-          .login-form button {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
-            color: #03101a;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s ease;
-          }
-
-          .login-form button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(125, 211, 252, 0.4);
-          }
-        `}</style>
       </div>
     );
   }
@@ -312,12 +257,15 @@ function AdminPanel() {
   return (
     <div className="admin-panel">
       <div className="admin-header">
-        <h1>⚙️ Админ-панель NeuroExpert</h1>
+        <h1>
+          <span>⚙️</span>
+          <span>Панель управления NeuroExpert</span>
+        </h1>
         <div className="admin-actions">
-          <button onClick={exportContent} className="export-btn">
+          <button onClick={exportContent} className="logout-btn">
             📤 Экспорт
           </button>
-          <label className="import-btn">
+          <label className="logout-btn" style={{ cursor: 'pointer' }}>
             📥 Импорт
             <input
               type="file"
@@ -335,24 +283,25 @@ function AdminPanel() {
         </div>
       </div>
 
-      <div className="admin-tabs">
-        {[
-          { id: 'faq', label: '❓ FAQ', count: content.faq.length },
-          { id: 'services', label: '🛍️ Услуги', count: content.services.length },
-          { id: 'courses', label: '📚 Курсы', count: content.courses.length },
-          { id: 'testimonials', label: '💬 Отзывы', count: content.testimonials.length }
-        ].map(tab => (
-          <button
-            key={tab.id}
-            className={`tab ${activeTab === tab.id ? 'active' : ''}`}
-            onClick={() => setActiveTab(tab.id)}
-          >
-            {tab.label} ({tab.count})
-          </button>
-        ))}
-      </div>
+      <div className="admin-container">
+        <div className="admin-tabs">
+          {[
+            { id: 'faq', label: '❓ FAQ', count: content.faq.length },
+            { id: 'services', label: '🛍️ Услуги', count: content.services.length },
+            { id: 'courses', label: '📚 Курсы', count: content.courses.length },
+            { id: 'testimonials', label: '💬 Отзывы', count: content.testimonials.length }
+          ].map(tab => (
+            <button
+              key={tab.id}
+              className={`tab-btn ${activeTab === tab.id ? 'active' : ''}`}
+              onClick={() => setActiveTab(tab.id)}
+            >
+              {tab.label} ({tab.count})
+            </button>
+          ))}
+        </div>
 
-      <div className="admin-content">
+        <div className="admin-content">
         <div className="content-header">
           <h2>
             {activeTab === 'faq' && '❓ Управление FAQ'}
@@ -504,37 +453,105 @@ function AdminPanel() {
           ))}
         </div>
       </div>
+      </div>
 
       <style jsx>{`
         .admin-panel {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100vw;
-          height: 100vh;
-          background: var(--background);
-          z-index: 2000;
-          overflow-y: auto;
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          width: 100%;
+          min-height: 100vh;
+          background: #0a0a0a;
+          color: white;
+          padding: 2rem 0;
+        }
+
+        .auth-form {
+          max-width: 400px;
+          margin: 100px auto;
+          padding: 2rem;
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 16px;
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .auth-form h2 {
+          text-align: center;
+          margin-bottom: 24px;
+          font-size: 2rem;
+          background: linear-gradient(135deg, #9945FF 0%, #00D4FF 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .password-input {
+          width: 100%;
+          padding: 12px 16px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 12px;
+          background: rgba(255, 255, 255, 0.05);
+          color: white;
+          font-size: 16px;
+          margin-bottom: 16px;
+          transition: all 0.3s ease;
+        }
+
+        .password-input:focus {
+          outline: none;
+          border-color: rgba(153, 69, 255, 0.5);
+          box-shadow: 0 0 0 3px rgba(153, 69, 255, 0.1);
+          background: rgba(255, 255, 255, 0.08);
+        }
+
+        .login-btn {
+          width: 100%;
+          background: linear-gradient(135deg, #9945FF 0%, #00D4FF 100%);
+          color: white;
+          border: none;
+          padding: 12px 24px;
+          border-radius: 12px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          font-size: 16px;
+        }
+
+        .login-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(153, 69, 255, 0.3);
         }
 
         .admin-header {
+          max-width: 1400px;
+          margin: 0 auto;
+          padding: 2rem 3rem;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 20px 24px;
-          border-bottom: 2px solid var(--accent);
-          background: var(--card);
+          background: linear-gradient(135deg, rgba(153, 69, 255, 0.05) 0%, rgba(0, 212, 255, 0.05) 100%);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          margin-bottom: 2rem;
         }
 
         .admin-header h1 {
+          font-size: 2rem;
+          font-weight: 600;
           margin: 0;
-          color: var(--text);
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+        }
+
+        .admin-header h1 span {
+          background: linear-gradient(135deg, #9945FF 0%, #00D4FF 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
         }
 
         .admin-actions {
           display: flex;
-          gap: 8px;
+          gap: 12px;
         }
 
         .admin-actions button,
@@ -556,46 +573,91 @@ function AdminPanel() {
         }
 
         .save-btn {
-          background: linear-gradient(135deg, #22c55e, #16a34a) !important;
-          color: white !important;
-          border-color: #22c55e !important;
+          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 12px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .save-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
         }
 
         .logout-btn {
-          background: linear-gradient(135deg, #ef4444, #dc2626) !important;
-          color: white !important;
-          border-color: #ef4444 !important;
+          background: rgba(255, 255, 255, 0.1);
+          color: white;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          padding: 10px 20px;
+          border-radius: 12px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+          background: rgba(255, 255, 255, 0.15);
+          border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .admin-container {
+          max-width: 1400px;
+          margin: 0 auto;
+          padding: 0 3rem;
         }
 
         .admin-tabs {
           display: flex;
-          background: var(--card);
-          padding: 0 24px;
-          border-bottom: 1px solid rgba(125, 211, 252, 0.2);
+          gap: 1rem;
+          margin-bottom: 2rem;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          padding-bottom: 0;
         }
 
-        .tab {
-          padding: 12px 16px;
+        .tab-btn {
           background: transparent;
+          color: rgba(255, 255, 255, 0.6);
           border: none;
-          border-bottom: 3px solid transparent;
-          color: var(--muted);
+          padding: 12px 24px;
           cursor: pointer;
+          font-weight: 500;
+          font-size: 0.95rem;
           transition: all 0.3s ease;
-          font-size: 14px;
+          position: relative;
         }
 
-        .tab.active {
-          color: var(--accent);
-          border-bottom-color: var(--accent);
+        .tab-btn::after {
+          content: '';
+          position: absolute;
+          bottom: -1px;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background: transparent;
+          transition: background 0.3s ease;
         }
 
-        .tab:hover {
-          color: var(--text);
+        .tab-btn:hover {
+          color: rgba(255, 255, 255, 0.9);
+        }
+
+        .tab-btn.active {
+          color: white;
+        }
+
+        .tab-btn.active::after {
+          background: linear-gradient(90deg, #9945FF 0%, #00D4FF 100%);
         }
 
         .admin-content {
-          padding: 24px;
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 16px;
+          padding: 2rem;
         }
 
         .content-header {
@@ -607,23 +669,28 @@ function AdminPanel() {
 
         .content-header h2 {
           margin: 0;
-          color: var(--text);
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: white;
         }
 
         .add-btn {
-          background: linear-gradient(135deg, var(--accent), var(--accent-hover));
-          color: #03101a;
+          background: linear-gradient(135deg, #9945FF 0%, #00D4FF 100%);
+          color: white;
           border: none;
           padding: 10px 16px;
-          border-radius: 8px;
-          font-weight: bold;
+          border-radius: 10px;
+          font-weight: 600;
           cursor: pointer;
           transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
         }
 
         .add-btn:hover {
           transform: translateY(-2px);
-          box-shadow: 0 8px 20px rgba(125, 211, 252, 0.4);
+          box-shadow: 0 4px 16px rgba(153, 69, 255, 0.3);
         }
 
         .items-list {
@@ -632,10 +699,16 @@ function AdminPanel() {
         }
 
         .item-card {
-          background: var(--card);
-          border: 1px solid rgba(125, 211, 252, 0.2);
+          background: rgba(255, 255, 255, 0.02);
+          border: 1px solid rgba(255, 255, 255, 0.1);
           border-radius: 12px;
-          padding: 16px;
+          padding: 20px;
+          transition: all 0.3s ease;
+        }
+
+        .item-card:hover {
+          background: rgba(255, 255, 255, 0.03);
+          border-color: rgba(255, 255, 255, 0.15);
         }
 
         .item-header {
@@ -646,8 +719,9 @@ function AdminPanel() {
         }
 
         .item-id {
-          color: var(--muted);
+          color: rgba(255, 255, 255, 0.5);
           font-size: 12px;
+          font-family: monospace;
         }
 
         .item-controls {
@@ -660,25 +734,32 @@ function AdminPanel() {
           display: flex;
           align-items: center;
           gap: 6px;
-          color: var(--text);
+          color: rgba(255, 255, 255, 0.8);
           font-size: 12px;
           cursor: pointer;
+          transition: color 0.3s ease;
+        }
+
+        .toggle:hover {
+          color: white;
         }
 
         .delete-btn {
           background: transparent;
           border: 1px solid #ef4444;
           color: #ef4444;
-          padding: 4px 8px;
-          border-radius: 4px;
+          padding: 6px 12px;
+          border-radius: 8px;
           cursor: pointer;
           font-size: 12px;
+          font-weight: 500;
           transition: all 0.3s ease;
         }
 
         .delete-btn:hover {
           background: #ef4444;
           color: white;
+          box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
         }
 
         .faq-fields,
@@ -698,13 +779,25 @@ function AdminPanel() {
         .course-fields textarea,
         .testimonial-fields textarea {
           width: 100%;
-          padding: 8px 12px;
-          border: 1px solid rgba(125, 211, 252, 0.3);
-          border-radius: 6px;
-          background: rgba(125, 211, 252, 0.05);
-          color: var(--text);
+          padding: 10px 14px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 10px;
+          background: rgba(255, 255, 255, 0.05);
+          color: white;
           font-size: 14px;
           resize: vertical;
+          transition: all 0.3s ease;
+        }
+
+        .faq-fields input::placeholder,
+        .service-fields input::placeholder,
+        .course-fields input::placeholder,
+        .testimonial-fields input::placeholder,
+        .faq-fields textarea::placeholder,
+        .service-fields textarea::placeholder,
+        .course-fields textarea::placeholder,
+        .testimonial-fields textarea::placeholder {
+          color: rgba(255, 255, 255, 0.4);
         }
 
         .faq-fields input:focus,
@@ -716,27 +809,50 @@ function AdminPanel() {
         .course-fields textarea:focus,
         .testimonial-fields textarea:focus {
           outline: none;
-          border-color: var(--accent);
-          box-shadow: 0 0 0 2px rgba(125, 211, 252, 0.2);
+          border-color: rgba(153, 69, 255, 0.5);
+          box-shadow: 0 0 0 3px rgba(153, 69, 255, 0.1);
+          background: rgba(255, 255, 255, 0.08);
         }
 
         @media (max-width: 768px) {
           .admin-header {
             flex-direction: column;
             gap: 16px;
+            padding: 1.5rem;
+          }
+
+          .admin-container {
+            padding: 0 1.5rem;
           }
 
           .admin-actions {
             flex-wrap: wrap;
+            width: 100%;
+          }
+
+          .save-btn,
+          .logout-btn {
+            flex: 1;
           }
 
           .admin-tabs {
             overflow-x: auto;
+            gap: 0.5rem;
+          }
+
+          .tab-btn {
+            padding: 10px 16px;
+            white-space: nowrap;
           }
 
           .content-header {
             flex-direction: column;
             gap: 16px;
+            align-items: stretch;
+          }
+
+          .admin-content {
+            padding: 1.5rem;
           }
         }
       `}</style>
