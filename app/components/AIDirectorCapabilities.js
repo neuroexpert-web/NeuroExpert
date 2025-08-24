@@ -155,7 +155,7 @@ export default function AIDirectorCapabilities() {
   };
 
   return (
-    <section className="w-full h-full overflow-y-auto overflow-x-hidden py-12 px-4">
+    <section className="w-full h-full overflow-y-auto overflow-x-hidden py-12 px-4" style={{ backgroundColor: 'transparent', color: '#ffffff' }}>
       <div className="max-w-7xl mx-auto w-full pt-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -413,19 +413,47 @@ export default function AIDirectorCapabilities() {
       </div>
 
       <style jsx>{`
+        /* Базовые стили для секции */
+        section {
+          color: #ffffff !important;
+        }
+        
+        /* Исправление цветов текста */
+        h1, h2, h3, h4, h5, h6 {
+          color: #ffffff !important;
+        }
+        
+        p, span, div {
+          color: #ffffff !important;
+        }
+        
+        .text-gray-400 {
+          color: rgba(255, 255, 255, 0.7) !important;
+        }
+        
+        .text-gray-300 {
+          color: rgba(255, 255, 255, 0.8) !important;
+        }
+        
+        .text-white {
+          color: #ffffff !important;
+        }
+
         .glass-card {
-          background: var(--glass-bg);
-          backdrop-filter: var(--glass-blur);
-          -webkit-backdrop-filter: var(--glass-blur);
-          border: 1px solid var(--glass-border);
-          box-shadow: var(--glass-shadow);
+          background: rgba(20, 20, 40, 0.8);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+          color: #ffffff;
         }
 
         .glass-card-light {
-          background: var(--glass-bg-light);
-          backdrop-filter: var(--glass-blur);
-          -webkit-backdrop-filter: var(--glass-blur);
-          border: 1px solid var(--glass-border);
+          background: rgba(30, 30, 50, 0.6);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          color: #ffffff;
         }
 
         .aurora-text {
@@ -435,10 +463,10 @@ export default function AIDirectorCapabilities() {
           background-clip: text;
         }
 
-        .text-aurora-cyan { color: var(--aurora-cyan); }
-        .text-aurora-purple { color: var(--aurora-purple); }
-        .text-aurora-green { color: var(--aurora-green); }
-        .text-aurora-pink { color: var(--aurora-pink); }
+        .text-aurora-cyan { color: var(--aurora-cyan) !important; }
+        .text-aurora-purple { color: var(--aurora-purple) !important; }
+        .text-aurora-green { color: var(--aurora-green) !important; }
+        .text-aurora-pink { color: var(--aurora-pink) !important; }
         .border-aurora-purple { border-color: var(--aurora-purple) !important; }
       `}</style>
     </section>
