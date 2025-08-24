@@ -18,9 +18,9 @@ export interface ROIFormData {
   businessSize: 'small' | 'medium' | 'large';
   industry: 'retail' | 'services' | 'production' | 'it' | 'ecommerce' | 'finance' | 'healthcare' | 'education' | 'other';
   budget: number;
-  currentRevenue?: number;
-  expectedGrowth?: number;
-  automationSavings?: number;
+  currentRevenue: number;
+  expectedGrowth: number;
+  automationSavings: number;
 }
 
 export interface ROIResults {

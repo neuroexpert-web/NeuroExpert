@@ -60,7 +60,7 @@ export default function ROICalculator(): JSX.Element {
   const calculateROI = (e: React.FormEvent): void => {
     e.preventDefault();
     
-    const { budget, currentRevenue, expectedGrowth, automationSavings, industry } = formData;
+    const { budget, currentRevenue = 10000000, expectedGrowth = 20, automationSavings = 300000, industry } = formData;
     
     // Применяем формулу ROI из бизнес-логики:
     // ROI = ((Дополнительные доходы + Экономия) - Инвестиции) / Инвестиции × 100%
