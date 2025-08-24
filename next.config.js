@@ -7,11 +7,11 @@
 // Content Security Policy configuration
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' *.google.com *.googleapis.com *.gstatic.com *.google-analytics.com *.googletagmanager.com mc.yandex.ru *.yandex.net ${process.env.NODE_ENV === 'development' ? "'unsafe-eval'" : ''};
+  script-src 'self' 'unsafe-eval' 'unsafe-inline' *.google.com *.googleapis.com *.gstatic.com *.google-analytics.com *.googletagmanager.com mc.yandex.ru *.yandex.net ${process.env.NODE_ENV === 'development' ? "'unsafe-eval' vercel.live *.vercel.live" : ''};
   style-src 'self' 'unsafe-inline' *.googleapis.com fonts.googleapis.com;
   img-src 'self' blob: data: *.google.com *.googleapis.com *.gstatic.com *.google-analytics.com api.dicebear.com;
   font-src 'self' fonts.gstatic.com;
-  connect-src 'self' *.google.com *.googleapis.com *.google-analytics.com mc.yandex.ru *.yandex.net generativelanguage.googleapis.com ${process.env.NODE_ENV === 'development' ? 'ws://localhost:*' : ''};
+  connect-src 'self' *.google.com *.googleapis.com *.google-analytics.com mc.yandex.ru *.yandex.net generativelanguage.googleapis.com ${process.env.NODE_ENV === 'development' ? 'ws://localhost:* vercel.live *.vercel.live' : ''};
   media-src 'self';
   object-src 'none';
   child-src 'self';

@@ -301,12 +301,10 @@ const clientAnalytics = new ClientAnalytics();
 // Экспорт для использования в компонентах
 export default clientAnalytics;
 
-// Экспорт удобных методов
-export const {
-  track,
-  trackPageView,
-  trackSwipe,
-  trackSectionView,
-  getSessionMetrics,
-  clearData
-} = clientAnalytics;
+// Экспорт удобных методов через функции-обертки
+export const track = (...args) => clientAnalytics.track(...args);
+export const trackPageView = (...args) => clientAnalytics.trackPageView(...args);
+export const trackSwipe = (...args) => clientAnalytics.trackSwipe(...args);
+export const trackSectionView = (...args) => clientAnalytics.trackSectionView(...args);
+export const getSessionMetrics = () => clientAnalytics.getSessionMetrics();
+export const clearData = () => clientAnalytics.clearData();
