@@ -1,32 +1,23 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useState, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import PremiumGlassBackground from './components/PremiumGlassBackground';
-import NeuroExpertHero from './components/NeuroExpertHero';
-import JourneySection from './components/JourneySection';
-import WhyUsSection from './components/WhyUsSection';
-import PricingSection from './components/PricingSection';
+import SwipeContainer from './components/SwipeContainer';
 
 // Динамические импорты для оптимизации
+const NeuroExpertHero = dynamic(() => import('./components/NeuroExpertHero'), {
+  ssr: false,
+  loading: () => <div className="loading-skeleton">Загрузка главной...</div>
+});
+
+const AnalyticsDashboard = dynamic(() => import('./components/AnalyticsDashboard'), {
+  ssr: false,
+  loading: () => <div className="loading-skeleton">Загрузка аналитики...</div>
+});
+
 const ROICalculator = dynamic(() => import('./components/ROICalculator'), {
   ssr: false,
-  loading: () => <div className="loading-skeleton">Загрузка калькулятора ROI...</div>
-});
-
-const SmartFloatingAI = dynamic(() => import('./components/SmartFloatingAI'), {
-  ssr: false,
-  loading: () => <div className="ai-loading">AI управляющий загружается...</div>
-});
-
-const ContactForm = dynamic(() => import('./components/ContactForm'), {
-  ssr: false,
-  loading: () => <div className="loading-skeleton">Загрузка формы...</div>
-});
-
-const AdminPanel = dynamic(() => import('./components/AdminPanel'), {
-  ssr: false,
-  loading: () => <div>Загрузка админ-панели...</div>
+  loading: () => <div className="loading-skeleton">Загрузка ROI калькулятора...</div>
 });
 
 const AIDirectorCapabilities = dynamic(() => import('./components/AIDirectorCapabilities'), {
@@ -34,151 +25,242 @@ const AIDirectorCapabilities = dynamic(() => import('./components/AIDirectorCapa
   loading: () => <div className="loading-skeleton">Загрузка AI директора...</div>
 });
 
+const SolutionsSection = dynamic(() => import('./components/SolutionsSection'), {
+  ssr: false,
+  loading: () => <div className="loading-skeleton">Загрузка решений...</div>
+});
+
+const AdminPanel = dynamic(() => import('./components/AdminPanel'), {
+  ssr: false,
+  loading: () => <div className="loading-skeleton">Загрузка панели безопасности...</div>
+});
+
+const ContactForm = dynamic(() => import('./components/ContactForm'), {
+  ssr: false,
+  loading: () => <div className="loading-skeleton">Загрузка формы...</div>
+});
+
+const AboutSection = dynamic(() => import('./components/AboutSection'), {
+  ssr: false,
+  loading: () => <div className="loading-skeleton">Загрузка о нас...</div>
+});
+
+// AI чат - всегда доступен
+const SmartFloatingAI = dynamic(() => import('./components/SmartFloatingAI'), {
+  ssr: false,
+  loading: () => <div className="ai-loading">AI управляющий загружается...</div>
+});
+
 export default function Home() {
-  return (
-    <main className="premium-main" style={{ background: 'var(--noir-900)', minHeight: '100vh' }}>
-      {/* Новый Hero блок с анимацией нейросети */}
+  const [currentSection, setCurrentSection] = useState(0);
+  
+  // Определение разделов для навигации
+  const sections = [
+    'Главная',
+    'Аналитика', 
+    'ROI-калькулятор',
+    'AI управляющий',
+    'Решения',
+    'Безопасность',
+    'Контакты',
+    'О нас'
+  ];
+
+  // Сохранение состояния и аналитика
+  const handleSectionChange = useCallback((index) => {
+    setCurrentSection(index);
+    
+    // Сохранение в localStorage
+    try {
+      localStorage.setItem('neuroexpert-current-section', index.toString());
+    } catch (e) {
+      console.warn('LocalStorage not available');
+    }
+    
+    // Простая аналитика
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'section_view', {
+        section_name: sections[index],
+        section_index: index
+      });
+    }
+  }, [sections]);
+
+  // Загрузка сохраненного состояния
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('neuroexpert-current-section');
+      if (saved) {
+        setCurrentSection(parseInt(saved, 10));
+      }
+    } catch (e) {
+      console.warn('LocalStorage not available');
+    }
+  }, []);
+
+  // Компоненты для каждого раздела
+  const sectionComponents = [
+    // 1. Главная
+    <Suspense key="hero" fallback={<div className="loading-section">Загрузка главной...</div>}>
       <NeuroExpertHero />
-      
-      {/* AI Управляющий директор */}
-      <Suspense fallback={<div className="loading-skeleton">Загрузка...</div>}>
-        <AIDirectorCapabilities />
-      </Suspense>
-      
-      {/* Ваш простой путь к результату */}
-      <JourneySection />
-      
-      {/* Почему NeuroExpert */}
-      <section id="why-us">
-        <WhyUsSection />
-      </section>
-      
-      {/* Тарифы */}
-      <section id="pricing">
-        <PricingSection />
-      </section>
-      
-      {/* Калькулятор ROI */}
-      <section className="roi-section" id="benefits">
-        <div className="container">
+    </Suspense>,
+    
+    // 2. Аналитика
+    <section key="analytics" className="analytics-section" id="analytics">
+      <div className="container">
+        <div className="section-header">
+          <h2 className="heading-luxury">
+            Аналитика <span className="heading-gold">в реальном времени</span>
+          </h2>
+          <p className="section-subtitle">
+            Полная картина вашего бизнеса с AI-рекомендациями
+          </p>
+        </div>
+        <Suspense fallback={<div className="loading-skeleton">Загрузка дашборда...</div>}>
+          <AnalyticsDashboard />
+        </Suspense>
+      </div>
+    </section>,
+    
+    // 3. ROI-калькулятор
+    <section key="roi" className="roi-section" id="roi-calculator">
+      <div className="container">
+        <div className="section-header">
+          <h2 className="heading-luxury">
+            Рассчитайте вашу <span className="heading-gold">выгоду</span>
+          </h2>
+          <p className="section-subtitle">
+            Продвинутый ROI калькулятор с автоматическим ценообразованием
+          </p>
+        </div>
+        <div className="roi-wrapper">
+          <Suspense fallback={<div className="loading-skeleton">Загрузка калькулятора...</div>}>
+            <ROICalculator />
+          </Suspense>
+        </div>
+      </div>
+    </section>,
+    
+    // 4. AI управляющий
+    <Suspense key="ai-director" fallback={<div className="loading-skeleton">Загрузка AI директора...</div>}>
+      <AIDirectorCapabilities />
+    </Suspense>,
+    
+    // 5. Решения
+    <Suspense key="solutions" fallback={<div className="loading-section">Загрузка решений...</div>}>
+      <SolutionsSection />
+    </Suspense>,
+    
+    // 6. Безопасность
+    <section key="security" className="security-section" id="security">
+      <div className="container">
+        <div className="section-header">
+          <h2 className="heading-luxury">
+            Безопасность и <span className="heading-gold">защита данных</span>
+          </h2>
+          <p className="section-subtitle">
+            Zero Trust архитектура, GDPR compliance, ISO 27001
+          </p>
+        </div>
+        <Suspense fallback={<div className="loading-skeleton">Загрузка панели...</div>}>
+          <AdminPanel />
+        </Suspense>
+      </div>
+    </section>,
+    
+    // 7. Контакты
+    <section key="contacts" className="contact-section" id="contacts">
+      <div className="container">
+        <div className="contact-content">
           <div className="section-header">
             <h2 className="heading-luxury">
-              Рассчитайте вашу <span className="heading-gold">выгоду</span>
+              Свяжитесь с <span className="heading-gold">нами</span>
             </h2>
             <p className="section-subtitle">
-              Узнайте, сколько вы сэкономите с нашими решениями
+              Готовы начать цифровую трансформацию? Мы здесь, чтобы помочь
             </p>
           </div>
-          <div className="roi-wrapper">
-            <Suspense fallback={<div>Загрузка калькулятора...</div>}>
-              <ROICalculator />
-            </Suspense>
-          </div>
+          <Suspense fallback={<div className="loading-skeleton">Загрузка формы...</div>}>
+            <ContactForm />
+          </Suspense>
         </div>
-      </section>
-      
-      {/* Демо секция */}
-      <section className="demo-section" id="demo">
-        <div className="container">
-          <div className="demo-content">
-            <h2 className="heading-luxury">
-              Попробуйте <span className="heading-gold">демо</span> прямо сейчас
-            </h2>
-            <p className="demo-description">
-              Наш цифровой директор покажет возможности платформы
-            </p>
-            <button 
-              className="btn-luxury btn-gold btn-large"
-              onClick={() => {
-                const aiButton = document.querySelector('.ai-float-button');
-                if (aiButton) {
-                  aiButton.click();
-                } else {
-                  // Если кнопка AI еще не загрузилась, показываем алерт
-                  alert('AI директор загружается, попробуйте через секунду...');
-                }
-              }}
-            >
-              <span>Запустить демо</span>
-              <span className="btn-icon">🚀</span>
-            </button>
-          </div>
-        </div>
-      </section>
-      
-      {/* Консультация */}
-      <section className="consultation-section" id="consultation">
-        <div className="container">
-          <div className="consultation-wrapper">
-            <div className="consultation-info">
-              <h2 className="heading-luxury">
-                Готовы начать <span className="heading-gold">трансформацию</span>?
-              </h2>
-              <p className="consultation-description">
-                Получите персональную консультацию и дорожную карту развития
-              </p>
-              <ul className="consultation-benefits">
-                <li>✓ Бесплатный аудит текущего состояния</li>
-                <li>✓ Персональная стратегия развития</li>
-                <li>✓ Расчет ROI для вашего бизнеса</li>
-                <li>✓ Демонстрация возможностей</li>
-              </ul>
-            </div>
-            <div className="consultation-form">
-              <Suspense fallback={<div>Загрузка формы...</div>}>
-                <ContactForm />
-              </Suspense>
-            </div>
-          </div>
-        </div>
-      </section>
-      
-      {/* AI Управляющий - Цифровой директор */}
+      </div>
+    </section>,
+    
+    // 8. О нас
+    <Suspense key="about" fallback={<div className="loading-section">Загрузка...</div>}>
+      <AboutSection />
+    </Suspense>
+  ];
+
+  return (
+    <main className="premium-main">
+      {/* Горизонтальный свайп контейнер */}
+      <SwipeContainer 
+        sections={sections}
+        onSectionChange={handleSectionChange}
+        initialSection={currentSection}
+      >
+        {sectionComponents}
+      </SwipeContainer>
+
+      {/* AI Ассистент - всегда доступен */}
       <Suspense fallback={null}>
         <SmartFloatingAI />
       </Suspense>
-      
-      {/* Админ панель (скрыта по умолчанию) */}
-      {process.env.NODE_ENV === 'development' && (
-        <Suspense fallback={null}>
-          <AdminPanel />
-        </Suspense>
-      )}
 
       <style jsx>{`
         .premium-main {
           position: relative;
           min-height: 100vh;
-          background: var(--noir-900);
-          overflow-x: hidden;
+          background: var(--noir-900, #0A051A);
+          overflow: hidden;
         }
 
         .container {
           max-width: 1400px;
           margin: 0 auto;
-          padding: 0 24px;
+          padding: 0 2rem;
         }
 
         .section-header {
           text-align: center;
-          margin-bottom: 60px;
+          margin-bottom: 3rem;
+          padding-top: 2rem;
         }
 
-        .section-header h2 {
-          font-size: clamp(36px, 5vw, 56px);
-          margin-bottom: 16px;
+        .heading-luxury {
+          font-size: clamp(2.5rem, 5vw, 4rem);
+          font-weight: 800;
+          color: var(--text-primary, #f8fafc);
+          margin-bottom: 1rem;
+        }
+
+        .heading-gold {
+          background: linear-gradient(135deg, #ffd700, #ff8c00);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
         }
 
         .section-subtitle {
-          font-family: var(--font-body);
-          font-size: 20px;
-          color: var(--platinum-400);
+          font-size: 1.25rem;
+          color: var(--text-secondary, #94a3b8);
+          max-width: 600px;
+          margin: 0 auto;
+          line-height: 1.6;
         }
 
-        /* ROI Section */
-        .roi-section {
-          padding: 120px 0;
-          background: rgba(65, 54, 241, 0.02);
+        /* Секции с единым стилем */
+        .analytics-section,
+        .roi-section,
+        .security-section,
+        .contact-section {
+          padding: 4rem 0;
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          background: linear-gradient(180deg, var(--noir-900, #0A051A) 0%, var(--noir-800, #1e293b) 100%);
         }
 
         .roi-wrapper {
@@ -186,96 +268,39 @@ export default function Home() {
           margin: 0 auto;
         }
 
-        /* Demo Section */
-        .demo-section {
-          padding: 120px 0;
-          background: var(--noir-850);
+        .contact-content {
+          max-width: 800px;
+          margin: 0 auto;
+        }
+
+        /* Loading состояния */
+        .loading-skeleton,
+        .loading-section {
+          background: var(--glass-dark, rgba(255, 255, 255, 0.05));
+          border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+          border-radius: 16px;
+          padding: 3rem;
           text-align: center;
-        }
-
-        .demo-content h2 {
-          margin-bottom: 24px;
-        }
-
-        .demo-description {
-          font-size: 20px;
-          color: var(--platinum-400);
-          margin-bottom: 40px;
-        }
-
-        .btn-large {
-          padding: 20px 48px;
-          font-size: 18px;
-          display: inline-flex;
-          align-items: center;
-          gap: 12px;
-        }
-
-        .btn-icon {
-          font-size: 24px;
-        }
-
-        /* Consultation Section */
-        .consultation-section {
-          padding: 120px 0;
-          background: linear-gradient(180deg, var(--noir-900) 0%, var(--noir-800) 100%);
-        }
-
-        .consultation-wrapper {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 80px;
-          align-items: center;
-        }
-
-        .consultation-info h2 {
-          margin-bottom: 24px;
-        }
-
-        .consultation-description {
-          font-size: 20px;
-          color: var(--platinum-400);
-          margin-bottom: 40px;
-          line-height: 1.6;
-        }
-
-        .consultation-benefits {
-          list-style: none;
-          padding: 0;
-          margin: 0;
-        }
-
-        .consultation-benefits li {
-          font-size: 18px;
-          color: var(--platinum-300);
-          margin-bottom: 16px;
+          color: var(--text-secondary, #94a3b8);
+          min-height: 200px;
           display: flex;
           align-items: center;
-          gap: 12px;
-        }
-
-        .consultation-benefits li::before {
-          content: '';
-          color: var(--gold-premium);
-          font-weight: 700;
-        }
-
-        .consultation-form {
-          background: var(--glass-white);
+          justify-content: center;
           backdrop-filter: blur(20px);
-          border: 1px solid var(--glass-border);
-          border-radius: 24px;
-          padding: 40px;
+          animation: pulse 2s ease-in-out infinite;
         }
 
-        /* Loading states */
-        .loading-skeleton {
-          background: var(--glass-white);
-          border-radius: 12px;
-          padding: 40px;
-          text-align: center;
-          color: var(--platinum-400);
-          animation: pulse 2s ease-in-out infinite;
+        .ai-loading {
+          position: fixed;
+          bottom: 2rem;
+          right: 2rem;
+          background: var(--glass-dark, rgba(255, 255, 255, 0.05));
+          border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+          border-radius: 50px;
+          padding: 1rem 2rem;
+          color: var(--text-secondary, #94a3b8);
+          backdrop-filter: blur(20px);
+          z-index: 1000;
         }
 
         @keyframes pulse {
@@ -284,20 +309,21 @@ export default function Home() {
         }
 
         /* Responsive */
-        @media (max-width: 1024px) {
-          .consultation-wrapper {
-            grid-template-columns: 1fr;
-            gap: 48px;
-          }
-        }
-
         @media (max-width: 768px) {
-          section {
-            padding: 80px 0;
+          .container {
+            padding: 0 1rem;
+          }
+
+          .analytics-section,
+          .roi-section,
+          .security-section,
+          .contact-section {
+            padding: 2rem 0;
           }
 
           .section-header {
-            margin-bottom: 40px;
+            margin-bottom: 2rem;
+            padding-top: 1rem;
           }
         }
       `}</style>
