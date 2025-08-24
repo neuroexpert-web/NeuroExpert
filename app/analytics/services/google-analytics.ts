@@ -26,7 +26,7 @@ export class GoogleAnalytics implements AnalyticsService {
     // Initialize dataLayer
     window.dataLayer = window.dataLayer || [];
     window.gtag = function() {
-      window.dataLayer.push(arguments);
+      window.dataLayer!.push(arguments);
     };
 
     window.gtag('js', new Date());
@@ -39,7 +39,7 @@ export class GoogleAnalytics implements AnalyticsService {
   }
 
   async track(event: AnalyticsEvent): Promise<void> {
-    if (!this.isInitialized || typeof window === 'undefined') {
+    if (!this.isInitialized || typeof window === 'undefined' || !window.gtag) {
       return;
     }
 
@@ -185,7 +185,7 @@ export class GoogleAnalytics implements AnalyticsService {
 // Declare global types
 declare global {
   interface Window {
-    dataLayer: any[];
-    gtag: (...args: any[]) => void;
+    dataLayer?: any[];
+    gtag?: (...args: any[]) => void;
   }
 }

@@ -31,20 +31,22 @@ export class YandexMetrica implements AnalyticsService {
     })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
 
     // Configure Yandex Metrica
-    window.ym(this.config.counterId, 'init', {
+    if (window.ym) {
+      window.ym(this.config.counterId, 'init', {
       clickmap: this.config.clickmap !== false,
       trackLinks: this.config.trackLinks !== false,
       accurateTrackBounce: this.config.accurateTrackBounce !== false,
       trackHash: this.config.trackHash !== false,
-      webvisor: this.config.webvisor !== false,
-      defer: false
-    });
+        webvisor: this.config.webvisor !== false,
+        defer: false
+      });
+    }
 
     this.isInitialized = true;
   }
 
   async track(event: AnalyticsEvent): Promise<void> {
-    if (!this.isInitialized || typeof window === 'undefined') {
+    if (!this.isInitialized || typeof window === 'undefined' || !window.ym) {
       return;
     }
 
@@ -188,6 +190,6 @@ export class YandexMetrica implements AnalyticsService {
 // Declare global types
 declare global {
   interface Window {
-    ym: (counterId: string | number, action: string, ...params: any[]) => void;
+    ym?: (counterId: string | number, action: string, ...params: any[]) => void;
   }
 }
