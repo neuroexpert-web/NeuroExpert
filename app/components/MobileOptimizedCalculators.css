@@ -1,0 +1,537 @@
+/* Мобильная оптимизация для калькуляторов NeuroExpert */
+
+/* ========== PRICING CALCULATOR MOBILE ========== */
+@media (max-width: 768px) {
+  /* Основной контейнер */
+  .pricing-calculator-mobile {
+    padding: 0 !important;
+    min-height: 100vh;
+    background: var(--dark-bg);
+  }
+  
+  /* Шапка калькулятора */
+  .pricing-header-mobile {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: linear-gradient(180deg, 
+      rgba(10, 14, 26, 0.98) 0%, 
+      rgba(10, 14, 26, 0.95) 100%);
+    backdrop-filter: blur(20px);
+    padding: 1rem;
+    border-bottom: 1px solid var(--glass-border);
+  }
+  
+  .pricing-title-mobile {
+    font-size: 1.5rem !important;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .pricing-subtitle-mobile {
+    font-size: 0.875rem;
+    text-align: center;
+    opacity: 0.8;
+  }
+  
+  /* Параметры проекта */
+  .pricing-params-mobile {
+    padding: 1rem;
+    background: var(--glass-bg);
+    margin: 0.5rem;
+    border-radius: 12px;
+  }
+  
+  .param-group-mobile {
+    margin-bottom: 1.5rem;
+  }
+  
+  .param-label-mobile {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--aurora-cyan);
+  }
+  
+  /* Радио кнопки и чекбоксы */
+  .radio-group-mobile,
+  .checkbox-group-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .radio-label-mobile,
+  .checkbox-label-mobile {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+  }
+  
+  .radio-label-mobile:active,
+  .checkbox-label-mobile:active {
+    transform: scale(0.98);
+    background: rgba(74, 158, 255, 0.2);
+  }
+  
+  /* Услуги */
+  .services-section-mobile {
+    padding: 0.5rem;
+  }
+  
+  .service-category-mobile {
+    margin-bottom: 1.5rem;
+  }
+  
+  .category-title-mobile {
+    font-size: 1.1rem;
+    padding: 0 0.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--aurora-purple);
+  }
+  
+  .service-grid-mobile {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  
+  .service-card-mobile {
+    padding: 1rem;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+  
+  .service-card-mobile.selected {
+    background: rgba(74, 158, 255, 0.15);
+    border-color: var(--aurora-cyan);
+  }
+  
+  .service-card-mobile:active {
+    transform: scale(0.98);
+  }
+  
+  .service-name-mobile {
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+  
+  .service-price-mobile {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+  
+  /* Результаты - фиксированная панель внизу */
+  .pricing-results-mobile {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, 
+      rgba(10, 14, 26, 0.95) 0%, 
+      rgba(20, 24, 36, 0.98) 100%);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--glass-border);
+    padding: 1rem;
+    z-index: 90;
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+    max-height: 50vh;
+    overflow-y: auto;
+  }
+  
+  .pricing-results-mobile.collapsed {
+    transform: translateY(calc(100% - 60px));
+  }
+  
+  .results-toggle-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem;
+    margin: -1rem -1rem 1rem -1rem;
+    border-bottom: 1px solid var(--glass-border);
+    cursor: pointer;
+  }
+  
+  .price-display-mobile {
+    text-align: center;
+    padding: 1rem 0;
+  }
+  
+  .price-value-mobile {
+    font-size: 2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--aurora-cyan), var(--aurora-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  /* CTA кнопка */
+  .cta-button-mobile {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--aurora-cyan), var(--aurora-purple));
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1rem;
+  }
+  
+  .cta-button-mobile:active {
+    transform: scale(0.98);
+  }
+  
+  /* Прокрутка с учетом фиксированных элементов */
+  .pricing-content-mobile {
+    padding-bottom: 250px; /* Место для результатов */
+    padding-top: 80px; /* Место для шапки */
+  }
+}
+
+/* ========== ROI CALCULATOR MOBILE ========== */
+@media (max-width: 768px) {
+  /* Основной контейнер */
+  .roi-calculator-mobile {
+    padding: 1rem 0;
+    min-height: 100vh;
+    background: transparent;
+  }
+  
+  .roi-container-mobile {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 1.5rem 1rem;
+    margin: 0 0.5rem;
+  }
+  
+  /* Заголовок */
+  .roi-header-mobile {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .roi-title-mobile {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .roi-subtitle-mobile {
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+  
+  /* Выбор сценария */
+  .scenario-selector-mobile {
+    background: rgba(10, 10, 30, 0.6);
+    border-radius: 16px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .scenario-title-mobile {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  
+  .scenarios-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .scenario-button-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .scenario-button-mobile.active {
+    background: rgba(74, 158, 255, 0.2);
+    border-color: var(--aurora-cyan);
+  }
+  
+  .scenario-button-mobile:active {
+    transform: scale(0.98);
+  }
+  
+  .scenario-info-mobile {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  
+  .scenario-icon-mobile {
+    font-size: 1.5rem;
+  }
+  
+  .scenario-text-mobile {
+    text-align: left;
+  }
+  
+  .scenario-name-mobile {
+    font-size: 0.95rem;
+    font-weight: 600;
+    display: block;
+  }
+  
+  .scenario-desc-mobile {
+    font-size: 0.75rem;
+    opacity: 0.7;
+    display: block;
+  }
+  
+  .scenario-multiplier-mobile {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--aurora-cyan);
+  }
+  
+  /* Форма */
+  .roi-form-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .field-mobile {
+    margin-bottom: 0.5rem;
+  }
+  
+  .label-mobile {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    display: block;
+    color: var(--text-primary);
+  }
+  
+  .input-mobile,
+  .select-mobile {
+    width: 100%;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 16px; /* Предотвращает зум на iOS */
+    transition: all 0.2s;
+  }
+  
+  .input-mobile:focus,
+  .select-mobile:focus {
+    outline: none;
+    border-color: var(--aurora-cyan);
+    background: rgba(255, 255, 255, 0.08);
+  }
+  
+  .field-hint-mobile {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+  }
+  
+  /* Информационная панель */
+  .info-panel-mobile {
+    background: rgba(74, 158, 255, 0.1);
+    border: 1px solid rgba(74, 158, 255, 0.3);
+    border-radius: 12px;
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+  
+  .info-title-mobile {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--aurora-cyan);
+  }
+  
+  .info-list-mobile {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .info-item-mobile {
+    font-size: 0.85rem;
+    padding: 0.25rem 0;
+    opacity: 0.9;
+  }
+  
+  /* Кнопка отправки */
+  .submit-button-mobile {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--aurora-cyan), var(--aurora-purple));
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .submit-button-mobile:active {
+    transform: scale(0.98);
+  }
+  
+  /* Гарантии */
+  .guarantee-mobile {
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.85rem;
+    opacity: 0.8;
+    margin-top: 1rem;
+  }
+}
+
+/* ========== МОДАЛЬНОЕ ОКНО РЕЗУЛЬТАТОВ ROI ========== */
+@media (max-width: 768px) {
+  .roi-modal-mobile {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--dark-bg);
+    z-index: 1001;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .roi-modal-content-mobile {
+    padding: 1rem;
+    min-height: 100vh;
+  }
+  
+  .roi-modal-header-mobile {
+    text-align: center;
+    padding: 1rem 0 2rem;
+  }
+  
+  .roi-modal-icon-mobile {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .roi-modal-title-mobile {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .roi-result-card-mobile {
+    background: var(--glass-bg);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .roi-main-value-mobile {
+    font-size: 3rem;
+    font-weight: 700;
+    text-align: center;
+    margin: 1rem 0;
+  }
+  
+  .roi-metrics-grid-mobile {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin: 1rem 0;
+  }
+  
+  .roi-metric-card-mobile {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  .roi-cta-buttons-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+  
+  .roi-close-button-mobile {
+    position: sticky;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    float: right;
+  }
+}
+
+/* ========== ОБЩИЕ МОБИЛЬНЫЕ УЛУЧШЕНИЯ ========== */
+@media (max-width: 768px) {
+  /* Отключаем ненужные анимации */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+  
+  /* Улучшенный скролл */
+  .scrollable {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+  
+  /* Безопасные области для iPhone X+ */
+  .safe-area-inset {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  /* Оптимизация производительности */
+  .no-mobile-shadows * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  /* Упрощенные градиенты */
+  .simple-gradients {
+    background-image: none !important;
+    background-color: var(--primary) !important;
+  }
+}

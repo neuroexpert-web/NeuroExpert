@@ -15,7 +15,7 @@ const AnalyticsDashboard = dynamic(() => import('./components/AnalyticsRealTimeD
   loading: () => <div className="loading-skeleton">Загрузка аналитики...</div>
 });
 
-const ROICalculator = dynamic(() => import('./components/ROICalculator'), {
+const ROICalculator = dynamic(() => import('./components/ROICalculatorFixed'), {
   ssr: false,
   loading: () => <div className="loading-skeleton">Загрузка ROI калькулятора...</div>
 });
@@ -45,7 +45,7 @@ const AboutSection = dynamic(() => import('./components/AboutSection'), {
   loading: () => <div className="loading-skeleton">Загрузка о нас...</div>
 });
 
-const PricingCalculator = dynamic(() => import('./components/PricingCalculator'), {
+const PricingCalculator = dynamic(() => import('./components/PricingCalculatorFixed'), {
   ssr: false,
   loading: () => <div className="loading-skeleton">Загрузка калькулятора цен...</div>
 });
