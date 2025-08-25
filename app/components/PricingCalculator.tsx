@@ -45,19 +45,19 @@ export default function PricingCalculator() {
   // Каталог услуг из прайс-листа
   const services: Service[] = [
     // Аудит и Аналитика
-    { id: 'digital-audit', category: 'Аудит и Аналитика', name: 'Digital-аудит', minPrice: 25500, maxPrice: 90000 },
+    { id: 'digital-audit', category: 'Аудит и Аналитика', name: 'Цифровой аудит вашего бизнеса', minPrice: 25500, maxPrice: 90000 },
     { id: 'competitor-analysis', category: 'Аудит и Аналитика', name: 'Анализ конкурентов', minPrice: 20000, maxPrice: 70000 },
-    { id: 'digital-maturity', category: 'Аудит и Аналитика', name: 'Оценка цифровой зрелости', minPrice: 30000, maxPrice: 85000 },
+    { id: 'digital-maturity', category: 'Аудит и Аналитика', name: 'Насколько ваш бизнес готов к цифровизации', minPrice: 30000, maxPrice: 85000 },
     { id: 'data-analytics', category: 'Аудит и Аналитика', name: 'Аналитика данных и отчетность', minPrice: 25000, maxPrice: 80000 },
     
     // Стратегия и Консалтинг
-    { id: 'digital-strategy', category: 'Стратегия и Консалтинг', name: 'Разработка digital-стратегии', minPrice: 85000, maxPrice: 270000 },
-    { id: 'roi-model', category: 'Стратегия и Консалтинг', name: 'Разработка ROI модели', minPrice: 40000, maxPrice: 120000 },
+    { id: 'digital-strategy', category: 'Стратегия и Консалтинг', name: 'План цифровой трансформации', minPrice: 85000, maxPrice: 270000 },
+    { id: 'roi-model', category: 'Стратегия и Консалтинг', name: 'Расчёт окупаемости инвестиций', minPrice: 40000, maxPrice: 120000 },
     { id: 'process-optimization', category: 'Стратегия и Консалтинг', name: 'Оптимизация бизнес-процессов', minPrice: 60000, maxPrice: 150000 },
-    { id: 'digital-consulting', category: 'Стратегия и Консалтинг', name: 'Консалтинг по цифровой трансформации', minPrice: 50000, maxPrice: 180000 },
+    { id: 'digital-consulting', category: 'Стратегия и Консалтинг', name: 'Консультации по внедрению цифровых технологий', minPrice: 50000, maxPrice: 180000 },
     
     // Дизайн и UX/UI
-    { id: 'ux-ui-design', category: 'Дизайн и UX/UI', name: 'UX/UI дизайн', minPrice: 57800, maxPrice: 162000 },
+    { id: 'ux-ui-design', category: 'Дизайн и UX/UI', name: 'Красивый и удобный дизайн интерфейса', minPrice: 57800, maxPrice: 162000 },
     { id: 'landing-design', category: 'Дизайн и UX/UI', name: 'Дизайн лендинга', minPrice: 42500, maxPrice: 108000 },
     { id: 'corporate-design', category: 'Дизайн и UX/UI', name: 'Дизайн корпоративного сайта', minPrice: 90000, maxPrice: 240000 },
     { id: 'design-system', category: 'Дизайн и UX/UI', name: 'Разработка дизайн-системы', minPrice: 70000, maxPrice: 200000 },

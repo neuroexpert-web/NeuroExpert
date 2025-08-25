@@ -19,13 +19,13 @@ export default function SolutionsSection() {
         },
         {
           name: 'Корпоративный сайт',
-          price: 'от 199,900₽',
+          price: 'от 199 900 ₽',
           timeline: '14-21 день',
           features: ['AI отдел продаж', 'Многоязычность', 'База знаний компании']
         },
         {
           name: 'Интернет-магазин',
-          price: 'от 299,900₽',
+          price: 'от 299 900 ₽',
           timeline: '21-30 дней',
           features: ['Персональные рекомендации', 'AI-стилист', 'Умный поиск']
         }
@@ -36,20 +36,20 @@ export default function SolutionsSection() {
       items: [
         {
           name: 'Мобильное приложение',
-          price: 'от 399,900₽',
+          price: 'от 399 900 ₽',
           timeline: '30-45 дней',
           features: ['iOS + Android', 'AI-ассистент', 'Push персонализация'],
           popular: true
         },
         {
           name: 'PWA приложение',
-          price: 'от 199,900₽',
+          price: 'от 199 900 ₽',
           timeline: '14-21 день',
           features: ['Работает офлайн', 'Как нативное', 'Быстрая установка']
         },
         {
           name: 'SaaS платформа',
-          price: 'от 999,900₽',
+          price: 'от 999 900 ₽',
           timeline: '2-3 месяца',
           features: ['Масштабируемость', 'API интеграции', 'White label']
         }
@@ -60,20 +60,20 @@ export default function SolutionsSection() {
       items: [
         {
           name: 'AI Консультант',
-          price: 'от 49,900₽/мес',
+          price: 'от 49 900 ₽/мес',
           timeline: '3-5 дней',
           features: ['Обучение на данных', 'CRM интеграция', 'Голосовой интерфейс'],
           popular: true
         },
         {
           name: 'AI Автоматизация',
-          price: 'от 149,900₽',
+          price: 'от 149 900 ₽',
           timeline: '7-14 дней',
           features: ['Обработка документов', 'Генерация контента', 'Умная аналитика']
         },
         {
           name: 'AI Аналитика',
-          price: 'от 99,900₽',
+          price: 'от 99 900 ₽',
           timeline: '5-10 дней',
           features: ['Предиктивная аналитика', 'Рекомендации', 'Реал-тайм отчеты']
         }
