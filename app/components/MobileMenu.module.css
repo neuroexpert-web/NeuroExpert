@@ -1,0 +1,380 @@
+/* Стили для мобильного меню */
+
+/* Мобильный хедер */
+.mobileHeader {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(10, 14, 26, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  padding: env(safe-area-inset-top) 0 0 0;
+}
+
+.mobileHeader.scrolled {
+  background: rgba(10, 14, 26, 0.98);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  height: 60px;
+}
+
+/* Логотип */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--text-primary);
+}
+
+.logoIcon {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 0 20px rgba(74, 158, 255, 0.5));
+}
+
+.logoText {
+  background: linear-gradient(135deg, var(--aurora-cyan), var(--aurora-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Кнопка меню (гамбургер) */
+.menuButton {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.menuButton:active {
+  transform: scale(0.95);
+}
+
+.menuButton.active {
+  background: rgba(74, 158, 255, 0.1);
+  border-color: var(--aurora-cyan);
+}
+
+.menuIcon {
+  position: relative;
+  width: 24px;
+  height: 20px;
+}
+
+.menuIcon span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.menuIcon span:nth-child(1) {
+  top: 0;
+}
+
+.menuIcon span:nth-child(2) {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.menuIcon span:nth-child(3) {
+  bottom: 0;
+}
+
+/* Анимация гамбургера при активации */
+.active .menuIcon span:nth-child(1) {
+  transform: rotate(45deg) translateY(9px);
+}
+
+.active .menuIcon span:nth-child(2) {
+  opacity: 0;
+}
+
+.active .menuIcon span:nth-child(3) {
+  transform: rotate(-45deg) translateY(-9px);
+}
+
+/* Оверлей */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 1001;
+}
+
+/* Мобильное меню */
+.mobileMenu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 85%;
+  max-width: 320px;
+  background: linear-gradient(180deg, 
+    rgba(20, 24, 36, 0.98) 0%, 
+    rgba(10, 14, 26, 0.98) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 1002;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Шапка меню */
+.menuHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.menuTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--aurora-cyan), var(--aurora-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.closeButton {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.closeButton:active {
+  transform: scale(0.9);
+}
+
+/* Список меню */
+.menuList {
+  list-style: none;
+  padding: 1rem 0;
+  margin: 0;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.menuItem::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(74, 158, 255, 0.1) 50%, 
+    transparent 100%);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.menuItem:active::before {
+  transform: translateX(0);
+}
+
+.menuItem:active {
+  background: rgba(74, 158, 255, 0.05);
+}
+
+.menuItemIcon {
+  font-size: 1.5rem;
+  margin-right: 1rem;
+  width: 2rem;
+  text-align: center;
+}
+
+.menuItemText {
+  flex: 1;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.menuItemArrow {
+  opacity: 0.5;
+  transition: transform 0.3s ease;
+}
+
+.menuItem:active .menuItemArrow {
+  transform: translateX(5px);
+}
+
+/* Быстрые действия */
+.quickActions {
+  padding: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ctaButton {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, var(--aurora-cyan), var(--aurora-purple));
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.ctaButton:active {
+  transform: scale(0.98);
+}
+
+.contactInfo {
+  text-align: center;
+}
+
+.phoneLink {
+  display: inline-block;
+  color: var(--aurora-cyan);
+  text-decoration: none;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.phoneLink:active {
+  transform: scale(0.95);
+}
+
+.workHours {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Социальные сети */
+.socialLinks {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.socialLinks a {
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.socialLinks a:active {
+  transform: scale(0.9);
+  background: rgba(74, 158, 255, 0.2);
+}
+
+/* Показываем только на мобильных */
+@media (max-width: 768px) {
+  .mobileHeader {
+    display: block;
+  }
+  
+  /* Добавляем отступ для контента под хедером */
+  body {
+    padding-top: calc(60px + env(safe-area-inset-top));
+  }
+}
+
+/* Адаптация для маленьких экранов */
+@media (max-width: 375px) {
+  .mobileMenu {
+    width: 90%;
+  }
+  
+  .menuItemText {
+    font-size: 1rem;
+  }
+  
+  .ctaButton {
+    font-size: 1rem;
+    padding: 0.875rem;
+  }
+}
+
+/* Landscape ориентация */
+@media (max-height: 480px) and (orientation: landscape) {
+  .mobileMenu {
+    width: 50%;
+    max-width: 400px;
+  }
+  
+  .menuList {
+    padding: 0.5rem 0;
+  }
+  
+  .menuItem {
+    padding: 0.75rem 1.5rem;
+  }
+  
+  .quickActions {
+    padding: 1rem 1.5rem;
+  }
+}
