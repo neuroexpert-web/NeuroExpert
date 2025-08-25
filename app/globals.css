@@ -10,6 +10,9 @@
 /* Импорт нового дизайна от Екатерины */
 @import './styles/redesign-preview.css';
 
+/* Импорт стилей аналитики */
+@import './styles/analytics-style.css';
+
 /* Критические стили для Hero секции */
 .hero-section {
   background-color: #0A051A !important;
