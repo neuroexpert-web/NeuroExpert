@@ -7,6 +7,9 @@
 /* Импорт темы "Полярная ночь" */
 @import './styles/polar-night-theme.css';
 
+/* Импорт нового дизайна от Екатерины */
+@import './styles/redesign-preview.css';
+
 /* Критические стили для Hero секции */
 .hero-section {
   background-color: #0A051A !important;
