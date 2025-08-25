@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { assistantRateLimit } from '@/app/middleware/rateLimit';
+import { validate, schemas } from '@/app/utils/validation';
 import fs from 'fs';
 import path from 'path';
 // import { 
@@ -165,7 +166,18 @@ async function handler(request) {
   const startTime = Date.now();
   
   try {
-    const { userMessage: question, model = 'gemini', history = [] } = await request.json();
+    const requestData = await request.json();
+    
+    // Валидация входных данных
+    const validationResult = validate({ question: requestData.userMessage }, schemas.apiRequest);
+    
+    if (!validationResult.isValid) {
+      const firstError = Object.values(validationResult.errors)[0];
+      return NextResponse.json({ error: firstError }, { status: 400 });
+    }
+    
+    const { question } = validationResult.sanitizedData;
+    const { model = 'gemini', history = [] } = requestData;
     
     // Debug logging
     console.log('Assistant API called:', { 
@@ -176,10 +188,6 @@ async function handler(request) {
       anthropicKeyLength: ANTHROPIC_API_KEY ? ANTHROPIC_API_KEY.length : 0,
       nodeEnv: process.env.NODE_ENV
     });
-    
-    if (!question) {
-      return NextResponse.json({ error: 'Вопрос обязателен' }, { status: 400 });
-    }
 
     // Создаём улучшенный промпт
     // const enhancedPrompt = createEnhancedPrompt(question, context);

@@ -1,39 +1,25 @@
 import { NextResponse } from 'next/server';
 import { apiRateLimit } from '@/app/middleware/rateLimit';
+import { validate, schemas } from '@/app/utils/validation';
 
 async function handler(request) {
   try {
     const data = await request.json();
     
-    // Validate required fields
-    const { name, email, phone, message } = data;
+    // Валидация данных с использованием схемы
+    const validationResult = validate(data, schemas.contactForm);
     
-    if (!name || !email || !message) {
+    if (!validationResult.isValid) {
+      // Возвращаем первую ошибку для удобства пользователя
+      const firstError = Object.values(validationResult.errors)[0];
       return NextResponse.json(
-        { error: 'Пожалуйста, заполните все обязательные поля' },
+        { error: firstError },
         { status: 400 }
       );
     }
     
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: 'Пожалуйста, введите корректный email' },
-        { status: 400 }
-      );
-    }
-    
-    // Phone validation (optional but if provided, should be valid)
-    if (phone) {
-      const phoneRegex = /^[\d\s\-\+\(\)]+$/;
-      if (!phoneRegex.test(phone) || phone.length < 10) {
-        return NextResponse.json(
-          { error: 'Пожалуйста, введите корректный номер телефона' },
-          { status: 400 }
-        );
-      }
-    }
+    // Используем санитизированные данные
+    const { name, email, phone, message } = validationResult.sanitizedData;
     
     // Log the submission (in production, save to database)
     console.log('Contact form submission:', {

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { authRateLimit } from '@/app/middleware/rateLimit';
+import { generateToken, isTokenValid } from '@/app/security/auth';
 
 // --- Security hardening -----------------------------
 // Получаем секретный ключ и хешированный пароль из переменных окружения.
@@ -84,15 +84,13 @@ export async function POST(request) {
     // Успешный вход — сбрасываем счётчик попыток
     resetAttempts(ip);
 
-    // Создаем JWT токен
-    const token = jwt.sign(
-      {
-        role: 'admin',
-        timestamp: Date.now(),
-      },
-      JWT_SECRET,
-      { expiresIn: '24h' }
-    );
+    // Создаем JWT токен используя наш secure auth module
+    const token = generateToken({
+      userId: 'admin',
+      email: 'admin@neuroexpert.ai',
+      role: 'admin',
+      sessionId: `admin-${Date.now()}`
+    });
 
     return NextResponse.json({
       success: true,
@@ -122,13 +120,15 @@ export async function GET(request) {
 
     const token = authHeader.substring(7);
     
-    try {
-      const decoded = jwt.verify(token, JWT_SECRET);
+    // Используем безопасную валидацию токена
+    const isValid = isTokenValid(token);
+    
+    if (isValid) {
       return NextResponse.json({
         valid: true,
-        role: decoded.role
+        role: 'admin'
       });
-    } catch (error) {
+    } else {
       return NextResponse.json(
         { valid: false },
         { status: 401 }
