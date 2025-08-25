@@ -39,6 +39,14 @@ export default function HomePage({ onNavigate }: HomePageProps) {
 
   return (
     <div className={styles.homePage} ref={containerRef}>
+      {/* Header с логотипом */}
+      <header className={styles.header}>
+        <div className={styles.logo}>
+          <span className={styles.logoNeuro}>Neuro</span>
+          <span className={styles.logoExpert}>Expert</span>
+        </div>
+      </header>
+
       {/* Основной контент */}
       <main className={styles.mainContent}>
         {/* Видео фон "цифрового космоса" с фолбеком */}
