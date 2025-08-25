@@ -319,19 +319,53 @@
 }
 
 .titleLine1 {
-  color: #fff;
-  text-shadow: 0 0 40px rgba(255, 255, 255, 0.5);
-  animation: glow 3s ease-in-out infinite alternate;
-}
-
-.titleLine2 {
-  background: linear-gradient(135deg, #9945ff 0%, #6366f1 25%, #a855f7 50%, #ec4899 75%, #9945ff 100%);
+  background: linear-gradient(135deg, #00ff88 0%, #00d4ff 50%, #0099ff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   background-size: 200% 200%;
-  animation: gradient-shift 5s ease infinite;
-  filter: drop-shadow(0 0 30px rgba(153, 69, 255, 0.5));
+  animation: energy-flow 4s ease-in-out infinite;
+  text-shadow: 0 0 40px rgba(0, 255, 136, 0.6);
+  filter: drop-shadow(0 0 30px rgba(0, 255, 136, 0.4));
+  position: relative;
+}
+
+.titleLine1::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #00ff88 0%, #00d4ff 50%, #0099ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: blur(15px);
+  opacity: 0.7;
+  z-index: -1;
+}
+
+.titleLine2 {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ffa500 50%, #ffeb3b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% 200%;
+  animation: warm-glow 3s ease-in-out infinite alternate;
+  text-shadow: 0 0 40px rgba(255, 165, 0, 0.8);
+  filter: drop-shadow(0 0 25px rgba(255, 165, 0, 0.5));
+  position: relative;
+}
+
+.titleLine2::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ffa500 50%, #ffeb3b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: blur(20px);
+  opacity: 0.6;
+  z-index: -1;
 }
 
 @keyframes glow {
