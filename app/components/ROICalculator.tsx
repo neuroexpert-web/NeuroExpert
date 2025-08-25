@@ -317,7 +317,7 @@ export default function ROICalculator(): JSX.Element {
               whileTap={{ scale: 0.95 }}
             >
               <span className={styles.buttonText}>
-                Рассчитать ROI
+                Узнать мою выгоду
               </span>
               <motion.span
                 animate={{ x: [0, 5, 0] }}
@@ -336,7 +336,7 @@ export default function ROICalculator(): JSX.Element {
             viewport={{ once: true }}
             transition={{ delay: 0.6 }}
           >
-            <p>🔒 Гарантируем ROI 300%+ или вернем деньги</p>
+            <p>🔒 Гарантируем прибыль в 3 раза больше вложений или вернём деньги</p>
           </motion.div>
         </motion.div>
 

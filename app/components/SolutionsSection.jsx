@@ -12,7 +12,7 @@ export default function SolutionsSection() {
       items: [
         {
           name: 'AI Landing Page',
-          price: 'от 79,900₽',
+          price: 'от 79 900 ₽',
           timeline: '5-7 дней',
           features: ['AI-консультант 24/7', 'Конверсия до 40%', 'A/B тестирование'],
           popular: true

@@ -32,7 +32,7 @@ export default function AnalyticsRealTimeDashboard() {
     {
       id: 'google-analytics',
       name: 'Google Analytics',
-      description: 'Анализ посещаемости сайта и поведения пользователей',
+      description: 'Понимаем, кто и как пользуется вашим сайтом',
       icon: '📊',
       color: '#4285F4',
       isActive: true,
@@ -40,7 +40,7 @@ export default function AnalyticsRealTimeDashboard() {
         visitors: { 
           value: 1247, 
           label: 'Посетители сейчас', 
-          description: 'Количество людей на сайте прямо сейчас',
+          description: 'Сколько потенциальных клиентов сейчас на сайте',
           trend: 12.5,
           format: 'number'
         },
@@ -54,14 +54,14 @@ export default function AnalyticsRealTimeDashboard() {
         avgTime: { 
           value: '2:34', 
           label: 'Время на сайте', 
-          description: 'Среднее время, которое пользователи проводят на сайте',
+          description: 'Насколько интересен ваш сайт посетителям',
           trend: 15.2,
           format: 'time'
         },
         bounceRate: { 
           value: 32.5, 
           label: 'Процент отказов', 
-          description: 'Процент посетителей, которые ушли сразу',
+          description: 'Сколько людей уходит, не заинтересовавшись',
           trend: -5.1,
           format: 'percent'
         }
@@ -70,7 +70,7 @@ export default function AnalyticsRealTimeDashboard() {
     {
       id: 'yandex-metrica',
       name: 'Яндекс.Метрика',
-      description: 'Российская система веб-аналитики с уникальными возможностями',
+      description: 'Показывает подробную картину поведения ваших клиентов',
       icon: '🟡',
       color: '#FFCC00',
       isActive: true,
@@ -99,7 +99,7 @@ export default function AnalyticsRealTimeDashboard() {
         goals: { 
           value: 156, 
           label: 'Достигнутые цели', 
-          description: 'Количество выполненных целевых действий',
+          description: 'Сколько посетителей стали клиентами',
           trend: 22.4,
           format: 'number'
         }
@@ -108,7 +108,7 @@ export default function AnalyticsRealTimeDashboard() {
     {
       id: 'sentry',
       name: 'Sentry',
-      description: 'Мониторинг ошибок и производительности в реальном времени',
+      description: 'Следим, чтобы ваш сайт работал идеально',
       icon: '🛡️',
       color: '#362C63',
       isActive: true,
@@ -123,7 +123,7 @@ export default function AnalyticsRealTimeDashboard() {
         errorRate: { 
           value: 0.02, 
           label: 'Процент ошибок', 
-          description: 'Процент пользователей, столкнувшихся с ошибками',
+          description: 'Какая доля клиентов столкнулась с проблемами',
           trend: -12.7,
           format: 'percent'
         },
@@ -146,7 +146,7 @@ export default function AnalyticsRealTimeDashboard() {
     {
       id: 'appmetrica',
       name: 'AppMetrica',
-      description: 'Аналитика мобильных приложений от Яндекса',
+      description: 'Понимаем, как клиенты используют мобильное приложение',
       icon: '📱',
       color: '#FF6B6B',
       isActive: true,
@@ -184,7 +184,7 @@ export default function AnalyticsRealTimeDashboard() {
     {
       id: 'openreplay',
       name: 'OpenReplay',
-      description: 'Запись и воспроизведение сессий пользователей',
+      description: 'Видим, как именно клиенты пользуются сайтом',
       icon: '🎥',
       color: '#5B47D9',
       isActive: true,
