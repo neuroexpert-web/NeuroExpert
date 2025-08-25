@@ -122,7 +122,7 @@ export default function ROICalculator(): JSX.Element {
             💎
           </motion.div>
           <h2 className={styles.title}>
-            <span className="aurora-text">Рассчитайте ROI</span> вашего проекта
+            Рассчитайте ROI вашего проекта
           </h2>
           <p className={styles.subtitle}>
             Прозрачный расчет окупаемости с гарантией 300%+ ROI

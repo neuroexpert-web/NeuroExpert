@@ -396,6 +396,31 @@
   text-align: center;
 }
 
+.highlightProfit {
+  background: linear-gradient(135deg, #00ff88 0%, #00ff00 50%, #32cd32 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+  font-size: 1.2em;
+  text-shadow: 0 0 30px rgba(0, 255, 136, 0.8);
+  filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.6));
+  position: relative;
+  display: inline-block;
+  animation: profit-pulse 2s ease-in-out infinite;
+}
+
+@keyframes profit-pulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.6));
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 30px rgba(0, 255, 136, 0.9));
+  }
+}
+
 /* CTA Buttons */
 .ctaButtons {
   display: flex;
