@@ -52,21 +52,16 @@ export function captureSecurityEvent(event: string, details: Record<string, any>
  * Track performance
  */
 export function trackPerformance(name: string, fn: () => Promise<any>): Promise<any> {
-  const transaction = Sentry.startTransaction({ name });
-  Sentry.getCurrentHub().getScope()?.setSpan(transaction);
-
-  return fn()
-    .then((result) => {
-      transaction.setStatus('ok');
+  // В новой версии Sentry используется startSpan
+  return Sentry.startSpan({ name }, async () => {
+    try {
+      const result = await fn();
       return result;
-    })
-    .catch((error) => {
-      transaction.setStatus('internal_error');
+    } catch (error) {
+      Sentry.captureException(error);
       throw error;
-    })
-    .finally(() => {
-      transaction.finish();
-    });
+    }
+  });
 }
 
 /**
@@ -74,25 +69,21 @@ export function trackPerformance(name: string, fn: () => Promise<any>): Promise<
  */
 export function monitorAPIEndpoint(endpoint: string, handler: Function) {
   return async (...args: any[]) => {
-    const transaction = Sentry.startTransaction({
+    return Sentry.startSpan({
       name: `API ${endpoint}`,
       op: 'http.server'
+    }, async () => {
+      try {
+        const result = await handler(...args);
+        return result;
+      } catch (error) {
+        captureError(error as Error, {
+          action: `API ${endpoint}`,
+          metadata: { args }
+        });
+        throw error;
+      }
     });
-
-    try {
-      const result = await handler(...args);
-      transaction.setStatus('ok');
-      return result;
-    } catch (error) {
-      transaction.setStatus('internal_error');
-      captureError(error as Error, {
-        action: `API ${endpoint}`,
-        metadata: { args }
-      });
-      throw error;
-    } finally {
-      transaction.finish();
-    }
   };
 }
 

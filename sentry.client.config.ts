@@ -14,7 +14,6 @@ if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
   
   // Security monitoring
   attachStacktrace: true,
-  autoSessionTracking: true,
   
   // Setting this option to true will print useful information to the console while you're setting up Sentry.
   debug: false,
@@ -25,10 +24,9 @@ if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
   // in development and sample at a lower rate in production
   replaysSessionSampleRate: 0.1,
   
-  // You can remove this option if you're not planning to use the Sentry Session Replay feature:
+  // Session replay configuration
   integrations: [
-    new Sentry.Replay({
-      // Additional Replay configuration goes in here
+    Sentry.replayIntegration({
       maskAllText: true,
       blockAllMedia: true,
     }),
