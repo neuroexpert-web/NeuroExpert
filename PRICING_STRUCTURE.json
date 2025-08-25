@@ -1,0 +1,225 @@
+{
+  "platform": "NeuroExpert v3.0",
+  "currency": "RUB",
+  "updated": "2025-01-11",
+  "services": {
+    "audit_analytics": {
+      "digital_audit": {
+        "name": "Цифровой аудит бизнеса",
+        "price_range": [25500, 90000],
+        "duration": "5-7 дней",
+        "roi": "200-300%"
+      },
+      "competitor_analysis": {
+        "name": "Анализ конкурентов",
+        "price_range": [20000, 70000],
+        "duration": "3-5 дней"
+      },
+      "digital_maturity": {
+        "name": "Готовность к цифровизации",
+        "price_range": [30000, 85000],
+        "duration": "1 неделя"
+      },
+      "data_analytics": {
+        "name": "Аналитика данных",
+        "price_range": [25000, 80000],
+        "duration": "ongoing"
+      }
+    },
+    "strategy_consulting": {
+      "digital_transformation": {
+        "name": "План цифровой трансформации",
+        "price_range": [85000, 270000],
+        "duration": "2-4 недели",
+        "roi": "400-600%"
+      },
+      "roi_calculation": {
+        "name": "Расчёт окупаемости",
+        "price_range": [40000, 120000],
+        "duration": "3-5 дней"
+      },
+      "process_optimization": {
+        "name": "Оптимизация процессов",
+        "price_range": [60000, 150000],
+        "duration": "2-3 недели"
+      }
+    },
+    "design_ux": {
+      "ui_ux_design": {
+        "name": "Дизайн интерфейса",
+        "price_range": [57800, 162000],
+        "duration": "2-4 недели"
+      },
+      "landing_design": {
+        "name": "Дизайн лендинга",
+        "price_range": [42500, 108000],
+        "duration": "1-2 недели"
+      },
+      "corporate_design": {
+        "name": "Корпоративный сайт",
+        "price_range": [90000, 240000],
+        "duration": "3-6 недель"
+      },
+      "design_system": {
+        "name": "Дизайн-система",
+        "price_range": [70000, 200000],
+        "duration": "4-8 недель"
+      }
+    },
+    "development": {
+      "landing": {
+        "name": "Разработка лендинга",
+        "price_range": [50000, 120000],
+        "duration": "2-3 недели",
+        "roi": "300-500%"
+      },
+      "corporate_site": {
+        "name": "Корпоративный сайт",
+        "price_range": [127500, 360000],
+        "duration": "1-3 месяца"
+      },
+      "ecommerce": {
+        "name": "Интернет-магазин",
+        "price_range": [255000, 720000],
+        "duration": "2-4 месяца",
+        "roi": "400-800%"
+      },
+      "mobile_app": {
+        "name": "Мобильное приложение",
+        "price_range": [340000, 900000],
+        "duration": "3-6 месяцев"
+      },
+      "custom_software": {
+        "name": "Кастомная разработка",
+        "price_range": [300000, 1000000],
+        "duration": "3-12 месяцев"
+      }
+    },
+    "integration_automation": {
+      "ai_agents": {
+        "name": "AI агенты",
+        "price_range": [85000, 315000],
+        "duration": "2-6 недель",
+        "roi": "350-700%"
+      },
+      "chatbots": {
+        "name": "Чат-боты",
+        "price_range": [70000, 250000],
+        "duration": "2-4 недели"
+      },
+      "advertising": {
+        "name": "Интеграция рекламы",
+        "price_range": [25500, 81000],
+        "duration": "1 неделя"
+      },
+      "analytics_integration": {
+        "name": "Интеграция аналитики",
+        "price_range": [17000, 54000],
+        "duration": "3-5 дней"
+      },
+      "marketing_automation": {
+        "name": "Автоматизация маркетинга",
+        "price_range": [40000, 120000],
+        "duration": "2-4 недели"
+      }
+    },
+    "support_training": {
+      "tech_support": {
+        "name": "Техподдержка",
+        "price_range": [20000, 70000],
+        "period": "месяц",
+        "sla": "24/7"
+      },
+      "staff_training": {
+        "name": "Обучение сотрудников",
+        "price_range": [15000, 50000],
+        "duration": "1-2 недели"
+      },
+      "consulting": {
+        "name": "Консультации",
+        "price_range": [10000, 40000],
+        "period": "месяц"
+      }
+    }
+  },
+  "pricing_coefficients": {
+    "business_size": {
+      "small": 0.8,
+      "medium": 1.0,
+      "large": 1.3
+    },
+    "urgency": {
+      "normal": 1.0,
+      "urgent": 1.3,
+      "very_urgent": 1.6
+    },
+    "integrations": {
+      "base": 1.0,
+      "per_integration": 0.1
+    },
+    "inflation": 0.1
+  },
+  "roi_model": {
+    "scenarios": {
+      "conservative": 0.8,
+      "ambitious": 1.0,
+      "breakthrough": 1.5
+    },
+    "industry_multipliers": {
+      "retail": 1.2,
+      "services": 1.3,
+      "production": 1.1,
+      "it": 1.5,
+      "ecommerce": 1.4,
+      "finance": 1.6,
+      "healthcare": 1.3,
+      "education": 1.2,
+      "other": 1.0
+    },
+    "guarantees": {
+      "minimum_roi": 300,
+      "money_back_guarantee": true,
+      "support_period_months": 12
+    }
+  },
+  "packages": {
+    "small_business": {
+      "name": "Малый бизнес",
+      "employees": "до 10",
+      "services": [
+        "digital_audit",
+        "landing",
+        "analytics_integration"
+      ],
+      "price_from": 50000,
+      "typical_roi": "200-300%",
+      "payback_months": 4
+    },
+    "medium_business": {
+      "name": "Средний бизнес",
+      "employees": "10-100",
+      "services": [
+        "digital_transformation",
+        "corporate_site",
+        "ai_agents",
+        "marketing_automation"
+      ],
+      "price_from": 200000,
+      "typical_roi": "300-450%",
+      "payback_months": 6
+    },
+    "large_business": {
+      "name": "Крупный бизнес",
+      "employees": "100+",
+      "services": [
+        "digital_transformation",
+        "custom_software",
+        "ai_agents",
+        "process_optimization"
+      ],
+      "price_from": 1500000,
+      "typical_roi": "600-1200%",
+      "payback_months": 12
+    }
+  }
+}
