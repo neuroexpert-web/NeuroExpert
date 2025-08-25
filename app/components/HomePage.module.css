@@ -795,7 +795,12 @@
   }
 
   .mainContent {
-    padding: 7rem 1rem 3rem; /* Увеличил отступ для мобильных */
+    padding: 5rem 1rem 3rem;
+  }
+  
+  /* Скрываем видео на мобильных для производительности */
+  .videoBackground {
+    display: none;
   }
 
   .heroTitle {
@@ -842,14 +847,14 @@
     font-size: 0.75rem;
   }
 
+  /* Скрываем индикатор свайпа на мобильных */
   .swipeIndicator {
-    bottom: 1rem;
-    right: 1rem;
-    padding: 0.75rem;
+    display: none;
   }
-
-  .swipeText {
-    font-size: 0.7rem;
+  
+  /* Скрываем индикатор позиции на мобильных */
+  .positionIndicator {
+    display: none;
   }
 
   .advantages {

@@ -61,8 +61,8 @@ export const DIRECTOR_KNOWLEDGE_BASE = {
       },
       expertise: {
         title: "Экспертиза",
-        description: "15+ лет опыта команды",
-        proof: "500+ успешных кейсов в 30+ отраслях"
+        description: "Команда AI-специалистов",
+        proof: "Фокус на результат и инновации"
       },
       technology: {
         title: "Технологии",

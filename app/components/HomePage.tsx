@@ -105,19 +105,14 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 </button>
               </motion.div>
 
-              {/* Индикатор свайпа */}
+              {/* Индикатор свайпа - только для десктопа */}
               <motion.div 
                 className={styles.swipeIndicator}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1, delay: 1.5 }}
               >
-                <span className={styles.swipeText}>Свайп →</span>
-                <div className={styles.swipeIcon}>
-                  <span className={styles.swipeArrow}></span>
-                  <span className={styles.swipeArrow}></span>
-                  <span className={styles.swipeArrow}></span>
-                </div>
+                <span className={styles.swipeText}>Свайп для навигации →</span>
               </motion.div>
             </motion.section>
         )}
@@ -135,11 +130,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         </div>
       </div>
 
-      {/* Статус индикаторы */}
-      <div className={styles.statusIndicators}>
-        <span className={styles.statusSuccess}></span>
-        <span className={styles.statusError}></span>
-      </div>
+
     </div>
   );
 }
