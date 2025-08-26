@@ -5,16 +5,23 @@ import SwipeContainer from './components/SwipeContainer';
 
 export default function Home() {
   const [currentSection, setCurrentSection] = useState(0);
+  const [activeSegment, setActiveSegment] = useState('loyal');
   
   // Определение разделов для навигации
   const sections = [
     'Главная',
-    'Аналитика'
+    'Аналитика',
+    'Аудитория'
   ];
 
   // Обработка смены секции
   const handleSectionChange = useCallback((index) => {
     setCurrentSection(index);
+  }, []);
+
+  // Обработка смены сегмента
+  const handleSegmentChange = useCallback((segment) => {
+    setActiveSegment(segment);
   }, []);
 
   // Компоненты для каждого раздела
@@ -140,6 +147,202 @@ export default function Home() {
           </div>
         </div>
 
+      </div>
+    </section>,
+
+    // 3. Аудитория
+    <section key="audience" id="page-audience" className="full-page">
+      <div className="page-header">
+        <h2>Портрет вашей аудитории</h2>
+        <p>Изучайте, сегментируйте и взаимодействуйте с вашими клиентами</p>
+      </div>
+
+      <div className="audience-container">
+        {/* Левая панель: Выбор сегмента */}
+        <div className="segment-selector-panel">
+          <h4>Сегменты клиентов</h4>
+          <ul>
+            <li 
+              className={`segment-item ${activeSegment === 'loyal' ? 'active' : ''}`}
+              onClick={() => handleSegmentChange('loyal')}
+            >
+              <span className="segment-icon loyal-icon"></span>
+              <span>Лояльные клиенты</span>
+            </li>
+            <li 
+              className={`segment-item ${activeSegment === 'new' ? 'active' : ''}`}
+              onClick={() => handleSegmentChange('new')}
+            >
+              <span className="segment-icon new-icon"></span>
+              <span>Новые пользователи</span>
+            </li>
+            <li 
+              className={`segment-item ${activeSegment === 'vip' ? 'active' : ''}`}
+              onClick={() => handleSegmentChange('vip')}
+            >
+              <span className="segment-icon vip-icon"></span>
+              <span>VIP-сегмент</span>
+            </li>
+            <li 
+              className={`segment-item ${activeSegment === 'churn-risk' ? 'active' : ''}`}
+              onClick={() => handleSegmentChange('churn-risk')}
+            >
+              <span className="segment-icon churn-icon"></span>
+              <span>На грани оттока</span>
+            </li>
+            <li className="segment-item add-new">
+              <span className="segment-icon add-icon"></span>
+              <span>Создать свой сегмент</span>
+            </li>
+          </ul>
+        </div>
+
+        {/* Правая панель: Детали сегмента */}
+        <div className="segment-details-panel">
+          {/* Контент для "Лояльные клиенты" */}
+          <div className={`segment-content ${activeSegment === 'loyal' ? 'active' : ''}`}>
+            <div className="segment-header">
+              <h3>Лояльные клиенты</h3>
+              <p>3,450 пользователей (28% от всей базы)</p>
+            </div>
+            <div className="details-grid">
+              <div className="detail-card demographics-card">
+                <h4>Демография</h4>
+                <div className="chart-placeholder small">
+                  <canvas id="loyalDemographicsChart"></canvas>
+                </div>
+              </div>
+              <div className="detail-card behavior-card">
+                <h4>Поведение</h4>
+                <div className="behavior-metric">
+                  <span>Средний чек</span>
+                  <strong>₽ 4,800</strong>
+                </div>
+                <div className="behavior-metric">
+                  <span>Частота покупок</span>
+                  <strong>3.5 раз/мес</strong>
+                </div>
+              </div>
+              <div className="detail-card ltv-card">
+                <h4>Lifetime Value (LTV)</h4>
+                <span className="ltv-value">₽ 45,900</span>
+                <p>На 120% выше среднего</p>
+              </div>
+            </div>
+            <div className="ai-recommendation-for-segment">
+              <div className="rec-icon idea-icon"></div>
+              <p><strong>AI-совет:</strong> Удерживайте этот сегмент с помощью эксклюзивных предложений. Они наиболее чувствительны к программам лояльности.</p>
+            </div>
+          </div>
+
+          {/* Контент для "Новые пользователи" */}
+          <div className={`segment-content ${activeSegment === 'new' ? 'active' : ''}`}>
+            <div className="segment-header">
+              <h3>Новые пользователи</h3>
+              <p>1,256 пользователей (10.2% от всей базы)</p>
+            </div>
+            <div className="details-grid">
+              <div className="detail-card demographics-card">
+                <h4>Демография</h4>
+                <div className="chart-placeholder small">
+                  <canvas id="newDemographicsChart"></canvas>
+                </div>
+              </div>
+              <div className="detail-card behavior-card">
+                <h4>Поведение</h4>
+                <div className="behavior-metric">
+                  <span>Средний чек</span>
+                  <strong>₽ 2,300</strong>
+                </div>
+                <div className="behavior-metric">
+                  <span>Конверсия в покупателя</span>
+                  <strong>23%</strong>
+                </div>
+              </div>
+              <div className="detail-card ltv-card">
+                <h4>Потенциальная ценность</h4>
+                <span className="ltv-value">₽ 12,400</span>
+                <p>Прогноз на 6 месяцев</p>
+              </div>
+            </div>
+            <div className="ai-recommendation-for-segment">
+              <div className="rec-icon idea-icon"></div>
+              <p><strong>AI-совет:</strong> Фокусируйтесь на onboarding. Первые 30 дней критичны для удержания. Создайте welcome-серию писем.</p>
+            </div>
+          </div>
+
+          {/* Контент для "VIP-сегмент" */}
+          <div className={`segment-content ${activeSegment === 'vip' ? 'active' : ''}`}>
+            <div className="segment-header">
+              <h3>VIP-сегмент</h3>
+              <p>432 пользователя (3.5% от всей базы)</p>
+            </div>
+            <div className="details-grid">
+              <div className="detail-card demographics-card">
+                <h4>Демография</h4>
+                <div className="chart-placeholder small">
+                  <canvas id="vipDemographicsChart"></canvas>
+                </div>
+              </div>
+              <div className="detail-card behavior-card">
+                <h4>Поведение</h4>
+                <div className="behavior-metric">
+                  <span>Средний чек</span>
+                  <strong>₽ 15,600</strong>
+                </div>
+                <div className="behavior-metric">
+                  <span>Частота покупок</span>
+                  <strong>5.2 раз/мес</strong>
+                </div>
+              </div>
+              <div className="detail-card ltv-card">
+                <h4>Lifetime Value (LTV)</h4>
+                <span className="ltv-value">₽ 187,200</span>
+                <p>Топ 3.5% по доходности</p>
+              </div>
+            </div>
+            <div className="ai-recommendation-for-segment">
+              <div className="rec-icon idea-icon"></div>
+              <p><strong>AI-совет:</strong> Персональный подход критичен. Назначьте dedicated manager и предложите early access к новинкам.</p>
+            </div>
+          </div>
+
+          {/* Контент для "На грани оттока" */}
+          <div className={`segment-content ${activeSegment === 'churn-risk' ? 'active' : ''}`}>
+            <div className="segment-header">
+              <h3>На грани оттока</h3>
+              <p>892 пользователя (7.2% от всей базы)</p>
+            </div>
+            <div className="details-grid">
+              <div className="detail-card demographics-card">
+                <h4>Причины оттока</h4>
+                <div className="chart-placeholder small">
+                  <canvas id="churnReasonsChart"></canvas>
+                </div>
+              </div>
+              <div className="detail-card behavior-card">
+                <h4>Последняя активность</h4>
+                <div className="behavior-metric">
+                  <span>Дней без покупок</span>
+                  <strong className="negative">45-90</strong>
+                </div>
+                <div className="behavior-metric">
+                  <span>Снижение активности</span>
+                  <strong className="negative">-78%</strong>
+                </div>
+              </div>
+              <div className="detail-card ltv-card">
+                <h4>Потери при оттоке</h4>
+                <span className="ltv-value negative">₽ 2.1M</span>
+                <p>Потенциальные потери/год</p>
+              </div>
+            </div>
+            <div className="ai-recommendation-for-segment">
+              <div className="rec-icon warning-icon"></div>
+              <p><strong>AI-совет:</strong> Срочная реактивация! Запустите win-back кампанию с персональными скидками 20-30%. Время критично.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   ];

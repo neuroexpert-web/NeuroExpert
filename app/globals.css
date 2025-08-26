@@ -13,6 +13,9 @@
 /* Импорт стилей аналитики */
 @import './styles/analytics-style.css';
 
+/* Импорт стилей аудитории */
+@import './styles/audience-style.css';
+
 /* Критические стили для Hero секции */
 .hero-section {
   background-color: #0A051A !important;
