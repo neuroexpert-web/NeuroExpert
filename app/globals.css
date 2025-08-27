@@ -36,6 +36,7 @@
 
 /* Импорт стилей контактов */
 @import './styles/contacts-style.css';
+@import './styles/workspace-style.css';
 
 /* Критические стили для Hero секции */
 .hero-section {
