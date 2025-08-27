@@ -47,6 +47,17 @@ const ProcessTooltips = dynamic(() => import('./components/ProcessTooltips'), {
   loading: () => null
 });
 
+// Динамические импорты для страницы решений
+const SolutionsManager = dynamic(() => import('./components/SolutionsManager'), {
+  ssr: false,
+  loading: () => null
+});
+
+const SolutionsComparison = dynamic(() => import('./components/SolutionsComparison'), {
+  ssr: false,
+  loading: () => null
+});
+
 export default function Home() {
   const [currentSection, setCurrentSection] = useState(0);
   const [activeSegment, setActiveSegment] = useState('loyal');
@@ -1140,6 +1151,440 @@ export default function Home() {
       <Suspense fallback={null}>
         <ProcessManager />
         <ProcessTooltips />
+      </Suspense>
+    </section>,
+
+    // 5. Решения - каталог услуг и пакетов
+    <section key="solutions" id="solutions-section" className="full-page scrollable-section">
+      <div className="page-header">
+        <h2>Решения для вашего бизнеса</h2>
+        <p>Выберите готовое решение или создадим индивидуальное под ваши задачи</p>
+      </div>
+
+      <div className="solutions-container">
+        {/* Фильтры по отраслям */}
+        <div className="filter-section glass-card">
+          <h3>Фильтр по отраслям</h3>
+          <div className="industry-filters">
+            <label className="filter-checkbox">
+              <input type="checkbox" name="industry" value="all" defaultChecked />
+              <span className="checkbox-label">Все отрасли</span>
+            </label>
+            <label className="filter-checkbox">
+              <input type="checkbox" name="industry" value="retail" />
+              <span className="checkbox-label">Ритейл</span>
+            </label>
+            <label className="filter-checkbox">
+              <input type="checkbox" name="industry" value="finance" />
+              <span className="checkbox-label">Финансы</span>
+            </label>
+            <label className="filter-checkbox">
+              <input type="checkbox" name="industry" value="manufacturing" />
+              <span className="checkbox-label">Производство</span>
+            </label>
+            <label className="filter-checkbox">
+              <input type="checkbox" name="industry" value="logistics" />
+              <span className="checkbox-label">Логистика</span>
+            </label>
+            <label className="filter-checkbox">
+              <input type="checkbox" name="industry" value="healthcare" />
+              <span className="checkbox-label">Здравоохранение</span>
+            </label>
+            <label className="filter-checkbox">
+              <input type="checkbox" name="industry" value="it" />
+              <span className="checkbox-label">IT</span>
+            </label>
+          </div>
+        </div>
+
+        {/* Каталог решений */}
+        <div className="solutions-grid">
+          {/* Автоматизация продаж */}
+          <article className="solution-card glass-card" data-industry="retail finance">
+            <div className="solution-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" strokeWidth="2"/>
+              </svg>
+            </div>
+            <div className="solution-badge popular">Популярное</div>
+            <h3>Автоматизация продаж</h3>
+            <p className="solution-description">AI-модули для увеличения конверсии и оптимизации воронки продаж</p>
+            
+            <div className="solution-metrics">
+              <div className="metric">
+                <span className="metric-value">+45%</span>
+                <span className="metric-label">Рост конверсии</span>
+              </div>
+              <div className="metric">
+                <span className="metric-value">2-3 нед</span>
+                <span className="metric-label">Внедрение</span>
+              </div>
+              <div className="metric">
+                <span className="metric-value">ROI 320%</span>
+                <span className="metric-label">За 6 мес</span>
+              </div>
+            </div>
+
+            <div className="solution-tags">
+              <span className="tag">AI</span>
+              <span className="tag">CRM</span>
+              <span className="tag">Analytics</span>
+            </div>
+
+            <button className="btn-details" aria-expanded="false">
+              Подробнее
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <path d="M5 12h14M12 5l7 7-7 7" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </button>
+            
+            <div className="solution-details" hidden>
+              <h4>Что входит в решение:</h4>
+              <ul>
+                <li>AI-консультант для сайта 24/7</li>
+                <li>Интеграция с CRM и мессенджерами</li>
+                <li>Умная сегментация клиентов</li>
+                <li>Предиктивная аналитика продаж</li>
+                <li>A/B тестирование и оптимизация</li>
+              </ul>
+              <div className="clients-row">
+                <span className="clients-label">Используют:</span>
+                <div className="client-logos">
+                  <span className="client-logo">🏪</span>
+                  <span className="client-logo">🏦</span>
+                  <span className="client-logo">🏭</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          {/* AI-маркетинг и сегментация */}
+          <article className="solution-card glass-card" data-industry="retail it healthcare">
+            <div className="solution-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" strokeWidth="2"/>
+              </svg>
+            </div>
+            <h3>AI-маркетинг и сегментация</h3>
+            <p className="solution-description">Персонализация коммуникаций и точечный таргетинг на основе ML</p>
+            
+            <div className="solution-metrics">
+              <div className="metric">
+                <span className="metric-value">+68%</span>
+                <span className="metric-label">CTR email</span>
+              </div>
+              <div className="metric">
+                <span className="metric-value">-40%</span>
+                <span className="metric-label">CAC</span>
+              </div>
+              <div className="metric">
+                <span className="metric-value">x3.2</span>
+                <span className="metric-label">LTV</span>
+              </div>
+            </div>
+
+            <div className="solution-tags">
+              <span className="tag">ML</span>
+              <span className="tag">BigData</span>
+              <span className="tag">Personalization</span>
+            </div>
+
+            <button className="btn-details" aria-expanded="false">
+              Подробнее
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <path d="M5 12h14M12 5l7 7-7 7" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </button>
+          </article>
+
+          {/* Прогнозирование спроса */}
+          <article className="solution-card glass-card" data-industry="retail manufacturing logistics">
+            <div className="solution-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" strokeWidth="2"/>
+              </svg>
+            </div>
+            <h3>Прогнозирование спроса</h3>
+            <p className="solution-description">Точное планирование закупок и оптимизация складских остатков</p>
+            
+            <div className="solution-metrics">
+              <div className="metric">
+                <span className="metric-value">-35%</span>
+                <span className="metric-label">Излишки</span>
+              </div>
+              <div className="metric">
+                <span className="metric-value">95%</span>
+                <span className="metric-label">Точность</span>
+              </div>
+              <div className="metric">
+                <span className="metric-value">-28%</span>
+                <span className="metric-label">Затраты</span>
+              </div>
+            </div>
+
+            <div className="solution-tags">
+              <span className="tag">DeepLearning</span>
+              <span className="tag">TimeSeries</span>
+              <span className="tag">Supply Chain</span>
+            </div>
+
+            <button className="btn-details" aria-expanded="false">
+              Подробнее
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <path d="M5 12h14M12 5l7 7-7 7" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </button>
+          </article>
+
+          {/* Кредитный скоринг */}
+          <article className="solution-card glass-card" data-industry="finance">
+            <div className="solution-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" strokeWidth="2"/>
+              </svg>
+            </div>
+            <div className="solution-badge new">Новое</div>
+            <h3>Кредитный скоринг 2.0</h3>
+            <p className="solution-description">AI-оценка платежеспособности с учетом 500+ параметров</p>
+            
+            <div className="solution-metrics">
+              <div className="metric">
+                <span className="metric-value">-60%</span>
+                <span className="metric-label">Дефолты</span>
+              </div>
+              <div className="metric">
+                <span className="metric-value">15 сек</span>
+                <span className="metric-label">Решение</span>
+              </div>
+              <div className="metric">
+                <span className="metric-value">+40%</span>
+                <span className="metric-label">Одобрения</span>
+              </div>
+            </div>
+
+            <div className="solution-tags">
+              <span className="tag">AI</span>
+              <span className="tag">RiskManagement</span>
+              <span className="tag">FinTech</span>
+            </div>
+
+            <button className="btn-details" aria-expanded="false">
+              Подробнее
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <path d="M5 12h14M12 5l7 7-7 7" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </button>
+          </article>
+
+          {/* Мониторинг качества */}
+          <article className="solution-card glass-card" data-industry="manufacturing">
+            <div className="solution-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" strokeWidth="2"/>
+              </svg>
+            </div>
+            <h3>Мониторинг качества</h3>
+            <p className="solution-description">Компьютерное зрение для контроля производства в реальном времени</p>
+            
+            <div className="solution-metrics">
+              <div className="metric">
+                <span className="metric-value">99.9%</span>
+                <span className="metric-label">Точность</span>
+              </div>
+              <div className="metric">
+                <span className="metric-value">-80%</span>
+                <span className="metric-label">Брак</span>
+              </div>
+              <div className="metric">
+                <span className="metric-value">24/7</span>
+                <span className="metric-label">Контроль</span>
+              </div>
+            </div>
+
+            <div className="solution-tags">
+              <span className="tag">ComputerVision</span>
+              <span className="tag">IoT</span>
+              <span className="tag">RealTime</span>
+            </div>
+
+            <button className="btn-details" aria-expanded="false">
+              Подробнее
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <path d="M5 12h14M12 5l7 7-7 7" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </button>
+          </article>
+
+          {/* Персонализация UX */}
+          <article className="solution-card glass-card" data-industry="retail it healthcare">
+            <div className="solution-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" strokeWidth="2"/>
+              </svg>
+            </div>
+            <h3>Персонализация UX</h3>
+            <p className="solution-description">Адаптивные интерфейсы под каждого пользователя на основе поведения</p>
+            
+            <div className="solution-metrics">
+              <div className="metric">
+                <span className="metric-value">+85%</span>
+                <span className="metric-label">Retention</span>
+              </div>
+              <div className="metric">
+                <span className="metric-value">+120%</span>
+                <span className="metric-label">Engagement</span>
+              </div>
+              <div className="metric">
+                <span className="metric-value">-50%</span>
+                <span className="metric-label">Bounce Rate</span>
+              </div>
+            </div>
+
+            <div className="solution-tags">
+              <span className="tag">UX/UI</span>
+              <span className="tag">A/B Testing</span>
+              <span className="tag">Behavioral AI</span>
+            </div>
+
+            <button className="btn-details" aria-expanded="false">
+              Подробнее
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <path d="M5 12h14M12 5l7 7-7 7" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </button>
+          </article>
+        </div>
+
+        {/* Пакетные предложения */}
+        <section className="package-offers">
+          <h3>Пакетные предложения</h3>
+          <p className="package-subtitle">Комплексные решения с прозрачным ценообразованием</p>
+          
+          <div className="package-cards">
+            <div className="package-card glass-card">
+              <div className="package-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M12 15l-2 5v-5m2 0l2 5v-5m-2 0V9m-6 6v-5a2 2 0 012-2h8a2 2 0 012 2v5M12 9V3m0 0L9 6m3-3l3 3" strokeWidth="2"/>
+                </svg>
+              </div>
+              <h4>Старт</h4>
+              <p className="package-description">Базовый набор для малого бизнеса</p>
+              <div className="package-price">
+                <span className="price-from">от</span>
+                <span className="price-value">39 900</span>
+                <span className="price-currency">₽/мес</span>
+              </div>
+              <ul className="package-features">
+                <li>До 100 клиентов в CRM</li>
+                <li>1 AI-консультант</li>
+                <li>Базовая аналитика</li>
+                <li>5 интеграций</li>
+                <li>Поддержка 5/2</li>
+              </ul>
+              <button className="btn-select">Выбрать Старт</button>
+            </div>
+
+            <div className="package-card glass-card popular">
+              <div className="package-badge">Рекомендуем</div>
+              <div className="package-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" strokeWidth="2"/>
+                </svg>
+              </div>
+              <h4>Бизнес</h4>
+              <p className="package-description">Расширенные возможности для роста</p>
+              <div className="package-price">
+                <span className="price-from">от</span>
+                <span className="price-value">89 900</span>
+                <span className="price-currency">₽/мес</span>
+              </div>
+              <ul className="package-features">
+                <li>До 1000 клиентов в CRM</li>
+                <li>3 AI-консультанта</li>
+                <li>Продвинутая аналитика</li>
+                <li>Неограниченные интеграции</li>
+                <li>Поддержка 24/7</li>
+                <li>Персональный менеджер</li>
+              </ul>
+              <button className="btn-select primary">Выбрать Бизнес</button>
+            </div>
+
+            <div className="package-card glass-card">
+              <div className="package-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" strokeWidth="2"/>
+                </svg>
+              </div>
+              <h4>Энтерпрайз</h4>
+              <p className="package-description">Полный контроль и кастомизация</p>
+              <div className="package-price">
+                <span className="price-from">от</span>
+                <span className="price-value">199 900</span>
+                <span className="price-currency">₽/мес</span>
+              </div>
+              <ul className="package-features">
+                <li>Безлимит клиентов</li>
+                <li>Безлимит AI-консультантов</li>
+                <li>Кастомная разработка</li>
+                <li>Выделенный сервер</li>
+                <li>SLA 99.9%</li>
+                <li>Команда разработки</li>
+              </ul>
+              <button className="btn-select">Обсудить Энтерпрайз</button>
+            </div>
+          </div>
+
+          <div className="package-comparison">
+            <button className="btn-compare">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <path d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" strokeWidth="2"/>
+              </svg>
+              Сравнить все возможности пакетов
+            </button>
+          </div>
+        </section>
+
+        {/* CTA секция */}
+        <div className="solutions-cta glass-card">
+          <div className="cta-content">
+            <h3>Не нашли подходящее решение?</h3>
+            <p>Создадим индивидуальное решение под ваши задачи. Расскажите о вашем проекте, и мы подготовим персональное предложение.</p>
+            <div className="cta-buttons">
+              <button className="btn-consult primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" strokeWidth="2"/>
+                </svg>
+                Получить консультацию
+              </button>
+              <button className="btn-calc">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" strokeWidth="2"/>
+                </svg>
+                Рассчитать стоимость
+              </button>
+            </div>
+          </div>
+          <div className="cta-illustration">
+            <svg viewBox="0 0 200 200" fill="none">
+              <circle cx="100" cy="100" r="80" stroke="url(#gradient)" strokeWidth="2" opacity="0.2"/>
+              <circle cx="100" cy="100" r="60" stroke="url(#gradient)" strokeWidth="2" opacity="0.3"/>
+              <circle cx="100" cy="100" r="40" stroke="url(#gradient)" strokeWidth="2" opacity="0.4"/>
+              <circle cx="100" cy="100" r="20" fill="url(#gradient)" opacity="0.6"/>
+              <defs>
+                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#8b5cf6"/>
+                  <stop offset="100%" stopColor="#ec4899"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </div>
+      </div>
+      
+      {/* Компоненты для управления решениями */}
+      <Suspense fallback={null}>
+        <SolutionsManager />
+        <SolutionsComparison />
       </Suspense>
     </section>
   ];

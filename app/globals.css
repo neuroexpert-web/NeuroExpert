@@ -22,6 +22,9 @@
 @import './styles/processes-style.css';
 @import './styles/processes-style-v2.css';
 
+/* Импорт стилей решений */
+@import './styles/solutions-style.css';
+
 /* Критические стили для Hero секции */
 .hero-section {
   background-color: #0A051A !important;
