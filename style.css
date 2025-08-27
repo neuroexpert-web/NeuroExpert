@@ -1,73 +1,420 @@
-/* NeuroExpert - Новый дизайн главной страницы */
-/* TODO: Вставить полный CSS-код от дизайнера Екатерины */
+/* NeuroExpert - Улучшенный дизайн главной страницы */
 
-/* Временные базовые стили для проверки структуры */
+/* Design Tokens */
+:root {
+  /* Цвета брендбука */
+  --color-bg-primary: #02001A;
+  --color-gradient-start: #8A2BE2;
+  --color-gradient-end: #4D4DFF;
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: rgba(255, 255, 255, 0.8);
+  --color-glass-bg: rgba(255, 255, 255, 0.1);
+  --color-glass-border: rgba(255, 255, 255, 0.2);
+  
+  /* Типографика */
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-secondary: 'Gilroy', 'Inter', sans-serif;
+  
+  /* Размеры шрифтов Desktop */
+  --font-size-h1-desktop: 96px;
+  --font-size-p-desktop: 48px;
+  --font-size-button-desktop: 20px;
+  --font-size-hint-desktop: 16px;
+  
+  /* Размеры шрифтов Mobile */
+  --font-size-h1-mobile: 64px;
+  --font-size-p-mobile: 32px;
+  --font-size-button-mobile: 18px;
+  --font-size-hint-mobile: 14px;
+  
+  /* Отступы */
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-lg: 32px;
+  --spacing-xl: 48px;
+  --spacing-2xl: 64px;
+  
+  /* Анимации */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.6s ease;
+}
+
+/* Сброс стилей */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+/* Основные стили для body */
 body {
-    font-family: 'Inter', sans-serif;
-    background-color: #0a0a0a;
-    color: #ffffff;
-    min-height: 100vh;
-    overflow-x: hidden;
+  font-family: var(--font-primary);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* Анимированный фон с эффектом нейросети */
+.background-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: var(--color-bg-primary);
+  overflow: hidden;
+}
+
+.background-animation::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 20% 50%, var(--color-gradient-start) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, var(--color-gradient-end) 0%, transparent 50%),
+              radial-gradient(circle at 40% 20%, #6A0DAD 0%, transparent 50%);
+  opacity: 0.3;
+  animation: neuralPulse 20s ease-in-out infinite;
+  filter: blur(60px);
+}
+
+.background-animation::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 35px,
+      rgba(255, 255, 255, 0.02) 35px,
+      rgba(255, 255, 255, 0.02) 70px
+    );
+  animation: networkFlow 30s linear infinite;
+}
+
+/* Hero секция */
 .hero-section {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 2rem;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+  text-align: center;
+  position: relative;
 }
 
+/* Контент hero секции */
+.hero-content {
+  animation: fadeInUp 1s ease-out;
+}
+
+/* Главный заголовок */
 .main-title {
-    font-size: 4rem;
-    font-weight: 500;
-    margin-bottom: 1rem;
+  font-size: var(--font-size-h1-desktop);
+  font-weight: 500;
+  font-family: var(--font-secondary);
+  margin-bottom: var(--spacing-lg);
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--color-text-primary) 0%, var(--color-text-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-transform: uppercase;
+  position: relative;
 }
 
+.main-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-gradient-start), var(--color-gradient-end));
+  opacity: 0.8;
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+/* Описание */
 .descriptor {
-    font-size: 1.5rem;
-    line-height: 1.5;
-    margin-bottom: 2rem;
-    opacity: 0.8;
+  font-size: var(--font-size-p-desktop);
+  line-height: 1.2;
+  margin-bottom: var(--spacing-2xl);
+  color: var(--color-text-secondary);
+  font-weight: 400;
 }
 
+/* CTA кнопка с glassmorphism */
 .cta-button {
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    color: white;
-    border: none;
-    padding: 1rem 2rem;
-    font-size: 1.1rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: transform 0.2s ease;
+  background: var(--color-glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--color-glass-border);
+  color: var(--color-text-primary);
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--font-size-button-desktop);
+  font-weight: 500;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cta-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--color-gradient-start), var(--color-gradient-end));
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  z-index: -1;
 }
 
 .cta-button:hover {
-    transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 40px rgba(138, 43, 226, 0.4);
+  border-color: var(--color-gradient-start);
 }
 
+.cta-button:hover::before {
+  opacity: 0.8;
+}
+
+.cta-button:active {
+  transform: translateY(-1px);
+}
+
+.cta-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.5);
+}
+
+/* Подсказка для свайпа с glassmorphism */
 .swipe-hint {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
+  position: absolute;
+  bottom: var(--spacing-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  animation: fadeInHint 2s ease-out 1.5s both;
 }
 
-/* Заглушка для анимированного фона */
-.background-animation {
-    position: fixed;
-    top: 0;
-    left: 0;
+.swipe-hint-desktop {
+  font-size: var(--font-size-hint-desktop);
+  color: var(--color-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background: var(--color-glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 30px;
+  position: relative;
+}
+
+.swipe-hint-desktop::after {
+  content: '→';
+  font-size: 20px;
+  animation: arrowSlide 1.5s ease-in-out infinite;
+}
+
+.swipe-hint-mobile {
+  display: none;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto;
+  background: var(--color-glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 50%;
+  position: relative;
+}
+
+.swipe-hint-mobile::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23ffffff" stroke-width="2"><path d="M7 10l5 5 5-5"/></svg>') center no-repeat;
+  background-size: 24px;
+  animation: bounce 2s infinite;
+}
+
+/* Анимации */
+@keyframes neuralPulse {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+    opacity: 0.3;
+  }
+  25% {
+    transform: rotate(90deg) scale(1.1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: rotate(180deg) scale(1.2);
+    opacity: 0.3;
+  }
+  75% {
+    transform: rotate(270deg) scale(1.1);
+    opacity: 0.4;
+  }
+}
+
+@keyframes networkFlow {
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+  100% {
+    transform: translateX(70px) translateY(70px);
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInHint {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes arrowSlide {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    opacity: 0.8;
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 20px rgba(138, 43, 226, 0.8);
+  }
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: var(--spacing-md);
+  }
+
+  .main-title {
+    font-size: var(--font-size-h1-mobile);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .main-title::after {
+    width: 60px;
+    height: 2px;
+  }
+
+  .descriptor {
+    font-size: var(--font-size-p-mobile);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .cta-button {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: var(--font-size-button-mobile);
+  }
+
+  .swipe-hint {
+    bottom: var(--spacing-lg);
+  }
+
+  .swipe-hint-desktop {
+    display: none;
+  }
+
+  .swipe-hint-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-title {
+    font-size: 48px;
+  }
+
+  .descriptor {
+    font-size: 24px;
+    line-height: 1.3;
+  }
+
+  .cta-button {
     width: 100%;
-    height: 100%;
-    z-index: -1;
-    background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a0a 100%);
+    max-width: 280px;
+  }
+}
+
+/* Поддержка уменьшенной анимации */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .background-animation::before,
+  .background-animation::after {
+    animation: none;
+  }
 }

@@ -27,7 +27,7 @@ export default function Home() {
 
   // Компоненты для каждого раздела
   const sectionComponents = [
-    // 1. Главная
+    // 1. Главная - улучшенный дизайн с анимацией нейросети
     <section key="home" className="full-page">
       <div className="background-animation"></div>
       <main className="hero-section">
@@ -36,13 +36,13 @@ export default function Home() {
           <p className="descriptor">
             Цифровая трансформация<br/>бизнеса с помощью AI
           </p>
-          <button className="cta-button">
+          <button className="cta-button" aria-label="Начать бесплатно">
             Начать бесплатно
           </button>
         </div>
         <div className="swipe-hint">
-          <span className="swipe-hint-desktop">Листайте, чтобы узнать больше →</span>
-          <div className="swipe-hint-mobile"></div>
+          <span className="swipe-hint-desktop">Листайте, чтобы узнать больше</span>
+          <div className="swipe-hint-mobile" aria-label="Свайпните вверх"></div>
         </div>
       </main>
     </section>,
