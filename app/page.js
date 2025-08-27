@@ -36,6 +36,17 @@ const AudienceTooltips = dynamic(() => import('./components/AudienceTooltips'), 
   loading: () => null
 });
 
+// Динамические импорты для страницы процессов
+const ProcessManager = dynamic(() => import('./components/ProcessManager'), {
+  ssr: false,
+  loading: () => null
+});
+
+const ProcessTooltips = dynamic(() => import('./components/ProcessTooltips'), {
+  ssr: false,
+  loading: () => null
+});
+
 export default function Home() {
   const [currentSection, setCurrentSection] = useState(0);
   const [activeSegment, setActiveSegment] = useState('loyal');
@@ -809,70 +820,237 @@ export default function Home() {
       </Suspense>
     </section>,
 
-    // 4. Процессы
+    // 4. Процессы - улучшенная с UX акцентом
     <section key="processes" id="page-processes" className="full-page">
       <div className="page-header">
         <h2>Управление бизнес-процессами</h2>
-        <p>Оптимизируйте и автоматизируйте работу с AI-аналитикой</p>
+        <p>Контролируйте задачи, ресурсы и эффективность в одном месте</p>
       </div>
 
       <div className="processes-container">
-        {/* Блок 1: Приоритетные задачи и оповещения */}
-        <aside className="task-priorities">
-          <h3>Приоритетные задачи</h3>
-          <ul>
-            <li>
-              <span className="priority-icon high"></span>
-              <strong>Обновить CRM</strong> — интеграция с новым AI-модулем
-              <small>Срок: 30 Августа</small>
+        {/* Левая панель: Приоритетные задачи */}
+        <aside className="task-priorities glass-card">
+          <div className="panel-header">
+            <h3>Приоритетные задачи</h3>
+            <div className="task-filters">
+              <button className="filter-btn active" data-filter="all">Все</button>
+              <button className="filter-btn" data-filter="high">Высокий</button>
+              <button className="filter-btn" data-filter="today">Сегодня</button>
+            </div>
+          </div>
+          
+          <div className="tasks-stats">
+            <div className="stat-mini">
+              <span className="stat-value">12</span>
+              <span className="stat-label">активных</span>
+            </div>
+            <div className="stat-mini">
+              <span className="stat-value">3</span>
+              <span className="stat-label">срочных</span>
+            </div>
+            <div className="stat-mini">
+              <span className="stat-value">85%</span>
+              <span className="stat-label">выполнено</span>
+            </div>
+          </div>
+          
+          <ul className="tasks-list" role="list">
+            <li className="task-item high-priority" data-priority="high">
+              <div className="task-indicator">
+                <span className="priority-icon high">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v2h-2v-2zm0-8h2v6h-2V9z"/>
+                  </svg>
+                </span>
+                <div className="priority-line"></div>
+              </div>
+              <div className="task-content">
+                <div className="task-header">
+                  <strong>Обновить CRM систему</strong>
+                  <span className="task-status in-progress">В работе</span>
+                </div>
+                <p className="task-description">Интеграция с новым AI-модулем для автоматизации продаж</p>
+                <div className="task-meta">
+                  <span className="task-deadline">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                      <path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z" strokeWidth="2"/>
+                    </svg>
+                    30 августа
+                  </span>
+                  <span className="task-assignee">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                      <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z" strokeWidth="2"/>
+                    </svg>
+                    IT отдел
+                  </span>
+                </div>
+              </div>
             </li>
-            <li>
-              <span className="priority-icon medium"></span>
-              <strong>Анализ клиентской базы</strong> — подготовка сегментов VIP
-              <small>Срок: 5 Сентября</small>
+            <li className="task-item medium-priority" data-priority="medium">
+              <div className="task-indicator">
+                <span className="priority-icon medium">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v2h-2v-2zm0-8h2v6h-2V9z"/>
+                  </svg>
+                </span>
+                <div className="priority-line"></div>
+              </div>
+              <div className="task-content">
+                <div className="task-header">
+                  <strong>Анализ клиентской базы</strong>
+                  <span className="task-status pending">Ожидает</span>
+                </div>
+                <p className="task-description">Подготовка сегментов VIP для персонализированных предложений</p>
+                <div className="task-meta">
+                  <span className="task-deadline">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                      <path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z" strokeWidth="2"/>
+                    </svg>
+                    5 сентября
+                  </span>
+                  <span className="task-assignee">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                      <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z" strokeWidth="2"/>
+                    </svg>
+                    Маркетинг
+                  </span>
+                </div>
+              </div>
             </li>
-            <li>
-              <span className="priority-icon low"></span>
-              <strong>Тестирование новых сценариев AI-бота</strong>
-              <small>Срок: 15 Сентября</small>
-            </li>
-            <li>
-              <span className="priority-icon high"></span>
-              <strong>Миграция данных</strong> — перенос на новую платформу
-              <small>Срок: 28 Августа</small>
-            </li>
-            <li>
-              <span className="priority-icon medium"></span>
-              <strong>Оптимизация воронки продаж</strong> — A/B тестирование
-              <small>Срок: 10 Сентября</small>
+            <li className="task-item low-priority" data-priority="low">
+              <div className="task-indicator">
+                <span className="priority-icon low">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v2h-2v-2zm0-8h2v6h-2V9z"/>
+                  </svg>
+                </span>
+                <div className="priority-line"></div>
+              </div>
+              <div className="task-content">
+                <div className="task-header">
+                  <strong>Тестирование AI-бота</strong>
+                  <span className="task-status planned">Запланировано</span>
+                </div>
+                <p className="task-description">Проверка новых сценариев для улучшения клиентского опыта</p>
+                <div className="task-meta">
+                  <span className="task-deadline">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                      <path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z" strokeWidth="2"/>
+                    </svg>
+                    15 сентября
+                  </span>
+                  <span className="task-assignee">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                      <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z" strokeWidth="2"/>
+                    </svg>
+                    QA команда
+                  </span>
+                </div>
+              </div>
             </li>
           </ul>
+          
+          <button className="add-task-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M12 5v14M5 12h14" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+            Добавить задачу
+          </button>
         </aside>
 
-        {/* Блок 2: Дашборд KPI и процессов */}
+        {/* Правая панель: Дашборд KPI и процессов */}
         <div className="process-dashboard">
           <div className="process-metrics">
-            <div className="metric-card">
-              <h4>Автоматизация</h4>
-              <div className="metric-value">85%</div>
-              <div className="progress-bar">
-                <div className="progress-fill" style={{width: '85%'}}></div>
+            <div className="metric-card glass-card">
+              <div className="metric-header">
+                <div className="metric-icon-wrapper">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" strokeWidth="2"/>
+                  </svg>
+                </div>
+                <h4>Автоматизация процессов</h4>
               </div>
+              <div className="metric-main">
+                <div className="metric-value">85%</div>
+                <span className="metric-change positive">+5% за месяц</span>
+              </div>
+              <div className="progress-bar">
+                <div className="progress-fill" style={{width: '85%'}}>
+                  <span className="progress-label">85%</span>
+                </div>
+              </div>
+              <p className="metric-description">Процессов работают без участия человека</p>
             </div>
-            <div className="metric-card">
-              <h4>Время обработки заявки</h4>
-              <div className="metric-value">2ч 45м</div>
-              <p className="metric-trend positive">-15% за месяц</p>
+            <div className="metric-card glass-card">
+              <div className="metric-header">
+                <div className="metric-icon-wrapper">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M12 2v10l4 2M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" strokeWidth="2"/>
+                  </svg>
+                </div>
+                <h4>Среднее время обработки</h4>
+              </div>
+              <div className="metric-main">
+                <div className="metric-value">2ч 45м</div>
+                <span className="metric-change positive">-15% быстрее</span>
+              </div>
+              <div className="time-breakdown">
+                <div className="time-item">
+                  <span className="time-label">Приём:</span>
+                  <span className="time-value">15 мин</span>
+                </div>
+                <div className="time-item">
+                  <span className="time-label">Обработка:</span>
+                  <span className="time-value">2ч 30м</span>
+                </div>
+              </div>
+              <p className="metric-description">От поступления до завершения</p>
             </div>
-            <div className="metric-card">
-              <h4>Успешные сделки</h4>
-              <div className="metric-value">93%</div>
-              <p className="metric-trend positive">+3% за квартал</p>
+            <div className="metric-card glass-card">
+              <div className="metric-header">
+                <div className="metric-icon-wrapper">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14M22 4L12 14.01l-3-3" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </div>
+                <h4>Успешные сделки</h4>
+              </div>
+              <div className="metric-main">
+                <div className="metric-value">93%</div>
+                <span className="metric-change positive">+3% рост</span>
+              </div>
+              <div className="success-stats">
+                <div className="success-item">
+                  <span className="success-count">247</span>
+                  <span className="success-label">закрыто</span>
+                </div>
+                <div className="success-item">
+                  <span className="success-count">18</span>
+                  <span className="success-label">в работе</span>
+                </div>
+              </div>
+              <p className="metric-description">Конверсия в закрытые сделки</p>
             </div>
           </div>
 
-          <div className="process-graph">
-            <h4>Загрузка ресурсов (по отделам)</h4>
+          <div className="process-graph glass-card">
+            <div className="graph-header">
+              <h4>Загрузка ресурсов по отделам</h4>
+              <div className="graph-controls">
+                <button className="control-btn active" data-view="chart">График</button>
+                <button className="control-btn" data-view="table">Таблица</button>
+                <button className="refresh-btn" aria-label="Обновить данные">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" strokeWidth="2"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            
+            <div className="chart-container">
+              <canvas id="resourceChart"></canvas>
+            </div>
+            
             <div className="department-loads">
               <div className="department-item">
                 <span className="department-name">Продажи</span>
@@ -915,19 +1093,54 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="ai-insights">
-            <h4>AI-инсайты по процессам</h4>
-            <div className="insight-card">
-              <div className="rec-icon idea-icon"></div>
-              <p><strong>Оптимизация:</strong> Перераспределите 2 сотрудника из HR в отдел маркетинга для балансировки нагрузки.</p>
+          <div className="ai-insights glass-card">
+            <div className="insights-header">
+              <div className="insights-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" strokeWidth="2"/>
+                </svg>
+              </div>
+              <h4>AI-рекомендации по оптимизации процессов</h4>
             </div>
-            <div className="insight-card">
-              <div className="rec-icon warning-icon"></div>
-              <p><strong>Внимание:</strong> Отдел разработки близок к перегрузке. Рассмотрите автоматизацию тестирования.</p>
+            <div className="insights-list">
+              <div className="insight-card">
+                <div className="insight-priority high">
+                  <span className="priority-dot"></span>
+                  Критично
+                </div>
+                <div className="insight-content">
+                  <h5>Перегрузка маркетинга</h5>
+                  <p>Отдел работает на 92% мощности. Рекомендуем перераспределить задачи или нанять 2 специалистов.</p>
+                  <div className="insight-actions">
+                    <button className="action-btn primary">Создать вакансии</button>
+                    <button className="action-btn secondary">Анализ задач</button>
+                  </div>
+                </div>
+              </div>
+              <div className="insight-card">
+                <div className="insight-priority medium">
+                  <span className="priority-dot"></span>
+                  Важно
+                </div>
+                <div className="insight-content">
+                  <h5>Резерв в поддержке</h5>
+                  <p>Загрузка 65% позволяет взять дополнительные задачи. Можно расширить функционал отдела.</p>
+                  <div className="insight-actions">
+                    <button className="action-btn primary">Предложить задачи</button>
+                    <button className="action-btn secondary">Оптимизировать</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
+      
+      {/* Компоненты для управления процессами */}
+      <Suspense fallback={null}>
+        <ProcessManager />
+        <ProcessTooltips />
+      </Suspense>
     </section>
   ];
 

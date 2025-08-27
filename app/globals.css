@@ -20,6 +20,7 @@
 
 /* Импорт стилей процессов */
 @import './styles/processes-style.css';
+@import './styles/processes-style-v2.css';
 
 /* Критические стили для Hero секции */
 .hero-section {
