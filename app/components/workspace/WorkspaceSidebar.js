@@ -75,8 +75,13 @@ export default function WorkspaceSidebar() {
   ];
 
   const handleItemClick = (item) => {
+    console.log('Sidebar item clicked:', item.id);
     setActiveItem(item.id);
-    item.action();
+    if (item.action) {
+      item.action();
+    } else {
+      console.error('No action defined for item:', item.id);
+    }
   };
 
   return (

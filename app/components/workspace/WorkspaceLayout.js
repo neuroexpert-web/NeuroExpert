@@ -10,6 +10,8 @@ import AIAssistant from './AIAssistant';
 import { WorkspaceProvider } from './WorkspaceContext';
 
 export default function WorkspaceLayout() {
+  console.log('WorkspaceLayout rendering...');
+  
   const [windows, setWindows] = useState([]);
   const [activeWindow, setActiveWindow] = useState(null);
   const [notifications, setNotifications] = useState([]);
@@ -76,20 +78,21 @@ export default function WorkspaceLayout() {
   }, []);
 
   const openWindow = useCallback((type, data = {}) => {
+    console.log('Opening window:', type, data);
     const newWindow = {
       id: Date.now(),
       type,
       title: data.title || getWindowTitle(type),
-      position: { x: 100 + windows.length * 20, y: 100 + windows.length * 20 },
+      position: { x: 100 + Math.random() * 200, y: 100 + Math.random() * 200 },
       size: { width: 600, height: 400 },
       minimized: false,
       maximized: false,
       data,
-      zIndex: windows.length + 1
+      zIndex: 1000
     };
     setWindows(prev => [...prev, newWindow]);
     setActiveWindow(newWindow.id);
-  }, [windows]);
+  }, []);
 
   const closeWindow = useCallback((windowId) => {
     setWindows(prev => prev.filter(w => w.id !== windowId));
@@ -116,12 +119,14 @@ export default function WorkspaceLayout() {
 
   const getWindowTitle = (type) => {
     const titles = {
+      dashboard: 'Дашборд',
       analytics: 'Аналитика',
       tasks: 'Управление задачами',
       orders: 'Заказы',
       documents: 'Документы',
       integrations: 'Интеграции',
-      settings: 'Настройки'
+      settings: 'Настройки',
+      support: 'Поддержка'
     };
     return titles[type] || 'Новое окно';
   };
