@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import dynamic from 'next/dynamic';
+import MobileWorkspace from './MobileWorkspace';
 
 // Динамический импорт компонентов
 const SmartCustomerChat = dynamic(() => import('../SmartCustomerChat'), {
@@ -1148,6 +1149,19 @@ export default function WorkspaceLayoutFixed() {
     layout: 'default',
     widgets: ['revenue', 'customers', 'conversion', 'tasks']
   });
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Проверка мобильного устройства
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Загрузка сохраненной сессии
   useEffect(() => {
@@ -1321,7 +1335,12 @@ export default function WorkspaceLayoutFixed() {
     );
   }
 
-  // Основной интерфейс
+  // Мобильная версия
+  if (isMobile && userEmail) {
+    return <MobileWorkspace userEmail={userEmail} onLogout={() => setUserEmail('')} />;
+  }
+
+  // Основной интерфейс (десктоп)
   return (
     <div className="workspace-enhanced" role="application" aria-label="NeuroExpert Workspace">
       {/* Верхняя панель */}

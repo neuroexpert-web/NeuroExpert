@@ -6,6 +6,7 @@ import './styles/neuroexpert-pro.css'
 import './styles/premium-design-system.css'
 import './styles/premium-glass-sections.css'
 import './styles/mobile-fixes.css'
+import './styles/mobile-complete.css'
 import Script from 'next/script'
 
 // Оптимизированная загрузка шрифтов
