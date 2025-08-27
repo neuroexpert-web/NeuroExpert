@@ -1,0 +1,333 @@
+/* --- СТИЛИ ДЛЯ ВТОРОЙ СТРАНИЦЫ: АНАЛИТИКА (УЛУЧШЕННАЯ) --- */
+
+/* --- 0. ОБЩИЕ ПЕРЕМЕННЫЕ --- */
+:root {
+    /* Glassmorphism */
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-blur: 20px;
+    
+    /* Цвета */
+    --color-positive: #10b981;
+    --color-negative: #ef4444;
+    --color-warning: #f59e0b;
+    --color-info: #3b82f6;
+    
+    /* Приоритеты */
+    --priority-high: #ef4444;
+    --priority-medium: #f59e0b;
+    --priority-low: #10b981;
+    
+    /* Анимации */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- 1. СТРУКТУРА СТРАНИЦЫ --- */
+.full-page { /* Общий класс для всех "слайдов" */
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 60px;
+    overflow: hidden; /* Скролл будет внутри контейнера */
+    position: relative;
+}
+
+.page-header {
+    margin-bottom: 24px;
+    flex-shrink: 0; /* Заголовок не сжимается */
+}
+
+.page-header h2 {
+    font-size: 36px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.page-header p {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.dashboard-scroll-container {
+    overflow-y: auto; /* Включаем скролл для этой области */
+    height: 100%;
+    padding-right: 15px; /* Место для скроллбара */
+}
+
+/* Кастомный скроллбар */
+.dashboard-scroll-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.dashboard-scroll-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.dashboard-scroll-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+.dashboard-scroll-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* --- 2. КАРТОЧКИ KPI (ЭФФЕКТ СТЕКЛА) --- */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.kpi-card {
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-surface-border);
+    border-radius: 16px;
+    padding: 24px;
+    backdrop-filter: blur(var(--backdrop-blur-value));
+    -webkit-backdrop-filter: blur(var(--backdrop-blur-value));
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.kpi-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
+}
+
+.kpi-card .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.kpi-title {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.kpi-card .kpi-value {
+    font-size: 32px;
+    font-weight: 700;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #ffffff;
+    margin-bottom: 12px;
+}
+
+.kpi-card .kpi-trend {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.kpi-trend.positive { color: var(--color-text-positive); }
+.kpi-trend.negative { color: var(--color-text-negative); }
+
+.arrow-up, .arrow-down { /* Стрелки тренда */
+    width: 0; 
+    height: 0; 
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    margin-right: 8px;
+}
+.arrow-up { border-bottom: 8px solid var(--color-text-positive); }
+.arrow-down { border-top: 8px solid var(--color-text-negative); }
+
+/* Иконки KPI */
+.kpi-icon {
+    width: 24px;
+    height: 24px;
+    background-size: contain;
+    opacity: 0.6;
+}
+
+.revenue-icon {
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ffffff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.19 14.56L12 15.45l-1.19 1.19a3.52 3.52 0 1 1 0-4.95l1.19 1.19 1.19-1.19a3.52 3.52 0 1 1 0 4.95z"/></svg>');
+}
+
+.clients-icon {
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ffffff"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>');
+}
+
+/* --- 3. ГЛАВНЫЙ ДАШБОРД (ГРАФИКИ) --- */
+.main-dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* Большой график слева */
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.chart-card {
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-surface-border);
+    border-radius: 16px;
+    padding: 24px;
+    backdrop-filter: blur(var(--backdrop-blur-value));
+    -webkit-backdrop-filter: blur(var(--backdrop-blur-value));
+}
+
+.chart-card.large-card {
+    grid-column: 1 / 2; /* Занимает первую колонку */
+    grid-row: 1 / 3; /* Занимает две строки */
+}
+
+.chart-card h3 {
+    margin-bottom: 16px;
+    font-size: 18px;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.chart-placeholder {
+    height: 300px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 14px;
+}
+
+.chart-card.large-card .chart-placeholder {
+    height: 400px;
+}
+
+/* --- 4. AI-РЕКОМЕНДАЦИИ --- */
+.ai-recommendations {
+    margin-top: 40px;
+}
+
+.ai-recommendations h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.recommendation-card {
+    display: flex;
+    align-items: center;
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-surface-border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    backdrop-filter: blur(var(--backdrop-blur-value));
+    -webkit-backdrop-filter: blur(var(--backdrop-blur-value));
+    transition: transform 0.3s ease;
+}
+
+.recommendation-card:hover {
+    transform: translateX(5px);
+}
+
+.rec-icon {
+    width: 48px;
+    height: 48px;
+    margin-right: 20px;
+    flex-shrink: 0;
+    background-size: contain;
+}
+
+.idea-icon {
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2328a745"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6A4.997 4.997 0 0 1 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>');
+}
+
+.warning-icon {
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23dc3545"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>');
+}
+
+.rec-content {
+    flex: 1;
+}
+
+.rec-content h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 8px;
+}
+
+.rec-content p {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.5;
+}
+
+.rec-action-button {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 20px;
+}
+
+.rec-action-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+/* --- 5. АДАПТИВНОСТЬ --- */
+@media (max-width: 992px) {
+    .main-dashboard-grid {
+        grid-template-columns: 1fr; /* Все графики в одну колонку */
+    }
+    .chart-card.large-card {
+        grid-row: auto; /* Сбрасываем высоту */
+    }
+}
+
+@media (max-width: 768px) {
+    .full-page {
+        padding: 20px;
+    }
+    .page-header h2 { 
+        font-size: 28px; 
+    }
+    .page-header p { 
+        font-size: 16px; 
+    }
+    .kpi-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+    }
+    .kpi-card {
+        padding: 16px;
+    }
+    .kpi-card .kpi-value {
+        font-size: 24px;
+    }
+    .recommendation-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    .rec-icon {
+        margin-right: 0;
+        margin-bottom: 16px;
+    }
+    .rec-action-button {
+        margin-left: 0;
+        margin-top: 16px;
+        width: 100%;
+    }
+}
+
+/* --- 6. ОСНОВНОЙ КОНТЕЙНЕР --- */
+.premium-main {
+    position: relative;
+    min-height: 100vh;
+    background: #0a0a0a;
+    overflow: hidden;
+}

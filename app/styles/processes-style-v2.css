@@ -1,0 +1,871 @@
+/* --- УЛУЧШЕННЫЕ СТИЛИ ДЛЯ СТРАНИЦЫ ПРОЦЕССОВ (UX-FOCUSED) --- */
+
+/* --- 0. ПЕРЕМЕННЫЕ ДЛЯ ПРОЦЕССОВ --- */
+:root {
+  /* Цвета приоритетов */
+  --priority-high: #ef4444;
+  --priority-medium: #f59e0b;
+  --priority-low: #10b981;
+  
+  /* Цвета отделов */
+  --dept-sales: #8b5cf6;
+  --dept-marketing: #ec4899;
+  --dept-support: #3b82f6;
+  --dept-dev: #14b8a6;
+  --dept-hr: #f97316;
+  
+  /* Статусы задач */
+  --status-progress: #3b82f6;
+  --status-pending: #f59e0b;
+  --status-planned: #6b7280;
+  --status-complete: #10b981;
+}
+
+/* --- 1. ОСНОВНАЯ СТРУКТУРА --- */
+#page-processes {
+  padding: 2rem;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.processes-container {
+  display: flex;
+  gap: 2rem;
+  height: calc(100% - 120px);
+  margin-top: 2rem;
+}
+
+/* --- 2. ЛЕВАЯ ПАНЕЛЬ - ПРИОРИТЕТНЫЕ ЗАДАЧИ --- */
+.task-priorities {
+  flex: 0 0 420px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.panel-header h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.task-filters {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.filter-btn {
+  padding: 0.375rem 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.filter-btn.active {
+  background: rgba(139, 92, 246, 0.3);
+  border-color: rgba(139, 92, 246, 0.5);
+  color: white;
+}
+
+/* Статистика задач */
+.tasks-stats {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.stat-mini {
+  flex: 1;
+  text-align: center;
+}
+
+.stat-mini .stat-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.25rem;
+}
+
+.stat-mini .stat-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Список задач */
+.tasks-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  flex: 1;
+  padding-right: 0.5rem;
+}
+
+.task-item {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.task-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateX(5px);
+}
+
+.task-item.high-priority {
+  border-left: 4px solid var(--priority-high);
+}
+
+.task-item.medium-priority {
+  border-left: 4px solid var(--priority-medium);
+}
+
+.task-item.low-priority {
+  border-left: 4px solid var(--priority-low);
+}
+
+/* Индикатор задачи */
+.task-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.priority-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.priority-icon.high {
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--priority-high);
+}
+
+.priority-icon.medium {
+  background: rgba(245, 158, 11, 0.2);
+  color: var(--priority-medium);
+}
+
+.priority-icon.low {
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--priority-low);
+}
+
+.priority-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.priority-line {
+  width: 2px;
+  height: 100%;
+  background: currentColor;
+  opacity: 0.2;
+}
+
+/* Контент задачи */
+.task-content {
+  flex: 1;
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.task-header strong {
+  font-size: 1rem;
+  color: white;
+}
+
+.task-status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.task-status.in-progress {
+  background: rgba(59, 130, 246, 0.2);
+  color: var(--status-progress);
+}
+
+.task-status.pending {
+  background: rgba(245, 158, 11, 0.2);
+  color: var(--status-pending);
+}
+
+.task-status.planned {
+  background: rgba(107, 114, 128, 0.2);
+  color: var(--status-planned);
+}
+
+.task-description {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 0.75rem 0;
+  line-height: 1.4;
+}
+
+.task-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.task-deadline,
+.task-assignee {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.task-deadline svg,
+.task-assignee svg {
+  opacity: 0.6;
+}
+
+/* Кнопка добавления задачи */
+.add-task-btn {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  width: 100%;
+  background: rgba(139, 92, 246, 0.1);
+  border: 2px dashed rgba(139, 92, 246, 0.3);
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-task-btn:hover {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.5);
+  transform: translateY(-2px);
+}
+
+.add-task-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* --- 3. ПРАВАЯ ПАНЕЛЬ - ДАШБОРД --- */
+.process-dashboard {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
+/* Метрики процессов */
+.process-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.metric-card {
+  padding: 1.5rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.metric-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.metric-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(139, 92, 246, 0.2);
+  border-radius: 12px;
+}
+
+.metric-icon-wrapper svg {
+  width: 24px;
+  height: 24px;
+  stroke: #8b5cf6;
+}
+
+.metric-header h4 {
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+.metric-main {
+  margin-bottom: 1rem;
+}
+
+.metric-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.25rem;
+}
+
+.metric-change {
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+.metric-change.positive {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.metric-change.negative {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+/* Прогресс бар */
+.progress-bar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #8b5cf6, #ec4899);
+  border-radius: 4px;
+  transition: width 0.6s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 0.5rem;
+}
+
+.progress-label {
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: white;
+}
+
+.metric-description {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+/* Разбивка времени */
+.time-breakdown,
+.success-stats {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.time-item,
+.success-item {
+  flex: 1;
+  text-align: center;
+}
+
+.time-label,
+.success-label {
+  display: block;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0.25rem;
+}
+
+.time-value,
+.success-count {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: white;
+}
+
+/* --- 4. ГРАФИК РЕСУРСОВ --- */
+.process-graph {
+  padding: 1.5rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+}
+
+.graph-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.graph-header h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.graph-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.control-btn {
+  padding: 0.375rem 0.875rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.control-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.control-btn.active {
+  background: rgba(139, 92, 246, 0.3);
+  border-color: rgba(139, 92, 246, 0.5);
+  color: white;
+}
+
+.refresh-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.refresh-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: rotate(180deg);
+}
+
+.refresh-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* График */
+.chart-container {
+  height: 300px;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+/* Загрузка отделов */
+.department-loads {
+  display: grid;
+  gap: 1rem;
+}
+
+.department-item {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.department-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.department-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.department-icon {
+  font-size: 1.5rem;
+}
+
+.department-name {
+  font-weight: 600;
+  color: white;
+}
+
+.department-people {
+  margin-left: auto;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.load-visualization {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.load-bar {
+  flex: 1;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.load-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.6s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.load-fill.sales { background: var(--dept-sales); }
+.load-fill.marketing { background: var(--dept-marketing); }
+.load-fill.support { background: var(--dept-support); }
+.load-fill.dev { background: var(--dept-dev); }
+.load-fill.hr { background: var(--dept-hr); }
+
+.load-percent {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.load-status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.load-status.normal {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.load-status.high {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.load-status.low {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+}
+
+/* --- 5. AI ИНСАЙТЫ --- */
+.ai-insights {
+  padding: 1.5rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+}
+
+.insights-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.insights-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(139, 92, 246, 0.2);
+  border-radius: 12px;
+}
+
+.insights-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke: #8b5cf6;
+}
+
+.insights-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.insight-card {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.insight-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.insight-priority {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.insight-priority.high {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.insight-priority.medium {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
+
+.priority-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: pulse 2s infinite;
+}
+
+.insight-content h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+
+.insight-content p {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.insight-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.action-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.action-btn.primary {
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: white;
+}
+
+.action-btn.primary:hover {
+  background: rgba(139, 92, 246, 0.3);
+  transform: translateY(-1px);
+}
+
+.action-btn.secondary {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.action-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* --- 6. АНИМАЦИИ --- */
+@keyframes pulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.5);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.task-item {
+  animation: slideInLeft 0.5s ease-out;
+  animation-fill-mode: backwards;
+}
+
+.task-item:nth-child(1) { animation-delay: 0.1s; }
+.task-item:nth-child(2) { animation-delay: 0.2s; }
+.task-item:nth-child(3) { animation-delay: 0.3s; }
+
+/* --- 7. АДАПТИВНОСТЬ --- */
+@media (max-width: 1200px) {
+  .processes-container {
+    flex-direction: column;
+  }
+  
+  .task-priorities {
+    flex: 0 0 auto;
+    max-height: 400px;
+  }
+  
+  .process-metrics {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  #page-processes {
+    padding: 1rem;
+  }
+  
+  .task-filters {
+    display: none;
+  }
+  
+  .graph-controls {
+    flex-wrap: wrap;
+  }
+  
+  .department-info {
+    flex-wrap: wrap;
+  }
+  
+  .department-people {
+    margin-left: 0;
+    width: 100%;
+  }
+  
+  .insight-actions {
+    flex-direction: column;
+  }
+  
+  .action-btn {
+    width: 100%;
+  }
+}
+
+/* --- 8. ДОСТУПНОСТЬ --- */
+.task-item:focus,
+.filter-btn:focus,
+.control-btn:focus,
+.action-btn:focus {
+  outline: 2px solid rgba(139, 92, 246, 0.5);
+  outline-offset: 2px;
+}
+
+/* Высокий контраст */
+@media (prefers-contrast: high) {
+  .task-item {
+    border-width: 2px;
+  }
+  
+  .metric-card,
+  .process-graph,
+  .ai-insights {
+    border-width: 2px;
+  }
+}
+
+/* Уменьшение движения */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

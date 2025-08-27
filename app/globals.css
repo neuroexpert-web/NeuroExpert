@@ -7,6 +7,36 @@
 /* Импорт темы "Полярная ночь" */
 @import './styles/polar-night-theme.css';
 
+/* Импорт нового дизайна от Екатерины */
+@import './styles/redesign-preview.css';
+
+/* Импорт стилей аналитики */
+@import './styles/analytics-style-v2.css';
+@import './styles/analytics-style-v3.css';
+
+/* Импорт стилей аудитории */
+@import './styles/audience-style.css';
+@import './styles/audience-style-v2.css';
+
+/* Импорт стилей процессов */
+@import './styles/processes-style.css';
+@import './styles/processes-style-v2.css';
+
+/* Импорт стилей решений */
+@import './styles/solutions-style.css';
+
+/* Импорт стилей безопасности */
+@import './styles/security-style.css';
+
+/* Импорт стилей о нас */
+@import './styles/about-style.css';
+
+/* Импорт стилей калькулятора цен */
+@import './styles/pricing-style.css';
+
+/* Импорт стилей контактов */
+@import './styles/contacts-style.css';
+
 /* Критические стили для Hero секции */
 .hero-section {
   background-color: #0A051A !important;
