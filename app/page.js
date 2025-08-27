@@ -48,7 +48,7 @@ const ProcessTooltips = dynamic(() => import('./components/ProcessTooltips'), {
 });
 
 // Динамические импорты для личного кабинета
-const WorkspaceLayout = dynamic(() => import('./components/workspace/WorkspaceLayoutEnhanced'), {
+const WorkspaceLayout = dynamic(() => import('./components/workspace/WorkspaceLayoutFixed'), {
   ssr: false,
   loading: () => null
 });
