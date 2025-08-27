@@ -9,6 +9,7 @@ import './styles/mobile-fixes.css'
 import './styles/mobile-complete.css'
 import './styles/neon-button.css'
 import './styles/ai-manager-premium.css'
+import './styles/scroll-fixes.css'
 import Script from 'next/script'
 
 // Оптимизированная загрузка шрифтов
@@ -252,6 +253,33 @@ export default function RootLayout({ children }) {
                     (err) => console.log('SW registration failed:', err)
                   );
                 });
+              }
+            `
+          }}
+        />
+        
+        {/* Инициализация ScrollManager */}
+        <Script
+          id="scroll-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Установка высоты viewport для мобильных
+              function setVH() {
+                const vh = window.innerHeight * 0.01;
+                document.documentElement.style.setProperty('--vh', vh + 'px');
+              }
+              setVH();
+              window.addEventListener('resize', setVH);
+              window.addEventListener('orientationchange', setVH);
+              
+              // Фикс для скролла на iOS
+              if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+                document.addEventListener('touchmove', function(e) {
+                  if (!e.target.closest('.scrollable-section, .chat-messages, .modal-content')) {
+                    e.preventDefault();
+                  }
+                }, { passive: false });
               }
             `
           }}

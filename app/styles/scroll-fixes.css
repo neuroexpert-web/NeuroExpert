@@ -1,0 +1,340 @@
+/* Scroll Fixes for All Pages */
+
+/* ========== ГЛОБАЛЬНЫЕ ИСПРАВЛЕНИЯ ========== */
+
+/* Сброс базовых стилей для правильного скроллинга */
+html {
+  height: 100%;
+  overflow: hidden; /* Предотвращаем двойной скролл */
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Основной скролл управляется SwipeContainer */
+}
+
+/* Главный контейнер приложения */
+#__next,
+.premium-main {
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ========== SWIPE CONTAINER ========== */
+
+/* Исправление высоты для SwipeContainer */
+.swipe-wrapper,
+.swipe-container {
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100); /* Для мобильных */
+  overflow: hidden;
+  position: relative;
+}
+
+/* Страницы внутри SwipeContainer */
+.page-content {
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* ========== СЕКЦИИ ========== */
+
+/* Полностраничные секции */
+.full-page {
+  min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Скроллируемые секции */
+.scrollable-section {
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  position: relative;
+}
+
+/* Убираем лишние отступы */
+.scrollable-section > * {
+  margin-top: 0;
+}
+
+/* ========== СПЕЦИФИЧНЫЕ СТРАНИЦЫ ========== */
+
+/* Главная страница */
+.hero-section {
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Аналитика */
+#analytics-dashboard {
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#analytics-dashboard .dashboard-grid {
+  display: grid;
+  gap: 20px;
+  padding-bottom: 40px; /* Отступ снизу для скролла */
+}
+
+/* Аудитория */
+#page-audience {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#page-audience .segment-section {
+  padding: 20px;
+  min-height: auto; /* Убираем фиксированную высоту */
+}
+
+/* Процессы */
+#page-processes {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#page-processes .process-diagram {
+  padding: 20px;
+  overflow-x: auto; /* Для широких диаграмм */
+}
+
+/* Решения */
+#solutions-section {
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#solutions-section .solutions-grid {
+  display: grid;
+  gap: 20px;
+  padding-bottom: 40px;
+}
+
+/* Безопасность */
+#security-page {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 20px;
+}
+
+/* Контакты */
+#contacts-section {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 20px;
+}
+
+/* О компании */
+#about-section {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 20px;
+}
+
+/* Цены */
+#pricing-page {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 20px;
+}
+
+/* Личный кабинет */
+#workspace-section {
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+  overflow: hidden; /* Workspace управляет своим скроллом */
+}
+
+/* ========== КОМПОНЕНТЫ ========== */
+
+/* Модальные окна */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  z-index: 9999;
+}
+
+.modal-content {
+  max-height: 90vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* AI чат */
+.ai-chat-window {
+  max-height: 600px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* ========== МОБИЛЬНЫЕ ИСПРАВЛЕНИЯ ========== */
+
+@media (max-width: 768px) {
+  /* Отключаем body scroll на мобильных */
+  body {
+    position: fixed;
+    width: 100%;
+  }
+  
+  /* Секции на мобильных */
+  .full-page,
+  .scrollable-section {
+    min-height: 100vh;
+    min-height: calc(var(--vh, 1vh) * 100);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  /* Контент страниц */
+  .page-content {
+    padding: 16px;
+    padding-bottom: calc(80px + env(safe-area-inset-bottom)); /* Для нижней навигации */
+  }
+  
+  /* AI чат на весь экран */
+  .ai-chat-window {
+    max-height: 100vh;
+    height: 100vh;
+  }
+}
+
+/* ========== ИСПРАВЛЕНИЯ ДЛЯ SAFARI ========== */
+
+@supports (-webkit-touch-callout: none) {
+  /* Специфичные исправления для Safari */
+  .scrollable-section {
+    -webkit-overflow-scrolling: touch;
+    transform: translateZ(0); /* Включаем аппаратное ускорение */
+  }
+  
+  /* Фикс для iOS */
+  .full-page {
+    min-height: -webkit-fill-available;
+  }
+}
+
+/* ========== СКРОЛЛБАРЫ ========== */
+
+/* Стилизация скроллбаров */
+.scrollable-section::-webkit-scrollbar,
+.chat-messages::-webkit-scrollbar,
+.modal-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollable-section::-webkit-scrollbar-track,
+.chat-messages::-webkit-scrollbar-track,
+.modal-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.scrollable-section::-webkit-scrollbar-thumb,
+.chat-messages::-webkit-scrollbar-thumb,
+.modal-content::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.3);
+  border-radius: 3px;
+}
+
+.scrollable-section::-webkit-scrollbar-thumb:hover,
+.chat-messages::-webkit-scrollbar-thumb:hover,
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.5);
+}
+
+/* Скрываем скроллбары на мобильных */
+@media (max-width: 768px) {
+  .scrollable-section::-webkit-scrollbar,
+  .chat-messages::-webkit-scrollbar,
+  .modal-content::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .scrollable-section,
+  .chat-messages,
+  .modal-content {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* ========== ПРОИЗВОДИТЕЛЬНОСТЬ ========== */
+
+/* Оптимизация скролла */
+.scrollable-section,
+.page-content,
+.chat-messages {
+  will-change: scroll-position;
+}
+
+/* Предотвращение layout shift */
+.full-page > *,
+.scrollable-section > * {
+  flex-shrink: 0;
+}
+
+/* ========== ДОПОЛНИТЕЛЬНЫЕ ИСПРАВЛЕНИЯ ========== */
+
+/* Фикс для вложенных скроллов */
+.scrollable-section .scrollable-content {
+  height: auto;
+  overflow: visible;
+}
+
+/* Предотвращение bounce эффекта на iOS */
+.scrollable-section {
+  overscroll-behavior: contain;
+}
+
+/* Фикс для position: fixed элементов */
+.fixed-element {
+  position: fixed;
+  transform: translateZ(0); /* Фикс для iOS */
+}
+
+/* Плавность анимаций при скролле */
+@media (prefers-reduced-motion: no-preference) {
+  .scrollable-section {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Debug классы для тестирования */
+.debug-scroll {
+  border: 2px solid red !important;
+}
+
+.debug-overflow {
+  outline: 2px dashed yellow !important;
+}
