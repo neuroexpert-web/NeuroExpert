@@ -25,6 +25,9 @@
 /* Импорт стилей решений */
 @import './styles/solutions-style.css';
 
+/* Импорт стилей безопасности */
+@import './styles/security-style.css';
+
 /* Критические стили для Hero секции */
 .hero-section {
   background-color: #0A051A !important;

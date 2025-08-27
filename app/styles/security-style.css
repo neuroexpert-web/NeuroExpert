@@ -1,0 +1,637 @@
+/* --- СТИЛИ ДЛЯ СТРАНИЦЫ БЕЗОПАСНОСТИ --- */
+
+/* --- 0. ПЕРЕМЕННЫЕ --- */
+:root {
+  --security-gradient-start: #10b981;
+  --security-gradient-end: #3b82f6;
+  --security-card-bg: rgba(20, 20, 50, 0.4);
+  --security-border: rgba(255, 255, 255, 0.15);
+  --security-success: #10b981;
+  --security-warning: #f59e0b;
+  --security-info: #3b82f6;
+}
+
+/* --- 1. ОСНОВНАЯ СТРУКТУРА --- */
+#security-section {
+  padding: 2rem;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.security-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* --- 2. УРОВЕНЬ БЕЗОПАСНОСТИ --- */
+.security-level {
+  padding: 2.5rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.level-indicator {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 2rem;
+}
+
+.level-gauge {
+  width: 200px;
+  height: 100px;
+}
+
+.level-fill {
+  animation: fillGauge 2s ease-out forwards;
+}
+
+@keyframes fillGauge {
+  from {
+    stroke-dashoffset: 251;
+  }
+  to {
+    stroke-dashoffset: 25;
+  }
+}
+
+.level-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -20%);
+  text-align: center;
+}
+
+.level-value {
+  display: block;
+  font-size: 3rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--security-gradient-start), var(--security-gradient-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.level-label {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.level-details {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.detail-item svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--security-success);
+}
+
+/* --- 3. ТЕХНОЛОГИИ ЗАЩИТЫ --- */
+.security-technologies {
+  margin-bottom: 4rem;
+}
+
+.security-technologies h3,
+.security-certificates h3,
+.security-guarantees h3,
+.security-policies h3 {
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
+  color: white;
+  text-align: center;
+}
+
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.tech-card {
+  padding: 2rem;
+  background: var(--security-card-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--security-border);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.tech-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+  transform: rotate(45deg);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.tech-card:hover::before {
+  opacity: 1;
+}
+
+.tech-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(139, 92, 246, 0.3);
+}
+
+.tech-icon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(139, 92, 246, 0.2);
+  border-radius: 16px;
+  margin-bottom: 1.5rem;
+}
+
+.tech-icon svg {
+  width: 32px;
+  height: 32px;
+  stroke: #a78bfa;
+}
+
+.tech-card h4 {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+  color: white;
+}
+
+.tech-card p {
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.tech-details-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tech-details-btn:hover {
+  background: rgba(139, 92, 246, 0.1);
+  border-color: rgba(139, 92, 246, 0.5);
+}
+
+.tech-details-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.tech-details-btn[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+.tech-details {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  animation: slideDown 0.3s ease-out;
+}
+
+.tech-details ul {
+  list-style: none;
+  padding: 0;
+}
+
+.tech-details li {
+  padding: 0.5rem 0;
+  color: rgba(255, 255, 255, 0.8);
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.tech-details li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--security-success);
+  font-weight: bold;
+}
+
+/* --- 4. СЕРТИФИКАТЫ --- */
+.security-certificates {
+  margin-bottom: 4rem;
+}
+
+.certificates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.certificate-card {
+  padding: 2rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.certificate-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.cert-logo {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+}
+
+.cert-logo img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  filter: brightness(0) invert(1) opacity(0.8);
+}
+
+.certificate-card h4 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.certificate-card p {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.cert-view-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cert-view-btn:hover {
+  background: rgba(139, 92, 246, 0.3);
+  transform: translateY(-2px);
+}
+
+/* --- 5. ГАРАНТИИ --- */
+.security-guarantees {
+  margin-bottom: 4rem;
+}
+
+.guarantees-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.guarantee-card {
+  padding: 2rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.guarantee-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(139, 92, 246, 0.3);
+}
+
+.guarantee-icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2));
+  border-radius: 14px;
+  margin-bottom: 1.5rem;
+}
+
+.guarantee-icon svg {
+  width: 28px;
+  height: 28px;
+  stroke: #a78bfa;
+}
+
+.guarantee-card h4 {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+  color: white;
+}
+
+.guarantee-card p {
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.guarantee-link {
+  color: #a78bfa;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.guarantee-link:hover {
+  color: #c4b5fd;
+}
+
+/* --- 6. ПОЛИТИКИ И ДОКУМЕНТЫ --- */
+.security-policies {
+  padding: 2rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  margin-bottom: 4rem;
+}
+
+.policies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.policy-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.policy-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(5px);
+}
+
+.policy-link svg {
+  width: 24px;
+  height: 24px;
+  stroke: #a78bfa;
+}
+
+/* --- 7. CTA СЕКЦИЯ --- */
+.security-cta {
+  padding: 3rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  text-align: center;
+}
+
+.security-cta h3 {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.security-cta p {
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.security-cta .cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-security-audit,
+.btn-security-contact {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn-security-audit {
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  color: white;
+}
+
+.btn-security-audit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+}
+
+.btn-security-contact {
+  background: transparent;
+  border: 2px solid rgba(139, 92, 246, 0.3);
+  color: white;
+}
+
+.btn-security-contact:hover {
+  background: rgba(139, 92, 246, 0.1);
+  border-color: rgba(139, 92, 246, 0.5);
+}
+
+/* --- 8. АНИМАЦИИ --- */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 1;
+    max-height: 500px;
+  }
+  to {
+    opacity: 0;
+    max-height: 0;
+  }
+}
+
+/* Анимация появления карточек */
+.tech-card,
+.certificate-card,
+.guarantee-card {
+  animation: fadeInUp 0.6s ease-out;
+  animation-fill-mode: backwards;
+}
+
+.tech-card:nth-child(1) { animation-delay: 0.1s; }
+.tech-card:nth-child(2) { animation-delay: 0.2s; }
+.tech-card:nth-child(3) { animation-delay: 0.3s; }
+.tech-card:nth-child(4) { animation-delay: 0.4s; }
+
+.certificate-card:nth-child(1) { animation-delay: 0.1s; }
+.certificate-card:nth-child(2) { animation-delay: 0.2s; }
+.certificate-card:nth-child(3) { animation-delay: 0.3s; }
+.certificate-card:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- 9. АДАПТИВНОСТЬ --- */
+@media (max-width: 1200px) {
+  .tech-grid,
+  .certificates-grid,
+  .guarantees-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  #security-section {
+    padding: 1rem;
+  }
+  
+  .security-level {
+    padding: 1.5rem;
+  }
+  
+  .level-details {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .tech-grid,
+  .certificates-grid,
+  .guarantees-grid,
+  .policies-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .security-cta .cta-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .btn-security-audit,
+  .btn-security-contact {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .level-gauge {
+    width: 160px;
+    height: 80px;
+  }
+  
+  .level-value {
+    font-size: 2.5rem;
+  }
+  
+  .security-technologies h3,
+  .security-certificates h3,
+  .security-guarantees h3 {
+    font-size: 1.5rem;
+  }
+}
+
+/* --- 10. ДОСТУПНОСТЬ --- */
+.tech-card:focus-within,
+.certificate-card:focus-within,
+.guarantee-card:focus-within,
+.policy-link:focus,
+.tech-details-btn:focus,
+.cert-view-btn:focus {
+  outline: 2px solid rgba(139, 92, 246, 0.5);
+  outline-offset: 2px;
+}
+
+/* Режим высокой контрастности */
+@media (prefers-contrast: high) {
+  .tech-card,
+  .certificate-card,
+  .guarantee-card {
+    border-width: 2px;
+  }
+}
+
+/* Уменьшение движения */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .level-fill {
+    animation: none;
+    stroke-dashoffset: 25;
+  }
+}

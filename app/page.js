@@ -58,6 +58,22 @@ const SolutionsComparison = dynamic(() => import('./components/SolutionsComparis
   loading: () => null
 });
 
+// Динамические импорты для страницы безопасности
+const SecurityAccordion = dynamic(() => import('./components/SecurityAccordion'), {
+  ssr: false,
+  loading: () => null
+});
+
+const SecurityTooltips = dynamic(() => import('./components/SecurityTooltips'), {
+  ssr: false,
+  loading: () => null
+});
+
+const CertificatesModal = dynamic(() => import('./components/CertificatesModal'), {
+  ssr: false,
+  loading: () => null
+});
+
 export default function Home() {
   const [currentSection, setCurrentSection] = useState(0);
   const [activeSegment, setActiveSegment] = useState('loyal');
@@ -68,7 +84,8 @@ export default function Home() {
     'Аналитика',
     'Аудитория',
     'Процессы',
-    'Решения'
+    'Решения',
+    'Безопасность'
   ];
 
   // Обработка смены секции
@@ -1586,6 +1603,334 @@ export default function Home() {
       <Suspense fallback={null}>
         <SolutionsManager />
         <SolutionsComparison />
+      </Suspense>
+    </section>,
+
+    // 6. Безопасность - демонстрация надежности платформы
+    <section key="security" id="security-section" className="full-page scrollable-section">
+      <div className="page-header">
+        <h2>Безопасность превыше всего</h2>
+        <p>Ваши данные под надежной защитой современных технологий</p>
+      </div>
+
+      <div className="security-container">
+        {/* Уровень безопасности */}
+        <div className="security-level glass-card">
+          <div className="level-indicator">
+            <svg viewBox="0 0 200 100" className="level-gauge">
+              <path d="M 20 80 A 60 60 0 0 1 180 80" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="15"/>
+              <path d="M 20 80 A 60 60 0 0 1 180 80" fill="none" stroke="url(#securityGradient)" strokeWidth="15" strokeDasharray="251" strokeDashoffset="25" className="level-fill"/>
+              <defs>
+                <linearGradient id="securityGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#10b981"/>
+                  <stop offset="100%" stopColor="#3b82f6"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            <div className="level-text">
+              <span className="level-value">98%</span>
+              <span className="level-label">Уровень защиты</span>
+            </div>
+          </div>
+          <div className="level-details">
+            <div className="detail-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" strokeWidth="2"/>
+              </svg>
+              <span>Защита 24/7</span>
+            </div>
+            <div className="detail-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" strokeWidth="2"/>
+              </svg>
+              <span>Шифрование AES-256</span>
+            </div>
+            <div className="detail-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" strokeWidth="2"/>
+              </svg>
+              <span>Сертифицировано</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Технологии защиты */}
+        <div className="security-technologies">
+          <h3>Технологии защиты данных</h3>
+          <div className="tech-grid">
+            <article className="tech-card glass-card">
+              <div className="tech-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" strokeWidth="2"/>
+                </svg>
+              </div>
+              <h4>Шифрование данных</h4>
+              <p>End-to-end шифрование всех передаваемых данных с использованием AES-256 и RSA-4096</p>
+              <button className="tech-details-btn" aria-expanded="false" data-section="encryption">
+                Подробнее
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                  <path d="M19 9l-7 7-7-7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </button>
+              <div className="tech-details" hidden>
+                <ul>
+                  <li>Шифрование в состоянии покоя (at rest)</li>
+                  <li>Шифрование при передаче (in transit)</li>
+                  <li>Управление ключами через HSM</li>
+                  <li>Perfect Forward Secrecy</li>
+                  <li>Квантово-устойчивые алгоритмы</li>
+                </ul>
+              </div>
+            </article>
+
+            <article className="tech-card glass-card">
+              <div className="tech-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" strokeWidth="2"/>
+                </svg>
+              </div>
+              <h4>Многофакторная аутентификация</h4>
+              <p>Защита аккаунтов с помощью 2FA/MFA, биометрии и аппаратных ключей</p>
+              <button className="tech-details-btn" aria-expanded="false" data-section="auth">
+                Подробнее
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                  <path d="M19 9l-7 7-7-7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </button>
+              <div className="tech-details" hidden>
+                <ul>
+                  <li>SMS и Email коды</li>
+                  <li>Google/Microsoft Authenticator</li>
+                  <li>Поддержка FIDO2/WebAuthn</li>
+                  <li>Биометрическая аутентификация</li>
+                  <li>SSO через SAML 2.0</li>
+                </ul>
+              </div>
+            </article>
+
+            <article className="tech-card glass-card">
+              <div className="tech-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h2m-2 6h2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" strokeWidth="2"/>
+                </svg>
+              </div>
+              <h4>AI-мониторинг угроз</h4>
+              <p>Машинное обучение для обнаружения аномалий и предотвращения атак в реальном времени</p>
+              <button className="tech-details-btn" aria-expanded="false" data-section="monitoring">
+                Подробнее
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                  <path d="M19 9l-7 7-7-7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </button>
+              <div className="tech-details" hidden>
+                <ul>
+                  <li>Анализ поведения пользователей (UEBA)</li>
+                  <li>Обнаружение DDoS атак</li>
+                  <li>Защита от SQL-инъекций</li>
+                  <li>Предотвращение утечек данных (DLP)</li>
+                  <li>Threat Intelligence в реальном времени</li>
+                </ul>
+              </div>
+            </article>
+
+            <article className="tech-card glass-card">
+              <div className="tech-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" strokeWidth="2"/>
+                </svg>
+              </div>
+              <h4>Резервное копирование</h4>
+              <p>Автоматическое резервирование с географическим распределением и мгновенным восстановлением</p>
+              <button className="tech-details-btn" aria-expanded="false" data-section="backup">
+                Подробнее
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                  <path d="M19 9l-7 7-7-7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </button>
+              <div className="tech-details" hidden>
+                <ul>
+                  <li>Ежедневные автоматические бэкапы</li>
+                  <li>Географическая репликация (3+ региона)</li>
+                  <li>Версионирование данных</li>
+                  <li>RPO &lt; 1 час, RTO &lt; 4 часа</li>
+                  <li>Тестирование восстановления</li>
+                </ul>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        {/* Сертификаты и соответствие */}
+        <div className="security-certificates">
+          <h3>Сертификаты и стандарты</h3>
+          <div className="certificates-grid">
+            <div className="certificate-card glass-card">
+              <div className="cert-logo">
+                <img src="/api/placeholder/80/80" alt="ISO 27001" />
+              </div>
+              <h4>ISO 27001</h4>
+              <p>Международный стандарт информационной безопасности</p>
+              <button className="cert-view-btn" data-cert="iso27001">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" strokeWidth="2"/>
+                </svg>
+                Просмотр сертификата
+              </button>
+            </div>
+
+            <div className="certificate-card glass-card">
+              <div className="cert-logo">
+                <img src="/api/placeholder/80/80" alt="GDPR" />
+              </div>
+              <h4>GDPR Compliant</h4>
+              <p>Соответствие европейскому регламенту защиты данных</p>
+              <button className="cert-view-btn" data-cert="gdpr">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" strokeWidth="2"/>
+                </svg>
+                Политика GDPR
+              </button>
+            </div>
+
+            <div className="certificate-card glass-card">
+              <div className="cert-logo">
+                <img src="/api/placeholder/80/80" alt="SOC 2" />
+              </div>
+              <h4>SOC 2 Type II</h4>
+              <p>Аудит безопасности, доступности и конфиденциальности</p>
+              <button className="cert-view-btn" data-cert="soc2">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" strokeWidth="2"/>
+                </svg>
+                Отчет аудита
+              </button>
+            </div>
+
+            <div className="certificate-card glass-card">
+              <div className="cert-logo">
+                <img src="/api/placeholder/80/80" alt="PCI DSS" />
+              </div>
+              <h4>PCI DSS Level 1</h4>
+              <p>Стандарт безопасности для обработки платежных данных</p>
+              <button className="cert-view-btn" data-cert="pcidss">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" strokeWidth="2"/>
+                </svg>
+                Сертификат PCI
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Гарантии безопасности */}
+        <div className="security-guarantees">
+          <h3>Наши гарантии</h3>
+          <div className="guarantees-grid">
+            <div className="guarantee-card glass-card">
+              <div className="guarantee-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
+                </svg>
+              </div>
+              <h4>SLA 99.9%</h4>
+              <p>Гарантированное время доступности сервиса с финансовыми компенсациями</p>
+              <a href="#" className="guarantee-link">Условия SLA →</a>
+            </div>
+
+            <div className="guarantee-card glass-card">
+              <div className="guarantee-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
+                </svg>
+              </div>
+              <h4>Прозрачность</h4>
+              <p>Публичные отчеты об инцидентах и регулярные аудиты безопасности</p>
+              <a href="#" className="guarantee-link">Отчеты безопасности →</a>
+            </div>
+
+            <div className="guarantee-card glass-card">
+              <div className="guarantee-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" strokeWidth="2"/>
+                </svg>
+              </div>
+              <h4>Поддержка 24/7</h4>
+              <p>Круглосуточная служба безопасности для быстрого реагирования на инциденты</p>
+              <a href="#" className="guarantee-link">Связаться с командой →</a>
+            </div>
+
+            <div className="guarantee-card glass-card">
+              <div className="guarantee-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" strokeWidth="2"/>
+                </svg>
+              </div>
+              <h4>Страхование данных</h4>
+              <p>Полное страховое покрытие рисков кибербезопасности до $10 млн</p>
+              <a href="#" className="guarantee-link">Условия страхования →</a>
+            </div>
+          </div>
+        </div>
+
+        {/* Политики и документы */}
+        <div className="security-policies glass-card">
+          <h3>Политики и документы</h3>
+          <div className="policies-grid">
+            <a href="#" className="policy-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" strokeWidth="2"/>
+              </svg>
+              <span>Политика конфиденциальности</span>
+            </a>
+            <a href="#" className="policy-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" strokeWidth="2"/>
+              </svg>
+              <span>Политика безопасности</span>
+            </a>
+            <a href="#" className="policy-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" strokeWidth="2"/>
+              </svg>
+              <span>График аудитов</span>
+            </a>
+            <a href="#" className="policy-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" strokeWidth="2"/>
+              </svg>
+              <span>Условия использования</span>
+            </a>
+          </div>
+        </div>
+
+        {/* CTA секция */}
+        <div className="security-cta glass-card">
+          <div className="cta-content">
+            <h3>Есть вопросы о безопасности?</h3>
+            <p>Наша команда безопасности готова ответить на любые вопросы и предоставить дополнительную информацию о защите ваших данных.</p>
+            <div className="cta-buttons">
+              <button className="btn-security-audit">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" strokeWidth="2"/>
+                </svg>
+                Запросить аудит
+              </button>
+              <button className="btn-security-contact">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" strokeWidth="2"/>
+                </svg>
+                security@neuroexpert.com
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Компоненты для управления безопасностью */}
+      <Suspense fallback={null}>
+        <SecurityAccordion />
+        <SecurityTooltips />
+        <CertificatesModal />
       </Suspense>
     </section>
   ];
