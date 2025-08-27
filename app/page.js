@@ -136,7 +136,8 @@ export default function Home() {
     'Безопасность',
     'О нас',
     'Цены',
-    'Контакты'
+    'Контакты',
+    'Кабинет'
   ];
 
   // Обработка смены секции
@@ -3224,6 +3225,538 @@ export default function Home() {
         <ContactFormHandler />
         <ContactValidation />
         <ContactMap />
+      </Suspense>
+    </section>,
+
+    // 10. Личный кабинет - мультиоконное рабочее пространство
+    <section key="workspace" id="workspace-section" className="workspace-container">
+      {/* Верхняя панель */}
+      <header className="workspace-header">
+        <div className="header-left">
+          <div className="logo-workspace">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span>NeuroExpert</span>
+          </div>
+        </div>
+        
+        <div className="header-center">
+          <div className="global-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+              <circle cx="11" cy="11" r="8" strokeWidth="2"/>
+              <path d="m21 21-4.35-4.35" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+            <input type="text" placeholder="Поиск по всем данным..." aria-label="Глобальный поиск" />
+            <kbd>⌘K</kbd>
+          </div>
+        </div>
+        
+        <div className="header-right">
+          <button className="header-btn" aria-label="Уведомления">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" strokeWidth="2"/>
+            </svg>
+            <span className="notification-badge">3</span>
+          </button>
+          
+          <button className="header-btn" aria-label="Быстрые действия">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" strokeWidth="2"/>
+            </svg>
+          </button>
+          
+          <div className="user-profile">
+            <div className="user-avatar">
+              <span>АК</span>
+            </div>
+            <div className="user-info">
+              <span className="user-name">Александр К.</span>
+              <span className="user-role">CEO</span>
+            </div>
+          </div>
+        </div>
+      </header>
+      
+      {/* Основной контейнер */}
+      <div className="workspace-main">
+        {/* Левая навигация */}
+        <nav className="workspace-sidebar">
+          <div className="nav-section">
+            <button className="nav-item active" data-window="dashboard">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <rect x="3" y="3" width="7" height="7" strokeWidth="2"/>
+                <rect x="14" y="3" width="7" height="7" strokeWidth="2"/>
+                <rect x="14" y="14" width="7" height="7" strokeWidth="2"/>
+                <rect x="3" y="14" width="7" height="7" strokeWidth="2"/>
+              </svg>
+              <span>Дашборд</span>
+            </button>
+            
+            <button className="nav-item" data-window="analytics">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <path d="M18 20V10M12 20V4M6 20v-6" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+              <span>Аналитика</span>
+            </button>
+            
+            <button className="nav-item" data-window="tasks">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" strokeWidth="2"/>
+              </svg>
+              <span>Задачи</span>
+            </button>
+            
+            <button className="nav-item" data-window="orders">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" strokeWidth="2"/>
+              </svg>
+              <span>Заказы</span>
+            </button>
+            
+            <button className="nav-item" data-window="documents">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" strokeWidth="2"/>
+                <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" strokeWidth="2"/>
+              </svg>
+              <span>Документы</span>
+            </button>
+            
+            <button className="nav-item" data-window="integrations">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <path d="M12 2v6m0 4v6m0 4v-2m-7-8h6m4 0h6m-11 4h2m4 0h2M3 12a9 9 0 1118 0 9 9 0 01-18 0z" strokeWidth="2"/>
+              </svg>
+              <span>Интеграции</span>
+            </button>
+          </div>
+          
+          <div className="nav-section nav-bottom">
+            <button className="nav-item" data-window="ai-assistant">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2z" strokeWidth="2"/>
+              </svg>
+              <span>AI Ассистент</span>
+            </button>
+            
+            <button className="nav-item" data-window="support">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" strokeWidth="2"/>
+              </svg>
+              <span>Поддержка</span>
+            </button>
+            
+            <button className="nav-item theme-toggle" aria-label="Переключить тему">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <circle cx="12" cy="12" r="5" strokeWidth="2"/>
+                <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" strokeWidth="2"/>
+              </svg>
+            </button>
+          </div>
+        </nav>
+        
+        {/* Рабочая область с окнами */}
+        <div className="workspace-area">
+          {/* Дашборд по умолчанию */}
+          <div className="window-container active" data-window-id="dashboard">
+            <div className="window-header">
+              <div className="window-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <rect x="3" y="3" width="7" height="7" strokeWidth="2"/>
+                  <rect x="14" y="3" width="7" height="7" strokeWidth="2"/>
+                  <rect x="14" y="14" width="7" height="7" strokeWidth="2"/>
+                  <rect x="3" y="14" width="7" height="7" strokeWidth="2"/>
+                </svg>
+                <span>Главный дашборд</span>
+              </div>
+              <div className="window-controls">
+                <button className="window-btn" aria-label="Обновить">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                    <path d="M1 4v6h6M23 20v-6h-6M20.49 9A9 9 0 105.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15" strokeWidth="2"/>
+                  </svg>
+                </button>
+                <button className="window-btn" aria-label="Настройки">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                    <circle cx="12" cy="12" r="3" strokeWidth="2"/>
+                    <path d="M12 1v6m0 6v6m3.22-10.22l4.24-4.24m-4.24 12.68l4.24 4.24M21 12h-6m-6 0H3m1.54-6.46L8.78 9.78M4.54 18.46l4.24-4.24" strokeWidth="2"/>
+                  </svg>
+                </button>
+                <button className="window-btn window-close" aria-label="Закрыть">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                    <path d="M18 6L6 18M6 6l12 12" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            
+            <div className="window-content">
+              {/* Виджеты дашборда */}
+              <div className="dashboard-grid">
+                {/* KPI виджеты */}
+                <div className="widget kpi-widget" data-widget-id="revenue">
+                  <div className="widget-header">
+                    <h4>Выручка за месяц</h4>
+                    <button className="widget-menu" aria-label="Меню виджета">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                        <circle cx="12" cy="5" r="1" fill="currentColor"/>
+                        <circle cx="12" cy="12" r="1" fill="currentColor"/>
+                        <circle cx="12" cy="19" r="1" fill="currentColor"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div className="widget-body">
+                    <div className="kpi-value">₽12.4M</div>
+                    <div className="kpi-change positive">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                        <path d="M7 17L17 7M17 7H7M17 7V17" strokeWidth="2"/>
+                      </svg>
+                      <span>+24%</span>
+                    </div>
+                    <div className="kpi-sparkline">
+                      <canvas id="revenue-sparkline"></canvas>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="widget kpi-widget" data-widget-id="customers">
+                  <div className="widget-header">
+                    <h4>Активные клиенты</h4>
+                    <button className="widget-menu" aria-label="Меню виджета">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                        <circle cx="12" cy="5" r="1" fill="currentColor"/>
+                        <circle cx="12" cy="12" r="1" fill="currentColor"/>
+                        <circle cx="12" cy="19" r="1" fill="currentColor"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div className="widget-body">
+                    <div className="kpi-value">3,847</div>
+                    <div className="kpi-change positive">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                        <path d="M7 17L17 7M17 7H7M17 7V17" strokeWidth="2"/>
+                      </svg>
+                      <span>+12%</span>
+                    </div>
+                    <div className="kpi-sparkline">
+                      <canvas id="customers-sparkline"></canvas>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="widget kpi-widget" data-widget-id="conversion">
+                  <div className="widget-header">
+                    <h4>Конверсия</h4>
+                    <button className="widget-menu" aria-label="Меню виджета">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                        <circle cx="12" cy="5" r="1" fill="currentColor"/>
+                        <circle cx="12" cy="12" r="1" fill="currentColor"/>
+                        <circle cx="12" cy="19" r="1" fill="currentColor"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div className="widget-body">
+                    <div className="kpi-value">4.2%</div>
+                    <div className="kpi-change negative">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                        <path d="M7 7L17 17M7 7V17M7 7H17" strokeWidth="2"/>
+                      </svg>
+                      <span>-0.3%</span>
+                    </div>
+                    <div className="kpi-sparkline">
+                      <canvas id="conversion-sparkline"></canvas>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="widget kpi-widget" data-widget-id="tasks">
+                  <div className="widget-header">
+                    <h4>Задачи сегодня</h4>
+                    <button className="widget-menu" aria-label="Меню виджета">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                        <circle cx="12" cy="5" r="1" fill="currentColor"/>
+                        <circle cx="12" cy="12" r="1" fill="currentColor"/>
+                        <circle cx="12" cy="19" r="1" fill="currentColor"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div className="widget-body">
+                    <div className="kpi-value">8/12</div>
+                    <div className="task-progress">
+                      <div className="progress-bar">
+                        <div className="progress-fill" style={{width: '66%'}}></div>
+                      </div>
+                      <span className="progress-text">66% выполнено</span>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* График продаж */}
+                <div className="widget chart-widget" data-widget-id="sales-chart">
+                  <div className="widget-header">
+                    <h4>Динамика продаж</h4>
+                    <div className="chart-controls">
+                      <button className="chart-period active">День</button>
+                      <button className="chart-period">Неделя</button>
+                      <button className="chart-period">Месяц</button>
+                    </div>
+                  </div>
+                  <div className="widget-body">
+                    <canvas id="sales-chart"></canvas>
+                  </div>
+                </div>
+                
+                {/* Активность команды */}
+                <div className="widget activity-widget" data-widget-id="team-activity">
+                  <div className="widget-header">
+                    <h4>Активность команды</h4>
+                    <span className="live-indicator">
+                      <span className="live-dot"></span>
+                      Live
+                    </span>
+                  </div>
+                  <div className="widget-body">
+                    <div className="activity-list">
+                      <div className="activity-item">
+                        <div className="activity-avatar">МК</div>
+                        <div className="activity-info">
+                          <span className="activity-user">Мария К.</span>
+                          <span className="activity-action">завершила задачу "Анализ Q4"</span>
+                        </div>
+                        <span className="activity-time">2 мин назад</span>
+                      </div>
+                      <div className="activity-item">
+                        <div className="activity-avatar">ИС</div>
+                        <div className="activity-info">
+                          <span className="activity-user">Иван С.</span>
+                          <span className="activity-action">добавил новый заказ #1284</span>
+                        </div>
+                        <span className="activity-time">15 мин назад</span>
+                      </div>
+                      <div className="activity-item">
+                        <div className="activity-avatar">АБ</div>
+                        <div className="activity-info">
+                          <span className="activity-user">Анна Б.</span>
+                          <span className="activity-action">обновила документ "Стратегия 2025"</span>
+                        </div>
+                        <span className="activity-time">1 час назад</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Быстрые действия */}
+                <div className="widget actions-widget" data-widget-id="quick-actions">
+                  <div className="widget-header">
+                    <h4>Быстрые действия</h4>
+                  </div>
+                  <div className="widget-body">
+                    <div className="quick-actions-grid">
+                      <button className="quick-action">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="24" height="24">
+                          <path d="M12 4v16m8-8H4" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                        <span>Новая задача</span>
+                      </button>
+                      <button className="quick-action">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="24" height="24">
+                          <path d="M9 17V7m0 10l3-3m-3 3l-3-3m14 3V7m0 10l3-3m-3 3l-3-3" strokeWidth="2"/>
+                        </svg>
+                        <span>Экспорт отчета</span>
+                      </button>
+                      <button className="quick-action">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="24" height="24">
+                          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" strokeWidth="2"/>
+                        </svg>
+                        <span>Пригласить</span>
+                      </button>
+                      <button className="quick-action">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="24" height="24">
+                          <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" strokeWidth="2"/>
+                        </svg>
+                        <span>Календарь</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* AI инсайты */}
+                <div className="widget insights-widget" data-widget-id="ai-insights">
+                  <div className="widget-header">
+                    <h4>AI Рекомендации</h4>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20" className="ai-icon">
+                      <path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2z" strokeWidth="2"/>
+                    </svg>
+                  </div>
+                  <div className="widget-body">
+                    <div className="insight-card">
+                      <div className="insight-icon warning">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                          <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0zM12 9v4M12 17h.01" strokeWidth="2"/>
+                        </svg>
+                      </div>
+                      <div className="insight-content">
+                        <h5>Снижение конверсии</h5>
+                        <p>Обнаружено снижение конверсии на 15% в сегменте B2B. Рекомендуем пересмотреть воронку продаж.</p>
+                        <button className="insight-action">Анализировать</button>
+                      </div>
+                    </div>
+                    <div className="insight-card">
+                      <div className="insight-icon success">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                          <path d="M22 11.08V12a10 10 0 11-5.93-9.14M22 4L12 14.01l-3-3" strokeWidth="2"/>
+                        </svg>
+                      </div>
+                      <div className="insight-content">
+                        <h5>Рост вовлеченности</h5>
+                        <p>Email-кампания показывает рост CTR на 32%. Используйте эти паттерны для других кампаний.</p>
+                        <button className="insight-action">Подробнее</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Плавающие окна (изначально скрыты) */}
+          <div className="floating-windows">
+            {/* Окно задач */}
+            <div className="floating-window" data-window-id="tasks-window" style={{display: 'none'}}>
+              <div className="window-header draggable">
+                <div className="window-title">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                    <path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" strokeWidth="2"/>
+                  </svg>
+                  <span>Менеджер задач</span>
+                </div>
+                <div className="window-controls">
+                  <button className="window-btn minimize" aria-label="Свернуть">−</button>
+                  <button className="window-btn maximize" aria-label="Развернуть">□</button>
+                  <button className="window-btn close" aria-label="Закрыть">×</button>
+                </div>
+              </div>
+              <div className="window-body">
+                <div className="tasks-kanban">
+                  <div className="kanban-column">
+                    <div className="column-header">
+                      <h4>К выполнению</h4>
+                      <span className="column-count">4</span>
+                    </div>
+                    <div className="kanban-cards">
+                      <div className="task-card" draggable="true">
+                        <div className="task-priority high"></div>
+                        <h5>Подготовить презентацию Q4</h5>
+                        <p>Квартальный отчет для инвесторов</p>
+                        <div className="task-meta">
+                          <span className="task-deadline">Завтра</span>
+                          <div className="task-assignee">АК</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="kanban-column">
+                    <div className="column-header">
+                      <h4>В работе</h4>
+                      <span className="column-count">2</span>
+                    </div>
+                    <div className="kanban-cards">
+                      {/* Карточки задач */}
+                    </div>
+                  </div>
+                  <div className="kanban-column">
+                    <div className="column-header">
+                      <h4>Готово</h4>
+                      <span className="column-count">8</span>
+                    </div>
+                    <div className="kanban-cards">
+                      {/* Карточки задач */}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* AI Ассистент */}
+            <div className="ai-assistant-window" data-window-id="ai-chat" style={{display: 'none'}}>
+              <div className="ai-header">
+                <div className="ai-avatar">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="24" height="24">
+                    <path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2z" strokeWidth="2"/>
+                  </svg>
+                </div>
+                <div className="ai-info">
+                  <span className="ai-name">NeuroAI</span>
+                  <span className="ai-status">Готов помочь</span>
+                </div>
+                <button className="ai-close" aria-label="Закрыть">×</button>
+              </div>
+              <div className="ai-messages">
+                <div className="ai-message">
+                  <p>Привет! Я ваш AI-ассистент. Чем могу помочь?</p>
+                </div>
+              </div>
+              <div className="ai-input">
+                <input type="text" placeholder="Задайте вопрос..." />
+                <button aria-label="Отправить">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                    <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" strokeWidth="2"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          {/* Статус бар снизу */}
+          <div className="workspace-statusbar">
+            <div className="status-left">
+              <span className="status-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                  <circle cx="12" cy="12" r="10" strokeWidth="2"/>
+                  <path d="M12 6v6l4 2" strokeWidth="2"/>
+                </svg>
+                <span id="current-time">14:32</span>
+              </span>
+              <span className="status-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                  <path d="M20.24 12.24a6 6 0 00-8.49-8.49L5 10.5V19h8.5zM16 8L2 22M17.5 15H9" strokeWidth="2"/>
+                </svg>
+                <span>3 активных окна</span>
+              </span>
+            </div>
+            <div className="status-center">
+              <div className="progress-indicator">
+                <span>Загрузка системы</span>
+                <div className="system-progress">
+                  <div className="progress-cpu" title="CPU: 23%"></div>
+                  <div className="progress-ram" title="RAM: 45%"></div>
+                  <div className="progress-net" title="Network: 12%"></div>
+                </div>
+              </div>
+            </div>
+            <div className="status-right">
+              <button className="status-btn" aria-label="Настройки рабочего пространства">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                  <circle cx="12" cy="12" r="3" strokeWidth="2"/>
+                  <path d="M12 1v6m0 6v6m3.22-10.22l4.24-4.24m-4.24 12.68l4.24 4.24M21 12h-6m-6 0H3m1.54-6.46L8.78 9.78M4.54 18.46l4.24-4.24" strokeWidth="2"/>
+                </svg>
+              </button>
+              <button className="status-btn" aria-label="Полноэкранный режим">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                  <path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3" strokeWidth="2"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Компоненты для управления workspace */}
+      <Suspense fallback={null}>
+        <WorkspaceManager />
+        <WindowManager />
+        <WidgetSystem />
+        <RealtimeEngine />
+        <AIPersonalization />
+        <GamificationHub />
       </Suspense>
     </section>
   ];
