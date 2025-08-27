@@ -2907,6 +2907,308 @@ export default function Home() {
         <PricingComparison />
         <PricingTooltips />
       </Suspense>
+    </section>,
+
+    // 9. Контакты - форма обратной связи и контактная информация
+    <section key="contacts" id="contacts-section" className="full-page scrollable-section">
+      <div className="page-header">
+        <h2>Свяжитесь с нами</h2>
+        <p>Мы готовы ответить на все ваши вопросы и помочь с внедрением</p>
+      </div>
+
+      <div className="contacts-container">
+        {/* Левая часть - форма */}
+        <div className="contact-form-wrapper glass-card">
+          <h3>Оставьте заявку</h3>
+          <p className="form-subtitle">Мы свяжемся с вами в течение 15 минут</p>
+          
+          <form className="contact-form" id="mainContactForm">
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="contact-name">Ваше имя *</label>
+                <input 
+                  type="text" 
+                  id="contact-name" 
+                  name="name" 
+                  required 
+                  placeholder="Иван Иванов"
+                  aria-label="Ваше имя"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="contact-company">Компания</label>
+                <input 
+                  type="text" 
+                  id="contact-company" 
+                  name="company" 
+                  placeholder="ООО Название"
+                  aria-label="Название компании"
+                />
+              </div>
+            </div>
+            
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="contact-email">Email *</label>
+                <input 
+                  type="email" 
+                  id="contact-email" 
+                  name="email" 
+                  required 
+                  placeholder="your@email.com"
+                  aria-label="Email адрес"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="contact-phone">Телефон *</label>
+                <input 
+                  type="tel" 
+                  id="contact-phone" 
+                  name="phone" 
+                  required 
+                  placeholder="+7 (999) 123-45-67"
+                  aria-label="Номер телефона"
+                />
+              </div>
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="contact-topic">Тема обращения</label>
+              <select id="contact-topic" name="topic" aria-label="Выберите тему обращения">
+                <option value="">Выберите тему</option>
+                <option value="demo">Демонстрация платформы</option>
+                <option value="pricing">Вопросы по тарифам</option>
+                <option value="integration">Интеграция и внедрение</option>
+                <option value="support">Техническая поддержка</option>
+                <option value="partnership">Партнерство</option>
+                <option value="other">Другое</option>
+              </select>
+            </div>
+            
+            <div className="form-group">
+              <label>Интересующие решения</label>
+              <div className="solutions-checkboxes">
+                <label className="checkbox-label">
+                  <input type="checkbox" name="solutions" value="crm" />
+                  <span className="checkbox-box"></span>
+                  <span>CRM-система</span>
+                </label>
+                <label className="checkbox-label">
+                  <input type="checkbox" name="solutions" value="analytics" />
+                  <span className="checkbox-box"></span>
+                  <span>AI-аналитика</span>
+                </label>
+                <label className="checkbox-label">
+                  <input type="checkbox" name="solutions" value="automation" />
+                  <span className="checkbox-box"></span>
+                  <span>Автоматизация</span>
+                </label>
+                <label className="checkbox-label">
+                  <input type="checkbox" name="solutions" value="integration" />
+                  <span className="checkbox-box"></span>
+                  <span>Интеграции</span>
+                </label>
+              </div>
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="contact-message">Сообщение</label>
+              <textarea 
+                id="contact-message" 
+                name="message" 
+                rows="4" 
+                placeholder="Расскажите о вашей задаче или задайте вопрос"
+                aria-label="Ваше сообщение"
+              ></textarea>
+            </div>
+            
+            <div className="form-group">
+              <label className="privacy-checkbox">
+                <input type="checkbox" name="privacy" required />
+                <span className="checkbox-box"></span>
+                <span>Согласен с <a href="#" className="privacy-link">политикой конфиденциальности</a> *</span>
+              </label>
+            </div>
+            
+            <button type="submit" className="btn-submit-form">
+              <span>Отправить заявку</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          </form>
+        </div>
+        
+        {/* Правая часть - контактная информация */}
+        <div className="contact-info-wrapper">
+          {/* Быстрые контакты */}
+          <div className="quick-contacts glass-card">
+            <h3>Быстрая связь</h3>
+            
+            <div className="contact-item">
+              <div className="contact-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" strokeWidth="2"/>
+                </svg>
+              </div>
+              <div className="contact-details">
+                <span className="contact-label">Email</span>
+                <a href="mailto:hello@neuroexpert.ru" className="contact-value">hello@neuroexpert.ru</a>
+              </div>
+            </div>
+            
+            <div className="contact-item">
+              <div className="contact-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" strokeWidth="2"/>
+                </svg>
+              </div>
+              <div className="contact-details">
+                <span className="contact-label">Телефон</span>
+                <a href="tel:+74951234567" className="contact-value">+7 (495) 123-45-67</a>
+                <span className="contact-note">Пн-Пт с 9:00 до 18:00 МСК</span>
+              </div>
+            </div>
+            
+            <div className="contact-item">
+              <div className="contact-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" strokeWidth="2"/>
+                  <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" strokeWidth="2"/>
+                </svg>
+              </div>
+              <div className="contact-details">
+                <span className="contact-label">Офис</span>
+                <span className="contact-value">Москва, ул. Тверская, 1</span>
+                <a href="#map" className="contact-link">Показать на карте ↓</a>
+              </div>
+            </div>
+          </div>
+          
+          {/* Мессенджеры */}
+          <div className="messengers glass-card">
+            <h3>Мессенджеры и соцсети</h3>
+            <div className="messenger-buttons">
+              <a href="#" className="messenger-btn telegram" aria-label="Telegram">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.56c-.21 2.27-1.13 7.75-1.6 10.27-.2 1.07-.59 1.43-.96 1.47-.82.08-1.44-.54-2.24-.92-1.24-.73-1.94-1.19-3.14-1.9-1.39-.83-.49-1.28.3-2.03.21-.2 3.82-3.5 3.89-3.8.01-.04.01-.18-.07-.25s-.2-.05-.29-.03c-.12.03-2.09 1.33-5.91 3.9-.56.38-1.07.57-1.52.56-.5-.01-1.47-.28-2.19-.52-.88-.29-1.58-.44-1.52-.93.03-.26.38-.52 1.06-.8 4.16-1.81 6.93-3.01 8.32-3.59 3.96-1.66 4.79-1.95 5.32-1.96.12 0 .38.03.55.18.15.13.19.3.21.44-.01.06.01.24 0 .38z"/>
+                </svg>
+                <span>Telegram</span>
+              </a>
+              
+              <a href="#" className="messenger-btn whatsapp" aria-label="WhatsApp">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                </svg>
+                <span>WhatsApp</span>
+              </a>
+              
+              <a href="#" className="messenger-btn vk" aria-label="VKontakte">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.408 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.864-.525-2.05-1.727-1.033-1.033-1.49-1.173-1.743-1.173-.357 0-.458.102-.458.593v1.575c0 .424-.135.678-1.253.678-1.846 0-3.896-1.12-5.335-3.202C4.624 10.857 4 8.777 4 8.425c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.677.863 2.49 2.303 4.675 2.896 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.203.17-.407.44-.407h2.744c.373 0 .508.203.508.643v3.895c0 .373.17.508.271.508.22 0 .407-.135.813-.542 1.27-1.422 2.18-3.61 2.18-3.61.119-.254.322-.491.762-.491h1.744c.525 0 .644.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.779 1.203 1.253.745.847 1.32 1.558 1.473 2.05.17.49-.085.744-.576.744z"/>
+                </svg>
+                <span>VKontakte</span>
+              </a>
+              
+              <a href="#" className="messenger-btn linkedin" aria-label="LinkedIn">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+                <span>LinkedIn</span>
+              </a>
+            </div>
+          </div>
+          
+          {/* Время работы */}
+          <div className="work-hours glass-card">
+            <h3>Время работы</h3>
+            <div className="schedule">
+              <div className="schedule-row">
+                <span className="day">Понедельник - Пятница</span>
+                <span className="time">9:00 - 18:00 МСК</span>
+              </div>
+              <div className="schedule-row">
+                <span className="day">Суббота</span>
+                <span className="time">10:00 - 16:00 МСК</span>
+              </div>
+              <div className="schedule-row weekend">
+                <span className="day">Воскресенье</span>
+                <span className="time">Выходной</span>
+              </div>
+            </div>
+            <div className="support-note">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
+              </svg>
+              <span>Техподдержка работает 24/7 для клиентов тарифа Бизнес и Enterprise</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Карта */}
+      <div className="map-section" id="map">
+        <div className="map-container glass-card">
+          <div className="map-placeholder">
+            {/* Здесь будет интегрирована карта */}
+            <div className="map-overlay">
+              <h3>Наш офис в Москве</h3>
+              <p>ул. Тверская, 1</p>
+              <button className="btn-build-route">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" strokeWidth="2"/>
+                </svg>
+                Построить маршрут
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* FAQ по контактам */}
+      <div className="contact-faq">
+        <h3>Часто задаваемые вопросы</h3>
+        <div className="faq-items">
+          <details className="faq-item glass-card">
+            <summary>
+              <span>Как быстро вы отвечаете на заявки?</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <path d="M19 9l-7 7-7-7" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </summary>
+            <p>В рабочее время мы отвечаем в течение 15-30 минут. Заявки, отправленные в нерабочее время, обрабатываются на следующий рабочий день.</p>
+          </details>
+          
+          <details className="faq-item glass-card">
+            <summary>
+              <span>Можно ли приехать к вам в офис?</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <path d="M19 9l-7 7-7-7" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </summary>
+            <p>Да, мы всегда рады видеть вас в нашем офисе. Рекомендуем заранее согласовать время встречи через форму или по телефону.</p>
+          </details>
+          
+          <details className="faq-item glass-card">
+            <summary>
+              <span>Проводите ли вы онлайн-демонстрации?</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <path d="M19 9l-7 7-7-7" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </summary>
+            <p>Конечно! Мы проводим персональные демонстрации через Zoom, Google Meet или любую удобную для вас платформу.</p>
+          </details>
+        </div>
+      </div>
+      
+      {/* Компоненты для управления страницей контактов */}
+      <Suspense fallback={null}>
+        <ContactFormHandler />
+        <ContactValidation />
+        <ContactMap />
+      </Suspense>
     </section>
   ];
 
