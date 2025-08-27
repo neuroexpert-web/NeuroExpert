@@ -38,6 +38,7 @@
 @import './styles/contacts-style.css';
 @import './styles/workspace-full.css';
 @import './styles/workspace-cabinet.css';
+@import './styles/workspace-advanced.css';
 
 /* Критические стили для Hero секции */
 .hero-section {

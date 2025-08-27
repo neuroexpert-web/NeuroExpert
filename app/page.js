@@ -47,6 +47,12 @@ const ProcessTooltips = dynamic(() => import('./components/ProcessTooltips'), {
   loading: () => null
 });
 
+// Динамические импорты для личного кабинета
+const WorkspaceLayout = dynamic(() => import('./components/workspace/WorkspaceLayout'), {
+  ssr: false,
+  loading: () => null
+});
+
 // Динамические импорты для страницы решений
 const SolutionsManager = dynamic(() => import('./components/SolutionsManager'), {
   ssr: false,
@@ -3259,136 +3265,16 @@ export default function Home() {
       </Suspense>
     </section>,
 
-    // 10. Личный кабинет - демо версия без авторизации
+    // 10. Личный кабинет - полнофункциональная версия согласно ТЗ
     <section key="workspace" id="workspace-section" className="workspace-container">
-      {/* Верхняя панель */}
-      <header className="workspace-header">
-        <div className="workspace-logo">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          <span>NeuroExpert Workspace</span>
+      <Suspense fallback={
+        <div className="workspace-loading">
+          <div className="loading-spinner"></div>
+          <p>Загрузка рабочего пространства...</p>
         </div>
-        <div className="workspace-user">
-          <span>Демо пользователь</span>
-          <div className="user-avatar">ДП</div>
-        </div>
-      </header>
-
-      {/* Основной контент */}
-      <div className="workspace-content">
-        {/* Боковое меню */}
-        <aside className="workspace-sidebar">
-          <ul className="sidebar-menu">
-            <li className="menu-item active">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" strokeWidth="2"/>
-              </svg>
-              Главная
-            </li>
-            <li className="menu-item">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M18 20V10M12 20V4M6 20v-6" strokeWidth="2"/>
-              </svg>
-              Аналитика
-            </li>
-            <li className="menu-item">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" strokeWidth="2"/>
-              </svg>
-              Клиенты
-            </li>
-            <li className="menu-item">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" strokeWidth="2"/>
-              </svg>
-              Проекты
-            </li>
-            <li className="menu-item">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" strokeWidth="2"/>
-              </svg>
-              Финансы
-            </li>
-            <li className="menu-item">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <circle cx="12" cy="12" r="3" strokeWidth="2"/>
-                <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1" strokeWidth="2"/>
-              </svg>
-              Настройки
-            </li>
-          </ul>
-        </aside>
-
-        {/* Основная область */}
-        <main className="workspace-main">
-          <h1 className="workspace-title">Добро пожаловать в личный кабинет</h1>
-          
-          {/* Статистика */}
-          <div className="dashboard-grid">
-            <div className="stat-card">
-              <div className="stat-label">Активные проекты</div>
-              <div className="stat-value">12</div>
-              <div className="stat-change">+2 за неделю</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-label">Обработано запросов</div>
-              <div className="stat-value">1,847</div>
-              <div className="stat-change">+23% за месяц</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-label">Экономия времени</div>
-              <div className="stat-value">156ч</div>
-              <div className="stat-change">В этом месяце</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-label">ROI</div>
-              <div className="stat-value">287%</div>
-              <div className="stat-change">+45% за квартал</div>
-            </div>
-          </div>
-
-          {/* Последняя активность */}
-          <div className="recent-activity">
-            <h2 className="activity-header">Последняя активность</h2>
-            <div className="activity-item">
-              <div className="activity-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8a2be2">
-                  <path d="M9 11l3 3L22 4" strokeWidth="2"/>
-                  <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" strokeWidth="2"/>
-                </svg>
-              </div>
-              <div className="activity-content">
-                <div className="activity-title">Проект "Оптимизация продаж" завершен</div>
-                <div className="activity-time">2 часа назад</div>
-              </div>
-            </div>
-            <div className="activity-item">
-              <div className="activity-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8a2be2">
-                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5" strokeWidth="2"/>
-                </svg>
-              </div>
-              <div className="activity-content">
-                <div className="activity-title">AI модель обновлена</div>
-                <div className="activity-time">5 часов назад</div>
-              </div>
-            </div>
-            <div className="activity-item">
-              <div className="activity-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8a2be2">
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" strokeWidth="2"/>
-                  <circle cx="9" cy="7" r="4" strokeWidth="2"/>
-                </svg>
-              </div>
-              <div className="activity-content">
-                <div className="activity-title">Новый клиент добавлен</div>
-                <div className="activity-time">Вчера</div>
-              </div>
-            </div>
-          </div>
-        </main>
-      </div>
+      }>
+        <WorkspaceLayout />
+      </Suspense>
     </section>
   ];
 
