@@ -4,9 +4,9 @@
 #analytics-dashboard {
     width: 100%;
     height: 100vh;
-    overflow: hidden;
     position: relative;
     background: var(--color-bg-primary, #02001A);
+    padding: 2rem;
 }
 
 .scrollable-section {
@@ -35,10 +35,11 @@
     background: rgba(255, 255, 255, 0.3);
 }
 
-.dashboard-content {
-    padding: 2rem;
+/* Центрирование контента внутри analytics-dashboard */
+#analytics-dashboard > * {
     max-width: 1400px;
-    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* --- 2. ЗАГОЛОВОК СТРАНИЦЫ --- */

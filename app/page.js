@@ -65,8 +65,6 @@ export default function Home() {
         <h2>Аналитика в реальном времени</h2>
         <p>Показатели KPI и AI-рекомендации</p>
       </header>
-      
-      <div className="dashboard-content">
         {/* KPI карточки */}
         <div className="kpi-cards">
           <div className="kpi-card glass-card" id="kpi-revenue">
@@ -228,7 +226,6 @@ export default function Home() {
             </svg>
           </div>
         </div>
-      </div>
       
       {/* Компоненты для графиков и обновлений в реальном времени */}
       <Suspense fallback={null}>
