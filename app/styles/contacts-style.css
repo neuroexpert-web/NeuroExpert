@@ -1,0 +1,729 @@
+/* --- СТИЛИ ДЛЯ СТРАНИЦЫ КОНТАКТОВ --- */
+
+/* --- 0. ПЕРЕМЕННЫЕ --- */
+:root {
+  --contact-gradient-start: #6366f1;
+  --contact-gradient-end: #8b5cf6;
+  --contact-success: #10b981;
+  --contact-error: #ef4444;
+  --contact-warning: #f59e0b;
+  --contact-border: rgba(255, 255, 255, 0.15);
+  --contact-bg: rgba(20, 20, 50, 0.4);
+}
+
+/* --- 1. ОСНОВНАЯ СТРУКТУРА --- */
+#contacts-section {
+  padding: 2rem;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.contacts-container {
+  max-width: 1200px;
+  margin: 0 auto 3rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+/* --- 2. ФОРМА ОБРАТНОЙ СВЯЗИ --- */
+.contact-form-wrapper {
+  padding: 2.5rem;
+  background: var(--contact-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--contact-border);
+  border-radius: 24px;
+}
+
+.contact-form-wrapper h3 {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.form-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 2rem;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--contact-gradient-start);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+  font-family: inherit;
+}
+
+/* Чекбоксы решений */
+.solutions-checkboxes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.checkbox-label:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.checkbox-box {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  margin-right: 0.75rem;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkbox-box {
+  background: linear-gradient(135deg, var(--contact-gradient-start), var(--contact-gradient-end));
+  border-color: var(--contact-gradient-start);
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkbox-box::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+/* Согласие с политикой */
+.privacy-checkbox {
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.privacy-link {
+  color: var(--contact-gradient-end);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.privacy-link:hover {
+  color: var(--contact-gradient-start);
+  text-decoration: underline;
+}
+
+/* Кнопка отправки */
+.btn-submit-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, var(--contact-gradient-start), var(--contact-gradient-end));
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.btn-submit-form:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+}
+
+.btn-submit-form:active {
+  transform: translateY(-1px);
+}
+
+.btn-submit-form svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* --- 3. КОНТАКТНАЯ ИНФОРМАЦИЯ --- */
+.contact-info-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.quick-contacts,
+.messengers,
+.work-hours {
+  padding: 2rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+}
+
+.quick-contacts h3,
+.messengers h3,
+.work-hours h3 {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+  color: white;
+}
+
+/* Контактные элементы */
+.contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.contact-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.contact-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.contact-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--contact-gradient-end);
+}
+
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.contact-label {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.contact-value {
+  font-size: 1.125rem;
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.contact-value:hover {
+  color: var(--contact-gradient-end);
+}
+
+.contact-note {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 0.25rem;
+}
+
+.contact-link {
+  font-size: 0.875rem;
+  color: var(--contact-gradient-end);
+  text-decoration: none;
+  margin-top: 0.25rem;
+  transition: all 0.3s ease;
+}
+
+.contact-link:hover {
+  color: var(--contact-gradient-start);
+  transform: translateX(3px);
+}
+
+/* --- 4. МЕССЕНДЖЕРЫ --- */
+.messenger-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.messenger-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.messenger-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.messenger-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+.messenger-btn.telegram:hover {
+  background: #0088cc;
+  border-color: #0088cc;
+}
+
+.messenger-btn.whatsapp:hover {
+  background: #25d366;
+  border-color: #25d366;
+}
+
+.messenger-btn.vk:hover {
+  background: #4376a6;
+  border-color: #4376a6;
+}
+
+.messenger-btn.linkedin:hover {
+  background: #0077b5;
+  border-color: #0077b5;
+}
+
+/* --- 5. ВРЕМЯ РАБОТЫ --- */
+.schedule {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.schedule-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.schedule-row:last-child {
+  border-bottom: none;
+}
+
+.day {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.time {
+  color: white;
+  font-weight: 500;
+}
+
+.schedule-row.weekend .time {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.support-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.support-note svg {
+  stroke: var(--contact-success);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* --- 6. КАРТА --- */
+.map-section {
+  max-width: 1200px;
+  margin: 0 auto 3rem;
+}
+
+.map-container {
+  padding: 2rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.map-placeholder {
+  position: relative;
+  height: 400px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-overlay {
+  text-align: center;
+  z-index: 1;
+}
+
+.map-overlay h3 {
+  font-size: 1.5rem;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.map-overlay p {
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1.5rem;
+}
+
+.btn-build-route {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-build-route:hover {
+  background: rgba(139, 92, 246, 0.3);
+  transform: translateY(-2px);
+}
+
+/* --- 7. FAQ СЕКЦИЯ --- */
+.contact-faq {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.contact-faq h3 {
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+.faq-items {
+  display: grid;
+  gap: 1rem;
+}
+
+.faq-item {
+  padding: 1.5rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  cursor: pointer;
+}
+
+.faq-item summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  color: white;
+  list-style: none;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item summary svg {
+  transition: transform 0.3s ease;
+}
+
+.faq-item[open] summary svg {
+  transform: rotate(180deg);
+}
+
+.faq-item p {
+  margin-top: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+}
+
+/* --- 8. СОСТОЯНИЯ ФОРМЫ --- */
+.form-group.error input,
+.form-group.error select,
+.form-group.error textarea {
+  border-color: var(--contact-error);
+}
+
+.form-group .error-message {
+  display: none;
+  font-size: 0.75rem;
+  color: var(--contact-error);
+  margin-top: 0.25rem;
+}
+
+.form-group.error .error-message {
+  display: block;
+}
+
+.form-loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.form-loading .btn-submit-form {
+  position: relative;
+  color: transparent;
+}
+
+.form-loading .btn-submit-form::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 50%;
+  left: 50%;
+  margin-left: -10px;
+  margin-top: -10px;
+  border: 2px solid white;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spinner 0.8s linear infinite;
+}
+
+@keyframes spinner {
+  to { transform: rotate(360deg); }
+}
+
+/* --- 9. УВЕДОМЛЕНИЯ --- */
+.contact-notification {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  max-width: 400px;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: slideInRight 0.3s ease-out;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.contact-notification.success {
+  background: var(--contact-success);
+  color: white;
+}
+
+.contact-notification.error {
+  background: var(--contact-error);
+  color: white;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* --- 10. АНИМАЦИИ --- */
+.contact-form-wrapper,
+.quick-contacts,
+.messengers,
+.work-hours,
+.map-container {
+  animation: fadeInUp 0.6s ease-out;
+  animation-fill-mode: backwards;
+}
+
+.contact-form-wrapper { animation-delay: 0.1s; }
+.quick-contacts { animation-delay: 0.15s; }
+.messengers { animation-delay: 0.2s; }
+.work-hours { animation-delay: 0.25s; }
+.map-container { animation-delay: 0.3s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- 11. АДАПТИВНОСТЬ --- */
+@media (max-width: 968px) {
+  .contacts-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .messenger-buttons {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  #contacts-section {
+    padding: 1rem;
+  }
+  
+  .contact-form-wrapper {
+    padding: 1.5rem;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .solutions-checkboxes {
+    grid-template-columns: 1fr;
+  }
+  
+  .contact-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .contact-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .map-placeholder {
+    height: 300px;
+  }
+  
+  .contact-notification {
+    bottom: 1rem;
+    right: 1rem;
+    left: 1rem;
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-submit-form {
+    width: 100%;
+  }
+  
+  .schedule-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+}
+
+/* --- 12. ДОСТУПНОСТЬ --- */
+.form-group input:focus-visible,
+.form-group select:focus-visible,
+.form-group textarea:focus-visible,
+.btn-submit-form:focus-visible,
+.messenger-btn:focus-visible {
+  outline: 2px solid rgba(139, 92, 246, 0.5);
+  outline-offset: 2px;
+}
+
+/* Высокая контрастность */
+@media (prefers-contrast: high) {
+  .contact-form-wrapper,
+  .quick-contacts,
+  .messengers,
+  .work-hours,
+  .map-container,
+  .faq-item {
+    border-width: 2px;
+  }
+}
+
+/* Уменьшение движения */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

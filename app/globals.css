@@ -34,6 +34,9 @@
 /* Импорт стилей калькулятора цен */
 @import './styles/pricing-style.css';
 
+/* Импорт стилей контактов */
+@import './styles/contacts-style.css';
+
 /* Критические стили для Hero секции */
 .hero-section {
   background-color: #0A051A !important;

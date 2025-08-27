@@ -106,6 +106,22 @@ const PricingTooltips = dynamic(() => import('./components/PricingTooltips'), {
   loading: () => null
 });
 
+// Динамические импорты для страницы контактов
+const ContactFormHandler = dynamic(() => import('./components/ContactFormHandler'), {
+  ssr: false,
+  loading: () => null
+});
+
+const ContactValidation = dynamic(() => import('./components/ContactValidation'), {
+  ssr: false,
+  loading: () => null
+});
+
+const ContactMap = dynamic(() => import('./components/ContactMap'), {
+  ssr: false,
+  loading: () => null
+});
+
 export default function Home() {
   const [currentSection, setCurrentSection] = useState(0);
   const [activeSegment, setActiveSegment] = useState('loyal');
