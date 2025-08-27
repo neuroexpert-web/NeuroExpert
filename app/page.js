@@ -3259,7 +3259,53 @@ export default function Home() {
       </Suspense>
     </section>,
 
-    // 10. Личный кабинет - мультиоконное рабочее пространство
+    // 10. Личный кабинет - временная заглушка
+    <section key="workspace" id="workspace-section" style={{ 
+      width: '100%', 
+      height: '100vh', 
+      background: '#0a0a0f',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: 'white',
+      fontSize: '24px',
+      fontWeight: '600'
+    }}>
+      <div style={{
+        textAlign: 'center',
+        padding: '40px',
+        background: 'rgba(30, 30, 45, 0.4)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        borderRadius: '16px',
+        maxWidth: '600px'
+      }}>
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#8a2be2" style={{ marginBottom: '24px' }}>
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+        <h2 style={{ marginBottom: '16px', fontSize: '32px' }}>Личный кабинет</h2>
+        <p style={{ color: 'rgba(255, 255, 255, 0.6)', marginBottom: '24px' }}>
+          Раздел находится в разработке
+        </p>
+        <button 
+          onClick={() => alert('Функционал личного кабинета будет доступен в ближайшее время!')}
+          style={{
+            padding: '12px 32px',
+            background: '#8a2be2',
+            border: 'none',
+            borderRadius: '8px',
+            color: 'white',
+            fontSize: '16px',
+            fontWeight: '600',
+            cursor: 'pointer'
+          }}
+        >
+          Уведомить о запуске
+        </button>
+      </div>
+    </section>
+    /* ВРЕМЕННО ЗАКОММЕНТИРОВАНО - СТАРЫЙ КОД ЛИЧНОГО КАБИНЕТА
     <section key="workspace" id="workspace-section" className="workspace-container">
       {/* Верхняя панель */}
       <header className="workspace-header">
@@ -3790,6 +3836,7 @@ export default function Home() {
         <GamificationHub />
       </Suspense>
     </section>
+    КОНЕЦ ЗАКОММЕНТИРОВАННОГО КОДА */
   ];
 
   return (
