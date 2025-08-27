@@ -3305,11 +3305,6 @@ export default function Home() {
         </button>
       </div>
     </section>
-    /* ВРЕМЕННО ЗАКОММЕНТИРОВАНО - СТАРЫЙ КОД ЛИЧНОГО КАБИНЕТА
-    <section key="workspace" id="workspace-section" className="workspace-container">
-      {/* Верхняя панель */}
-      <header className="workspace-header">
-        <div className="header-left">
           <div className="logo-workspace">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
