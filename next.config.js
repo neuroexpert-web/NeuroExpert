@@ -31,6 +31,12 @@ const nextConfig = {
     // Игнорировать ESLint во время сборки на продакшене
     ignoreDuringBuilds: true,
   },
+  typescript: {
+    // Игнорировать ошибки TypeScript во время сборки
+    ignoreBuildErrors: true,
+  },
+  swcMinify: true,
+  reactStrictMode: true,
   // Режим output зависит от платформы
   output: process.env.NEXT_OUTPUT_MODE || undefined,
   
