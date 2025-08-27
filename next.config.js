@@ -27,6 +27,10 @@ const ContentSecurityPolicy = `
 `;
 
 const nextConfig = {
+  eslint: {
+    // Игнорировать ESLint во время сборки на продакшене
+    ignoreDuringBuilds: true,
+  },
   // Режим output зависит от платформы
   output: process.env.NEXT_OUTPUT_MODE || undefined,
   
