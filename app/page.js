@@ -3259,50 +3259,261 @@ export default function Home() {
       </Suspense>
     </section>,
 
-    // 10. Личный кабинет - временная заглушка
-    <section key="workspace" id="workspace-section" style={{ 
-      width: '100%', 
-      height: '100vh', 
-      background: '#0a0a0f',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      color: 'white',
-      fontSize: '24px',
-      fontWeight: '600'
-    }}>
-      <div style={{
-        textAlign: 'center',
-        padding: '40px',
-        background: 'rgba(30, 30, 45, 0.4)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        borderRadius: '16px',
-        maxWidth: '600px'
-      }}>
-        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#8a2be2" style={{ marginBottom: '24px' }}>
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-        <h2 style={{ marginBottom: '16px', fontSize: '32px' }}>Личный кабинет</h2>
-        <p style={{ color: 'rgba(255, 255, 255, 0.6)', marginBottom: '24px' }}>
-          Раздел находится в разработке
-        </p>
-        <button 
-          onClick={() => alert('Функционал личного кабинета будет доступен в ближайшее время!')}
-          style={{
-            padding: '12px 32px',
-            background: '#8a2be2',
-            border: 'none',
-            borderRadius: '8px',
-            color: 'white',
-            fontSize: '16px',
-            fontWeight: '600',
-            cursor: 'pointer'
-          }}
-        >
-          Уведомить о запуске
-        </button>
+    // 10. Личный кабинет - демо версия без авторизации
+    <section key="workspace" id="workspace-section" className="workspace-container">
+      <style jsx>{`
+        .workspace-container {
+          width: 100%;
+          height: 100vh;
+          background: #0a0a0f;
+          color: white;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+        }
+        .workspace-header {
+          height: 60px;
+          background: rgba(20, 20, 30, 0.8);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          display: flex;
+          align-items: center;
+          padding: 0 24px;
+          justify-content: space-between;
+        }
+        .workspace-logo {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          font-weight: 600;
+          font-size: 18px;
+        }
+        .workspace-user {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
+        .user-avatar {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #8a2be2, #4b0082);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 600;
+        }
+        .workspace-content {
+          flex: 1;
+          display: flex;
+          overflow: hidden;
+        }
+        .workspace-sidebar {
+          width: 240px;
+          background: rgba(20, 20, 30, 0.5);
+          border-right: 1px solid rgba(255, 255, 255, 0.1);
+          padding: 24px 0;
+        }
+        .sidebar-menu {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+        .menu-item {
+          padding: 12px 24px;
+          cursor: pointer;
+          transition: all 0.2s;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+        .menu-item:hover {
+          background: rgba(138, 43, 226, 0.1);
+          border-left: 3px solid #8a2be2;
+        }
+        .menu-item.active {
+          background: rgba(138, 43, 226, 0.2);
+          border-left: 3px solid #8a2be2;
+        }
+        .workspace-main {
+          flex: 1;
+          padding: 40px;
+          overflow-y: auto;
+        }
+        .dashboard-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 24px;
+          margin-bottom: 40px;
+        }
+        .stat-card {
+          background: rgba(30, 30, 45, 0.6);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 12px;
+          padding: 24px;
+          backdrop-filter: blur(10px);
+        }
+        .stat-value {
+          font-size: 32px;
+          font-weight: 700;
+          color: #8a2be2;
+          margin: 8px 0;
+        }
+        .stat-label {
+          color: rgba(255, 255, 255, 0.6);
+          font-size: 14px;
+        }
+        .recent-activity {
+          background: rgba(30, 30, 45, 0.6);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 12px;
+          padding: 24px;
+          backdrop-filter: blur(10px);
+        }
+        .activity-item {
+          padding: 16px 0;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
+        .activity-icon {
+          width: 40px;
+          height: 40px;
+          border-radius: 8px;
+          background: rgba(138, 43, 226, 0.2);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      `}</style>
+
+      {/* Верхняя панель */}
+      <header className="workspace-header">
+        <div className="workspace-logo">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          <span>NeuroExpert Workspace</span>
+        </div>
+        <div className="workspace-user">
+          <span>Демо пользователь</span>
+          <div className="user-avatar">ДП</div>
+        </div>
+      </header>
+
+      {/* Основной контент */}
+      <div className="workspace-content">
+        {/* Боковое меню */}
+        <aside className="workspace-sidebar">
+          <ul className="sidebar-menu">
+            <li className="menu-item active">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" strokeWidth="2"/>
+              </svg>
+              Главная
+            </li>
+            <li className="menu-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M18 20V10M12 20V4M6 20v-6" strokeWidth="2"/>
+              </svg>
+              Аналитика
+            </li>
+            <li className="menu-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" strokeWidth="2"/>
+              </svg>
+              Клиенты
+            </li>
+            <li className="menu-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" strokeWidth="2"/>
+              </svg>
+              Проекты
+            </li>
+            <li className="menu-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" strokeWidth="2"/>
+              </svg>
+              Финансы
+            </li>
+            <li className="menu-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="12" cy="12" r="3" strokeWidth="2"/>
+                <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1" strokeWidth="2"/>
+              </svg>
+              Настройки
+            </li>
+          </ul>
+        </aside>
+
+        {/* Основная область */}
+        <main className="workspace-main">
+          <h1 style={{ fontSize: '28px', marginBottom: '32px' }}>Добро пожаловать в личный кабинет</h1>
+          
+          {/* Статистика */}
+          <div className="dashboard-grid">
+            <div className="stat-card">
+              <div className="stat-label">Активные проекты</div>
+              <div className="stat-value">12</div>
+              <div style={{ color: '#4ade80', fontSize: '14px' }}>+2 за неделю</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-label">Обработано запросов</div>
+              <div className="stat-value">1,847</div>
+              <div style={{ color: '#4ade80', fontSize: '14px' }}>+23% за месяц</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-label">Экономия времени</div>
+              <div className="stat-value">156ч</div>
+              <div style={{ color: '#4ade80', fontSize: '14px' }}>В этом месяце</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-label">ROI</div>
+              <div className="stat-value">287%</div>
+              <div style={{ color: '#4ade80', fontSize: '14px' }}>+45% за квартал</div>
+            </div>
+          </div>
+
+          {/* Последняя активность */}
+          <div className="recent-activity">
+            <h2 style={{ fontSize: '20px', marginBottom: '24px' }}>Последняя активность</h2>
+            <div className="activity-item">
+              <div className="activity-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8a2be2">
+                  <path d="M9 11l3 3L22 4" strokeWidth="2"/>
+                  <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" strokeWidth="2"/>
+                </svg>
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: '600' }}>Проект "Оптимизация продаж" завершен</div>
+                <div style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '14px' }}>2 часа назад</div>
+              </div>
+            </div>
+            <div className="activity-item">
+              <div className="activity-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8a2be2">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5" strokeWidth="2"/>
+                </svg>
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: '600' }}>AI модель обновлена</div>
+                <div style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '14px' }}>5 часов назад</div>
+              </div>
+            </div>
+            <div className="activity-item">
+              <div className="activity-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8a2be2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" strokeWidth="2"/>
+                  <circle cx="9" cy="7" r="4" strokeWidth="2"/>
+                </svg>
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: '600' }}>Новый клиент добавлен</div>
+                <div style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '14px' }}>Вчера</div>
+              </div>
+            </div>
+          </div>
+        </main>
       </div>
     </section>
   ];
