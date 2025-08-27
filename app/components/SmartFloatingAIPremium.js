@@ -66,7 +66,7 @@ export default function SmartFloatingAIPremium() {
     }
   }, [isOpen]);
 
-  // Слушаем событие открытия чата
+  // Слушаем событие открытия чата и глобальную переменную
   useEffect(() => {
     const handleOpenChat = (event) => {
       setIsOpen(true);
@@ -79,8 +79,24 @@ export default function SmartFloatingAIPremium() {
         }, 100);
       }
     };
+    
+    // Проверяем глобальную переменную при монтировании
+    if (window.openAIChat) {
+      setIsOpen(true);
+      window.openAIChat = false;
+    }
+    
     window.addEventListener('openAIChat', handleOpenChat);
-    return () => window.removeEventListener('openAIChat', handleOpenChat);
+    
+    // Добавляем глобальную функцию для открытия чата
+    window.openAIAssistant = () => {
+      setIsOpen(true);
+    };
+    
+    return () => {
+      window.removeEventListener('openAIChat', handleOpenChat);
+      delete window.openAIAssistant;
+    };
   }, []);
 
   const typewriterEffect = (text, model, callback) => {

@@ -167,7 +167,6 @@ const GamificationHub = dynamic(() => import('./components/GamificationHub'), {
 export default function Home() {
   const [currentSection, setCurrentSection] = useState(0);
   const [activeSegment, setActiveSegment] = useState('loyal');
-  const [showAIChat, setShowAIChat] = useState(false);
   
   // Определение разделов для навигации
   const sections = [
@@ -204,7 +203,14 @@ export default function Home() {
           <p className="descriptor">
             Цифровая трансформация<br/>бизнеса с помощью AI
           </p>
-          <button className="cta-button" onClick={() => setShowAIChat(true)}>
+          <button className="cta-button" onClick={() => {
+            if (window.openAIAssistant) {
+              window.openAIAssistant();
+            } else {
+              // Fallback - отправляем событие
+              window.dispatchEvent(new CustomEvent('openAIChat'));
+            }
+          }}>
             <span>Начать бесплатно</span>
             <div className="particles">
               {[...Array(6)].map((_, i) => (
@@ -3312,7 +3318,7 @@ export default function Home() {
       </SwipeContainer>
       
       {/* AI Управляющий с неоновым дизайном */}
-      {showAIChat && <SmartFloatingAIPremium />}
+      <SmartFloatingAIPremium />
     </main>
   );
 }
