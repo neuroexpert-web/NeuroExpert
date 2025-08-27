@@ -183,7 +183,7 @@ export default function ProcessTooltips() {
         }
 
         // Позиционирование подсказки
-        let tooltipStyles = {
+        const tooltipStyles = {
           position: 'fixed',
           zIndex: '10000',
           background: 'white',

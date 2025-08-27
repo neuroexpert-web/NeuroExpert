@@ -404,7 +404,7 @@
 
 .activity-item {
   display: flex;
-  align-items: start;
+  align-items: flex-start;
   gap: 12px;
   padding: 12px 0;
   border-bottom: 1px solid var(--ws-border-color);

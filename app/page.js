@@ -122,6 +122,37 @@ const ContactMap = dynamic(() => import('./components/ContactMap'), {
   loading: () => null
 });
 
+// Динамические импорты для workspace компонентов
+const WorkspaceManager = dynamic(() => import('./components/WorkspaceManager'), {
+  ssr: false,
+  loading: () => null
+});
+
+const WindowManager = dynamic(() => import('./components/WindowManager'), {
+  ssr: false,
+  loading: () => null
+});
+
+const WidgetSystem = dynamic(() => import('./components/WidgetSystem'), {
+  ssr: false,
+  loading: () => null
+});
+
+const RealtimeEngine = dynamic(() => import('./components/RealtimeEngine'), {
+  ssr: false,
+  loading: () => null
+});
+
+const AIPersonalization = dynamic(() => import('./components/AIPersonalization'), {
+  ssr: false,
+  loading: () => null
+});
+
+const GamificationHub = dynamic(() => import('./components/GamificationHub'), {
+  ssr: false,
+  loading: () => null
+});
+
 export default function Home() {
   const [currentSection, setCurrentSection] = useState(0);
   const [activeSegment, setActiveSegment] = useState('loyal');

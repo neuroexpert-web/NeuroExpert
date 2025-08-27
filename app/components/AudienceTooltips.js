@@ -70,7 +70,7 @@ export default function AudienceTooltips() {
         }
       ];
 
-      let currentHint = 0;
+      const currentHint = 0;
 
       const showHint = (index) => {
         if (index >= hints.length) {

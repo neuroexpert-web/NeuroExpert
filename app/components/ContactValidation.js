@@ -56,7 +56,7 @@ export default function ContactValidation() {
       const hintRect = hint.getBoundingClientRect();
       
       // Позиционирование
-      let top = rect.bottom + 5;
+      const top = rect.bottom + 5;
       let left = rect.left;
       
       // Проверка границ
@@ -246,7 +246,7 @@ export default function ContactValidation() {
         const formData = new FormData(form);
         const data = {};
         
-        for (let [key, value] of formData.entries()) {
+        for (const [key, value] of formData.entries()) {
           if (key !== 'privacy') { // Не сохраняем согласие
             data[key] = value;
           }

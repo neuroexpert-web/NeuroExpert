@@ -264,7 +264,7 @@ export default function SecurityTooltips() {
 
     // Запуск тура
     const startTour = (steps) => {
-      let currentStep = 0;
+      const currentStep = 0;
       
       const showStep = (index) => {
         if (index >= steps.length) {

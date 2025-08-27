@@ -15,7 +15,7 @@ export default function PricingCalculator() {
       
       // Получаем выбранный тариф
       const selectedPlan = document.querySelector('input[name="base-plan"]:checked');
-      let basePrice = selectedPlan ? parseInt(selectedPlan.value) : 39900;
+      const basePrice = selectedPlan ? parseInt(selectedPlan.value) : 39900;
       
       // Получаем количество пользователей
       const usersSlider = document.getElementById('users-slider');
