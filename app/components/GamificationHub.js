@@ -8,501 +8,870 @@ export default function GamificationHub() {
     experience: 0,
     achievements: [],
     streak: 0,
-    totalTasks: 0,
-    weeklyGoals: {
-      tasks: { current: 0, target: 20 },
-      reports: { current: 0, target: 5 },
-      insights: { current: 0, target: 10 }
-    }
+    totalPoints: 0,
+    rank: 'Новичок'
   });
   
-  const [showAchievement, setShowAchievement] = useState(false);
-  const [latestAchievement, setLatestAchievement] = useState(null);
-  
+  const [activeQuests, setActiveQuests] = useState([]);
+  const [recentAchievements, setRecentAchievements] = useState([]);
+  const [leaderboard, setLeaderboard] = useState([]);
+
   useEffect(() => {
-    // Load saved stats
-    loadUserStats();
+    // Initialize gamification system
+    initializeGamification();
     
-    // Set up event listeners
-    setupEventTracking();
+    // Load user progress
+    loadUserProgress();
     
-    // Initialize progress indicators
-    updateProgressUI();
+    // Set up achievement tracking
+    setupAchievementTracking();
     
-    // Check daily streak
-    checkDailyStreak();
+    // Initialize daily quests
+    initializeDailyQuests();
     
-    return () => {
-      saveUserStats();
-    };
+    // Update leaderboard
+    updateLeaderboard();
   }, []);
-  
-  const loadUserStats = () => {
-    const saved = localStorage.getItem('gamificationStats');
-    if (saved) {
-      setUserStats(JSON.parse(saved));
-    } else {
-      // Initialize new user
-      const initialStats = {
-        ...userStats,
-        joinDate: Date.now(),
-        lastActive: Date.now()
-      };
-      setUserStats(initialStats);
-      localStorage.setItem('gamificationStats', JSON.stringify(initialStats));
+
+  // Initialize gamification
+  const initializeGamification = () => {
+    console.log('Initializing Gamification Hub...');
+    
+    // Add gamification UI elements
+    addProgressBar();
+    addLevelIndicator();
+    addStreakCounter();
+    
+    // Start tracking user actions
+    trackUserActions();
+  };
+
+  // Load user progress
+  const loadUserProgress = () => {
+    const savedProgress = localStorage.getItem('gamification-progress');
+    if (savedProgress) {
+      const progress = JSON.parse(savedProgress);
+      setUserStats(progress);
+      updateUI(progress);
     }
   };
-  
-  const saveUserStats = () => {
-    localStorage.setItem('gamificationStats', JSON.stringify(userStats));
+
+  // Save user progress
+  const saveUserProgress = (stats) => {
+    localStorage.setItem('gamification-progress', JSON.stringify(stats));
   };
-  
-  const setupEventTracking = () => {
-    // Track various user actions
-    const events = {
-      'task-completed': { xp: 10, stat: 'totalTasks' },
-      'report-generated': { xp: 25, stat: 'reports' },
-      'insight-discovered': { xp: 15, stat: 'insights' },
-      'widget-customized': { xp: 5 },
-      'data-analyzed': { xp: 20 },
-      'goal-achieved': { xp: 50 }
-    };
+
+  // Add progress bar to header
+  const addProgressBar = () => {
+    const header = document.querySelector('.workspace-header');
+    if (!header) return;
     
-    Object.keys(events).forEach(eventName => {
-      window.addEventListener(eventName, (e) => {
-        const event = events[eventName];
-        addExperience(event.xp);
-        
-        if (event.stat) {
-          updateWeeklyGoal(event.stat);
-        }
-        
-        checkAchievements(eventName, e.detail);
-      });
-    });
+    const progressContainer = document.createElement('div');
+    progressContainer.className = 'user-progress-container';
+    progressContainer.innerHTML = `
+      <div class="progress-info">
+        <span class="user-level">Уровень <span class="level-number">1</span></span>
+        <span class="user-exp">0 / 100 XP</span>
+      </div>
+      <div class="progress-bar-wrapper">
+        <div class="progress-bar-fill" style="width: 0%"></div>
+      </div>
+    `;
+    
+    // Insert after user profile
+    const userProfile = header.querySelector('.user-profile');
+    if (userProfile) {
+      userProfile.parentNode.insertBefore(progressContainer, userProfile);
+    }
   };
-  
-  const addExperience = (xp) => {
-    setUserStats(prev => {
-      const newXP = prev.experience + xp;
-      const newLevel = calculateLevel(newXP);
-      
-      if (newLevel > prev.level) {
-        showLevelUp(newLevel);
+
+  // Add level indicator
+  const addLevelIndicator = () => {
+    const userAvatar = document.querySelector('.user-avatar');
+    if (!userAvatar) return;
+    
+    const levelBadge = document.createElement('div');
+    levelBadge.className = 'level-badge';
+    levelBadge.textContent = '1';
+    userAvatar.appendChild(levelBadge);
+  };
+
+  // Add streak counter
+  const addStreakCounter = () => {
+    const statusBar = document.querySelector('.status-left');
+    if (!statusBar) return;
+    
+    const streakElement = document.createElement('div');
+    streakElement.className = 'status-item streak-counter';
+    streakElement.innerHTML = `
+      <svg class="status-icon" viewBox="0 0 16 16">
+        <path d="M8 1l2 5h5l-4 3 2 5-5-3-5 3 2-5-4-3h5z" fill="currentColor"/>
+      </svg>
+      <span class="streak-days">0</span> дней подряд
+    `;
+    
+    statusBar.appendChild(streakElement);
+  };
+
+  // Track user actions for points
+  const trackUserActions = () => {
+    // Track widget interactions
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.widget')) {
+        awardPoints('widget_interaction', 5);
       }
       
-      // Show XP gain animation
-      showXPGain(xp);
+      if (e.target.closest('.quick-action-btn')) {
+        awardPoints('quick_action', 10);
+      }
       
-      return {
-        ...prev,
-        experience: newXP,
-        level: newLevel
-      };
+      if (e.target.closest('.nav-item')) {
+        awardPoints('navigation', 3);
+      }
     });
+    
+    // Track task completion
+    trackTaskCompletion();
+    
+    // Track time spent
+    trackActiveTime();
   };
-  
-  const calculateLevel = (xp) => {
-    // Simple level calculation: 100 XP per level with increasing requirements
-    return Math.floor(Math.sqrt(xp / 50)) + 1;
+
+  // Award points and check achievements
+  const awardPoints = (action, points) => {
+    setUserStats(prev => {
+      const newStats = {
+        ...prev,
+        experience: prev.experience + points,
+        totalPoints: prev.totalPoints + points
+      };
+      
+      // Check for level up
+      const requiredXP = newStats.level * 100;
+      if (newStats.experience >= requiredXP) {
+        newStats.level += 1;
+        newStats.experience -= requiredXP;
+        newStats.rank = getRankByLevel(newStats.level);
+        
+        // Show level up notification
+        showLevelUpNotification(newStats.level);
+        
+        // Unlock new features
+        unlockFeatures(newStats.level);
+      }
+      
+      // Update UI
+      updateUI(newStats);
+      
+      // Save progress
+      saveUserProgress(newStats);
+      
+      // Check achievements
+      checkAchievements(action, newStats);
+      
+      return newStats;
+    });
+    
+    // Show points animation
+    showPointsAnimation(points);
   };
-  
-  const showLevelUp = (newLevel) => {
+
+  // Get rank by level
+  const getRankByLevel = (level) => {
+    if (level < 5) return 'Новичок';
+    if (level < 10) return 'Специалист';
+    if (level < 20) return 'Эксперт';
+    if (level < 30) return 'Мастер';
+    if (level < 50) return 'Гуру';
+    return 'Легенда';
+  };
+
+  // Update UI with current stats
+  const updateUI = (stats) => {
+    // Update level
+    const levelNumber = document.querySelector('.level-number');
+    if (levelNumber) levelNumber.textContent = stats.level;
+    
+    const levelBadge = document.querySelector('.level-badge');
+    if (levelBadge) levelBadge.textContent = stats.level;
+    
+    // Update experience
+    const expText = document.querySelector('.user-exp');
+    const requiredXP = stats.level * 100;
+    if (expText) expText.textContent = `${stats.experience} / ${requiredXP} XP`;
+    
+    // Update progress bar
+    const progressBar = document.querySelector('.progress-bar-fill');
+    const progress = (stats.experience / requiredXP) * 100;
+    if (progressBar) progressBar.style.width = `${progress}%`;
+    
+    // Update streak
+    const streakDays = document.querySelector('.streak-days');
+    if (streakDays) streakDays.textContent = stats.streak;
+    
+    // Update rank in profile
+    const userRole = document.querySelector('.user-role');
+    if (userRole) userRole.textContent = stats.rank;
+  };
+
+  // Show level up notification
+  const showLevelUpNotification = (level) => {
     const notification = document.createElement('div');
     notification.className = 'level-up-notification';
     notification.innerHTML = `
       <div class="level-up-content">
         <div class="level-up-icon">🎉</div>
-        <div class="level-up-text">
-          <h3>Новый уровень!</h3>
-          <p>Вы достигли уровня ${newLevel}</p>
+        <h3>Поздравляем!</h3>
+        <p>Вы достигли уровня ${level}</p>
+        <div class="level-up-rewards">
+          <div class="reward-item">
+            <span class="reward-icon">🏆</span>
+            <span>Новое достижение разблокировано</span>
+          </div>
+          <div class="reward-item">
+            <span class="reward-icon">✨</span>
+            <span>+50 бонусных очков</span>
+          </div>
         </div>
+        <button class="level-up-continue">Продолжить</button>
       </div>
     `;
     
     document.body.appendChild(notification);
     
+    // Animate in
+    setTimeout(() => notification.classList.add('show'), 100);
+    
+    // Close button
+    notification.querySelector('.level-up-continue').addEventListener('click', () => {
+      notification.classList.remove('show');
+      setTimeout(() => notification.remove(), 300);
+    });
+    
+    // Award bonus points
+    awardPoints('level_up_bonus', 50);
+  };
+
+  // Show points animation
+  const showPointsAnimation = (points) => {
+    const animation = document.createElement('div');
+    animation.className = 'points-animation';
+    animation.textContent = `+${points} XP`;
+    
+    // Position near cursor or center
+    animation.style.left = '50%';
+    animation.style.top = '50%';
+    
+    document.body.appendChild(animation);
+    
+    // Animate
     setTimeout(() => {
-      notification.classList.add('show');
+      animation.style.transform = 'translate(-50%, -50%) translateY(-50px)';
+      animation.style.opacity = '0';
     }, 100);
     
+    // Remove
+    setTimeout(() => animation.remove(), 1000);
+  };
+
+  // Setup achievement tracking
+  const setupAchievementTracking = () => {
+    const achievements = [
+      {
+        id: 'first_login',
+        name: 'Первый вход',
+        description: 'Войдите в систему впервые',
+        icon: '👋',
+        points: 10,
+        condition: (stats) => true
+      },
+      {
+        id: 'week_streak',
+        name: 'Недельная серия',
+        description: 'Используйте платформу 7 дней подряд',
+        icon: '🔥',
+        points: 50,
+        condition: (stats) => stats.streak >= 7
+      },
+      {
+        id: 'data_explorer',
+        name: 'Исследователь данных',
+        description: 'Просмотрите все разделы аналитики',
+        icon: '📊',
+        points: 30,
+        condition: (stats) => stats.sectionsViewed >= 5
+      },
+      {
+        id: 'task_master',
+        name: 'Мастер задач',
+        description: 'Выполните 100 задач',
+        icon: '✅',
+        points: 100,
+        condition: (stats) => stats.tasksCompleted >= 100
+      },
+      {
+        id: 'power_user',
+        name: 'Опытный пользователь',
+        description: 'Достигните 10 уровня',
+        icon: '💪',
+        points: 200,
+        condition: (stats) => stats.level >= 10
+      }
+    ];
+    
+    // Store achievements
+    window.achievements = achievements;
+  };
+
+  // Check achievements
+  const checkAchievements = (action, stats) => {
+    if (!window.achievements) return;
+    
+    window.achievements.forEach(achievement => {
+      // Skip if already earned
+      if (stats.achievements?.includes(achievement.id)) return;
+      
+      // Check condition
+      if (achievement.condition(stats)) {
+        // Award achievement
+        earnAchievement(achievement);
+      }
+    });
+  };
+
+  // Earn achievement
+  const earnAchievement = (achievement) => {
+    setUserStats(prev => ({
+      ...prev,
+      achievements: [...(prev.achievements || []), achievement.id],
+      totalPoints: prev.totalPoints + achievement.points
+    }));
+    
+    // Show achievement notification
+    showAchievementNotification(achievement);
+    
+    // Add to recent achievements
+    setRecentAchievements(prev => [achievement, ...prev.slice(0, 4)]);
+  };
+
+  // Show achievement notification
+  const showAchievementNotification = (achievement) => {
+    const notification = document.createElement('div');
+    notification.className = 'achievement-notification';
+    notification.innerHTML = `
+      <div class="achievement-icon">${achievement.icon}</div>
+      <div class="achievement-info">
+        <h4>Достижение получено!</h4>
+        <p>${achievement.name}</p>
+        <span class="achievement-points">+${achievement.points} очков</span>
+      </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Animate in
+    setTimeout(() => notification.classList.add('show'), 100);
+    
+    // Auto remove
+    setTimeout(() => {
+      notification.classList.remove('show');
+      setTimeout(() => notification.remove(), 300);
+    }, 4000);
+  };
+
+  // Initialize daily quests
+  const initializeDailyQuests = () => {
+    const today = new Date().toDateString();
+    const savedQuests = localStorage.getItem('daily-quests');
+    
+    if (savedQuests) {
+      const { date, quests } = JSON.parse(savedQuests);
+      if (date === today) {
+        setActiveQuests(quests);
+        return;
+      }
+    }
+    
+    // Generate new daily quests
+    const newQuests = [
+      {
+        id: 'daily_analytics',
+        title: 'Проверьте аналитику',
+        description: 'Просмотрите основные показатели за день',
+        progress: 0,
+        target: 1,
+        reward: 20,
+        icon: '📈'
+      },
+      {
+        id: 'complete_tasks',
+        title: 'Выполните 5 задач',
+        description: 'Закройте любые 5 задач из списка',
+        progress: 0,
+        target: 5,
+        reward: 30,
+        icon: '✔️'
+      },
+      {
+        id: 'team_interaction',
+        title: 'Командное взаимодействие',
+        description: 'Отправьте сообщение или комментарий',
+        progress: 0,
+        target: 3,
+        reward: 15,
+        icon: '💬'
+      }
+    ];
+    
+    setActiveQuests(newQuests);
+    localStorage.setItem('daily-quests', JSON.stringify({
+      date: today,
+      quests: newQuests
+    }));
+  };
+
+  // Track task completion
+  const trackTaskCompletion = () => {
+    // Listen for task completion events
+    document.addEventListener('task-completed', (e) => {
+      awardPoints('task_completion', 15);
+      
+      // Update daily quest progress
+      updateQuestProgress('complete_tasks', 1);
+      
+      // Update stats
+      setUserStats(prev => ({
+        ...prev,
+        tasksCompleted: (prev.tasksCompleted || 0) + 1
+      }));
+    });
+  };
+
+  // Update quest progress
+  const updateQuestProgress = (questId, increment = 1) => {
+    setActiveQuests(prev => {
+      const updated = prev.map(quest => {
+        if (quest.id === questId && quest.progress < quest.target) {
+          const newProgress = Math.min(quest.progress + increment, quest.target);
+          
+          // Check if completed
+          if (newProgress === quest.target) {
+            awardPoints('quest_completion', quest.reward);
+            showQuestCompletedNotification(quest);
+          }
+          
+          return { ...quest, progress: newProgress };
+        }
+        return quest;
+      });
+      
+      // Save updated quests
+      const today = new Date().toDateString();
+      localStorage.setItem('daily-quests', JSON.stringify({
+        date: today,
+        quests: updated
+      }));
+      
+      return updated;
+    });
+  };
+
+  // Show quest completed notification
+  const showQuestCompletedNotification = (quest) => {
+    const notification = document.createElement('div');
+    notification.className = 'quest-completed-notification';
+    notification.innerHTML = `
+      <div class="quest-icon">${quest.icon}</div>
+      <div class="quest-info">
+        <h4>Задание выполнено!</h4>
+        <p>${quest.title}</p>
+        <span class="quest-reward">+${quest.reward} XP</span>
+      </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => notification.classList.add('show'), 100);
     setTimeout(() => {
       notification.classList.remove('show');
       setTimeout(() => notification.remove(), 300);
     }, 3000);
   };
-  
-  const showXPGain = (xp) => {
-    const indicator = document.createElement('div');
-    indicator.className = 'xp-gain-indicator';
-    indicator.textContent = `+${xp} XP`;
+
+  // Track active time
+  const trackActiveTime = () => {
+    let activeTime = 0;
+    let lastActivity = Date.now();
     
-    // Position near user profile or XP bar
-    const profileElement = document.querySelector('.user-profile');
-    if (profileElement) {
-      const rect = profileElement.getBoundingClientRect();
-      indicator.style.left = rect.left + 'px';
-      indicator.style.top = rect.bottom + 10 + 'px';
-    }
-    
-    document.body.appendChild(indicator);
-    
-    setTimeout(() => {
-      indicator.classList.add('animate');
-    }, 10);
-    
-    setTimeout(() => {
-      indicator.remove();
-    }, 2000);
-  };
-  
-  const updateWeeklyGoal = (goalType) => {
-    setUserStats(prev => {
-      const goals = { ...prev.weeklyGoals };
-      
-      if (goals[goalType]) {
-        goals[goalType].current += 1;
+    // Update active time every minute
+    setInterval(() => {
+      const now = Date.now();
+      if (now - lastActivity < 60000) { // Active in last minute
+        activeTime++;
         
-        // Check if goal completed
-        if (goals[goalType].current === goals[goalType].target) {
-          window.dispatchEvent(new CustomEvent('goal-achieved', { 
-            detail: { goal: goalType }
-          }));
-        }
+        // Award points for active time milestones
+        if (activeTime === 30) awardPoints('active_30min', 25);
+        if (activeTime === 60) awardPoints('active_1hour', 50);
+        if (activeTime === 120) awardPoints('active_2hours', 100);
       }
-      
-      return { ...prev, weeklyGoals: goals };
+    }, 60000);
+    
+    // Reset on activity
+    document.addEventListener('click', () => {
+      lastActivity = Date.now();
     });
     
-    updateProgressUI();
+    document.addEventListener('keypress', () => {
+      lastActivity = Date.now();
+    });
   };
-  
-  const checkAchievements = (eventType, details) => {
-    const achievements = {
-      firstTask: {
-        id: 'first-task',
-        name: 'Первые шаги',
-        description: 'Завершите вашу первую задачу',
-        icon: '✅',
-        condition: () => userStats.totalTasks === 1
-      },
-      taskMaster: {
-        id: 'task-master',
-        name: 'Мастер задач',
-        description: 'Завершите 100 задач',
-        icon: '🏆',
-        condition: () => userStats.totalTasks >= 100
-      },
-      weekStreak: {
-        id: 'week-streak',
-        name: 'Недельный марафон',
-        description: 'Работайте 7 дней подряд',
-        icon: '🔥',
-        condition: () => userStats.streak >= 7
-      },
-      dataExplorer: {
-        id: 'data-explorer',
-        name: 'Исследователь данных',
-        description: 'Проанализируйте данные 50 раз',
-        icon: '📊',
-        condition: () => eventType === 'data-analyzed' && details?.count >= 50
-      },
-      nightOwl: {
-        id: 'night-owl',
-        name: 'Ночная сова',
-        description: 'Работайте после полуночи',
-        icon: '🦉',
-        condition: () => new Date().getHours() >= 0 && new Date().getHours() < 6
-      }
+
+  // Update leaderboard
+  const updateLeaderboard = () => {
+    // Simulated leaderboard data
+    const leaderboardData = [
+      { name: 'Александр К.', level: 42, points: 15420, avatar: 'AK' },
+      { name: 'Мария С.', level: 38, points: 14200, avatar: 'MC' },
+      { name: 'Дмитрий П.', level: 35, points: 13100, avatar: 'ДП' },
+      { name: 'Вы', level: userStats.level, points: userStats.totalPoints, avatar: 'ME', isCurrentUser: true },
+      { name: 'Елена В.', level: 28, points: 10500, avatar: 'ЕВ' },
+    ];
+    
+    // Sort by points
+    leaderboardData.sort((a, b) => b.points - a.points);
+    
+    setLeaderboard(leaderboardData);
+  };
+
+  // Unlock features based on level
+  const unlockFeatures = (level) => {
+    const unlocks = {
+      5: { feature: 'custom_dashboard', name: 'Настройка дашборда' },
+      10: { feature: 'advanced_analytics', name: 'Расширенная аналитика' },
+      15: { feature: 'ai_assistant', name: 'AI-ассистент' },
+      20: { feature: 'team_collaboration', name: 'Командные функции' },
+      25: { feature: 'api_access', name: 'API доступ' }
     };
     
-    Object.values(achievements).forEach(achievement => {
-      if (!userStats.achievements.includes(achievement.id) && achievement.condition()) {
-        unlockAchievement(achievement);
-      }
-    });
+    if (unlocks[level]) {
+      showFeatureUnlockNotification(unlocks[level]);
+    }
   };
-  
-  const unlockAchievement = (achievement) => {
-    setUserStats(prev => ({
-      ...prev,
-      achievements: [...prev.achievements, achievement.id]
-    }));
+
+  // Show feature unlock notification
+  const showFeatureUnlockNotification = (feature) => {
+    const notification = document.createElement('div');
+    notification.className = 'feature-unlock-notification';
+    notification.innerHTML = `
+      <div class="unlock-icon">🔓</div>
+      <div class="unlock-info">
+        <h4>Новая функция разблокирована!</h4>
+        <p>${feature.name}</p>
+      </div>
+    `;
     
-    setLatestAchievement(achievement);
-    setShowAchievement(true);
+    document.body.appendChild(notification);
     
-    // Play sound effect
-    playAchievementSound();
-    
-    // Add bonus XP
-    addExperience(50);
-    
-    // Hide after delay
+    setTimeout(() => notification.classList.add('show'), 100);
     setTimeout(() => {
-      setShowAchievement(false);
-    }, 5000);
+      notification.classList.remove('show');
+      setTimeout(() => notification.remove(), 300);
+    }, 4000);
   };
-  
-  const playAchievementSound = () => {
-    // Create simple achievement sound using Web Audio API
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
-    
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-    
-    oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
-    oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1); // E5
-    oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2); // G5
-    
-    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-    
-    oscillator.start(audioContext.currentTime);
-    oscillator.stop(audioContext.currentTime + 0.5);
-  };
-  
-  const checkDailyStreak = () => {
-    const lastActive = new Date(userStats.lastActive || Date.now());
-    const today = new Date();
-    const daysDiff = Math.floor((today - lastActive) / (1000 * 60 * 60 * 24));
-    
-    if (daysDiff === 1) {
-      // Continue streak
-      setUserStats(prev => ({
-        ...prev,
-        streak: prev.streak + 1,
-        lastActive: Date.now()
-      }));
-    } else if (daysDiff > 1) {
-      // Break streak
-      setUserStats(prev => ({
-        ...prev,
-        streak: 1,
-        lastActive: Date.now()
-      }));
-    }
-  };
-  
-  const updateProgressUI = () => {
-    // Update level progress bar
-    const levelProgress = document.querySelector('.level-progress');
-    if (levelProgress) {
-      const currentLevelXP = Math.pow((userStats.level - 1), 2) * 50;
-      const nextLevelXP = Math.pow(userStats.level, 2) * 50;
-      const progress = ((userStats.experience - currentLevelXP) / (nextLevelXP - currentLevelXP)) * 100;
-      
-      levelProgress.style.width = `${Math.min(progress, 100)}%`;
-    }
-    
-    // Update weekly goals
-    Object.entries(userStats.weeklyGoals).forEach(([goal, data]) => {
-      const progressElement = document.querySelector(`.goal-${goal} .progress-bar`);
-      if (progressElement) {
-        const progress = (data.current / data.target) * 100;
-        progressElement.style.width = `${Math.min(progress, 100)}%`;
-      }
-    });
-  };
-  
-  // Add gamification UI elements
-  useEffect(() => {
-    // Add level indicator to user profile
-    const userProfile = document.querySelector('.user-info');
-    if (userProfile && !document.querySelector('.user-level')) {
-      const levelBadge = document.createElement('div');
-      levelBadge.className = 'user-level';
-      levelBadge.innerHTML = `
-        <span class="level-label">Ур.</span>
-        <span class="level-number">${userStats.level}</span>
-      `;
-      userProfile.appendChild(levelBadge);
-    }
-    
-    // Add progress bar
-    const header = document.querySelector('.workspace-header');
-    if (header && !document.querySelector('.gamification-progress')) {
-      const progressBar = document.createElement('div');
-      progressBar.className = 'gamification-progress';
-      progressBar.innerHTML = `
-        <div class="level-progress-container">
-          <div class="level-progress"></div>
-        </div>
-      `;
-      header.appendChild(progressBar);
-    }
-    
-    // Update UI
-    updateProgressUI();
-  }, [userStats]);
-  
-  // Render achievement popup
-  useEffect(() => {
-    if (showAchievement && latestAchievement) {
-      const popup = document.createElement('div');
-      popup.className = 'achievement-popup';
-      popup.innerHTML = `
-        <div class="achievement-content">
-          <div class="achievement-icon">${latestAchievement.icon}</div>
-          <div class="achievement-info">
-            <h4>Достижение разблокировано!</h4>
-            <p class="achievement-name">${latestAchievement.name}</p>
-            <p class="achievement-desc">${latestAchievement.description}</p>
-          </div>
-        </div>
-      `;
-      
-      document.body.appendChild(popup);
-      
-      setTimeout(() => {
-        popup.classList.add('show');
-      }, 100);
-      
-      setTimeout(() => {
-        popup.classList.remove('show');
-        setTimeout(() => popup.remove(), 300);
-      }, 4500);
-    }
-  }, [showAchievement, latestAchievement]);
-  
-  // Add CSS for gamification elements
+
+  // Add gamification styles
   useEffect(() => {
     const style = document.createElement('style');
     style.textContent = `
+      /* Progress Container */
+      .user-progress-container {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin-right: 20px;
+        min-width: 200px;
+      }
+      
+      .progress-info {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: var(--color-text-secondary);
+      }
+      
       .user-level {
+        font-weight: 600;
+        color: var(--gradient-cta-start);
+      }
+      
+      .progress-bar-wrapper {
+        height: 6px;
+        background: var(--ws-bg-tertiary);
+        border-radius: 3px;
+        overflow: hidden;
+      }
+      
+      .progress-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--gradient-cta-start), var(--gradient-cta-end));
+        transition: width 0.5s ease;
+      }
+      
+      /* Level Badge */
+      .level-badge {
+        position: absolute;
+        bottom: -4px;
+        right: -4px;
+        width: 20px;
+        height: 20px;
+        background: linear-gradient(135deg, gold, orange);
+        border-radius: 50%;
         display: flex;
         align-items: center;
-        gap: 4px;
-        background: var(--workspace-accent);
-        padding: 2px 8px;
-        border-radius: 12px;
-        font-size: 12px;
-        font-weight: 600;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: bold;
         color: white;
-        margin-top: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
       }
       
-      .gamification-progress {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: rgba(255, 255, 255, 0.1);
+      /* Streak Counter */
+      .streak-counter {
+        color: #f59e0b;
       }
       
-      .level-progress {
-        height: 100%;
-        background: linear-gradient(90deg, #6366f1, #8b5cf6);
-        transition: width 0.3s ease;
-      }
-      
-      .xp-gain-indicator {
+      /* Points Animation */
+      .points-animation {
         position: fixed;
-        font-size: 16px;
-        font-weight: 600;
-        color: #10b981;
+        font-size: 18px;
+        font-weight: bold;
+        color: var(--gradient-cta-start);
         pointer-events: none;
         z-index: 1000;
+        transition: all 1s ease-out;
+      }
+      
+      /* Level Up Notification */
+      .level-up-notification {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
         opacity: 0;
-        transform: translateY(0);
-        transition: all 0.5s ease;
+        transition: opacity 0.3s ease;
       }
       
-      .xp-gain-indicator.animate {
+      .level-up-notification.show {
         opacity: 1;
-        transform: translateY(-30px);
       }
       
-      .achievement-popup {
+      .level-up-content {
+        background: var(--ws-surface-glass);
+        backdrop-filter: blur(20px);
+        border: 2px solid var(--gradient-cta-start);
+        border-radius: 16px;
+        padding: 40px;
+        text-align: center;
+        max-width: 400px;
+        transform: scale(0.9);
+        transition: transform 0.3s ease;
+      }
+      
+      .level-up-notification.show .level-up-content {
+        transform: scale(1);
+      }
+      
+      .level-up-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+      }
+      
+      .level-up-content h3 {
+        font-size: 24px;
+        margin-bottom: 8px;
+        color: var(--color-text-light);
+      }
+      
+      .level-up-content p {
+        font-size: 18px;
+        color: var(--gradient-cta-start);
+        margin-bottom: 24px;
+      }
+      
+      .level-up-rewards {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      
+      .reward-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        background: var(--ws-bg-tertiary);
+        border-radius: 8px;
+      }
+      
+      .reward-icon {
+        font-size: 24px;
+      }
+      
+      .level-up-continue {
+        padding: 12px 32px;
+        background: linear-gradient(135deg, var(--gradient-cta-start), var(--gradient-cta-end));
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      
+      .level-up-continue:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(138, 43, 226, 0.4);
+      }
+      
+      /* Achievement Notification */
+      .achievement-notification {
         position: fixed;
         top: 80px;
-        right: 20px;
-        background: var(--workspace-glass);
+        right: -400px;
+        background: var(--ws-surface-glass);
         backdrop-filter: blur(20px);
-        border: 1px solid var(--workspace-glass-border);
-        border-radius: 16px;
-        padding: 20px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        transform: translateX(400px);
+        border: 1px solid var(--gradient-cta-start);
+        border-radius: 12px;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        box-shadow: var(--ws-shadow-lg);
+        transition: right 0.3s ease;
+        z-index: 1000;
+      }
+      
+      .achievement-notification.show {
+        right: 20px;
+      }
+      
+      .achievement-icon {
+        font-size: 36px;
+      }
+      
+      .achievement-info h4 {
+        font-size: 14px;
+        color: var(--color-text-light);
+        margin-bottom: 4px;
+      }
+      
+      .achievement-info p {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--gradient-cta-start);
+        margin-bottom: 4px;
+      }
+      
+      .achievement-points {
+        font-size: 12px;
+        color: var(--color-text-secondary);
+      }
+      
+      /* Quest Notification */
+      .quest-completed-notification {
+        position: fixed;
+        bottom: 80px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: var(--ws-surface-glass);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--ws-metric-positive);
+        border-radius: 12px;
+        padding: 16px 24px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        box-shadow: var(--ws-shadow-lg);
         transition: transform 0.3s ease;
         z-index: 1000;
       }
       
-      .achievement-popup.show {
-        transform: translateX(0);
+      .quest-completed-notification.show {
+        transform: translateX(-50%) translateY(0);
       }
       
-      .achievement-content {
-        display: flex;
-        align-items: center;
-        gap: 16px;
+      .quest-icon {
+        font-size: 28px;
       }
       
-      .achievement-icon {
-        font-size: 48px;
-      }
-      
-      .achievement-info h4 {
-        margin: 0 0 4px 0;
-        color: var(--workspace-accent);
-      }
-      
-      .achievement-name {
-        font-weight: 600;
-        margin: 0 0 4px 0;
-      }
-      
-      .achievement-desc {
-        margin: 0;
+      .quest-info h4 {
         font-size: 14px;
-        color: var(--workspace-text-secondary);
+        color: var(--ws-metric-positive);
+        margin-bottom: 2px;
       }
       
-      .level-up-notification {
+      .quest-info p {
+        font-size: 14px;
+        color: var(--color-text-light);
+        margin-bottom: 2px;
+      }
+      
+      .quest-reward {
+        font-size: 12px;
+        color: var(--color-text-secondary);
+      }
+      
+      /* Feature Unlock */
+      .feature-unlock-notification {
         position: fixed;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%) scale(0);
-        background: var(--workspace-glass);
+        background: var(--ws-surface-glass);
         backdrop-filter: blur(20px);
-        border: 2px solid var(--workspace-accent);
-        border-radius: 20px;
-        padding: 40px;
+        border: 2px solid var(--gradient-cta-end);
+        border-radius: 16px;
+        padding: 32px;
         text-align: center;
+        box-shadow: var(--ws-shadow-lg);
         transition: transform 0.3s ease;
-        z-index: 1001;
+        z-index: 1500;
       }
       
-      .level-up-notification.show {
+      .feature-unlock-notification.show {
         transform: translate(-50%, -50%) scale(1);
       }
       
-      .level-up-icon {
-        font-size: 64px;
+      .unlock-icon {
+        font-size: 48px;
         margin-bottom: 16px;
       }
       
-      .level-up-text h3 {
-        margin: 0 0 8px 0;
-        font-size: 24px;
-        color: var(--workspace-accent);
+      .unlock-info h4 {
+        font-size: 18px;
+        color: var(--gradient-cta-end);
+        margin-bottom: 8px;
       }
       
-      .level-up-text p {
-        margin: 0;
-        font-size: 18px;
+      .unlock-info p {
+        font-size: 16px;
+        color: var(--color-text-light);
       }
     `;
-    
     document.head.appendChild(style);
     
     return () => {
       document.head.removeChild(style);
     };
   }, []);
-  
-  return null; // This component manages gamification, no UI
+
+  return null; // This component manages behavior, not UI
 }

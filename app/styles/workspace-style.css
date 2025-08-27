@@ -1,185 +1,180 @@
-/* --- СТИЛИ ДЛЯ ДЕСЯТОЙ СТРАНИЦЫ: РАБОЧЕЕ ПРОСТРАНСТВО КЛИЕНТА --- */
+/* --- СТИЛИ ДЛЯ ДЕСЯТОЙ СТРАНИЦЫ: ЛИЧНЫЙ КАБИНЕТ --- */
 
-/* --- 0. ДИЗАЙН ТОКЕНЫ ДЛЯ WORKSPACE --- */
+/* --- 0. ПЕРЕМЕННЫЕ И ТОКЕНЫ ДЛЯ WORKSPACE --- */
 :root {
-  /* Темная тема для профессионального интерфейса */
-  --workspace-bg-primary: #0a0a0f;
-  --workspace-bg-secondary: #12121a;
-  --workspace-bg-tertiary: #1a1a25;
-  --workspace-surface: rgba(30, 30, 45, 0.6);
-  --workspace-surface-hover: rgba(40, 40, 60, 0.8);
-  --workspace-border: rgba(255, 255, 255, 0.1);
-  --workspace-border-active: rgba(136, 92, 246, 0.5);
+  /* Темная тема для рабочего пространства */
+  --ws-bg-primary: #0a0a0f;
+  --ws-bg-secondary: #12121a;
+  --ws-bg-tertiary: #1a1a25;
+  --ws-surface-glass: rgba(30, 30, 45, 0.6);
+  --ws-surface-glass-hover: rgba(40, 40, 60, 0.7);
+  --ws-border-color: rgba(255, 255, 255, 0.1);
+  --ws-border-active: rgba(138, 43, 226, 0.5);
   
-  /* Акцентные цвета для виджетов */
-  --widget-success: #10b981;
-  --widget-warning: #f59e0b;
-  --widget-danger: #ef4444;
-  --widget-info: #3b82f6;
+  /* Цвета для виджетов и метрик */
+  --ws-metric-positive: #10b981;
+  --ws-metric-negative: #ef4444;
+  --ws-metric-warning: #f59e0b;
+  --ws-metric-info: #3b82f6;
   
-  /* Шрифты и размеры */
-  --workspace-font-xs: 11px;
-  --workspace-font-sm: 13px;
-  --workspace-font-md: 15px;
-  --workspace-font-lg: 18px;
-  --workspace-font-xl: 24px;
-  --workspace-font-2xl: 32px;
-  --workspace-font-3xl: 48px;
+  /* Размеры и отступы */
+  --ws-header-height: 64px;
+  --ws-sidebar-width: 240px;
+  --ws-sidebar-collapsed: 64px;
+  --ws-statusbar-height: 32px;
+  --ws-widget-gap: 20px;
   
-  /* Отступы */
-  --workspace-spacing-xs: 4px;
-  --workspace-spacing-sm: 8px;
-  --workspace-spacing-md: 16px;
-  --workspace-spacing-lg: 24px;
-  --workspace-spacing-xl: 32px;
-  
-  /* Анимации */
-  --workspace-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  --workspace-transition-slow: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Тени и эффекты */
+  --ws-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --ws-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --ws-shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.5);
+  --ws-shadow-glow: 0 0 20px rgba(138, 43, 226, 0.3);
 }
 
-/* --- 1. ОСНОВНОЙ КОНТЕЙНЕР --- */
-#client-workspace {
+/* --- 1. ОСНОВНАЯ СТРУКТУРА WORKSPACE --- */
+#workspace-dashboard {
   width: 100%;
   height: 100vh;
-  background: var(--workspace-bg-primary);
-  color: var(--color-text-light);
-  display: flex;
-  flex-direction: column;
+  background: var(--ws-bg-primary);
+  display: grid;
+  grid-template-rows: var(--ws-header-height) 1fr var(--ws-statusbar-height);
+  grid-template-columns: var(--ws-sidebar-width) 1fr;
+  grid-template-areas:
+    "header header"
+    "sidebar workspace"
+    "statusbar statusbar";
   overflow: hidden;
   position: relative;
+  font-family: var(--font-secondary);
 }
 
-/* --- 2. ВЕРХНЯЯ ПАНЕЛЬ (HEADER) --- */
+/* --- 2. HEADER --- */
 .workspace-header {
-  height: 56px;
-  background: var(--workspace-bg-secondary);
-  border-bottom: 1px solid var(--workspace-border);
+  grid-area: header;
+  background: var(--ws-surface-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--ws-border-color);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--workspace-spacing-lg);
-  flex-shrink: 0;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  padding: 0 24px;
   z-index: 100;
 }
 
 .header-left {
   display: flex;
   align-items: center;
-  gap: var(--workspace-spacing-lg);
+  gap: 24px;
 }
 
 .workspace-logo {
-  font-size: var(--workspace-font-lg);
+  font-family: var(--font-primary);
+  font-size: 24px;
   font-weight: 700;
   background: linear-gradient(135deg, var(--gradient-logo-start), var(--gradient-logo-end));
   -webkit-background-clip: text;
-  background-clip: text;
   -webkit-text-fill-color: transparent;
-  letter-spacing: -0.5px;
+  background-clip: text;
 }
 
 .global-search {
   position: relative;
-  width: 320px;
 }
 
 .global-search input {
-  width: 100%;
-  padding: var(--workspace-spacing-sm) var(--workspace-spacing-md);
-  padding-left: 40px;
-  background: var(--workspace-surface);
-  border: 1px solid var(--workspace-border);
+  width: 300px;
+  height: 40px;
+  background: var(--ws-bg-tertiary);
+  border: 1px solid var(--ws-border-color);
   border-radius: 8px;
+  padding: 0 40px 0 16px;
   color: var(--color-text-light);
-  font-size: var(--workspace-font-sm);
-  transition: var(--workspace-transition);
+  font-size: 14px;
+  transition: all 0.3s ease;
 }
 
 .global-search input:focus {
   outline: none;
-  border-color: var(--workspace-border-active);
-  background: var(--workspace-surface-hover);
+  border-color: var(--ws-border-active);
+  box-shadow: var(--ws-shadow-glow);
+  width: 400px;
 }
 
-.global-search svg {
+.search-icon {
   position: absolute;
-  left: 12px;
+  right: 12px;
   top: 50%;
   transform: translateY(-50%);
-  opacity: 0.5;
+  color: var(--color-text-secondary);
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: var(--workspace-spacing-md);
+  gap: 16px;
 }
 
 .header-btn {
   width: 40px;
   height: 40px;
+  background: var(--ws-bg-tertiary);
+  border: 1px solid var(--ws-border-color);
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--workspace-surface);
-  border: 1px solid var(--workspace-border);
-  border-radius: 8px;
   cursor: pointer;
-  transition: var(--workspace-transition);
+  transition: all 0.2s ease;
   position: relative;
 }
 
 .header-btn:hover {
-  background: var(--workspace-surface-hover);
-  transform: translateY(-1px);
+  background: var(--ws-surface-glass-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--ws-shadow-md);
 }
 
 .notification-badge {
   position: absolute;
   top: -4px;
   right: -4px;
-  min-width: 18px;
-  height: 18px;
-  background: var(--widget-danger);
-  color: white;
+  width: 16px;
+  height: 16px;
+  background: var(--ws-metric-negative);
+  border-radius: 50%;
   font-size: 10px;
-  font-weight: 700;
-  border-radius: 9px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 4px;
+  font-weight: 700;
 }
 
 .user-profile {
   display: flex;
   align-items: center;
-  gap: var(--workspace-spacing-sm);
-  padding: var(--workspace-spacing-xs) var(--workspace-spacing-sm);
-  background: var(--workspace-surface);
-  border: 1px solid var(--workspace-border);
+  gap: 12px;
+  padding: 8px 16px;
+  background: var(--ws-bg-tertiary);
   border-radius: 8px;
   cursor: pointer;
-  transition: var(--workspace-transition);
+  transition: all 0.2s ease;
 }
 
 .user-profile:hover {
-  background: var(--workspace-surface-hover);
+  background: var(--ws-surface-glass-hover);
 }
 
 .user-avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--gradient-logo-start), var(--gradient-logo-end));
+  background: linear-gradient(135deg, var(--gradient-cta-start), var(--gradient-cta-end));
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
-  font-size: var(--workspace-font-sm);
+  font-weight: 700;
+  font-size: 14px;
 }
 
 .user-info {
@@ -188,53 +183,45 @@
 }
 
 .user-name {
-  font-size: var(--workspace-font-sm);
+  font-size: 14px;
   font-weight: 500;
+  color: var(--color-text-light);
 }
 
 .user-role {
-  font-size: var(--workspace-font-xs);
+  font-size: 12px;
   color: var(--color-text-secondary);
 }
 
-/* --- 3. БОКОВАЯ ПАНЕЛЬ (SIDEBAR) --- */
-.workspace-container {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-}
-
+/* --- 3. SIDEBAR --- */
 .workspace-sidebar {
-  width: 240px;
-  background: var(--workspace-bg-secondary);
-  border-right: 1px solid var(--workspace-border);
-  padding: var(--workspace-spacing-lg) 0;
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
+  grid-area: sidebar;
+  background: var(--ws-bg-secondary);
+  border-right: 1px solid var(--ws-border-color);
+  padding: 24px 0;
+  overflow-y: auto;
+  transition: all 0.3s ease;
 }
 
 .nav-item {
   display: flex;
   align-items: center;
-  gap: var(--workspace-spacing-md);
-  padding: var(--workspace-spacing-sm) var(--workspace-spacing-lg);
-  cursor: pointer;
-  transition: var(--workspace-transition);
-  font-size: var(--workspace-font-sm);
+  gap: 16px;
+  padding: 12px 24px;
   color: var(--color-text-secondary);
-  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
   position: relative;
 }
 
 .nav-item:hover {
-  background: var(--workspace-surface);
   color: var(--color-text-light);
+  background: var(--ws-surface-glass);
 }
 
 .nav-item.active {
-  background: var(--workspace-surface);
   color: var(--color-text-light);
+  background: var(--ws-surface-glass);
 }
 
 .nav-item.active::before {
@@ -243,265 +230,194 @@
   left: 0;
   top: 0;
   bottom: 0;
-  width: 3px;
-  background: linear-gradient(180deg, var(--gradient-logo-start), var(--gradient-logo-end));
+  width: 4px;
+  background: linear-gradient(180deg, var(--gradient-cta-start), var(--gradient-cta-end));
 }
 
-.nav-item svg {
+.nav-icon {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
 }
 
+.nav-text {
+  font-size: 14px;
+  font-weight: 500;
+}
+
 .nav-divider {
   height: 1px;
-  background: var(--workspace-border);
-  margin: var(--workspace-spacing-md) var(--workspace-spacing-lg);
+  background: var(--ws-border-color);
+  margin: 16px 24px;
 }
 
 .theme-toggle {
   margin-top: auto;
-  padding: var(--workspace-spacing-md) var(--workspace-spacing-lg);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--color-text-secondary);
+  font-size: 14px;
 }
 
 .toggle-switch {
-  display: flex;
-  align-items: center;
-  gap: var(--workspace-spacing-sm);
-  font-size: var(--workspace-font-sm);
-  cursor: pointer;
-}
-
-.toggle-track {
-  width: 44px;
-  height: 24px;
-  background: var(--workspace-surface);
-  border: 1px solid var(--workspace-border);
-  border-radius: 12px;
+  width: 40px;
+  height: 20px;
+  background: var(--ws-bg-tertiary);
+  border-radius: 10px;
   position: relative;
-  transition: var(--workspace-transition);
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.toggle-thumb {
-  width: 18px;
-  height: 18px;
+.toggle-switch.active {
+  background: linear-gradient(90deg, var(--gradient-cta-start), var(--gradient-cta-end));
+}
+
+.toggle-knob {
+  width: 16px;
+  height: 16px;
   background: white;
   border-radius: 50%;
   position: absolute;
   top: 2px;
   left: 2px;
-  transition: var(--workspace-transition);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
 }
 
-.toggle-track.active {
-  background: var(--gradient-logo-end);
+.toggle-switch.active .toggle-knob {
+  left: 22px;
 }
 
-.toggle-track.active .toggle-thumb {
-  transform: translateX(20px);
-}
-
-/* --- 4. РАБОЧАЯ ОБЛАСТЬ --- */
+/* --- 4. WORKSPACE AREA --- */
 .workspace-area {
-  flex: 1;
-  background: var(--workspace-bg-primary);
+  grid-area: workspace;
+  background: var(--ws-bg-primary);
   position: relative;
   overflow: hidden;
 }
 
 .dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--workspace-spacing-lg);
-  padding: var(--workspace-spacing-lg);
+  padding: var(--ws-widget-gap);
   height: 100%;
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--workspace-border) transparent;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--ws-widget-gap);
+  grid-auto-rows: min-content;
 }
 
-.dashboard-grid::-webkit-scrollbar {
-  width: 8px;
-}
-
-.dashboard-grid::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.dashboard-grid::-webkit-scrollbar-thumb {
-  background: var(--workspace-border);
-  border-radius: 4px;
-}
-
-.dashboard-grid::-webkit-scrollbar-thumb:hover {
-  background: var(--workspace-border-active);
-}
-
-/* --- 5. ВИДЖЕТЫ --- */
+/* --- 5. WIDGETS --- */
 .widget {
-  background: var(--workspace-surface);
-  border: 1px solid var(--workspace-border);
+  background: var(--ws-surface-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--ws-border-color);
   border-radius: 12px;
-  padding: var(--workspace-spacing-lg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  transition: var(--workspace-transition);
-  display: flex;
-  flex-direction: column;
+  padding: 20px;
+  transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
 }
 
 .widget:hover {
-  border-color: var(--workspace-border-active);
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(136, 92, 246, 0.1);
+  box-shadow: var(--ws-shadow-lg);
+  border-color: var(--ws-border-active);
 }
 
 .widget-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--workspace-spacing-md);
+  margin-bottom: 16px;
 }
 
 .widget-title {
-  font-size: var(--workspace-font-md);
-  font-weight: 500;
-  color: var(--color-text-secondary);
-}
-
-.widget-actions {
-  display: flex;
-  gap: var(--workspace-spacing-xs);
-}
-
-.widget-action {
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-  color: var(--color-text-secondary);
-  cursor: pointer;
-  border-radius: 4px;
-  transition: var(--workspace-transition);
-}
-
-.widget-action:hover {
-  background: var(--workspace-surface-hover);
+  font-size: 16px;
+  font-weight: 600;
   color: var(--color-text-light);
 }
 
-/* KPI виджеты */
-.kpi-widget .kpi-value {
-  font-size: var(--workspace-font-3xl);
+.widget-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--color-text-secondary);
+}
+
+/* KPI Widgets */
+.kpi-widget {
+  min-height: 140px;
+}
+
+.kpi-widget .metric-value {
+  font-size: 36px;
   font-weight: 700;
   font-family: var(--font-primary);
-  margin: var(--workspace-spacing-md) 0;
+  margin: 12px 0;
   background: linear-gradient(135deg, var(--gradient-logo-start), var(--gradient-logo-end));
   -webkit-background-clip: text;
-  background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.kpi-change {
+.kpi-widget .metric-trend {
   display: flex;
   align-items: center;
-  gap: var(--workspace-spacing-xs);
-  font-size: var(--workspace-font-sm);
-  margin-top: var(--workspace-spacing-sm);
+  gap: 8px;
+  font-size: 14px;
 }
 
-.kpi-change.positive {
-  color: var(--widget-success);
+.trend-positive {
+  color: var(--ws-metric-positive);
 }
 
-.kpi-change.negative {
-  color: var(--widget-danger);
+.trend-negative {
+  color: var(--ws-metric-negative);
 }
 
-.kpi-sparkline {
-  margin-top: var(--workspace-spacing-md);
+.metric-sparkline {
+  width: 100%;
   height: 40px;
-  opacity: 0.6;
+  margin-top: 12px;
 }
 
-/* График виджет */
+/* Chart Widget */
 .chart-widget {
   grid-column: span 2;
-  min-height: 320px;
+  min-height: 400px;
 }
 
 .chart-container {
-  flex: 1;
+  width: 100%;
+  height: 300px;
+  margin-top: 20px;
   position: relative;
 }
 
-.chart-controls {
-  display: flex;
-  gap: var(--workspace-spacing-sm);
-  margin-bottom: var(--workspace-spacing-md);
-}
-
-.chart-control {
-  padding: var(--workspace-spacing-xs) var(--workspace-spacing-sm);
-  background: transparent;
-  border: 1px solid var(--workspace-border);
-  border-radius: 6px;
-  color: var(--color-text-secondary);
-  font-size: var(--workspace-font-xs);
-  cursor: pointer;
-  transition: var(--workspace-transition);
-}
-
-.chart-control:hover,
-.chart-control.active {
-  background: var(--workspace-surface-hover);
-  color: var(--color-text-light);
-  border-color: var(--workspace-border-active);
-}
-
-/* Активность команды */
+/* Activity Widget */
 .activity-widget {
-  grid-row: span 2;
-}
-
-.activity-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--workspace-spacing-sm);
   max-height: 400px;
   overflow-y: auto;
-  padding-right: var(--workspace-spacing-sm);
 }
 
 .activity-item {
   display: flex;
-  align-items: flex-start;
-  gap: var(--workspace-spacing-md);
-  padding: var(--workspace-spacing-sm);
-  border-radius: 8px;
-  transition: var(--workspace-transition);
+  align-items: start;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--ws-border-color);
 }
 
-.activity-item:hover {
-  background: var(--workspace-surface-hover);
-}
-
-.activity-avatar {
+.activity-icon {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: var(--workspace-surface-hover);
+  background: var(--ws-bg-tertiary);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--workspace-font-xs);
-  font-weight: 600;
   flex-shrink: 0;
 }
 
@@ -509,165 +425,120 @@
   flex: 1;
 }
 
-.activity-user {
-  font-size: var(--workspace-font-sm);
-  font-weight: 500;
-  margin-bottom: 2px;
-}
-
-.activity-action {
-  font-size: var(--workspace-font-xs);
-  color: var(--color-text-secondary);
+.activity-title {
+  font-size: 14px;
+  color: var(--color-text-light);
   margin-bottom: 4px;
 }
 
-.activity-time {
-  font-size: var(--workspace-font-xs);
+.activity-description {
+  font-size: 12px;
   color: var(--color-text-secondary);
-  opacity: 0.7;
 }
 
-/* Быстрые действия */
-.quick-action {
-  display: flex;
-  align-items: center;
-  gap: var(--workspace-spacing-md);
-  padding: var(--workspace-spacing-md);
-  background: var(--workspace-surface-hover);
-  border: 1px solid var(--workspace-border);
+.activity-time {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+/* Quick Actions Widget */
+.quick-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.quick-action-btn {
+  padding: 16px;
+  background: var(--ws-bg-tertiary);
+  border: 1px solid var(--ws-border-color);
   border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
   cursor: pointer;
-  transition: var(--workspace-transition);
-  text-decoration: none;
-  color: var(--color-text-light);
-  margin-bottom: var(--workspace-spacing-sm);
+  transition: all 0.2s ease;
 }
 
-.quick-action:hover {
-  border-color: var(--workspace-border-active);
-  transform: translateX(4px);
+.quick-action-btn:hover {
+  background: var(--ws-surface-glass-hover);
+  transform: translateY(-2px);
+  border-color: var(--ws-border-active);
 }
 
 .quick-action-icon {
-  width: 40px;
-  height: 40px;
-  background: var(--workspace-bg-tertiary);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: var(--gradient-cta-start);
 }
 
 .quick-action-text {
-  flex: 1;
+  font-size: 12px;
+  color: var(--color-text-light);
+  text-align: center;
 }
 
-.quick-action-title {
-  font-size: var(--workspace-font-sm);
-  font-weight: 500;
-  margin-bottom: 2px;
+/* AI Recommendations Widget */
+.ai-widget {
+  background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(77, 77, 255, 0.1));
+  border-color: var(--ws-border-active);
 }
 
-.quick-action-desc {
-  font-size: var(--workspace-font-xs);
-  color: var(--color-text-secondary);
-}
-
-/* AI рекомендации */
-.ai-recommendations {
-  grid-column: span 2;
-}
-
-.recommendation {
-  background: var(--workspace-surface-hover);
-  border: 1px solid var(--workspace-border);
+.ai-recommendation {
+  background: var(--ws-bg-tertiary);
   border-radius: 8px;
-  padding: var(--workspace-spacing-md);
-  margin-bottom: var(--workspace-spacing-sm);
-  position: relative;
-  overflow: hidden;
+  padding: 16px;
+  margin-bottom: 12px;
 }
 
-.recommendation::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: linear-gradient(180deg, var(--gradient-logo-start), var(--gradient-logo-end));
-}
-
-.rec-header {
+.ai-rec-header {
   display: flex;
   align-items: center;
-  gap: var(--workspace-spacing-sm);
-  margin-bottom: var(--workspace-spacing-sm);
+  gap: 12px;
+  margin-bottom: 8px;
 }
 
-.rec-priority {
-  padding: 2px 8px;
+.ai-priority {
+  font-size: 12px;
+  padding: 4px 8px;
   border-radius: 4px;
-  font-size: var(--workspace-font-xs);
   font-weight: 600;
-  text-transform: uppercase;
 }
 
-.rec-priority.high {
+.priority-high {
   background: rgba(239, 68, 68, 0.2);
-  color: var(--widget-danger);
+  color: var(--ws-metric-negative);
 }
 
-.rec-priority.medium {
+.priority-medium {
   background: rgba(245, 158, 11, 0.2);
-  color: var(--widget-warning);
+  color: var(--ws-metric-warning);
 }
 
-.rec-title {
-  font-size: var(--workspace-font-sm);
-  font-weight: 500;
-  flex: 1;
-}
-
-.rec-content {
-  font-size: var(--workspace-font-sm);
-  color: var(--color-text-secondary);
-  margin-bottom: var(--workspace-spacing-sm);
-}
-
-.rec-actions {
-  display: flex;
-  gap: var(--workspace-spacing-sm);
-}
-
-.rec-action {
-  padding: var(--workspace-spacing-xs) var(--workspace-spacing-md);
-  background: transparent;
-  border: 1px solid var(--workspace-border);
-  border-radius: 6px;
+.ai-rec-content {
+  font-size: 14px;
   color: var(--color-text-light);
-  font-size: var(--workspace-font-xs);
+  margin-bottom: 12px;
+}
+
+.ai-rec-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--gradient-cta-start);
   cursor: pointer;
-  transition: var(--workspace-transition);
+  transition: all 0.2s ease;
 }
 
-.rec-action:hover {
-  background: var(--workspace-surface);
-  border-color: var(--workspace-border-active);
+.ai-rec-action:hover {
+  color: var(--gradient-cta-end);
+  transform: translateX(4px);
 }
 
-.rec-action.primary {
-  background: linear-gradient(135deg, var(--gradient-cta-start), var(--gradient-cta-end));
-  border: none;
-  color: white;
-}
-
-.rec-action.primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(136, 92, 246, 0.3);
-}
-
-/* --- 6. ПЛАВАЮЩИЕ ОКНА --- */
+/* --- 6. FLOATING WINDOWS --- */
 .floating-windows {
   position: absolute;
   top: 0;
@@ -675,504 +546,399 @@
   right: 0;
   bottom: 0;
   pointer-events: none;
+  z-index: 50;
 }
 
 .floating-window {
   position: absolute;
-  background: var(--workspace-bg-secondary);
-  border: 1px solid var(--workspace-border);
+  background: var(--ws-surface-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--ws-border-color);
   border-radius: 12px;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
-  min-width: 320px;
-  min-height: 240px;
-  display: flex;
-  flex-direction: column;
+  box-shadow: var(--ws-shadow-lg);
   pointer-events: all;
-  transition: box-shadow 0.2s ease;
+  min-width: 400px;
+  min-height: 300px;
+  display: none;
 }
 
 .floating-window.active {
-  border-color: var(--workspace-border-active);
-  box-shadow: 0 16px 48px rgba(136, 92, 246, 0.2);
+  display: flex;
+  flex-direction: column;
 }
 
 .window-header {
-  height: 40px;
-  background: var(--workspace-surface);
-  border-bottom: 1px solid var(--workspace-border);
-  border-radius: 12px 12px 0 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--workspace-spacing-md);
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--ws-border-color);
   cursor: move;
+  user-select: none;
 }
 
 .window-title {
-  font-size: var(--workspace-font-sm);
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-light);
 }
 
 .window-controls {
   display: flex;
-  gap: var(--workspace-spacing-xs);
+  gap: 8px;
 }
 
 .window-control {
   width: 24px;
   height: 24px;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: transparent;
-  border: none;
-  color: var(--color-text-secondary);
   cursor: pointer;
-  border-radius: 4px;
-  transition: var(--workspace-transition);
+  transition: all 0.2s ease;
 }
 
 .window-control:hover {
-  background: var(--workspace-surface-hover);
-  color: var(--color-text-light);
+  background: var(--ws-bg-tertiary);
+}
+
+.window-control.minimize {
+  color: var(--ws-metric-warning);
+}
+
+.window-control.maximize {
+  color: var(--ws-metric-positive);
+}
+
+.window-control.close {
+  color: var(--ws-metric-negative);
 }
 
 .window-content {
   flex: 1;
-  padding: var(--workspace-spacing-lg);
+  padding: 20px;
   overflow-y: auto;
 }
 
-/* Tasks Manager окно */
-#tasks-window {
-  width: 480px;
-  height: 600px;
-  top: 80px;
-  left: 300px;
-}
-
-.tasks-filters {
-  display: flex;
-  gap: var(--workspace-spacing-sm);
-  margin-bottom: var(--workspace-spacing-md);
-}
-
-.task-filter {
-  padding: var(--workspace-spacing-xs) var(--workspace-spacing-sm);
-  background: var(--workspace-surface);
-  border: 1px solid var(--workspace-border);
-  border-radius: 6px;
-  font-size: var(--workspace-font-xs);
-  cursor: pointer;
-  transition: var(--workspace-transition);
-}
-
-.task-filter.active {
-  background: var(--workspace-surface-hover);
-  border-color: var(--workspace-border-active);
-}
-
-.tasks-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--workspace-spacing-sm);
-}
-
-.task-item {
-  background: var(--workspace-surface);
-  border: 1px solid var(--workspace-border);
-  border-radius: 8px;
-  padding: var(--workspace-spacing-md);
-  cursor: pointer;
-  transition: var(--workspace-transition);
-}
-
-.task-item:hover {
-  border-color: var(--workspace-border-active);
-  background: var(--workspace-surface-hover);
-}
-
-.task-header {
-  display: flex;
-  align-items: center;
-  gap: var(--workspace-spacing-sm);
-  margin-bottom: var(--workspace-spacing-sm);
-}
-
-.task-priority {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.task-priority.high {
-  background: var(--widget-danger);
-}
-
-.task-priority.medium {
-  background: var(--widget-warning);
-}
-
-.task-priority.low {
-  background: var(--widget-success);
-}
-
-.task-title {
-  font-size: var(--workspace-font-sm);
-  font-weight: 500;
-  flex: 1;
-}
-
-.task-status {
-  padding: 2px 8px;
-  background: var(--workspace-surface-hover);
-  border-radius: 4px;
-  font-size: var(--workspace-font-xs);
-  color: var(--color-text-secondary);
-}
-
-.task-meta {
-  display: flex;
-  gap: var(--workspace-spacing-md);
-  font-size: var(--workspace-font-xs);
-  color: var(--color-text-secondary);
-}
-
-/* AI Assistant окно */
-#ai-assistant-window {
-  width: 400px;
-  height: 500px;
-  bottom: 80px;
-  right: 40px;
-}
-
-.ai-chat {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.ai-messages {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--workspace-spacing-md);
-  overflow-y: auto;
-  padding-right: var(--workspace-spacing-sm);
-  margin-bottom: var(--workspace-spacing-md);
-}
-
-.ai-message {
-  display: flex;
-  gap: var(--workspace-spacing-md);
-  align-items: flex-start;
-}
-
-.ai-message.user {
-  flex-direction: row-reverse;
-}
-
-.ai-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--gradient-logo-start), var(--gradient-logo-end));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.ai-message.user .ai-avatar {
-  background: var(--workspace-surface-hover);
-}
-
-.ai-bubble {
-  background: var(--workspace-surface);
-  border: 1px solid var(--workspace-border);
-  border-radius: 12px;
-  padding: var(--workspace-spacing-sm) var(--workspace-spacing-md);
-  max-width: 80%;
-  font-size: var(--workspace-font-sm);
-}
-
-.ai-message.user .ai-bubble {
-  background: var(--workspace-surface-hover);
-}
-
-.ai-input-container {
-  display: flex;
-  gap: var(--workspace-spacing-sm);
-  padding-top: var(--workspace-spacing-md);
-  border-top: 1px solid var(--workspace-border);
-}
-
-.ai-input {
-  flex: 1;
-  padding: var(--workspace-spacing-sm) var(--workspace-spacing-md);
-  background: var(--workspace-surface);
-  border: 1px solid var(--workspace-border);
-  border-radius: 8px;
-  color: var(--color-text-light);
-  font-size: var(--workspace-font-sm);
-}
-
-.ai-input:focus {
-  outline: none;
-  border-color: var(--workspace-border-active);
-  background: var(--workspace-surface-hover);
-}
-
-.ai-send {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, var(--gradient-cta-start), var(--gradient-cta-end));
-  border: none;
-  border-radius: 8px;
-  color: white;
-  cursor: pointer;
-  transition: var(--workspace-transition);
-}
-
-.ai-send:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(136, 92, 246, 0.3);
-}
-
-/* --- 7. СТАТУС БАР --- */
+/* --- 7. STATUSBAR --- */
 .workspace-statusbar {
-  height: 32px;
-  background: var(--workspace-bg-secondary);
-  border-top: 1px solid var(--workspace-border);
+  grid-area: statusbar;
+  background: var(--ws-bg-secondary);
+  border-top: 1px solid var(--ws-border-color);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--workspace-spacing-lg);
-  font-size: var(--workspace-font-xs);
+  padding: 0 24px;
+  font-size: 12px;
   color: var(--color-text-secondary);
-  flex-shrink: 0;
 }
 
-.status-left,
-.status-right {
+.status-left {
   display: flex;
   align-items: center;
-  gap: var(--workspace-spacing-lg);
+  gap: 24px;
 }
 
 .status-item {
   display: flex;
   align-items: center;
-  gap: var(--workspace-spacing-xs);
+  gap: 8px;
 }
 
-.status-indicator {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--widget-success);
-  animation: pulse 2s infinite;
+.status-icon {
+  width: 14px;
+  height: 14px;
 }
 
-@keyframes pulse {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-  100% {
-    opacity: 1;
-  }
+.status-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
-.progress-bar {
-  width: 120px;
+.progress-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.progress-bar-mini {
+  width: 60px;
   height: 4px;
-  background: var(--workspace-surface);
+  background: var(--ws-bg-tertiary);
   border-radius: 2px;
   overflow: hidden;
 }
 
-.progress-fill {
+.progress-fill-mini {
   height: 100%;
-  background: linear-gradient(90deg, var(--gradient-logo-start), var(--gradient-logo-end));
-  width: 75%;
+  background: linear-gradient(90deg, var(--gradient-cta-start), var(--gradient-cta-end));
   transition: width 0.3s ease;
 }
 
-/* --- 8. АНИМАЦИИ И ЭФФЕКТЫ --- */
-.window-resize-handle {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 16px;
-  height: 16px;
-  cursor: nwse-resize;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.floating-window:hover .window-resize-handle {
-  opacity: 0.3;
-}
-
-/* Drag & Drop эффекты */
-.dragging {
-  opacity: 0.8;
-  cursor: move;
-}
-
-.drop-zone {
-  background: var(--workspace-surface-hover);
-  border: 2px dashed var(--workspace-border-active);
-  border-radius: 8px;
-  transition: var(--workspace-transition);
-}
-
-.drop-zone.active {
-  background: rgba(136, 92, 246, 0.1);
-  border-color: var(--gradient-logo-end);
-}
-
-/* --- 9. АДАПТИВНОСТЬ --- */
+/* --- 8. RESPONSIVE DESIGN --- */
 @media (max-width: 1400px) {
   .dashboard-grid {
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
   
   .chart-widget {
     grid-column: span 1;
   }
-  
-  .ai-recommendations {
-    grid-column: span 1;
-  }
 }
 
 @media (max-width: 1200px) {
-  .workspace-sidebar {
+  :root {
+    --ws-sidebar-width: 200px;
+  }
+  
+  .global-search input {
     width: 200px;
   }
   
-  .nav-item span:not(.nav-icon) {
-    font-size: var(--workspace-font-xs);
-  }
-  
-  .global-search {
-    width: 240px;
+  .global-search input:focus {
+    width: 300px;
   }
 }
 
 @media (max-width: 992px) {
+  #workspace-dashboard {
+    grid-template-columns: var(--ws-sidebar-collapsed) 1fr;
+  }
+  
   .workspace-sidebar {
-    position: absolute;
-    left: -240px;
-    height: 100%;
-    z-index: 101;
-    transition: left 0.3s ease;
+    overflow: visible;
   }
   
-  .workspace-sidebar.open {
-    left: 0;
+  .nav-text,
+  .theme-toggle-text {
+    display: none;
   }
   
-  .sidebar-toggle {
-    display: flex;
+  .nav-item {
+    padding: 12px 0;
+    justify-content: center;
   }
   
-  .dashboard-grid {
-    padding: var(--workspace-spacing-md);
+  .nav-divider {
+    margin: 16px 12px;
+  }
+  
+  .theme-toggle {
+    padding: 12px 0;
+    justify-content: center;
+  }
+  
+  .workspace-header {
+    padding: 0 16px;
+  }
+  
+  .header-left {
+    gap: 16px;
+  }
+  
+  .workspace-logo {
+    font-size: 20px;
   }
 }
 
 @media (max-width: 768px) {
-  .workspace-header {
-    padding: 0 var(--workspace-spacing-md);
+  #workspace-dashboard {
+    grid-template-rows: var(--ws-header-height) 1fr;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "header"
+      "workspace";
   }
   
-  .global-search {
-    display: none;
-  }
-  
-  .user-info {
+  .workspace-sidebar,
+  .workspace-statusbar {
     display: none;
   }
   
   .dashboard-grid {
     grid-template-columns: 1fr;
-    gap: var(--workspace-spacing-md);
+    padding: 16px;
+    gap: 16px;
+  }
+  
+  .chart-widget {
+    grid-column: span 1;
+    min-height: 300px;
   }
   
   .floating-window {
-    position: fixed;
-    top: 60px !important;
-    left: 10px !important;
-    right: 10px !important;
-    bottom: 40px !important;
-    width: auto !important;
-    height: auto !important;
+    min-width: calc(100vw - 32px);
+    max-width: calc(100vw - 32px);
+    left: 16px !important;
+    right: 16px !important;
   }
 }
 
-/* --- 10. РЕЖИМ ФОКУСА --- */
-.focus-mode #client-workspace {
-  --workspace-bg-primary: #000000;
-  --workspace-bg-secondary: #0a0a0a;
-  --workspace-surface: rgba(20, 20, 20, 0.8);
+/* --- 9. ANIMATIONS --- */
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(138, 43, 226, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(138, 43, 226, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(138, 43, 226, 0);
+  }
 }
 
-.focus-mode .workspace-header,
-.focus-mode .workspace-sidebar,
-.focus-mode .workspace-statusbar {
-  opacity: 0.3;
-  transition: opacity 0.3s ease;
+.notification-badge {
+  animation: pulse-glow 2s infinite;
 }
 
-.focus-mode .workspace-header:hover,
-.focus-mode .workspace-sidebar:hover,
-.focus-mode .workspace-statusbar:hover {
-  opacity: 1;
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* --- 11. ДОСТУПНОСТЬ --- */
-.widget:focus-visible,
-.nav-item:focus-visible,
-.header-btn:focus-visible,
-.window-control:focus-visible {
-  outline: 2px solid var(--workspace-border-active);
+.widget {
+  animation: slide-in 0.5s ease-out;
+}
+
+.widget:nth-child(1) { animation-delay: 0.1s; }
+.widget:nth-child(2) { animation-delay: 0.2s; }
+.widget:nth-child(3) { animation-delay: 0.3s; }
+.widget:nth-child(4) { animation-delay: 0.4s; }
+.widget:nth-child(5) { animation-delay: 0.5s; }
+.widget:nth-child(6) { animation-delay: 0.6s; }
+
+/* --- 10. CUSTOM SCROLLBAR --- */
+.dashboard-grid::-webkit-scrollbar,
+.activity-widget::-webkit-scrollbar,
+.window-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dashboard-grid::-webkit-scrollbar-track,
+.activity-widget::-webkit-scrollbar-track,
+.window-content::-webkit-scrollbar-track {
+  background: var(--ws-bg-secondary);
+}
+
+.dashboard-grid::-webkit-scrollbar-thumb,
+.activity-widget::-webkit-scrollbar-thumb,
+.window-content::-webkit-scrollbar-thumb {
+  background: var(--ws-bg-tertiary);
+  border-radius: 4px;
+}
+
+.dashboard-grid::-webkit-scrollbar-thumb:hover,
+.activity-widget::-webkit-scrollbar-thumb:hover,
+.window-content::-webkit-scrollbar-thumb:hover {
+  background: var(--ws-surface-glass-hover);
+}
+
+/* --- 11. FOCUS STATES FOR ACCESSIBILITY --- */
+.header-btn:focus,
+.nav-item:focus,
+.quick-action-btn:focus,
+.window-control:focus {
+  outline: 2px solid var(--gradient-cta-start);
   outline-offset: 2px;
 }
 
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+.global-search input:focus {
+  outline: 2px solid var(--gradient-cta-start);
+  outline-offset: -2px;
 }
 
-/* Режим высокой контрастности */
-@media (prefers-contrast: high) {
-  :root {
-    --workspace-border: rgba(255, 255, 255, 0.3);
-    --workspace-border-active: rgba(255, 255, 255, 0.6);
+/* --- 12. LOADING STATES --- */
+.widget.loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.widget.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  animation: loading-sweep 2s infinite;
+}
+
+@keyframes loading-sweep {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
   }
 }
 
-/* Режим уменьшенного движения */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+/* --- 13. GAMIFICATION ELEMENTS --- */
+.user-level {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background: var(--ws-bg-tertiary);
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gradient-cta-start);
+}
+
+.achievement-badge {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, gold, orange);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+}
+
+/* --- 14. FOCUS MODE --- */
+.workspace-area.focus-mode .dashboard-grid {
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+.workspace-area.focus-mode .floating-window.active {
+  filter: none;
+  box-shadow: var(--ws-shadow-lg), var(--ws-shadow-glow);
+}
+
+/* --- 15. PRINT STYLES --- */
+@media print {
+  .workspace-header,
+  .workspace-sidebar,
+  .workspace-statusbar,
+  .floating-windows {
+    display: none;
+  }
+  
+  .workspace-area {
+    grid-area: auto;
+  }
+  
+  .widget {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ccc;
   }
 }
