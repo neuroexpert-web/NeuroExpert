@@ -40,6 +40,7 @@
 @import './styles/workspace-cabinet.css';
 @import './styles/workspace-advanced.css';
 @import './styles/workspace-enhanced.css';
+@import './styles/workspace-complete.css';
 
 /* Критические стили для Hero секции */
 .hero-section {
