@@ -1,349 +1,301 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function AIPersonalization() {
-  const [userProfile, setUserProfile] = useState(null);
-  const [recommendations, setRecommendations] = useState([]);
-  const behaviorTracker = useRef({
-    clicks: {},
-    timeSpent: {},
-    features: {},
-    lastActivity: Date.now()
+  const [userProfile, setUserProfile] = useState({
+    role: 'manager',
+    preferences: {},
+    behavior: []
   });
-  
+  const [recommendations, setRecommendations] = useState([]);
+
   useEffect(() => {
-    // Load user profile
+    // Загрузка профиля пользователя
     loadUserProfile();
     
-    // Initialize behavior tracking
-    initializeBehaviorTracking();
+    // Отслеживание поведения
+    trackUserBehavior();
     
-    // Start AI analysis
-    startAIAnalysis();
+    // Персонализация интерфейса
+    personalizeInterface();
     
-    // Listen for AI events
-    window.addEventListener('ai-command', handleAICommand);
+    // Обновление рекомендаций каждые 10 секунд
+    const interval = setInterval(updateRecommendations, 10000);
     
-    return () => {
-      window.removeEventListener('ai-command', handleAICommand);
-      saveBehaviorData();
-    };
+    return () => clearInterval(interval);
   }, []);
-  
+
   const loadUserProfile = () => {
+    // Загрузка сохраненного профиля
     const savedProfile = localStorage.getItem('userProfile');
     if (savedProfile) {
       setUserProfile(JSON.parse(savedProfile));
-    } else {
-      // Create default profile
-      const defaultProfile = {
-        id: 'user-' + Date.now(),
-        role: 'analyst',
-        preferences: {
-          dashboardLayout: 'default',
-          theme: 'dark',
-          language: 'ru',
-          notifications: true,
-          dataRefreshRate: 30
-        },
-        usage: {
-          mostUsedFeatures: [],
-          averageSessionDuration: 0,
-          lastLogin: Date.now()
-        }
-      };
-      setUserProfile(defaultProfile);
-      localStorage.setItem('userProfile', JSON.stringify(defaultProfile));
     }
   };
-  
-  const initializeBehaviorTracking = () => {
-    // Track clicks
+
+  const trackUserBehavior = () => {
+    // Отслеживание кликов
     document.addEventListener('click', (e) => {
-      const target = e.target.closest('[data-trackable]');
-      if (target) {
-        const feature = target.getAttribute('data-trackable');
-        behaviorTracker.current.clicks[feature] = (behaviorTracker.current.clicks[feature] || 0) + 1;
+      const target = e.target;
+      const action = {
+        type: 'click',
+        element: target.className,
+        timestamp: Date.now()
+      };
+      
+      setUserProfile(prev => ({
+        ...prev,
+        behavior: [...prev.behavior.slice(-99), action]
+      }));
+    });
+    
+    // Отслеживание времени на виджетах
+    const widgets = document.querySelectorAll('.widget');
+    widgets.forEach(widget => {
+      let startTime;
+      
+      widget.addEventListener('mouseenter', () => {
+        startTime = Date.now();
+      });
+      
+      widget.addEventListener('mouseleave', () => {
+        if (startTime) {
+          const duration = Date.now() - startTime;
+          const widgetType = widget.querySelector('.widget-title')?.textContent;
+          
+          if (duration > 2000) { // Более 2 секунд
+            updateWidgetPriority(widgetType, duration);
+          }
+        }
+      });
+    });
+  };
+
+  const updateWidgetPriority = (widgetType, duration) => {
+    setUserProfile(prev => {
+      const preferences = { ...prev.preferences };
+      preferences[widgetType] = (preferences[widgetType] || 0) + duration;
+      
+      // Сохранение обновленного профиля
+      const updatedProfile = { ...prev, preferences };
+      localStorage.setItem('userProfile', JSON.stringify(updatedProfile));
+      
+      return updatedProfile;
+    });
+  };
+
+  const personalizeInterface = () => {
+    // Персонализация на основе роли
+    const roleBasedLayouts = {
+      manager: ['kpi', 'team', 'tasks', 'analytics'],
+      analyst: ['analytics', 'reports', 'data', 'insights'],
+      admin: ['system', 'users', 'settings', 'logs']
+    };
+    
+    // Перестановка виджетов на основе предпочтений
+    setTimeout(() => {
+      const dashboard = document.querySelector('.dashboard-grid');
+      if (!dashboard) return;
+      
+      const widgets = Array.from(dashboard.querySelectorAll('.widget'));
+      const sortedWidgets = widgets.sort((a, b) => {
+        const aTitle = a.querySelector('.widget-title')?.textContent || '';
+        const bTitle = b.querySelector('.widget-title')?.textContent || '';
+        const aScore = userProfile.preferences[aTitle] || 0;
+        const bScore = userProfile.preferences[bTitle] || 0;
+        return bScore - aScore;
+      });
+      
+      // Перестановка виджетов
+      sortedWidgets.forEach(widget => dashboard.appendChild(widget));
+    }, 1000);
+  };
+
+  const updateRecommendations = () => {
+    // Анализ поведения и генерация рекомендаций
+    const behaviorPatterns = analyzeBehavior();
+    const newRecommendations = generateRecommendations(behaviorPatterns);
+    
+    setRecommendations(newRecommendations);
+    
+    // Обновление UI
+    displayRecommendations(newRecommendations);
+  };
+
+  const analyzeBehavior = () => {
+    const recentActions = userProfile.behavior.slice(-50);
+    const patterns = {
+      mostClickedElements: {},
+      timeOfDay: new Date().getHours(),
+      sessionDuration: Date.now() - (recentActions[0]?.timestamp || Date.now())
+    };
+    
+    recentActions.forEach(action => {
+      if (action.type === 'click') {
+        patterns.mostClickedElements[action.element] = 
+          (patterns.mostClickedElements[action.element] || 0) + 1;
       }
     });
     
-    // Track time spent on sections
-    let currentSection = 'dashboard';
-    let sectionStartTime = Date.now();
+    return patterns;
+  };
+
+  const generateRecommendations = (patterns) => {
+    const recommendations = [];
     
-    window.addEventListener('workspace-section-change', (e) => {
-      const previousSection = currentSection;
-      const timeSpent = Date.now() - sectionStartTime;
-      
-      behaviorTracker.current.timeSpent[previousSection] = 
-        (behaviorTracker.current.timeSpent[previousSection] || 0) + timeSpent;
-      
-      currentSection = e.detail;
-      sectionStartTime = Date.now();
+    // Рекомендации на основе времени дня
+    const hour = patterns.timeOfDay;
+    if (hour >= 9 && hour <= 11) {
+      recommendations.push({
+        type: 'productivity',
+        title: 'Оптимальное время для аналитики',
+        text: 'Согласно вашим паттернам работы, сейчас лучшее время для глубокого анализа данных',
+        action: 'Открыть аналитику'
+      });
+    }
+    
+    // Рекомендации на основе частых действий
+    const mostClicked = Object.entries(patterns.mostClickedElements)
+      .sort(([,a], [,b]) => b - a)[0];
+    
+    if (mostClicked && mostClicked[1] > 5) {
+      recommendations.push({
+        type: 'optimization',
+        title: 'Часто используемая функция',
+        text: `Вы часто используете ${mostClicked[0]}. Хотите добавить быстрый доступ?`,
+        action: 'Настроить'
+      });
+    }
+    
+    // AI-инсайты
+    recommendations.push({
+      type: 'insight',
+      title: 'AI-прогноз на сегодня',
+      text: 'Вероятность успешных сделок сегодня на 23% выше обычного. Рекомендуем активизировать отдел продаж.',
+      action: 'Подробнее'
     });
     
-    // Track feature usage
-    window.addEventListener('feature-used', (e) => {
-      const feature = e.detail;
-      behaviorTracker.current.features[feature] = 
-        (behaviorTracker.current.features[feature] || 0) + 1;
-    });
-    
-    // Save behavior data periodically
-    setInterval(() => {
-      saveBehaviorData();
-    }, 60000); // Every minute
+    return recommendations;
   };
-  
-  const saveBehaviorData = () => {
-    const data = {
-      ...behaviorTracker.current,
-      lastSaved: Date.now()
+
+  const displayRecommendations = (recommendations) => {
+    const aiWidget = document.querySelector('.ai-assistant-widget');
+    if (!aiWidget) return;
+    
+    const content = aiWidget.querySelector('.widget-content');
+    if (content) {
+      content.innerHTML = `
+        <div class="ai-personalized-content">
+          <div class="ai-greeting">
+            ${getPersonalizedGreeting()}
+          </div>
+          <div class="ai-recommendations-list">
+            ${recommendations.map(rec => `
+              <div class="ai-recommendation-card" data-type="${rec.type}">
+                <div class="ai-rec-icon">${getRecommendationIcon(rec.type)}</div>
+                <div class="ai-rec-content">
+                  <h4>${rec.title}</h4>
+                  <p>${rec.text}</p>
+                </div>
+                <button class="ai-rec-action">${rec.action}</button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+      
+      // Добавление обработчиков
+      content.querySelectorAll('.ai-rec-action').forEach((btn, index) => {
+        btn.addEventListener('click', () => handleRecommendationAction(recommendations[index]));
+      });
+    }
+  };
+
+  const getPersonalizedGreeting = () => {
+    const hour = new Date().getHours();
+    const greetings = {
+      morning: 'Доброе утро! Готовы к продуктивному дню?',
+      day: 'Добрый день! Как проходит ваш рабочий день?',
+      evening: 'Добрый вечер! Время подвести итоги дня',
+      night: 'Работаете допоздна? Не забудьте отдохнуть!'
     };
-    localStorage.setItem('userBehavior', JSON.stringify(data));
+    
+    if (hour >= 5 && hour < 12) return greetings.morning;
+    if (hour >= 12 && hour < 17) return greetings.day;
+    if (hour >= 17 && hour < 22) return greetings.evening;
+    return greetings.night;
   };
-  
-  const startAIAnalysis = () => {
-    // Analyze user behavior and generate recommendations
-    setInterval(() => {
-      analyzeAndRecommend();
-    }, 300000); // Every 5 minutes
-    
-    // Initial analysis
-    setTimeout(analyzeAndRecommend, 5000);
-  };
-  
-  const analyzeAndRecommend = () => {
-    const behavior = behaviorTracker.current;
-    const newRecommendations = [];
-    
-    // Analyze most clicked features
-    const sortedClicks = Object.entries(behavior.clicks)
-      .sort(([,a], [,b]) => b - a)
-      .slice(0, 3);
-    
-    if (sortedClicks.length > 0) {
-      const [topFeature] = sortedClicks[0];
-      newRecommendations.push({
-        id: 'rec-' + Date.now(),
-        type: 'feature',
-        title: 'Оптимизация рабочего процесса',
-        description: `Вы часто используете ${getFeatureName(topFeature)}. Попробуйте горячие клавиши для быстрого доступа.`,
-        action: 'show-shortcuts',
-        priority: 'medium'
-      });
-    }
-    
-    // Analyze time patterns
-    const totalTime = Object.values(behavior.timeSpent).reduce((a, b) => a + b, 0);
-    const analyticsTime = behavior.timeSpent.analytics || 0;
-    
-    if (analyticsTime > totalTime * 0.4) {
-      newRecommendations.push({
-        id: 'rec-' + Date.now() + 1,
-        type: 'insight',
-        title: 'Фокус на аналитике',
-        description: 'Вы проводите много времени в аналитике. Настройте автоматические отчеты для экономии времени.',
-        action: 'setup-reports',
-        priority: 'high'
-      });
-    }
-    
-    // Check for anomalies
-    const currentHour = new Date().getHours();
-    if (currentHour >= 22 || currentHour <= 6) {
-      newRecommendations.push({
-        id: 'rec-' + Date.now() + 2,
-        type: 'wellbeing',
-        title: 'Поздняя работа',
-        description: 'Вы работаете в позднее время. Не забывайте об отдыхе для поддержания продуктивности.',
-        action: 'schedule-reminder',
-        priority: 'low'
-      });
-    }
-    
-    // Update recommendations
-    setRecommendations(newRecommendations);
-    updateAIRecommendationsUI(newRecommendations);
-  };
-  
-  const getFeatureName = (feature) => {
-    const featureNames = {
-      'new-task': 'создание задач',
-      'analytics': 'аналитику',
-      'reports': 'отчеты',
-      'ai-chat': 'AI-ассистента'
+
+  const getRecommendationIcon = (type) => {
+    const icons = {
+      productivity: '⚡',
+      optimization: '⚙️',
+      insight: '💡',
+      warning: '⚠️'
     };
-    return featureNames[feature] || feature;
+    return icons[type] || '📌';
   };
-  
-  const updateAIRecommendationsUI = (recommendations) => {
-    const aiRecContainer = document.querySelector('.ai-recommendations');
-    if (!aiRecContainer) return;
+
+  const handleRecommendationAction = (recommendation) => {
+    console.log('Выполнение рекомендации:', recommendation);
     
-    aiRecContainer.innerHTML = recommendations.map(rec => `
-      <div class="ai-rec-item" data-rec-id="${rec.id}">
-        <svg class="ai-rec-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M10 2a8 8 0 100 16 8 8 0 000-16zM9 7a1 1 0 112 0v4a1 1 0 11-2 0V7zm1 8a1 1 0 100-2 1 1 0 000 2z"/>
-        </svg>
-        <div class="ai-rec-content">
-          <div class="ai-rec-title">${rec.title}</div>
-          <div class="ai-rec-desc">${rec.description}</div>
+    // Здесь можно добавить логику выполнения рекомендаций
+    switch (recommendation.type) {
+      case 'productivity':
+        // Открыть раздел аналитики
+        document.querySelector('[data-view="analytics"]')?.click();
+        break;
+      case 'optimization':
+        // Открыть настройки
+        openSettingsWindow();
+        break;
+      case 'insight':
+        // Показать детальную информацию
+        showInsightDetails(recommendation);
+        break;
+    }
+  };
+
+  const openSettingsWindow = () => {
+    // Создание окна настроек
+    const settingsWindow = document.createElement('div');
+    settingsWindow.className = 'floating-window active';
+    settingsWindow.style.cssText = 'left: 50%; top: 50%; transform: translate(-50%, -50%);';
+    settingsWindow.innerHTML = `
+      <div class="window-header">
+        <div class="window-title">Настройки персонализации</div>
+        <div class="window-controls">
+          <div class="window-control window-close"></div>
         </div>
       </div>
-    `).join('');
+      <div class="window-content">
+        <h3>Быстрый доступ</h3>
+        <p>Настройте виджеты и функции для быстрого доступа</p>
+        <!-- Здесь будут настройки -->
+      </div>
+    `;
+    
+    document.querySelector('.floating-windows')?.appendChild(settingsWindow);
   };
-  
-  const handleAICommand = async (e) => {
-    const { command, params } = e.detail;
+
+  const showInsightDetails = (insight) => {
+    // Показать модальное окно с деталями
+    const modal = document.createElement('div');
+    modal.className = 'insight-modal';
+    modal.innerHTML = `
+      <div class="modal-content">
+        <h2>${insight.title}</h2>
+        <p>${insight.text}</p>
+        <div class="insight-charts">
+          <!-- Здесь могут быть графики и дополнительные данные -->
+        </div>
+        <button class="modal-close">Закрыть</button>
+      </div>
+    `;
     
-    switch (command) {
-      case 'analyze-data':
-        await analyzeDataPattern(params);
-        break;
-      case 'suggest-optimization':
-        suggestOptimization(params);
-        break;
-      case 'predict-trend':
-        predictTrend(params);
-        break;
-      case 'chat':
-        handleAIChat(params);
-        break;
-    }
+    document.body.appendChild(modal);
   };
-  
-  const analyzeDataPattern = async (params) => {
-    // Simulate AI data analysis
-    const analysis = {
-      patterns: [
-        'Обнаружен рост конверсии в вечернее время',
-        'Сегмент VIP-клиентов показывает увеличение активности',
-        'Эффективность email-кампаний выросла на 23%'
-      ],
-      anomalies: [
-        'Необычное снижение трафика из социальных сетей',
-        'Повышенный отток в сегменте новых пользователей'
-      ],
-      recommendations: [
-        'Увеличить бюджет на вечернюю рекламу',
-        'Запустить retention-кампанию для новых пользователей'
-      ]
-    };
-    
-    // Display results
-    window.dispatchEvent(new CustomEvent('ai-analysis-complete', { detail: analysis }));
-  };
-  
-  const suggestOptimization = (params) => {
-    const optimizations = {
-      dashboard: [
-        'Переместите виджет "Конверсия" выше для быстрого доступа',
-        'Добавьте график трендов для отслеживания динамики'
-      ],
-      workflow: [
-        'Автоматизируйте создание еженедельных отчетов',
-        'Настройте уведомления о критических изменениях KPI'
-      ],
-      performance: [
-        'Включите кэширование данных для ускорения загрузки',
-        'Оптимизируйте частоту обновления виджетов'
-      ]
-    };
-    
-    const category = params.category || 'workflow';
-    const suggestions = optimizations[category] || optimizations.workflow;
-    
-    window.dispatchEvent(new CustomEvent('ai-suggestions', { detail: suggestions }));
-  };
-  
-  const predictTrend = (params) => {
-    // Simple trend prediction based on historical data
-    const metric = params.metric || 'revenue';
-    const period = params.period || 30;
-    
-    // Generate prediction
-    const prediction = {
-      metric,
-      current: 100,
-      predicted: 115,
-      confidence: 0.82,
-      factors: [
-        'Сезонный рост',
-        'Успешная маркетинговая кампания',
-        'Улучшение конверсии'
-      ]
-    };
-    
-    window.dispatchEvent(new CustomEvent('ai-prediction', { detail: prediction }));
-  };
-  
-  const handleAIChat = (params) => {
-    const { message } = params;
-    
-    // Simple AI responses
-    const responses = {
-      'привет': 'Здравствуйте! Как я могу помочь вам сегодня?',
-      'помощь': 'Я могу помочь с анализом данных, оптимизацией процессов и ответами на вопросы о платформе.',
-      'отчет': 'Какой отчет вы хотели бы создать? Я могу помочь с продажами, аналитикой или пользовательской активностью.',
-      'default': 'Я анализирую ваш запрос. Могу я уточнить, что именно вас интересует?'
-    };
-    
-    const keyword = Object.keys(responses).find(k => 
-      message.toLowerCase().includes(k)
-    );
-    
-    const response = responses[keyword] || responses.default;
-    
-    // Add AI insights based on current data
-    const insights = [];
-    if (message.includes('продаж') || message.includes('выручк')) {
-      insights.push('Продажи показывают рост на 12% по сравнению с прошлым месяцем.');
-    }
-    if (message.includes('клиент')) {
-      insights.push('Активность клиентов увеличилась на 8% за последнюю неделю.');
-    }
-    
-    window.dispatchEvent(new CustomEvent('ai-response', { 
-      detail: { 
-        message: response,
-        insights,
-        timestamp: Date.now()
-      }
-    }));
-  };
-  
-  // Adaptive UI based on usage
-  useEffect(() => {
-    if (!userProfile) return;
-    
-    // Adjust dashboard based on role
-    const roleConfigs = {
-      analyst: {
-        priorityWidgets: ['analytics', 'reports', 'trends'],
-        theme: 'dark'
-      },
-      manager: {
-        priorityWidgets: ['kpi', 'team', 'tasks'],
-        theme: 'dark'
-      },
-      executive: {
-        priorityWidgets: ['revenue', 'summary', 'alerts'],
-        theme: 'light'
-      }
-    };
-    
-    const config = roleConfigs[userProfile.role] || roleConfigs.analyst;
-    
-    // Apply configuration
-    if (config.theme !== userProfile.preferences.theme) {
-      document.body.classList.toggle('light-theme', config.theme === 'light');
-    }
-    
-    // Reorder widgets based on priority
-    // This would be implemented with the widget system
-  }, [userProfile]);
-  
-  return null; // This component manages AI personalization, no UI
+
+  return null;
 }

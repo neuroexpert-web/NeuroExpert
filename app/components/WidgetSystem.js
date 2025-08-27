@@ -1,322 +1,266 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Chart from 'chart.js/auto';
 
 export default function WidgetSystem() {
   const [widgets, setWidgets] = useState([]);
-  const [isEditMode, setIsEditMode] = useState(false);
-  
+  const [charts, setCharts] = useState({});
+
   useEffect(() => {
-    // Load saved widget configuration
-    const savedWidgets = localStorage.getItem('dashboardWidgets');
-    if (savedWidgets) {
-      setWidgets(JSON.parse(savedWidgets));
-    } else {
-      // Initialize with default widgets
-      initializeDefaultWidgets();
-    }
+    // Инициализация виджетов
+    initializeWidgets();
     
-    // Set up drag and drop
-    initializeDragAndDrop();
-    
-    // Listen for widget events
-    window.addEventListener('toggle-edit-mode', handleToggleEditMode);
-    window.addEventListener('add-widget', handleAddWidget);
-    window.addEventListener('remove-widget', handleRemoveWidget);
+    // Обновление данных каждые 5 секунд
+    const updateInterval = setInterval(updateWidgetData, 5000);
     
     return () => {
-      window.removeEventListener('toggle-edit-mode', handleToggleEditMode);
-      window.removeEventListener('add-widget', handleAddWidget);
-      window.removeEventListener('remove-widget', handleRemoveWidget);
+      clearInterval(updateInterval);
+      // Очистка графиков
+      Object.values(charts).forEach(chart => chart.destroy());
     };
   }, []);
-  
-  const initializeDefaultWidgets = () => {
-    const defaultWidgets = [
-      {
-        id: 'revenue-widget',
-        type: 'kpi',
-        title: 'Выручка за месяц',
-        position: { x: 0, y: 0 },
-        size: { width: 1, height: 1 },
-        config: {
-          metric: 'revenue',
-          period: 'month',
-          showChart: true
+
+  const initializeWidgets = () => {
+    // KPI виджеты
+    animateKPIValues();
+    
+    // График продаж
+    initSalesChart();
+    
+    // Спарклайны
+    initSparklines();
+    
+    // Активность команды
+    loadTeamActivity();
+    
+    // AI рекомендации
+    loadAIRecommendations();
+  };
+
+  const animateKPIValues = () => {
+    const kpiWidgets = document.querySelectorAll('.kpi-widget');
+    
+    kpiWidgets.forEach(widget => {
+      const valueElement = widget.querySelector('.kpi-value');
+      if (valueElement) {
+        const finalValue = valueElement.textContent;
+        const isRevenue = finalValue.includes('₽');
+        const numericValue = parseFloat(finalValue.replace(/[^0-9.-]/g, ''));
+        
+        // Анимация от 0 до финального значения
+        let currentValue = 0;
+        const increment = numericValue / 50;
+        const timer = setInterval(() => {
+          currentValue += increment;
+          if (currentValue >= numericValue) {
+            currentValue = numericValue;
+            clearInterval(timer);
+          }
+          
+          if (isRevenue) {
+            valueElement.textContent = `₽ ${currentValue.toFixed(1)}K`;
+          } else if (finalValue.includes('%')) {
+            valueElement.textContent = `${currentValue.toFixed(1)}%`;
+          } else {
+            valueElement.textContent = Math.round(currentValue).toString();
+          }
+        }, 20);
+      }
+    });
+  };
+
+  const initSalesChart = () => {
+    const canvas = document.getElementById('salesChart');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: generateTimeLabels(30),
+        datasets: [{
+          label: 'Продажи',
+          data: generateSalesData(30),
+          borderColor: '#8b5cf6',
+          backgroundColor: 'rgba(139, 92, 246, 0.1)',
+          tension: 0.4,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            borderColor: '#8b5cf6',
+            borderWidth: 1,
+            cornerRadius: 8,
+            padding: 12
+          }
+        },
+        scales: {
+          x: {
+            grid: {
+              color: 'rgba(255, 255, 255, 0.05)'
+            },
+            ticks: {
+              color: 'rgba(255, 255, 255, 0.5)'
+            }
+          },
+          y: {
+            grid: {
+              color: 'rgba(255, 255, 255, 0.05)'
+            },
+            ticks: {
+              color: 'rgba(255, 255, 255, 0.5)',
+              callback: function(value) {
+                return '₽' + value + 'K';
+              }
+            }
+          }
         }
+      }
+    });
+
+    setCharts(prev => ({ ...prev, sales: chart }));
+  };
+
+  const initSparklines = () => {
+    const sparklines = document.querySelectorAll('.kpi-sparkline');
+    
+    sparklines.forEach((sparkline, index) => {
+      const canvas = document.createElement('canvas');
+      sparkline.appendChild(canvas);
+      
+      const ctx = canvas.getContext('2d');
+      const sparkChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: Array(20).fill(''),
+          datasets: [{
+            data: generateSparklineData(),
+            borderColor: index % 2 === 0 ? '#10b981' : '#f59e0b',
+            borderWidth: 2,
+            pointRadius: 0,
+            fill: false
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: { enabled: false }
+          },
+          scales: {
+            x: { display: false },
+            y: { display: false }
+          }
+        }
+      });
+    });
+  };
+
+  const loadTeamActivity = () => {
+    const activities = [
+      { user: 'АК', name: 'Анна Ким', action: 'завершила задачу "Анализ конкурентов"', time: '5 мин назад' },
+      { user: 'ИП', name: 'Иван Петров', action: 'создал новый отчет по продажам', time: '15 мин назад' },
+      { user: 'МС', name: 'Мария Соколова', action: 'обновила данные клиента #2451', time: '1 час назад' },
+      { user: 'ДН', name: 'Дмитрий Новиков', action: 'запустил email-кампанию', time: '2 часа назад' }
+    ];
+
+    const activityList = document.querySelector('.activity-list');
+    if (activityList) {
+      activityList.innerHTML = activities.map(activity => `
+        <div class="activity-item">
+          <div class="activity-avatar">${activity.user}</div>
+          <div class="activity-content">
+            <div class="activity-text"><strong>${activity.name}</strong> ${activity.action}</div>
+            <div class="activity-time">${activity.time}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+  };
+
+  const loadAIRecommendations = () => {
+    const recommendations = [
+      {
+        priority: 'Высокий',
+        text: 'Обратите внимание на снижение конверсии в сегменте B2B на 15%. Рекомендуется провести A/B тестирование новой посадочной страницы.',
+        actions: ['Создать тест', 'Подробнее']
       },
       {
-        id: 'clients-widget',
-        type: 'kpi',
-        title: 'Активные клиенты',
-        position: { x: 1, y: 0 },
-        size: { width: 1, height: 1 },
-        config: {
-          metric: 'active_clients',
-          showTrend: true
-        }
-      },
-      {
-        id: 'sales-chart',
-        type: 'chart',
-        title: 'График продаж',
-        position: { x: 0, y: 1 },
-        size: { width: 2, height: 2 },
-        config: {
-          chartType: 'line',
-          metrics: ['revenue', 'orders'],
-          period: '30d'
-        }
-      },
-      {
-        id: 'activity-feed',
-        type: 'activity',
-        title: 'Активность команды',
-        position: { x: 2, y: 0 },
-        size: { width: 1, height: 2 },
-        config: {
-          showAvatars: true,
-          limit: 10
-        }
+        priority: 'Средний',
+        text: 'Оптимальное время для запуска email-кампании: четверг 10:00-11:00. Ожидаемое увеличение открываемости на 23%.',
+        actions: ['Запланировать', 'Отклонить']
       }
     ];
-    
-    setWidgets(defaultWidgets);
-    localStorage.setItem('dashboardWidgets', JSON.stringify(defaultWidgets));
-  };
-  
-  const handleToggleEditMode = () => {
-    setIsEditMode(prev => !prev);
-    const dashboard = document.querySelector('.dashboard-grid');
-    if (dashboard) {
-      dashboard.classList.toggle('edit-mode');
+
+    const aiWidget = document.querySelector('.ai-recommendations-widget .widget-content');
+    if (aiWidget) {
+      aiWidget.innerHTML = recommendations.map(rec => `
+        <div class="ai-recommendation-item">
+          <div class="ai-priority">${rec.priority}</div>
+          <div class="ai-text">${rec.text}</div>
+          <div class="ai-actions">
+            ${rec.actions.map((action, i) => `
+              <button class="ai-action-btn ${i > 0 ? 'secondary' : ''}">${action}</button>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
     }
   };
-  
-  const handleAddWidget = (e) => {
-    const { type, config } = e.detail;
-    const newWidget = {
-      id: `widget-${Date.now()}`,
-      type,
-      title: config.title || 'Новый виджет',
-      position: findEmptyPosition(),
-      size: getDefaultSize(type),
-      config
-    };
-    
-    const updatedWidgets = [...widgets, newWidget];
-    setWidgets(updatedWidgets);
-    localStorage.setItem('dashboardWidgets', JSON.stringify(updatedWidgets));
-  };
-  
-  const handleRemoveWidget = (e) => {
-    const widgetId = e.detail;
-    const updatedWidgets = widgets.filter(w => w.id !== widgetId);
-    setWidgets(updatedWidgets);
-    localStorage.setItem('dashboardWidgets', JSON.stringify(updatedWidgets));
-  };
-  
-  const findEmptyPosition = () => {
-    // Simple algorithm to find empty space in grid
-    const grid = new Array(10).fill(null).map(() => new Array(10).fill(false));
-    
-    widgets.forEach(widget => {
-      for (let y = widget.position.y; y < widget.position.y + widget.size.height; y++) {
-        for (let x = widget.position.x; x < widget.position.x + widget.size.width; x++) {
-          if (grid[y] && grid[y][x] !== undefined) {
-            grid[y][x] = true;
-          }
-        }
-      }
+
+  const updateWidgetData = () => {
+    // Обновление KPI
+    const kpiChanges = document.querySelectorAll('.kpi-change');
+    kpiChanges.forEach(change => {
+      const currentValue = parseFloat(change.textContent);
+      const newValue = currentValue + (Math.random() - 0.5) * 0.5;
+      change.textContent = `${newValue > 0 ? '+' : ''}${newValue.toFixed(1)}%`;
+      change.className = `kpi-change ${newValue > 0 ? 'positive' : 'negative'}`;
     });
-    
-    // Find first empty position
-    for (let y = 0; y < 10; y++) {
-      for (let x = 0; x < 10; x++) {
-        if (!grid[y][x]) {
-          return { x, y };
-        }
-      }
-    }
-    
-    return { x: 0, y: 0 };
-  };
-  
-  const getDefaultSize = (type) => {
-    switch (type) {
-      case 'kpi':
-        return { width: 1, height: 1 };
-      case 'chart':
-        return { width: 2, height: 2 };
-      case 'activity':
-      case 'tasks':
-        return { width: 1, height: 2 };
-      default:
-        return { width: 1, height: 1 };
+
+    // Обновление графика продаж
+    if (charts.sales) {
+      const newData = generateSalesData(1);
+      charts.sales.data.datasets[0].data.shift();
+      charts.sales.data.datasets[0].data.push(newData[0]);
+      charts.sales.update('none');
     }
   };
-  
-  const initializeDragAndDrop = () => {
-    let draggedWidget = null;
-    let placeholder = null;
-    
-    const handleDragStart = (e) => {
-      if (!isEditMode) return;
-      
-      const widget = e.target.closest('.widget');
-      if (!widget) return;
-      
-      draggedWidget = widget;
-      widget.classList.add('dragging');
-      
-      // Create placeholder
-      placeholder = document.createElement('div');
-      placeholder.className = 'widget-placeholder';
-      placeholder.style.width = widget.offsetWidth + 'px';
-      placeholder.style.height = widget.offsetHeight + 'px';
-    };
-    
-    const handleDragOver = (e) => {
-      if (!draggedWidget || !placeholder) return;
-      e.preventDefault();
-      
-      const dashboard = document.querySelector('.dashboard-grid');
-      const afterElement = getDragAfterElement(dashboard, e.clientY);
-      
-      if (afterElement == null) {
-        dashboard.appendChild(placeholder);
-      } else {
-        dashboard.insertBefore(placeholder, afterElement);
-      }
-    };
-    
-    const handleDragEnd = (e) => {
-      if (!draggedWidget) return;
-      
-      draggedWidget.classList.remove('dragging');
-      
-      if (placeholder && placeholder.parentNode) {
-        placeholder.parentNode.replaceChild(draggedWidget, placeholder);
-        
-        // Update widget positions
-        updateWidgetPositions();
-      }
-      
-      draggedWidget = null;
-      placeholder = null;
-    };
-    
-    const getDragAfterElement = (container, y) => {
-      const draggableElements = [...container.querySelectorAll('.widget:not(.dragging)')];
-      
-      return draggableElements.reduce((closest, child) => {
-        const box = child.getBoundingClientRect();
-        const offset = y - box.top - box.height / 2;
-        
-        if (offset < 0 && offset > closest.offset) {
-          return { offset: offset, element: child };
-        } else {
-          return closest;
-        }
-      }, { offset: Number.NEGATIVE_INFINITY }).element;
-    };
-    
-    document.addEventListener('dragstart', handleDragStart);
-    document.addEventListener('dragover', handleDragOver);
-    document.addEventListener('dragend', handleDragEnd);
-    
-    return () => {
-      document.removeEventListener('dragstart', handleDragStart);
-      document.removeEventListener('dragover', handleDragOver);
-      document.removeEventListener('dragend', handleDragEnd);
-    };
-  };
-  
-  const updateWidgetPositions = () => {
-    const dashboard = document.querySelector('.dashboard-grid');
-    const widgetElements = dashboard.querySelectorAll('.widget');
-    
-    const updatedWidgets = Array.from(widgetElements).map((el, index) => {
-      const widgetId = el.getAttribute('data-widget-id');
-      const widget = widgets.find(w => w.id === widgetId);
-      
-      if (widget) {
-        // Calculate new position based on index
-        const columns = 4; // Adjust based on grid
-        return {
-          ...widget,
-          position: {
-            x: index % columns,
-            y: Math.floor(index / columns)
-          }
-        };
-      }
-      
-      return null;
-    }).filter(Boolean);
-    
-    setWidgets(updatedWidgets);
-    localStorage.setItem('dashboardWidgets', JSON.stringify(updatedWidgets));
-  };
-  
-  // Widget action handlers
-  useEffect(() => {
-    const handleWidgetAction = (e) => {
-      const actionBtn = e.target.closest('.widget-action');
-      if (!actionBtn) return;
-      
-      const action = actionBtn.getAttribute('data-action');
-      const widget = actionBtn.closest('.widget');
-      const widgetId = widget?.getAttribute('data-widget-id');
-      
-      switch (action) {
-        case 'refresh':
-          refreshWidget(widgetId);
-          break;
-        case 'settings':
-          openWidgetSettings(widgetId);
-          break;
-        case 'remove':
-          if (confirm('Удалить этот виджет?')) {
-            window.dispatchEvent(new CustomEvent('remove-widget', { detail: widgetId }));
-          }
-          break;
-      }
-    };
-    
-    document.addEventListener('click', handleWidgetAction);
-    return () => document.removeEventListener('click', handleWidgetAction);
-  }, []);
-  
-  const refreshWidget = (widgetId) => {
-    const widget = document.querySelector(`[data-widget-id="${widgetId}"]`);
-    if (widget) {
-      widget.classList.add('loading');
-      
-      // Simulate data refresh
-      setTimeout(() => {
-        widget.classList.remove('loading');
-        
-        // Trigger widget update event
-        window.dispatchEvent(new CustomEvent('widget-refresh', { 
-          detail: { widgetId, timestamp: Date.now() }
-        }));
-      }, 1000);
+
+  // Вспомогательные функции
+  const generateTimeLabels = (count) => {
+    const labels = [];
+    const now = new Date();
+    for (let i = count - 1; i >= 0; i--) {
+      const date = new Date(now - i * 24 * 60 * 60 * 1000);
+      labels.push(date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' }));
     }
+    return labels;
   };
-  
-  const openWidgetSettings = (widgetId) => {
-    // Open settings modal for widget
-    window.dispatchEvent(new CustomEvent('open-widget-settings', { detail: widgetId }));
+
+  const generateSalesData = (count) => {
+    const data = [];
+    for (let i = 0; i < count; i++) {
+      data.push(Math.round(150 + Math.random() * 100));
+    }
+    return data;
   };
-  
-  // Apply widget draggable attribute
-  useEffect(() => {
-    const widgets = document.querySelectorAll('.widget');
-    widgets.forEach(widget => {
-      widget.setAttribute('draggable', isEditMode);
-    });
-  }, [isEditMode, widgets]);
-  
-  return null; // This component manages widget system, no UI
+
+  const generateSparklineData = () => {
+    return Array(20).fill(0).map(() => Math.random() * 100);
+  };
+
+  return null;
 }

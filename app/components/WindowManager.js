@@ -1,294 +1,194 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function WindowManager() {
-  const [windows, setWindows] = useState([]);
-  const [activeWindowId, setActiveWindowId] = useState(null);
-  const dragRef = useRef(null);
-  const resizeRef = useRef(null);
-  
+  const windowsRef = useRef([]);
+  const draggedWindow = useRef(null);
+  const dragOffset = useRef({ x: 0, y: 0 });
+
   useEffect(() => {
-    // Initialize default windows
-    const defaultWindows = [
-      {
-        id: 'task-manager',
-        title: 'Менеджер задач',
-        x: 100,
-        y: 100,
-        width: 600,
-        height: 400,
-        minimized: false,
-        maximized: false,
-        visible: false
-      },
-      {
-        id: 'ai-assistant',
-        title: 'AI Ассистент',
-        x: 200,
-        y: 150,
-        width: 400,
-        height: 500,
-        minimized: false,
-        maximized: false,
-        visible: false
+    // Инициализация управления окнами
+    const floatingWindows = document.querySelectorAll('.floating-window');
+    
+    floatingWindows.forEach(window => {
+      const header = window.querySelector('.window-header');
+      const minimizeBtn = window.querySelector('.window-minimize');
+      const maximizeBtn = window.querySelector('.window-maximize');
+      const closeBtn = window.querySelector('.window-close');
+      
+      // Перетаскивание окна
+      if (header) {
+        header.addEventListener('mousedown', startDrag);
       }
-    ];
+      
+      // Кнопки управления
+      if (minimizeBtn) {
+        minimizeBtn.addEventListener('click', () => minimizeWindow(window));
+      }
+      
+      if (maximizeBtn) {
+        maximizeBtn.addEventListener('click', () => maximizeWindow(window));
+      }
+      
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => closeWindow(window));
+      }
+      
+      // Изменение размера
+      addResizeHandles(window);
+    });
     
-    setWindows(defaultWindows);
+    // Глобальные обработчики
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', stopDrag);
     
-    // Listen for window open events
-    const handleOpenWindow = (e) => {
-      const windowId = e.detail;
-      openWindow(windowId);
+    return () => {
+      document.removeEventListener('mousemove', drag);
+      document.removeEventListener('mouseup', stopDrag);
     };
-    
-    window.addEventListener('open-window', handleOpenWindow);
-    return () => window.removeEventListener('open-window', handleOpenWindow);
   }, []);
   
-  // Open window
-  const openWindow = (windowId) => {
-    setWindows(prev => prev.map(w => 
-      w.id === windowId ? { ...w, visible: true, minimized: false } : w
-    ));
-    setActiveWindowId(windowId);
+  // Перетаскивание
+  const startDrag = (e) => {
+    if (e.target.classList.contains('window-control')) return;
     
-    // Add active class to window
+    const window = e.target.closest('.floating-window');
+    draggedWindow.current = window;
+    
+    const rect = window.getBoundingClientRect();
+    dragOffset.current = {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
+    
+    // Поднять окно наверх
+    bringToFront(window);
+  };
+  
+  const drag = (e) => {
+    if (!draggedWindow.current) return;
+    
+    const workspace = document.querySelector('.workspace-area');
+    const workspaceRect = workspace.getBoundingClientRect();
+    
+    let newX = e.clientX - dragOffset.current.x - workspaceRect.left;
+    let newY = e.clientY - dragOffset.current.y - workspaceRect.top;
+    
+    // Ограничения
+    newX = Math.max(0, Math.min(newX, workspaceRect.width - draggedWindow.current.offsetWidth));
+    newY = Math.max(0, Math.min(newY, workspaceRect.height - draggedWindow.current.offsetHeight));
+    
+    draggedWindow.current.style.left = newX + 'px';
+    draggedWindow.current.style.top = newY + 'px';
+  };
+  
+  const stopDrag = () => {
+    draggedWindow.current = null;
+  };
+  
+  // Управление окнами
+  const minimizeWindow = (window) => {
+    window.classList.add('minimized');
+    window.style.transform = 'scale(0.2)';
+    window.style.opacity = '0';
+    
     setTimeout(() => {
-      const windowEl = document.querySelector(`#window-${windowId}`);
-      if (windowEl) {
-        windowEl.classList.add('active');
-        bringToFront(windowId);
-      }
-    }, 0);
+      window.style.display = 'none';
+    }, 300);
   };
   
-  // Close window
-  const closeWindow = (windowId) => {
-    const windowEl = document.querySelector(`#window-${windowId}`);
-    if (windowEl) {
-      windowEl.classList.remove('active');
-      setTimeout(() => {
-        setWindows(prev => prev.map(w => 
-          w.id === windowId ? { ...w, visible: false } : w
-        ));
-      }, 200);
+  const maximizeWindow = (window) => {
+    if (window.classList.contains('maximized')) {
+      // Восстановить
+      window.classList.remove('maximized');
+      window.style.width = window.dataset.originalWidth;
+      window.style.height = window.dataset.originalHeight;
+      window.style.left = window.dataset.originalLeft;
+      window.style.top = window.dataset.originalTop;
+    } else {
+      // Развернуть
+      window.dataset.originalWidth = window.style.width;
+      window.dataset.originalHeight = window.style.height;
+      window.dataset.originalLeft = window.style.left;
+      window.dataset.originalTop = window.style.top;
+      
+      window.classList.add('maximized');
+      window.style.width = '100%';
+      window.style.height = '100%';
+      window.style.left = '0';
+      window.style.top = '0';
     }
   };
   
-  // Minimize window
-  const minimizeWindow = (windowId) => {
-    setWindows(prev => prev.map(w => 
-      w.id === windowId ? { ...w, minimized: true } : w
-    ));
+  const closeWindow = (window) => {
+    window.style.transform = 'scale(0.8)';
+    window.style.opacity = '0';
+    
+    setTimeout(() => {
+      window.classList.remove('active');
+      window.style.display = 'none';
+    }, 300);
   };
   
-  // Maximize/restore window
-  const toggleMaximize = (windowId) => {
-    setWindows(prev => prev.map(w => {
-      if (w.id === windowId) {
-        if (w.maximized) {
-          // Restore
-          return { ...w, maximized: false };
-        } else {
-          // Maximize
-          return {
-            ...w,
-            maximized: true,
-            prevX: w.x,
-            prevY: w.y,
-            prevWidth: w.width,
-            prevHeight: w.height
-          };
-        }
-      }
-      return w;
-    }));
-  };
-  
-  // Bring window to front
-  const bringToFront = (windowId) => {
+  const bringToFront = (window) => {
     const allWindows = document.querySelectorAll('.floating-window');
-    let maxZ = 100;
-    
-    allWindows.forEach(w => {
-      const z = parseInt(w.style.zIndex || 100);
-      if (z > maxZ) maxZ = z;
+    allWindows.forEach((w, index) => {
+      w.style.zIndex = w === window ? 200 : 100 + index;
     });
-    
-    const targetWindow = document.querySelector(`#window-${windowId}`);
-    if (targetWindow) {
-      targetWindow.style.zIndex = maxZ + 1;
-    }
-    
-    setActiveWindowId(windowId);
   };
   
-  // Drag functionality
-  useEffect(() => {
-    let isDragging = false;
-    let currentWindow = null;
-    let startX = 0;
-    let startY = 0;
-    let windowStartX = 0;
-    let windowStartY = 0;
+  // Изменение размера
+  const addResizeHandles = (window) => {
+    const handles = ['n', 'e', 's', 'w', 'ne', 'se', 'sw', 'nw'];
     
-    const handleMouseDown = (e) => {
-      const header = e.target.closest('.window-header');
-      if (!header || e.target.closest('.window-controls')) return;
-      
-      const windowEl = header.closest('.floating-window');
-      if (!windowEl) return;
-      
-      isDragging = true;
-      currentWindow = windowEl;
-      startX = e.clientX;
-      startY = e.clientY;
-      
-      const windowId = windowEl.id.replace('window-', '');
-      const window = windows.find(w => w.id === windowId);
-      if (window && !window.maximized) {
-        windowStartX = window.x;
-        windowStartY = window.y;
-        
-        currentWindow.style.cursor = 'move';
-        document.body.style.cursor = 'move';
-        
-        bringToFront(windowId);
-      }
-    };
-    
-    const handleMouseMove = (e) => {
-      if (!isDragging || !currentWindow) return;
-      
-      const deltaX = e.clientX - startX;
-      const deltaY = e.clientY - startY;
-      
-      const newX = windowStartX + deltaX;
-      const newY = windowStartY + deltaY;
-      
-      // Constrain to viewport
-      const maxX = window.innerWidth - currentWindow.offsetWidth;
-      const maxY = window.innerHeight - currentWindow.offsetHeight - 60; // Account for header
-      
-      const constrainedX = Math.max(0, Math.min(newX, maxX));
-      const constrainedY = Math.max(0, Math.min(newY, maxY));
-      
-      currentWindow.style.left = constrainedX + 'px';
-      currentWindow.style.top = constrainedY + 'px';
-      
-      // Update state
-      const windowId = currentWindow.id.replace('window-', '');
-      setWindows(prev => prev.map(w => 
-        w.id === windowId ? { ...w, x: constrainedX, y: constrainedY } : w
-      ));
-    };
-    
-    const handleMouseUp = () => {
-      isDragging = false;
-      currentWindow = null;
-      document.body.style.cursor = '';
-    };
-    
-    document.addEventListener('mousedown', handleMouseDown);
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
-    
-    return () => {
-      document.removeEventListener('mousedown', handleMouseDown);
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, [windows]);
-  
-  // Window control handlers
-  useEffect(() => {
-    const handleWindowControl = (e) => {
-      const btn = e.target.closest('.window-control');
-      if (!btn) return;
-      
-      const windowEl = btn.closest('.floating-window');
-      if (!windowEl) return;
-      
-      const windowId = windowEl.id.replace('window-', '');
-      const action = btn.getAttribute('data-action');
-      
-      switch (action) {
-        case 'minimize':
-          minimizeWindow(windowId);
-          break;
-        case 'maximize':
-          toggleMaximize(windowId);
-          break;
-        case 'close':
-          closeWindow(windowId);
-          break;
-      }
-    };
-    
-    document.addEventListener('click', handleWindowControl);
-    return () => document.removeEventListener('click', handleWindowControl);
-  }, []);
-  
-  // Update window positions and states
-  useEffect(() => {
-    windows.forEach(window => {
-      const windowEl = document.querySelector(`#window-${window.id}`);
-      if (!windowEl) return;
-      
-      if (window.visible && !window.minimized) {
-        windowEl.classList.add('active');
-        
-        if (window.maximized) {
-          windowEl.style.left = '0';
-          windowEl.style.top = '0';
-          windowEl.style.width = '100%';
-          windowEl.style.height = `calc(100% - ${60}px)`; // Account for header
-        } else {
-          windowEl.style.left = window.x + 'px';
-          windowEl.style.top = window.y + 'px';
-          windowEl.style.width = window.width + 'px';
-          windowEl.style.height = window.height + 'px';
-        }
-      } else {
-        windowEl.classList.remove('active');
-      }
+    handles.forEach(direction => {
+      const handle = document.createElement('div');
+      handle.className = `resize-handle resize-${direction}`;
+      handle.addEventListener('mousedown', (e) => startResize(e, window, direction));
+      window.appendChild(handle);
     });
-  }, [windows]);
+  };
   
-  // Quick action handlers
-  useEffect(() => {
-    const quickActions = document.querySelectorAll('.quick-action');
+  const startResize = (e, window, direction) => {
+    e.preventDefault();
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const startWidth = window.offsetWidth;
+    const startHeight = window.offsetHeight;
+    const startLeft = window.offsetLeft;
+    const startTop = window.offsetTop;
     
-    const handleQuickAction = (e) => {
-      const action = e.currentTarget.getAttribute('data-action');
+    const doResize = (e) => {
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
       
-      switch (action) {
-        case 'new-task':
-          openWindow('task-manager');
-          // Trigger new task creation
-          setTimeout(() => {
-            window.dispatchEvent(new CustomEvent('create-new-task'));
-          }, 300);
-          break;
-        case 'ai-chat':
-          openWindow('ai-assistant');
-          break;
-        // Add more actions as needed
+      if (direction.includes('e')) {
+        window.style.width = Math.max(400, startWidth + dx) + 'px';
+      }
+      if (direction.includes('s')) {
+        window.style.height = Math.max(300, startHeight + dy) + 'px';
+      }
+      if (direction.includes('w')) {
+        const newWidth = Math.max(400, startWidth - dx);
+        window.style.width = newWidth + 'px';
+        window.style.left = (startLeft + startWidth - newWidth) + 'px';
+      }
+      if (direction.includes('n')) {
+        const newHeight = Math.max(300, startHeight - dy);
+        window.style.height = newHeight + 'px';
+        window.style.top = (startTop + startHeight - newHeight) + 'px';
       }
     };
     
-    quickActions.forEach(action => {
-      action.addEventListener('click', handleQuickAction);
-    });
-    
-    return () => {
-      quickActions.forEach(action => {
-        action.removeEventListener('click', handleQuickAction);
-      });
+    const stopResize = () => {
+      document.removeEventListener('mousemove', doResize);
+      document.removeEventListener('mouseup', stopResize);
     };
-  }, []);
+    
+    document.addEventListener('mousemove', doResize);
+    document.addEventListener('mouseup', stopResize);
+  };
   
-  return null; // This component manages window state, no UI
+  return null;
 }
