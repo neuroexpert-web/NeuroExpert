@@ -369,6 +369,8 @@ export default function WidgetSystem() {
     const width = window.innerWidth;
     const grid = document.querySelector('.dashboard-grid');
     
+    if (!grid) return; // Добавлена проверка на null
+    
     if (width < 768) {
       grid.style.gridTemplateColumns = '1fr';
     } else if (width < 1200) {

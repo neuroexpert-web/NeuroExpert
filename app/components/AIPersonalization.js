@@ -49,6 +49,36 @@ export default function AIPersonalization() {
     startAnomalyDetection();
   };
 
+  // Start behavior tracking
+  const startBehaviorTracking = () => {
+    console.log('Starting behavior tracking...');
+    behaviorTracking.current = true;
+  };
+
+  // Track page view
+  const trackPageView = () => {
+    if (!behaviorTracking.current) return;
+    
+    const pageView = {
+      url: window.location.pathname,
+      timestamp: new Date(),
+      referrer: document.referrer
+    };
+    
+    setUserBehavior(prev => ({
+      ...prev,
+      interactions: [...prev.interactions, { type: 'pageView', data: pageView }]
+    }));
+  };
+
+  // Start session tracking
+  const startSessionTracking = () => {
+    if (!behaviorTracking.current) return;
+    
+    const sessionStart = new Date();
+    localStorage.setItem('ai-session-start', sessionStart.toISOString());
+  };
+
   // Load user profile and preferences
   const loadUserProfile = () => {
     const savedProfile = localStorage.getItem('ai-user-profile');

@@ -1,56 +1,16 @@
 {
-  "name": "NeuroExpert - AI-платформа для бизнеса",
+  "name": "NeuroExpert",
   "short_name": "NeuroExpert",
-  "description": "Интеллектуальная платформа для цифровизации и автоматизации бизнес-процессов",
+  "description": "AI-платформа для автоматизации бизнеса",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#6366f1",
+  "background_color": "#0a0a0f",
+  "theme_color": "#8a2be2",
   "orientation": "portrait-primary",
-  "scope": "/",
-  "lang": "ru-RU",
-  "dir": "ltr",
-  "categories": ["business", "productivity", "utilities"],
   "icons": [
-    {
-      "src": "/icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icon-128x128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
     {
       "src": "/icon-192x192.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icon-384x384.png",
-      "sizes": "384x384",
       "type": "image/png",
       "purpose": "any maskable"
     },
@@ -61,36 +21,7 @@
       "purpose": "any maskable"
     }
   ],
-  "screenshots": [
-    {
-      "src": "/screenshot-1.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "label": "Главный экран платформы"
-    },
-    {
-      "src": "/screenshot-2.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "label": "AI-ассистент в действии"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "AI Чат",
-      "short_name": "Чат",
-      "description": "Открыть AI-ассистента",
-      "url": "/?chat=open",
-      "icons": [{ "src": "/icon-96x96.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "Калькулятор ROI",
-      "short_name": "ROI",
-      "description": "Рассчитать окупаемость",
-      "url": "/#calculator",
-      "icons": [{ "src": "/icon-96x96.png", "sizes": "96x96" }]
-    }
-  ],
-  "related_applications": [],
-  "prefer_related_applications": false
+  "categories": ["business", "productivity"],
+  "lang": "ru",
+  "dir": "ltr"
 }
