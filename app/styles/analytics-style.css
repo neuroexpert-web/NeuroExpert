@@ -1,12 +1,25 @@
-/* --- СТИЛИ ДЛЯ ВТОРОЙ СТРАНИЦЫ: АНАЛИТИКА --- */
+/* --- СТИЛИ ДЛЯ ВТОРОЙ СТРАНИЦЫ: АНАЛИТИКА (УЛУЧШЕННАЯ) --- */
 
-/* --- 0. ОБЩИЕ ПЕРЕМЕННЫЕ (дополняем) --- */
+/* --- 0. ОБЩИЕ ПЕРЕМЕННЫЕ --- */
 :root {
-    --color-surface-glass: rgba(20, 20, 50, 0.4);
-    --color-surface-border: rgba(255, 255, 255, 0.2);
-    --color-text-positive: #28a745;
-    --color-text-negative: #dc3545;
-    --backdrop-blur-value: 12px;
+    /* Glassmorphism */
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-blur: 20px;
+    
+    /* Цвета */
+    --color-positive: #10b981;
+    --color-negative: #ef4444;
+    --color-warning: #f59e0b;
+    --color-info: #3b82f6;
+    
+    /* Приоритеты */
+    --priority-high: #ef4444;
+    --priority-medium: #f59e0b;
+    --priority-low: #10b981;
+    
+    /* Анимации */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* --- 1. СТРУКТУРА СТРАНИЦЫ --- */

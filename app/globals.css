@@ -11,7 +11,7 @@
 @import './styles/redesign-preview.css';
 
 /* Импорт стилей аналитики */
-@import './styles/analytics-style.css';
+@import './styles/analytics-style-v2.css';
 
 /* Импорт стилей аудитории */
 @import './styles/audience-style.css';

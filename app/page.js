@@ -1,7 +1,19 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import SwipeContainer from './components/SwipeContainer';
+
+// Динамические импорты для аналитики
+const AnalyticsCharts = dynamic(() => import('./components/AnalyticsCharts'), {
+  ssr: false,
+  loading: () => null
+});
+
+const RealtimeUpdates = dynamic(() => import('./components/RealtimeUpdates'), {
+  ssr: false,
+  loading: () => null
+});
 
 export default function Home() {
   const [currentSection, setCurrentSection] = useState(0);
@@ -47,108 +59,182 @@ export default function Home() {
       </main>
     </section>,
     
-    // 2. Аналитика
-    <section key="analytics" id="page-analytics" className="full-page">
-      <div className="page-header">
+    // 2. Аналитика - улучшенная с живыми KPI и графиками
+    <section key="analytics" id="analytics-dashboard" className="full-page scrollable-section">
+      <header className="page-header">
         <h2>Аналитика в реальном времени</h2>
-        <p>Ключевые показатели и AI-рекомендации для вашего бизнеса</p>
-      </div>
-
-      {/* Контейнер для скролла */}
-      <div className="dashboard-scroll-container">
-        
-        {/* Блок 1: Ключевые метрики (KPI) */}
-        <div className="kpi-grid">
-          <div className="kpi-card">
-            <div className="card-header">
+        <p>Показатели KPI и AI-рекомендации</p>
+      </header>
+      
+      <div className="dashboard-content">
+        {/* KPI карточки */}
+        <div className="kpi-cards">
+          <div className="kpi-card glass-card" id="kpi-revenue">
+            <div className="kpi-header">
+              <span className="kpi-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </span>
               <span className="kpi-title">Выручка</span>
-              <span className="kpi-icon revenue-icon"></span>
             </div>
             <div className="kpi-value">₽ 7 128,4K</div>
             <div className="kpi-trend positive">
-              <span className="arrow-up"></span> +5.2% vs. прошлый месяц
+              <span className="trend-icon">↑</span>
+              <span>+5.2% vs. прошлый месяц</span>
             </div>
+            <div className="kpi-sparkline" id="revenue-sparkline"></div>
           </div>
 
-          <div className="kpi-card">
-            <div className="card-header">
+          <div className="kpi-card glass-card" id="kpi-clients">
+            <div className="kpi-header">
+              <span className="kpi-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </span>
               <span className="kpi-title">Новые клиенты</span>
-              <span className="kpi-icon clients-icon"></span>
             </div>
             <div className="kpi-value">162</div>
             <div className="kpi-trend positive">
-              <span className="arrow-up"></span> +12%
+              <span className="trend-icon">↑</span>
+              <span>+12% за месяц</span>
             </div>
+            <div className="kpi-sparkline" id="clients-sparkline"></div>
           </div>
 
-          <div className="kpi-card">
-            <div className="card-header">
+          <div className="kpi-card glass-card" id="kpi-satisfaction">
+            <div className="kpi-header">
+              <span className="kpi-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </span>
               <span className="kpi-title">Удовлетворенность</span>
-              <span className="kpi-icon satisfaction-icon"></span>
             </div>
             <div className="kpi-value">4.85/5</div>
             <div className="kpi-trend negative">
-              <span className="arrow-down"></span> -0.15
+              <span className="trend-icon">↓</span>
+              <span>-0.15 пунктов</span>
             </div>
+            <div className="kpi-sparkline" id="satisfaction-sparkline"></div>
           </div>
           
-          <div className="kpi-card">
-            <div className="card-header">
+          <div className="kpi-card glass-card" id="kpi-conversion">
+            <div className="kpi-header">
+              <span className="kpi-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M22 12h-4l-3 9L9 3l-3 9H2" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </span>
               <span className="kpi-title">Конверсия</span>
-              <span className="kpi-icon conversion-icon"></span>
             </div>
             <div className="kpi-value">3.13%</div>
             <div className="kpi-trend positive">
-              <span className="arrow-up"></span> +0.5%
+              <span className="trend-icon">↑</span>
+              <span>+0.5% рост</span>
             </div>
+            <div className="kpi-sparkline" id="conversion-sparkline"></div>
           </div>
         </div>
-
-        {/* Блок 2: Главный дашборд с графиками */}
-        <div className="main-dashboard-grid">
-          <div className="chart-card large-card">
-            <h3>Динамика выручки (Последние 30 дней)</h3>
-            <div className="chart-placeholder">
+        
+        {/* Контейнер для графиков */}
+        <div className="charts-container">
+          <div className="chart-card glass-card" id="chart-revenue">
+            <h3>Динамика выручки (30 дней)</h3>
+            <div className="chart-wrapper">
               <canvas id="revenueChart"></canvas>
             </div>
           </div>
-
-          <div className="chart-card">
+          
+          <div className="chart-card glass-card" id="chart-traffic">
             <h3>Источники трафика</h3>
-            <div className="chart-placeholder">
+            <div className="chart-wrapper">
               <canvas id="trafficChart"></canvas>
             </div>
           </div>
-          <div className="chart-card">
+          
+          <div className="chart-card glass-card" id="chart-funnel">
             <h3>Воронка продаж</h3>
-            <div className="chart-placeholder">
+            <div className="chart-wrapper">
               <canvas id="funnelChart"></canvas>
             </div>
           </div>
         </div>
-        
-        {/* Блок 3: AI-Рекомендации */}
-        <div className="ai-recommendations">
-          <h3>AI-рекомендации для вашего бизнеса</h3>
-          <div className="recommendation-card">
-            <div className="rec-icon idea-icon"></div>
-            <div className="rec-content">
+
+        {/* AI рекомендации */}
+        <section className="ai-recommendations">
+          <h3>AI-рекомендации для роста бизнеса</h3>
+          <div className="recommendations-grid">
+            <div className="recommendation-card glass-card">
+              <div className="rec-header">
+                <div className="rec-icon idea">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" strokeWidth="2"/>
+                  </svg>
+                </div>
+                <div className="rec-priority high">Высокий приоритет</div>
+              </div>
               <h4>Оптимизируйте мобильную версию</h4>
               <p>72% новых пользователей приходят с мобильных устройств. Улучшение UX на смартфонах может повысить конверсию на 15%.</p>
+              <div className="rec-actions">
+                <button className="rec-action-button primary">Начать оптимизацию</button>
+                <button className="rec-action-button secondary">Подробнее</button>
+              </div>
             </div>
-            <button className="rec-action-button">Подробнее</button>
-          </div>
-          <div className="recommendation-card">
-            <div className="rec-icon warning-icon"></div>
-            <div className="rec-content">
+            
+            <div className="recommendation-card glass-card">
+              <div className="rec-header">
+                <div className="rec-icon warning">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4m0 4h.01" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </div>
+                <div className="rec-priority medium">Средний приоритет</div>
+              </div>
               <h4>Риск оттока клиентов</h4>
               <p>Сегмент "Малый бизнес" показывает снижение активности на 25%. Рекомендуется запустить для них email-кампанию.</p>
+              <div className="rec-actions">
+                <button className="rec-action-button primary">Создать кампанию</button>
+                <button className="rec-action-button secondary">Анализ сегмента</button>
+              </div>
             </div>
-            <button className="rec-action-button">Создать кампанию</button>
+
+            <div className="recommendation-card glass-card">
+              <div className="rec-header">
+                <div className="rec-icon success">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </div>
+                <div className="rec-priority low">Возможность роста</div>
+              </div>
+              <h4>Увеличьте частоту покупок</h4>
+              <p>Внедрение программы лояльности может увеличить повторные покупки на 30% и средний чек на 20%.</p>
+              <div className="rec-actions">
+                <button className="rec-action-button primary">Запустить программу</button>
+                <button className="rec-action-button secondary">Изучить варианты</button>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        {/* Индикатор скролла */}
+        <div className="scroll-indicator">
+          <span>Прокрутите для большего</span>
+          <div className="scroll-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M7 10l5 5 5-5" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
           </div>
         </div>
-
       </div>
+      
+      {/* Компоненты для графиков и обновлений в реальном времени */}
+      <Suspense fallback={null}>
+        <AnalyticsCharts />
+        <RealtimeUpdates />
+      </Suspense>
     </section>,
 
     // 3. Аудитория
