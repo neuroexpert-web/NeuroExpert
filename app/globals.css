@@ -16,6 +16,7 @@
 
 /* Импорт стилей аудитории */
 @import './styles/audience-style.css';
+@import './styles/audience-style-v2.css';
 
 /* Импорт стилей процессов */
 @import './styles/processes-style.css';

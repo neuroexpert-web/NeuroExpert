@@ -25,6 +25,17 @@ const OnboardingTour = dynamic(() => import('./components/OnboardingTour'), {
   loading: () => null
 });
 
+// Динамические импорты для страницы аудитории
+const SegmentManager = dynamic(() => import('./components/SegmentManager'), {
+  ssr: false,
+  loading: () => null
+});
+
+const AudienceTooltips = dynamic(() => import('./components/AudienceTooltips'), {
+  ssr: false,
+  loading: () => null
+});
+
 export default function Home() {
   const [currentSection, setCurrentSection] = useState(0);
   const [activeSegment, setActiveSegment] = useState('loyal');
@@ -347,88 +358,337 @@ export default function Home() {
       </Suspense>
     </section>,
 
-    // 3. Аудитория
+    // 3. Аудитория - улучшенная с интерактивными сегментами
     <section key="audience" id="page-audience" className="full-page">
       <div className="page-header">
         <h2>Портрет вашей аудитории</h2>
-        <p>Изучайте, сегментируйте и взаимодействуйте с вашими клиентами</p>
+        <p>Понимайте своих клиентов, чтобы предлагать им то, что действительно нужно</p>
       </div>
 
       <div className="audience-container">
         {/* Левая панель: Выбор сегмента */}
-        <div className="segment-selector-panel">
-          <h4>Сегменты клиентов</h4>
-          <ul>
+        <div className="segment-selector-panel glass-card">
+          <div className="panel-header">
+            <h4>Сегменты клиентов</h4>
+            <button className="info-btn" aria-label="Подробнее о сегментации">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+              </svg>
+            </button>
+          </div>
+          <ul role="tablist" aria-label="Список сегментов клиентов">
             <li 
               className={`segment-item ${activeSegment === 'loyal' ? 'active' : ''}`}
               onClick={() => handleSegmentChange('loyal')}
+              onKeyDown={(e) => e.key === 'Enter' && handleSegmentChange('loyal')}
+              role="tab"
+              tabIndex={activeSegment === 'loyal' ? 0 : -1}
+              aria-selected={activeSegment === 'loyal'}
+              aria-controls="segment-loyal-content"
+              data-segment="loyal"
             >
-              <span className="segment-icon loyal-icon"></span>
-              <span>Лояльные клиенты</span>
+              <span className="segment-icon loyal-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" strokeWidth="2"/>
+                </svg>
+              </span>
+              <div className="segment-info">
+                <span className="segment-name">Лояльные клиенты</span>
+                <span className="segment-count">3,450 человек</span>
+              </div>
+              <span className="segment-percentage">28%</span>
             </li>
             <li 
               className={`segment-item ${activeSegment === 'new' ? 'active' : ''}`}
               onClick={() => handleSegmentChange('new')}
+              onKeyDown={(e) => e.key === 'Enter' && handleSegmentChange('new')}
+              role="tab"
+              tabIndex={activeSegment === 'new' ? 0 : -1}
+              aria-selected={activeSegment === 'new'}
+              aria-controls="segment-new-content"
+              data-segment="new"
             >
-              <span className="segment-icon new-icon"></span>
-              <span>Новые пользователи</span>
+              <span className="segment-icon new-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M8.5 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM20 8v6M23 11h-6" strokeWidth="2"/>
+                </svg>
+              </span>
+              <div className="segment-info">
+                <span className="segment-name">Новые пользователи</span>
+                <span className="segment-count">892 человека</span>
+              </div>
+              <span className="segment-percentage">12%</span>
             </li>
             <li 
               className={`segment-item ${activeSegment === 'vip' ? 'active' : ''}`}
               onClick={() => handleSegmentChange('vip')}
+              onKeyDown={(e) => e.key === 'Enter' && handleSegmentChange('vip')}
+              role="tab"
+              tabIndex={activeSegment === 'vip' ? 0 : -1}
+              aria-selected={activeSegment === 'vip'}
+              aria-controls="segment-vip-content"
+              data-segment="vip"
             >
-              <span className="segment-icon vip-icon"></span>
-              <span>VIP-сегмент</span>
+              <span className="segment-icon vip-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" strokeWidth="2"/>
+                </svg>
+              </span>
+              <div className="segment-info">
+                <span className="segment-name">VIP-сегмент</span>
+                <span className="segment-count">412 человек</span>
+              </div>
+              <span className="segment-percentage">7%</span>
             </li>
             <li 
               className={`segment-item ${activeSegment === 'churn-risk' ? 'active' : ''}`}
               onClick={() => handleSegmentChange('churn-risk')}
+              onKeyDown={(e) => e.key === 'Enter' && handleSegmentChange('churn-risk')}
+              role="tab"
+              tabIndex={activeSegment === 'churn-risk' ? 0 : -1}
+              aria-selected={activeSegment === 'churn-risk'}
+              aria-controls="segment-churn-content"
+              data-segment="churn-risk"
             >
-              <span className="segment-icon churn-icon"></span>
-              <span>На грани оттока</span>
+              <span className="segment-icon churn-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4m0 4h.01" strokeWidth="2"/>
+                </svg>
+              </span>
+              <div className="segment-info">
+                <span className="segment-name">На грани оттока</span>
+                <span className="segment-count">1,289 человек</span>
+              </div>
+              <span className="segment-percentage">21%</span>
             </li>
-            <li className="segment-item add-new">
-              <span className="segment-icon add-icon"></span>
-              <span>Создать свой сегмент</span>
+            <li className="segment-item add-new" tabIndex={-1}>
+              <span className="segment-icon add-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M12 5v14M5 12h14" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </span>
+              <div className="segment-info">
+                <span className="segment-name">Создать свой сегмент</span>
+                <span className="segment-count">Настроить параметры</span>
+              </div>
             </li>
           </ul>
+          
+          {/* Общая статистика */}
+          <div className="total-stats">
+            <div className="stat-item">
+              <span className="stat-label">Всего клиентов:</span>
+              <span className="stat-value">12,043</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-label">Активных за месяц:</span>
+              <span className="stat-value">8,721</span>
+            </div>
+          </div>
         </div>
 
         {/* Правая панель: Детали сегмента */}
-        <div className="segment-details-panel">
+        <div className="segment-details-panel" role="tabpanel">
           {/* Контент для "Лояльные клиенты" */}
-          <div className={`segment-content ${activeSegment === 'loyal' ? 'active' : ''}`}>
+          <div 
+            id="segment-loyal-content"
+            className={`segment-content ${activeSegment === 'loyal' ? 'active' : ''}`}
+            aria-hidden={activeSegment !== 'loyal'}
+          >
             <div className="segment-header">
-              <h3>Лояльные клиенты</h3>
-              <p>3,450 пользователей (28% от всей базы)</p>
+              <div>
+                <h3>Лояльные клиенты</h3>
+                <p className="segment-description">Ваши самые ценные и постоянные покупатели</p>
+              </div>
+              <div className="segment-badges">
+                <span className="badge badge-success">Активные</span>
+                <span className="badge badge-premium">Высокий LTV</span>
+              </div>
+            </div>
+            
+            <div className="segment-stats-overview glass-card">
+              <div className="stat-card">
+                <span className="stat-icon">👥</span>
+                <div>
+                  <h4>3,450</h4>
+                  <p>пользователей</p>
+                </div>
+              </div>
+              <div className="stat-card">
+                <span className="stat-icon">📈</span>
+                <div>
+                  <h4>28%</h4>
+                  <p>от всей базы</p>
+                </div>
+              </div>
+              <div className="stat-card">
+                <span className="stat-icon">💰</span>
+                <div>
+                  <h4>₽45,900</h4>
+                  <p>средний LTV</p>
+                </div>
+              </div>
+              <div className="stat-card">
+                <span className="stat-icon">🔄</span>
+                <div>
+                  <h4>3.5</h4>
+                  <p>покупок в месяц</p>
+                </div>
+              </div>
             </div>
             <div className="details-grid">
-              <div className="detail-card demographics-card">
-                <h4>Демография</h4>
-                <div className="chart-placeholder small">
+              <div className="detail-card demographics-card glass-card">
+                <div className="card-header">
+                  <h4>Демография</h4>
+                  <button className="help-icon" aria-describedby="demo-tooltip" tabIndex="0">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                    </svg>
+                  </button>
+                  <div id="demo-tooltip" className="tooltip" role="tooltip" hidden>
+                    Распределение клиентов по возрасту, полу и географии
+                  </div>
+                </div>
+                <div className="chart-wrapper">
                   <canvas id="loyalDemographicsChart"></canvas>
                 </div>
-              </div>
-              <div className="detail-card behavior-card">
-                <h4>Поведение</h4>
-                <div className="behavior-metric">
-                  <span>Средний чек</span>
-                  <strong>₽ 4,800</strong>
+                <div className="chart-legend">
+                  <div className="legend-item">
+                    <span className="legend-color" style={{background: '#8b5cf6'}}></span>
+                    <span>25-34 лет (45%)</span>
+                  </div>
+                  <div className="legend-item">
+                    <span className="legend-color" style={{background: '#ec4899'}}></span>
+                    <span>35-44 лет (30%)</span>
+                  </div>
+                  <div className="legend-item">
+                    <span className="legend-color" style={{background: '#3b82f6'}}></span>
+                    <span>45+ лет (25%)</span>
+                  </div>
                 </div>
-                <div className="behavior-metric">
-                  <span>Частота покупок</span>
-                  <strong>3.5 раз/мес</strong>
+              </div>
+              <div className="detail-card behavior-card glass-card">
+                <div className="card-header">
+                  <h4>Поведение покупателей</h4>
+                </div>
+                <div className="behavior-metrics">
+                  <div className="behavior-metric">
+                    <div className="metric-header">
+                      <span className="metric-icon">💵</span>
+                      <span className="metric-label">Средний чек</span>
+                    </div>
+                    <div className="metric-value">
+                      <strong>₽ 4,800</strong>
+                      <span className="metric-trend positive">+12%</span>
+                    </div>
+                  </div>
+                  <div className="behavior-metric">
+                    <div className="metric-header">
+                      <span className="metric-icon">🛒</span>
+                      <span className="metric-label">Частота покупок</span>
+                    </div>
+                    <div className="metric-value">
+                      <strong>3.5 раз/мес</strong>
+                      <span className="metric-subtext">выше среднего на 40%</span>
+                    </div>
+                  </div>
+                  <div className="behavior-metric">
+                    <div className="metric-header">
+                      <span className="metric-icon">📱</span>
+                      <span className="metric-label">Любимый канал</span>
+                    </div>
+                    <div className="metric-value">
+                      <strong>Мобильное приложение</strong>
+                      <span className="metric-subtext">78% покупок</span>
+                    </div>
+                  </div>
+                  <div className="behavior-metric">
+                    <div className="metric-header">
+                      <span className="metric-icon">⏰</span>
+                      <span className="metric-label">Активное время</span>
+                    </div>
+                    <div className="metric-value">
+                      <strong>19:00 - 22:00</strong>
+                      <span className="metric-subtext">будние дни</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="detail-card ltv-card">
-                <h4>Lifetime Value (LTV)</h4>
-                <span className="ltv-value">₽ 45,900</span>
-                <p>На 120% выше среднего</p>
+              <div className="detail-card ltv-card glass-card">
+                <div className="card-header">
+                  <h4>Ценность клиента (LTV)</h4>
+                  <button className="help-icon" aria-describedby="ltv-tooltip" tabIndex="0">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                    </svg>
+                  </button>
+                  <div id="ltv-tooltip" className="tooltip" role="tooltip" hidden>
+                    Прогнозируемая прибыль от клиента за всё время сотрудничества
+                  </div>
+                </div>
+                <div className="ltv-content">
+                  <div className="ltv-main">
+                    <span className="ltv-value">₽ 45,900</span>
+                    <div className="ltv-comparison">
+                      <span className="comparison-icon">📊</span>
+                      <span>На 120% выше среднего</span>
+                    </div>
+                  </div>
+                  <div className="ltv-breakdown">
+                    <h5>Структура LTV:</h5>
+                    <div className="ltv-item">
+                      <span>Первая покупка:</span>
+                      <strong>₽ 3,200</strong>
+                    </div>
+                    <div className="ltv-item">
+                      <span>Повторные покупки:</span>
+                      <strong>₽ 38,500</strong>
+                    </div>
+                    <div className="ltv-item">
+                      <span>Рефералы:</span>
+                      <strong>₽ 4,200</strong>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="ai-recommendation-for-segment">
-              <div className="rec-icon idea-icon"></div>
-              <p><strong>AI-совет:</strong> Удерживайте этот сегмент с помощью эксклюзивных предложений. Они наиболее чувствительны к программам лояльности.</p>
+            
+            {/* AI рекомендации для сегмента */}
+            <div className="ai-recommendation-for-segment glass-card">
+              <div className="rec-header">
+                <div className="rec-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" strokeWidth="2"/>
+                  </svg>
+                </div>
+                <h4>Умные рекомендации для работы с сегментом</h4>
+              </div>
+              <div className="recommendations-list">
+                <div className="rec-item">
+                  <span className="rec-number">1</span>
+                  <div className="rec-content">
+                    <h5>Программа привилегий</h5>
+                    <p>Запустите VIP-программу с эксклюзивными предложениями. Эти клиенты готовы платить больше за особое отношение.</p>
+                    <button className="rec-action">Создать программу</button>
+                  </div>
+                </div>
+                <div className="rec-item">
+                  <span className="rec-number">2</span>
+                  <div className="rec-content">
+                    <h5>Персональные рекомендации</h5>
+                    <p>Используйте историю покупок для персонализированных предложений. Повысьте средний чек на 15-20%.</p>
+                    <button className="rec-action">Настроить AI</button>
+                  </div>
+                </div>
+                <div className="rec-item">
+                  <span className="rec-number">3</span>
+                  <div className="rec-content">
+                    <h5>Реферальная программа</h5>
+                    <p>Лояльные клиенты - лучшие адвокаты бренда. Предложите им бонусы за привлечение друзей.</p>
+                    <button className="rec-action">Запустить</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -541,6 +801,12 @@ export default function Home() {
           </div>
         </div>
       </div>
+      
+      {/* Компоненты для управления сегментами и подсказками */}
+      <Suspense fallback={null}>
+        <SegmentManager />
+        <AudienceTooltips />
+      </Suspense>
     </section>,
 
     // 4. Процессы

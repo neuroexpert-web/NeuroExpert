@@ -1,0 +1,713 @@
+/* --- УЛУЧШЕННЫЕ СТИЛИ ДЛЯ СТРАНИЦЫ АУДИТОРИИ (UX-FOCUSED) --- */
+
+/* --- 0. ПЕРЕМЕННЫЕ ДЛЯ СТРАНИЦЫ АУДИТОРИИ --- */
+:root {
+  /* Цвета для сегментов */
+  --segment-loyal: #8b5cf6;
+  --segment-new: #10b981;
+  --segment-vip: #f59e0b;
+  --segment-churn: #ef4444;
+  
+  /* Размеры панелей */
+  --panel-left-width: 380px;
+  --panel-gap: 2rem;
+  
+  /* Анимации */
+  --transition-fast: 0.2s ease;
+  --transition-smooth: 0.3s ease;
+  --transition-slow: 0.5s ease-out;
+}
+
+/* --- 1. ОСНОВНАЯ СТРУКТУРА --- */
+#page-audience {
+  padding: 2rem;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.audience-container {
+  display: flex;
+  gap: var(--panel-gap);
+  height: calc(100% - 120px);
+  margin-top: 2rem;
+}
+
+/* --- 2. ЛЕВАЯ ПАНЕЛЬ - СЕЛЕКТОР СЕГМЕНТОВ --- */
+.segment-selector-panel {
+  flex: 0 0 var(--panel-left-width);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.panel-header h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.info-btn {
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.info-btn:hover {
+  color: white;
+  transform: scale(1.1);
+}
+
+.info-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Список сегментов */
+.segment-selector-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.segment-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.segment-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateX(5px);
+}
+
+.segment-item.active {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.1));
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  transform: translateX(0);
+}
+
+.segment-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--segment-loyal);
+  animation: slideIn 0.3s ease-out;
+}
+
+.segment-item:nth-child(2).active::before { background: var(--segment-new); }
+.segment-item:nth-child(3).active::before { background: var(--segment-vip); }
+.segment-item:nth-child(4).active::before { background: var(--segment-churn); }
+
+/* Иконки сегментов */
+.segment-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  transition: var(--transition-smooth);
+}
+
+.segment-item.active .segment-icon {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.1);
+}
+
+.segment-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+}
+
+.loyal-icon svg { stroke: var(--segment-loyal); }
+.new-icon svg { stroke: var(--segment-new); }
+.vip-icon svg { stroke: var(--segment-vip); }
+.churn-icon svg { stroke: var(--segment-churn); }
+
+/* Информация о сегменте */
+.segment-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.segment-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: white;
+}
+
+.segment-count {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.segment-percentage {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.8);
+  margin-left: auto;
+}
+
+/* Кнопка добавления сегмента */
+.segment-item.add-new {
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  background: transparent;
+  opacity: 0.7;
+  margin-top: 1rem;
+}
+
+.segment-item.add-new:hover {
+  opacity: 1;
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* Общая статистика */
+.total-stats {
+  margin-top: auto;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.stat-value {
+  font-weight: 600;
+  color: white;
+}
+
+/* --- 3. ПРАВАЯ ПАНЕЛЬ - ДЕТАЛИ СЕГМЕНТА --- */
+.segment-details-panel {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
+.segment-content {
+  display: none;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.segment-content.active {
+  display: block;
+}
+
+/* Заголовок сегмента */
+.segment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.segment-header h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+}
+
+.segment-description {
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.segment-badges {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.badge {
+  padding: 0.375rem 0.875rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-success {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badge-premium {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+/* Обзор статистики */
+.segment-stats-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stat-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.stat-card h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.stat-card p {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+/* Сетка деталей */
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.detail-card {
+  padding: 1.5rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  transition: var(--transition-smooth);
+}
+
+.detail-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.card-header h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* График демографии */
+.chart-wrapper {
+  height: 200px;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.chart-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+/* Метрики поведения */
+.behavior-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+.behavior-metric {
+  text-align: center;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+}
+
+.metric-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.metric-icon {
+  font-size: 1.5rem;
+}
+
+.metric-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.metric-value {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.metric-value strong {
+  font-size: 1.125rem;
+  color: white;
+}
+
+.metric-trend {
+  font-size: 0.75rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 10px;
+  display: inline-block;
+}
+
+.metric-trend.positive {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.metric-subtext {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* LTV карточка */
+.ltv-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.ltv-main {
+  text-align: center;
+}
+
+.ltv-value {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--segment-loyal);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.ltv-comparison {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.comparison-icon {
+  font-size: 1.25rem;
+}
+
+.ltv-breakdown {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.ltv-breakdown h5 {
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 0.75rem 0;
+}
+
+.ltv-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ltv-item:last-child {
+  border-bottom: none;
+}
+
+/* AI рекомендации для сегмента */
+.ai-recommendation-for-segment {
+  padding: 2rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+}
+
+.ai-recommendation-for-segment .rec-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.ai-recommendation-for-segment .rec-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(139, 92, 246, 0.2);
+  border-radius: 12px;
+}
+
+.ai-recommendation-for-segment .rec-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke: #8b5cf6;
+}
+
+.recommendations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.rec-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  transition: var(--transition-smooth);
+}
+
+.rec-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.rec-number {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(139, 92, 246, 0.2);
+  color: #8b5cf6;
+  border-radius: 50%;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.rec-content {
+  flex: 1;
+}
+
+.rec-content h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+
+.rec-content p {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.rec-action {
+  padding: 0.5rem 1rem;
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 8px;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.rec-action:hover {
+  background: rgba(139, 92, 246, 0.3);
+  transform: translateY(-1px);
+}
+
+/* --- 4. АНИМАЦИИ --- */
+@keyframes slideIn {
+  from {
+    width: 0;
+  }
+  to {
+    width: 4px;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- 5. АДАПТИВНОСТЬ --- */
+@media (max-width: 1200px) {
+  .audience-container {
+    flex-direction: column;
+  }
+  
+  .segment-selector-panel {
+    flex: 0 0 auto;
+    max-height: 200px;
+    width: 100%;
+  }
+  
+  .segment-selector-panel ul {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    gap: 1rem;
+  }
+  
+  .segment-item {
+    flex: 0 0 280px;
+    margin-bottom: 0;
+  }
+  
+  .total-stats {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  #page-audience {
+    padding: 1rem;
+  }
+  
+  .segment-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .behavior-metrics {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .segment-stats-overview {
+    grid-template-columns: 1fr 1fr;
+    padding: 1rem;
+  }
+  
+  .ltv-value {
+    font-size: 2rem;
+  }
+}
+
+/* --- 6. СОСТОЯНИЕ ЗАГРУЗКИ --- */
+.segment-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.segment-loading::after {
+  content: '';
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #8b5cf6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* --- 7. ДОСТУПНОСТЬ --- */
+.segment-item:focus {
+  outline: 2px solid rgba(139, 92, 246, 0.5);
+  outline-offset: 2px;
+}
+
+.help-icon:focus,
+.rec-action:focus {
+  outline: 2px solid rgba(139, 92, 246, 0.5);
+  outline-offset: 2px;
+}
+
+/* Высокий контраст */
+@media (prefers-contrast: high) {
+  .segment-item.active {
+    border-width: 2px;
+  }
+  
+  .detail-card {
+    border-width: 2px;
+  }
+}
