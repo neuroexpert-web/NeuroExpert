@@ -53,6 +53,11 @@ const WorkspaceLayout = dynamic(() => import('./components/workspace/WorkspaceLa
   loading: () => null
 });
 
+const SmartFloatingAIPremium = dynamic(() => import('./components/SmartFloatingAIPremium'), {
+  ssr: false,
+  loading: () => null
+});
+
 // Динамические импорты для страницы решений
 const SolutionsManager = dynamic(() => import('./components/SolutionsManager'), {
   ssr: false,
@@ -198,12 +203,35 @@ export default function Home() {
           <p className="descriptor">
             Цифровая трансформация<br/>бизнеса с помощью AI
           </p>
-          <button className="cta-button">
-            Начать бесплатно
+          <button className="cta-button" onClick={() => {
+            if (window.openAIAssistant) {
+              window.openAIAssistant();
+            } else {
+              // Fallback - отправляем событие
+              window.dispatchEvent(new CustomEvent('openAIChat'));
+            }
+          }}>
+            <span>Начать бесплатно</span>
+            <div className="particles">
+              {[...Array(6)].map((_, i) => (
+                <span 
+                  key={i} 
+                  className="particle" 
+                  style={{
+                    '--x': `${(Math.random() - 0.5) * 100}px`,
+                    '--y': `${(Math.random() - 0.5) * 100}px`,
+                    animationDelay: `${i * 0.1}s`
+                  }}
+                />
+              ))}
+            </div>
           </button>
         </div>
         <div className="swipe-hint">
-          <span className="swipe-hint-desktop">Листайте, чтобы узнать больше →</span>
+          <span className="swipe-hint-desktop">
+            Листайте, чтобы узнать больше 
+            <span className="swipe-arrow"></span>
+          </span>
           <div className="swipe-hint-mobile"></div>
         </div>
       </main>
@@ -3288,6 +3316,9 @@ export default function Home() {
       >
         {sectionComponents}
       </SwipeContainer>
+      
+      {/* AI Управляющий с неоновым дизайном */}
+      <SmartFloatingAIPremium />
     </main>
   );
 }

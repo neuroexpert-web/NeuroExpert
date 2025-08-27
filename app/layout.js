@@ -6,6 +6,10 @@ import './styles/neuroexpert-pro.css'
 import './styles/premium-design-system.css'
 import './styles/premium-glass-sections.css'
 import './styles/mobile-fixes.css'
+import './styles/mobile-complete.css'
+import './styles/neon-button.css'
+import './styles/ai-manager-premium.css'
+import './styles/scroll-fixes.css'
 import Script from 'next/script'
 
 // Оптимизированная загрузка шрифтов
@@ -54,8 +58,7 @@ export const metadata = {
   alternates: {
     canonical: '/',
   },
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes',
-  themeColor: '#0a0e1a',
+
   openGraph: {
     title: 'NeuroExpert - AI-платформа для цифровизации бизнеса',
     description: 'Увеличьте прибыль на 40% с помощью AI',
@@ -95,17 +98,6 @@ export const metadata = {
     statusBarStyle: 'black-translucent',
     title: 'NeuroExpert',
   },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5,
-    userScalable: true,
-    viewportFit: 'cover',
-  },
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f8fafc' },
-    { media: '(prefers-color-scheme: dark)', color: '#0f172a' },
-  ],
   other: {
     'mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-capable': 'yes',
@@ -114,6 +106,18 @@ export const metadata = {
     'msapplication-TileColor': '#6366f1',
     'msapplication-tap-highlight': 'no',
   },
+}
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: 'cover',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f8fafc' },
+    { media: '(prefers-color-scheme: dark)', color: '#0a0e1a' },
+  ],
 }
 
 export default function RootLayout({ children }) {
@@ -249,6 +253,33 @@ export default function RootLayout({ children }) {
                     (err) => console.log('SW registration failed:', err)
                   );
                 });
+              }
+            `
+          }}
+        />
+        
+        {/* Инициализация ScrollManager */}
+        <Script
+          id="scroll-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Установка высоты viewport для мобильных
+              function setVH() {
+                const vh = window.innerHeight * 0.01;
+                document.documentElement.style.setProperty('--vh', vh + 'px');
+              }
+              setVH();
+              window.addEventListener('resize', setVH);
+              window.addEventListener('orientationchange', setVH);
+              
+              // Фикс для скролла на iOS
+              if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+                document.addEventListener('touchmove', function(e) {
+                  if (!e.target.closest('.scrollable-section, .chat-messages, .modal-content')) {
+                    e.preventDefault();
+                  }
+                }, { passive: false });
               }
             `
           }}

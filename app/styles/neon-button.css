@@ -1,0 +1,316 @@
+/* Neon Gradient Button Styles */
+
+/* Неоновая кнопка "Начать бесплатно" */
+.hero-section .cta-button {
+  position: relative;
+  padding: 18px 48px;
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  z-index: 1;
+}
+
+/* Неоновое свечение */
+.hero-section .cta-button::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #f093fb, #f5576c, #4facfe, #00f2fe, #f093fb);
+  background-size: 400%;
+  border-radius: 50px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: neon-glow 20s linear infinite;
+}
+
+/* Анимация градиента */
+@keyframes neon-glow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Внутреннее свечение */
+.hero-section .cta-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+/* Hover эффекты */
+.hero-section .cta-button:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 10px 40px rgba(103, 126, 234, 0.4), 
+              0 0 60px rgba(103, 126, 234, 0.3),
+              inset 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.hero-section .cta-button:hover::before {
+  opacity: 1;
+  filter: blur(3px);
+}
+
+.hero-section .cta-button:hover::after {
+  opacity: 1;
+}
+
+/* Active состояние */
+.hero-section .cta-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Пульсирующая анимация */
+.hero-section .cta-button {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 5px 20px rgba(103, 126, 234, 0.3);
+  }
+  50% {
+    box-shadow: 0 5px 30px rgba(103, 126, 234, 0.5),
+                0 0 40px rgba(103, 126, 234, 0.3);
+  }
+}
+
+/* Текстовая анимация */
+.hero-section .cta-button span {
+  position: relative;
+  z-index: 2;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.hero-section .cta-button:hover span {
+  transform: scale(1.05);
+}
+
+/* Частицы при наведении */
+.hero-section .cta-button .particles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.hero-section .cta-button .particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: linear-gradient(45deg, #f093fb, #f5576c);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.hero-section .cta-button:hover .particle {
+  animation: particle-explosion 0.8s ease-out forwards;
+}
+
+@keyframes particle-explosion {
+  0% {
+    transform: translate(0, 0) scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--x), var(--y)) scale(1);
+    opacity: 0;
+  }
+}
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+  .hero-section .cta-button {
+    width: 100%;
+    max-width: 300px;
+    padding: 16px 40px;
+    font-size: 16px;
+  }
+  
+  /* Упрощенные эффекты для мобильных */
+  @media (hover: none) {
+    .hero-section .cta-button:hover {
+      transform: none;
+    }
+    
+    .hero-section .cta-button:active {
+      transform: scale(0.95);
+    }
+  }
+}
+
+/* Стрелка свайпа с анимацией */
+.swipe-hint {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  z-index: 10;
+}
+
+.swipe-hint-desktop {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 16px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: swipe-hint-glow 2s ease-in-out infinite;
+}
+
+@keyframes swipe-hint-glow {
+  0%, 100% {
+    opacity: 0.8;
+    text-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 20px rgba(139, 92, 246, 0.5),
+                 0 0 30px rgba(139, 92, 246, 0.3);
+  }
+}
+
+/* Анимированная стрелка */
+.swipe-arrow {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  position: relative;
+  animation: swipe-arrow-move 1.5s ease-in-out infinite;
+}
+
+.swipe-arrow::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 20px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #8b5cf6);
+  transform: translateY(-50%);
+}
+
+.swipe-arrow::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid #8b5cf6;
+  border-right: 2px solid #8b5cf6;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+@keyframes swipe-arrow-move {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+}
+
+/* Мобильная версия стрелки */
+.swipe-hint-mobile {
+  width: 40px;
+  height: 40px;
+  position: relative;
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .swipe-hint-desktop {
+    display: none;
+  }
+  
+  .swipe-hint-mobile {
+    display: block;
+  }
+  
+  .swipe-hint-mobile::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    border-bottom: 3px solid #8b5cf6;
+    border-right: 3px solid #8b5cf6;
+    transform: translate(-50%, -70%) rotate(45deg);
+    animation: swipe-down 1.5s ease-in-out infinite;
+  }
+  
+  @keyframes swipe-down {
+    0%, 100% {
+      transform: translate(-50%, -70%) rotate(45deg);
+    }
+    50% {
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+  }
+}
+
+/* Индикаторы страниц с неоновым эффектом */
+.swipe-indicators {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 10;
+}
+
+.swipe-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.swipe-indicator.active {
+  width: 24px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #8b5cf6, #3b82f6);
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+}
+
+.swipe-indicator:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(1.2);
+}
