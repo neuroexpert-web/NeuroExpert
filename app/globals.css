@@ -39,6 +39,7 @@
 @import './styles/workspace-full.css';
 @import './styles/workspace-cabinet.css';
 @import './styles/workspace-advanced.css';
+@import './styles/workspace-enhanced.css';
 
 /* Критические стили для Hero секции */
 .hero-section {
