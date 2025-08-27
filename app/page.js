@@ -90,6 +90,22 @@ const AboutAnimations = dynamic(() => import('./components/AboutAnimations'), {
   loading: () => null
 });
 
+// Динамические импорты для страницы калькулятора цен
+const PricingCalculator = dynamic(() => import('./components/PricingCalculator'), {
+  ssr: false,
+  loading: () => null
+});
+
+const PricingComparison = dynamic(() => import('./components/PricingComparison'), {
+  ssr: false,
+  loading: () => null
+});
+
+const PricingTooltips = dynamic(() => import('./components/PricingTooltips'), {
+  ssr: false,
+  loading: () => null
+});
+
 export default function Home() {
   const [currentSection, setCurrentSection] = useState(0);
   const [activeSegment, setActiveSegment] = useState('loyal');
@@ -2375,6 +2391,520 @@ export default function Home() {
         <TeamModal />
         <ValuesTooltips />
         <AboutAnimations />
+      </Suspense>
+    </section>,
+
+    // 8. Калькулятор цен - интерактивный расчет стоимости
+    <section key="pricing" id="pricing-section" className="full-page scrollable-section">
+      <div className="page-header">
+        <h2>Выберите свой пакет</h2>
+        <p>Прозрачные цены и гибкие тарифы для любого бизнеса</p>
+      </div>
+
+      <div className="pricing-container">
+        {/* Основные тарифные планы */}
+        <div className="pricing-plans">
+          <article className="pricing-plan glass-card" data-plan="start">
+            <div className="plan-badge">Для старта</div>
+            <h3 className="plan-title">Старт</h3>
+            <div className="plan-price">
+              <span className="price-from">от</span>
+              <span className="price-value">39 900</span>
+              <span className="price-currency">₽</span>
+              <span className="price-period">/месяц</span>
+            </div>
+            <p className="plan-description">Аудит, базовый сайт, CRM, поддержка</p>
+            
+            <ul className="plan-features">
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                Глубокий аудит бизнеса
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                Базовый сайт или лендинг
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                CRM-система на 100 клиентов
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                Интеграция с мессенджерами
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                Базовая автоматизация продаж
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                Обучение команды
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                Поддержка 5 дней в неделю
+              </li>
+            </ul>
+            
+            <button className="plan-select-btn" data-plan="start">
+              Выбрать Старт
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <path d="M13 7l5 5m0 0l-5 5m5-5H6" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </button>
+          </article>
+
+          <article className="pricing-plan glass-card popular" data-plan="business">
+            <div className="plan-badge popular-badge">Популярный выбор</div>
+            <h3 className="plan-title">Бизнес</h3>
+            <div className="plan-price">
+              <span className="price-from">от</span>
+              <span className="price-value">89 900</span>
+              <span className="price-currency">₽</span>
+              <span className="price-period">/месяц</span>
+            </div>
+            <p className="plan-description">Всё из Старт + интернет-магазин, приложение, расширенная CRM</p>
+            
+            <ul className="plan-features">
+              <li className="feature-highlight">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                Всё из тарифа Старт
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                Интернет-магазин или корпоративный сайт
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                Мобильное приложение (iOS/Android)
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                CRM на 1000+ клиентов
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                AI-аналитика и прогнозирование
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                Омниканальность (10+ каналов)
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                Приоритетная поддержка 24/7
+              </li>
+            </ul>
+            
+            <button className="plan-select-btn popular-btn" data-plan="business">
+              Выбрать Бизнес
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <path d="M13 7l5 5m0 0l-5 5m5-5H6" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </button>
+          </article>
+
+          <article className="pricing-plan glass-card" data-plan="enterprise">
+            <div className="plan-badge">Для корпораций</div>
+            <h3 className="plan-title">Enterprise</h3>
+            <div className="plan-price">
+              <span className="price-from">от</span>
+              <span className="price-value">199 900</span>
+              <span className="price-currency">₽</span>
+              <span className="price-period">/месяц</span>
+            </div>
+            <p className="plan-description">Безлимит, SaaS, выделенный сервер</p>
+            
+            <ul className="plan-features">
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                Безлимитные возможности
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                Собственная SaaS платформа
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                Выделенный сервер и инфраструктура
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                Кастомная разработка под ваши задачи
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                Интеграция с любыми системами
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                Персональная команда разработки
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                SLA 99.9% и гарантии
+              </li>
+            </ul>
+            
+            <button className="plan-select-btn" data-plan="enterprise">
+              Выбрать Enterprise
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <path d="M13 7l5 5m0 0l-5 5m5-5H6" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </button>
+          </article>
+        </div>
+
+        {/* Интерактивный калькулятор */}
+        <div className="pricing-calculator glass-card">
+          <h3>Калькулятор стоимости</h3>
+          <p className="calculator-subtitle">Настройте параметры под ваши потребности</p>
+          
+          <form className="calculator-form">
+            {/* Выбор базового тарифа */}
+            <div className="form-group">
+              <label htmlFor="base-plan">Базовый тариф</label>
+              <div className="plan-selector">
+                <input type="radio" name="base-plan" id="plan-start" value="39900" defaultChecked />
+                <label htmlFor="plan-start" className="plan-option">
+                  <span className="plan-name">Старт</span>
+                  <span className="plan-price">39 900₽</span>
+                </label>
+                
+                <input type="radio" name="base-plan" id="plan-business" value="89900" />
+                <label htmlFor="plan-business" className="plan-option">
+                  <span className="plan-name">Бизнес</span>
+                  <span className="plan-price">89 900₽</span>
+                </label>
+                
+                <input type="radio" name="base-plan" id="plan-enterprise" value="199900" />
+                <label htmlFor="plan-enterprise" className="plan-option">
+                  <span className="plan-name">Enterprise</span>
+                  <span className="plan-price">199 900₽</span>
+                </label>
+              </div>
+            </div>
+
+            {/* Количество пользователей */}
+            <div className="form-group">
+              <label htmlFor="users-slider">
+                Количество пользователей
+                <span className="value-display" id="users-value">10</span>
+              </label>
+              <input 
+                type="range" 
+                id="users-slider" 
+                name="users" 
+                min="1" 
+                max="1000" 
+                value="10" 
+                className="custom-slider"
+                data-tooltip="Количество сотрудников, которые будут использовать платформу"
+              />
+              <div className="slider-labels">
+                <span>1</span>
+                <span>500</span>
+                <span>1000+</span>
+              </div>
+            </div>
+
+            {/* Объем данных */}
+            <div className="form-group">
+              <label htmlFor="data-slider">
+                Объем данных (ГБ)
+                <span className="value-display" id="data-value">100</span>
+              </label>
+              <input 
+                type="range" 
+                id="data-slider" 
+                name="data" 
+                min="10" 
+                max="10000" 
+                value="100" 
+                className="custom-slider"
+                data-tooltip="Объем хранилища для ваших данных и файлов"
+              />
+              <div className="slider-labels">
+                <span>10 ГБ</span>
+                <span>5 ТБ</span>
+                <span>10 ТБ</span>
+              </div>
+            </div>
+
+            {/* Количество интеграций */}
+            <div className="form-group">
+              <label htmlFor="integrations-slider">
+                Количество интеграций
+                <span className="value-display" id="integrations-value">5</span>
+              </label>
+              <input 
+                type="range" 
+                id="integrations-slider" 
+                name="integrations" 
+                min="0" 
+                max="50" 
+                value="5" 
+                className="custom-slider"
+                data-tooltip="Подключение внешних сервисов и API"
+              />
+              <div className="slider-labels">
+                <span>0</span>
+                <span>25</span>
+                <span>50+</span>
+              </div>
+            </div>
+
+            {/* Период использования */}
+            <div className="form-group">
+              <label>Период оплаты</label>
+              <div className="period-selector">
+                <input type="radio" name="period" id="period-month" value="1" defaultChecked />
+                <label htmlFor="period-month" className="period-option">
+                  <span className="period-name">Месяц</span>
+                  <span className="period-discount">0%</span>
+                </label>
+                
+                <input type="radio" name="period" id="period-quarter" value="3" />
+                <label htmlFor="period-quarter" className="period-option">
+                  <span className="period-name">Квартал</span>
+                  <span className="period-discount">-5%</span>
+                </label>
+                
+                <input type="radio" name="period" id="period-year" value="12" />
+                <label htmlFor="period-year" className="period-option">
+                  <span className="period-name">Год</span>
+                  <span className="period-discount">-15%</span>
+                </label>
+              </div>
+            </div>
+
+            {/* Дополнительные опции */}
+            <div className="form-group">
+              <label>Дополнительные опции</label>
+              <div className="options-grid">
+                <label className="option-checkbox">
+                  <input type="checkbox" name="option-support" value="10000" />
+                  <span className="option-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="24" height="24">
+                      <path d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" strokeWidth="2"/>
+                    </svg>
+                    <span className="option-name">Расширенная поддержка 24/7</span>
+                    <span className="option-price">+10 000₽/мес</span>
+                  </span>
+                </label>
+
+                <label className="option-checkbox">
+                  <input type="checkbox" name="option-api" value="15000" />
+                  <span className="option-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="24" height="24">
+                      <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
+                    <span className="option-name">Расширенный API</span>
+                    <span className="option-price">+15 000₽/мес</span>
+                  </span>
+                </label>
+
+                <label className="option-checkbox">
+                  <input type="checkbox" name="option-custom" value="25000" />
+                  <span className="option-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="24" height="24">
+                      <path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" strokeWidth="2"/>
+                    </svg>
+                    <span className="option-name">Кастомные интеграции</span>
+                    <span className="option-price">+25 000₽/мес</span>
+                  </span>
+                </label>
+
+                <label className="option-checkbox">
+                  <input type="checkbox" name="option-training" value="30000" />
+                  <span className="option-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="24" height="24">
+                      <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" strokeWidth="2"/>
+                    </svg>
+                    <span className="option-name">Обучение команды</span>
+                    <span className="option-price">+30 000₽ разово</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </form>
+
+          {/* Итоговый расчет */}
+          <div className="calculator-result">
+            <div className="result-breakdown">
+              <div className="breakdown-item">
+                <span>Базовый тариф:</span>
+                <span id="base-cost">39 900₽</span>
+              </div>
+              <div className="breakdown-item">
+                <span>Дополнительные опции:</span>
+                <span id="options-cost">0₽</span>
+              </div>
+              <div className="breakdown-item discount-item">
+                <span>Скидка за период:</span>
+                <span id="discount-amount">0₽</span>
+              </div>
+            </div>
+            
+            <div className="total-price">
+              <span className="total-label">Итого в месяц:</span>
+              <span className="total-value" id="total-cost">39 900₽</span>
+            </div>
+            
+            <div className="calculator-actions">
+              <button className="btn-get-offer">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" strokeWidth="2"/>
+                </svg>
+                Получить индивидуальное предложение
+              </button>
+              <button className="btn-contact-sales">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" strokeWidth="2"/>
+                </svg>
+                Связаться с отделом продаж
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Сравнение тарифов */}
+        <div className="pricing-comparison glass-card">
+          <h3>Сравнение тарифов</h3>
+          <button className="btn-compare-all">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+              <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" strokeWidth="2"/>
+            </svg>
+            Подробное сравнение всех возможностей
+          </button>
+          
+          <div className="quick-comparison">
+            <div className="comparison-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="24" height="24">
+                <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
+              </svg>
+              <div>
+                <strong>Экономия до 40%</strong>
+                <p>По сравнению с классическими CRM системами</p>
+              </div>
+            </div>
+            
+            <div className="comparison-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="24" height="24">
+                <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeWidth="2"/>
+              </svg>
+              <div>
+                <strong>В 3 раза больше функций</strong>
+                <p>AI-автоматизация включена во все тарифы</p>
+              </div>
+            </div>
+            
+            <div className="comparison-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="24" height="24">
+                <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
+              </svg>
+              <div>
+                <strong>Поддержка 24/7</strong>
+                <p>Включена в тарифы Бизнес и Enterprise</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* FAQ секция */}
+        <div className="pricing-faq">
+          <h3>Часто задаваемые вопросы</h3>
+          <div className="faq-grid">
+            <details className="faq-item glass-card">
+              <summary>
+                <span>Можно ли изменить тариф в любое время?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M19 9l-7 7-7-7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </summary>
+              <p>Да, вы можете повысить или понизить тариф в любой момент. При повышении тарифа новые возможности станут доступны сразу, при понижении — с начала следующего расчетного периода.</p>
+            </details>
+
+            <details className="faq-item glass-card">
+              <summary>
+                <span>Есть ли бесплатный пробный период?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M19 9l-7 7-7-7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </summary>
+              <p>Мы предоставляем 14 дней бесплатного доступа к тарифу Бизнес. Это позволит вам оценить все возможности платформы без рисков.</p>
+            </details>
+
+            <details className="faq-item glass-card">
+              <summary>
+                <span>Что входит в поддержку?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M19 9l-7 7-7-7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </summary>
+              <p>Техническая поддержка включает: консультации по работе с платформой, помощь в настройке, решение технических проблем, обновления и улучшения системы.</p>
+            </details>
+
+            <details className="faq-item glass-card">
+              <summary>
+                <span>Как происходит оплата?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M19 9l-7 7-7-7" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </summary>
+              <p>Оплата производится банковским переводом на основании выставленного счета. Мы также принимаем карты и электронные платежи. Для Enterprise доступна постоплата.</p>
+            </details>
+          </div>
+        </div>
+      </div>
+      
+      {/* Компоненты для управления калькулятором */}
+      <Suspense fallback={null}>
+        <PricingCalculator />
+        <PricingComparison />
+        <PricingTooltips />
       </Suspense>
     </section>
   ];

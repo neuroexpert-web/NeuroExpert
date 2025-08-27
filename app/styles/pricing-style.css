@@ -1,0 +1,751 @@
+/* --- СТИЛИ ДЛЯ СТРАНИЦЫ КАЛЬКУЛЯТОРА ЦЕН --- */
+
+/* --- 0. ПЕРЕМЕННЫЕ --- */
+:root {
+  --pricing-gradient-start: #6366f1;
+  --pricing-gradient-end: #8b5cf6;
+  --pricing-gold: #fbbf24;
+  --pricing-popular: #ec4899;
+  --pricing-success: #10b981;
+  --pricing-card-bg: rgba(20, 20, 50, 0.4);
+  --pricing-border: rgba(255, 255, 255, 0.15);
+}
+
+/* --- 1. ОСНОВНАЯ СТРУКТУРА --- */
+#pricing-section {
+  padding: 2rem;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.pricing-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* --- 2. ТАРИФНЫЕ ПЛАНЫ --- */
+.pricing-plans {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.pricing-plan {
+  padding: 2.5rem;
+  background: var(--pricing-card-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--pricing-border);
+  border-radius: 24px;
+  position: relative;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.pricing-plan:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.pricing-plan.popular {
+  border: 2px solid var(--pricing-popular);
+  transform: scale(1.05);
+}
+
+.pricing-plan.popular:hover {
+  transform: scale(1.05) translateY(-10px);
+}
+
+.plan-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.5rem 1.5rem;
+  background: linear-gradient(135deg, var(--pricing-gradient-start), var(--pricing-gradient-end));
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.popular-badge {
+  background: linear-gradient(135deg, var(--pricing-popular), var(--pricing-gold));
+}
+
+.plan-title {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.plan-price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.price-from {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.price-value {
+  font-size: 3rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, white, rgba(255, 255, 255, 0.8));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.price-currency {
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.price-period {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.plan-description {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+  flex-grow: 1;
+}
+
+.plan-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  color: rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.plan-features li:last-child {
+  border-bottom: none;
+}
+
+.plan-features svg {
+  flex-shrink: 0;
+  stroke: var(--pricing-success);
+  margin-top: 2px;
+}
+
+.feature-highlight {
+  background: rgba(139, 92, 246, 0.1);
+  margin: -0.75rem;
+  padding: 0.75rem !important;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.plan-select-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 1rem;
+  background: transparent;
+  border: 2px solid rgba(139, 92, 246, 0.5);
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.plan-select-btn:hover {
+  background: rgba(139, 92, 246, 0.1);
+  border-color: var(--pricing-gradient-start);
+  transform: translateX(5px);
+}
+
+.popular-btn {
+  background: linear-gradient(135deg, var(--pricing-gradient-start), var(--pricing-gradient-end));
+  border: none;
+}
+
+.popular-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+}
+
+/* --- 3. КАЛЬКУЛЯТОР --- */
+.pricing-calculator {
+  padding: 3rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  margin-bottom: 3rem;
+}
+
+.pricing-calculator h3 {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.calculator-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 2rem;
+}
+
+.calculator-form {
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  margin-bottom: 2rem;
+}
+
+.form-group label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  color: white;
+  font-weight: 500;
+}
+
+.value-display {
+  background: rgba(139, 92, 246, 0.2);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  color: var(--pricing-gradient-end);
+}
+
+/* Селектор тарифов */
+.plan-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.plan-selector input[type="radio"] {
+  display: none;
+}
+
+.plan-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.plan-selector input[type="radio"]:checked + .plan-option {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: var(--pricing-gradient-start);
+}
+
+.plan-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.plan-name {
+  font-weight: 600;
+  color: white;
+  margin-bottom: 0.25rem;
+}
+
+.plan-option .plan-price {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Кастомные слайдеры */
+.custom-slider {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  outline: none;
+  -webkit-appearance: none;
+  margin-bottom: 0.5rem;
+}
+
+.custom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, var(--pricing-gradient-start), var(--pricing-gradient-end));
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(139, 92, 246, 0.4);
+  transition: all 0.3s ease;
+}
+
+.custom-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.6);
+}
+
+.custom-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, var(--pricing-gradient-start), var(--pricing-gradient-end));
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(139, 92, 246, 0.4);
+  border: none;
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Селектор периода */
+.period-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.period-selector input[type="radio"] {
+  display: none;
+}
+
+.period-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.period-selector input[type="radio"]:checked + .period-option {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: var(--pricing-success);
+}
+
+.period-name {
+  font-weight: 600;
+  color: white;
+  margin-bottom: 0.25rem;
+}
+
+.period-discount {
+  font-size: 0.875rem;
+  color: var(--pricing-success);
+  font-weight: 600;
+}
+
+/* Дополнительные опции */
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.option-checkbox input[type="checkbox"] {
+  display: none;
+}
+
+.option-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.option-checkbox input[type="checkbox"]:checked + .option-box {
+  background: rgba(236, 72, 153, 0.2);
+  border-color: var(--pricing-popular);
+}
+
+.option-box:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.option-box svg {
+  width: 40px;
+  height: 40px;
+  stroke: var(--pricing-gradient-end);
+  margin-bottom: 0.75rem;
+}
+
+.option-name {
+  font-weight: 600;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.option-price {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* --- 4. РЕЗУЛЬТАТ РАСЧЕТА --- */
+.calculator-result {
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.result-breakdown {
+  margin-bottom: 1.5rem;
+}
+
+.breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.breakdown-item:last-child {
+  border-bottom: none;
+}
+
+.discount-item {
+  color: var(--pricing-success);
+}
+
+.total-price {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 0;
+  border-top: 2px solid rgba(139, 92, 246, 0.3);
+  margin-bottom: 1.5rem;
+}
+
+.total-label {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: white;
+}
+
+.total-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--pricing-gradient-start), var(--pricing-gradient-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.calculator-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-get-offer,
+.btn-contact-sales {
+  flex: 1;
+  min-width: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn-get-offer {
+  background: linear-gradient(135deg, var(--pricing-gradient-start), var(--pricing-gradient-end));
+  color: white;
+}
+
+.btn-get-offer:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+}
+
+.btn-contact-sales {
+  background: transparent;
+  border: 2px solid rgba(139, 92, 246, 0.5);
+  color: white;
+}
+
+.btn-contact-sales:hover {
+  background: rgba(139, 92, 246, 0.1);
+  border-color: var(--pricing-gradient-start);
+}
+
+/* --- 5. СРАВНЕНИЕ ТАРИФОВ --- */
+.pricing-comparison {
+  padding: 2rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.pricing-comparison h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: white;
+}
+
+.btn-compare-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.75rem;
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 2rem;
+}
+
+.btn-compare-all:hover {
+  background: rgba(139, 92, 246, 0.3);
+  transform: translateY(-2px);
+}
+
+.quick-comparison {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.comparison-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  text-align: left;
+}
+
+.comparison-item svg {
+  width: 48px;
+  height: 48px;
+  stroke: var(--pricing-gradient-end);
+  flex-shrink: 0;
+}
+
+.comparison-item strong {
+  display: block;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.comparison-item p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875rem;
+}
+
+/* --- 6. FAQ СЕКЦИЯ --- */
+.pricing-faq {
+  margin-top: 4rem;
+}
+
+.pricing-faq h3 {
+  font-size: 1.75rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+
+.faq-item {
+  padding: 1.5rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  cursor: pointer;
+}
+
+.faq-item summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  color: white;
+  list-style: none;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item summary svg {
+  transition: transform 0.3s ease;
+}
+
+.faq-item[open] summary svg {
+  transform: rotate(180deg);
+}
+
+.faq-item p {
+  margin-top: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+}
+
+/* --- 7. АНИМАЦИИ --- */
+.pricing-plan,
+.option-box,
+.faq-item {
+  animation: fadeInUp 0.6s ease-out;
+  animation-fill-mode: backwards;
+}
+
+.pricing-plan:nth-child(1) { animation-delay: 0.1s; }
+.pricing-plan:nth-child(2) { animation-delay: 0.2s; }
+.pricing-plan:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- 8. АДАПТИВНОСТЬ --- */
+@media (max-width: 1200px) {
+  .pricing-plans {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+    margin: 0 auto 4rem;
+  }
+  
+  .pricing-plan.popular {
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  #pricing-section {
+    padding: 1rem;
+  }
+  
+  .pricing-calculator {
+    padding: 2rem 1.5rem;
+  }
+  
+  .plan-selector,
+  .period-selector {
+    grid-template-columns: 1fr;
+  }
+  
+  .options-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .calculator-actions {
+    flex-direction: column;
+  }
+  
+  .btn-get-offer,
+  .btn-contact-sales {
+    min-width: 100%;
+  }
+  
+  .faq-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .quick-comparison {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .pricing-plan {
+    padding: 2rem 1.5rem;
+  }
+  
+  .price-value {
+    font-size: 2.5rem;
+  }
+  
+  .total-value {
+    font-size: 2rem;
+  }
+}
+
+/* --- 9. ДОСТУПНОСТЬ --- */
+.plan-select-btn:focus,
+.btn-get-offer:focus,
+.btn-contact-sales:focus,
+.btn-compare-all:focus {
+  outline: 2px solid rgba(139, 92, 246, 0.5);
+  outline-offset: 2px;
+}
+
+.custom-slider:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.3);
+}
+
+/* Режим высокой контрастности */
+@media (prefers-contrast: high) {
+  .pricing-plan,
+  .pricing-calculator,
+  .faq-item {
+    border-width: 2px;
+  }
+}
+
+/* Уменьшение движения */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
