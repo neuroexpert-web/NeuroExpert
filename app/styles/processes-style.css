@@ -1,0 +1,403 @@
+/* --- СТИЛИ ДЛЯ ЧЕТВЕРТОЙ СТРАНИЦЫ: УПРАВЛЕНИЕ ПРОЦЕССАМИ --- */
+
+/* --- 1. ОСНОВНАЯ СТРУКТУРА --- */
+.processes-container {
+    display: flex;
+    gap: 30px;
+    height: calc(100% - 120px);
+}
+
+/* --- 2. БЛОК ПРИОРИТЕТНЫХ ЗАДАЧ --- */
+.task-priorities {
+    flex: 0 0 320px;
+    background: var(--color-surface-glass);
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid var(--color-surface-border);
+    backdrop-filter: blur(var(--backdrop-blur-value));
+    -webkit-backdrop-filter: blur(var(--backdrop-blur-value));
+    overflow-y: auto;
+}
+
+/* Кастомный скроллбар */
+.task-priorities::-webkit-scrollbar {
+    width: 6px;
+}
+
+.task-priorities::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+}
+
+.task-priorities::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+.task-priorities h3 {
+    margin-bottom: 20px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.task-priorities ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.task-priorities li {
+    margin-bottom: 20px;
+    padding-left: 32px;
+    position: relative;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+    transition: transform 0.2s ease;
+}
+
+.task-priorities li:hover {
+    transform: translateX(5px);
+}
+
+.task-priorities li strong {
+    display: block;
+    color: #ffffff;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.task-priorities small {
+    display: block;
+    margin-top: 6px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+}
+
+/* Иконки приоритета */
+.priority-icon {
+    position: absolute;
+    left: 0;
+    top: 4px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.priority-icon::before {
+    content: '';
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: currentColor;
+}
+
+.priority-icon.high {
+    background-color: rgba(220, 53, 69, 0.2);
+    color: #dc3545;
+}
+
+.priority-icon.medium {
+    background-color: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+}
+
+.priority-icon.low {
+    background-color: rgba(40, 167, 69, 0.2);
+    color: #28a745;
+}
+
+/* --- 3. ДАШБОРД ПРОЦЕССОВ --- */
+.process-dashboard {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    overflow-y: auto;
+    padding-right: 15px;
+}
+
+/* Метрики процессов */
+.process-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.metric-card {
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-surface-border);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    backdrop-filter: blur(var(--backdrop-blur-value));
+    -webkit-backdrop-filter: blur(var(--backdrop-blur-value));
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
+}
+
+.metric-card h4 {
+    margin-bottom: 12px;
+    font-weight: 500;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.metric-value {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 8px;
+}
+
+.metric-trend {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.metric-trend.positive {
+    color: var(--color-text-positive);
+}
+
+.metric-trend.negative {
+    color: var(--color-text-negative);
+}
+
+/* Progress bar */
+.progress-bar {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    height: 10px;
+    overflow: hidden;
+    margin-top: 16px;
+}
+
+.progress-fill {
+    background: linear-gradient(90deg, #6366f1, #8b5cf6);
+    height: 100%;
+    border-radius: 30px;
+    transition: width 0.6s ease-in-out;
+    position: relative;
+}
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 30px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3));
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-30px);
+    }
+    100% {
+        transform: translateX(30px);
+    }
+}
+
+/* --- 4. ГРАФИК ЗАГРУЗКИ РЕСУРСОВ --- */
+.process-graph {
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-surface-border);
+    border-radius: 16px;
+    padding: 24px;
+    backdrop-filter: blur(var(--backdrop-blur-value));
+    -webkit-backdrop-filter: blur(var(--backdrop-blur-value));
+}
+
+.process-graph h4 {
+    margin-bottom: 24px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+/* Департаментская загрузка */
+.department-loads {
+    margin-bottom: 20px;
+}
+
+.department-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    gap: 12px;
+}
+
+.department-name {
+    flex: 0 0 100px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.load-bar {
+    flex: 1;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.load-fill {
+    height: 100%;
+    border-radius: 12px;
+    transition: width 0.8s ease-out;
+    position: relative;
+}
+
+.load-fill.sales {
+    background: linear-gradient(90deg, #00d4ff, #0099cc);
+}
+
+.load-fill.marketing {
+    background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+}
+
+.load-fill.support {
+    background: linear-gradient(90deg, #4ecdc4, #44a08d);
+}
+
+.load-fill.dev {
+    background: linear-gradient(90deg, #a55eea, #8854d0);
+}
+
+.load-fill.hr {
+    background: linear-gradient(90deg, #26de81, #20bf6b);
+}
+
+.load-percent {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+/* --- 5. AI ИНСАЙТЫ --- */
+.ai-insights {
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-surface-border);
+    border-radius: 16px;
+    padding: 24px;
+    backdrop-filter: blur(var(--backdrop-blur-value));
+    -webkit-backdrop-filter: blur(var(--backdrop-blur-value));
+}
+
+.ai-insights h4 {
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.insight-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    margin-bottom: 16px;
+    transition: transform 0.2s ease;
+}
+
+.insight-card:last-child {
+    margin-bottom: 0;
+}
+
+.insight-card:hover {
+    transform: translateX(5px);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.insight-card .rec-icon {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    background-size: contain;
+}
+
+.insight-card p {
+    flex: 1;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.insight-card strong {
+    color: #ffffff;
+}
+
+/* --- 6. АДАПТИВНОСТЬ --- */
+@media (max-width: 992px) {
+    .processes-container {
+        flex-direction: column;
+        height: calc(100% - 100px);
+    }
+    
+    .task-priorities {
+        flex: 0 0 auto;
+        max-height: 200px;
+        width: 100%;
+    }
+    
+    .process-metrics {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .department-item {
+        flex-wrap: wrap;
+    }
+    
+    .department-name {
+        flex: 0 0 100%;
+        margin-bottom: 8px;
+    }
+    
+    .load-bar {
+        flex: 1 1 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .metric-card {
+        padding: 20px;
+    }
+    
+    .metric-value {
+        font-size: 28px;
+    }
+    
+    .task-priorities {
+        padding: 20px;
+    }
+    
+    .process-graph {
+        padding: 20px;
+    }
+    
+    .ai-insights {
+        padding: 20px;
+    }
+}

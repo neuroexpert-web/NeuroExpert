@@ -11,7 +11,8 @@ export default function Home() {
   const sections = [
     'Главная',
     'Аналитика',
-    'Аудитория'
+    'Аудитория',
+    'Процессы'
   ];
 
   // Обработка смены секции
@@ -340,6 +341,127 @@ export default function Home() {
             <div className="ai-recommendation-for-segment">
               <div className="rec-icon warning-icon"></div>
               <p><strong>AI-совет:</strong> Срочная реактивация! Запустите win-back кампанию с персональными скидками 20-30%. Время критично.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>,
+
+    // 4. Процессы
+    <section key="processes" id="page-processes" className="full-page">
+      <div className="page-header">
+        <h2>Управление бизнес-процессами</h2>
+        <p>Оптимизируйте и автоматизируйте работу с AI-аналитикой</p>
+      </div>
+
+      <div className="processes-container">
+        {/* Блок 1: Приоритетные задачи и оповещения */}
+        <aside className="task-priorities">
+          <h3>Приоритетные задачи</h3>
+          <ul>
+            <li>
+              <span className="priority-icon high"></span>
+              <strong>Обновить CRM</strong> — интеграция с новым AI-модулем
+              <small>Срок: 30 Августа</small>
+            </li>
+            <li>
+              <span className="priority-icon medium"></span>
+              <strong>Анализ клиентской базы</strong> — подготовка сегментов VIP
+              <small>Срок: 5 Сентября</small>
+            </li>
+            <li>
+              <span className="priority-icon low"></span>
+              <strong>Тестирование новых сценариев AI-бота</strong>
+              <small>Срок: 15 Сентября</small>
+            </li>
+            <li>
+              <span className="priority-icon high"></span>
+              <strong>Миграция данных</strong> — перенос на новую платформу
+              <small>Срок: 28 Августа</small>
+            </li>
+            <li>
+              <span className="priority-icon medium"></span>
+              <strong>Оптимизация воронки продаж</strong> — A/B тестирование
+              <small>Срок: 10 Сентября</small>
+            </li>
+          </ul>
+        </aside>
+
+        {/* Блок 2: Дашборд KPI и процессов */}
+        <div className="process-dashboard">
+          <div className="process-metrics">
+            <div className="metric-card">
+              <h4>Автоматизация</h4>
+              <div className="metric-value">85%</div>
+              <div className="progress-bar">
+                <div className="progress-fill" style={{width: '85%'}}></div>
+              </div>
+            </div>
+            <div className="metric-card">
+              <h4>Время обработки заявки</h4>
+              <div className="metric-value">2ч 45м</div>
+              <p className="metric-trend positive">-15% за месяц</p>
+            </div>
+            <div className="metric-card">
+              <h4>Успешные сделки</h4>
+              <div className="metric-value">93%</div>
+              <p className="metric-trend positive">+3% за квартал</p>
+            </div>
+          </div>
+
+          <div className="process-graph">
+            <h4>Загрузка ресурсов (по отделам)</h4>
+            <div className="department-loads">
+              <div className="department-item">
+                <span className="department-name">Продажи</span>
+                <div className="load-bar">
+                  <div className="load-fill sales" style={{width: '78%'}}></div>
+                  <span className="load-percent">78%</span>
+                </div>
+              </div>
+              <div className="department-item">
+                <span className="department-name">Маркетинг</span>
+                <div className="load-bar">
+                  <div className="load-fill marketing" style={{width: '92%'}}></div>
+                  <span className="load-percent">92%</span>
+                </div>
+              </div>
+              <div className="department-item">
+                <span className="department-name">Поддержка</span>
+                <div className="load-bar">
+                  <div className="load-fill support" style={{width: '65%'}}></div>
+                  <span className="load-percent">65%</span>
+                </div>
+              </div>
+              <div className="department-item">
+                <span className="department-name">Разработка</span>
+                <div className="load-bar">
+                  <div className="load-fill dev" style={{width: '88%'}}></div>
+                  <span className="load-percent">88%</span>
+                </div>
+              </div>
+              <div className="department-item">
+                <span className="department-name">HR</span>
+                <div className="load-bar">
+                  <div className="load-fill hr" style={{width: '45%'}}></div>
+                  <span className="load-percent">45%</span>
+                </div>
+              </div>
+            </div>
+            <div className="chart-placeholder">
+              <canvas id="resourceLoadChart"></canvas>
+            </div>
+          </div>
+
+          <div className="ai-insights">
+            <h4>AI-инсайты по процессам</h4>
+            <div className="insight-card">
+              <div className="rec-icon idea-icon"></div>
+              <p><strong>Оптимизация:</strong> Перераспределите 2 сотрудника из HR в отдел маркетинга для балансировки нагрузки.</p>
+            </div>
+            <div className="insight-card">
+              <div className="rec-icon warning-icon"></div>
+              <p><strong>Внимание:</strong> Отдел разработки близок к перегрузке. Рассмотрите автоматизацию тестирования.</p>
             </div>
           </div>
         </div>
