@@ -3090,6 +3090,5 @@ button:disabled {
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
-/* Import workspace styles */
-@import './styles/workspace-full.css';
+/* Workspace styles already imported at the top */
 
