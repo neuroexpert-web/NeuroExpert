@@ -74,6 +74,22 @@ const CertificatesModal = dynamic(() => import('./components/CertificatesModal')
   loading: () => null
 });
 
+// Динамические импорты для страницы "О нас"
+const TeamModal = dynamic(() => import('./components/TeamModal'), {
+  ssr: false,
+  loading: () => null
+});
+
+const ValuesTooltips = dynamic(() => import('./components/ValuesTooltips'), {
+  ssr: false,
+  loading: () => null
+});
+
+const AboutAnimations = dynamic(() => import('./components/AboutAnimations'), {
+  ssr: false,
+  loading: () => null
+});
+
 export default function Home() {
   const [currentSection, setCurrentSection] = useState(0);
   const [activeSegment, setActiveSegment] = useState('loyal');
@@ -85,7 +101,8 @@ export default function Home() {
     'Аудитория',
     'Процессы',
     'Решения',
-    'Безопасность'
+    'Безопасность',
+    'О нас'
   ];
 
   // Обработка смены секции
@@ -1931,6 +1948,432 @@ export default function Home() {
         <SecurityAccordion />
         <SecurityTooltips />
         <CertificatesModal />
+      </Suspense>
+    </section>,
+
+    // 7. О нас - презентация компании и команды
+    <section key="about" id="about-section" className="full-page scrollable-section">
+      <div className="page-header">
+        <h2>Кто мы такие</h2>
+        <p>Команда экспертов, объединенная миссией трансформировать бизнес с помощью AI</p>
+      </div>
+
+      <div className="about-container">
+        {/* Миссия и история */}
+        <div className="mission-block glass-card">
+          <div className="mission-content">
+            <h3>Наша миссия</h3>
+            <p className="mission-text">
+              Мы делаем искусственный интеллект доступным для каждого бизнеса, превращая сложные технологии в простые и эффективные решения. 
+              NeuroExpert — это не просто платформа, это ваш партнер в цифровой трансформации.
+            </p>
+            <div className="mission-stats">
+              <div className="stat-item">
+                <span className="stat-value">2019</span>
+                <span className="stat-label">Год основания</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-value">500+</span>
+                <span className="stat-label">Компаний-клиентов</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-value">98%</span>
+                <span className="stat-label">Удовлетворенность</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-value">24/7</span>
+                <span className="stat-label">Поддержка</span>
+              </div>
+            </div>
+          </div>
+          <div className="mission-visual">
+            <div className="animated-brain">
+              <svg viewBox="0 0 200 200" className="brain-svg">
+                <defs>
+                  <linearGradient id="brainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#8b5cf6"/>
+                    <stop offset="100%" stopColor="#3b82f6"/>
+                  </linearGradient>
+                </defs>
+                <path d="M100 40 C60 40, 30 70, 30 110 C30 150, 60 180, 100 180 C140 180, 170 150, 170 110 C170 70, 140 40, 100 40" 
+                      fill="none" stroke="url(#brainGradient)" strokeWidth="2" className="brain-outline"/>
+                <circle cx="70" cy="80" r="15" fill="url(#brainGradient)" opacity="0.3" className="neuron"/>
+                <circle cx="130" cy="80" r="15" fill="url(#brainGradient)" opacity="0.3" className="neuron"/>
+                <circle cx="100" cy="110" r="20" fill="url(#brainGradient)" opacity="0.3" className="neuron"/>
+                <circle cx="80" cy="140" r="12" fill="url(#brainGradient)" opacity="0.3" className="neuron"/>
+                <circle cx="120" cy="140" r="12" fill="url(#brainGradient)" opacity="0.3" className="neuron"/>
+                <path d="M70 80 L100 110 M130 80 L100 110 M100 110 L80 140 M100 110 L120 140" 
+                      stroke="url(#brainGradient)" strokeWidth="1" opacity="0.5" className="connections"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        {/* Наши ценности */}
+        <div className="values-section">
+          <h3>Наши ценности</h3>
+          <div className="values-grid">
+            <article className="value-card glass-card" data-value="innovation">
+              <div className="value-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" strokeWidth="2"/>
+                </svg>
+              </div>
+              <h4>Инновации</h4>
+              <p>Используем передовые технологии AI и машинного обучения для создания решений будущего</p>
+              <button className="value-learn-more" aria-label="Узнать больше об инновациях">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                  <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
+                </svg>
+              </button>
+            </article>
+
+            <article className="value-card glass-card" data-value="transparency">
+              <div className="value-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" strokeWidth="2"/>
+                  <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" strokeWidth="2"/>
+                </svg>
+              </div>
+              <h4>Прозрачность</h4>
+              <p>Открыто рассказываем о наших процессах, технологиях и результатах работы</p>
+              <button className="value-learn-more" aria-label="Узнать больше о прозрачности">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                  <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
+                </svg>
+              </button>
+            </article>
+
+            <article className="value-card glass-card" data-value="responsibility">
+              <div className="value-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" strokeWidth="2"/>
+                </svg>
+              </div>
+              <h4>Ответственность</h4>
+              <p>Гарантируем безопасность данных и этичное использование искусственного интеллекта</p>
+              <button className="value-learn-more" aria-label="Узнать больше об ответственности">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                  <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
+                </svg>
+              </button>
+            </article>
+
+            <article className="value-card glass-card" data-value="partnership">
+              <div className="value-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" strokeWidth="2"/>
+                </svg>
+              </div>
+              <h4>Партнерство</h4>
+              <p>Строим долгосрочные отношения с клиентами, становимся частью их команды</p>
+              <button className="value-learn-more" aria-label="Узнать больше о партнерстве">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                  <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
+                </svg>
+              </button>
+            </article>
+          </div>
+        </div>
+
+        {/* Наша команда */}
+        <div className="team-section">
+          <h3>Наша команда</h3>
+          <p className="team-subtitle">Эксперты, объединенные страстью к технологиям и желанием менять мир к лучшему</p>
+          
+          <div className="team-grid">
+            <article className="team-member glass-card" data-member="ceo">
+              <div className="member-avatar">
+                <img src="/api/placeholder/120/120" alt="Александр Петров" />
+                <div className="member-badge">CEO</div>
+              </div>
+              <h4>Александр Петров</h4>
+              <p className="member-role">Основатель и CEO</p>
+              <p className="member-bio">15+ лет в IT, эксперт в области AI и бизнес-стратегии</p>
+              <div className="member-skills">
+                <span className="skill-tag">AI Strategy</span>
+                <span className="skill-tag">Business Development</span>
+                <span className="skill-tag">Leadership</span>
+              </div>
+              <button className="member-details-btn" aria-label="Подробнее об Александре">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
+                </svg>
+              </button>
+            </article>
+
+            <article className="team-member glass-card" data-member="cto">
+              <div className="member-avatar">
+                <img src="/api/placeholder/120/120" alt="Елена Иванова" />
+                <div className="member-badge">CTO</div>
+              </div>
+              <h4>Елена Иванова</h4>
+              <p className="member-role">Технический директор</p>
+              <p className="member-bio">PhD в Machine Learning, автор 20+ научных публикаций</p>
+              <div className="member-skills">
+                <span className="skill-tag">Machine Learning</span>
+                <span className="skill-tag">Neural Networks</span>
+                <span className="skill-tag">Python</span>
+              </div>
+              <button className="member-details-btn" aria-label="Подробнее о Елене">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
+                </svg>
+              </button>
+            </article>
+
+            <article className="team-member glass-card" data-member="head-ai">
+              <div className="member-avatar">
+                <img src="/api/placeholder/120/120" alt="Михаил Соколов" />
+                <div className="member-badge">Head of AI</div>
+              </div>
+              <h4>Михаил Соколов</h4>
+              <p className="member-role">Руководитель AI-департамента</p>
+              <p className="member-bio">10+ лет разработки AI-решений для Fortune 500</p>
+              <div className="member-skills">
+                <span className="skill-tag">Deep Learning</span>
+                <span className="skill-tag">NLP</span>
+                <span className="skill-tag">Computer Vision</span>
+              </div>
+              <button className="member-details-btn" aria-label="Подробнее о Михаиле">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
+                </svg>
+              </button>
+            </article>
+
+            <article className="team-member glass-card" data-member="head-ux">
+              <div className="member-avatar">
+                <img src="/api/placeholder/120/120" alt="Анна Морозова" />
+                <div className="member-badge">Head of UX</div>
+              </div>
+              <h4>Анна Морозова</h4>
+              <p className="member-role">Руководитель UX/UI</p>
+              <p className="member-bio">Создала дизайн-системы для 50+ AI-продуктов</p>
+              <div className="member-skills">
+                <span className="skill-tag">UX Research</span>
+                <span className="skill-tag">Design Systems</span>
+                <span className="skill-tag">Figma</span>
+              </div>
+              <button className="member-details-btn" aria-label="Подробнее об Анне">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
+                </svg>
+              </button>
+            </article>
+
+            <article className="team-member glass-card" data-member="head-data">
+              <div className="member-avatar">
+                <img src="/api/placeholder/120/120" alt="Дмитрий Волков" />
+                <div className="member-badge">Head of Data</div>
+              </div>
+              <h4>Дмитрий Волков</h4>
+              <p className="member-role">Руководитель Data Science</p>
+              <p className="member-bio">Эксперт в Big Data и предиктивной аналитике</p>
+              <div className="member-skills">
+                <span className="skill-tag">Big Data</span>
+                <span className="skill-tag">Analytics</span>
+                <span className="skill-tag">SQL/NoSQL</span>
+              </div>
+              <button className="member-details-btn" aria-label="Подробнее о Дмитрии">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
+                </svg>
+              </button>
+            </article>
+
+            <article className="team-member glass-card" data-member="head-security">
+              <div className="member-avatar">
+                <img src="/api/placeholder/120/120" alt="Ольга Белова" />
+                <div className="member-badge">CISO</div>
+              </div>
+              <h4>Ольга Белова</h4>
+              <p className="member-role">Директор по безопасности</p>
+              <p className="member-bio">Certified Ethical Hacker, 12+ лет в кибербезопасности</p>
+              <div className="member-skills">
+                <span className="skill-tag">Cybersecurity</span>
+                <span className="skill-tag">Compliance</span>
+                <span className="skill-tag">Risk Management</span>
+              </div>
+              <button className="member-details-btn" aria-label="Подробнее об Ольге">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
+                </svg>
+              </button>
+            </article>
+          </div>
+
+          <div className="team-cta">
+            <p>Хотите присоединиться к нашей команде?</p>
+            <a href="#careers" className="btn-careers">
+              Открытые вакансии
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <path d="M13 7l5 5m0 0l-5 5m5-5H6" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        {/* Достижения и награды */}
+        <div className="achievements-section">
+          <h3>Наши достижения</h3>
+          <div className="achievements-grid">
+            <div className="achievement-card glass-card">
+              <div className="achievement-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" strokeWidth="2"/>
+                </svg>
+              </div>
+              <h4>AI Excellence Award 2023</h4>
+              <p>Лучшая платформа для бизнес-аналитики</p>
+            </div>
+
+            <div className="achievement-card glass-card">
+              <div className="achievement-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" strokeWidth="2"/>
+                </svg>
+              </div>
+              <h4>500+ клиентов</h4>
+              <p>Доверяют нам цифровую трансформацию</p>
+            </div>
+
+            <div className="achievement-card glass-card">
+              <div className="achievement-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" strokeWidth="2"/>
+                </svg>
+              </div>
+              <h4>ISO сертификация</h4>
+              <p>Международные стандарты качества</p>
+            </div>
+
+            <div className="achievement-card glass-card">
+              <div className="achievement-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeWidth="2"/>
+                </svg>
+              </div>
+              <h4>10M+ обработано запросов</h4>
+              <p>Ежедневно через нашу платформу</p>
+            </div>
+
+            <div className="achievement-card glass-card">
+              <div className="achievement-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
+                </svg>
+              </div>
+              <h4>30+ стран</h4>
+              <p>География наших клиентов</p>
+            </div>
+
+            <div className="achievement-card glass-card">
+              <div className="achievement-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
+                </svg>
+              </div>
+              <h4>NPS 72</h4>
+              <p>Высокий уровень лояльности клиентов</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Партнеры и клиенты */}
+        <div className="partners-section">
+          <h3>Нам доверяют</h3>
+          <div className="partners-carousel glass-card">
+            <div className="partners-track">
+              <div className="partner-logo">
+                <img src="/api/placeholder/150/60" alt="Partner 1" />
+              </div>
+              <div className="partner-logo">
+                <img src="/api/placeholder/150/60" alt="Partner 2" />
+              </div>
+              <div className="partner-logo">
+                <img src="/api/placeholder/150/60" alt="Partner 3" />
+              </div>
+              <div className="partner-logo">
+                <img src="/api/placeholder/150/60" alt="Partner 4" />
+              </div>
+              <div className="partner-logo">
+                <img src="/api/placeholder/150/60" alt="Partner 5" />
+              </div>
+              <div className="partner-logo">
+                <img src="/api/placeholder/150/60" alt="Partner 6" />
+              </div>
+              {/* Дублируем для бесшовной анимации */}
+              <div className="partner-logo">
+                <img src="/api/placeholder/150/60" alt="Partner 1" />
+              </div>
+              <div className="partner-logo">
+                <img src="/api/placeholder/150/60" alt="Partner 2" />
+              </div>
+              <div className="partner-logo">
+                <img src="/api/placeholder/150/60" alt="Partner 3" />
+              </div>
+              <div className="partner-logo">
+                <img src="/api/placeholder/150/60" alt="Partner 4" />
+              </div>
+            </div>
+          </div>
+
+          <div className="testimonials-grid">
+            <article className="testimonial-card glass-card">
+              <div className="testimonial-quote">
+                <svg viewBox="0 0 24 24" fill="currentColor" className="quote-icon">
+                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+                </svg>
+                <p>"NeuroExpert помог нам увеличить конверсию на 45% за 3 месяца. Это лучшее решение для data-driven маркетинга."</p>
+                <div className="testimonial-author">
+                  <strong>Иван Кузнецов</strong>
+                  <span>CEO, TechStart</span>
+                </div>
+              </div>
+            </article>
+
+            <article className="testimonial-card glass-card">
+              <div className="testimonial-quote">
+                <svg viewBox="0 0 24 24" fill="currentColor" className="quote-icon">
+                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+                </svg>
+                <p>"AI-рекомендации платформы сэкономили нам миллионы рублей на оптимизации процессов. Невероятный ROI!"</p>
+                <div className="testimonial-author">
+                  <strong>Мария Федорова</strong>
+                  <span>CDO, RetailPro</span>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        {/* CTA секция */}
+        <div className="about-cta glass-card">
+          <h3>Готовы начать трансформацию?</h3>
+          <p>Присоединяйтесь к сотням компаний, которые уже используют силу AI для роста бизнеса</p>
+          <div className="cta-buttons">
+            <button className="btn-demo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" strokeWidth="2"/>
+              </svg>
+              Запланировать демо
+            </button>
+            <button className="btn-partnership">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" strokeWidth="2"/>
+              </svg>
+              Стать партнером
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      {/* Компоненты для управления страницей О нас */}
+      <Suspense fallback={null}>
+        <TeamModal />
+        <ValuesTooltips />
+        <AboutAnimations />
       </Suspense>
     </section>
   ];
