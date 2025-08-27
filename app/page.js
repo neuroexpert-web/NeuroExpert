@@ -15,6 +15,16 @@ const RealtimeUpdates = dynamic(() => import('./components/RealtimeUpdates'), {
   loading: () => null
 });
 
+const TooltipManager = dynamic(() => import('./components/TooltipManager'), {
+  ssr: false,
+  loading: () => null
+});
+
+const OnboardingTour = dynamic(() => import('./components/OnboardingTour'), {
+  ssr: false,
+  loading: () => null
+});
+
 export default function Home() {
   const [currentSection, setCurrentSection] = useState(0);
   const [activeSegment, setActiveSegment] = useState('loyal');
@@ -63,9 +73,37 @@ export default function Home() {
     <section key="analytics" id="analytics-dashboard" className="full-page scrollable-section">
       <header className="page-header">
         <h2>Аналитика в реальном времени</h2>
-        <p>Показатели KPI и AI-рекомендации</p>
+        <p>Ваши ключевые показатели и умные рекомендации для роста бизнеса</p>
       </header>
-        {/* KPI карточки */}
+      
+      {/* Панель фильтров */}
+      <div className="filters-panel glass-card">
+        <div className="filter-group">
+          <label htmlFor="date-filter">Период:</label>
+          <select id="date-filter" className="filter-select">
+            <option value="today">Сегодня</option>
+            <option value="week" selected>Последние 7 дней</option>
+            <option value="month">Последние 30 дней</option>
+            <option value="quarter">Квартал</option>
+          </select>
+        </div>
+        <div className="filter-group">
+          <label htmlFor="segment-filter">Сегмент:</label>
+          <select id="segment-filter" className="filter-select">
+            <option value="all">Все клиенты</option>
+            <option value="new">Новые</option>
+            <option value="returning">Постоянные</option>
+            <option value="vip">VIP</option>
+          </select>
+        </div>
+        <button className="refresh-button" aria-label="Обновить данные">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" strokeWidth="2" strokeLinecap="round"/>
+          </svg>
+          <span>Обновить</span>
+        </button>
+      </div>
+        {/* KPI карточки с пояснениями */}
         <div className="kpi-cards">
           <div className="kpi-card glass-card" id="kpi-revenue">
             <div className="kpi-header">
@@ -75,11 +113,20 @@ export default function Home() {
                 </svg>
               </span>
               <span className="kpi-title">Выручка</span>
+              <button className="help-icon" aria-describedby="tooltip-revenue" tabIndex="0">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                </svg>
+              </button>
+              <div id="tooltip-revenue" className="tooltip" role="tooltip" hidden>
+                Общая выручка за выбранный период от всех каналов продаж. Включает все успешные транзакции.
+              </div>
             </div>
             <div className="kpi-value">₽ 7 128,4K</div>
+            <div className="kpi-description">За последние 7 дней</div>
             <div className="kpi-trend positive">
               <span className="trend-icon">↑</span>
-              <span>+5.2% vs. прошлый месяц</span>
+              <span>+5.2% по сравнению с прошлой неделей</span>
             </div>
             <div className="kpi-sparkline" id="revenue-sparkline"></div>
           </div>
@@ -92,11 +139,20 @@ export default function Home() {
                 </svg>
               </span>
               <span className="kpi-title">Новые клиенты</span>
+              <button className="help-icon" aria-describedby="tooltip-clients" tabIndex="0">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                </svg>
+              </button>
+              <div id="tooltip-clients" className="tooltip" role="tooltip" hidden>
+                Количество новых уникальных пользователей, которые совершили первую покупку или регистрацию.
+              </div>
             </div>
             <div className="kpi-value">162</div>
+            <div className="kpi-description">Зарегистрировались за неделю</div>
             <div className="kpi-trend positive">
               <span className="trend-icon">↑</span>
-              <span>+12% за месяц</span>
+              <span>+12% больше обычного</span>
             </div>
             <div className="kpi-sparkline" id="clients-sparkline"></div>
           </div>
@@ -109,11 +165,20 @@ export default function Home() {
                 </svg>
               </span>
               <span className="kpi-title">Удовлетворенность</span>
+              <button className="help-icon" aria-describedby="tooltip-satisfaction" tabIndex="0">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                </svg>
+              </button>
+              <div id="tooltip-satisfaction" className="tooltip" role="tooltip" hidden>
+                Средняя оценка клиентов на основе отзывов и NPS-опросов.
+              </div>
             </div>
             <div className="kpi-value">4.85/5</div>
+            <div className="kpi-description">Средняя оценка клиентов</div>
             <div className="kpi-trend negative">
               <span className="trend-icon">↓</span>
-              <span>-0.15 пунктов</span>
+              <span>Небольшое снижение (-0.15)</span>
             </div>
             <div className="kpi-sparkline" id="satisfaction-sparkline"></div>
           </div>
@@ -126,43 +191,75 @@ export default function Home() {
                 </svg>
               </span>
               <span className="kpi-title">Конверсия</span>
+              <button className="help-icon" aria-describedby="tooltip-conversion" tabIndex="0">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                </svg>
+              </button>
+              <div id="tooltip-conversion" className="tooltip" role="tooltip" hidden>
+                Процент посетителей, совершивших целевое действие (покупка, регистрация, подписка).
+              </div>
             </div>
             <div className="kpi-value">3.13%</div>
+            <div className="kpi-description">Из посетителей в клиенты</div>
             <div className="kpi-trend positive">
               <span className="trend-icon">↑</span>
-              <span>+0.5% рост</span>
+              <span>Растёт (+0.5%)</span>
             </div>
             <div className="kpi-sparkline" id="conversion-sparkline"></div>
           </div>
         </div>
         
-        {/* Контейнер для графиков */}
-        <div className="charts-container">
-          <div className="chart-card glass-card" id="chart-revenue">
-            <h3>Динамика выручки (30 дней)</h3>
-            <div className="chart-wrapper">
-              <canvas id="revenueChart"></canvas>
+        {/* Контейнер для графиков с заголовками */}
+        <div className="charts-section">
+          <h3 className="section-title">Детальная аналитика</h3>
+          <div className="charts-container">
+            <div className="chart-card glass-card" id="chart-revenue">
+              <div className="chart-header">
+                <h4>Динамика выручки</h4>
+                <div className="chart-filters">
+                  <button className="filter-btn active" data-period="7d">7 дней</button>
+                  <button className="filter-btn" data-period="30d">30 дней</button>
+                  <button className="filter-btn" data-period="90d">90 дней</button>
+                </div>
+              </div>
+              <div className="chart-wrapper">
+                <canvas id="revenueChart"></canvas>
+              </div>
             </div>
-          </div>
           
           <div className="chart-card glass-card" id="chart-traffic">
-            <h3>Источники трафика</h3>
+            <div className="chart-header">
+              <h4>Источники трафика</h4>
+              <button className="info-btn" aria-label="Подробнее об источниках">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                </svg>
+              </button>
+            </div>
             <div className="chart-wrapper">
               <canvas id="trafficChart"></canvas>
             </div>
           </div>
           
           <div className="chart-card glass-card" id="chart-funnel">
-            <h3>Воронка продаж</h3>
+            <div className="chart-header">
+              <h4>Воронка продаж</h4>
+              <span className="chart-subtitle">Путь клиента от первого касания до покупки</span>
+            </div>
             <div className="chart-wrapper">
               <canvas id="funnelChart"></canvas>
             </div>
           </div>
+          </div>
         </div>
 
-        {/* AI рекомендации */}
+        {/* AI рекомендации с пояснениями */}
         <section className="ai-recommendations">
-          <h3>AI-рекомендации для роста бизнеса</h3>
+          <div className="section-header">
+            <h3>Умные рекомендации для вашего бизнеса</h3>
+            <p>AI проанализировал ваши данные и нашёл возможности для роста</p>
+          </div>
           <div className="recommendations-grid">
             <div className="recommendation-card glass-card">
               <div className="rec-header">
@@ -171,13 +268,20 @@ export default function Home() {
                     <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" strokeWidth="2"/>
                   </svg>
                 </div>
-                <div className="rec-priority high">Высокий приоритет</div>
+                <div className="rec-priority high">
+                  <span className="priority-dot"></span>
+                  Высокий приоритет
+                </div>
               </div>
-              <h4>Оптимизируйте мобильную версию</h4>
-              <p>72% новых пользователей приходят с мобильных устройств. Улучшение UX на смартфонах может повысить конверсию на 15%.</p>
+              <h4>Улучшите мобильный опыт</h4>
+              <div className="rec-metric">
+                <span className="metric-label">Потенциальный рост:</span>
+                <span className="metric-value">+15% конверсии</span>
+              </div>
+              <p>Мы заметили, что 72% ваших новых пользователей заходят с телефонов, но конверсия на мобильных ниже на 40%. Оптимизация интерфейса решит эту проблему.</p>
               <div className="rec-actions">
                 <button className="rec-action-button primary">Начать оптимизацию</button>
-                <button className="rec-action-button secondary">Подробнее</button>
+                <button className="rec-action-button secondary">Узнать детали</button>
               </div>
             </div>
             
@@ -188,13 +292,20 @@ export default function Home() {
                     <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4m0 4h.01" strokeWidth="2" strokeLinecap="round"/>
                   </svg>
                 </div>
-                <div className="rec-priority medium">Средний приоритет</div>
+                <div className="rec-priority medium">
+                  <span className="priority-dot"></span>
+                  Требует внимания
+                </div>
               </div>
-              <h4>Риск оттока клиентов</h4>
-              <p>Сегмент "Малый бизнес" показывает снижение активности на 25%. Рекомендуется запустить для них email-кампанию.</p>
+              <h4>Удержите ценных клиентов</h4>
+              <div className="rec-metric">
+                <span className="metric-label">В зоне риска:</span>
+                <span className="metric-value warning">312 клиентов</span>
+              </div>
+              <p>Клиенты из сегмента "Малый бизнес" стали реже совершать покупки (-25% за месяц). Персонализированная email-кампания поможет их вернуть.</p>
               <div className="rec-actions">
                 <button className="rec-action-button primary">Создать кампанию</button>
-                <button className="rec-action-button secondary">Анализ сегмента</button>
+                <button className="rec-action-button secondary">Посмотреть список</button>
               </div>
             </div>
 
@@ -231,6 +342,8 @@ export default function Home() {
       <Suspense fallback={null}>
         <AnalyticsCharts />
         <RealtimeUpdates />
+        <TooltipManager />
+        <OnboardingTour />
       </Suspense>
     </section>,
 

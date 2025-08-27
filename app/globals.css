@@ -12,6 +12,7 @@
 
 /* Импорт стилей аналитики */
 @import './styles/analytics-style-v2.css';
+@import './styles/analytics-style-v3.css';
 
 /* Импорт стилей аудитории */
 @import './styles/audience-style.css';
