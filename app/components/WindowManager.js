@@ -1,73 +1,294 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 export default function WindowManager() {
+  const [windows, setWindows] = useState([]);
+  const [activeWindowId, setActiveWindowId] = useState(null);
+  const dragRef = useRef(null);
+  const resizeRef = useRef(null);
+  
   useEffect(() => {
-    initializeWindows();
-  }, []);
-
-  const initializeWindows = () => {
-    const windows = document.querySelectorAll('.floating-window');
-    windows.forEach(window => {
-      const header = window.querySelector('.window-header');
-      if (header) {
-        makeDraggable(window, header);
+    // Initialize default windows
+    const defaultWindows = [
+      {
+        id: 'task-manager',
+        title: 'Менеджер задач',
+        x: 100,
+        y: 100,
+        width: 600,
+        height: 400,
+        minimized: false,
+        maximized: false,
+        visible: false
+      },
+      {
+        id: 'ai-assistant',
+        title: 'AI Ассистент',
+        x: 200,
+        y: 150,
+        width: 400,
+        height: 500,
+        minimized: false,
+        maximized: false,
+        visible: false
       }
-
-      // Window controls
-      const closeBtn = window.querySelector('.window-close');
-      if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-          window.classList.remove('active');
-        });
+    ];
+    
+    setWindows(defaultWindows);
+    
+    // Listen for window open events
+    const handleOpenWindow = (e) => {
+      const windowId = e.detail;
+      openWindow(windowId);
+    };
+    
+    window.addEventListener('open-window', handleOpenWindow);
+    return () => window.removeEventListener('open-window', handleOpenWindow);
+  }, []);
+  
+  // Open window
+  const openWindow = (windowId) => {
+    setWindows(prev => prev.map(w => 
+      w.id === windowId ? { ...w, visible: true, minimized: false } : w
+    ));
+    setActiveWindowId(windowId);
+    
+    // Add active class to window
+    setTimeout(() => {
+      const windowEl = document.querySelector(`#window-${windowId}`);
+      if (windowEl) {
+        windowEl.classList.add('active');
+        bringToFront(windowId);
+      }
+    }, 0);
+  };
+  
+  // Close window
+  const closeWindow = (windowId) => {
+    const windowEl = document.querySelector(`#window-${windowId}`);
+    if (windowEl) {
+      windowEl.classList.remove('active');
+      setTimeout(() => {
+        setWindows(prev => prev.map(w => 
+          w.id === windowId ? { ...w, visible: false } : w
+        ));
+      }, 200);
+    }
+  };
+  
+  // Minimize window
+  const minimizeWindow = (windowId) => {
+    setWindows(prev => prev.map(w => 
+      w.id === windowId ? { ...w, minimized: true } : w
+    ));
+  };
+  
+  // Maximize/restore window
+  const toggleMaximize = (windowId) => {
+    setWindows(prev => prev.map(w => {
+      if (w.id === windowId) {
+        if (w.maximized) {
+          // Restore
+          return { ...w, maximized: false };
+        } else {
+          // Maximize
+          return {
+            ...w,
+            maximized: true,
+            prevX: w.x,
+            prevY: w.y,
+            prevWidth: w.width,
+            prevHeight: w.height
+          };
+        }
+      }
+      return w;
+    }));
+  };
+  
+  // Bring window to front
+  const bringToFront = (windowId) => {
+    const allWindows = document.querySelectorAll('.floating-window');
+    let maxZ = 100;
+    
+    allWindows.forEach(w => {
+      const z = parseInt(w.style.zIndex || 100);
+      if (z > maxZ) maxZ = z;
+    });
+    
+    const targetWindow = document.querySelector(`#window-${windowId}`);
+    if (targetWindow) {
+      targetWindow.style.zIndex = maxZ + 1;
+    }
+    
+    setActiveWindowId(windowId);
+  };
+  
+  // Drag functionality
+  useEffect(() => {
+    let isDragging = false;
+    let currentWindow = null;
+    let startX = 0;
+    let startY = 0;
+    let windowStartX = 0;
+    let windowStartY = 0;
+    
+    const handleMouseDown = (e) => {
+      const header = e.target.closest('.window-header');
+      if (!header || e.target.closest('.window-controls')) return;
+      
+      const windowEl = header.closest('.floating-window');
+      if (!windowEl) return;
+      
+      isDragging = true;
+      currentWindow = windowEl;
+      startX = e.clientX;
+      startY = e.clientY;
+      
+      const windowId = windowEl.id.replace('window-', '');
+      const window = windows.find(w => w.id === windowId);
+      if (window && !window.maximized) {
+        windowStartX = window.x;
+        windowStartY = window.y;
+        
+        currentWindow.style.cursor = 'move';
+        document.body.style.cursor = 'move';
+        
+        bringToFront(windowId);
+      }
+    };
+    
+    const handleMouseMove = (e) => {
+      if (!isDragging || !currentWindow) return;
+      
+      const deltaX = e.clientX - startX;
+      const deltaY = e.clientY - startY;
+      
+      const newX = windowStartX + deltaX;
+      const newY = windowStartY + deltaY;
+      
+      // Constrain to viewport
+      const maxX = window.innerWidth - currentWindow.offsetWidth;
+      const maxY = window.innerHeight - currentWindow.offsetHeight - 60; // Account for header
+      
+      const constrainedX = Math.max(0, Math.min(newX, maxX));
+      const constrainedY = Math.max(0, Math.min(newY, maxY));
+      
+      currentWindow.style.left = constrainedX + 'px';
+      currentWindow.style.top = constrainedY + 'px';
+      
+      // Update state
+      const windowId = currentWindow.id.replace('window-', '');
+      setWindows(prev => prev.map(w => 
+        w.id === windowId ? { ...w, x: constrainedX, y: constrainedY } : w
+      ));
+    };
+    
+    const handleMouseUp = () => {
+      isDragging = false;
+      currentWindow = null;
+      document.body.style.cursor = '';
+    };
+    
+    document.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+    
+    return () => {
+      document.removeEventListener('mousedown', handleMouseDown);
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [windows]);
+  
+  // Window control handlers
+  useEffect(() => {
+    const handleWindowControl = (e) => {
+      const btn = e.target.closest('.window-control');
+      if (!btn) return;
+      
+      const windowEl = btn.closest('.floating-window');
+      if (!windowEl) return;
+      
+      const windowId = windowEl.id.replace('window-', '');
+      const action = btn.getAttribute('data-action');
+      
+      switch (action) {
+        case 'minimize':
+          minimizeWindow(windowId);
+          break;
+        case 'maximize':
+          toggleMaximize(windowId);
+          break;
+        case 'close':
+          closeWindow(windowId);
+          break;
+      }
+    };
+    
+    document.addEventListener('click', handleWindowControl);
+    return () => document.removeEventListener('click', handleWindowControl);
+  }, []);
+  
+  // Update window positions and states
+  useEffect(() => {
+    windows.forEach(window => {
+      const windowEl = document.querySelector(`#window-${window.id}`);
+      if (!windowEl) return;
+      
+      if (window.visible && !window.minimized) {
+        windowEl.classList.add('active');
+        
+        if (window.maximized) {
+          windowEl.style.left = '0';
+          windowEl.style.top = '0';
+          windowEl.style.width = '100%';
+          windowEl.style.height = `calc(100% - ${60}px)`; // Account for header
+        } else {
+          windowEl.style.left = window.x + 'px';
+          windowEl.style.top = window.y + 'px';
+          windowEl.style.width = window.width + 'px';
+          windowEl.style.height = window.height + 'px';
+        }
+      } else {
+        windowEl.classList.remove('active');
       }
     });
-
-    // Open AI Assistant button
-    const aiBtn = document.querySelector('[data-view="ai-assistant"]');
-    if (aiBtn) {
-      aiBtn.addEventListener('click', () => {
-        const aiWindow = document.getElementById('ai-assistant-window');
-        if (aiWindow) {
-          aiWindow.classList.add('active');
-          aiWindow.style.top = '100px';
-          aiWindow.style.left = '400px';
-        }
-      });
-    }
-  };
-
-  const makeDraggable = (element, handle) => {
-    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  }, [windows]);
+  
+  // Quick action handlers
+  useEffect(() => {
+    const quickActions = document.querySelectorAll('.quick-action');
     
-    handle.onmousedown = dragMouseDown;
-
-    function dragMouseDown(e) {
-      e = e || window.event;
-      e.preventDefault();
-      pos3 = e.clientX;
-      pos4 = e.clientY;
-      document.onmouseup = closeDragElement;
-      document.onmousemove = elementDrag;
-    }
-
-    function elementDrag(e) {
-      e = e || window.event;
-      e.preventDefault();
-      pos1 = pos3 - e.clientX;
-      pos2 = pos4 - e.clientY;
-      pos3 = e.clientX;
-      pos4 = e.clientY;
-      element.style.top = (element.offsetTop - pos2) + "px";
-      element.style.left = (element.offsetLeft - pos1) + "px";
-    }
-
-    function closeDragElement() {
-      document.onmouseup = null;
-      document.onmousemove = null;
-    }
-  };
-
-  return null;
+    const handleQuickAction = (e) => {
+      const action = e.currentTarget.getAttribute('data-action');
+      
+      switch (action) {
+        case 'new-task':
+          openWindow('task-manager');
+          // Trigger new task creation
+          setTimeout(() => {
+            window.dispatchEvent(new CustomEvent('create-new-task'));
+          }, 300);
+          break;
+        case 'ai-chat':
+          openWindow('ai-assistant');
+          break;
+        // Add more actions as needed
+      }
+    };
+    
+    quickActions.forEach(action => {
+      action.addEventListener('click', handleQuickAction);
+    });
+    
+    return () => {
+      quickActions.forEach(action => {
+        action.removeEventListener('click', handleQuickAction);
+      });
+    };
+  }, []);
+  
+  return null; // This component manages window state, no UI
 }
