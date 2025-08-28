@@ -54,8 +54,7 @@ export const metadata = {
   alternates: {
     canonical: '/',
   },
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes',
-  themeColor: '#0a0e1a',
+
   openGraph: {
     title: 'NeuroExpert - AI-платформа для цифровизации бизнеса',
     description: 'Увеличьте прибыль на 40% с помощью AI',
@@ -95,17 +94,7 @@ export const metadata = {
     statusBarStyle: 'black-translucent',
     title: 'NeuroExpert',
   },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5,
-    userScalable: true,
-    viewportFit: 'cover',
-  },
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f8fafc' },
-    { media: '(prefers-color-scheme: dark)', color: '#0f172a' },
-  ],
+
   other: {
     'mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-capable': 'yes',
@@ -114,6 +103,20 @@ export const metadata = {
     'msapplication-TileColor': '#6366f1',
     'msapplication-tap-highlight': 'no',
   },
+}
+
+export function generateViewport() {
+  return {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+    userScalable: true,
+    viewportFit: 'cover',
+    themeColor: [
+      { media: '(prefers-color-scheme: light)', color: '#f8fafc' },
+      { media: '(prefers-color-scheme: dark)', color: '#0f172a' },
+    ]
+  }
 }
 
 export default function RootLayout({ children }) {

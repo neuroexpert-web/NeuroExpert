@@ -38,7 +38,7 @@ export default function PricingCalculator() {
   // Расчет стоимости
   const calculatePrice = useCallback(() => {
     // Базовая цена
-    let basePrice = basePrices[selectedPlan];
+    const basePrice = basePrices[selectedPlan];
     
     // Дополнительная стоимость за пользователей
     let usersCost = 0;
