@@ -27,6 +27,22 @@ const OnboardingTour = dynamic(() => import('./components/OnboardingTour'), {
   loading: () => null
 });
 
+// Новые компоненты графиков
+const RevenueChart = dynamic(() => import('./components/analytics/RevenueChart'), {
+  ssr: false,
+  loading: () => <div className="chart-loading">Загрузка графика...</div>
+});
+
+const TrafficChart = dynamic(() => import('./components/analytics/TrafficChart'), {
+  ssr: false,
+  loading: () => <div className="chart-loading">Загрузка графика...</div>
+});
+
+const FunnelChart = dynamic(() => import('./components/analytics/FunnelChart'), {
+  ssr: false,
+  loading: () => <div className="chart-loading">Загрузка графика...</div>
+});
+
 // Динамические импорты для страницы аудитории
 const SegmentManager = dynamic(() => import('./components/SegmentManager'), {
   ssr: false,
@@ -175,6 +191,7 @@ export default function Home() {
     satisfaction: 4.8,
     conversion: 3.8
   });
+  const [chartPeriod, setChartPeriod] = useState('7d');
   
   // Определение разделов для навигации
   const sections = [
@@ -354,6 +371,31 @@ export default function Home() {
       }
     }, 100);
   }, [handleSectionChange]);
+
+  // Обработчик для информации о графиках
+  const handleChartInfo = useCallback((chartType) => {
+    const infoMap = {
+      traffic: {
+        title: 'Источники трафика',
+        content: 'Анализ показывает откуда приходят ваши клиенты:\n\n• Органический поиск - основной источник качественного трафика\n• Социальные сети - высокая вовлечённость, но низкая конверсия\n• Email рассылки - лучшая конверсия в покупки\n\nРекомендация: Увеличьте инвестиции в SEO и email-маркетинг'
+      }
+    };
+    
+    const info = infoMap[chartType];
+    if (info) {
+      const modal = document.createElement('div');
+      modal.className = 'details-modal';
+      modal.innerHTML = `
+        <div class="modal-backdrop" onclick="this.parentElement.remove()"></div>
+        <div class="modal-content glass-card">
+          <h3>${info.title}</h3>
+          <p>${info.content.replace(/\n/g, '<br>')}</p>
+          <button class="modal-close" onclick="this.closest('.details-modal').remove()">Закрыть</button>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+  }, []);
 
   // Компоненты для каждого раздела
   const sectionComponents = [
@@ -561,27 +603,46 @@ export default function Home() {
               <div className="chart-header">
                 <h4>Динамика выручки</h4>
                 <div className="chart-filters">
-                  <button className="filter-btn active" data-period="7d">7 дней</button>
-                  <button className="filter-btn" data-period="30d">30 дней</button>
-                  <button className="filter-btn" data-period="90d">90 дней</button>
+                  <button 
+                    className={`filter-btn ${chartPeriod === '7d' ? 'active' : ''}`}
+                    onClick={() => setChartPeriod('7d')}
+                  >
+                    7 дней
+                  </button>
+                  <button 
+                    className={`filter-btn ${chartPeriod === '30d' ? 'active' : ''}`}
+                    onClick={() => setChartPeriod('30d')}
+                  >
+                    30 дней
+                  </button>
+                  <button 
+                    className={`filter-btn ${chartPeriod === '90d' ? 'active' : ''}`}
+                    onClick={() => setChartPeriod('90d')}
+                  >
+                    90 дней
+                  </button>
                 </div>
               </div>
               <div className="chart-wrapper">
-                <canvas id="revenueChart"></canvas>
+                {RevenueChart && <RevenueChart period={chartPeriod} darkMode={true} />}
               </div>
             </div>
           
           <div className="chart-card glass-card" id="chart-traffic">
             <div className="chart-header">
               <h4>Источники трафика</h4>
-              <button className="info-btn" aria-label="Подробнее об источниках">
+              <button 
+                className="info-btn" 
+                aria-label="Подробнее об источниках"
+                onClick={() => handleChartInfo('traffic')}
+              >
                 <svg viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
                 </svg>
               </button>
             </div>
             <div className="chart-wrapper">
-              <canvas id="trafficChart"></canvas>
+              {TrafficChart && <TrafficChart darkMode={true} />}
             </div>
           </div>
           
@@ -591,7 +652,7 @@ export default function Home() {
               <span className="chart-subtitle">Путь клиента от первого касания до покупки</span>
             </div>
             <div className="chart-wrapper">
-              <canvas id="funnelChart"></canvas>
+              {FunnelChart && <FunnelChart darkMode={true} />}
             </div>
           </div>
           </div>

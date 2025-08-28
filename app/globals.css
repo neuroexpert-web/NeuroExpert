@@ -3479,3 +3479,115 @@ textarea:focus {
   to { transform: translateX(100%); opacity: 0; }
 }
 
+/* Chart Styles */
+.chart-container {
+  position: relative;
+  height: 300px;
+  padding: 10px;
+}
+
+.chart-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+}
+
+.chart-filters {
+  display: flex;
+  gap: 8px;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+  background: rgba(139, 92, 246, 0.1);
+  border-color: rgba(139, 92, 246, 0.5);
+  color: white;
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, #8b5cf6, #d946ef);
+  border-color: transparent;
+  color: white;
+}
+
+.chart-center-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+}
+
+.total-visits {
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+}
+
+.visits-label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 4px;
+}
+
+.funnel-stats {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 20px;
+  font-size: 13px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stat-label {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.stat-value {
+  color: white;
+  font-weight: 600;
+}
+
+.stat-value.success {
+  color: #10b981;
+}
+
+.info-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  padding: 4px;
+  transition: all 0.3s ease;
+}
+
+.info-btn:hover {
+  color: #8b5cf6;
+  transform: scale(1.1);
+}
+
+.info-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
