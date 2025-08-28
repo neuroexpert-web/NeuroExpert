@@ -3265,6 +3265,39 @@ button:disabled {
   z-index: 20;
 }
 
+/* Recommendation Action Buttons */
+.rec-action-button {
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 5px;
+}
+
+.rec-action-button.primary {
+  background: linear-gradient(135deg, #8b5cf6, #d946ef);
+  color: white;
+}
+
+.rec-action-button.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(139, 92, 246, 0.4);
+}
+
+.rec-action-button.secondary {
+  background: transparent;
+  color: #8b5cf6;
+  border: 2px solid #8b5cf6;
+}
+
+.rec-action-button.secondary:hover {
+  background: rgba(139, 92, 246, 0.1);
+  transform: translateY(-2px);
+}
+
 /* Button loading and interaction states */
 .cta-button.loading,
 .refresh-button.refreshing,
@@ -3305,11 +3338,33 @@ button:disabled {
 }
 
 /* Filter and form control states */
+.filter-select {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 10px 15px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-select:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(139, 92, 246, 0.5);
+}
+
 .filter-select:focus,
 input:focus,
 textarea:focus {
   outline: 2px solid #8b5cf6;
   outline-offset: 2px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.filter-select option {
+  background: #1a1a2e;
+  color: white;
 }
 
 /* Success/Error feedback */
@@ -3323,5 +3378,104 @@ textarea:focus {
   color: #ef4444;
   font-size: 0.875rem;
   margin-top: 0.5rem;
+}
+
+/* Details Modal */
+.details-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  cursor: pointer;
+}
+
+.modal-content {
+  position: relative;
+  max-width: 500px;
+  margin: 20px;
+  padding: 30px;
+  background: rgba(26, 26, 46, 0.95);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.3s ease;
+}
+
+.modal-content h3 {
+  color: white;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.modal-content p {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.8;
+  margin-bottom: 25px;
+}
+
+.modal-close {
+  background: linear-gradient(135deg, #8b5cf6, #d946ef);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(139, 92, 246, 0.4);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Filter Notifications */
+.filter-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #8b5cf6, #d946ef);
+  color: white;
+  padding: 15px 25px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+  animation: slideInRight 0.3s ease, slideOutRight 0.3s ease 2.7s;
+  z-index: 10000;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOutRight {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(100%); opacity: 0; }
 }
 

@@ -241,13 +241,33 @@ export default function Home() {
 
   // Обработчик изменения периода
   const handlePeriodChange = useCallback((e) => {
-    setDataPeriod(e.target.value);
+    const newPeriod = e.target.value;
+    setDataPeriod(newPeriod);
+    
+    // Показываем уведомление об изменении периода
+    const notification = document.createElement('div');
+    notification.className = 'filter-notification';
+    notification.textContent = `Период изменён на: ${e.target.options[e.target.selectedIndex].text}`;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => notification.remove(), 3000);
+    
     handleRefreshData();
   }, [handleRefreshData]);
 
   // Обработчик изменения фильтра сегментов
   const handleSegmentFilterChange = useCallback((e) => {
-    setSegmentFilter(e.target.value);
+    const newSegment = e.target.value;
+    setSegmentFilter(newSegment);
+    
+    // Показываем уведомление об изменении сегмента
+    const notification = document.createElement('div');
+    notification.className = 'filter-notification';
+    notification.textContent = `Сегмент изменён на: ${e.target.options[e.target.selectedIndex].text}`;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => notification.remove(), 3000);
+    
     handleRefreshData();
   }, [handleRefreshData]);
 
@@ -257,17 +277,66 @@ export default function Home() {
     
     switch (action) {
       case 'optimize-mobile':
-        alert('Начинаем оптимизацию мобильной версии. В реальном приложении здесь будет переход к мастеру оптимизации.');
+        // Открываем AI управляющего с контекстом
+        const aiButton = document.querySelector('.ai-chat-button, .floating-ai-btn, [class*="floating"][class*="ai"]');
+        if (aiButton) {
+          aiButton.click();
+          setTimeout(() => {
+            // Отправляем сообщение в чат
+            const input = document.querySelector('[class*="ai-input"] input, .ai-input-area input');
+            if (input) {
+              input.value = 'Мне нужна помощь с оптимизацией мобильной версии сайта';
+              const event = new Event('input', { bubbles: true });
+              input.dispatchEvent(event);
+            }
+          }, 500);
+        }
         break;
+        
       case 'create-campaign':
-        alert('Создание email-кампании. В реальном приложении здесь будет форма создания кампании.');
+        // Переход к секции решений
+        setCurrentSection(4); // Индекс секции решений
         break;
+        
       case 'launch-loyalty':
-        alert('Запуск программы лояльности. В реальном приложении здесь будет настройка программы.');
+        // Переход к секции цен
+        setCurrentSection(7); // Индекс секции цен
         break;
+        
       case 'view-details':
-        alert(`Просмотр деталей для: ${type}`);
+        // Показываем детальную информацию в модальном окне
+        const detailsMap = {
+          'mobile-optimization': {
+            title: 'Оптимизация мобильной версии',
+            content: '72% ваших пользователей заходят с мобильных устройств. Конверсия на мобильных ниже на 40%. Рекомендуем:\n\n• Адаптивный дизайн\n• Ускорение загрузки\n• Упрощение форм\n• Touch-friendly интерфейс'
+          },
+          'customer-list': {
+            title: 'Список клиентов в зоне риска',
+            content: '312 клиентов из сегмента "Малый бизнес" снизили активность:\n\n• 156 не делали покупки > 30 дней\n• 89 отписались от рассылки\n• 67 оставили негативные отзывы\n\nРекомендуем персонализированную email-кампанию'
+          },
+          'loyalty-options': {
+            title: 'Варианты программы лояльности',
+            content: 'Топ-3 программы для вашего бизнеса:\n\n1. Кэшбэк 5-10% (ROI 320%)\n2. Накопительные баллы (ROI 280%)\n3. Статусная система (ROI 250%)\n\nПрогноз: +30% повторных покупок'
+          }
+        };
+        
+        const details = detailsMap[type];
+        if (details) {
+          // Создаем красивое модальное окно
+          const modal = document.createElement('div');
+          modal.className = 'details-modal';
+          modal.innerHTML = `
+            <div class="modal-backdrop" onclick="this.parentElement.remove()"></div>
+            <div class="modal-content glass-card">
+              <h3>${details.title}</h3>
+              <p>${details.content.replace(/\n/g, '<br>')}</p>
+              <button class="modal-close" onclick="this.closest('.details-modal').remove()">Закрыть</button>
+            </div>
+          `;
+          document.body.appendChild(modal);
+        }
         break;
+        
       default:
         console.log('Неизвестное действие:', action);
     }
