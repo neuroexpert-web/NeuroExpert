@@ -189,7 +189,7 @@ export default function EnhancedFloatingAI() {
           message: messageText,
           context: 'general',
           personality: aiPersonality,
-          model: selectedModel
+          model: selectedModel === 'gpt' ? 'gemini' : selectedModel // GPT пока использует Gemini
         }),
       });
 
@@ -253,7 +253,7 @@ export default function EnhancedFloatingAI() {
             message: action.prompt,
             context: 'general',
             personality: aiPersonality,
-            model: selectedModel
+            model: selectedModel === 'gpt' ? 'gemini' : selectedModel // GPT пока использует Gemini
           }),
         });
 
@@ -418,6 +418,34 @@ export default function EnhancedFloatingAI() {
               </div>
             </div>
             <div className="header-controls">
+              {/* Выбор модели AI */}
+              <div className="model-selector">
+                <button 
+                  className={`model-btn ${selectedModel === 'gemini' ? 'active' : ''}`}
+                  onClick={() => setSelectedModel('gemini')}
+                  title="Google Gemini"
+                >
+                  <span className="model-icon">G</span>
+                  <span className="model-name">Gemini</span>
+                </button>
+                <button 
+                  className={`model-btn ${selectedModel === 'claude' ? 'active' : ''}`}
+                  onClick={() => setSelectedModel('claude')}
+                  title="Anthropic Claude"
+                >
+                  <span className="model-icon">C</span>
+                  <span className="model-name">Claude</span>
+                </button>
+                <button 
+                  className={`model-btn ${selectedModel === 'gpt' ? 'active' : ''}`}
+                  onClick={() => setSelectedModel('gpt')}
+                  title="OpenAI GPT"
+                >
+                  <span className="model-icon">O</span>
+                  <span className="model-name">GPT-4</span>
+                </button>
+              </div>
+
               {/* Переключатель персональности */}
               <div className="personality-selector">
                 <button 

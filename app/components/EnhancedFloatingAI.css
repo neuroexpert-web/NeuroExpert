@@ -544,6 +544,69 @@
   gap: 10px;
 }
 
+/* Выбор модели AI */
+.model-selector {
+  display: flex;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 4px;
+  border-radius: 12px;
+  border: 1px solid var(--ai-border);
+}
+
+.model-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.model-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.model-btn.active {
+  background: var(--ai-primary);
+  color: white;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+.model-icon {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 10px;
+}
+
+.model-btn.active .model-icon {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.model-name {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .model-name {
+    display: inline;
+  }
+}
+
 /* Переключатель персональности */
 .personality-selector {
   display: flex;
@@ -963,6 +1026,22 @@
   .header-controls {
     flex-direction: column;
     gap: 5px;
+  }
+  
+  .model-selector {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .model-btn {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+  
+  .model-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 9px;
   }
 }
 
