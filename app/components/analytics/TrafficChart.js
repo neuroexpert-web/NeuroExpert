@@ -51,43 +51,7 @@ export default function TrafficChart({ darkMode = true }) {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: 'right',
-        labels: {
-          padding: 20,
-          usePointStyle: true,
-          pointStyle: 'rectRounded',
-          color: darkMode ? 'rgba(255, 255, 255, 0.9)' : '#333',
-          font: {
-            size: 14,
-            family: "'Inter', sans-serif",
-            weight: '500'
-          },
-          generateLabels: function(chart) {
-            const data = chart.data;
-            if (data.labels.length && data.datasets.length) {
-              return data.labels.map((label, i) => {
-                const meta = chart.getDatasetMeta(0);
-                const style = meta.controller.getStyle(i);
-                const value = data.datasets[0].data[i];
-                const visitors = Math.round(value * 1200);
-
-                return {
-                  text: [
-                    `${label}`,
-                    `${value}% • ${visitors.toLocaleString('ru-RU')} чел.`
-                  ],
-                  fillStyle: style.backgroundColor,
-                  strokeStyle: style.borderColor,
-                  lineWidth: style.borderWidth,
-                  hidden: isNaN(data.datasets[0].data[i]) || meta.data[i].hidden,
-                  index: i,
-                  fontColor: darkMode ? ['white', 'rgba(255,255,255,0.6)'] : ['#333', '#666']
-                };
-              });
-            }
-            return [];
-          }
-        }
+        display: false // Скрываем стандартную легенду, используем свою
       },
       tooltip: {
         backgroundColor: darkMode ? 'rgba(26, 26, 46, 0.95)' : 'rgba(255, 255, 255, 0.95)',
@@ -165,21 +129,66 @@ export default function TrafficChart({ darkMode = true }) {
         }
       }
     },
-    cutout: '60%',
+    cutout: '65%',
     animation: {
       animateRotate: true,
       animateScale: false,
+    },
+    layout: {
+      padding: 20
+    },
+    elements: {
+      arc: {
+        borderWidth: 3,
+        borderRadius: 5
+      }
     }
   };
 
   if (!chartData) return <div className="chart-loading">Загрузка данных...</div>;
 
   return (
-    <div className="chart-container" style={{ height: '100%', position: 'relative' }}>
-      <Doughnut options={options} data={chartData} />
-      <div className="chart-center-text">
-        <div className="total-visits">42.3K</div>
-        <div className="visits-label">Визитов</div>
+    <div className="chart-container" style={{ height: '100%', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ position: 'relative', width: '100%', maxWidth: '400px' }}>
+        <Doughnut options={options} data={chartData} />
+        <div className="chart-center-text">
+          <div className="total-visits">42.3K</div>
+          <div className="visits-label">Визитов</div>
+        </div>
+      </div>
+      
+      {/* Цветные индикаторы источников */}
+      <div className="traffic-legend">
+        <div className="legend-item">
+          <span className="legend-color" style={{background: 'rgb(139, 92, 246)'}}></span>
+          <span className="legend-label">Google/Яндекс</span>
+          <span className="legend-value">35%</span>
+        </div>
+        <div className="legend-item">
+          <span className="legend-color" style={{background: 'rgb(217, 70, 239)'}}></span>
+          <span className="legend-label">Соцсети</span>
+          <span className="legend-value">25%</span>
+        </div>
+        <div className="legend-item">
+          <span className="legend-color" style={{background: 'rgb(168, 85, 247)'}}></span>
+          <span className="legend-label">Прямые</span>
+          <span className="legend-value">18%</span>
+        </div>
+        <div className="legend-item">
+          <span className="legend-color" style={{background: 'rgb(147, 51, 234)'}}></span>
+          <span className="legend-label">Email</span>
+          <span className="legend-value">12%</span>
+        </div>
+        <div className="legend-item">
+          <span className="legend-color" style={{background: 'rgb(126, 34, 206)'}}></span>
+          <span className="legend-label">Реклама</span>
+          <span className="legend-value">7%</span>
+        </div>
+        <div className="legend-item">
+          <span className="legend-color" style={{background: 'rgb(107, 33, 168)'}}></span>
+          <span className="legend-label">Партнёры</span>
+          <span className="legend-value">3%</span>
+        </div>
       </div>
     </div>
   );
