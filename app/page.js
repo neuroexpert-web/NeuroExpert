@@ -656,6 +656,37 @@ export default function Home() {
             </div>
           </div>
           </div>
+          
+          {/* Информационная панель с метриками */}
+          <div className="traffic-insights-panel">
+            <h4>Ключевые инсайты по источникам трафика</h4>
+            <div className="insights-grid">
+              <div className="insight-card glass-card">
+                <div className="insight-icon">🏆</div>
+                <h5>Лучший источник</h5>
+                <p className="insight-value">Email рассылки</p>
+                <p className="insight-detail">Конверсия 8.3% • ROI 420%</p>
+              </div>
+              <div className="insight-card glass-card">
+                <div className="insight-icon">📈</div>
+                <h5>Самый быстрый рост</h5>
+                <p className="insight-value">Instagram/VK/TG</p>
+                <p className="insight-detail">+23% за месяц • 3000 новых</p>
+              </div>
+              <div className="insight-card glass-card">
+                <div className="insight-icon">⚠️</div>
+                <h5>Требует внимания</h5>
+                <p className="insight-value">Яндекс.Директ</p>
+                <p className="insight-detail">-3% конверсия • Высокая цена</p>
+              </div>
+              <div className="insight-card glass-card">
+                <div className="insight-icon">💡</div>
+                <h5>Потенциал роста</h5>
+                <p className="insight-value">SEO оптимизация</p>
+                <p className="insight-detail">+40% трафика возможно</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* AI рекомендации с пояснениями */}
