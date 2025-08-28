@@ -32,8 +32,47 @@ export default function ContactForm() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  const validateForm = () => {
+    const errors = {};
+    
+    if (!formData.name.trim()) {
+      errors.name = 'Имя обязательно для заполнения';
+    }
+    
+    if (!formData.phone.trim()) {
+      errors.phone = 'Телефон обязателен для заполнения';
+    } else if (!/^\+?[0-9\s\-\(\)]+$/.test(formData.phone)) {
+      errors.phone = 'Неверный формат телефона';
+    }
+    
+    if (!formData.email.trim()) {
+      errors.email = 'Email обязателен для заполнения';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.email = 'Неверный формат email';
+    }
+    
+    if (!formData.message.trim()) {
+      errors.message = 'Сообщение обязательно для заполнения';
+    }
+    
+    return errors;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Валидация формы
+    const errors = validateForm();
+    if (Object.keys(errors).length > 0) {
+      setStatus({ 
+        loading: false, 
+        success: false, 
+        error: true, 
+        message: Object.values(errors)[0] // Показываем первую ошибку
+      });
+      return;
+    }
+    
     setStatus({ loading: true, success: false, error: false, message: '' });
 
     try {
