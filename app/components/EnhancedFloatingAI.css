@@ -567,19 +567,62 @@
   border-radius: 8px;
   font-size: 12px;
   font-weight: bold;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  overflow: hidden;
+}
+
+.model-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.model-btn:active::before {
+  width: 100px;
+  height: 100px;
 }
 
 .model-btn:hover {
   background: rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+}
+
+.model-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
 }
 
 .model-btn.active {
-  background: var(--ai-primary);
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
   color: white;
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+
+.model-btn.active:hover {
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.5);
+}
+
+/* Анимация переключения модели */
+.model-btn.switching {
+  animation: modelSwitch 0.4s ease-out;
+}
+
+@keyframes modelSwitch {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(0.9) rotate(180deg); }
+  100% { transform: scale(1) rotate(360deg); }
 }
 
 .model-icon {
@@ -650,16 +693,41 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-size: 16px;
   font-weight: normal;
   padding: 0;
   margin-left: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.close-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(255,107,107,0.3) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
 }
 
 .close-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.1);
+  background: rgba(255, 107, 107, 0.1);
+  border-color: rgba(255, 107, 107, 0.3);
+  color: #ff6b6b;
+  transform: rotate(90deg);
+}
+
+.close-btn:active {
+  transform: rotate(90deg) scale(0.9);
+}
+
+.close-btn:active::before {
+  width: 60px;
+  height: 60px;
 }
 
 /* Область сообщений */
@@ -711,6 +779,31 @@
   gap: 12px;
   margin-bottom: 20px;
   animation: fadeInMessage 0.4s ease-out;
+}
+
+.message-wrapper.system {
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.message.system {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+  padding: 8px 16px;
+  animation: systemMessageSlide 0.3s ease-out;
+}
+
+@keyframes systemMessageSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeInMessage {
@@ -942,6 +1035,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
   transition: all 0.3s ease;
   font-size: 16px;
   color: white;
@@ -953,9 +1048,46 @@
   box-shadow: 0 0 30px var(--ai-glow);
 }
 
+.send-btn:active {
+  transform: scale(0.95);
+}
+
 .send-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.send-btn.loading {
+  animation: sendPulse 1s ease-in-out infinite;
+}
+
+@keyframes sendPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 20px var(--ai-glow);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px var(--ai-glow);
+  }
+}
+
+/* Анимация отправки */
+.send-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.send-btn:active::after {
+  width: 80px;
+  height: 80px;
 }
 
 .send-icon {

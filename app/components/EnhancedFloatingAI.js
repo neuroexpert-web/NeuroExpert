@@ -18,22 +18,38 @@ export default function EnhancedFloatingAI() {
   const [selectedModel, setSelectedModel] = useState('gemini');
   const [aiPersonality, setAiPersonality] = useState('strategic'); // strategic, technical, creative
   
-  // Отладка для проверки рендеринга
-  useEffect(() => {
-    if (isOpen) {
-      console.log('AI Chat opened. Selected model:', selectedModel);
-      console.log('Component mounted, checking elements...');
-      setTimeout(() => {
-        const controls = document.querySelector('.header-controls');
-        const modelSelector = document.querySelector('.model-selector');
-        const closeBtn = document.querySelector('.close-btn');
-        console.log('Controls found:', !!controls);
-        console.log('Model selector found:', !!modelSelector);
-        console.log('Close button found:', !!closeBtn);
-        if (controls) console.log('Controls HTML:', controls.innerHTML);
-      }, 100);
+  // Обработка изменения модели с анимацией
+  const handleModelChange = (model) => {
+    // Анимация кнопки
+    const button = document.querySelector(`.model-btn:nth-child(${model === 'gemini' ? 1 : model === 'claude' ? 2 : 3})`);
+    if (button) {
+      button.classList.add('switching');
+      setTimeout(() => button.classList.remove('switching'), 400);
     }
-  }, [isOpen, selectedModel]);
+    
+    setSelectedModel(model);
+    
+    // Добавляем системное сообщение о смене модели
+    const modelNames = {
+      gemini: 'Google Gemini',
+      claude: 'Anthropic Claude',
+      gpt: 'OpenAI GPT-4 (через Gemini)'
+    };
+    
+    const systemMessage = {
+      id: Date.now(),
+      text: `🔄 Переключено на ${modelNames[model]}`,
+      sender: 'system',
+      timestamp: new Date().toISOString()
+    };
+    
+    setMessages(prev => [...prev, systemMessage]);
+    
+    // Убираем системное сообщение через 3 секунды
+    setTimeout(() => {
+      setMessages(prev => prev.filter(msg => msg.id !== systemMessage.id));
+    }, 3000);
+  };
   const [stats, setStats] = useState({
     totalQuestions: 0,
     avgResponseTime: 0,
@@ -181,6 +197,15 @@ export default function EnhancedFloatingAI() {
   // Отправка сообщения
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
+
+    // Анимация кнопки отправки
+    const sendBtn = document.querySelector('.send-btn');
+    if (sendBtn) {
+      sendBtn.style.transform = 'scale(0.9)';
+      setTimeout(() => {
+        sendBtn.style.transform = 'scale(1)';
+      }, 200);
+    }
 
     const messageText = input.trim();
     const userMessage = {
@@ -412,21 +437,21 @@ export default function EnhancedFloatingAI() {
               <div className="model-selector">
                 <button 
                   className={`model-btn ${selectedModel === 'gemini' ? 'active' : ''}`}
-                  onClick={() => setSelectedModel('gemini')}
+                  onClick={() => handleModelChange('gemini')}
                   title="Google Gemini"
                 >
                   G
                 </button>
                 <button 
                   className={`model-btn ${selectedModel === 'claude' ? 'active' : ''}`}
-                  onClick={() => setSelectedModel('claude')}
+                  onClick={() => handleModelChange('claude')}
                   title="Anthropic Claude"
                 >
                   C
                 </button>
                 <button 
                   className={`model-btn ${selectedModel === 'gpt' ? 'active' : ''}`}
-                  onClick={() => setSelectedModel('gpt')}
+                  onClick={() => handleModelChange('gpt')}
                   title="OpenAI GPT-4"
                 >
                   O
