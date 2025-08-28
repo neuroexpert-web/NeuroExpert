@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug AI Chat</title>
+    <style>
+        body { background: #0a0a0f; color: white; padding: 20px; font-family: Arial; }
+        .test-area { border: 2px solid red; padding: 20px; margin: 20px 0; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        .red-bg { background: red !important; color: white !important; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug AI Chat Components</h1>
+    
+    <div class="test-area">
+        <h2>Тест 1: Простые кнопки</h2>
+        <button class="model-btn red-bg">Test Button 1</button>
+        <button class="close-btn red-bg">✕ Close</button>
+    </div>
+
+    <div class="test-area">
+        <h2>Тест 2: Структура header-controls</h2>
+        <div class="header-controls" style="background: rgba(255,0,0,0.3); padding: 10px;">
+            <div style="color: yellow;">Controls Container</div>
+            <div class="model-selector" style="border: 1px solid yellow; padding: 5px;">
+                <button style="background: green; color: white; padding: 5px;">G</button>
+                <button style="background: blue; color: white; padding: 5px;">C</button>
+                <button style="background: purple; color: white; padding: 5px;">O</button>
+            </div>
+            <button style="background: red; color: white; padding: 10px;">✕</button>
+        </div>
+    </div>
+
+    <div class="test-area">
+        <h2>Проверки:</h2>
+        <ol>
+            <li>Откройте <a href="http://localhost:3000" style="color: cyan;">http://localhost:3000</a></li>
+            <li>Откройте консоль браузера (F12)</li>
+            <li>Нажмите на AI чат в правом нижнем углу</li>
+            <li>Посмотрите в консоль - должны появиться сообщения отладки</li>
+            <li>Проверьте вкладку Network - работает ли API</li>
+            <li>Если элементы не видны, попробуйте:
+                <ul>
+                    <li>Очистить кэш браузера (Ctrl+Shift+R)</li>
+                    <li>Проверить вкладку Elements в DevTools</li>
+                    <li>Искать элементы с классами: header-controls, model-selector, close-btn</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <div class="test-area">
+        <h2>Консольные команды для проверки:</h2>
+        <code style="display: block; background: #333; padding: 10px; margin: 5px 0;">
+            document.querySelector('.header-controls')
+        </code>
+        <code style="display: block; background: #333; padding: 10px; margin: 5px 0;">
+            document.querySelector('.model-selector')
+        </code>
+        <code style="display: block; background: #333; padding: 10px; margin: 5px 0;">
+            document.querySelector('.close-btn')
+        </code>
+    </div>
+</body>
+</html>

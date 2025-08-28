@@ -22,6 +22,16 @@ export default function EnhancedFloatingAI() {
   useEffect(() => {
     if (isOpen) {
       console.log('AI Chat opened. Selected model:', selectedModel);
+      console.log('Component mounted, checking elements...');
+      setTimeout(() => {
+        const controls = document.querySelector('.header-controls');
+        const modelSelector = document.querySelector('.model-selector');
+        const closeBtn = document.querySelector('.close-btn');
+        console.log('Controls found:', !!controls);
+        console.log('Model selector found:', !!modelSelector);
+        console.log('Close button found:', !!closeBtn);
+        if (controls) console.log('Controls HTML:', controls.innerHTML);
+      }, 100);
     }
   }, [isOpen, selectedModel]);
   const [stats, setStats] = useState({
@@ -425,29 +435,33 @@ export default function EnhancedFloatingAI() {
                 </span>
               </div>
             </div>
-            <div className="header-controls">
+            <div className="header-controls" style={{background: 'rgba(255,0,0,0.3)', padding: '10px'}}>
+              <div style={{color: 'yellow', fontSize: '14px'}}>DEBUG: Controls Here</div>
               {/* Выбор модели AI */}
               <div className="model-selector">
                 <button 
                   className={`model-btn ${selectedModel === 'gemini' ? 'active' : ''}`}
-                  onClick={() => setSelectedModel('gemini')}
+                  onClick={() => { console.log('Gemini clicked'); setSelectedModel('gemini'); }}
                   title="Google Gemini"
+                  style={{minWidth: '40px'}}
                 >
                   <span className="model-icon">G</span>
                   <span className="model-name">Gemini</span>
                 </button>
                 <button 
                   className={`model-btn ${selectedModel === 'claude' ? 'active' : ''}`}
-                  onClick={() => setSelectedModel('claude')}
+                  onClick={() => { console.log('Claude clicked'); setSelectedModel('claude'); }}
                   title="Anthropic Claude"
+                  style={{minWidth: '40px'}}
                 >
                   <span className="model-icon">C</span>
                   <span className="model-name">Claude</span>
                 </button>
                 <button 
                   className={`model-btn ${selectedModel === 'gpt' ? 'active' : ''}`}
-                  onClick={() => setSelectedModel('gpt')}
+                  onClick={() => { console.log('GPT clicked'); setSelectedModel('gpt'); }}
                   title="OpenAI GPT"
+                  style={{minWidth: '40px'}}
                 >
                   <span className="model-icon">O</span>
                   <span className="model-name">GPT-4</span>
@@ -481,10 +495,11 @@ export default function EnhancedFloatingAI() {
               
               <button 
                 className="close-btn"
-                onClick={() => setIsOpen(false)}
+                onClick={() => { console.log('Close clicked'); setIsOpen(false); }}
                 aria-label="Закрыть чат"
+                style={{background: 'red', color: 'white', fontSize: '20px'}}
               >
-                ✕
+                ✕ CLOSE
               </button>
             </div>
           </div>

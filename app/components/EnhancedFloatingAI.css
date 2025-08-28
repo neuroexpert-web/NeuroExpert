@@ -464,7 +464,9 @@
   align-items: center;
   gap: 15px;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+  min-height: 80px;
+  flex-wrap: wrap;
 }
 
 .enhanced-chat-header::before {
@@ -540,35 +542,41 @@
 }
 
 .header-controls {
-  display: flex;
+  display: flex !important;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
+  min-width: 0;
 }
 
 /* Выбор модели AI */
 .model-selector {
-  display: flex;
+  display: flex !important;
   gap: 5px;
   background: rgba(255, 255, 255, 0.05);
   padding: 4px;
   border-radius: 12px;
   border: 1px solid var(--ai-border);
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 .model-btn {
-  display: flex;
+  display: flex !important;
   align-items: center;
   gap: 4px;
   padding: 6px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.7);
+  border: 2px solid #ff0000 !important;
+  background: rgba(255, 0, 0, 0.2) !important;
+  color: #ffffff !important;
   cursor: pointer;
   border-radius: 8px;
   font-size: 12px;
   font-weight: 500;
   transition: all 0.3s ease;
   position: relative;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 .model-btn:hover {
@@ -647,16 +655,21 @@
 .close-btn {
   width: 32px;
   height: 32px;
-  border: none;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  border: 2px solid #ff0000 !important;
+  background: #ff0000 !important;
+  color: white !important;
   border-radius: 50%;
   cursor: pointer;
-  display: flex;
+  display: flex !important;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  font-size: 14px;
+  font-size: 18px;
+  font-weight: bold;
+  opacity: 1 !important;
+  visibility: visible !important;
+  position: relative;
+  z-index: 9999;
 }
 
 .close-btn:hover {
