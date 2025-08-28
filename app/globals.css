@@ -3665,11 +3665,12 @@ textarea:focus {
 /* Traffic Chart Styles */
 .traffic-chart-container {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  flex-direction: row;
+  gap: 30px;
   padding: 15px;
   height: 100%;
-  overflow: hidden;
+  align-items: center;
+  justify-content: center;
 }
 
 .chart-area {
@@ -3681,8 +3682,8 @@ textarea:focus {
 
 .chart-canvas-wrapper {
   position: relative;
-  width: 220px;
-  height: 220px;
+  width: 180px;
+  height: 180px;
 }
 
 .chart-canvas-wrapper canvas {
@@ -3714,21 +3715,19 @@ textarea:focus {
 
 .traffic-legend-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  overflow-y: auto;
-  max-height: 200px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
   padding: 5px;
 }
 
 .traffic-legend-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
+  gap: 6px;
+  padding: 6px 8px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(139, 92, 246, 0.15);
-  border-radius: 8px;
+  border-radius: 6px;
   transition: all 0.2s ease;
   cursor: pointer;
   min-width: 0;
@@ -3789,14 +3788,19 @@ textarea:focus {
   white-space: nowrap;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
   .traffic-chart-container {
     flex-direction: column;
+    gap: 20px;
   }
   
   .traffic-legend-grid {
-    max-width: 100%;
     grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .chart-canvas-wrapper {
+    width: 160px;
+    height: 160px;
   }
 }
 
@@ -3812,9 +3816,9 @@ textarea:focus {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 400px;
-  max-height: 450px;
-  overflow: hidden;
+  min-height: 350px;
+  max-height: 400px;
+  overflow: visible;
 }
 
 #chart-traffic .chart-container {
