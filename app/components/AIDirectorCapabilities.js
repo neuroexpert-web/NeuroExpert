@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 
-export default function AIDirectorCapabilities() {
+export default function AIManagerCapabilities() {
   const [activeTab, setActiveTab] = useState('orchestrator');
   const [selectedAgent, setSelectedAgent] = useState(null);
 
