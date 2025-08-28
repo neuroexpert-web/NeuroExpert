@@ -16,16 +16,16 @@ ChartJS.register(ArcElement, Tooltip, Legend, DoughnutController);
 export default function TrafficChart({ darkMode = true }) {
   // Данные источников трафика с разными цветами
   const trafficData = [
-    { name: 'Google/Яндекс', value: 35, color: '#8b5cf6', icon: '🔍' },
-    { name: 'Соцсети', value: 25, color: '#ec4899', icon: '📱' },
-    { name: 'Прямые', value: 18, color: '#06b6d4', icon: '🔗' },
-    { name: 'Email', value: 12, color: '#10b981', icon: '📧' },
-    { name: 'Реклама', value: 7, color: '#f59e0b', icon: '💰' },
-    { name: 'Партнёры', value: 3, color: '#ef4444', icon: '🤝' }
+    { name: 'SEO', fullName: 'Google/Яндекс (SEO)', value: 35, color: '#8b5cf6', icon: '🔍' },
+    { name: 'Соцсети', fullName: 'Instagram/VK/TG', value: 25, color: '#ec4899', icon: '📱' },
+    { name: 'Прямые', fullName: 'Прямые заходы', value: 18, color: '#06b6d4', icon: '🔗' },
+    { name: 'Email', fullName: 'Email рассылки', value: 12, color: '#10b981', icon: '📧' },
+    { name: 'Реклама', fullName: 'Яндекс.Директ/Google Ads', value: 7, color: '#f59e0b', icon: '💰' },
+    { name: 'Партнёры', fullName: 'Партнёрские ссылки', value: 3, color: '#ef4444', icon: '🤝' }
   ];
 
   const data = {
-    labels: trafficData.map(item => item.name),
+    labels: trafficData.map(item => item.fullName),
     datasets: [
       {
         data: trafficData.map(item => item.value),
@@ -96,9 +96,9 @@ export default function TrafficChart({ darkMode = true }) {
               style={{backgroundColor: source.color}}
             ></div>
             <div className="legend-info">
-              <div className="legend-name">
+              <div className="legend-name" title={source.fullName}>
                 <span className="legend-icon">{source.icon}</span>
-                <span title={source.name}>{source.name}</span>
+                <span>{source.name}</span>
               </div>
               <div className="legend-stats">
                 <span className="legend-percent">{source.value}%</span>
