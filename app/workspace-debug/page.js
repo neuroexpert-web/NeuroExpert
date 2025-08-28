@@ -9,8 +9,8 @@ export default function WorkspaceDebugPage() {
   const testComponent = async (name, path) => {
     try {
       console.log(`Testing ${name}...`);
-      const module = await import(`../components/workspace/${path}`);
-      console.log(`${name} loaded successfully:`, module);
+      const componentModule = await import(`../components/workspace/${path}`);
+      console.log(`${name} loaded successfully:`, componentModule);
       setComponents(prev => ({ ...prev, [name]: '✅ Loaded' }));
     } catch (err) {
       console.error(`Error loading ${name}:`, err);
