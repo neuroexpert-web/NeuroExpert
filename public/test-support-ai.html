@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест AI Поддержки</title>
+    <style>
+        body {
+            margin: 0;
+            background: #0a0a0f;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 20px;
+        }
+
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(30, 30, 45, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .test-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .test-header h1 {
+            color: #9945ff;
+            margin-bottom: 10px;
+        }
+
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .test-section h3 {
+            color: #9945ff;
+            margin-bottom: 15px;
+        }
+
+        .test-btn {
+            background: linear-gradient(135deg, #9945ff, #7c3aed);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            color: white;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+
+        .test-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(153, 69, 255, 0.3);
+        }
+
+        .quick-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            margin: 4px;
+            display: inline-block;
+        }
+
+        .quick-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .result-area {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            min-height: 100px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .loading {
+            color: #9945ff;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .success {
+            color: #10b981;
+        }
+
+        .error {
+            color: #ef4444;
+        }
+
+        .ai-message {
+            background: rgba(153, 69, 255, 0.1);
+            border: 1px solid rgba(153, 69, 255, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 10px 0;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-online { background: #10b981; }
+        .status-offline { background: #ef4444; }
+        .status-loading { background: #f59e0b; animation: pulse 1s infinite; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>🤖 Тест AI Поддержки NeuroExpert</h1>
+            <p>Проверка интеграции AI помощника в личный кабинет</p>
+            <div id="status">
+                <span class="status-indicator status-loading"></span>
+                <span>Проверка подключения...</span>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>📡 Проверка API</h3>
+            <button class="test-btn" onclick="testAPI()">Проверить API Assistant</button>
+            <button class="test-btn" onclick="testHealth()">Проверить Health API</button>
+            <div id="api-result" class="result-area"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>💬 Тест запросов поддержки</h3>
+            <div>
+                <button class="quick-btn" onclick="testSupportQuery('Как настроить интеграции?')">
+                    🔗 Настройка интеграций
+                </button>
+                <button class="quick-btn" onclick="testSupportQuery('Проблемы с аналитикой')">
+                    📊 Проблемы с аналитикой
+                </button>
+                <button class="quick-btn" onclick="testSupportQuery('Как улучшить производительность?')">
+                    ⚡ Производительность
+                </button>
+                <button class="quick-btn" onclick="testSupportQuery('Вопросы по безопасности')">
+                    🔒 Безопасность
+                </button>
+            </div>
+            <div>
+                <input type="text" id="custom-query" placeholder="Или введите свой вопрос..." 
+                       style="width: 70%; padding: 10px; margin: 10px 0; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: white;">
+                <button class="test-btn" onclick="testSupportQuery(document.getElementById('custom-query').value)">
+                    Отправить
+                </button>
+            </div>
+            <div id="support-result" class="result-area"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🎯 Результаты тестирования</h3>
+            <div id="test-results" class="result-area">
+                Результаты тестов будут отображаться здесь...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let testResults = {
+            apiHealth: false,
+            assistantAPI: false,
+            supportQueries: 0,
+            errors: []
+        };
+
+        // Проверка статуса при загрузке
+        window.onload = function() {
+            checkStatus();
+        };
+
+        async function checkStatus() {
+            try {
+                const response = await fetch('/api/health');
+                const data = await response.json();
+                
+                const statusEl = document.getElementById('status');
+                if (data.status === 'healthy' || data.status === 'degraded') {
+                    statusEl.innerHTML = `
+                        <span class="status-indicator status-online"></span>
+                        <span class="success">Сервер работает (${data.status})</span>
+                    `;
+                } else {
+                    statusEl.innerHTML = `
+                        <span class="status-indicator status-offline"></span>
+                        <span class="error">Проблемы с сервером</span>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('status').innerHTML = `
+                    <span class="status-indicator status-offline"></span>
+                    <span class="error">Сервер недоступен</span>
+                `;
+            }
+        }
+
+        async function testAPI() {
+            const resultEl = document.getElementById('api-result');
+            resultEl.innerHTML = '<div class="loading">🔄 Проверка API...</div>';
+            
+            try {
+                const response = await fetch('/api/assistant/test');
+                const data = await response.json();
+                
+                testResults.assistantAPI = data.status === 'ok';
+                
+                resultEl.innerHTML = `
+                    <div class="${data.status === 'ok' ? 'success' : 'error'}">
+                        <strong>Статус:</strong> ${data.status}<br>
+                        <strong>API ключ присутствует:</strong> ${data.apiKeyPresent ? 'Да' : 'Нет'}<br>
+                        <strong>Длина ключа:</strong> ${data.apiKeyLength}<br>
+                        <strong>Имя ключа:</strong> ${data.apiKeyName}<br>
+                        <strong>Environment:</strong> ${data.nodeEnv}<br>
+                        <strong>Время:</strong> ${data.timestamp}
+                    </div>
+                `;
+                updateTestResults();
+            } catch (error) {
+                resultEl.innerHTML = `<div class="error">Ошибка: ${error.message}</div>`;
+                testResults.errors.push('API Test: ' + error.message);
+                updateTestResults();
+            }
+        }
+
+        async function testHealth() {
+            const resultEl = document.getElementById('api-result');
+            resultEl.innerHTML = '<div class="loading">🔄 Проверка здоровья системы...</div>';
+            
+            try {
+                const response = await fetch('/api/health?detailed=true');
+                const data = await response.json();
+                
+                testResults.apiHealth = true;
+                
+                resultEl.innerHTML = `
+                    <div class="success">
+                        <strong>Статус системы:</strong> ${data.status}<br>
+                        <strong>Время отклика:</strong> ${data.duration}<br>
+                        <strong>Время:</strong> ${data.timestamp}<br>
+                        ${data.checks ? Object.entries(data.checks).map(([key, value]) => 
+                            `<strong>${key}:</strong> ${typeof value === 'object' ? JSON.stringify(value) : value}`
+                        ).join('<br>') : ''}
+                    </div>
+                `;
+                updateTestResults();
+            } catch (error) {
+                resultEl.innerHTML = `<div class="error">Ошибка: ${error.message}</div>`;
+                testResults.errors.push('Health Check: ' + error.message);
+                updateTestResults();
+            }
+        }
+
+        async function testSupportQuery(query) {
+            if (!query || !query.trim()) {
+                alert('Введите вопрос для тестирования!');
+                return;
+            }
+
+            const resultEl = document.getElementById('support-result');
+            resultEl.innerHTML = `<div class="loading">🤖 AI обрабатывает запрос: "${query}"...</div>`;
+            
+            try {
+                const response = await fetch('/api/assistant', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: query,
+                        context: 'support',
+                        systemPrompt: `Ты AI помощник технической поддержки платформы NeuroExpert. 
+                        Отвечай максимально полезно и конкретно на вопросы пользователей о:
+                        - Настройке интеграций (CRM, аналитика, платежи)
+                        - Решении технических проблем
+                        - Оптимизации производительности
+                        - Вопросах безопасности
+                        - Работе с личным кабинетом
+                        
+                        Всегда предлагай конкретные шаги решения. Если нужна дополнительная помощь, предложи связаться с технической поддержкой.
+                        Отвечай на русском языке дружелюбно и профессионально.`
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success || data.reply) {
+                    testResults.supportQueries++;
+                    const aiResponse = data.response || data.reply;
+                    
+                    resultEl.innerHTML = `
+                        <div class="ai-message">
+                            <strong>🤖 AI Ответ:</strong><br>
+                            ${aiResponse.replace(/\n/g, '<br>')}<br><br>
+                            <small>
+                                <strong>Модель:</strong> ${data.model || 'unknown'}<br>
+                                <strong>Контекст:</strong> ${data.context || 'general'}<br>
+                                <strong>Время обработки:</strong> ${data.responseTime || data.processingTime || 'N/A'}ms<br>
+                                <strong>Время:</strong> ${data.timestamp || new Date().toISOString()}
+                            </small>
+                        </div>
+                    `;
+                } else {
+                    resultEl.innerHTML = `
+                        <div class="error">
+                            <strong>❌ Ошибка API:</strong><br>
+                            ${data.error || 'Неизвестная ошибка'}<br>
+                            <small>Возможно, не настроены API ключи (GEMINI_API_KEY)</small>
+                        </div>
+                    `;
+                    testResults.errors.push('Support Query: ' + (data.error || 'Unknown error'));
+                }
+                updateTestResults();
+            } catch (error) {
+                resultEl.innerHTML = `
+                    <div class="error">
+                        <strong>❌ Ошибка сети:</strong><br>
+                        ${error.message}<br>
+                        <small>Проверьте подключение к серверу</small>
+                    </div>
+                `;
+                testResults.errors.push('Network Error: ' + error.message);
+                updateTestResults();
+            }
+
+            // Очищаем поле ввода
+            document.getElementById('custom-query').value = '';
+        }
+
+        function updateTestResults() {
+            const resultsEl = document.getElementById('test-results');
+            const totalTests = Object.values(testResults).filter(v => typeof v === 'boolean').length;
+            const passedTests = Object.values(testResults).filter(v => v === true).length;
+            
+            resultsEl.innerHTML = `
+                <div>
+                    <h4>📊 Сводка тестирования:</h4>
+                    <div style="margin: 10px 0;">
+                        <strong>Пройдено тестов:</strong> ${passedTests}/${totalTests}<br>
+                        <strong>Запросов поддержки:</strong> ${testResults.supportQueries}<br>
+                        <strong>Ошибок:</strong> ${testResults.errors.length}
+                    </div>
+                    
+                    ${testResults.errors.length > 0 ? `
+                        <div style="margin-top: 15px;">
+                            <strong>🚨 Ошибки:</strong><br>
+                            ${testResults.errors.map(error => `• ${error}`).join('<br>')}
+                        </div>
+                    ` : ''}
+                    
+                    <div style="margin-top: 15px;">
+                        <strong>✅ Статус интеграции:</strong>
+                        ${passedTests === totalTests && testResults.supportQueries > 0 ? 
+                            '<span class="success">AI поддержка готова к использованию!</span>' : 
+                            '<span class="error">Требуется дополнительная настройка</span>'
+                        }
+                    </div>
+                </div>
+            `;
+        }
+
+        // Обработка Enter в поле ввода
+        document.addEventListener('DOMContentLoaded', function() {
+            const input = document.getElementById('custom-query');
+            if (input) {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        testSupportQuery(this.value);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

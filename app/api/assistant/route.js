@@ -168,8 +168,13 @@ async function handler(request) {
   try {
     const requestData = await request.json();
     
+    // Поддерживаем два формата: старый (userMessage) и новый (message)
+    const message = requestData.message || requestData.userMessage;
+    const context = requestData.context || 'general';
+    const systemPrompt = requestData.systemPrompt;
+    
     // Валидация входных данных
-    const validationResult = validate({ question: requestData.userMessage }, schemas.apiRequest);
+    const validationResult = validate({ question: message }, schemas.apiRequest);
     
     if (!validationResult.isValid) {
       const firstError = Object.values(validationResult.errors)[0];
@@ -208,15 +213,24 @@ async function handler(request) {
         updatedHistory = claudeResponse.updatedHistory;
         usedModel = 'claude';
       } else if (model === 'gemini' && genAI && GEMINI_API_KEY) {
-        // Используем Gemini с системным промптом v3.2
-        console.log('Using Gemini with system prompt, length:', SYSTEM_PROMPT.length);
+        // Выбираем системный промпт в зависимости от контекста
+        let finalSystemPrompt = SYSTEM_PROMPT;
+        
+        if (context === 'support' && systemPrompt) {
+          finalSystemPrompt = systemPrompt;
+          console.log('Using custom support system prompt');
+        } else {
+          console.log('Using default Gemini system prompt, length:', SYSTEM_PROMPT.length);
+        }
+        
         console.log('Gemini API key exists:', !!GEMINI_API_KEY);
         console.log('genAI initialized:', !!genAI);
+        console.log('Context:', context);
         
         try {
           const geminiModel = genAI.getGenerativeModel({ 
             model: "gemini-1.5-pro-latest",
-            systemInstruction: SYSTEM_PROMPT
+            systemInstruction: finalSystemPrompt
           });
           
           const chat = geminiModel.startChat({ history: history || [] });
@@ -289,10 +303,14 @@ ${SYSTEM_PROMPT ? 'Системный промпт загружен успешн
     // const followUpQuestions = generateFollowUpQuestions(intent[0], context);
 
     return NextResponse.json({
+      success: true,
+      response: finalAnswer, // Для совместимости с UI поддержки
       reply: finalAnswer, // Изменено с 'answer' на 'reply' согласно чек-листу
       model: usedModel,
+      context: context,
       responseTime,
       updated_history: updatedHistory || history,
+      timestamp: new Date().toISOString(),
       // intent,
       // followUpQuestions,
       // emotion: 'professional' // Можно добавить анализ эмоций
