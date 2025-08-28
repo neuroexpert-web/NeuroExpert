@@ -20,16 +20,32 @@ export default function EnhancedFloatingAI() {
   
   // Обработка изменения модели с анимацией
   const handleModelChange = (model) => {
-    // Анимация кнопки - находим все кнопки и анимируем нужную
-    const modelButtons = document.querySelectorAll('.model-btn');
-    const buttonIndex = model === 'gemini' ? 0 : model === 'claude' ? 1 : 2;
+    // Проверяем, что модель действительно изменилась
+    if (model === selectedModel) return;
     
-    if (modelButtons[buttonIndex]) {
-      modelButtons[buttonIndex].classList.add('switching');
-      setTimeout(() => {
-        modelButtons[buttonIndex].classList.remove('switching');
-      }, 400);
-    }
+    // Анимация кнопки - находим все кнопки и анимируем нужную
+    setTimeout(() => {
+      const modelButtons = document.querySelectorAll('.model-btn');
+      console.log('Found buttons:', modelButtons.length);
+      
+      modelButtons.forEach((btn, index) => {
+        // Убираем класс switching со всех кнопок
+        btn.classList.remove('switching');
+        
+        // Добавляем класс к нужной кнопке
+        if ((model === 'gemini' && index === 0) ||
+            (model === 'claude' && index === 1) ||
+            (model === 'gpt' && index === 2)) {
+          btn.classList.add('switching');
+          console.log('Added switching class to button:', index);
+          
+          // Убираем класс после анимации
+          setTimeout(() => {
+            btn.classList.remove('switching');
+          }, 500);
+        }
+      });
+    }, 10);
     
     setSelectedModel(model);
     
@@ -442,39 +458,87 @@ export default function EnhancedFloatingAI() {
                 <button 
                   className={`model-btn ${selectedModel === 'gemini' ? 'active' : ''}`}
                   onClick={(e) => {
-                    e.currentTarget.style.transform = 'scale(0.95)';
+                    // Анимация при клике
+                    const btn = e.currentTarget;
+                    
+                    // Последовательная анимация через transform
+                    btn.style.transition = 'none';
+                    btn.style.transform = 'scale(1) rotate(0deg)';
+                    
                     setTimeout(() => {
-                      e.currentTarget.style.transform = '';
-                    }, 100);
+                      btn.style.transition = 'transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+                      btn.style.transform = 'scale(1) rotate(360deg)';
+                    }, 10);
+                    
+                    setTimeout(() => {
+                      btn.style.transition = 'all 0.3s ease';
+                      btn.style.transform = '';
+                    }, 510);
+                    
                     handleModelChange('gemini');
                   }}
                   title="Google Gemini"
+                  style={{
+                    transition: 'all 0.3s ease'
+                  }}
                 >
                   G
                 </button>
                 <button 
                   className={`model-btn ${selectedModel === 'claude' ? 'active' : ''}`}
                   onClick={(e) => {
-                    e.currentTarget.style.transform = 'scale(0.95)';
+                    // Анимация при клике
+                    const btn = e.currentTarget;
+                    
+                    // Последовательная анимация через transform
+                    btn.style.transition = 'none';
+                    btn.style.transform = 'scale(1) rotate(0deg)';
+                    
                     setTimeout(() => {
-                      e.currentTarget.style.transform = '';
-                    }, 100);
+                      btn.style.transition = 'transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+                      btn.style.transform = 'scale(1) rotate(360deg)';
+                    }, 10);
+                    
+                    setTimeout(() => {
+                      btn.style.transition = 'all 0.3s ease';
+                      btn.style.transform = '';
+                    }, 510);
+                    
                     handleModelChange('claude');
                   }}
                   title="Anthropic Claude"
+                  style={{
+                    transition: 'all 0.3s ease'
+                  }}
                 >
                   C
                 </button>
                 <button 
                   className={`model-btn ${selectedModel === 'gpt' ? 'active' : ''}`}
                   onClick={(e) => {
-                    e.currentTarget.style.transform = 'scale(0.95)';
+                    // Анимация при клике
+                    const btn = e.currentTarget;
+                    
+                    // Последовательная анимация через transform
+                    btn.style.transition = 'none';
+                    btn.style.transform = 'scale(1) rotate(0deg)';
+                    
                     setTimeout(() => {
-                      e.currentTarget.style.transform = '';
-                    }, 100);
+                      btn.style.transition = 'transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+                      btn.style.transform = 'scale(1) rotate(360deg)';
+                    }, 10);
+                    
+                    setTimeout(() => {
+                      btn.style.transition = 'all 0.3s ease';
+                      btn.style.transform = '';
+                    }, 510);
+                    
                     handleModelChange('gpt');
                   }}
                   title="OpenAI GPT-4"
+                  style={{
+                    transition: 'all 0.3s ease'
+                  }}
                 >
                   O
                 </button>
