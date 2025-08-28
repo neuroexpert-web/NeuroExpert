@@ -398,7 +398,7 @@ export default function EnhancedFloatingAI() {
             </div>
             <div className="header-info">
               <h3 className="ai-name">Александр Нейронов</h3>
-              <p className="ai-title">AI-Стратег NeuroExpert v4.0</p>
+              <p className="ai-title">AI-Помощник NeuroExpert v4.0</p>
               <div className="ai-stats">
                 <span className="stat">
                   <span className="stat-icon">💼</span>
