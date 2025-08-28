@@ -77,9 +77,27 @@ const SolutionsManager = dynamic(() => import('./components/SolutionsManager'), 
   loading: () => null
 });
 
+// Динамический импорт ROI калькулятора
+const ROICalculator = dynamic(() => import('./components/ROICalculator'), {
+  ssr: false,
+  loading: () => <div className="roi-loading">Загрузка калькулятора ROI...</div>
+});
+
+// Динамический импорт AI Director Capabilities
+const AIDirectorCapabilities = dynamic(() => import('./components/AIDirectorCapabilities'), {
+  ssr: false,
+  loading: () => <div className="ai-loading">Загрузка AI возможностей...</div>
+});
+
 const SolutionsComparison = dynamic(() => import('./components/SolutionsComparison'), {
   ssr: false,
   loading: () => null
+});
+
+// Динамический импорт SolutionsSection
+const SolutionsSection = dynamic(() => import('./components/SolutionsSection'), {
+  ssr: false,
+  loading: () => <div className="solutions-loading">Загрузка решений...</div>
 });
 
 // Динамические импорты для страницы безопасности
@@ -1594,6 +1612,13 @@ export default function Home() {
       </div>
 
       <div className="solutions-container">
+        {/* AI Director Capabilities - презентация возможностей AI */}
+        <div className="ai-capabilities-section">
+          <Suspense fallback={<div className="ai-loading">Загрузка AI возможностей...</div>}>
+            <AIDirectorCapabilities />
+          </Suspense>
+        </div>
+
         {/* Фильтры по отраслям */}
         <div className="filter-section glass-card">
           <h3>Фильтр по отраслям</h3>
@@ -2015,6 +2040,7 @@ export default function Home() {
       
       {/* Компоненты для управления решениями */}
       <Suspense fallback={null}>
+        <SolutionsSection />
         <SolutionsManager />
         <SolutionsComparison />
       </Suspense>
@@ -3231,6 +3257,15 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* ROI Калькулятор */}
+        <div className="roi-calculator-section">
+          <h3>Рассчитайте свой ROI</h3>
+          <p className="roi-description">Узнайте, какую выгоду принесет внедрение NeuroExpert вашему бизнесу</p>
+          <Suspense fallback={<div className="roi-loading">Загрузка калькулятора...</div>}>
+            <ROICalculator />
+          </Suspense>
         </div>
 
         {/* FAQ секция */}
