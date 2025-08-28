@@ -98,12 +98,12 @@ export default function TrafficChart({ darkMode = true }) {
             <div className="legend-info">
               <div className="legend-name">
                 <span className="legend-icon">{source.icon}</span>
-                {source.name}
+                <span title={source.name}>{source.name}</span>
               </div>
               <div className="legend-stats">
                 <span className="legend-percent">{source.value}%</span>
                 <span className="legend-visitors">
-                  {Math.round(totalVisitors * source.value / 100).toLocaleString('ru-RU')}
+                  {(totalVisitors * source.value / 100 / 1000).toFixed(1)}K
                 </span>
               </div>
             </div>
