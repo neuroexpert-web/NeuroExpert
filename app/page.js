@@ -329,7 +329,7 @@ export default function Home() {
           },
           'customer-list': {
             title: 'Список клиентов в зоне риска',
-            content: '312 клиентов из сегмента "Малый бизнес" снизили активность:\n\n• 156 не делали покупки > 30 дней\n• 89 отписались от рассылки\n• 67 оставили негативные отзывы\n\nРекомендуем персонализированную email-кампанию'
+            content: '15 клиентов из сегмента "Малый бизнес" снизили активность:\n\n• 8 не делали покупки > 30 дней\n• 4 отписались от рассылки\n• 3 оставили негативные отзывы\n\nРекомендуем персонализированную email-кампанию'
           },
           'loyalty-options': {
             title: 'Варианты программы лояльности',
@@ -671,7 +671,7 @@ export default function Home() {
                 <div className="insight-icon">📈</div>
                 <h5>Самый быстрый рост</h5>
                 <p className="insight-value">Instagram/VK/TG</p>
-                <p className="insight-detail">+23% за месяц • 3000 новых</p>
+                <p className="insight-detail">+23% за месяц • 150 новых</p>
               </div>
               <div className="insight-card glass-card">
                 <div className="insight-icon">⚠️</div>
@@ -745,7 +745,7 @@ export default function Home() {
               <h4>Удержите ценных клиентов</h4>
               <div className="rec-metric">
                 <span className="metric-label">В зоне риска:</span>
-                <span className="metric-value warning">312 клиентов</span>
+                <span className="metric-value warning">15 клиентов</span>
               </div>
               <p>Клиенты из сегмента "Малый бизнес" стали реже совершать покупки (-25% за месяц). Персонализированная email-кампания поможет их вернуть.</p>
               <div className="rec-actions">
@@ -932,7 +932,7 @@ export default function Home() {
           <div className="total-stats">
             <div className="stat-item">
               <span className="stat-label">Всего клиентов:</span>
-              <span className="stat-value">12,043</span>
+              <span className="stat-value">73</span>
             </div>
             <div className="stat-item">
               <span className="stat-label">Активных за месяц:</span>
@@ -1464,7 +1464,7 @@ export default function Home() {
               </div>
               <div className="success-stats">
                 <div className="success-item">
-                  <span className="success-count">247</span>
+                  <span className="success-count">12</span>
                   <span className="success-label">закрыто</span>
                 </div>
                 <div className="success-item">
@@ -1907,10 +1907,10 @@ export default function Home() {
                 <span className="price-currency">₽/мес</span>
               </div>
               <ul className="package-features">
-                <li>До 100 клиентов в CRM</li>
+                <li>До 50 клиентов в CRM</li>
                 <li>1 AI-консультант</li>
                 <li>Базовая аналитика</li>
-                <li>5 интеграций</li>
+                <li>3 интеграции</li>
                 <li>Поддержка 5/2</li>
               </ul>
               <button className="btn-select">Выбрать Старт</button>
@@ -1931,10 +1931,10 @@ export default function Home() {
                 <span className="price-currency">₽/мес</span>
               </div>
               <ul className="package-features">
-                <li>До 1000 клиентов в CRM</li>
-                <li>3 AI-консультанта</li>
+                <li>До 500 клиентов в CRM</li>
+                <li>2 AI-консультанта</li>
                 <li>Продвинутая аналитика</li>
-                <li>Неограниченные интеграции</li>
+                <li>10 интеграций</li>
                 <li>Поддержка 24/7</li>
                 <li>Персональный менеджер</li>
               </ul>
@@ -1955,10 +1955,10 @@ export default function Home() {
                 <span className="price-currency">₽/мес</span>
               </div>
               <ul className="package-features">
-                <li>Безлимит клиентов</li>
-                <li>Безлимит AI-консультантов</li>
+                <li>До 2000 клиентов</li>
+                <li>5 AI-консультантов</li>
                 <li>Кастомная разработка</li>
-                <li>Выделенный сервер</li>
+                <li>Приоритетная поддержка</li>
                 <li>SLA 99.9%</li>
                 <li>Команда разработки</li>
               </ul>
@@ -2042,7 +2042,7 @@ export default function Home() {
               </defs>
             </svg>
             <div className="level-text">
-              <span className="level-value">98%</span>
+              <span className="level-value">95%</span>
               <span className="level-label">Уровень защиты</span>
             </div>
           </div>
@@ -2280,7 +2280,7 @@ export default function Home() {
                 </svg>
               </div>
               <h4>Страхование данных</h4>
-              <p>Полное страховое покрытие рисков кибербезопасности до $10 млн</p>
+              <p>Страховое покрытие рисков кибербезопасности до $100K</p>
               <a href="#" className="guarantee-link">Условия страхования →</a>
             </div>
           </div>
@@ -2361,21 +2361,21 @@ export default function Home() {
           <div className="mission-content">
             <h3>Наша миссия</h3>
             <p className="mission-text">
-              Мы делаем искусственный интеллект доступным для каждого бизнеса, превращая сложные технологии в простые и эффективные решения. 
-              NeuroExpert — это не просто платформа, это ваш партнер в цифровой трансформации.
+              Мы создаём простые и понятные AI-инструменты для малого бизнеса. 
+              NeuroExpert — это стартап, который делает современные технологии доступными для небольших компаний.
             </p>
             <div className="mission-stats">
               <div className="stat-item">
-                <span className="stat-value">2019</span>
+                <span className="stat-value">2024</span>
                 <span className="stat-label">Год основания</span>
               </div>
               <div className="stat-item">
-                <span className="stat-value">500+</span>
-                <span className="stat-label">Компаний-клиентов</span>
+                <span className="stat-value">25+</span>
+                <span className="stat-label">Первых клиентов</span>
               </div>
               <div className="stat-item">
-                <span className="stat-value">98%</span>
-                <span className="stat-label">Удовлетворенность</span>
+                <span className="stat-value">4.3/5</span>
+                <span className="stat-label">Средняя оценка</span>
               </div>
               <div className="stat-item">
                 <span className="stat-value">24/7</span>
@@ -2526,7 +2526,7 @@ export default function Home() {
               </div>
               <h4>Михаил Соколов</h4>
               <p className="member-role">Руководитель AI-департамента</p>
-              <p className="member-bio">10+ лет разработки AI-решений для Fortune 500</p>
+              <p className="member-bio">5+ лет разработки AI-решений для стартапов</p>
               <div className="member-skills">
                 <span className="skill-tag">Deep Learning</span>
                 <span className="skill-tag">NLP</span>
@@ -2722,7 +2722,7 @@ export default function Home() {
                 <svg viewBox="0 0 24 24" fill="currentColor" className="quote-icon">
                   <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
                 </svg>
-                <p>"NeuroExpert помог нам увеличить конверсию на 45% за 3 месяца. Это лучшее решение для data-driven маркетинга."</p>
+                <p>"NeuroExpert помог нам увеличить конверсию на 25% за 3 месяца. Отличное решение для небольшого бизнеса."</p>
                 <div className="testimonial-author">
                   <strong>Иван Кузнецов</strong>
                   <span>CEO, TechStart</span>
@@ -2735,7 +2735,7 @@ export default function Home() {
                 <svg viewBox="0 0 24 24" fill="currentColor" className="quote-icon">
                   <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
                 </svg>
-                <p>"AI-рекомендации платформы сэкономили нам миллионы рублей на оптимизации процессов. Невероятный ROI!"</p>
+                <p>"AI-рекомендации платформы сэкономили нам тысячи рублей на оптимизации процессов. Хороший ROI!"</p>
                 <div className="testimonial-author">
                   <strong>Мария Федорова</strong>
                   <span>CDO, RetailPro</span>
@@ -2748,7 +2748,7 @@ export default function Home() {
         {/* CTA секция */}
         <div className="about-cta glass-card">
           <h3>Готовы начать трансформацию?</h3>
-          <p>Присоединяйтесь к сотням компаний, которые уже используют силу AI для роста бизнеса</p>
+          <p>Присоединяйтесь к десяткам компаний, которые уже используют силу AI для роста бизнеса</p>
           <div className="cta-buttons">
             <button className="btn-demo">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
