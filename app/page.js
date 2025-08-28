@@ -100,6 +100,12 @@ const SolutionsSection = dynamic(() => import('./components/SolutionsSection'), 
   loading: () => <div className="solutions-loading">Загрузка решений...</div>
 });
 
+// Динамический импорт AboutSection
+const AboutSection = dynamic(() => import('./components/AboutSection'), {
+  ssr: false,
+  loading: () => <div className="about-loading">Загрузка информации...</div>
+});
+
 // Динамические импорты для страницы безопасности
 const SecurityAccordion = dynamic(() => import('./components/SecurityAccordion'), {
   ssr: false,
@@ -2794,6 +2800,7 @@ export default function Home() {
       
       {/* Компоненты для управления страницей О нас */}
       <Suspense fallback={null}>
+        <AboutSection />
         <TeamModal />
         <ValuesTooltips />
         <AboutAnimations />
