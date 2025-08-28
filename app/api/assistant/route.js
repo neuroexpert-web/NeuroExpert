@@ -168,10 +168,11 @@ async function handler(request) {
   try {
     const requestData = await request.json();
     
-    // DEMO MODE: если нет настоящих API ключей, показываем демо-ответ
+    // Определяем валидность ключей в начале
     const isValidGeminiKey = GEMINI_API_KEY && !GEMINI_API_KEY.includes('your_') && GEMINI_API_KEY.length > 30;
     const isValidAnthropicKey = ANTHROPIC_API_KEY && !ANTHROPIC_API_KEY.includes('your_') && ANTHROPIC_API_KEY.length > 30;
     
+    // DEMO MODE: если нет настоящих API ключей, показываем демо-ответ
     if (!isValidGeminiKey && !isValidAnthropicKey) {
       const demoResponses = [
         "🚀 Демо-режим NeuroExpert AI активен! Для полной функциональности добавьте API ключи в .env.local файл.\n\n✨ Ваш вопрос принят, но это демо-ответ. Настоящий AI поможет с:\n• Анализом бизнес-процессов\n• Автоматизацией задач\n• Повышением конверсии",
@@ -194,6 +195,8 @@ async function handler(request) {
     const message = requestData.message || requestData.userMessage;
     const context = requestData.context || 'general';
     const systemPrompt = requestData.systemPrompt;
+    
+
     
     // Валидация входных данных
     const validationResult = validate({ question: message }, schemas.apiRequest);
