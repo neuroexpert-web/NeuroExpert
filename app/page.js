@@ -4,6 +4,7 @@ import { useState, useCallback, Suspense, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import SwipeContainer from './components/SwipeContainer';
+import SmartFloatingAI from './components/SmartFloatingAI';
 
 // Динамические импорты для аналитики
 const AnalyticsCharts = dynamic(() => import('./components/AnalyticsCharts'), {
@@ -282,16 +283,25 @@ export default function Home() {
             Цифровая трансформация<br/>бизнеса с помощью AI
           </p>
           <button 
-            className={`cta-button ${loading ? 'loading' : ''}`}
+            className={`cta-button premium-cta ${loading ? 'loading' : ''}`}
             onClick={handleCTAClick}
             disabled={loading}
           >
-            {loading ? 'Загрузка...' : 'Начать бесплатно'}
+            <span className="cta-text">{loading ? 'Загрузка...' : 'Начать бесплатно'}</span>
+            <span className="cta-arrow">→</span>
           </button>
         </div>
         <div className="swipe-hint">
-          <span className="swipe-hint-desktop">Листайте, чтобы узнать больше →</span>
-          <div className="swipe-hint-mobile"></div>
+          <button 
+            className="swipe-hint-button"
+            onClick={() => setCurrentSection(1)}
+            aria-label="Перейти к следующей секции"
+          >
+            <span className="swipe-hint-text">Листайте, чтобы узнать больше</span>
+            <svg className="swipe-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M7 10L12 15L17 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
         </div>
       </main>
     </section>,
@@ -3420,6 +3430,9 @@ export default function Home() {
       >
         {sectionComponents}
       </SwipeContainer>
+      
+      {/* AI Управляющий - плавающая кнопка */}
+      <SmartFloatingAI />
     </main>
   );
 }
