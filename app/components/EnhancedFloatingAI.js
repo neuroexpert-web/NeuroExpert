@@ -20,11 +20,15 @@ export default function EnhancedFloatingAI() {
   
   // Обработка изменения модели с анимацией
   const handleModelChange = (model) => {
-    // Анимация кнопки
-    const button = document.querySelector(`.model-btn:nth-child(${model === 'gemini' ? 1 : model === 'claude' ? 2 : 3})`);
-    if (button) {
-      button.classList.add('switching');
-      setTimeout(() => button.classList.remove('switching'), 400);
+    // Анимация кнопки - находим все кнопки и анимируем нужную
+    const modelButtons = document.querySelectorAll('.model-btn');
+    const buttonIndex = model === 'gemini' ? 0 : model === 'claude' ? 1 : 2;
+    
+    if (modelButtons[buttonIndex]) {
+      modelButtons[buttonIndex].classList.add('switching');
+      setTimeout(() => {
+        modelButtons[buttonIndex].classList.remove('switching');
+      }, 400);
     }
     
     setSelectedModel(model);
@@ -437,21 +441,39 @@ export default function EnhancedFloatingAI() {
               <div className="model-selector">
                 <button 
                   className={`model-btn ${selectedModel === 'gemini' ? 'active' : ''}`}
-                  onClick={() => handleModelChange('gemini')}
+                  onClick={(e) => {
+                    e.currentTarget.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                      e.currentTarget.style.transform = '';
+                    }, 100);
+                    handleModelChange('gemini');
+                  }}
                   title="Google Gemini"
                 >
                   G
                 </button>
                 <button 
                   className={`model-btn ${selectedModel === 'claude' ? 'active' : ''}`}
-                  onClick={() => handleModelChange('claude')}
+                  onClick={(e) => {
+                    e.currentTarget.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                      e.currentTarget.style.transform = '';
+                    }, 100);
+                    handleModelChange('claude');
+                  }}
                   title="Anthropic Claude"
                 >
                   C
                 </button>
                 <button 
                   className={`model-btn ${selectedModel === 'gpt' ? 'active' : ''}`}
-                  onClick={() => handleModelChange('gpt')}
+                  onClick={(e) => {
+                    e.currentTarget.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                      e.currentTarget.style.transform = '';
+                    }, 100);
+                    handleModelChange('gpt');
+                  }}
                   title="OpenAI GPT-4"
                 >
                   O
