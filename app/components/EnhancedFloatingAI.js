@@ -165,8 +165,9 @@ export default function EnhancedFloatingAI() {
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
 
+    const messageText = input.trim();
     const userMessage = {
-      text: input,
+      text: messageText,
       sender: 'user',
       timestamp: new Date().toISOString()
     };
@@ -184,7 +185,7 @@ export default function EnhancedFloatingAI() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          message: input,
+          message: messageText,
           context: 'general',
           personality: aiPersonality,
           model: selectedModel
@@ -225,9 +226,65 @@ export default function EnhancedFloatingAI() {
   // Быстрое действие
   const handleQuickAction = (action) => {
     setInput(action.prompt);
-    setTimeout(() => {
-      sendMessage();
-    }, 100);
+    
+    // Имитируем отправку сообщения напрямую
+    const userMessage = {
+      text: action.prompt,
+      sender: 'user',
+      timestamp: new Date().toISOString()
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setInput('');
+    setIsLoading(true);
+
+    setTimeout(async () => {
+      try {
+        const startTime = Date.now();
+        
+        const response = await fetch('/api/assistant', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: action.prompt,
+            context: 'general',
+            personality: aiPersonality,
+            model: selectedModel
+          }),
+        });
+
+        const data = await response.json();
+        const responseTime = Date.now() - startTime;
+
+        // Обновляем статистику
+        setStats(prev => ({
+          ...prev,
+          totalQuestions: prev.totalQuestions + 1,
+          avgResponseTime: Math.round((prev.avgResponseTime + responseTime) / 2)
+        }));
+
+        if (data.success || data.reply) {
+          setTimeout(() => {
+            typewriterEffect(data.response || data.reply, 'ai');
+          }, 500);
+        } else {
+          const fallbackMessage = "🤔 Извините, сейчас у меня технические сложности. Но я уже думаю над вашим вопросом! Попробуйте переформулировать или задать вопрос иначе.";
+          setTimeout(() => {
+            typewriterEffect(fallbackMessage, 'ai');
+          }, 500);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        const errorMessage = "⚠️ Упс! Похоже на сбой связи. Но не волнуйтесь - я быстро восстанавливаюсь! Попробуйте еще раз через минуту.";
+        setTimeout(() => {
+          typewriterEffect(errorMessage, 'ai');
+        }, 500);
+      } finally {
+        setIsLoading(false);
+      }
+    }, 300);
   };
 
   // AI Avatar компонент с крутыми эффектами

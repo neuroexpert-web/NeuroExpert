@@ -168,6 +168,25 @@ async function handler(request) {
   try {
     const requestData = await request.json();
     
+    // DEMO MODE: если нет API ключей, показываем демо-ответ
+    if (!GEMINI_API_KEY && !ANTHROPIC_API_KEY) {
+      const demoResponses = [
+        "🚀 Демо-режим NeuroExpert AI активен! Для полной функциональности добавьте API ключи в .env.local файл.\n\n✨ Ваш вопрос принят, но это демо-ответ. Настоящий AI поможет с:\n• Анализом бизнес-процессов\n• Автоматизацией задач\n• Повышением конверсии",
+        "🤖 Это тестовый ответ NeuroExpert AI! Настоящий AI проанализирует ваш бизнес и предложит конкретные решения.\n\n📋 Для активации:\n1. Получите бесплатный ключ: https://ai.google.dev/\n2. Добавьте в .env.local\n3. Перезапустите сервер",
+        "⚡ NeuroExpert AI готов помочь! (демо-режим)\n\nПосле настройки API ключей я смогу:\n• Проводить глубокий анализ вашего бизнеса\n• Предлагать персонализированные решения\n• Помогать с интеграцией AI-инструментов",
+        "🎯 Демо-ответ NeuroExpert v4.0!\n\nВаш запрос обработан в тестовом режиме. Полноценный AI поможет оптимизировать ваш бизнес с помощью современных технологий.\n\n🔧 Инструкции по настройке: /AI_SETUP_INSTRUCTIONS.md"
+      ];
+      
+      const randomResponse = demoResponses[Math.floor(Math.random() * demoResponses.length)];
+      
+      return NextResponse.json({
+        success: true,
+        response: randomResponse,
+        demo: true,
+        message: "API ключи не настроены. Это демо-режим."
+      });
+    }
+    
     // Поддерживаем два формата: старый (userMessage) и новый (message)
     const message = requestData.message || requestData.userMessage;
     const context = requestData.context || 'general';
@@ -335,7 +354,7 @@ export async function POST(request) {
 // Add GET method for testing prompt loading
 export async function GET() {
   try {
-    const PROMPT_PATH = path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v3_2.md');
+    const PROMPT_PATH = path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v4_enhanced.md');
     
     let fileExists = false;
     let promptContent = '';
