@@ -202,12 +202,18 @@ export default function Home() {
   // Обработчик для кнопки CTA
   const handleCTAClick = useCallback(() => {
     setLoading(true);
-    // Симуляция загрузки
+    // Переход к секции контактов
     setTimeout(() => {
-      router.push('/register');
+      const contactSection = document.getElementById('contacts');
+      if (contactSection) {
+        contactSection.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        // Если на главной странице, переходим к секции контактов
+        setCurrentSection(8); // Индекс секции контактов
+      }
       setLoading(false);
     }, 300);
-  }, [router]);
+  }, []);
 
   // Обработчик обновления данных
   const handleRefreshData = useCallback(async () => {
