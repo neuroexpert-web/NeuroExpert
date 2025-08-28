@@ -168,9 +168,21 @@ async function handler(request) {
   try {
     const requestData = await request.json();
     
-    // Определяем валидность ключей в начале
-    const isValidGeminiKey = GEMINI_API_KEY && !GEMINI_API_KEY.includes('your_') && GEMINI_API_KEY.length > 30;
-    const isValidAnthropicKey = ANTHROPIC_API_KEY && !ANTHROPIC_API_KEY.includes('your_') && ANTHROPIC_API_KEY.length > 30;
+    // Определяем валидность ключей в начале (строгая проверка)
+    const isValidGeminiKey = GEMINI_API_KEY && 
+                             !GEMINI_API_KEY.includes('your_') && 
+                             !GEMINI_API_KEY.includes('here') &&
+                             !GEMINI_API_KEY.includes('key') &&
+                             GEMINI_API_KEY.length > 30 &&
+                             GEMINI_API_KEY.startsWith('AI');
+    const isValidAnthropicKey = ANTHROPIC_API_KEY && 
+                               !ANTHROPIC_API_KEY.includes('your_') && 
+                               !ANTHROPIC_API_KEY.includes('here') &&
+                               !ANTHROPIC_API_KEY.includes('key') &&
+                               ANTHROPIC_API_KEY.length > 30;
+    
+    // ПРИНУДИТЕЛЬНЫЙ DEMO MODE для тестирования
+    console.log('Demo mode check:', { isValidGeminiKey, isValidAnthropicKey, GEMINI_API_KEY: GEMINI_API_KEY?.substring(0, 10) + '...' });
     
     // DEMO MODE: если нет настоящих API ключей, показываем демо-ответ
     if (!isValidGeminiKey && !isValidAnthropicKey) {
