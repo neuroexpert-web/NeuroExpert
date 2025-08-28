@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 Enhanced AI v4.0 Demo - NeuroExpert</title>
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #0a0a0f, #1a1a2e);
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .demo-header {
+            margin-bottom: 40px;
+        }
+
+        .demo-header h1 {
+            font-size: 3rem;
+            background: linear-gradient(90deg, #00d4ff, #9945ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .demo-header p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: #00d4ff;
+            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            color: #00d4ff;
+            margin-bottom: 15px;
+        }
+
+        .feature-description {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        .cta-section {
+            margin: 80px 0;
+            padding: 60px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(153, 69, 255, 0.1));
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #00d4ff, #9945ff);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px;
+            font-weight: bold;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .tech-specs {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .spec-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            text-align: left;
+        }
+
+        .spec-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .spec-icon {
+            color: #00d4ff;
+            font-weight: bold;
+        }
+
+        .ai-preview {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #00d4ff, #9945ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: ai-pulse 3s ease-in-out infinite;
+            z-index: 1000;
+        }
+
+        .ai-preview:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 50px rgba(0, 212, 255, 0.5);
+        }
+
+        @keyframes ai-pulse {
+            0%, 100% { 
+                box-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 60px rgba(0, 212, 255, 0.8);
+                transform: scale(1.05);
+            }
+        }
+
+        .notification {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #ff6b35;
+            color: white;
+            border-radius: 15px;
+            padding: 5px 10px;
+            font-size: 12px;
+            font-weight: bold;
+            animation: notification-bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes notification-bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @media (max-width: 768px) {
+            .demo-header h1 {
+                font-size: 2rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .cta-section {
+                padding: 30px;
+                margin: 40px 0;
+            }
+            
+            .ai-preview {
+                width: 80px;
+                height: 80px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1>🤖 Enhanced AI v4.0</h1>
+            <p>Познакомьтесь с новым поколением AI управляющего NeuroExpert. Невероятный аватар, умные диалоги, футуристический дизайн!</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="feature-icon">🧠</span>
+                <h3 class="feature-title">Невероятный AI Аватар</h3>
+                <p class="feature-description">
+                    Футуристический дизайн с энергетическими кольцами, нейронной сеткой, светящимися глазами и анимированным процессором. AI, которого хочется увидеть!
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">⚡</span>
+                <h3 class="feature-title">3 Режима Личности</h3>
+                <p class="feature-description">
+                    Стратегический, Технический и Креативный режимы. AI адаптируется под ваш стиль работы и тип задач.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🎯</span>
+                <h3 class="feature-title">Умные Быстрые Действия</h3>
+                <p class="feature-description">
+                    6 категорий быстрых действий: рост прибыли, автоматизация, аналитика, ROI, интеграции, безопасность.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🌟</span>
+                <h3 class="feature-title">Продвинутая Анимация</h3>
+                <p class="feature-description">
+                    Частицы данных, эффект дыхания, сканирование, пульсация энергии - каждая деталь живая и интерактивная.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">📊</span>
+                <h3 class="feature-title">Статистика в Реальном Времени</h3>
+                <p class="feature-description">
+                    247+ решений, время ответа в миллисекундах, 98% успешности - AI показывает свою эффективность.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🎨</span>
+                <h3 class="feature-title">Футуристический UI</h3>
+                <p class="feature-description">
+                    Glass-morphism, градиенты, энергетические эффекты, продуманная типографика - дизайн будущего сегодня.
+                </p>
+            </div>
+        </div>
+
+        <div class="tech-specs">
+            <h3 style="text-align: center; color: #00d4ff; margin-bottom: 30px;">Технические Характеристики</h3>
+            <div class="spec-list">
+                <div class="spec-item">
+                    <span class="spec-icon">✅</span>
+                    <span>React Hooks + useEffect анимации</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-icon">✅</span>
+                    <span>CSS3 анимации + keyframes</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-icon">✅</span>
+                    <span>Адаптивный дизайн</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-icon">✅</span>
+                    <span>LocalStorage персистентность</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-icon">✅</span>
+                    <span>Typewriter эффект печати</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-icon">✅</span>
+                    <span>Drag & Drop поддержка</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-icon">✅</span>
+                    <span>Backdrop-filter размытие</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-icon">✅</span>
+                    <span>Энергетические поля</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2 style="color: #00d4ff; margin-bottom: 20px;">Протестируйте Enhanced AI v4.0</h2>
+            <p style="margin-bottom: 30px; color: rgba(255, 255, 255, 0.8);">
+                Нажмите на кнопку AI в правом нижнем углу и испытайте будущее AI диалогов!
+            </p>
+            <button class="cta-button" onclick="window.location.href='/'">
+                🚀 Перейти к Основному Сайту
+            </button>
+            <button class="cta-button" onclick="window.open('/test-workspace', '_blank')">
+                💼 Открыть Workspace
+            </button>
+        </div>
+    </div>
+
+    <!-- Превью AI в углу -->
+    <div class="ai-preview" onclick="openAIDemo()">
+        🤖
+        <div class="notification">NEW!</div>
+    </div>
+
+    <script>
+        function openAIDemo() {
+            alert('🚀 Enhanced AI v4.0 готов к работе!\n\n✨ Функции:\n• Невероятный аватар с анимациями\n• 3 режима личности (🎯🔧💡)\n• 6 категорий быстрых действий\n• Статистика в реальном времени\n• Футуристический дизайн\n\n👈 Нажмите на основную кнопку AI на сайте!');
+        }
+
+        // Анимация появления карточек
+        const cards = document.querySelectorAll('.feature-card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }, index * 100);
+                }
+            });
+        });
+
+        cards.forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+
+        // Случайные частицы на фоне
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.width = '3px';
+            particle.style.height = '3px';
+            particle.style.background = '#00d4ff';
+            particle.style.borderRadius = '50%';
+            particle.style.pointerEvents = 'none';
+            particle.style.opacity = '0.7';
+            particle.style.left = Math.random() * window.innerWidth + 'px';
+            particle.style.top = window.innerHeight + 'px';
+            particle.style.zIndex = '1';
+            
+            document.body.appendChild(particle);
+            
+            const animation = particle.animate([
+                { transform: 'translateY(0) scale(1)', opacity: 0.7 },
+                { transform: `translateY(-${window.innerHeight + 100}px) scale(0)`, opacity: 0 }
+            ], {
+                duration: 3000 + Math.random() * 2000,
+                easing: 'linear'
+            });
+            
+            animation.onfinish = () => particle.remove();
+        }
+
+        // Создаем частицы каждые 2 секунды
+        setInterval(createParticle, 2000);
+
+        // Эффект параллакса для заголовка
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const header = document.querySelector('.demo-header');
+            if (header) {
+                header.style.transform = `translateY(${scrolled * 0.3}px)`;
+            }
+        });
+    </script>
+</body>
+</html>

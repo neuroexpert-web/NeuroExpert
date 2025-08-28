@@ -4,7 +4,7 @@ import { useState, useCallback, Suspense, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import SwipeContainer from './components/SwipeContainer';
-import SmartFloatingAI from './components/SmartFloatingAI';
+import EnhancedFloatingAI from './components/EnhancedFloatingAI';
 
 // Динамические импорты для аналитики
 const AnalyticsCharts = dynamic(() => import('./components/AnalyticsCharts'), {
@@ -3614,8 +3614,8 @@ export default function Home() {
         {sectionComponents}
       </SwipeContainer>
       
-      {/* AI Управляющий - плавающая кнопка */}
-      <SmartFloatingAI />
+      {/* AI Управляющий v4.0 Enhanced - плавающая кнопка */}
+      <EnhancedFloatingAI />
     </main>
   );
 }
