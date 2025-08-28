@@ -17,6 +17,13 @@ export default function EnhancedFloatingAI() {
   const [isTyping, setIsTyping] = useState(false);
   const [selectedModel, setSelectedModel] = useState('gemini');
   const [aiPersonality, setAiPersonality] = useState('strategic'); // strategic, technical, creative
+  
+  // Отладка для проверки рендеринга
+  useEffect(() => {
+    if (isOpen) {
+      console.log('AI Chat opened. Selected model:', selectedModel);
+    }
+  }, [isOpen, selectedModel]);
   const [stats, setStats] = useState({
     totalQuestions: 0,
     avgResponseTime: 0,
@@ -184,6 +191,7 @@ export default function EnhancedFloatingAI() {
         headers: {
           'Content-Type': 'application/json',
           'X-Requested-With': 'XMLHttpRequest',
+          'x-neuroexpert-csrf': '1',
         },
         body: JSON.stringify({
           message: messageText,
