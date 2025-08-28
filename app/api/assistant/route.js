@@ -168,8 +168,11 @@ async function handler(request) {
   try {
     const requestData = await request.json();
     
-    // DEMO MODE: если нет API ключей, показываем демо-ответ
-    if (!GEMINI_API_KEY && !ANTHROPIC_API_KEY) {
+    // DEMO MODE: если нет настоящих API ключей, показываем демо-ответ
+    const isValidGeminiKey = GEMINI_API_KEY && !GEMINI_API_KEY.includes('your_') && GEMINI_API_KEY.length > 30;
+    const isValidAnthropicKey = ANTHROPIC_API_KEY && !ANTHROPIC_API_KEY.includes('your_') && ANTHROPIC_API_KEY.length > 30;
+    
+    if (!isValidGeminiKey && !isValidAnthropicKey) {
       const demoResponses = [
         "🚀 Демо-режим NeuroExpert AI активен! Для полной функциональности добавьте API ключи в .env.local файл.\n\n✨ Ваш вопрос принят, но это демо-ответ. Настоящий AI поможет с:\n• Анализом бизнес-процессов\n• Автоматизацией задач\n• Повышением конверсии",
         "🤖 Это тестовый ответ NeuroExpert AI! Настоящий AI проанализирует ваш бизнес и предложит конкретные решения.\n\n📋 Для активации:\n1. Получите бесплатный ключ: https://ai.google.dev/\n2. Добавьте в .env.local\n3. Перезапустите сервер",
@@ -222,7 +225,7 @@ async function handler(request) {
     
     try {
       // Выбираем модель на основе запроса пользователя
-      if (model === 'claude' && ANTHROPIC_API_KEY) {
+      if (model === 'claude' && isValidAnthropicKey) {
         // Используем Claude с историей
         console.log('Using Claude with system prompt');
         console.log('ANTHROPIC_API_KEY exists:', !!ANTHROPIC_API_KEY);
@@ -231,7 +234,7 @@ async function handler(request) {
         answer = claudeResponse.text;
         updatedHistory = claudeResponse.updatedHistory;
         usedModel = 'claude';
-      } else if (model === 'gemini' && genAI && GEMINI_API_KEY) {
+      } else if (model === 'gemini' && genAI && isValidGeminiKey) {
         // Выбираем системный промпт в зависимости от контекста
         let finalSystemPrompt = SYSTEM_PROMPT;
         
@@ -262,7 +265,7 @@ async function handler(request) {
           console.error('Gemini API call failed:', geminiError);
           throw geminiError;
         }
-      } else if (ANTHROPIC_API_KEY && model !== 'gemini') {
+      } else if (isValidAnthropicKey && model !== 'gemini') {
         // Fallback на Claude если Gemini недоступен
         console.log('Fallback to Claude (Gemini not available)');
         const claudeResponse = await getClaudeResponse(question, history);
