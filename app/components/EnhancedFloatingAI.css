@@ -19,13 +19,23 @@
   position: fixed;
   bottom: 30px;
   right: 30px;
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   border: none;
-  background: transparent;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-radius: 50%;
   cursor: pointer;
   z-index: 9999;
-  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-chat-icon {
+  font-size: 28px;
+  filter: grayscale(0);
 }
 
 .ai-chat-trigger:hover {
@@ -36,24 +46,9 @@
   transform: scale(0.9);
 }
 
-/* Уведомление о новой версии */
+/* Убраны лишние анимации */
 .notification-pulse {
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  background: linear-gradient(135deg, var(--ai-accent), var(--ai-warning));
-  color: white;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 10px;
-  font-weight: bold;
-  animation: pulse-glow 2s infinite;
-  box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
-}
-
-@keyframes pulse-glow {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 107, 53, 0.5); }
-  50% { transform: scale(1.1); box-shadow: 0 0 30px rgba(255, 107, 53, 0.8); }
+  display: none;
 }
 
 /* AI АВАТАР - Главная фишка! */
@@ -432,6 +427,7 @@
   background: linear-gradient(145deg, var(--ai-dark), var(--ai-card));
   border: 1px solid var(--ai-border);
   border-radius: 24px;
+  z-index: 9999;
   box-shadow: 
     0 25px 80px rgba(0, 0, 0, 0.4),
     0 0 50px var(--ai-glow);
@@ -456,30 +452,29 @@
 
 /* Заголовок чата */
 .enhanced-chat-header {
-  padding: 20px;
-  background: linear-gradient(135deg, var(--ai-card), var(--ai-dark));
-  border-bottom: 1px solid var(--ai-border);
+  padding: 10px 15px;
+  background: rgba(26, 26, 46, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
-  gap: 15px;
+  justify-content: space-between;
+  gap: 10px;
   position: relative;
-  overflow: hidden;
+  min-height: 50px;
 }
 
-.enhanced-chat-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
-  animation: header-scan 3s linear infinite;
+/* Название AI */
+.ai-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
 }
 
-@keyframes header-scan {
-  0% { left: -100%; }
-  100% { left: 100%; }
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .header-avatar {
@@ -539,19 +534,223 @@
 }
 
 .header-controls {
-  display: flex;
+  display: flex !important;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
+  min-width: 0;
 }
 
-/* Переключатель персональности */
-.personality-selector {
-  display: flex;
+/* Выбор модели AI */
+.model-selector {
+  display: flex !important;
   gap: 5px;
   background: rgba(255, 255, 255, 0.05);
   padding: 4px;
   border-radius: 12px;
   border: 1px solid var(--ai-border);
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.model-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: bold;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  -webkit-animation: none;
+  animation: none;
+}
+
+/* Принудительное применение анимации */
+.model-btn[style*="animation"] {
+  -webkit-animation: modelSwitch 0.5s ease-out !important;
+  animation: modelSwitch 0.5s ease-out !important;
+}
+
+.model-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.model-btn:active::before {
+  width: 100px;
+  height: 100px;
+}
+
+.model-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+}
+
+.model-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
+}
+
+.model-btn.active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+  position: relative;
+}
+
+.model-btn.active::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-radius: 8px;
+  opacity: 0.5;
+  z-index: -1;
+  animation: activePulse 2s ease-in-out infinite;
+}
+
+@keyframes activePulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.5;
+  }
+}
+
+.model-btn.active:hover {
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.5);
+}
+
+/* Анимация переключения модели */
+.model-btn.switching {
+  animation: modelSwitch 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes modelSwitch {
+  0% { 
+    transform: scale(1) rotate(0deg);
+    background: rgba(255, 255, 255, 0.05);
+  }
+  25% {
+    transform: scale(1.3) rotate(90deg);
+    background: rgba(99, 102, 241, 0.2);
+  }
+  50% { 
+    transform: scale(0.7) rotate(180deg);
+    background: rgba(139, 92, 246, 0.2);
+  }
+  75% {
+    transform: scale(1.2) rotate(270deg);
+    background: rgba(99, 102, 241, 0.2);
+  }
+  100% { 
+    transform: scale(1) rotate(360deg);
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+@-webkit-keyframes modelSwitch {
+  0% { 
+    -webkit-transform: scale(1) rotate(0deg);
+    transform: scale(1) rotate(0deg);
+    background: rgba(255, 255, 255, 0.05);
+  }
+  25% {
+    -webkit-transform: scale(1.3) rotate(90deg);
+    transform: scale(1.3) rotate(90deg);
+    background: rgba(99, 102, 241, 0.2);
+  }
+  50% { 
+    -webkit-transform: scale(0.7) rotate(180deg);
+    transform: scale(0.7) rotate(180deg);
+    background: rgba(139, 92, 246, 0.2);
+  }
+  75% {
+    -webkit-transform: scale(1.2) rotate(270deg);
+    transform: scale(1.2) rotate(270deg);
+    background: rgba(99, 102, 241, 0.2);
+  }
+  100% { 
+    -webkit-transform: scale(1) rotate(360deg);
+    transform: scale(1) rotate(360deg);
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+/* Дополнительный эффект свечения при переключении */
+.model-btn.switching::before {
+  animation: modelGlow 0.5s ease-out;
+}
+
+@keyframes modelGlow {
+  0% { 
+    width: 0;
+    height: 0;
+    opacity: 0.8;
+  }
+  100% { 
+    width: 100px;
+    height: 100px;
+    opacity: 0;
+  }
+}
+
+.model-icon {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 10px;
+}
+
+.model-btn.active .model-icon {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.model-name {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .model-name {
+    display: inline;
+  }
+}
+
+/* Переключатель персональности - скрыт для минимализма */
+.personality-selector {
+  display: none;
 }
 
 .personality-btn {
@@ -583,21 +782,49 @@
 .close-btn {
   width: 32px;
   height: 32px;
-  border: none;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
-  font-size: 14px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 16px;
+  font-weight: normal;
+  padding: 0;
+  margin-left: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.close-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(255,107,107,0.3) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
 }
 
 .close-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.1);
+  background: rgba(255, 107, 107, 0.1);
+  border-color: rgba(255, 107, 107, 0.3);
+  color: #ff6b6b;
+  transform: rotate(90deg);
+}
+
+.close-btn:active {
+  transform: rotate(90deg) scale(0.9);
+}
+
+.close-btn:active::before {
+  width: 60px;
+  height: 60px;
 }
 
 /* Область сообщений */
@@ -649,6 +876,31 @@
   gap: 12px;
   margin-bottom: 20px;
   animation: fadeInMessage 0.4s ease-out;
+}
+
+.message-wrapper.system {
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.message.system {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+  padding: 8px 16px;
+  animation: systemMessageSlide 0.3s ease-out;
+}
+
+@keyframes systemMessageSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeInMessage {
@@ -880,6 +1132,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
   transition: all 0.3s ease;
   font-size: 16px;
   color: white;
@@ -891,9 +1145,46 @@
   box-shadow: 0 0 30px var(--ai-glow);
 }
 
+.send-btn:active {
+  transform: scale(0.95);
+}
+
 .send-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.send-btn.loading {
+  animation: sendPulse 1s ease-in-out infinite;
+}
+
+@keyframes sendPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 20px var(--ai-glow);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px var(--ai-glow);
+  }
+}
+
+/* Анимация отправки */
+.send-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.send-btn:active::after {
+  width: 80px;
+  height: 80px;
 }
 
 .send-icon {
@@ -961,8 +1252,18 @@
   }
 
   .header-controls {
-    flex-direction: column;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+  }
+  
+  .model-selector {
+    display: flex !important;
     gap: 5px;
+  }
+  
+  .ai-name {
+    font-size: 14px;
   }
 }
 

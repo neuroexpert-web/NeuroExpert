@@ -17,6 +17,59 @@ export default function EnhancedFloatingAI() {
   const [isTyping, setIsTyping] = useState(false);
   const [selectedModel, setSelectedModel] = useState('gemini');
   const [aiPersonality, setAiPersonality] = useState('strategic'); // strategic, technical, creative
+  
+  // Обработка изменения модели с анимацией
+  const handleModelChange = (model) => {
+    // Проверяем, что модель действительно изменилась
+    if (model === selectedModel) return;
+    
+    // Анимация кнопки - находим все кнопки и анимируем нужную
+    setTimeout(() => {
+      const modelButtons = document.querySelectorAll('.model-btn');
+      console.log('Found buttons:', modelButtons.length);
+      
+      modelButtons.forEach((btn, index) => {
+        // Убираем класс switching со всех кнопок
+        btn.classList.remove('switching');
+        
+        // Добавляем класс к нужной кнопке
+        if ((model === 'gemini' && index === 0) ||
+            (model === 'claude' && index === 1) ||
+            (model === 'gpt' && index === 2)) {
+          btn.classList.add('switching');
+          console.log('Added switching class to button:', index);
+          
+          // Убираем класс после анимации
+          setTimeout(() => {
+            btn.classList.remove('switching');
+          }, 500);
+        }
+      });
+    }, 10);
+    
+    setSelectedModel(model);
+    
+    // Добавляем системное сообщение о смене модели
+    const modelNames = {
+      gemini: 'Google Gemini',
+      claude: 'Anthropic Claude',
+      gpt: 'OpenAI GPT-4 (через Gemini)'
+    };
+    
+    const systemMessage = {
+      id: Date.now(),
+      text: `🔄 Переключено на ${modelNames[model]}`,
+      sender: 'system',
+      timestamp: new Date().toISOString()
+    };
+    
+    setMessages(prev => [...prev, systemMessage]);
+    
+    // Убираем системное сообщение через 3 секунды
+    setTimeout(() => {
+      setMessages(prev => prev.filter(msg => msg.id !== systemMessage.id));
+    }, 3000);
+  };
   const [stats, setStats] = useState({
     totalQuestions: 0,
     avgResponseTime: 0,
@@ -165,6 +218,15 @@ export default function EnhancedFloatingAI() {
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
 
+    // Анимация кнопки отправки
+    const sendBtn = document.querySelector('.send-btn');
+    if (sendBtn) {
+      sendBtn.style.transform = 'scale(0.9)';
+      setTimeout(() => {
+        sendBtn.style.transform = 'scale(1)';
+      }, 200);
+    }
+
     const messageText = input.trim();
     const userMessage = {
       text: messageText,
@@ -184,12 +246,13 @@ export default function EnhancedFloatingAI() {
         headers: {
           'Content-Type': 'application/json',
           'X-Requested-With': 'XMLHttpRequest',
+          'x-neuroexpert-csrf': '1',
         },
         body: JSON.stringify({
           message: messageText,
           context: 'general',
           personality: aiPersonality,
-          model: selectedModel
+          model: selectedModel === 'gpt' ? 'gemini' : selectedModel // GPT пока использует Gemini
         }),
       });
 
@@ -253,7 +316,7 @@ export default function EnhancedFloatingAI() {
             message: action.prompt,
             context: 'general',
             personality: aiPersonality,
-            model: selectedModel
+            model: selectedModel === 'gpt' ? 'gemini' : selectedModel // GPT пока использует Gemini
           }),
         });
 
@@ -378,46 +441,109 @@ export default function EnhancedFloatingAI() {
         onClick={() => setIsOpen(!isOpen)}
         style={{ bottom: position.y, right: position.x }}
       >
-        <AIAvatar isActive={isOpen} personality={aiPersonality} />
-        
-        {/* Уведомление о новых возможностях */}
-        {!isOpen && (
-          <div className="notification-pulse">
-            <span className="notification-text">AI v4.0</span>
-          </div>
-        )}
+        <div className="ai-chat-icon">💬</div>
       </button>
 
       {/* Диалоговое окно */}
       {isOpen && (
         <div className="enhanced-ai-chat-container">
-          {/* Заголовок с AI аватаром */}
+          {/* Компактная шапка */}
           <div className="enhanced-chat-header">
-            <div className="header-avatar">
-              <AIAvatar isActive={true} personality={aiPersonality} />
-            </div>
-            <div className="header-info">
-              <h3 className="ai-name">Александр Нейронов</h3>
-              <p className="ai-title">AI-Помощник NeuroExpert v4.0</p>
-              <div className="ai-stats">
-                <span className="stat">
-                  <span className="stat-icon">💼</span>
-                  <span className="stat-value">{stats.successfulSolutions}+</span>
-                  <span className="stat-label">решений</span>
-                </span>
-                <span className="stat">
-                  <span className="stat-icon">⚡</span>
-                  <span className="stat-value">{stats.avgResponseTime}ms</span>
-                  <span className="stat-label">ответ</span>
-                </span>
-                <span className="stat">
-                  <span className="stat-icon">⭐</span>
-                  <span className="stat-value">{stats.satisfaction}%</span>
-                  <span className="stat-label">успех</span>
-                </span>
-              </div>
+            <div className="header-left">
+              <h3 className="ai-name">NeuroExpert AI</h3>
             </div>
             <div className="header-controls">
+              {/* Выбор модели AI */}
+              <div className="model-selector">
+                <button 
+                  className={`model-btn ${selectedModel === 'gemini' ? 'active' : ''}`}
+                  onClick={(e) => {
+                    // Анимация при клике
+                    const btn = e.currentTarget;
+                    
+                    // Последовательная анимация через transform
+                    btn.style.transition = 'none';
+                    btn.style.transform = 'scale(1) rotate(0deg)';
+                    
+                    setTimeout(() => {
+                      btn.style.transition = 'transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+                      btn.style.transform = 'scale(1) rotate(360deg)';
+                    }, 10);
+                    
+                    setTimeout(() => {
+                      btn.style.transition = 'all 0.3s ease';
+                      btn.style.transform = '';
+                    }, 510);
+                    
+                    handleModelChange('gemini');
+                  }}
+                  title="Google Gemini"
+                  style={{
+                    transition: 'all 0.3s ease'
+                  }}
+                >
+                  G
+                </button>
+                <button 
+                  className={`model-btn ${selectedModel === 'claude' ? 'active' : ''}`}
+                  onClick={(e) => {
+                    // Анимация при клике
+                    const btn = e.currentTarget;
+                    
+                    // Последовательная анимация через transform
+                    btn.style.transition = 'none';
+                    btn.style.transform = 'scale(1) rotate(0deg)';
+                    
+                    setTimeout(() => {
+                      btn.style.transition = 'transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+                      btn.style.transform = 'scale(1) rotate(360deg)';
+                    }, 10);
+                    
+                    setTimeout(() => {
+                      btn.style.transition = 'all 0.3s ease';
+                      btn.style.transform = '';
+                    }, 510);
+                    
+                    handleModelChange('claude');
+                  }}
+                  title="Anthropic Claude"
+                  style={{
+                    transition: 'all 0.3s ease'
+                  }}
+                >
+                  C
+                </button>
+                <button 
+                  className={`model-btn ${selectedModel === 'gpt' ? 'active' : ''}`}
+                  onClick={(e) => {
+                    // Анимация при клике
+                    const btn = e.currentTarget;
+                    
+                    // Последовательная анимация через transform
+                    btn.style.transition = 'none';
+                    btn.style.transform = 'scale(1) rotate(0deg)';
+                    
+                    setTimeout(() => {
+                      btn.style.transition = 'transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+                      btn.style.transform = 'scale(1) rotate(360deg)';
+                    }, 10);
+                    
+                    setTimeout(() => {
+                      btn.style.transition = 'all 0.3s ease';
+                      btn.style.transform = '';
+                    }, 510);
+                    
+                    handleModelChange('gpt');
+                  }}
+                  title="OpenAI GPT-4"
+                  style={{
+                    transition: 'all 0.3s ease'
+                  }}
+                >
+                  O
+                </button>
+              </div>
+
               {/* Переключатель персональности */}
               <div className="personality-selector">
                 <button 
