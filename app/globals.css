@@ -3666,8 +3666,8 @@ textarea:focus {
 .traffic-chart-container {
   display: flex;
   flex-direction: column;
-  gap: 25px;
-  padding: 20px;
+  gap: 15px;
+  padding: 15px;
   height: 100%;
   overflow: hidden;
   justify-content: center;
@@ -3682,8 +3682,8 @@ textarea:focus {
 
 .chart-canvas-wrapper {
   position: relative;
-  width: 220px;
-  height: 220px;
+  width: 200px;
+  height: 200px;
 }
 
 .chart-canvas-wrapper canvas {
@@ -3726,11 +3726,11 @@ textarea:focus {
 .traffic-legend-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 15px;
+  gap: 8px;
+  padding: 10px 12px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(139, 92, 246, 0.2);
-  border-radius: 10px;
+  border-radius: 8px;
   transition: all 0.2s ease;
   cursor: pointer;
   min-width: 0;
@@ -3743,8 +3743,8 @@ textarea:focus {
 }
 
 .legend-color-dot {
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   flex-shrink: 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
@@ -3759,23 +3759,23 @@ textarea:focus {
 .legend-name {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 13px;
+  gap: 5px;
+  font-size: 12px;
   font-weight: 600;
   color: white;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 
 .legend-icon {
-  font-size: 18px;
+  font-size: 16px;
   flex-shrink: 0;
 }
 
 .legend-stats {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 12px;
+  gap: 6px;
+  font-size: 11px;
 }
 
 .legend-percent {
