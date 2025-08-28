@@ -406,7 +406,7 @@ export default function Home() {
         <div className="hero-content">
           <h1 className="main-title">NeuroExpert</h1>
           <p className="descriptor">
-            Цифровая трансформация<br/>бизнеса с помощью AI
+            Увеличьте прибыль на 40%<br/>с помощью искусственного интеллекта
           </p>
           <button 
             className={`hero-cta-button neon-gradient ${loading ? 'loading' : ''}`}
@@ -416,7 +416,7 @@ export default function Home() {
             <span className="button-glow"></span>
             <span className="button-content">
               <span className="cta-icon">🚀</span>
-              <span className="cta-text">{loading ? 'Загрузка...' : 'Начать бесплатно'}</span>
+              <span className="cta-text">{loading ? 'Загрузка...' : 'Получить консультацию'}</span>
               <span className="cta-arrow">→</span>
             </span>
           </button>
@@ -429,7 +429,7 @@ export default function Home() {
           >
             <span className="hint-glow"></span>
             <span className="hint-content">
-              <span className="swipe-hint-text">Листайте, чтобы узнать больше</span>
+              <span className="swipe-hint-text">Смотрите, как работает платформа</span>
               <svg className="swipe-arrow-right" width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
@@ -443,7 +443,7 @@ export default function Home() {
     <section key="analytics" id="analytics-dashboard" className="full-page scrollable-section">
       <header className="page-header">
         <h2>Аналитика в реальном времени</h2>
-        <p>Ваши ключевые показатели и умные рекомендации для роста бизнеса</p>
+        <p>Ключевые показатели вашего бизнеса и персональные рекомендации от AI</p>
       </header>
       
       {/* Панель фильтров */}
@@ -692,8 +692,8 @@ export default function Home() {
         {/* AI рекомендации с пояснениями */}
         <section className="ai-recommendations">
           <div className="section-header">
-            <h3>Умные рекомендации для вашего бизнеса</h3>
-            <p>AI проанализировал ваши данные и нашёл возможности для роста</p>
+            <h3>Персональные рекомендации от AI</h3>
+<p>Искусственный интеллект изучил ваши данные и определил точки роста прибыли</p>
           </div>
           <div className="recommendations-grid">
             <div className="recommendation-card glass-card">
@@ -1589,8 +1589,8 @@ export default function Home() {
     // 5. Решения - каталог услуг и пакетов
     <section key="solutions" id="solutions-section" className="full-page scrollable-section">
       <div className="page-header">
-        <h2>Решения для вашего бизнеса</h2>
-        <p>Выберите готовое решение или создадим индивидуальное под ваши задачи</p>
+        <h2>AI-решения для роста прибыли</h2>
+        <p>Готовые модули для автоматизации или индивидуальная разработка под ваши цели</p>
       </div>
 
       <div className="solutions-container">
@@ -2023,8 +2023,8 @@ export default function Home() {
     // 6. Безопасность - демонстрация надежности платформы
     <section key="security" id="security-section" className="full-page scrollable-section">
       <div className="page-header">
-        <h2>Безопасность превыше всего</h2>
-        <p>Ваши данные под надежной защитой современных технологий</p>
+        <h2>Банковский уровень защиты</h2>
+        <p>Ваши данные защищены по международным стандартам безопасности</p>
       </div>
 
       <div className="security-container">
@@ -2979,8 +2979,8 @@ export default function Home() {
 
         {/* Интерактивный калькулятор */}
         <div className="pricing-calculator glass-card">
-          <h3>Калькулятор стоимости</h3>
-          <p className="calculator-subtitle">Настройте параметры под ваши потребности</p>
+          <h3>Рассчитайте окупаемость</h3>
+          <p className="calculator-subtitle">Узнайте точную стоимость и сроки окупаемости для вашего бизнеса</p>
           
           <form className="calculator-form">
             {/* Выбор базового тарифа */}
@@ -3291,8 +3291,8 @@ export default function Home() {
     // 9. Контакты - форма обратной связи и контактная информация
     <section key="contacts" id="contacts-section" className="full-page scrollable-section">
       <div className="page-header">
-        <h2>Свяжитесь с нами</h2>
-        <p>Мы готовы ответить на все ваши вопросы и помочь с внедрением</p>
+        <h2>Начните прямо сейчас</h2>
+        <p>Получите персональную консультацию и расчет ROI для вашего бизнеса</p>
       </div>
 
       <div className="contacts-container">
