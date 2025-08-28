@@ -3665,20 +3665,31 @@ textarea:focus {
 /* Traffic Chart Styles */
 .traffic-chart-container {
   display: flex;
-  flex-direction: column;
-  gap: 30px;
+  gap: 40px;
   padding: 20px;
   height: 100%;
+  align-items: center;
 }
 
-.chart-with-center {
+.chart-area {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chart-canvas-wrapper {
   position: relative;
-  width: 300px;
-  height: 300px;
-  margin: 0 auto;
+  width: 280px;
+  height: 280px;
 }
 
-.chart-center-info {
+.chart-canvas-wrapper canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.chart-center-text {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -3687,92 +3698,96 @@ textarea:focus {
   pointer-events: none;
 }
 
-.total-number {
-  font-size: 36px;
+.center-value {
+  font-size: 32px;
   font-weight: 700;
   color: white;
   line-height: 1;
 }
 
-.total-label {
+.center-label {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.6);
   margin-top: 4px;
 }
 
-.total-period {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
-  margin-top: 2px;
-}
-
-.traffic-sources-grid {
+.traffic-legend-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: 1fr 1fr;
   gap: 15px;
-  margin-top: 10px;
+  flex: 1;
+  max-width: 400px;
 }
 
-.traffic-source-card {
+.traffic-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(139, 92, 246, 0.2);
-  border-radius: 12px;
-  padding: 15px;
-  transition: all 0.3s ease;
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  border-radius: 10px;
+  transition: all 0.2s ease;
   cursor: pointer;
 }
 
-.traffic-source-card:hover {
+.traffic-legend-item:hover {
   background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(139, 92, 246, 0.4);
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  border-color: rgba(139, 92, 246, 0.3);
+  transform: translateX(4px);
 }
 
-.source-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.source-icon {
-  font-size: 24px;
-}
-
-.source-color-bar {
-  width: 40px;
-  height: 4px;
-  border-radius: 2px;
+.legend-color-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.source-name {
-  font-size: 14px;
-  font-weight: 600;
+.legend-info {
+  flex: 1;
+}
+
+.legend-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
   color: white;
   margin-bottom: 4px;
 }
 
-.source-value {
-  font-size: 24px;
-  font-weight: 700;
+.legend-icon {
+  font-size: 16px;
+}
+
+.legend-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.legend-percent {
+  font-weight: 600;
   color: white;
-  line-height: 1;
 }
 
-.source-visitors {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.7);
-  margin-top: 4px;
+.legend-visitors {
+  color: rgba(255, 255, 255, 0.6);
 }
 
-.source-details {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+@media (max-width: 1024px) {
+  .traffic-chart-container {
+    flex-direction: column;
+  }
+  
+  .traffic-legend-grid {
+    max-width: 100%;
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 /* Chart improvements */
