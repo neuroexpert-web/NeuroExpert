@@ -42,6 +42,16 @@ export default function SmartFloatingAI() {
     scrollToBottom();
   }, [messages, isLoading]);
 
+  // Слушаем событие для открытия чата
+  useEffect(() => {
+    const handleOpenChat = () => {
+      setIsOpen(true);
+    };
+    
+    window.addEventListener('openAIChat', handleOpenChat);
+    return () => window.removeEventListener('openAIChat', handleOpenChat);
+  }, []);
+
   // Сохраняем историю сообщений при каждом изменении
   useEffect(() => {
     if (messages && messages.length) {

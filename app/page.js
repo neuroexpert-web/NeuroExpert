@@ -205,9 +205,14 @@ export default function Home() {
     setLoading(true);
     // Открываем AI управляющего
     setTimeout(() => {
-      const aiButton = document.querySelector('.floating-ai-button');
+      // Ищем кнопку AI управляющего и кликаем на неё
+      const aiButton = document.querySelector('.ai-chat-button, .floating-ai-btn, [class*="floating"][class*="ai"]');
       if (aiButton) {
         aiButton.click();
+      } else {
+        // Если не нашли кнопку, попробуем найти сам компонент и открыть его
+        const event = new CustomEvent('openAIChat');
+        window.dispatchEvent(event);
       }
       setLoading(false);
     }, 300);
@@ -268,6 +273,19 @@ export default function Home() {
     }
   }, []);
 
+  // Обработчик для перехода к следующей секции
+  const handleSwipeHint = useCallback(() => {
+    // Используем handleSectionChange который связан со SwipeContainer
+    handleSectionChange(1);
+    // Также эмулируем клик по точке навигации для SwipeContainer
+    setTimeout(() => {
+      const secondDot = document.querySelector('[class*="dotsContainer"] > div:nth-child(2) [class*="dot"]');
+      if (secondDot) {
+        secondDot.click();
+      }
+    }, 100);
+  }, [handleSectionChange]);
+
   // Компоненты для каждого раздела
   const sectionComponents = [
     // 1. Главная
@@ -295,7 +313,7 @@ export default function Home() {
         <div className="swipe-hint">
           <button 
             className="swipe-hint-button neon-outline"
-            onClick={() => setCurrentSection(1)}
+            onClick={handleSwipeHint}
             aria-label="Перейти к следующей секции"
           >
             <span className="hint-glow"></span>
