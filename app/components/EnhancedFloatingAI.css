@@ -19,13 +19,23 @@
   position: fixed;
   bottom: 30px;
   right: 30px;
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   border: none;
-  background: transparent;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-radius: 50%;
   cursor: pointer;
   z-index: 9999;
-  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-chat-icon {
+  font-size: 28px;
+  filter: grayscale(0);
 }
 
 .ai-chat-trigger:hover {
@@ -36,24 +46,9 @@
   transform: scale(0.9);
 }
 
-/* Уведомление о новой версии */
+/* Убраны лишние анимации */
 .notification-pulse {
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  background: linear-gradient(135deg, var(--ai-accent), var(--ai-warning));
-  color: white;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 10px;
-  font-weight: bold;
-  animation: pulse-glow 2s infinite;
-  box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
-}
-
-@keyframes pulse-glow {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 107, 53, 0.5); }
-  50% { transform: scale(1.1); box-shadow: 0 0 30px rgba(255, 107, 53, 0.8); }
+  display: none;
 }
 
 /* AI АВАТАР - Главная фишка! */
@@ -457,32 +452,29 @@
 
 /* Заголовок чата */
 .enhanced-chat-header {
-  padding: 20px;
-  background: linear-gradient(135deg, var(--ai-card), var(--ai-dark));
-  border-bottom: 1px solid var(--ai-border);
+  padding: 10px 15px;
+  background: rgba(26, 26, 46, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
-  gap: 15px;
+  justify-content: space-between;
+  gap: 10px;
   position: relative;
-  overflow: visible;
-  min-height: 80px;
-  flex-wrap: wrap;
+  min-height: 50px;
 }
 
-.enhanced-chat-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
-  animation: header-scan 3s linear infinite;
+/* Название AI */
+.ai-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
 }
 
-@keyframes header-scan {
-  0% { left: -100%; }
-  100% { left: 100%; }
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .header-avatar {
@@ -562,21 +554,21 @@
 }
 
 .model-btn {
-  display: flex !important;
+  display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 6px 12px;
-  border: 2px solid #ff0000 !important;
-  background: rgba(255, 0, 0, 0.2) !important;
-  color: #ffffff !important;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
   cursor: pointer;
   border-radius: 8px;
   font-size: 12px;
-  font-weight: 500;
-  transition: all 0.3s ease;
+  font-weight: bold;
+  transition: all 0.2s ease;
   position: relative;
-  opacity: 1 !important;
-  visibility: visible !important;
 }
 
 .model-btn:hover {
@@ -616,14 +608,9 @@
   }
 }
 
-/* Переключатель персональности */
+/* Переключатель персональности - скрыт для минимализма */
 .personality-selector {
-  display: flex;
-  gap: 5px;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 4px;
-  border-radius: 12px;
-  border: 1px solid var(--ai-border);
+  display: none;
 }
 
 .personality-btn {
@@ -655,21 +642,19 @@
 .close-btn {
   width: 32px;
   height: 32px;
-  border: 2px solid #ff0000 !important;
-  background: #ff0000 !important;
-  color: white !important;
-  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
   cursor: pointer;
-  display: flex !important;
+  display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
-  font-size: 18px;
-  font-weight: bold;
-  opacity: 1 !important;
-  visibility: visible !important;
-  position: relative;
-  z-index: 9999;
+  transition: all 0.2s ease;
+  font-size: 16px;
+  font-weight: normal;
+  padding: 0;
+  margin-left: 10px;
 }
 
 .close-btn:hover {
@@ -1038,24 +1023,18 @@
   }
 
   .header-controls {
-    flex-direction: column;
-    gap: 5px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
   }
   
   .model-selector {
-    width: 100%;
-    justify-content: space-between;
+    display: flex !important;
+    gap: 5px;
   }
   
-  .model-btn {
-    padding: 4px 8px;
-    font-size: 11px;
-  }
-  
-  .model-icon {
-    width: 16px;
-    height: 16px;
-    font-size: 9px;
+  .ai-name {
+    font-size: 14px;
   }
 }
 

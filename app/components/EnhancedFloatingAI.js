@@ -396,75 +396,40 @@ export default function EnhancedFloatingAI() {
         onClick={() => setIsOpen(!isOpen)}
         style={{ bottom: position.y, right: position.x }}
       >
-        <AIAvatar isActive={isOpen} personality={aiPersonality} />
-        
-        {/* Уведомление о новых возможностях */}
-        {!isOpen && (
-          <div className="notification-pulse">
-            <span className="notification-text">AI v4.0</span>
-          </div>
-        )}
+        <div className="ai-chat-icon">💬</div>
       </button>
 
       {/* Диалоговое окно */}
       {isOpen && (
         <div className="enhanced-ai-chat-container">
-          {/* Заголовок с AI аватаром */}
+          {/* Компактная шапка */}
           <div className="enhanced-chat-header">
-            <div className="header-avatar">
-              <AIAvatar isActive={true} personality={aiPersonality} />
+            <div className="header-left">
+              <h3 className="ai-name">NeuroExpert AI</h3>
             </div>
-            <div className="header-info">
-              <h3 className="ai-name">Александр Нейронов</h3>
-              <p className="ai-title">AI-Помощник NeuroExpert v4.0</p>
-              <div className="ai-stats">
-                <span className="stat">
-                  <span className="stat-icon">💼</span>
-                  <span className="stat-value">{stats.successfulSolutions}+</span>
-                  <span className="stat-label">решений</span>
-                </span>
-                <span className="stat">
-                  <span className="stat-icon">⚡</span>
-                  <span className="stat-value">{stats.avgResponseTime}ms</span>
-                  <span className="stat-label">ответ</span>
-                </span>
-                <span className="stat">
-                  <span className="stat-icon">⭐</span>
-                  <span className="stat-value">{stats.satisfaction}%</span>
-                  <span className="stat-label">успех</span>
-                </span>
-              </div>
-            </div>
-            <div className="header-controls" style={{background: 'rgba(255,0,0,0.3)', padding: '10px'}}>
-              <div style={{color: 'yellow', fontSize: '14px'}}>DEBUG: Controls Here</div>
+            <div className="header-controls">
               {/* Выбор модели AI */}
               <div className="model-selector">
                 <button 
                   className={`model-btn ${selectedModel === 'gemini' ? 'active' : ''}`}
-                  onClick={() => { console.log('Gemini clicked'); setSelectedModel('gemini'); }}
+                  onClick={() => setSelectedModel('gemini')}
                   title="Google Gemini"
-                  style={{minWidth: '40px'}}
                 >
-                  <span className="model-icon">G</span>
-                  <span className="model-name">Gemini</span>
+                  G
                 </button>
                 <button 
                   className={`model-btn ${selectedModel === 'claude' ? 'active' : ''}`}
-                  onClick={() => { console.log('Claude clicked'); setSelectedModel('claude'); }}
+                  onClick={() => setSelectedModel('claude')}
                   title="Anthropic Claude"
-                  style={{minWidth: '40px'}}
                 >
-                  <span className="model-icon">C</span>
-                  <span className="model-name">Claude</span>
+                  C
                 </button>
                 <button 
                   className={`model-btn ${selectedModel === 'gpt' ? 'active' : ''}`}
-                  onClick={() => { console.log('GPT clicked'); setSelectedModel('gpt'); }}
-                  title="OpenAI GPT"
-                  style={{minWidth: '40px'}}
+                  onClick={() => setSelectedModel('gpt')}
+                  title="OpenAI GPT-4"
                 >
-                  <span className="model-icon">O</span>
-                  <span className="model-name">GPT-4</span>
+                  O
                 </button>
               </div>
 
@@ -495,11 +460,10 @@ export default function EnhancedFloatingAI() {
               
               <button 
                 className="close-btn"
-                onClick={() => { console.log('Close clicked'); setIsOpen(false); }}
+                onClick={() => setIsOpen(false)}
                 aria-label="Закрыть чат"
-                style={{background: 'red', color: 'white', fontSize: '20px'}}
               >
-                ✕ CLOSE
+                ✕
               </button>
             </div>
           </div>
