@@ -3094,3 +3094,63 @@ button:disabled {
 
 /* Workspace styles already imported at the top */
 
+/* Button loading and interaction states */
+.cta-button.loading,
+.refresh-button.refreshing,
+.rec-action-button.loading {
+  position: relative;
+  color: transparent;
+  pointer-events: none;
+}
+
+.cta-button.loading::after,
+.refresh-button.refreshing::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 50%;
+  left: 50%;
+  margin-left: -10px;
+  margin-top: -10px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 0.8s linear infinite;
+}
+
+.refresh-button svg.rotating {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Disabled state */
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Filter and form control states */
+.filter-select:focus,
+input:focus,
+textarea:focus {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 2px;
+}
+
+/* Success/Error feedback */
+.success-feedback {
+  color: #10b981;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.error-feedback {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+

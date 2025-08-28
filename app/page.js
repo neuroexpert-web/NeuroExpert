@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useCallback, Suspense } from 'react';
+import { useState, useCallback, Suspense, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import SwipeContainer from './components/SwipeContainer';
 
@@ -160,8 +161,19 @@ const GamificationHub = dynamic(() => import('./components/GamificationHub'), {
 });
 
 export default function Home() {
+  const router = useRouter();
   const [currentSection, setCurrentSection] = useState(0);
   const [activeSegment, setActiveSegment] = useState('loyal');
+  const [loading, setLoading] = useState(false);
+  const [dataPeriod, setDataPeriod] = useState('week');
+  const [segmentFilter, setSegmentFilter] = useState('all');
+  const [refreshing, setRefreshing] = useState(false);
+  const [analyticsData, setAnalyticsData] = useState({
+    revenue: 15420875,
+    clients: 3241,
+    satisfaction: 4.8,
+    conversion: 3.8
+  });
   
   // Определение разделов для навигации
   const sections = [
@@ -187,6 +199,71 @@ export default function Home() {
     setActiveSegment(segment);
   }, []);
 
+  // Обработчик для кнопки CTA
+  const handleCTAClick = useCallback(() => {
+    setLoading(true);
+    // Симуляция загрузки
+    setTimeout(() => {
+      router.push('/register');
+      setLoading(false);
+    }, 300);
+  }, [router]);
+
+  // Обработчик обновления данных
+  const handleRefreshData = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      // Симуляция загрузки новых данных
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Обновляем данные с небольшими изменениями для демонстрации
+      setAnalyticsData(prev => ({
+        revenue: prev.revenue + Math.floor(Math.random() * 100000 - 50000),
+        clients: prev.clients + Math.floor(Math.random() * 100 - 50),
+        satisfaction: Math.max(0, Math.min(5, prev.satisfaction + (Math.random() * 0.2 - 0.1))),
+        conversion: Math.max(0, Math.min(100, prev.conversion + (Math.random() * 0.5 - 0.25)))
+      }));
+    } catch (error) {
+      console.error('Ошибка при обновлении данных:', error);
+    } finally {
+      setRefreshing(false);
+    }
+  }, []);
+
+  // Обработчик изменения периода
+  const handlePeriodChange = useCallback((e) => {
+    setDataPeriod(e.target.value);
+    handleRefreshData();
+  }, [handleRefreshData]);
+
+  // Обработчик изменения фильтра сегментов
+  const handleSegmentFilterChange = useCallback((e) => {
+    setSegmentFilter(e.target.value);
+    handleRefreshData();
+  }, [handleRefreshData]);
+
+  // Обработчики для кнопок рекомендаций
+  const handleRecommendationAction = useCallback((action, type) => {
+    console.log(`Действие: ${action}, Тип: ${type}`);
+    
+    switch (action) {
+      case 'optimize-mobile':
+        alert('Начинаем оптимизацию мобильной версии. В реальном приложении здесь будет переход к мастеру оптимизации.');
+        break;
+      case 'create-campaign':
+        alert('Создание email-кампании. В реальном приложении здесь будет форма создания кампании.');
+        break;
+      case 'launch-loyalty':
+        alert('Запуск программы лояльности. В реальном приложении здесь будет настройка программы.');
+        break;
+      case 'view-details':
+        alert(`Просмотр деталей для: ${type}`);
+        break;
+      default:
+        console.log('Неизвестное действие:', action);
+    }
+  }, []);
+
   // Компоненты для каждого раздела
   const sectionComponents = [
     // 1. Главная
@@ -198,8 +275,12 @@ export default function Home() {
           <p className="descriptor">
             Цифровая трансформация<br/>бизнеса с помощью AI
           </p>
-          <button className="cta-button">
-            Начать бесплатно
+          <button 
+            className={`cta-button ${loading ? 'loading' : ''}`}
+            onClick={handleCTAClick}
+            disabled={loading}
+          >
+            {loading ? 'Загрузка...' : 'Начать бесплатно'}
           </button>
         </div>
         <div className="swipe-hint">
@@ -220,27 +301,42 @@ export default function Home() {
       <div className="filters-panel glass-card">
         <div className="filter-group">
           <label htmlFor="date-filter">Период:</label>
-          <select id="date-filter" className="filter-select">
+          <select 
+            id="date-filter" 
+            className="filter-select"
+            value={dataPeriod}
+            onChange={handlePeriodChange}
+          >
             <option value="today">Сегодня</option>
-            <option value="week" selected>Последние 7 дней</option>
+            <option value="week">Последние 7 дней</option>
             <option value="month">Последние 30 дней</option>
             <option value="quarter">Квартал</option>
           </select>
         </div>
         <div className="filter-group">
           <label htmlFor="segment-filter">Сегмент:</label>
-          <select id="segment-filter" className="filter-select">
+          <select 
+            id="segment-filter" 
+            className="filter-select"
+            value={segmentFilter}
+            onChange={handleSegmentFilterChange}
+          >
             <option value="all">Все клиенты</option>
             <option value="new">Новые</option>
             <option value="returning">Постоянные</option>
             <option value="vip">VIP</option>
           </select>
         </div>
-        <button className="refresh-button" aria-label="Обновить данные">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <button 
+          className={`refresh-button ${refreshing ? 'refreshing' : ''}`}
+          onClick={handleRefreshData}
+          disabled={refreshing}
+          aria-label="Обновить данные"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={refreshing ? 'rotating' : ''}>
             <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" strokeWidth="2" strokeLinecap="round"/>
           </svg>
-          <span>Обновить</span>
+          <span>{refreshing ? 'Обновление...' : 'Обновить'}</span>
         </button>
       </div>
         {/* KPI карточки с пояснениями */}
@@ -262,7 +358,7 @@ export default function Home() {
                 Общая выручка за выбранный период от всех каналов продаж. Включает все успешные транзакции.
               </div>
             </div>
-            <div className="kpi-value">₽ 7 128,4K</div>
+            <div className="kpi-value">₽ {(analyticsData.revenue / 1000).toFixed(1)}K</div>
             <div className="kpi-description">За последние 7 дней</div>
             <div className="kpi-trend positive">
               <span className="trend-icon">↑</span>
@@ -288,7 +384,7 @@ export default function Home() {
                 Количество новых уникальных пользователей, которые совершили первую покупку или регистрацию.
               </div>
             </div>
-            <div className="kpi-value">162</div>
+            <div className="kpi-value">{analyticsData.clients}</div>
             <div className="kpi-description">Зарегистрировались за неделю</div>
             <div className="kpi-trend positive">
               <span className="trend-icon">↑</span>
@@ -314,7 +410,7 @@ export default function Home() {
                 Средняя оценка клиентов на основе отзывов и NPS-опросов.
               </div>
             </div>
-            <div className="kpi-value">4.85/5</div>
+            <div className="kpi-value">{analyticsData.satisfaction.toFixed(1)}/5</div>
             <div className="kpi-description">Средняя оценка клиентов</div>
             <div className="kpi-trend negative">
               <span className="trend-icon">↓</span>
@@ -340,7 +436,7 @@ export default function Home() {
                 Процент посетителей, совершивших целевое действие (покупка, регистрация, подписка).
               </div>
             </div>
-            <div className="kpi-value">3.13%</div>
+            <div className="kpi-value">{analyticsData.conversion.toFixed(2)}%</div>
             <div className="kpi-description">Из посетителей в клиенты</div>
             <div className="kpi-trend positive">
               <span className="trend-icon">↑</span>
@@ -420,8 +516,18 @@ export default function Home() {
               </div>
               <p>Мы заметили, что 72% ваших новых пользователей заходят с телефонов, но конверсия на мобильных ниже на 40%. Оптимизация интерфейса решит эту проблему.</p>
               <div className="rec-actions">
-                <button className="rec-action-button primary">Начать оптимизацию</button>
-                <button className="rec-action-button secondary">Узнать детали</button>
+                <button 
+                  className="rec-action-button primary"
+                  onClick={() => handleRecommendationAction('optimize-mobile', 'mobile-optimization')}
+                >
+                  Начать оптимизацию
+                </button>
+                <button 
+                  className="rec-action-button secondary"
+                  onClick={() => handleRecommendationAction('view-details', 'mobile-optimization')}
+                >
+                  Узнать детали
+                </button>
               </div>
             </div>
             
@@ -444,8 +550,18 @@ export default function Home() {
               </div>
               <p>Клиенты из сегмента "Малый бизнес" стали реже совершать покупки (-25% за месяц). Персонализированная email-кампания поможет их вернуть.</p>
               <div className="rec-actions">
-                <button className="rec-action-button primary">Создать кампанию</button>
-                <button className="rec-action-button secondary">Посмотреть список</button>
+                <button 
+                  className="rec-action-button primary"
+                  onClick={() => handleRecommendationAction('create-campaign', 'email-reactivation')}
+                >
+                  Создать кампанию
+                </button>
+                <button 
+                  className="rec-action-button secondary"
+                  onClick={() => handleRecommendationAction('view-details', 'customer-list')}
+                >
+                  Посмотреть список
+                </button>
               </div>
             </div>
 
@@ -461,8 +577,18 @@ export default function Home() {
               <h4>Увеличьте частоту покупок</h4>
               <p>Внедрение программы лояльности может увеличить повторные покупки на 30% и средний чек на 20%.</p>
               <div className="rec-actions">
-                <button className="rec-action-button primary">Запустить программу</button>
-                <button className="rec-action-button secondary">Изучить варианты</button>
+                <button 
+                  className="rec-action-button primary"
+                  onClick={() => handleRecommendationAction('launch-loyalty', 'loyalty-program')}
+                >
+                  Запустить программу
+                </button>
+                <button 
+                  className="rec-action-button secondary"
+                  onClick={() => handleRecommendationAction('view-details', 'loyalty-options')}
+                >
+                  Изучить варианты
+                </button>
               </div>
             </div>
           </div>

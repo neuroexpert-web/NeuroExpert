@@ -1,582 +1,477 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import styles from './PricingCalculator.module.css';
 
 export default function PricingCalculator() {
-  useEffect(() => {
-    // Расчет стоимости
-    const calculatePrice = () => {
-      // Базовые цены
-      const basePrices = {
-        'plan-start': 39900,
-        'plan-business': 89900,
-        'plan-enterprise': 199900
-      };
-      
-      // Получаем выбранный тариф
-      const selectedPlan = document.querySelector('input[name="base-plan"]:checked');
-      const basePrice = selectedPlan ? parseInt(selectedPlan.value) : 39900;
-      
-      // Получаем количество пользователей
-      const usersSlider = document.getElementById('users-slider');
-      const users = parseInt(usersSlider.value);
-      
-      // Дополнительная стоимость за пользователей
-      let usersCost = 0;
-      if (users > 10) {
-        usersCost = (users - 10) * 500; // 500₽ за каждого дополнительного пользователя
-      }
-      
-      // Получаем объем данных
-      const dataSlider = document.getElementById('data-slider');
-      const dataGB = parseInt(dataSlider.value);
-      
-      // Дополнительная стоимость за данные
-      let dataCost = 0;
-      if (dataGB > 100) {
-        dataCost = Math.floor((dataGB - 100) / 100) * 1000; // 1000₽ за каждые 100ГБ
-      }
-      
-      // Получаем количество интеграций
-      const integrationsSlider = document.getElementById('integrations-slider');
-      const integrations = parseInt(integrationsSlider.value);
-      
-      // Дополнительная стоимость за интеграции
-      let integrationsCost = 0;
-      if (integrations > 5) {
-        integrationsCost = (integrations - 5) * 2000; // 2000₽ за каждую дополнительную интеграцию
-      }
-      
-      // Дополнительные опции
-      let optionsCost = 0;
-      const optionCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-      optionCheckboxes.forEach(checkbox => {
-        optionsCost += parseInt(checkbox.value);
-      });
-      
-      // Общая стоимость до скидки
-      const subtotal = basePrice + usersCost + dataCost + integrationsCost + optionsCost;
-      
-      // Получаем период
-      const selectedPeriod = document.querySelector('input[name="period"]:checked');
-      const periodMonths = selectedPeriod ? parseInt(selectedPeriod.value) : 1;
-      
-      // Расчет скидки
-      let discount = 0;
-      if (periodMonths === 3) {
-        discount = subtotal * 0.05; // 5% скидка за квартал
-      } else if (periodMonths === 12) {
-        discount = subtotal * 0.15; // 15% скидка за год
-      }
-      
-      // Итоговая стоимость
-      const total = subtotal - discount;
-      
-      // Обновляем отображение
-      updatePriceDisplay(basePrice, optionsCost + usersCost + dataCost + integrationsCost, discount, total);
-    };
+  // Состояния для всех параметров калькулятора
+  const [selectedPlan, setSelectedPlan] = useState('plan-start');
+  const [period, setPeriod] = useState(1);
+  const [users, setUsers] = useState(10);
+  const [dataVolume, setDataVolume] = useState(100);
+  const [integrations, setIntegrations] = useState(5);
+  const [showContactForm, setShowContactForm] = useState(false);
+  
+  // Дополнительные опции
+  const [options, setOptions] = useState({
+    aiAssistant: false,
+    premiumSupport: false,
+    customization: false,
+    training: false
+  });
+
+  // Базовые цены тарифов
+  const basePrices = {
+    'plan-start': 39900,
+    'plan-business': 89900,
+    'plan-enterprise': 199900
+  };
+
+  // Цены дополнительных опций
+  const optionPrices = {
+    aiAssistant: 15000,
+    premiumSupport: 10000,
+    customization: 25000,
+    training: 20000
+  };
+
+  // Расчет стоимости
+  const calculatePrice = useCallback(() => {
+    // Базовая цена
+    let basePrice = basePrices[selectedPlan];
     
-    // Обновление отображения цен
-    const updatePriceDisplay = (base, options, discount, total) => {
-      const baseCostEl = document.getElementById('base-cost');
-      const optionsCostEl = document.getElementById('options-cost');
-      const discountAmountEl = document.getElementById('discount-amount');
-      const totalCostEl = document.getElementById('total-cost');
-      
-      if (baseCostEl) baseCostEl.textContent = formatPrice(base);
-      if (optionsCostEl) optionsCostEl.textContent = formatPrice(options);
-      if (discountAmountEl) discountAmountEl.textContent = discount > 0 ? `-${formatPrice(discount)}` : '0₽';
-      if (totalCostEl) {
-        totalCostEl.textContent = formatPrice(total);
-        // Анимация изменения цены
-        totalCostEl.style.animation = 'priceUpdate 0.5s ease-out';
-        setTimeout(() => {
-          totalCostEl.style.animation = '';
-        }, 500);
+    // Дополнительная стоимость за пользователей
+    let usersCost = 0;
+    if (users > 10) {
+      usersCost = (users - 10) * 500;
+    }
+    
+    // Дополнительная стоимость за данные
+    let dataCost = 0;
+    if (dataVolume > 100) {
+      dataCost = Math.floor((dataVolume - 100) / 100) * 1000;
+    }
+    
+    // Дополнительная стоимость за интеграции
+    let integrationsCost = 0;
+    if (integrations > 5) {
+      integrationsCost = (integrations - 5) * 2000;
+    }
+    
+    // Стоимость дополнительных опций
+    let optionsCost = 0;
+    Object.entries(options).forEach(([key, value]) => {
+      if (value) {
+        optionsCost += optionPrices[key];
       }
-    };
+    });
     
-    // Форматирование цены
-    const formatPrice = (price) => {
-      return new Intl.NumberFormat('ru-RU').format(price) + '₽';
-    };
+    // Общая стоимость до скидки
+    const subtotal = basePrice + usersCost + dataCost + integrationsCost + optionsCost;
     
-    // Обновление отображения значений слайдеров
-    const updateSliderDisplays = () => {
-      // Пользователи
-      const usersSlider = document.getElementById('users-slider');
-      const usersValue = document.getElementById('users-value');
-      if (usersSlider && usersValue) {
-        usersSlider.addEventListener('input', function() {
-          usersValue.textContent = this.value;
-          calculatePrice();
-        });
-      }
-      
-      // Данные
-      const dataSlider = document.getElementById('data-slider');
-      const dataValue = document.getElementById('data-value');
-      if (dataSlider && dataValue) {
-        dataSlider.addEventListener('input', function() {
-          const gb = parseInt(this.value);
-          if (gb >= 1000) {
-            dataValue.textContent = (gb / 1000).toFixed(1) + ' ТБ';
-          } else {
-            dataValue.textContent = gb + ' ГБ';
-          }
-          calculatePrice();
-        });
-      }
-      
-      // Интеграции
-      const integrationsSlider = document.getElementById('integrations-slider');
-      const integrationsValue = document.getElementById('integrations-value');
-      if (integrationsSlider && integrationsValue) {
-        integrationsSlider.addEventListener('input', function() {
-          integrationsValue.textContent = this.value;
-          calculatePrice();
-        });
-      }
-    };
+    // Расчет скидки
+    let discount = 0;
+    if (period === 3) {
+      discount = subtotal * 0.05; // 5% скидка за квартал
+    } else if (period === 12) {
+      discount = subtotal * 0.15; // 15% скидка за год
+    }
     
-    // Добавление слушателей событий
-    const setupEventListeners = () => {
-      // Выбор тарифа
-      const planRadios = document.querySelectorAll('input[name="base-plan"]');
-      planRadios.forEach(radio => {
-        radio.addEventListener('change', calculatePrice);
-      });
-      
-      // Выбор периода
-      const periodRadios = document.querySelectorAll('input[name="period"]');
-      periodRadios.forEach(radio => {
-        radio.addEventListener('change', calculatePrice);
-      });
-      
-      // Дополнительные опции
-      const optionCheckboxes = document.querySelectorAll('input[type="checkbox"]');
-      optionCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', calculatePrice);
-      });
-      
-      // Кнопки выбора тарифа
-      const selectButtons = document.querySelectorAll('.plan-select-btn');
-      selectButtons.forEach(button => {
-        button.addEventListener('click', function() {
-          const planType = this.getAttribute('data-plan');
-          selectPlan(planType);
-        });
-      });
-    };
+    // Итоговая стоимость
+    const total = subtotal - discount;
+    const monthlyPrice = total / period;
     
-    // Выбор тарифа через кнопку
-    const selectPlan = (planType) => {
-      const planMap = {
-        'start': 'plan-start',
-        'business': 'plan-business',
-        'enterprise': 'plan-enterprise'
-      };
-      
-      const radioId = planMap[planType];
-      if (radioId) {
-        const radio = document.getElementById(radioId);
-        if (radio) {
-          radio.checked = true;
-          calculatePrice();
-          
-          // Прокрутка к калькулятору
-          const calculator = document.querySelector('.pricing-calculator');
-          if (calculator) {
-            calculator.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-          
-          // Подсветка выбранного тарифа
-          showPlanHighlight(planType);
-        }
-      }
+    return {
+      basePrice,
+      additionalCosts: usersCost + dataCost + integrationsCost,
+      optionsCost,
+      subtotal,
+      discount,
+      total,
+      monthlyPrice
     };
+  }, [selectedPlan, period, users, dataVolume, integrations, options]);
+
+  const prices = calculatePrice();
+
+  // Форматирование цены
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('ru-RU').format(Math.round(price));
+  };
+
+  // Обработчик изменения опций
+  const handleOptionChange = (option) => {
+    setOptions(prev => ({
+      ...prev,
+      [option]: !prev[option]
+    }));
+  };
+
+  // Обработчик заказа
+  const handleOrder = () => {
+    setShowContactForm(true);
+  };
+
+  // Обработчик отправки формы
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData);
     
-    // Подсветка выбранного тарифа
-    const showPlanHighlight = (planType) => {
-      const allPlans = document.querySelectorAll('.pricing-plan');
-      allPlans.forEach(plan => {
-        plan.classList.remove('selected');
-      });
-      
-      const selectedPlan = document.querySelector(`[data-plan="${planType}"]`);
-      if (selectedPlan) {
-        selectedPlan.classList.add('selected');
-        selectedPlan.style.animation = 'planSelect 0.5s ease-out';
-        setTimeout(() => {
-          selectedPlan.style.animation = '';
-        }, 500);
-      }
-    };
+    console.log('Заказ:', {
+      ...data,
+      plan: selectedPlan,
+      period,
+      users,
+      dataVolume,
+      integrations,
+      options,
+      total: prices.total
+    });
     
-    // Тултипы для слайдеров
-    const setupTooltips = () => {
-      const sliders = document.querySelectorAll('.custom-slider');
-      
-      sliders.forEach(slider => {
-        const tooltip = slider.getAttribute('data-tooltip');
-        if (tooltip) {
-          slider.addEventListener('mouseenter', function(e) {
-            showTooltip(e.target, tooltip);
-          });
-          
-          slider.addEventListener('mouseleave', function() {
-            hideTooltip();
-          });
-        }
-      });
-    };
-    
-    // Показать тултип
-    const showTooltip = (element, text) => {
-      const tooltip = document.createElement('div');
-      tooltip.className = 'slider-tooltip';
-      tooltip.textContent = text;
-      tooltip.style.cssText = `
-        position: absolute;
-        background: rgba(0, 0, 0, 0.9);
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        font-size: 0.875rem;
-        z-index: 1000;
-        pointer-events: none;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        max-width: 250px;
-        text-align: center;
-      `;
-      
-      document.body.appendChild(tooltip);
-      
-      const rect = element.getBoundingClientRect();
-      tooltip.style.left = rect.left + rect.width / 2 - tooltip.offsetWidth / 2 + 'px';
-      tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + 'px';
-      
-      requestAnimationFrame(() => {
-        tooltip.style.opacity = '1';
-      });
-      
-      window.currentTooltip = tooltip;
-    };
-    
-    // Скрыть тултип
-    const hideTooltip = () => {
-      if (window.currentTooltip) {
-        const tooltip = window.currentTooltip;
-        tooltip.style.opacity = '0';
-        setTimeout(() => {
-          tooltip.remove();
-        }, 300);
-        window.currentTooltip = null;
-      }
-    };
-    
-    // Обработчики кнопок действий
-    const setupActionButtons = () => {
-      // Получить индивидуальное предложение
-      const getOfferBtn = document.querySelector('.btn-get-offer');
-      if (getOfferBtn) {
-        getOfferBtn.addEventListener('click', () => {
-          collectAndSendOffer();
-        });
-      }
-      
-      // Связаться с отделом продаж
-      const contactSalesBtn = document.querySelector('.btn-contact-sales');
-      if (contactSalesBtn) {
-        contactSalesBtn.addEventListener('click', () => {
-          showContactForm();
-        });
-      }
-    };
-    
-    // Сбор данных и отправка предложения
-    const collectAndSendOffer = () => {
-      const data = {
-        plan: document.querySelector('input[name="base-plan"]:checked')?.id,
-        users: document.getElementById('users-slider')?.value,
-        data: document.getElementById('data-slider')?.value,
-        integrations: document.getElementById('integrations-slider')?.value,
-        period: document.querySelector('input[name="period"]:checked')?.value,
-        options: Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.name),
-        totalPrice: document.getElementById('total-cost')?.textContent
-      };
-      
-      // Показываем уведомление
-      showNotification('Ваше предложение формируется. Мы свяжемся с вами в течение 24 часов!');
-      
-      // Здесь можно добавить отправку на сервер
-      console.log('Offer data:', data);
-    };
-    
-    // Показать форму контакта
-    const showContactForm = () => {
-      const form = document.createElement('div');
-      form.className = 'contact-form-modal';
-      form.innerHTML = `
-        <div class="form-content">
-          <h2>Связаться с отделом продаж</h2>
-          <form id="salesContactForm">
-            <div class="form-group">
-              <label>Имя *</label>
-              <input type="text" name="name" required>
+    alert('Спасибо за заказ! Мы свяжемся с вами в ближайшее время.');
+    setShowContactForm(false);
+  };
+
+  return (
+    <section className="pricing-section" id="pricing">
+      <header className="section-header">
+        <h2>Прозрачные цены без скрытых платежей</h2>
+        <p>Гибкие тарифы для бизнеса любого размера. Платите только за то, что используете.</p>
+      </header>
+
+      <div className="pricing-container">
+        {/* Выбор тарифа */}
+        <div className="pricing-plans">
+          <h3>1. Выберите базовый тариф</h3>
+          <div className="plans-grid">
+            <div 
+              className={`pricing-plan glass-card ${selectedPlan === 'plan-start' ? 'selected' : ''}`}
+              onClick={() => setSelectedPlan('plan-start')}
+            >
+              <h4>Start</h4>
+              <div className="plan-price">₽{formatPrice(basePrices['plan-start'])}/мес</div>
+              <ul className="plan-features">
+                <li>До 10 пользователей</li>
+                <li>100 ГБ хранилище</li>
+                <li>5 интеграций</li>
+                <li>Базовая аналитика</li>
+                <li>Email поддержка</li>
+              </ul>
             </div>
-            <div class="form-group">
-              <label>Компания</label>
-              <input type="text" name="company">
+
+            <div 
+              className={`pricing-plan glass-card recommended ${selectedPlan === 'plan-business' ? 'selected' : ''}`}
+              onClick={() => setSelectedPlan('plan-business')}
+            >
+              <div className="recommended-badge">Популярный</div>
+              <h4>Business</h4>
+              <div className="plan-price">₽{formatPrice(basePrices['plan-business'])}/мес</div>
+              <ul className="plan-features">
+                <li>До 50 пользователей</li>
+                <li>500 ГБ хранилище</li>
+                <li>15 интеграций</li>
+                <li>Расширенная аналитика</li>
+                <li>Приоритетная поддержка</li>
+                <li>AI-рекомендации</li>
+              </ul>
             </div>
-            <div class="form-group">
-              <label>Email *</label>
-              <input type="email" name="email" required>
+
+            <div 
+              className={`pricing-plan glass-card ${selectedPlan === 'plan-enterprise' ? 'selected' : ''}`}
+              onClick={() => setSelectedPlan('plan-enterprise')}
+            >
+              <h4>Enterprise</h4>
+              <div className="plan-price">₽{formatPrice(basePrices['plan-enterprise'])}/мес</div>
+              <ul className="plan-features">
+                <li>Неограниченно пользователей</li>
+                <li>Неограниченное хранилище</li>
+                <li>Все интеграции</li>
+                <li>Полная аналитика</li>
+                <li>Персональный менеджер</li>
+                <li>Кастомизация</li>
+                <li>SLA 99.9%</li>
+              </ul>
             </div>
-            <div class="form-group">
-              <label>Телефон *</label>
-              <input type="tel" name="phone" required>
-            </div>
-            <div class="form-group">
-              <label>Комментарий</label>
-              <textarea name="comment" rows="3" placeholder="Расскажите о ваших потребностях"></textarea>
-            </div>
-            <div class="form-actions">
-              <button type="submit" class="btn-submit">Отправить</button>
-              <button type="button" class="btn-cancel">Отмена</button>
-            </div>
-          </form>
+          </div>
         </div>
-      `;
-      
-      document.body.appendChild(form);
-      
-      // Обработчики
-      form.querySelector('.btn-cancel').addEventListener('click', () => {
-        form.remove();
-      });
-      
-      form.querySelector('#salesContactForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        showNotification('Спасибо! Наш менеджер свяжется с вами в ближайшее время.');
-        form.remove();
-      });
-    };
-    
-    // Уведомления
-    const showNotification = (message) => {
-      const notification = document.createElement('div');
-      notification.className = 'pricing-notification';
-      notification.textContent = message;
-      notification.style.cssText = `
-        position: fixed;
-        bottom: 2rem;
-        right: 2rem;
-        background: linear-gradient(135deg, #6366f1, #8b5cf6);
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 12px;
-        font-size: 0.875rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        animation: slideInRight 0.3s ease-out;
-        z-index: 10000;
-        max-width: 350px;
-      `;
-      
-      document.body.appendChild(notification);
-      
-      setTimeout(() => {
-        notification.style.animation = 'slideOutRight 0.3s ease-out';
-        setTimeout(() => {
-          notification.remove();
-        }, 300);
-      }, 5000);
-    };
-    
-    // Добавляем стили
-    const addStyles = () => {
-      const style = document.createElement('style');
-      style.textContent = `
-        .pricing-plan.selected {
-          transform: scale(1.08);
-          box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.5);
-        }
-        
-        @keyframes planSelect {
-          0% {
-            transform: scale(1);
-          }
-          50% {
-            transform: scale(1.1);
-          }
-          100% {
-            transform: scale(1.08);
-          }
-        }
-        
-        @keyframes priceUpdate {
-          0% {
-            transform: scale(1);
-            color: white;
-          }
-          50% {
-            transform: scale(1.2);
-            color: #fbbf24;
-          }
-          100% {
-            transform: scale(1);
-            color: white;
-          }
-        }
-        
-        .contact-form-modal {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(0, 0, 0, 0.9);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 10000;
-          animation: fadeIn 0.3s ease-out;
-          padding: 2rem;
-        }
-        
-        .form-content {
-          background: #1a1a2e;
-          border-radius: 20px;
-          padding: 2.5rem;
-          max-width: 500px;
-          width: 100%;
-          animation: slideInUp 0.3s ease-out;
-        }
-        
-        .form-content h2 {
-          color: white;
-          margin-bottom: 2rem;
-          text-align: center;
-        }
-        
-        .form-content .form-group {
-          margin-bottom: 1.5rem;
-        }
-        
-        .form-content label {
-          display: block;
-          color: rgba(255, 255, 255, 0.8);
-          margin-bottom: 0.5rem;
-          font-weight: 500;
-        }
-        
-        .form-content input,
-        .form-content textarea {
-          width: 100%;
-          padding: 0.75rem;
-          background: rgba(255, 255, 255, 0.1);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          border-radius: 8px;
-          color: white;
-          font-size: 1rem;
-        }
-        
-        .form-content input:focus,
-        .form-content textarea:focus {
-          outline: none;
-          border-color: #8b5cf6;
-          background: rgba(139, 92, 246, 0.1);
-        }
-        
-        .form-actions {
-          display: flex;
-          gap: 1rem;
-          justify-content: flex-end;
-          margin-top: 2rem;
-        }
-        
-        .btn-submit,
-        .btn-cancel {
-          padding: 0.75rem 1.5rem;
-          border-radius: 8px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          border: none;
-        }
-        
-        .btn-submit {
-          background: linear-gradient(135deg, #6366f1, #8b5cf6);
-          color: white;
-        }
-        
-        .btn-submit:hover {
-          transform: translateY(-2px);
-        }
-        
-        .btn-cancel {
-          background: transparent;
-          border: 1px solid rgba(255, 255, 255, 0.3);
-          color: white;
-        }
-        
-        .btn-cancel:hover {
-          background: rgba(255, 255, 255, 0.1);
-        }
-        
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        
-        @keyframes slideInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        @keyframes slideInRight {
-          from {
-            opacity: 0;
-            transform: translateX(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-        
-        @keyframes slideOutRight {
-          from {
-            opacity: 1;
-            transform: translateX(0);
-          }
-          to {
-            opacity: 0;
-            transform: translateX(30px);
-          }
-        }
-      `;
-      document.head.appendChild(style);
-    };
-    
-    // Инициализация
-    setTimeout(() => {
-      updateSliderDisplays();
-      setupEventListeners();
-      setupTooltips();
-      setupActionButtons();
-      calculatePrice(); // Начальный расчет
-      addStyles();
-    }, 500);
 
-  }, []);
+        {/* Период оплаты */}
+        <div className="pricing-period">
+          <h3>2. Выберите период оплаты</h3>
+          <div className="period-options">
+            <label className={`period-option ${period === 1 ? 'selected' : ''}`}>
+              <input 
+                type="radio" 
+                name="period" 
+                value="1"
+                checked={period === 1}
+                onChange={() => setPeriod(1)}
+              />
+              <span className="period-label">Ежемесячно</span>
+              <span className="period-discount">Без скидки</span>
+            </label>
+            
+            <label className={`period-option ${period === 3 ? 'selected' : ''}`}>
+              <input 
+                type="radio" 
+                name="period" 
+                value="3"
+                checked={period === 3}
+                onChange={() => setPeriod(3)}
+              />
+              <span className="period-label">Квартал</span>
+              <span className="period-discount">Скидка 5%</span>
+            </label>
+            
+            <label className={`period-option ${period === 12 ? 'selected' : ''}`}>
+              <input 
+                type="radio" 
+                name="period" 
+                value="12"
+                checked={period === 12}
+                onChange={() => setPeriod(12)}
+              />
+              <span className="period-label">Год</span>
+              <span className="period-discount">Скидка 15%</span>
+            </label>
+          </div>
+        </div>
 
-  return null;
+        {/* Настройка параметров */}
+        <div className="pricing-customization">
+          <h3>3. Настройте под свои нужды</h3>
+          
+          <div className="slider-group">
+            <label>
+              <span className="slider-label">Количество пользователей: {users}</span>
+              <input 
+                type="range" 
+                min="1" 
+                max="100" 
+                value={users}
+                onChange={(e) => setUsers(parseInt(e.target.value))}
+                className="slider"
+              />
+              <div className="slider-info">
+                {users > 10 && <span className="extra-cost">+₽{formatPrice((users - 10) * 500)}/мес</span>}
+              </div>
+            </label>
+          </div>
+
+          <div className="slider-group">
+            <label>
+              <span className="slider-label">Объём данных: {dataVolume} ГБ</span>
+              <input 
+                type="range" 
+                min="10" 
+                max="1000" 
+                step="10"
+                value={dataVolume}
+                onChange={(e) => setDataVolume(parseInt(e.target.value))}
+                className="slider"
+              />
+              <div className="slider-info">
+                {dataVolume > 100 && <span className="extra-cost">+₽{formatPrice(Math.floor((dataVolume - 100) / 100) * 1000)}/мес</span>}
+              </div>
+            </label>
+          </div>
+
+          <div className="slider-group">
+            <label>
+              <span className="slider-label">Количество интеграций: {integrations}</span>
+              <input 
+                type="range" 
+                min="0" 
+                max="50" 
+                value={integrations}
+                onChange={(e) => setIntegrations(parseInt(e.target.value))}
+                className="slider"
+              />
+              <div className="slider-info">
+                {integrations > 5 && <span className="extra-cost">+₽{formatPrice((integrations - 5) * 2000)}/мес</span>}
+              </div>
+            </label>
+          </div>
+        </div>
+
+        {/* Дополнительные опции */}
+        <div className="pricing-options">
+          <h3>4. Дополнительные опции</h3>
+          <div className="options-grid">
+            <label className={`option-card ${options.aiAssistant ? 'selected' : ''}`}>
+              <input 
+                type="checkbox" 
+                checked={options.aiAssistant}
+                onChange={() => handleOptionChange('aiAssistant')}
+              />
+              <div className="option-content">
+                <h5>AI-ассистент Pro</h5>
+                <p>Продвинутые AI функции и автоматизация</p>
+                <span className="option-price">+₽{formatPrice(optionPrices.aiAssistant)}/мес</span>
+              </div>
+            </label>
+
+            <label className={`option-card ${options.premiumSupport ? 'selected' : ''}`}>
+              <input 
+                type="checkbox" 
+                checked={options.premiumSupport}
+                onChange={() => handleOptionChange('premiumSupport')}
+              />
+              <div className="option-content">
+                <h5>Premium поддержка</h5>
+                <p>24/7 поддержка с SLA 1 час</p>
+                <span className="option-price">+₽{formatPrice(optionPrices.premiumSupport)}/мес</span>
+              </div>
+            </label>
+
+            <label className={`option-card ${options.customization ? 'selected' : ''}`}>
+              <input 
+                type="checkbox" 
+                checked={options.customization}
+                onChange={() => handleOptionChange('customization')}
+              />
+              <div className="option-content">
+                <h5>Кастомизация</h5>
+                <p>Индивидуальная настройка под ваш бизнес</p>
+                <span className="option-price">+₽{formatPrice(optionPrices.customization)}/мес</span>
+              </div>
+            </label>
+
+            <label className={`option-card ${options.training ? 'selected' : ''}`}>
+              <input 
+                type="checkbox" 
+                checked={options.training}
+                onChange={() => handleOptionChange('training')}
+              />
+              <div className="option-content">
+                <h5>Обучение команды</h5>
+                <p>Онлайн-курсы и личные тренинги</p>
+                <span className="option-price">+₽{formatPrice(optionPrices.training)}/мес</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        {/* Итоговый расчет */}
+        <div className="pricing-summary glass-card">
+          <h3>Итоговая стоимость</h3>
+          <div className="summary-breakdown">
+            <div className="summary-line">
+              <span>Базовый тариф:</span>
+              <span>₽{formatPrice(prices.basePrice)}</span>
+            </div>
+            {prices.additionalCosts > 0 && (
+              <div className="summary-line">
+                <span>Дополнительные ресурсы:</span>
+                <span>₽{formatPrice(prices.additionalCosts)}</span>
+              </div>
+            )}
+            {prices.optionsCost > 0 && (
+              <div className="summary-line">
+                <span>Дополнительные опции:</span>
+                <span>₽{formatPrice(prices.optionsCost)}</span>
+              </div>
+            )}
+            {prices.discount > 0 && (
+              <div className="summary-line discount">
+                <span>Скидка за период:</span>
+                <span>-₽{formatPrice(prices.discount)}</span>
+              </div>
+            )}
+            <div className="summary-line total">
+              <span>Итого за {period === 1 ? 'месяц' : period === 3 ? '3 месяца' : 'год'}:</span>
+              <span>₽{formatPrice(prices.total)}</span>
+            </div>
+            {period > 1 && (
+              <div className="summary-line monthly">
+                <span>В месяц:</span>
+                <span>₽{formatPrice(prices.monthlyPrice)}</span>
+              </div>
+            )}
+          </div>
+          
+          <button 
+            className="order-button"
+            onClick={handleOrder}
+          >
+            Оформить подписку
+          </button>
+          
+          <p className="summary-note">
+            🔒 Безопасная оплата • Отмена в любое время • Гарантия возврата 30 дней
+          </p>
+        </div>
+      </div>
+
+      {/* Модальное окно с формой контакта */}
+      {showContactForm && (
+        <div className="contact-form-modal" onClick={() => setShowContactForm(false)}>
+          <div className="form-content" onClick={(e) => e.stopPropagation()}>
+            <h2>Оформление подписки</h2>
+            <form onSubmit={handleFormSubmit}>
+              <div className="form-group">
+                <label htmlFor="company">Компания</label>
+                <input 
+                  type="text" 
+                  id="company" 
+                  name="company" 
+                  required 
+                  placeholder="ООО Рога и копыта"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="name">Контактное лицо</label>
+                <input 
+                  type="text" 
+                  id="name" 
+                  name="name" 
+                  required 
+                  placeholder="Иван Иванов"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <input 
+                  type="email" 
+                  id="email" 
+                  name="email" 
+                  required 
+                  placeholder="ivan@company.ru"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="phone">Телефон</label>
+                <input 
+                  type="tel" 
+                  id="phone" 
+                  name="phone" 
+                  required 
+                  placeholder="+7 (999) 123-45-67"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="comments">Комментарии</label>
+                <textarea 
+                  id="comments" 
+                  name="comments" 
+                  rows="3" 
+                  placeholder="Дополнительные пожелания..."
+                ></textarea>
+              </div>
+              
+              <div className="form-actions">
+                <button type="submit" className="btn-submit">Отправить заявку</button>
+                <button type="button" className="btn-cancel" onClick={() => setShowContactForm(false)}>Отмена</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </section>
+  );
 }
