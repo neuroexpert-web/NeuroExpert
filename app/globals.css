@@ -3094,79 +3094,175 @@ button:disabled {
 
 /* Workspace styles already imported at the top */
 
-/* Premium CTA Button Styles */
-.cta-button.premium-cta {
-  background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
+/* Neon Gradient Hero Button */
+.hero-cta-button.neon-gradient {
+  position: relative;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #667eea 100%);
+  background-size: 400% 400%;
   color: white;
   border: none;
-  padding: 16px 32px;
-  font-size: 18px;
-  font-weight: 600;
-  border-radius: 50px;
+  padding: 20px 40px;
+  font-size: 20px;
+  font-weight: 700;
+  border-radius: 60px;
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
-  position: relative;
   overflow: hidden;
+  animation: gradient-shift 3s ease infinite;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: all 0.3s ease;
 }
 
-.cta-button.premium-cta:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 30px rgba(139, 92, 246, 0.4);
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-.cta-button.premium-cta:active {
-  transform: translateY(0);
+.hero-cta-button .button-glow {
+  position: absolute;
+  inset: -3px;
+  background: linear-gradient(135deg, #667eea, #764ba2, #f093fb, #4facfe, #667eea);
+  background-size: 400% 400%;
+  border-radius: 60px;
+  filter: blur(15px);
+  opacity: 0.7;
+  animation: gradient-shift 3s ease infinite;
+  z-index: -1;
 }
 
-.cta-button.premium-cta .cta-arrow {
+.hero-cta-button .button-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 1;
+}
+
+.hero-cta-button .cta-icon {
+  font-size: 24px;
+  animation: rocket-bounce 2s ease-in-out infinite;
+}
+
+@keyframes rocket-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+.hero-cta-button .cta-arrow {
+  font-size: 24px;
   transition: transform 0.3s ease;
 }
 
-.cta-button.premium-cta:hover .cta-arrow {
+.hero-cta-button:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 40px rgba(102, 126, 234, 0.5),
+              0 0 60px rgba(102, 126, 234, 0.3),
+              inset 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.hero-cta-button:hover .button-glow {
+  opacity: 1;
+  filter: blur(20px);
+}
+
+.hero-cta-button:hover .cta-arrow {
   transform: translateX(5px);
 }
 
-/* Swipe Hint Button */
-.swipe-hint-button {
-  background: transparent;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+.hero-cta-button:active {
+  transform: translateY(-1px) scale(1.02);
+}
+
+/* Neon Outline Swipe Button */
+.swipe-hint-button.neon-outline {
+  position: relative;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid transparent;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                    linear-gradient(90deg, #667eea, #764ba2, #f093fb, #4facfe);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
   color: white;
-  padding: 12px 24px;
-  border-radius: 30px;
+  padding: 16px 32px;
+  border-radius: 50px;
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: 600;
   transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.swipe-hint-button .hint-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #4facfe);
+  border-radius: 50px;
+  opacity: 0;
+  filter: blur(20px);
+  transition: opacity 0.3s ease;
+}
+
+.swipe-hint-button .hint-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 1;
 }
 
 .swipe-hint-button:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.5);
-  transform: translateY(-2px);
+  transform: translateX(5px);
+  box-shadow: 0 0 30px rgba(102, 126, 234, 0.5),
+              inset 0 0 20px rgba(102, 126, 234, 0.2);
 }
 
-.swipe-arrow {
-  animation: bounce-down 2s infinite;
+.swipe-hint-button:hover .hint-glow {
+  opacity: 0.5;
 }
 
-@keyframes bounce-down {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(5px);
-  }
-  60% {
-    transform: translateY(3px);
-  }
+.swipe-arrow-right {
+  animation: slide-right 2s ease-in-out infinite;
+}
+
+@keyframes slide-right {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(5px); }
+}
+
+/* Loading state for neon button */
+.hero-cta-button.loading .button-content {
+  opacity: 0.7;
+}
+
+.hero-cta-button.loading .cta-icon {
+  animation: spin 1s linear infinite;
+}
+
+/* Hero section enhancements */
+.hero-section {
+  position: relative;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+}
+
+/* Enhance main title with glow */
+.main-title {
+  text-shadow: 0 0 20px rgba(102, 126, 234, 0.5),
+               0 0 40px rgba(102, 126, 234, 0.3),
+               0 0 60px rgba(102, 126, 234, 0.2);
+}
+
+/* Center swipe hint */
+.swipe-hint {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
 }
 
 /* Button loading and interaction states */

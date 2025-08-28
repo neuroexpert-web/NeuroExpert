@@ -203,14 +203,11 @@ export default function Home() {
   // Обработчик для кнопки CTA
   const handleCTAClick = useCallback(() => {
     setLoading(true);
-    // Переход к секции контактов
+    // Открываем AI управляющего
     setTimeout(() => {
-      const contactSection = document.getElementById('contacts');
-      if (contactSection) {
-        contactSection.scrollIntoView({ behavior: 'smooth' });
-      } else {
-        // Если на главной странице, переходим к секции контактов
-        setCurrentSection(8); // Индекс секции контактов
+      const aiButton = document.querySelector('.floating-ai-button');
+      if (aiButton) {
+        aiButton.click();
       }
       setLoading(false);
     }, 300);
@@ -283,24 +280,31 @@ export default function Home() {
             Цифровая трансформация<br/>бизнеса с помощью AI
           </p>
           <button 
-            className={`cta-button premium-cta ${loading ? 'loading' : ''}`}
+            className={`hero-cta-button neon-gradient ${loading ? 'loading' : ''}`}
             onClick={handleCTAClick}
             disabled={loading}
           >
-            <span className="cta-text">{loading ? 'Загрузка...' : 'Начать бесплатно'}</span>
-            <span className="cta-arrow">→</span>
+            <span className="button-glow"></span>
+            <span className="button-content">
+              <span className="cta-icon">🚀</span>
+              <span className="cta-text">{loading ? 'Загрузка...' : 'Начать бесплатно'}</span>
+              <span className="cta-arrow">→</span>
+            </span>
           </button>
         </div>
         <div className="swipe-hint">
           <button 
-            className="swipe-hint-button"
+            className="swipe-hint-button neon-outline"
             onClick={() => setCurrentSection(1)}
             aria-label="Перейти к следующей секции"
           >
-            <span className="swipe-hint-text">Листайте, чтобы узнать больше</span>
-            <svg className="swipe-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M7 10L12 15L17 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            <span className="hint-glow"></span>
+            <span className="hint-content">
+              <span className="swipe-hint-text">Листайте, чтобы узнать больше</span>
+              <svg className="swipe-arrow-right" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </span>
           </button>
         </div>
       </main>
