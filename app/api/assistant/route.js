@@ -33,10 +33,10 @@ console.log('API Keys check:', {
   geminiKeyLength: GEMINI_API_KEY ? GEMINI_API_KEY.length : 0
 });
 
-// Load system prompt for NeuroExpert v3.2 (used as systemInstruction)
+// Load system prompt for NeuroExpert v4.0 Enhanced (used as systemInstruction)
 // This file contains the complete system prompt for the AI assistant
 // Vercel deployment trigger - updated at: ${new Date().toISOString()}
-const PROMPT_PATH = path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v3_2.md');
+const PROMPT_PATH = path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v4_enhanced.md');
 let SYSTEM_PROMPT = '';
 
 // Check if file exists
