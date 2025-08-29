@@ -55,6 +55,20 @@ export default function AIAssistant() {
     scrollToBottom();
   }, [messages]);
 
+  // Закрытие dropdown при клике вне его
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showModelSelector && !event.target.closest('.model-selector')) {
+        setShowModelSelector(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showModelSelector]);
+
   const handleSend = async (e) => {
     e.preventDefault();
     if (!inputValue.trim()) return;
@@ -168,49 +182,54 @@ export default function AIAssistant() {
       {isOpen && (
         <div className="ai-chat-window">
           <div className="chat-header">
-            <div className="chat-header-info">
+            <div className="chat-header-left">
               <h3>AI Ассистент</h3>
-              <div className="chat-controls">
-                <div className="model-selector">
-                  <button 
-                    className="current-model"
-                    onClick={() => setShowModelSelector(!showModelSelector)}
-                  >
-                    {aiModels.find(m => m.id === selectedModel)?.icon} {aiModels.find(m => m.id === selectedModel)?.name}
-                    <span className="dropdown-arrow">▼</span>
-                  </button>
-                  
-                  {showModelSelector && (
-                    <div className="model-dropdown">
-                      {aiModels.map(model => (
-                        <button
-                          key={model.id}
-                          className={`model-option ${selectedModel === model.id ? 'active' : ''}`}
-                          onClick={() => {
-                            setSelectedModel(model.id);
-                            setShowModelSelector(false);
-                          }}
-                        >
-                          <div className="model-info">
-                            <span className="model-icon">{model.icon}</span>
-                            <div className="model-details">
-                              <span className="model-name">{model.name}</span>
-                              <span className="model-provider">{model.provider}</span>
-                            </div>
-                          </div>
-                          <span className={`model-status ${model.status}`}>●</span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+              <span className="chat-status">
+                <span className={`status-dot ${apiError ? 'error' : 'online'}`}></span>
+                {apiError ? 'Автономно' : 'Онлайн'}
+              </span>
+            </div>
+            
+            <div className="chat-header-center">
+              <div className="model-selector">
+                <button 
+                  className="current-model"
+                  onClick={() => {
+                    console.log('Model selector clicked, current state:', showModelSelector);
+                    setShowModelSelector(!showModelSelector);
+                  }}
+                >
+                  {aiModels.find(m => m.id === selectedModel)?.icon} {aiModels.find(m => m.id === selectedModel)?.name}
+                  <span className="dropdown-arrow">▼</span>
+                </button>
                 
-                <span className="chat-status">
-                  <span className={`status-dot ${apiError ? 'error' : 'online'}`}></span>
-                  {apiError ? 'Автономно' : 'Онлайн'}
-                </span>
+                {showModelSelector && (
+                  <div className="model-dropdown">
+                    {console.log('Rendering dropdown with models:', aiModels)}
+                    {aiModels.map(model => (
+                      <button
+                        key={model.id}
+                        className={`model-option ${selectedModel === model.id ? 'active' : ''}`}
+                        onClick={() => {
+                          setSelectedModel(model.id);
+                          setShowModelSelector(false);
+                        }}
+                      >
+                        <div className="model-info">
+                          <span className="model-icon">{model.icon}</span>
+                          <div className="model-details">
+                            <span className="model-name">{model.name}</span>
+                            <span className="model-provider">{model.provider}</span>
+                          </div>
+                        </div>
+                        <span className={`model-status ${model.status}`}>●</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
+            
             <button 
               className="chat-close"
               onClick={() => setIsOpen(false)}
