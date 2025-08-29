@@ -48,7 +48,7 @@ export default function DashboardLayout({
       type: 'business',
       title: 'Обзор бизнеса',
       description: 'Ключевые показатели вашего бизнеса в реальном времени',
-      size: 'large',
+      size: 'medium',
       position: { x: 0, y: 0 },
       refreshInterval: 15000,
       visible: true,
@@ -59,8 +59,8 @@ export default function DashboardLayout({
       type: 'site-health',
       title: 'Здоровье сайта',
       description: 'Аптайм, скорость, безопасность и производительность',
-      size: 'large',
-      position: { x: 0, y: 1 },
+      size: 'medium',
+      position: { x: 1, y: 0 },
       refreshInterval: 15000,
       visible: true
     },
@@ -70,7 +70,7 @@ export default function DashboardLayout({
       title: 'Яндекс.Метрика',
       description: 'Подробная аналитика посетителей в реальном времени',
       size: 'medium',
-      position: { x: 0, y: 2 },
+      position: { x: 2, y: 0 },
       refreshInterval: 30000,
       visible: true
     },
@@ -80,7 +80,7 @@ export default function DashboardLayout({
       title: 'Google Analytics',
       description: 'Данные о пользователях и источниках трафика',
       size: 'medium',
-      position: { x: 1, y: 2 },
+      position: { x: 0, y: 1 },
       refreshInterval: 30000,
       visible: true
     },
@@ -89,8 +89,8 @@ export default function DashboardLayout({
       type: 'leads',
       title: 'Лиды и конверсии',
       description: 'Воронка продаж и работа с клиентами',
-      size: 'large',
-      position: { x: 0, y: 3 },
+      size: 'medium',
+      position: { x: 1, y: 1 },
       refreshInterval: 60000,
       visible: true
     },
@@ -100,7 +100,7 @@ export default function DashboardLayout({
       title: 'SEO мониторинг',
       description: 'Позиции в поиске и органический трафик',
       size: 'medium',
-      position: { x: 0, y: 4 },
+      position: { x: 2, y: 1 },
       refreshInterval: 120000,
       visible: true
     },
@@ -110,7 +110,7 @@ export default function DashboardLayout({
       title: 'Социальные сети',
       description: 'Активность и вовлеченность в соцсетях',
       size: 'medium',
-      position: { x: 1, y: 4 },
+      position: { x: 0, y: 2 },
       refreshInterval: 60000,
       visible: true
     },
@@ -119,8 +119,8 @@ export default function DashboardLayout({
       type: 'email',
       title: 'Email-маркетинг',
       description: 'Кампании, открытия и конверсии рассылок',
-      size: 'large',
-      position: { x: 0, y: 5 },
+      size: 'medium',
+      position: { x: 1, y: 2 },
       refreshInterval: 60000,
       visible: true
     }
