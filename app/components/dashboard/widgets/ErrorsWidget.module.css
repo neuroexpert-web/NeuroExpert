@@ -1,0 +1,453 @@
+/* Errors Widget Styles */
+
+.widget {
+  height: 100%;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ==========================================
+   LOADING & ERROR STATES
+   ========================================== */
+
+.loadingState,
+.errorState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #94a3b8;
+  text-align: center;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(148, 163, 184, 0.2);
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+.errorState {
+  color: #fca5a5;
+}
+
+.errorIcon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.retryButton {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ef4444;
+  border-radius: 6px;
+  background: rgba(239, 68, 68, 0.1);
+  color: #fca5a5;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.retryButton:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+/* ==========================================
+   ERROR METRICS
+   ========================================== */
+
+.errorMetrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+}
+
+.metricCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.metricCard:hover {
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(148, 163, 184, 0.2);
+  transform: translateY(-2px);
+}
+
+.metricIcon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.metricContent {
+  text-align: center;
+  flex: 1;
+}
+
+.metricValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-bottom: 0.25rem;
+}
+
+.metricLabel {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.trendBadge {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: white;
+}
+
+.trendBadge.positive {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.trendBadge.negative {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+/* ==========================================
+   SECTION TITLES
+   ========================================== */
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.sectionIcon {
+  font-size: 1.125rem;
+}
+
+/* ==========================================
+   TOP ISSUES
+   ========================================== */
+
+.topIssues {
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.issuesList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.issueItem {
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  transition: all 0.2s ease;
+}
+
+.issueItem:hover {
+  background: rgba(15, 23, 42, 0.8);
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+.issueHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.issueInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.severityBadge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.issueKey {
+  font-family: 'Courier New', monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #93c5fd;
+  background: rgba(59, 130, 246, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.trendIcon {
+  font-size: 0.875rem;
+}
+
+.issueStats {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.issueEvents {
+  color: #fbbf24;
+  font-weight: 600;
+}
+
+.issueUsers {
+  color: #f87171;
+  font-weight: 600;
+}
+
+.issueTitle {
+  font-size: 0.875rem;
+  color: #e2e8f0;
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.issueActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.actionButton {
+  padding: 0.375rem 0.75rem;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 6px;
+  background: rgba(59, 130, 246, 0.1);
+  color: #93c5fd;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.actionButton:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+/* ==========================================
+   PERFORMANCE METRICS
+   ========================================== */
+
+.performanceMetrics {
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.endpointsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.endpointItem {
+  padding: 0.75rem;
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  transition: all 0.2s ease;
+}
+
+.endpointItem:hover {
+  background: rgba(15, 23, 42, 0.8);
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+.endpointPath {
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #93c5fd;
+  margin-bottom: 0.5rem;
+}
+
+.endpointMetrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.endpointMetric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.endpointMetric .metricLabel {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.endpointMetric .metricValue {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+/* ==========================================
+   ERRORS BY TYPE
+   ========================================== */
+
+.errorsByType {
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.typesList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+}
+
+.typeItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.typeName {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #f8fafc;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.typeCount {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #3b82f6;
+}
+
+.typeBar {
+  height: 4px;
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.typeProgress {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* ==========================================
+   UPDATE STATUS
+   ========================================== */
+
+.updateStatus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.updateIcon {
+  font-size: 0.875rem;
+}
+
+.updateText {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+/* ==========================================
+   ANIMATIONS
+   ========================================== */
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (max-width: 768px) {
+  .errorMetrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .issueHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .issueActions {
+    width: 100%;
+    justify-content: stretch;
+  }
+  
+  .actionButton {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .endpointMetrics {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  
+  .endpointMetric {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .typesList {
+    grid-template-columns: 1fr;
+  }
+}

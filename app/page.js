@@ -6,15 +6,15 @@ import dynamic from 'next/dynamic';
 import SwipeContainer from './components/SwipeContainer';
 import EnhancedFloatingAI from './components/EnhancedFloatingAI';
 
-// Динамические импорты для аналитики
+// Динамические импорты для аналитики с улучшенной загрузкой
 const AnalyticsCharts = dynamic(() => import('./components/AnalyticsCharts'), {
   ssr: false,
-  loading: () => null
+  loading: () => <div className="analytics-skeleton">📊 Загрузка графиков...</div>
 });
 
 const RealtimeUpdates = dynamic(() => import('./components/RealtimeUpdates'), {
   ssr: false,
-  loading: () => null
+  loading: () => <div className="realtime-skeleton">⚡ Подготовка данных...</div>
 });
 
 const TooltipManager = dynamic(() => import('./components/TooltipManager'), {
@@ -65,10 +65,10 @@ const ProcessTooltips = dynamic(() => import('./components/ProcessTooltips'), {
   loading: () => null
 });
 
-// Динамические импорты для личного кабинета
-const WorkspaceLayout = dynamic(() => import('./components/workspace/WorkspaceLayout'), {
+// Динамические импорты для личного кабинета - Визуальная Студия
+const DashboardLayout = dynamic(() => import('./components/dashboard/DashboardLayout'), {
   ssr: false,
-  loading: () => null
+  loading: () => <div className="dashboard-skeleton">🎛️ Загрузка Визуальной Студии...</div>
 });
 
 // Динамические импорты для страницы решений
@@ -250,7 +250,7 @@ export default function Home() {
         conversion: Math.max(0, Math.min(100, prev.conversion + (Math.random() * 0.5 - 0.25)))
       }));
     } catch (error) {
-      console.error('Ошибка при обновлении данных:', error);
+      // Production: silent error handling
     } finally {
       setRefreshing(false);
     }
@@ -290,7 +290,7 @@ export default function Home() {
 
   // Обработчики для кнопок рекомендаций
   const handleRecommendationAction = useCallback((action, type) => {
-    console.log(`Действие: ${action}, Тип: ${type}`);
+    // Action analytics can be tracked here
     
     switch (action) {
       case 'optimize-mobile':
@@ -355,7 +355,7 @@ export default function Home() {
         break;
         
       default:
-        console.log('Неизвестное действие:', action);
+        // Unknown action handling
     }
   }, []);
 
@@ -3590,15 +3590,15 @@ export default function Home() {
       </Suspense>
     </section>,
 
-    // 10. Личный кабинет - полнофункциональная версия согласно ТЗ
+    // 10. Визуальная Студия - unified real-time dashboard для мониторинга
     <section key="workspace" id="workspace-section" className="workspace-container">
       <Suspense fallback={
         <div className="workspace-loading">
           <div className="loading-spinner"></div>
-          <p>Загрузка рабочего пространства...</p>
+          <p>Загрузка Визуальной Студии...</p>
         </div>
       }>
-        <WorkspaceLayout />
+        <DashboardLayout userRole="Admin" />
       </Suspense>
     </section>
   ];
