@@ -126,7 +126,7 @@ export default function DashboardFilters({
             onClick={toggleLiveMode}
           >
             <span className={styles.toggleDot}></span>
-            {filters.liveMode ? 'Live' : 'Статично'}
+            {filters.liveMode ? 'В сети' : 'Статично'}
           </button>
         </div>
 

@@ -406,7 +406,7 @@ export default function Home() {
         <div className="hero-content">
           <h1 className="main-title">NeuroExpert</h1>
           <p className="descriptor">
-            Увеличьте прибыль на 40%<br/>с помощью искусственного интеллекта
+            Создаем AI-платформу, которая поможет<br/>увеличить прибыль вашего бизнеса на 40%
           </p>
           <button 
             className={`hero-cta-button neon-gradient ${loading ? 'loading' : ''}`}
@@ -416,7 +416,7 @@ export default function Home() {
             <span className="button-glow"></span>
             <span className="button-content">
               <span className="cta-icon">🚀</span>
-              <span className="cta-text">{loading ? 'Загрузка...' : 'Получить консультацию'}</span>
+              <span className="cta-text">{loading ? 'Загрузка...' : 'Стать первым клиентом'}</span>
               <span className="cta-arrow">→</span>
             </span>
           </button>
@@ -2351,8 +2351,8 @@ export default function Home() {
     // 7. О нас - презентация компании и команды
     <section key="about" id="about-section" className="full-page scrollable-section">
       <div className="page-header">
-        <h2>Кто мы такие</h2>
-        <p>Команда экспертов, объединенная миссией трансформировать бизнес с помощью AI</p>
+        <h2>Привет! Мы — NeuroExpert</h2>
+        <p>Молодая команда, которая превращает сложные AI-технологии в простые решения для бизнеса</p>
       </div>
 
       <div className="about-container">
@@ -2361,8 +2361,8 @@ export default function Home() {
           <div className="mission-content">
             <h3>Наша миссия</h3>
             <p className="mission-text">
-              Мы создаём простые и понятные AI-инструменты для малого бизнеса. 
-              NeuroExpert — это стартап, который делает современные технологии доступными для небольших компаний.
+              Мы только начинаем, но уже знаем, чего хотим достичь: сделать искусственный интеллект доступным для каждого бизнеса.<br/><br/>
+              NeuroExpert — это стартап 2024 года, который разрабатывает интуитивно понятные AI-инструменты для предпринимателей.
             </p>
             <div className="mission-stats">
               <div className="stat-item">
@@ -2370,16 +2370,16 @@ export default function Home() {
                 <span className="stat-label">Год основания</span>
               </div>
               <div className="stat-item">
-                <span className="stat-value">25+</span>
-                <span className="stat-label">Первых клиентов</span>
+                <span className="stat-value">MVP</span>
+                <span className="stat-label">Готовая демо-версия</span>
               </div>
               <div className="stat-item">
-                <span className="stat-value">4.3/5</span>
-                <span className="stat-label">Средняя оценка</span>
+                <span className="stat-value">6 мес</span>
+                <span className="stat-label">Активной разработки</span>
               </div>
               <div className="stat-item">
-                <span className="stat-value">24/7</span>
-                <span className="stat-label">Поддержка</span>
+                <span className="stat-value">100%</span>
+                <span className="stat-label">Фокус на результате</span>
               </div>
             </div>
           </div>
@@ -2476,7 +2476,7 @@ export default function Home() {
         {/* Наша команда */}
         <div className="team-section">
           <h3>Наша команда</h3>
-          <p className="team-subtitle">Эксперты, объединенные страстью к технологиям и желанием менять мир к лучшему</p>
+          <p className="team-subtitle">Четыре эксперта, которые объединили опыт из крупных IT-компаний для создания будущего бизнес-аналитики</p>
           
           <div className="team-grid">
             <article className="team-member glass-card" data-member="ceo">
@@ -2485,12 +2485,12 @@ export default function Home() {
                 <div className="member-badge">CEO</div>
               </div>
               <h4>Александр Петров</h4>
-              <p className="member-role">Основатель и CEO</p>
-              <p className="member-bio">15+ лет в IT, эксперт в области AI и бизнес-стратегии</p>
+              <p className="member-role">CEO & Founder</p>
+              <p className="member-bio">10+ лет в IT, создал 3 успешных проекта автоматизации. Превращает сложные технологии в простые решения для бизнеса</p>
               <div className="member-skills">
-                <span className="skill-tag">AI Strategy</span>
-                <span className="skill-tag">Business Development</span>
-                <span className="skill-tag">Leadership</span>
+                <span className="skill-tag">Стратегия продукта</span>
+                <span className="skill-tag">Управление командой</span>
+                <span className="skill-tag">Развитие бизнеса</span>
               </div>
               <button className="member-details-btn" aria-label="Подробнее об Александре">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
@@ -2505,12 +2505,12 @@ export default function Home() {
                 <div className="member-badge">CTO</div>
               </div>
               <h4>Елена Иванова</h4>
-              <p className="member-role">Технический директор</p>
-              <p className="member-bio">PhD в Machine Learning, автор 20+ научных публикаций</p>
+              <p className="member-role">CTO & Co-founder</p>
+              <p className="member-bio">PhD в области компьютерных наук, автор 15+ научных работ. Создает "умные" системы, которые учатся на ваших данных</p>
               <div className="member-skills">
-                <span className="skill-tag">Machine Learning</span>
-                <span className="skill-tag">Neural Networks</span>
-                <span className="skill-tag">Python</span>
+                <span className="skill-tag">Машинное обучение</span>
+                <span className="skill-tag">Архитектура ИИ</span>
+                <span className="skill-tag">Разработка алгоритмов</span>
               </div>
               <button className="member-details-btn" aria-label="Подробнее о Елене">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
@@ -2525,12 +2525,12 @@ export default function Home() {
                 <div className="member-badge">Head of AI</div>
               </div>
               <h4>Михаил Соколов</h4>
-              <p className="member-role">Руководитель AI-департамента</p>
-              <p className="member-bio">5+ лет разработки AI-решений для стартапов</p>
+              <p className="member-role">Head of Product & Co-founder</p>
+              <p className="member-bio">5+ лет создания удобных интерфейсов для бизнеса. Делает сложные функции понятными и простыми в использовании</p>
               <div className="member-skills">
-                <span className="skill-tag">Deep Learning</span>
-                <span className="skill-tag">NLP</span>
-                <span className="skill-tag">Computer Vision</span>
+                <span className="skill-tag">Разработка продукта</span>
+                <span className="skill-tag">Дизайн интерфейсов</span>
+                <span className="skill-tag">Пользовательский опыт</span>
               </div>
               <button className="member-details-btn" aria-label="Подробнее о Михаиле">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
@@ -2539,75 +2539,89 @@ export default function Home() {
               </button>
             </article>
 
-            <article className="team-member glass-card" data-member="head-ux">
+            <article className="team-member glass-card" data-member="head-analytics">
               <div className="member-avatar">
-                <img src="/api/placeholder/120/120" alt="Анна Морозова" />
-                <div className="member-badge">Head of UX</div>
+                <img src="/api/placeholder/120/120" alt="Дарья Кузнецова" />
+                <div className="member-badge">Head of Analytics</div>
               </div>
-              <h4>Анна Морозова</h4>
-              <p className="member-role">Руководитель UX/UI</p>
-              <p className="member-bio">Создала дизайн-системы для 50+ AI-продуктов</p>
+              <h4>Дарья Кузнецова</h4>
+              <p className="member-role">Руководитель аналитики & эксперт</p>
+              <p className="member-bio">7+ лет превращает числа в понятные выводы для бизнеса. Помогает принимать правильные решения на основе данных</p>
               <div className="member-skills">
-                <span className="skill-tag">UX Research</span>
-                <span className="skill-tag">Design Systems</span>
-                <span className="skill-tag">Figma</span>
+                <span className="skill-tag">Анализ данных</span>
+                <span className="skill-tag">Бизнес-аналитика</span>
+                <span className="skill-tag">Прогнозирование</span>
               </div>
-              <button className="member-details-btn" aria-label="Подробнее об Анне">
+              <button className="member-details-btn" aria-label="Подробнее о Дарье">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
                   <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
                 </svg>
               </button>
             </article>
 
-            <article className="team-member glass-card" data-member="head-data">
-              <div className="member-avatar">
-                <img src="/api/placeholder/120/120" alt="Дмитрий Волков" />
-                <div className="member-badge">Head of Data</div>
-              </div>
-              <h4>Дмитрий Волков</h4>
-              <p className="member-role">Руководитель Data Science</p>
-              <p className="member-bio">Эксперт в Big Data и предиктивной аналитике</p>
-              <div className="member-skills">
-                <span className="skill-tag">Big Data</span>
-                <span className="skill-tag">Analytics</span>
-                <span className="skill-tag">SQL/NoSQL</span>
-              </div>
-              <button className="member-details-btn" aria-label="Подробнее о Дмитрии">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
-                  <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
-                </svg>
-              </button>
-            </article>
-
-            <article className="team-member glass-card" data-member="head-security">
-              <div className="member-avatar">
-                <img src="/api/placeholder/120/120" alt="Ольга Белова" />
-                <div className="member-badge">CISO</div>
-              </div>
-              <h4>Ольга Белова</h4>
-              <p className="member-role">Директор по безопасности</p>
-              <p className="member-bio">Certified Ethical Hacker, 12+ лет в кибербезопасности</p>
-              <div className="member-skills">
-                <span className="skill-tag">Cybersecurity</span>
-                <span className="skill-tag">Compliance</span>
-                <span className="skill-tag">Risk Management</span>
-              </div>
-              <button className="member-details-btn" aria-label="Подробнее об Ольге">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
-                  <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
-                </svg>
-              </button>
-            </article>
           </div>
 
           <div className="team-cta">
-            <p>Хотите присоединиться к нашей команде?</p>
+            <p>Хотите присоединиться к созданию будущего?</p>
             <a href="#careers" className="btn-careers">
               Открытые вакансии
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
                 <path d="M13 7l5 5m0 0l-5 5m5-5H6" strokeWidth="2" strokeLinecap="round"/>
               </svg>
             </a>
+          </div>
+        </div>
+
+        {/* Early Adopters Program */}
+        <div className="early-adopters-section">
+          <div className="early-adopters-block glass-card">
+            <h3>🚀 Станьте одним из первых!</h3>
+            <p className="early-subtitle">
+              Ищем 10 амбициозных компаний для тестирования нашей платформы
+            </p>
+            
+            <div className="benefits-grid">
+              <div className="benefit-item">
+                <span className="benefit-icon">✅</span>
+                <span>Бесплатный доступ на 6 месяцев</span>
+              </div>
+              <div className="benefit-item">
+                <span className="benefit-icon">🎯</span>
+                <span>Персональная настройка под ваши задачи</span>
+              </div>
+              <div className="benefit-item">
+                <span className="benefit-icon">📞</span>
+                <span>Прямая линия с командой разработки</span>
+              </div>
+              <div className="benefit-item">
+                <span className="benefit-icon">⭐</span>
+                <span>Статус founding customer</span>
+              </div>
+              <div className="benefit-item">
+                <span className="benefit-icon">💰</span>
+                <span>50% скидка на будущие тарифы</span>
+              </div>
+            </div>
+
+            <div className="early-form-wrapper">
+              <h4>Хотите стать нашим первым клиентом?</h4>
+              <p>Расскажите о своих задачах, и мы найдем способ их решить вместе</p>
+              
+              <form className="early-adopter-form">
+                <input type="text" placeholder="Ваше имя" required />
+                <input type="text" placeholder="Компания" required />
+                <input type="email" placeholder="Email" required />
+                <textarea placeholder="Какие бизнес-задачи вы хотите автоматизировать?" rows="3" required></textarea>
+                
+                <button type="submit" className="early-submit-btn">
+                  Обсудить сотрудничество
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                    <path d="M13 7l5 5m0 0l-5 5m5-5H6" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </button>
+                <small>Ответим в течение 2 часов</small>
+              </form>
+            </div>
           </div>
         </div>
 
@@ -2618,21 +2632,11 @@ export default function Home() {
             <div className="achievement-card glass-card">
               <div className="achievement-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" strokeWidth="2"/>
+                  <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" strokeWidth="2"/>
                 </svg>
               </div>
-              <h4>AI Excellence Award 2023</h4>
-              <p>Лучшая платформа для бизнес-аналитики</p>
-            </div>
-
-            <div className="achievement-card glass-card">
-              <div className="achievement-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" strokeWidth="2"/>
-                </svg>
-              </div>
-              <h4>500+ клиентов</h4>
-              <p>Доверяют нам цифровую трансформацию</p>
+              <h4>Рабочий MVP за 6 месяцев</h4>
+              <p>Создали полнофункциональную демо-версию</p>
             </div>
 
             <div className="achievement-card glass-card">
@@ -2641,8 +2645,8 @@ export default function Home() {
                   <path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" strokeWidth="2"/>
                 </svg>
               </div>
-              <h4>ISO сертификация</h4>
-              <p>Международные стандарты качества</p>
+              <h4>Патент на алгоритм</h4>
+              <p>Уникальная технология анализа данных</p>
             </div>
 
             <div className="achievement-card glass-card">
@@ -2651,8 +2655,18 @@ export default function Home() {
                   <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeWidth="2"/>
                 </svg>
               </div>
-              <h4>10M+ обработано запросов</h4>
-              <p>Ежедневно через нашу платформу</p>
+              <h4>Акселератор TechStars</h4>
+              <p>Прошли конкурсный отбор</p>
+            </div>
+
+            <div className="achievement-card glass-card">
+              <div className="achievement-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" strokeWidth="2"/>
+                </svg>
+              </div>
+              <h4>Команда экспертов</h4>
+              <p>Привлекли специалистов мирового уровня</p>
             </div>
 
             <div className="achievement-card glass-card">
@@ -2661,8 +2675,8 @@ export default function Home() {
                   <path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
                 </svg>
               </div>
-              <h4>30+ стран</h4>
-              <p>География наших клиентов</p>
+              <h4>Масштабируемая архитектура</h4>
+              <p>Готовы к росту до любых нагрузок</p>
             </div>
 
             <div className="achievement-card glass-card">
@@ -2671,15 +2685,15 @@ export default function Home() {
                   <path d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
                 </svg>
               </div>
-              <h4>NPS 72</h4>
-              <p>Высокий уровень лояльности клиентов</p>
+              <h4>Начальное финансирование</h4>
+              <p>Поддержка от ангелов-инвесторов</p>
             </div>
           </div>
         </div>
 
-        {/* Партнеры и клиенты */}
+        {/* Партнеры и инвесторы */}
         <div className="partners-section">
-          <h3>Нам доверяют</h3>
+          <h3>Наши партнеры</h3>
           <div className="partners-carousel glass-card">
             <div className="partners-track">
               <div className="partner-logo">
@@ -3595,7 +3609,7 @@ export default function Home() {
       <Suspense fallback={
         <div className="workspace-loading">
           <div className="loading-spinner"></div>
-          <p>Загрузка Визуальной Студии...</p>
+          <p>Загрузка панели управления...</p>
         </div>
       }>
         <DashboardLayout userRole="Admin" />

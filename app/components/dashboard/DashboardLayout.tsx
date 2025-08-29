@@ -10,6 +10,14 @@ import SLOWidget from './widgets/SLOWidget';
 import TrafficWidget from './widgets/TrafficWidget';
 import ErrorsWidget from './widgets/ErrorsWidget';
 import SystemWidget from './widgets/SystemWidget';
+import BusinessMetricsWidget from './widgets/BusinessMetricsWidget';
+import YandexMetrikaWidget from './widgets/YandexMetrikaWidget';
+import GoogleAnalyticsWidget from './widgets/GoogleAnalyticsWidget';
+import SiteHealthWidget from './widgets/SiteHealthWidget';
+import SocialMediaWidget from './widgets/SocialMediaWidget';
+import EmailMarketingWidget from './widgets/EmailMarketingWidget';
+import LeadsWidget from './widgets/LeadsWidget';
+import SEOWidget from './widgets/SEOWidget';
 import DashboardFilters from './DashboardFilters';
 
 interface DashboardLayoutProps {
@@ -36,9 +44,10 @@ export default function DashboardLayout({
   // Состояние виджетов
   const [widgets, setWidgets] = useState<WidgetConfig[]>([
     {
-      id: 'slo-overview',
-      type: 'slo',
-      title: 'SLO & Аптайм',
+      id: 'business-overview',
+      type: 'business',
+      title: 'Обзор бизнеса',
+      description: 'Ключевые показатели вашего бизнеса в реальном времени',
       size: 'medium',
       position: { x: 0, y: 0 },
       refreshInterval: 15000,
@@ -46,30 +55,73 @@ export default function DashboardLayout({
       pinned: true
     },
     {
-      id: 'traffic-overview', 
-      type: 'traffic',
-      title: 'Трафик & Конверсии',
+      id: 'site-health',
+      type: 'site-health',
+      title: 'Здоровье сайта',
+      description: 'Аптайм, скорость, безопасность и производительность',
       size: 'medium',
       position: { x: 1, y: 0 },
+      refreshInterval: 15000,
+      visible: true
+    },
+    {
+      id: 'yandex-metrika',
+      type: 'yandex',
+      title: 'Яндекс.Метрика',
+      description: 'Подробная аналитика посетителей в реальном времени',
+      size: 'medium',
+      position: { x: 2, y: 0 },
       refreshInterval: 30000,
       visible: true
     },
     {
-      id: 'errors-overview',
-      type: 'errors', 
-      title: 'Ошибки & Performance',
+      id: 'google-analytics',
+      type: 'google',
+      title: 'Google Analytics',
+      description: 'Данные о пользователях и источниках трафика',
       size: 'medium',
       position: { x: 0, y: 1 },
-      refreshInterval: 15000,
+      refreshInterval: 30000,
       visible: true
     },
     {
-      id: 'system-overview',
-      type: 'system',
-      title: 'Здоровье Сервисов',
-      size: 'medium', 
+      id: 'leads-conversion',
+      type: 'leads',
+      title: 'Лиды и конверсии',
+      description: 'Воронка продаж и работа с клиентами',
+      size: 'medium',
       position: { x: 1, y: 1 },
-      refreshInterval: 15000,
+      refreshInterval: 60000,
+      visible: true
+    },
+    {
+      id: 'seo-monitoring',
+      type: 'seo',
+      title: 'SEO мониторинг',
+      description: 'Позиции в поиске и органический трафик',
+      size: 'medium',
+      position: { x: 2, y: 1 },
+      refreshInterval: 120000,
+      visible: true
+    },
+    {
+      id: 'social-media',
+      type: 'social',
+      title: 'Социальные сети',
+      description: 'Активность и вовлеченность в соцсетях',
+      size: 'medium',
+      position: { x: 0, y: 2 },
+      refreshInterval: 60000,
+      visible: true
+    },
+    {
+      id: 'email-marketing',
+      type: 'email',
+      title: 'Email-маркетинг',
+      description: 'Кампании, открытия и конверсии рассылок',
+      size: 'medium',
+      position: { x: 1, y: 2 },
+      refreshInterval: 60000,
       visible: true
     }
   ]);
@@ -121,6 +173,22 @@ export default function DashboardLayout({
     };
 
     switch (widget.type) {
+      case 'business':
+        return <BusinessMetricsWidget {...commonProps} />;
+      case 'site-health':
+        return <SiteHealthWidget {...commonProps} />;
+      case 'yandex':
+        return <YandexMetrikaWidget {...commonProps} />;
+      case 'google':
+        return <GoogleAnalyticsWidget {...commonProps} />;
+      case 'leads':
+        return <LeadsWidget {...commonProps} />;
+      case 'seo':
+        return <SEOWidget {...commonProps} />;
+      case 'social':
+        return <SocialMediaWidget {...commonProps} />;
+      case 'email':
+        return <EmailMarketingWidget {...commonProps} />;
       case 'slo':
         return <SLOWidget {...commonProps} />;
       case 'traffic':
@@ -135,14 +203,11 @@ export default function DashboardLayout({
   };
 
   const tabs = [
-    { id: 'overview', label: 'Обзор', icon: '📊' },
-    { id: 'users', label: 'Пользователи', icon: '👥' },
-    { id: 'errors', label: 'Ошибки', icon: '🐛' },
-    { id: 'performance', label: 'Производительность', icon: '⚡' },
-    { id: 'infrastructure', label: 'Инфраструктура', icon: '🖥️' },
-    { id: 'logs', label: 'Логи', icon: '📝' },
-    { id: 'ux', label: 'UX-сессии', icon: '🎥' },
-    { id: 'roi', label: 'ROI/KPI', icon: '💰' }
+    { id: 'overview', label: 'Обзор', icon: '📊' }
+    // Остальные вкладки будут добавлены по мере готовности
+    // { id: 'analytics', label: 'Аналитика', icon: '📈', comingSoon: true },
+    // { id: 'customers', label: 'Клиенты', icon: '👥', comingSoon: true },
+    // { id: 'sales', label: 'Продажи', icon: '💰', comingSoon: true }
   ];
 
   return (
@@ -151,13 +216,13 @@ export default function DashboardLayout({
       <header className={styles.header}>
         <div className={styles.titleSection}>
           <h1 className={styles.title}>
-            <span className={styles.icon}>🎛️</span>
-            Визуальная Студия Мониторинга
+            <span className={styles.icon}>📊</span>
+            Панель управления
           </h1>
           <div className={styles.statusBar}>
             <div className={`${styles.connectionStatus} ${styles[connectionStatus]}`}>
               <span className={styles.statusDot}></span>
-              {connectionStatus === 'connected' && 'Live'}
+              {connectionStatus === 'connected' && 'В сети'}
               {connectionStatus === 'connecting' && 'Подключение...'}
               {connectionStatus === 'disconnected' && 'Офлайн'}
             </div>
@@ -213,7 +278,12 @@ export default function DashboardLayout({
                   }}
                 >
                   <div className={styles.widgetHeader}>
-                    <h3 className={styles.widgetTitle}>{widget.title}</h3>
+                    <div className={styles.widgetTitleSection}>
+                      <h3 className={styles.widgetTitle}>{widget.title}</h3>
+                      {widget.description && (
+                        <p className={styles.widgetDescription}>{widget.description}</p>
+                      )}
+                    </div>
                     <div className={styles.widgetControls}>
                       {widget.pinned && (
                         <span className={styles.pinnedIcon} title="Закреплено">📌</span>
