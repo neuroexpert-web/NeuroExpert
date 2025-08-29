@@ -1,36 +1,13 @@
-# Файлы которые не нужны для деплоя
+# Ignore these files during deployment
 node_modules
+.git
 .env.local
-.env.development
-.env.test
-*.log
-.DS_Store
-.vscode
-.idea
-coverage
-.nyc_output
+.env.development.local
+.env.test.local
+.env.production.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Временные файлы
-*.tmp
-*.temp
-.cache
-
-# Документация и гайды (оставляем только нужные)
-docs/
-CABINET_*.md
-BUTTON_*.md
-FIXES_*.md
-EMERGENCY_*.md
-*_REPORT.md
-*_CHECKLIST.md
-*_GUIDE.md
-AI_DEVELOPER_ROLE.md
-TECH_STANDARDS.md
-
-# Тестовые файлы
-test-*.html
-test-*.mjs
-*.test.js
-*.spec.js
-playwright-report
-test-results
+# This file forces rebuild
+FORCE_DEPLOY_TRIGGER.txt

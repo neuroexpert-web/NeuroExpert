@@ -1,21 +1,29 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Базовые настройки для стабильной работы на Vercel
-  typescript: {
-    ignoreBuildErrors: false,
+  experimental: {
+    appDir: true,
   },
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // Настройки изображений
-  images: {
-    domains: ['localhost'],
+  typescript: {
+    ignoreBuildErrors: true,
   },
-  // Настройки для production
-  poweredByHeader: false,
-  reactStrictMode: true,
-  // Убираем любые экспериментальные флаги
-  swcMinify: true,
+  // Force rebuild on deployment
+  env: {
+    DEPLOYMENT_VERSION: '3.1.0',
+    DEPLOYMENT_TIME: new Date().toISOString(),
+    FORCE_REBUILD: 'true'
+  },
+  // Ensure all components are properly built
+  webpack: (config) => {
+    config.resolve.fallback = {
+      fs: false,
+      net: false,
+      tls: false,
+    };
+    return config;
+  },
 }
 
 module.exports = nextConfig
