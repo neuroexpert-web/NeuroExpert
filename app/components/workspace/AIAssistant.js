@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useWorkspace } from './WorkspaceContext';
+import styles from './AIAssistant.module.css';
 
 export default function AIAssistant() {
   const { addNotification, userProfile } = useWorkspace();
@@ -170,9 +171,9 @@ export default function AIAssistant() {
   };
 
   return (
-    <div className="ai-assistant">
+    <div className={`ai-assistant ${styles.aiAssistant}`}>
       <button 
-        className="ai-assistant-trigger"
+        className={`ai-assistant-trigger ${styles.aiAssistantTrigger}`}
         onClick={() => setIsOpen(!isOpen)}
         aria-label="AI Ассистент"
       >
@@ -180,20 +181,20 @@ export default function AIAssistant() {
       </button>
 
       {isOpen && (
-        <div className="ai-chat-window">
-          <div className="chat-header">
-            <div className="chat-header-left">
+        <div className={`ai-chat-window ${styles.aiChatWindow}`}>
+          <div className={`chat-header ${styles.chatHeader}`}>
+            <div className={`chat-header-left ${styles.chatHeaderLeft}`}>
               <h3>AI Ассистент</h3>
-              <span className="chat-status">
-                <span className={`status-dot ${apiError ? 'error' : 'online'}`}></span>
+              <span className={`chat-status ${styles.chatStatus}`}>
+                <span className={`status-dot ${styles.statusDot} ${apiError ? styles.error : ''}`}></span>
                 {apiError ? 'Автономно' : 'Онлайн'}
               </span>
             </div>
             
-            <div className="chat-header-center">
-              <div className="model-selector">
+            <div className={`chat-header-center ${styles.chatHeaderCenter}`}>
+              <div className={`model-selector ${styles.modelSelector}`}>
                 <button 
-                  className="current-model"
+                  className={`current-model ${styles.currentModel}`}
                   onClick={() => {
                     console.log('Model selector clicked, current state:', showModelSelector);
                     setShowModelSelector(!showModelSelector);
@@ -204,12 +205,12 @@ export default function AIAssistant() {
                 </button>
                 
                 {showModelSelector && (
-                  <div className="model-dropdown">
+                  <div className={`model-dropdown ${styles.modelDropdown}`}>
                     {console.log('Rendering dropdown with models:', aiModels)}
                     {aiModels.map(model => (
                       <button
                         key={model.id}
-                        className={`model-option ${selectedModel === model.id ? 'active' : ''}`}
+                        className={`model-option ${styles.modelOption} ${selectedModel === model.id ? styles.active : ''}`}
                         onClick={() => {
                           setSelectedModel(model.id);
                           setShowModelSelector(false);
@@ -231,7 +232,7 @@ export default function AIAssistant() {
             </div>
             
             <button 
-              className="chat-close"
+              className={`chat-close ${styles.chatClose}`}
               onClick={() => setIsOpen(false)}
               aria-label="Закрыть чат"
               title="Закрыть чат"
