@@ -1,14 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    // Убираем экспериментальные флаги для стабильности на Vercel
-    cpus: undefined,
-    turbo: undefined,
-    optimizeCss: undefined
-  },
-  env: {
-    NODE_ENV: process.env.NODE_ENV || 'production'
-  },
   // Настройки для Vercel
   typescript: {
     // Игнорируем TypeScript ошибки при сборке (если есть)
@@ -29,6 +20,9 @@ const nextConfig = {
     domains: ['localhost'],
     unoptimized: false,
   },
+  // Настройки для production
+  poweredByHeader: false,
+  reactStrictMode: true,
 }
 
 module.exports = nextConfig
