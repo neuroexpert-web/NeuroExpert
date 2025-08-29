@@ -1,0 +1,485 @@
+.widget {
+  padding: 1rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(79, 70, 229, 0.02));
+  border: 1px solid rgba(99, 102, 241, 0.1);
+  overflow-y: auto;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  gap: 1rem;
+  color: #94a3b8;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(99, 102, 241, 0.3);
+  border-top: 2px solid #6366f1;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #ef4444;
+  text-align: center;
+}
+
+/* Заголовок и основные метрики */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.header h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: #f8fafc;
+  font-weight: 600;
+}
+
+.mainMetrics {
+  display: flex;
+  gap: 1rem;
+}
+
+.mainMetric {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.metricValue {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #6366f1;
+  margin-bottom: 0.1rem;
+}
+
+.metricLabel {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  margin-bottom: 0.2rem;
+}
+
+.metricGrowth {
+  font-size: 0.65rem;
+  color: #22c55e;
+  font-weight: 600;
+}
+
+/* Рейтинги */
+.rankings {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.rankingItem {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem;
+  background: rgba(30, 41, 59, 0.4);
+  border-radius: 6px;
+  border: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+.rankingIcon {
+  font-size: 1rem;
+}
+
+.rankingContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.rankingValue {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-bottom: 0.1rem;
+}
+
+.rankingLabel {
+  font-size: 0.65rem;
+  color: #94a3b8;
+}
+
+/* Топ ключевые слова */
+.topKeywords {
+  margin-bottom: 1rem;
+}
+
+.topKeywords h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.8rem;
+  color: #f8fafc;
+  font-weight: 600;
+}
+
+.keywordsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.keywordItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.keywordItem:hover {
+  background: rgba(30, 41, 59, 0.5);
+}
+
+.keywordInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  flex: 1;
+}
+
+.keywordText {
+  font-size: 0.75rem;
+  color: #f8fafc;
+  font-weight: 500;
+}
+
+.keywordUrl {
+  font-size: 0.65rem;
+  color: #6366f1;
+}
+
+.keywordMetrics {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.1rem;
+}
+
+.keywordPosition {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.positionNumber {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #f8fafc;
+  background: rgba(99, 102, 241, 0.2);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+}
+
+.positionChange {
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.keywordVolume {
+  font-size: 0.65rem;
+  color: #94a3b8;
+}
+
+/* Изменения позиций */
+.positionChanges {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.changesSection {
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+
+.gainersTitle {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.75rem;
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.losersTitle {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.75rem;
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.changesList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.changeItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.3rem;
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 4px;
+}
+
+.changeKeyword {
+  font-size: 0.7rem;
+  color: #f8fafc;
+  flex: 1;
+  margin-right: 0.5rem;
+}
+
+.changeValue {
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+/* Техническое состояние */
+.technicalHealth {
+  margin-bottom: 1rem;
+}
+
+.technicalHealth h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.8rem;
+  color: #f8fafc;
+  font-weight: 600;
+}
+
+.pageSpeed {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.speedMetric {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 6px;
+}
+
+.speedIcon {
+  font-size: 1rem;
+}
+
+.speedContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.speedValue {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.1rem;
+}
+
+.speedLabel {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.technicalIssues {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.issueItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 6px;
+}
+
+.issueInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  flex: 1;
+}
+
+.issueName {
+  font-size: 0.75rem;
+  color: #f8fafc;
+  font-weight: 500;
+}
+
+.issueDescription {
+  font-size: 0.65rem;
+  color: #94a3b8;
+}
+
+.issueMetrics {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.1rem;
+}
+
+.issueCount {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.issueSeverity {
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+/* Ссылочная масса */
+.backlinks {
+  margin-bottom: 1rem;
+}
+
+.backlinks h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.8rem;
+  color: #f8fafc;
+  font-weight: 600;
+}
+
+.backlinksStats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.backlinksStat {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem;
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 8px;
+  border-left: 3px solid #6366f1;
+}
+
+.backlinksValue {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #6366f1;
+  margin-bottom: 0.2rem;
+}
+
+.backlinksLabel {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  margin-bottom: 0.3rem;
+}
+
+.backlinksChange {
+  font-size: 0.7rem;
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.backlinksQuality {
+  font-size: 0.7rem;
+  color: #f59e0b;
+  font-weight: 500;
+}
+
+/* Рекомендации */
+.recommendations {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+
+.recommendations h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.8rem;
+  color: #f8fafc;
+  font-weight: 600;
+}
+
+.recommendationsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.recommendation {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #e2e8f0;
+  padding: 0.3rem;
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 4px;
+}
+
+.recIcon {
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .mainMetrics {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .rankings {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .positionChanges {
+    grid-template-columns: 1fr;
+  }
+  
+  .pageSpeed {
+    grid-template-columns: 1fr;
+  }
+  
+  .backlinksStats {
+    grid-template-columns: 1fr;
+  }
+  
+  .widget {
+    padding: 0.75rem;
+  }
+}

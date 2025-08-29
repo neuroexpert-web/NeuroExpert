@@ -1,0 +1,451 @@
+.widget {
+  padding: 1rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.05), rgba(219, 39, 119, 0.02));
+  border: 1px solid rgba(236, 72, 153, 0.1);
+  overflow-y: auto;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  gap: 1rem;
+  color: #94a3b8;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(236, 72, 153, 0.3);
+  border-top: 2px solid #ec4899;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #ef4444;
+  text-align: center;
+}
+
+/* Заголовок и основные метрики */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.header h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: #f8fafc;
+  font-weight: 600;
+}
+
+.mainMetrics {
+  display: flex;
+  gap: 1rem;
+}
+
+.mainMetric {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.metricValue {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ec4899;
+  margin-bottom: 0.1rem;
+}
+
+.metricLabel {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  margin-bottom: 0.2rem;
+}
+
+.metricGrowth {
+  font-size: 0.65rem;
+  color: #22c55e;
+  font-weight: 600;
+}
+
+/* Средние показатели */
+.averageStats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.avgStat {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: rgba(30, 41, 59, 0.4);
+  border-radius: 8px;
+  border: 1px solid rgba(236, 72, 153, 0.1);
+}
+
+.avgIcon {
+  font-size: 1.2rem;
+}
+
+.avgContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.avgValue {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-bottom: 0.1rem;
+}
+
+.avgLabel {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+/* Лучшая кампания */
+.topCampaign {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.05));
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  border-radius: 8px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.topHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.topIcon {
+  font-size: 1rem;
+}
+
+.topTitle {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.topContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.topCampaignName {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fbbf24;
+}
+
+.topMetrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.topMetric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.topMetricValue {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-bottom: 0.1rem;
+}
+
+.topMetricLabel {
+  font-size: 0.65rem;
+  color: #94a3b8;
+}
+
+/* Последние кампании */
+.recentCampaigns {
+  margin-bottom: 1rem;
+}
+
+.recentCampaigns h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.8rem;
+  color: #f8fafc;
+  font-weight: 600;
+}
+
+.campaignsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.campaignItem {
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 8px;
+  padding: 0.75rem;
+  transition: background 0.2s ease;
+}
+
+.campaignItem:hover {
+  background: rgba(30, 41, 59, 0.5);
+}
+
+.campaignHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.campaignInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.campaignName {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.campaignStatus {
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.campaignDate {
+  font-size: 0.7rem;
+  color: #64748b;
+}
+
+.campaignStats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.campaignStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.statValue {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #f8fafc;
+  margin-bottom: 0.1rem;
+}
+
+.statLabel {
+  font-size: 0.65rem;
+  color: #94a3b8;
+}
+
+/* Сегменты */
+.segments {
+  margin-bottom: 1rem;
+}
+
+.segments h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.8rem;
+  color: #f8fafc;
+  font-weight: 600;
+}
+
+.segmentsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.segmentItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 6px;
+}
+
+.segmentInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.segmentName {
+  font-size: 0.75rem;
+  color: #f8fafc;
+  font-weight: 500;
+}
+
+.segmentSize {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.segmentMetrics {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.segmentOpenRate {
+  font-size: 0.75rem;
+  color: #ec4899;
+  font-weight: 600;
+}
+
+.segmentGrowth {
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+/* Запланированные кампании */
+.upcomingCampaigns {
+  margin-bottom: 1rem;
+}
+
+.upcomingCampaigns h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.8rem;
+  color: #f8fafc;
+  font-weight: 600;
+}
+
+.upcomingList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.upcomingItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 6px;
+  border-left: 3px solid #f59e0b;
+}
+
+.upcomingInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.upcomingName {
+  font-size: 0.75rem;
+  color: #f8fafc;
+  font-weight: 500;
+}
+
+.upcomingDate {
+  font-size: 0.7rem;
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+.upcomingRecipients {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+/* Рекомендации */
+.recommendations {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+
+.recommendations h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.8rem;
+  color: #f8fafc;
+  font-weight: 600;
+}
+
+.recommendationsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.recommendation {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #e2e8f0;
+  padding: 0.3rem;
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 4px;
+}
+
+.recIcon {
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .mainMetrics {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .averageStats {
+    grid-template-columns: 1fr;
+  }
+  
+  .topMetrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .campaignStats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .widget {
+    padding: 0.75rem;
+  }
+}

@@ -13,6 +13,11 @@ import SystemWidget from './widgets/SystemWidget';
 import BusinessMetricsWidget from './widgets/BusinessMetricsWidget';
 import YandexMetrikaWidget from './widgets/YandexMetrikaWidget';
 import GoogleAnalyticsWidget from './widgets/GoogleAnalyticsWidget';
+import SiteHealthWidget from './widgets/SiteHealthWidget';
+import SocialMediaWidget from './widgets/SocialMediaWidget';
+import EmailMarketingWidget from './widgets/EmailMarketingWidget';
+import LeadsWidget from './widgets/LeadsWidget';
+import SEOWidget from './widgets/SEOWidget';
 import DashboardFilters from './DashboardFilters';
 
 interface DashboardLayoutProps {
@@ -50,12 +55,22 @@ export default function DashboardLayout({
       pinned: true
     },
     {
+      id: 'site-health',
+      type: 'site-health',
+      title: 'Здоровье сайта',
+      description: 'Аптайм, скорость, безопасность и производительность',
+      size: 'large',
+      position: { x: 0, y: 1 },
+      refreshInterval: 15000,
+      visible: true
+    },
+    {
       id: 'yandex-metrika',
       type: 'yandex',
       title: 'Яндекс.Метрика',
       description: 'Подробная аналитика посетителей в реальном времени',
       size: 'medium',
-      position: { x: 0, y: 1 },
+      position: { x: 0, y: 2 },
       refreshInterval: 30000,
       visible: true
     },
@@ -65,28 +80,48 @@ export default function DashboardLayout({
       title: 'Google Analytics',
       description: 'Данные о пользователях и источниках трафика',
       size: 'medium',
-      position: { x: 1, y: 1 },
+      position: { x: 1, y: 2 },
       refreshInterval: 30000,
       visible: true
     },
     {
-      id: 'availability-overview',
-      type: 'slo',
-      title: 'Доступность сайта',
-      description: 'Работает ли ваш сайт для клиентов',
-      size: 'medium',
-      position: { x: 0, y: 2 },
-      refreshInterval: 15000,
+      id: 'leads-conversion',
+      type: 'leads',
+      title: 'Лиды и конверсии',
+      description: 'Воронка продаж и работа с клиентами',
+      size: 'large',
+      position: { x: 0, y: 3 },
+      refreshInterval: 60000,
       visible: true
     },
     {
-      id: 'quality-overview',
-      type: 'errors', 
-      title: 'Качество работы',
-      description: 'Насколько быстро и стабильно работает сайт',
+      id: 'seo-monitoring',
+      type: 'seo',
+      title: 'SEO мониторинг',
+      description: 'Позиции в поиске и органический трафик',
       size: 'medium',
-      position: { x: 1, y: 2 },
-      refreshInterval: 15000,
+      position: { x: 0, y: 4 },
+      refreshInterval: 120000,
+      visible: true
+    },
+    {
+      id: 'social-media',
+      type: 'social',
+      title: 'Социальные сети',
+      description: 'Активность и вовлеченность в соцсетях',
+      size: 'medium',
+      position: { x: 1, y: 4 },
+      refreshInterval: 60000,
+      visible: true
+    },
+    {
+      id: 'email-marketing',
+      type: 'email',
+      title: 'Email-маркетинг',
+      description: 'Кампании, открытия и конверсии рассылок',
+      size: 'large',
+      position: { x: 0, y: 5 },
+      refreshInterval: 60000,
       visible: true
     }
   ]);
@@ -140,10 +175,20 @@ export default function DashboardLayout({
     switch (widget.type) {
       case 'business':
         return <BusinessMetricsWidget {...commonProps} />;
+      case 'site-health':
+        return <SiteHealthWidget {...commonProps} />;
       case 'yandex':
         return <YandexMetrikaWidget {...commonProps} />;
       case 'google':
         return <GoogleAnalyticsWidget {...commonProps} />;
+      case 'leads':
+        return <LeadsWidget {...commonProps} />;
+      case 'seo':
+        return <SEOWidget {...commonProps} />;
+      case 'social':
+        return <SocialMediaWidget {...commonProps} />;
+      case 'email':
+        return <EmailMarketingWidget {...commonProps} />;
       case 'slo':
         return <SLOWidget {...commonProps} />;
       case 'traffic':
