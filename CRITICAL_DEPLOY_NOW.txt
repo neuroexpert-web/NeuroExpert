@@ -1,0 +1,15 @@
+CRITICAL DEPLOYMENT REQUIRED - $(date)
+
+USER REPORTS: New dashboard interface not visible
+ISSUE: Vercel not deploying latest changes
+STATUS: Code ready, deployment failing
+
+FORCE REBUILD REQUIRED IMMEDIATELY
+
+Changes ready:
+- DashboardLayout with 8 widgets ✅
+- AI Assistant with model selector ✅  
+- All API routes functional ✅
+- Build passes locally ✅
+
+DEPLOY THIS COMMIT: $(git rev-parse HEAD)
