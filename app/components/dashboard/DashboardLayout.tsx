@@ -11,6 +11,8 @@ import TrafficWidget from './widgets/TrafficWidget';
 import ErrorsWidget from './widgets/ErrorsWidget';
 import SystemWidget from './widgets/SystemWidget';
 import BusinessMetricsWidget from './widgets/BusinessMetricsWidget';
+import YandexMetrikaWidget from './widgets/YandexMetrikaWidget';
+import GoogleAnalyticsWidget from './widgets/GoogleAnalyticsWidget';
 import DashboardFilters from './DashboardFilters';
 
 interface DashboardLayoutProps {
@@ -48,12 +50,32 @@ export default function DashboardLayout({
       pinned: true
     },
     {
+      id: 'yandex-metrika',
+      type: 'yandex',
+      title: 'Яндекс.Метрика',
+      description: 'Подробная аналитика посетителей в реальном времени',
+      size: 'medium',
+      position: { x: 0, y: 1 },
+      refreshInterval: 30000,
+      visible: true
+    },
+    {
+      id: 'google-analytics',
+      type: 'google',
+      title: 'Google Analytics',
+      description: 'Данные о пользователях и источниках трафика',
+      size: 'medium',
+      position: { x: 1, y: 1 },
+      refreshInterval: 30000,
+      visible: true
+    },
+    {
       id: 'availability-overview',
       type: 'slo',
       title: 'Доступность сайта',
       description: 'Работает ли ваш сайт для клиентов',
       size: 'medium',
-      position: { x: 0, y: 1 },
+      position: { x: 0, y: 2 },
       refreshInterval: 15000,
       visible: true
     },
@@ -63,7 +85,7 @@ export default function DashboardLayout({
       title: 'Качество работы',
       description: 'Насколько быстро и стабильно работает сайт',
       size: 'medium',
-      position: { x: 1, y: 1 },
+      position: { x: 1, y: 2 },
       refreshInterval: 15000,
       visible: true
     }
@@ -118,6 +140,10 @@ export default function DashboardLayout({
     switch (widget.type) {
       case 'business':
         return <BusinessMetricsWidget {...commonProps} />;
+      case 'yandex':
+        return <YandexMetrikaWidget {...commonProps} />;
+      case 'google':
+        return <GoogleAnalyticsWidget {...commonProps} />;
       case 'slo':
         return <SLOWidget {...commonProps} />;
       case 'traffic':
@@ -151,7 +177,7 @@ export default function DashboardLayout({
           <div className={styles.statusBar}>
             <div className={`${styles.connectionStatus} ${styles[connectionStatus]}`}>
               <span className={styles.statusDot}></span>
-              {connectionStatus === 'connected' && 'Live'}
+              {connectionStatus === 'connected' && 'В сети'}
               {connectionStatus === 'connecting' && 'Подключение...'}
               {connectionStatus === 'disconnected' && 'Офлайн'}
             </div>

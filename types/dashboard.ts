@@ -301,7 +301,7 @@ export interface DashboardFilters extends Filters {
 
 export interface WidgetConfig {
   id: string;
-  type: 'business' | 'slo' | 'traffic' | 'errors' | 'apm' | 'logs' | 'ux' | 'roi' | 'system';
+  type: 'business' | 'yandex' | 'google' | 'slo' | 'traffic' | 'errors' | 'apm' | 'logs' | 'ux' | 'roi' | 'system';
   title: string;
   description?: string;
   size: 'small' | 'medium' | 'large' | 'full';
