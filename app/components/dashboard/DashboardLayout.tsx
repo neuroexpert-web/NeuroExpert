@@ -220,7 +220,7 @@ export default function DashboardLayout({
           transition={{ duration: 0.5 }}
         >
           <div className={styles.headerLeft}>
-            <h1 className={styles.dashboardTitle}>Панель управления</h1>
+            <h1 className={styles.dashboardTitle}>🚀 НОВАЯ ПАНЕЛЬ УПРАВЛЕНИЯ v3.1.1 🚀</h1>
             <div className={styles.connectionIndicator}>
               <span className={`${styles.statusDot} ${styles[connectionStatus]}`}></span>
               <span className={styles.statusText}>
