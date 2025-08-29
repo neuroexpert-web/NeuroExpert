@@ -3609,7 +3609,7 @@ export default function Home() {
       <Suspense fallback={
         <div className="workspace-loading">
           <div className="loading-spinner"></div>
-          <p>Загрузка Визуальной Студии...</p>
+          <p>Загрузка панели управления...</p>
         </div>
       }>
         <DashboardLayout userRole="Admin" />

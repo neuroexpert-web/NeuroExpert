@@ -10,6 +10,7 @@ import SLOWidget from './widgets/SLOWidget';
 import TrafficWidget from './widgets/TrafficWidget';
 import ErrorsWidget from './widgets/ErrorsWidget';
 import SystemWidget from './widgets/SystemWidget';
+import BusinessMetricsWidget from './widgets/BusinessMetricsWidget';
 import DashboardFilters from './DashboardFilters';
 
 interface DashboardLayoutProps {
@@ -36,38 +37,32 @@ export default function DashboardLayout({
   // Состояние виджетов
   const [widgets, setWidgets] = useState<WidgetConfig[]>([
     {
-      id: 'slo-overview',
-      type: 'slo',
-      title: 'SLO & Аптайм',
-      size: 'medium',
+      id: 'business-overview',
+      type: 'business',
+      title: 'Обзор бизнеса',
+      description: 'Ключевые показатели вашего бизнеса в реальном времени',
+      size: 'large',
       position: { x: 0, y: 0 },
       refreshInterval: 15000,
       visible: true,
       pinned: true
     },
     {
-      id: 'traffic-overview', 
-      type: 'traffic',
-      title: 'Трафик & Конверсии',
-      size: 'medium',
-      position: { x: 1, y: 0 },
-      refreshInterval: 30000,
-      visible: true
-    },
-    {
-      id: 'errors-overview',
-      type: 'errors', 
-      title: 'Ошибки & Performance',
+      id: 'availability-overview',
+      type: 'slo',
+      title: 'Доступность сайта',
+      description: 'Работает ли ваш сайт для клиентов',
       size: 'medium',
       position: { x: 0, y: 1 },
       refreshInterval: 15000,
       visible: true
     },
     {
-      id: 'system-overview',
-      type: 'system',
-      title: 'Здоровье Сервисов',
-      size: 'medium', 
+      id: 'quality-overview',
+      type: 'errors', 
+      title: 'Качество работы',
+      description: 'Насколько быстро и стабильно работает сайт',
+      size: 'medium',
       position: { x: 1, y: 1 },
       refreshInterval: 15000,
       visible: true
@@ -121,6 +116,8 @@ export default function DashboardLayout({
     };
 
     switch (widget.type) {
+      case 'business':
+        return <BusinessMetricsWidget {...commonProps} />;
       case 'slo':
         return <SLOWidget {...commonProps} />;
       case 'traffic':
@@ -135,14 +132,11 @@ export default function DashboardLayout({
   };
 
   const tabs = [
-    { id: 'overview', label: 'Обзор', icon: '📊' },
-    { id: 'users', label: 'Пользователи', icon: '👥' },
-    { id: 'errors', label: 'Ошибки', icon: '🐛' },
-    { id: 'performance', label: 'Производительность', icon: '⚡' },
-    { id: 'infrastructure', label: 'Инфраструктура', icon: '🖥️' },
-    { id: 'logs', label: 'Логи', icon: '📝' },
-    { id: 'ux', label: 'UX-сессии', icon: '🎥' },
-    { id: 'roi', label: 'ROI/KPI', icon: '💰' }
+    { id: 'overview', label: 'Обзор', icon: '📊' }
+    // Остальные вкладки будут добавлены по мере готовности
+    // { id: 'analytics', label: 'Аналитика', icon: '📈', comingSoon: true },
+    // { id: 'customers', label: 'Клиенты', icon: '👥', comingSoon: true },
+    // { id: 'sales', label: 'Продажи', icon: '💰', comingSoon: true }
   ];
 
   return (
@@ -151,8 +145,8 @@ export default function DashboardLayout({
       <header className={styles.header}>
         <div className={styles.titleSection}>
           <h1 className={styles.title}>
-            <span className={styles.icon}>🎛️</span>
-            Визуальная Студия Мониторинга
+            <span className={styles.icon}>📊</span>
+            Панель управления
           </h1>
           <div className={styles.statusBar}>
             <div className={`${styles.connectionStatus} ${styles[connectionStatus]}`}>
@@ -213,7 +207,12 @@ export default function DashboardLayout({
                   }}
                 >
                   <div className={styles.widgetHeader}>
-                    <h3 className={styles.widgetTitle}>{widget.title}</h3>
+                    <div className={styles.widgetTitleSection}>
+                      <h3 className={styles.widgetTitle}>{widget.title}</h3>
+                      {widget.description && (
+                        <p className={styles.widgetDescription}>{widget.description}</p>
+                      )}
+                    </div>
                     <div className={styles.widgetControls}>
                       {widget.pinned && (
                         <span className={styles.pinnedIcon} title="Закреплено">📌</span>
