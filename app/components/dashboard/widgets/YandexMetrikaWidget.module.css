@@ -1,0 +1,155 @@
+.container {
+  background: rgba(15, 15, 25, 0.95);
+  border: 2px solid rgba(255, 219, 0, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+  color: white;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 12px;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(255, 219, 0, 0.3);
+  border-top: 3px solid #ffdb00;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.yandexIcon {
+  font-size: 20px;
+}
+
+.title {
+  font-weight: 600;
+  color: #ffdb00;
+}
+
+.liveIndicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.liveDot {
+  width: 8px;
+  height: 8px;
+  background: #ff4444;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.metricsRow {
+  display: flex;
+  gap: 20px;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffdb00;
+}
+
+.iframe {
+  flex: 1;
+  background: rgba(30, 30, 45, 0.8);
+  border: 1px solid rgba(255, 219, 0, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.iframeHeader {
+  padding: 12px 16px;
+  background: rgba(255, 219, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 219, 0, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.iframeContent {
+  padding: 20px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mockChart {
+  text-align: center;
+}
+
+.chartBars {
+  display: flex;
+  gap: 8px;
+  align-items: end;
+  height: 60px;
+  margin-bottom: 12px;
+}
+
+.bar {
+  width: 12px;
+  background: linear-gradient(180deg, #ffdb00, #ff8800);
+  border-radius: 2px;
+  animation: grow 1s ease-out;
+}
+
+.chartLabel {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.8); }
+}
+
+@keyframes grow {
+  0% { height: 0; }
+  100% { height: var(--target-height); }
+}
