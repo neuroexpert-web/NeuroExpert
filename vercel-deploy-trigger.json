@@ -1,0 +1,14 @@
+{
+  "trigger": "force-redeploy",
+  "timestamp": "2025-01-23T16:15:00Z",
+  "reason": "User reports Vercel deployment not triggered",
+  "changes": [
+    "Complete DashboardLayout rewrite",
+    "AI Assistant with model selector",
+    "8 new dashboard widgets",
+    "All API routes created",
+    "CSS styles updated"
+  ],
+  "version": "3.1.0",
+  "priority": "CRITICAL"
+}
