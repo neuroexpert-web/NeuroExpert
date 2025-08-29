@@ -1,5 +1,5 @@
 
-# NeuroExpert - AI-Powered Business Platform 🚀
+# NeuroExpert - AI-Powered Business Platform v3.1.0 🚀
 
 ## 🚀 Быстрое развертывание
 
