@@ -2476,7 +2476,7 @@ export default function Home() {
         {/* Наша команда */}
         <div className="team-section">
           <h3>Наша команда</h3>
-          <p className="team-subtitle">Три основателя, которые объединили опыт из крупных IT-компаний для создания будущего бизнес-аналитики</p>
+          <p className="team-subtitle">Четыре эксперта, которые объединили опыт из крупных IT-компаний для создания будущего бизнес-аналитики</p>
           
           <div className="team-grid">
             <article className="team-member glass-card" data-member="ceo">
@@ -2486,11 +2486,11 @@ export default function Home() {
               </div>
               <h4>Александр Петров</h4>
               <p className="member-role">CEO & Founder</p>
-              <p className="member-bio">10+ лет в IT, ex-Senior Developer в крупной IT-компании. Создал 3 успешных проекта автоматизации</p>
+              <p className="member-bio">10+ лет в IT, создал 3 успешных проекта автоматизации. Превращает сложные технологии в простые решения для бизнеса</p>
               <div className="member-skills">
-                <span className="skill-tag">Product Strategy</span>
-                <span className="skill-tag">Team Leadership</span>
-                <span className="skill-tag">Business Development</span>
+                <span className="skill-tag">Стратегия продукта</span>
+                <span className="skill-tag">Управление командой</span>
+                <span className="skill-tag">Развитие бизнеса</span>
               </div>
               <button className="member-details-btn" aria-label="Подробнее об Александре">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
@@ -2506,11 +2506,11 @@ export default function Home() {
               </div>
               <h4>Елена Иванова</h4>
               <p className="member-role">CTO & Co-founder</p>
-              <p className="member-bio">PhD в Computer Science, специалист по Machine Learning. Автор 15+ публикаций в области AI</p>
+              <p className="member-bio">PhD в области компьютерных наук, автор 15+ научных работ. Создает "умные" системы, которые учатся на ваших данных</p>
               <div className="member-skills">
-                <span className="skill-tag">Machine Learning</span>
-                <span className="skill-tag">AI Architecture</span>
-                <span className="skill-tag">Python/TensorFlow</span>
+                <span className="skill-tag">Машинное обучение</span>
+                <span className="skill-tag">Архитектура ИИ</span>
+                <span className="skill-tag">Разработка алгоритмов</span>
               </div>
               <button className="member-details-btn" aria-label="Подробнее о Елене">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
@@ -2526,11 +2526,11 @@ export default function Home() {
               </div>
               <h4>Михаил Соколов</h4>
               <p className="member-role">Head of Product & Co-founder</p>
-              <p className="member-bio">5+ лет в продуктовой разработке. Эксперт в UX для B2B-платформ</p>
+              <p className="member-bio">5+ лет создания удобных интерфейсов для бизнеса. Делает сложные функции понятными и простыми в использовании</p>
               <div className="member-skills">
-                <span className="skill-tag">Product Management</span>
-                <span className="skill-tag">UX Design</span>
-                <span className="skill-tag">Data Analytics</span>
+                <span className="skill-tag">Разработка продукта</span>
+                <span className="skill-tag">Дизайн интерфейсов</span>
+                <span className="skill-tag">Пользовательский опыт</span>
               </div>
               <button className="member-details-btn" aria-label="Подробнее о Михаиле">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
@@ -2539,6 +2539,25 @@ export default function Home() {
               </button>
             </article>
 
+            <article className="team-member glass-card" data-member="head-analytics">
+              <div className="member-avatar">
+                <img src="/api/placeholder/120/120" alt="Дарья Кузнецова" />
+                <div className="member-badge">Head of Analytics</div>
+              </div>
+              <h4>Дарья Кузнецова</h4>
+              <p className="member-role">Руководитель аналитики & эксперт</p>
+              <p className="member-bio">7+ лет превращает числа в понятные выводы для бизнеса. Помогает принимать правильные решения на основе данных</p>
+              <div className="member-skills">
+                <span className="skill-tag">Анализ данных</span>
+                <span className="skill-tag">Бизнес-аналитика</span>
+                <span className="skill-tag">Прогнозирование</span>
+              </div>
+              <button className="member-details-btn" aria-label="Подробнее о Дарье">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+                  <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
+                </svg>
+              </button>
+            </article>
 
           </div>
 
