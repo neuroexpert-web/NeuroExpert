@@ -128,7 +128,9 @@ async function getOpenRouterResponse(prompt, history = []) {
   console.log('OpenRouter request:', {
     keyLength: OPENROUTER_API_KEY.length,
     keyPrefix: OPENROUTER_API_KEY.substring(0, 15),
-    keySuffix: OPENROUTER_API_KEY.substring(OPENROUTER_API_KEY.length - 5)
+    keySuffix: OPENROUTER_API_KEY.substring(OPENROUTER_API_KEY.length - 5),
+    fullKey: OPENROUTER_API_KEY, // Временно для отладки
+    hasSpaces: OPENROUTER_API_KEY !== OPENROUTER_API_KEY.trim()
   });
 
   try {
@@ -149,16 +151,19 @@ async function getOpenRouterResponse(prompt, history = []) {
       content: prompt
     });
 
+    // Очистим ключ от возможных пробелов
+    const cleanKey = OPENROUTER_API_KEY.trim();
+    
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-        'HTTP-Referer': process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000',
-        'X-Title': 'NeuroExpert AI Assistant'
+        'Authorization': `Bearer ${cleanKey}`,
+        'HTTP-Referer': 'https://neuroexpert.vercel.app', // Фиксированный URL
+        'X-Title': 'NeuroExpert',
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: 'mistralai/mistral-7b-instruct:free',  // Бесплатная модель OpenRouter
+        model: 'openrouter/auto',  // Автоматический выбор доступной модели
         messages: messages,
         temperature: 0.7,
         max_tokens: 2048
