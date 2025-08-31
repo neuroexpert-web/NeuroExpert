@@ -34,6 +34,20 @@
   overflow-y: auto;
   overflow-x: hidden;
   position: relative;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Специальный фикс для страницы личного кабинета */
+.pageWrapper:has(#workspace-section) {
+  overflow-y: auto !important;
+  height: 100vh !important;
+}
+
+.pageWrapper #workspace-section {
+  height: auto !important;
+  min-height: 100vh;
+  overflow: visible !important;
 }
 
 /* Индикатор прогресса с неоновыми эффектами */
