@@ -1,22 +1,9 @@
 {
-  "version": 2,
   "buildCommand": "npm run build",
   "outputDirectory": ".next",
   "framework": "nextjs",
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
-  ],
-  "functions": {
-    "app/api/**/*.ts": {
-      "runtime": "nodejs18.x"
-    }
-  },
-  "crons": [],
   "env": {
-    "FORCE_CACHE_BUST": "2025-01-29-FORCE-DEPLOY-NOW",
+    "FORCE_CACHE_BUST": "2025-01-29-FORCE-DEPLOY-FIX",
     "DEPLOYMENT_TRIGGER": "FORCE_REBUILD_ALL_COMPONENTS"
   }
 }
