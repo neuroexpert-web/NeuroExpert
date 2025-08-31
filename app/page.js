@@ -239,6 +239,43 @@ export default function Home() {
     }, 300);
   }, []);
 
+  // Обработчики для кнопок действий в процессах
+  const handleCreateVacancies = useCallback(() => {
+    // Открываем раздел HR с предзаполненной формой создания вакансий
+    setCurrentSection(3); // Переключаемся на раздел процессов
+    setTimeout(() => {
+      // Показываем модальное окно создания вакансий
+      const event = new CustomEvent('showProcessModal', { 
+        detail: { type: 'create-vacancy', department: 'Разработка' } 
+      });
+      window.dispatchEvent(event);
+    }, 300);
+  }, []);
+
+  const handleTaskAnalysis = useCallback(() => {
+    // Открываем детальный анализ задач отдела
+    const event = new CustomEvent('showProcessModal', { 
+      detail: { type: 'task-analysis', department: 'Разработка' } 
+    });
+    window.dispatchEvent(event);
+  }, []);
+
+  const handleSuggestTasks = useCallback(() => {
+    // Открываем рекомендации по оптимизации
+    const event = new CustomEvent('showProcessModal', { 
+      detail: { type: 'suggest-tasks', department: 'Поддержка' } 
+    });
+    window.dispatchEvent(event);
+  }, []);
+
+  const handleOptimizeDepartment = useCallback(() => {
+    // Запускаем оптимизацию процессов
+    const event = new CustomEvent('showProcessModal', { 
+      detail: { type: 'optimize', department: 'Поддержка' } 
+    });
+    window.dispatchEvent(event);
+  }, []);
+
   // Обработчик обновления данных
   const handleRefreshData = useCallback(async () => {
     setRefreshing(true);
@@ -1559,8 +1596,8 @@ export default function Home() {
                   <h5>Перегрузка маркетинга</h5>
                   <p>Отдел работает на 92% мощности. Рекомендуем перераспределить задачи или нанять 2 специалистов.</p>
                   <div className="insight-actions">
-                    <button className="action-btn primary">Создать вакансии</button>
-                    <button className="action-btn secondary">Анализ задач</button>
+                    <button className="action-btn primary" onClick={handleCreateVacancies}>Создать вакансии</button>
+                    <button className="action-btn secondary" onClick={handleTaskAnalysis}>Анализ задач</button>
                   </div>
                 </div>
               </div>
@@ -1573,8 +1610,8 @@ export default function Home() {
                   <h5>Резерв в поддержке</h5>
                   <p>Загрузка 65% позволяет взять дополнительные задачи. Можно расширить функционал отдела.</p>
                   <div className="insight-actions">
-                    <button className="action-btn primary">Предложить задачи</button>
-                    <button className="action-btn secondary">Оптимизировать</button>
+                    <button className="action-btn primary" onClick={handleSuggestTasks}>Предложить задачи</button>
+                    <button className="action-btn secondary" onClick={handleOptimizeDepartment}>Оптимизировать</button>
                   </div>
                 </div>
               </div>
