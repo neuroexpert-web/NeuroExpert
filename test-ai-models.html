@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Тест AI моделей NeuroExpert</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .model-test {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .model-test h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .status {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            display: inline-block;
+        }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .status.loading { background: #cce5ff; color: #004085; }
+        .response {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            white-space: pre-wrap;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Тест AI моделей NeuroExpert</h1>
+    
+    <div class="test-container">
+        <h2>Статус API</h2>
+        <div id="api-status">Проверка...</div>
+    </div>
+
+    <div class="test-container">
+        <h2>Тест моделей</h2>
+        <button onclick="testAllModels()">Протестировать все модели</button>
+        
+        <div id="models-tests">
+            <div class="model-test" id="gemini-test">
+                <h3>Google Gemini</h3>
+                <div class="status loading">Ожидание теста...</div>
+                <div class="response"></div>
+            </div>
+            
+            <div class="model-test" id="gpt4-test">
+                <h3>GPT-4 (OpenRouter)</h3>
+                <div class="status loading">Ожидание теста...</div>
+                <div class="response"></div>
+            </div>
+            
+            <div class="model-test" id="claude-test">
+                <h3>Claude 3</h3>
+                <div class="status loading">Ожидание теста...</div>
+                <div class="response"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Проверка статуса API
+        async function checkAPIStatus() {
+            try {
+                const response = await fetch('/api/assistant', { method: 'GET' });
+                const data = await response.json();
+                
+                const statusDiv = document.getElementById('api-status');
+                statusDiv.innerHTML = `
+                    <p><strong>Статус:</strong> ${data.success ? '✅ API работает' : '❌ API не работает'}</p>
+                    <p><strong>Gemini ключ:</strong> ${data.env?.hasGeminiKey ? '✅ Установлен' : '❌ Не установлен'}</p>
+                    <p><strong>OpenRouter ключ:</strong> ${data.env?.hasOpenRouterKey ? '✅ Установлен' : '❌ Не установлен'}</p>
+                    <p><strong>Anthropic ключ:</strong> ${data.env?.hasAnthropicKey ? '✅ Установлен' : '❌ Не установлен'}</p>
+                `;
+            } catch (error) {
+                document.getElementById('api-status').innerHTML = '❌ Ошибка проверки API: ' + error.message;
+            }
+        }
+
+        // Тест одной модели
+        async function testModel(modelId, modelName) {
+            const testDiv = document.getElementById(`${modelId}-test`);
+            const statusDiv = testDiv.querySelector('.status');
+            const responseDiv = testDiv.querySelector('.response');
+            
+            statusDiv.className = 'status loading';
+            statusDiv.textContent = 'Тестирование...';
+            responseDiv.textContent = '';
+            
+            try {
+                const response = await fetch('/api/assistant', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: 'Привет! Расскажи кратко, какая ты AI модель и что умеешь делать?',
+                        model: modelName,
+                        context: 'general'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success || data.response || data.reply) {
+                    statusDiv.className = 'status success';
+                    statusDiv.textContent = '✅ Работает';
+                    responseDiv.textContent = data.response || data.reply || data.answer || 'Ответ получен';
+                    responseDiv.innerHTML += `\n\n<small>Модель: ${data.model || modelName}</small>`;
+                } else {
+                    statusDiv.className = 'status error';
+                    statusDiv.textContent = '❌ Ошибка';
+                    responseDiv.textContent = data.error || 'Неизвестная ошибка';
+                }
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = '❌ Ошибка сети';
+                responseDiv.textContent = error.message;
+            }
+        }
+
+        // Тест всех моделей
+        async function testAllModels() {
+            await testModel('gemini', 'gemini');
+            await testModel('gpt4', 'gpt-4');
+            await testModel('claude', 'claude');
+        }
+
+        // Запуск при загрузке страницы
+        window.onload = function() {
+            checkAPIStatus();
+        };
+    </script>
+</body>
+</html>

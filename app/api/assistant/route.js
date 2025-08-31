@@ -18,8 +18,9 @@ const GEMINI_API_KEY = process.env.GOOGLE_GEMINI_API_KEY
   || process.env.GEMINI_API_KEY
   || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
-if (!GEMINI_API_KEY && !ANTHROPIC_API_KEY) {
+if (!GEMINI_API_KEY && !ANTHROPIC_API_KEY && !OPENROUTER_API_KEY) {
   console.error('No AI API keys configured. Please check environment variables.');
 }
 
@@ -29,8 +30,10 @@ const genAI = GEMINI_API_KEY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null;
 console.log('API Keys check:', {
   hasGeminiKey: !!GEMINI_API_KEY,
   hasAnthropicKey: !!ANTHROPIC_API_KEY,
+  hasOpenRouterKey: !!OPENROUTER_API_KEY,
   genAIInitialized: !!genAI,
-  geminiKeyLength: GEMINI_API_KEY ? GEMINI_API_KEY.length : 0
+  geminiKeyLength: GEMINI_API_KEY ? GEMINI_API_KEY.length : 0,
+  openRouterKeyLength: OPENROUTER_API_KEY ? OPENROUTER_API_KEY.length : 0
 });
 
 // Load system prompt for NeuroExpert v4.0 Enhanced (used as systemInstruction)
@@ -108,6 +111,68 @@ async function sendTelegramNotification(question, answer, model) {
   }
 }
 
+// Функция для взаимодействия с OpenRouter API (GPT-4)
+async function getOpenRouterResponse(prompt, history = []) {
+  if (!OPENROUTER_API_KEY) {
+    throw new Error('OPENROUTER_API_KEY is not set');
+  }
+
+  try {
+    // Подготавливаем историю для OpenRouter
+    const messages = history.length > 0 ? history : [];
+    
+    // Добавляем системное сообщение если его нет
+    if (messages.length === 0 || messages[0].role !== 'system') {
+      messages.unshift({
+        role: 'system',
+        content: SYSTEM_PROMPT || 'You are a helpful AI assistant.'
+      });
+    }
+    
+    // Добавляем текущее сообщение
+    messages.push({
+      role: 'user',
+      content: prompt
+    });
+
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+        'HTTP-Referer': 'https://neuroexpert.io',
+        'X-Title': 'NeuroExpert AI Assistant'
+      },
+      body: JSON.stringify({
+        model: 'openai/gpt-4-turbo-preview',
+        messages: messages,
+        temperature: 0.7,
+        max_tokens: 2048
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('OpenRouter API error response:', errorData);
+      throw new Error(`OpenRouter API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    // Возвращаем ответ и обновленную историю
+    return {
+      text: data.choices[0].message.content,
+      updatedHistory: [...messages, {
+        role: 'assistant',
+        content: data.choices[0].message.content
+      }]
+    };
+  } catch (error) {
+    console.error('OpenRouter API error:', error);
+    throw error;
+  }
+}
+
 // Функция для взаимодействия с Claude API (Anthropic)
 async function getClaudeResponse(prompt, history = []) {
   if (!ANTHROPIC_API_KEY) {
@@ -180,12 +245,23 @@ async function handler(request) {
                                !ANTHROPIC_API_KEY.includes('here') &&
                                !ANTHROPIC_API_KEY.includes('key') &&
                                ANTHROPIC_API_KEY.length > 30;
+    const isValidOpenRouterKey = OPENROUTER_API_KEY && 
+                                !OPENROUTER_API_KEY.includes('your_') && 
+                                !OPENROUTER_API_KEY.includes('here') &&
+                                !OPENROUTER_API_KEY.includes('key') &&
+                                OPENROUTER_API_KEY.length > 30;
     
     // ПРИНУДИТЕЛЬНЫЙ DEMO MODE для тестирования
-    console.log('Demo mode check:', { isValidGeminiKey, isValidAnthropicKey, GEMINI_API_KEY: GEMINI_API_KEY?.substring(0, 10) + '...' });
+    console.log('Demo mode check:', { 
+      isValidGeminiKey, 
+      isValidAnthropicKey, 
+      isValidOpenRouterKey,
+      GEMINI_API_KEY: GEMINI_API_KEY?.substring(0, 10) + '...',
+      OPENROUTER_KEY: OPENROUTER_API_KEY?.substring(0, 10) + '...'
+    });
     
     // DEMO MODE: если нет настоящих API ключей, показываем демо-ответ
-    if (!isValidGeminiKey && !isValidAnthropicKey) {
+    if (!isValidGeminiKey && !isValidAnthropicKey && !isValidOpenRouterKey) {
       const demoResponses = [
         "🚀 Демо-режим NeuroExpert AI активен! Для полной функциональности добавьте API ключи в .env.local файл.\n\n✨ Ваш вопрос принят, но это демо-ответ. Настоящий AI поможет с:\n• Анализом бизнес-процессов\n• Автоматизацией задач\n• Повышением конверсии",
         "🤖 Это тестовый ответ NeuroExpert AI! Настоящий AI проанализирует ваш бизнес и предложит конкретные решения.\n\n📋 Для активации:\n1. Получите бесплатный ключ: https://ai.google.dev/\n2. Добавьте в .env.local\n3. Перезапустите сервер",
@@ -240,7 +316,16 @@ async function handler(request) {
     
     try {
       // Выбираем модель на основе запроса пользователя
-      if (model === 'claude' && isValidAnthropicKey) {
+      if (model === 'gpt-4' && isValidOpenRouterKey) {
+        // Используем GPT-4 через OpenRouter
+        console.log('Using GPT-4 via OpenRouter with system prompt');
+        console.log('OPENROUTER_API_KEY exists:', !!OPENROUTER_API_KEY);
+        console.log('OPENROUTER_API_KEY length:', OPENROUTER_API_KEY ? OPENROUTER_API_KEY.length : 0);
+        const gptResponse = await getOpenRouterResponse(question, history);
+        answer = gptResponse.text;
+        updatedHistory = gptResponse.updatedHistory;
+        usedModel = 'gpt-4';
+      } else if (model === 'claude' && isValidAnthropicKey) {
         // Используем Claude с историей
         console.log('Using Claude with system prompt');
         console.log('ANTHROPIC_API_KEY exists:', !!ANTHROPIC_API_KEY);
@@ -280,6 +365,13 @@ async function handler(request) {
           console.error('Gemini API call failed:', geminiError);
           throw geminiError;
         }
+      } else if (isValidOpenRouterKey && model !== 'gemini' && model !== 'claude') {
+        // Fallback на GPT-4 если другие модели недоступны
+        console.log('Fallback to GPT-4 via OpenRouter');
+        const gptResponse = await getOpenRouterResponse(question, history);
+        answer = gptResponse.text;
+        updatedHistory = gptResponse.updatedHistory;
+        usedModel = 'gpt-4';
       } else if (isValidAnthropicKey && model !== 'gemini') {
         // Fallback на Claude если Gemini недоступен
         console.log('Fallback to Claude (Gemini not available)');
