@@ -241,7 +241,12 @@ async function getOpenRouterResponse(prompt, history = []) {
     throw new Error('OPENROUTER_API_KEY is not set');
   }
 
-  console.log('OpenRouter request debug');
+  console.log('OpenRouter request debug:', {
+    hasKey: !!OPENROUTER_API_KEY,
+    keyLength: OPENROUTER_API_KEY?.length,
+    keyFormat: OPENROUTER_API_KEY?.startsWith('sk-or-v1-') ? 'correct' : 'incorrect',
+    keyTrimmed: OPENROUTER_API_KEY === OPENROUTER_API_KEY?.trim()
+  });
 
   try {
     // Подготавливаем историю для OpenRouter
@@ -264,20 +269,32 @@ async function getOpenRouterResponse(prompt, history = []) {
     // Очистим ключ от возможных пробелов
     const cleanKey = OPENROUTER_API_KEY.trim();
     
+    // Пробуем бесплатную модель для OpenRouter
+    const requestBody = {
+      model: 'mistralai/mistral-7b-instruct:free',  // Бесплатная модель
+      messages: messages,
+      temperature: 0.7,
+      max_tokens: 2048,
+      route: 'fallback', // Добавляем fallback для надёжности
+      transforms: ["middle-out"] // Рекомендуется для бесплатных моделей
+    };
+
+    console.log('OpenRouter request:', {
+      url: 'https://openrouter.ai/api/v1/chat/completions',
+      model: requestBody.model,
+      messagesCount: messages.length,
+      keyPrefix: cleanKey.substring(0, 15) + '...'
+    });
+
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${cleanKey}`,
-        'HTTP-Referer': 'https://neuroexpert.vercel.app', // Фиксированный URL
+        'HTTP-Referer': 'https://neuroexpert.vercel.app',
         'X-Title': 'NeuroExpert',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        model: 'openai/gpt-3.5-turbo',  // Доступная модель OpenRouter
-        messages: messages,
-        temperature: 0.7,
-        max_tokens: 2048
-      })
+      body: JSON.stringify(requestBody)
     });
 
     if (!response.ok) {
