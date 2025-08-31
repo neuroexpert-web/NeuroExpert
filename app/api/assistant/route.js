@@ -51,7 +51,7 @@ console.log('API Keys check:', {
 // Load system prompt for NeuroExpert v4.0 Enhanced (used as systemInstruction)
 // This file contains the complete system prompt for the AI assistant
 // Vercel deployment trigger - updated at: ${new Date().toISOString()}
-const PROMPT_PATH = path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v4_enhanced.md');
+const PROMPT_PATH = path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v5_human.md');
 let SYSTEM_PROMPT = '';
 
 // Check if file exists
@@ -699,7 +699,7 @@ export async function POST(request) {
 // Add GET method for testing prompt loading
 export async function GET() {
   try {
-    const PROMPT_PATH = path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v4_enhanced.md');
+    const PROMPT_PATH = path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v5_human.md');
     
     let fileExists = false;
     let promptContent = '';

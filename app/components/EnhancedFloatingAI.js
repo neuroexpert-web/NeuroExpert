@@ -127,9 +127,9 @@ export default function EnhancedFloatingAI() {
       const timeOfDay = hour < 12 ? 'morning' : hour < 18 ? 'day' : 'evening';
       
       const greetings = {
-        morning: "🌅 Доброе утро! Я Александр Нейронов, ваш AI-помощник NeuroExpert. Готов помочь развивать ваш проект!",
-        day: "⚡ Добрый день! Александр на связи. Как могу помочь с вашим бизнесом?",
-        evening: "🌙 Добрый вечер! Работаю круглосуточно. О чём хотите поговорить?"
+        morning: "🌅 Доброе утро! Я Александр, ваш персональный AI-консультант. Давайте увеличим прибыль вашего бизнеса на 40%!",
+        day: "⚡ Привет! Александр на связи. Расскажите о вашем бизнесе - помогу с автоматизацией и ростом продаж.",
+        evening: "🌙 Добрый вечер! Готов помочь с любыми вопросами по развитию вашего проекта. Что вас интересует?"
       };
       
       setTimeout(() => {
@@ -408,42 +408,44 @@ export default function EnhancedFloatingAI() {
         <div className="enhanced-ai-chat-container">
           {/* Заголовок с AI аватаром */}
           <div className="enhanced-chat-header">
-            <div className="header-left">
-              <div className="header-avatar">
-                <AIAvatar isActive={true} personality={aiPersonality} />
-              </div>
-              <div className="header-info">
-                <h3 className="ai-name">Александр Нейронов</h3>
-                <p className="ai-title">AI-Помощник NeuroExpert v4.0</p>
-              </div>
-            </div>
-            
-            <div className="header-controls">
-              {/* Выбор модели - компактный */}
-              <div className="model-selector-compact">
-                <select 
-                  value={selectedModel} 
-                  onChange={(e) => setSelectedModel(e.target.value)}
-                  className="model-select-compact"
-                  title="Выберите AI модель"
-                >
-                  <option value="gemini">Gemini</option>
-                  <option value="claude">Claude</option>
-                  <option value="gpt-4">GPT-4</option>
-                </select>
+            <div style={{width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+              <div className="header-left">
+                <div className="header-avatar">
+                  <AIAvatar isActive={true} personality={aiPersonality} />
+                </div>
+                <div className="header-info">
+                  <h3 className="ai-name">Александр</h3>
+                  <p className="ai-title">AI-консультант NeuroExpert v5.0</p>
+                </div>
               </div>
               
-              {/* Кнопка закрытия */}
-              <button 
-                className="close-btn-compact"
-                onClick={() => setIsOpen(false)}
-                aria-label="Закрыть чат"
-                title="Закрыть"
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M18 6L6 18M6 6l12 12" />
-                </svg>
-              </button>
+              <div className="header-controls">
+                {/* Выбор модели - компактный */}
+                <div className="model-selector-compact">
+                  <select 
+                    value={selectedModel} 
+                    onChange={(e) => setSelectedModel(e.target.value)}
+                    className="model-select-compact"
+                    title="Выберите AI модель"
+                  >
+                    <option value="gemini">Gemini</option>
+                    <option value="claude">Claude</option>
+                    <option value="gpt-4">GPT-4</option>
+                  </select>
+                </div>
+                
+                {/* Кнопка закрытия */}
+                <button 
+                  className="close-btn-compact"
+                  onClick={() => setIsOpen(false)}
+                  aria-label="Закрыть чат"
+                  title="Закрыть"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -454,8 +456,8 @@ export default function EnhancedFloatingAI() {
                 <div className="welcome-avatar">
                   <AIAvatar isActive={true} personality={aiPersonality} />
                 </div>
-                <h3>Добро пожаловать в NeuroExpert AI v4.0!</h3>
-                <p>Готов трансформировать ваш бизнес с помощью искусственного интеллекта</p>
+                <h2>Добро пожаловать в NeuroExpert!</h2>
+                <p>Увеличим прибыль вашего бизнеса на 40% с помощью AI-технологий</p>
               </div>
             )}
             
@@ -527,7 +529,7 @@ export default function EnhancedFloatingAI() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-                placeholder="Опишите ваш бизнес-вызов или задайте вопрос..."
+                placeholder="Расскажите о вашем бизнесе или задайте вопрос..."
                 className="enhanced-chat-input"
                 disabled={isLoading}
               />
