@@ -373,7 +373,7 @@ async function handler(request) {
           
           try {
             const geminiModel = genAI.getGenerativeModel({ 
-              model: "gemini-pro",  // Используем стабильную версию
+              model: "gemini-1.5-flash",  // Используем актуальную модель
               systemInstruction: finalSystemPrompt
             });
             
