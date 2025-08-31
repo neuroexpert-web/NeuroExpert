@@ -68,10 +68,12 @@ export default function EnhancedFloatingAI() {
   // Обработчик события для открытия чата
   useEffect(() => {
     const handleOpenAIChat = () => {
+      console.log('📢 EnhancedFloatingAI: Получено событие openAIChat');
       setIsOpen(true);
     };
 
     window.addEventListener('openAIChat', handleOpenAIChat);
+    console.log('✅ EnhancedFloatingAI: Event listener установлен');
     
     return () => {
       window.removeEventListener('openAIChat', handleOpenAIChat);

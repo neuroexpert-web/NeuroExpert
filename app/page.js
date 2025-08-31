@@ -219,15 +219,19 @@ export default function Home() {
 
   // Обработчик для кнопки CTA
   const handleCTAClick = useCallback(() => {
+    console.log('🎯 handleCTAClick: Начинаем открытие AI чата');
     setLoading(true);
     // Открываем AI управляющего
     setTimeout(() => {
       // Ищем кнопку AI управляющего и кликаем на неё
-      const aiButton = document.querySelector('.ai-chat-button, .floating-ai-btn, [class*="floating"][class*="ai"]');
+      const aiButton = document.querySelector('.ai-chat-trigger');
+      console.log('🔍 Поиск AI кнопки:', aiButton);
       if (aiButton) {
+        console.log('✅ Найдена AI кнопка, кликаем');
         aiButton.click();
       } else {
         // Если не нашли кнопку, попробуем найти сам компонент и открыть его
+        console.log('⚡ Кнопка не найдена, отправляем CustomEvent');
         const event = new CustomEvent('openAIChat');
         window.dispatchEvent(event);
       }

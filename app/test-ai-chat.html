@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тест AI Чата</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #1a1a1a;
+      color: white;
+      padding: 20px;
+    }
+    .test-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: rgba(30, 30, 45, 0.8);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(138, 43, 226, 0.3);
+    }
+    h1 {
+      color: #8a2be2;
+      text-align: center;
+    }
+    .section {
+      margin: 20px 0;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+    }
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ff4444;
+    }
+    .status-dot.ok {
+      background: #44ff44;
+    }
+    button {
+      background: #8a2be2;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    button:hover {
+      background: #7a1bc2;
+    }
+    .close-btn {
+      width: 32px;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .model-select {
+      background: rgba(30, 30, 45, 0.8);
+      border: 1px solid rgba(138, 43, 226, 0.3);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      margin: 5px;
+    }
+    #result {
+      margin-top: 20px;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 8px;
+      min-height: 100px;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>🔍 Тест AI Чата NeuroExpert</h1>
+    
+    <div class="section">
+      <h2>1. Элементы управления</h2>
+      
+      <div class="status">
+        <span class="status-dot" id="close-status"></span>
+        <span>Крестик закрытия:</span>
+        <button class="close-btn">✕</button>
+      </div>
+      
+      <div class="status">
+        <span class="status-dot" id="model-status"></span>
+        <span>Выбор модели:</span>
+        <select class="model-select">
+          <option value="gemini">Gemini Pro</option>
+          <option value="gpt-4">GPT-4</option>
+          <option value="claude">Claude 3</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>2. Тест API</h2>
+      <button onclick="testAPI()">Протестировать API</button>
+      <div id="result">Результат появится здесь...</div>
+    </div>
+    
+    <div class="section">
+      <h2>3. Проверка событий</h2>
+      <button onclick="triggerOpenChat()">Эмулировать открытие чата</button>
+    </div>
+  </div>
+
+  <script>
+    // Проверка видимости элементов
+    document.addEventListener('DOMContentLoaded', function() {
+      const closeBtn = document.querySelector('.close-btn');
+      const modelSelect = document.querySelector('.model-select');
+      
+      document.getElementById('close-status').classList.add('ok');
+      document.getElementById('model-status').classList.add('ok');
+      
+      closeBtn.addEventListener('click', () => {
+        alert('Крестик работает!');
+      });
+      
+      modelSelect.addEventListener('change', (e) => {
+        alert('Выбрана модель: ' + e.target.value);
+      });
+    });
+    
+    // Тест API
+    async function testAPI() {
+      const result = document.getElementById('result');
+      result.innerHTML = 'Отправляю запрос...';
+      
+      try {
+        const response = await fetch('/api/assistant', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            prompt: 'Тестовый запрос',
+            history: [],
+            selectedModel: 'gemini'
+          })
+        });
+        
+        const data = await response.json();
+        result.innerHTML = '<strong>Ответ от API:</strong><br>' + 
+          JSON.stringify(data, null, 2);
+      } catch (error) {
+        result.innerHTML = '<strong>Ошибка:</strong><br>' + error.message;
+      }
+    }
+    
+    // Эмуляция события
+    function triggerOpenChat() {
+      window.dispatchEvent(new CustomEvent('openAIChat'));
+      alert('Событие openAIChat отправлено!');
+    }
+  </script>
+</body>
+</html>

@@ -539,9 +539,12 @@
 }
 
 .header-controls {
-  display: flex;
+  display: flex !important;
   align-items: center;
   gap: 10px;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 10;
 }
 
 /* Переключатель персональности */
@@ -583,6 +586,9 @@
 /* Model Selector */
 .model-selector {
   position: relative;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 .model-select {
@@ -597,6 +603,9 @@
   appearance: none;
   padding-right: 2rem;
   min-width: 120px;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 .model-select:hover {
@@ -629,11 +638,14 @@
   color: white;
   border-radius: 50%;
   cursor: pointer;
-  display: flex;
+  display: flex !important;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
   font-size: 14px;
+  position: relative;
+  z-index: 10;
+  flex-shrink: 0;
 }
 
 .close-btn:hover {
