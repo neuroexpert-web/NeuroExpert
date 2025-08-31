@@ -24,7 +24,15 @@ if (!GEMINI_API_KEY && !ANTHROPIC_API_KEY && !OPENROUTER_API_KEY) {
   console.error('No AI API keys configured. Please check environment variables.');
 }
 
-const genAI = GEMINI_API_KEY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null;
+let genAI = null;
+try {
+  if (GEMINI_API_KEY) {
+    genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+    console.log('GoogleGenerativeAI initialized successfully');
+  }
+} catch (error) {
+  console.error('Failed to initialize GoogleGenerativeAI:', error);
+}
 
 // Debug logging
 console.log('API Keys check:', {
@@ -144,7 +152,7 @@ async function getOpenRouterResponse(prompt, history = []) {
         'X-Title': 'NeuroExpert AI Assistant'
       },
       body: JSON.stringify({
-        model: 'openai/gpt-4-turbo-preview',
+        model: 'openai/gpt-3.5-turbo',  // Используем более доступную модель
         messages: messages,
         temperature: 0.7,
         max_tokens: 2048
@@ -304,7 +312,14 @@ async function handler(request) {
       questionLength: question?.length,
       hasAnthropicKey: !!ANTHROPIC_API_KEY,
       hasGeminiKey: !!GEMINI_API_KEY,
+      hasOpenRouterKey: !!OPENROUTER_API_KEY,
+      isValidGeminiKey,
+      isValidAnthropicKey,
+      isValidOpenRouterKey,
+      genAIInitialized: !!genAI,
       anthropicKeyLength: ANTHROPIC_API_KEY ? ANTHROPIC_API_KEY.length : 0,
+      geminiKeyLength: GEMINI_API_KEY ? GEMINI_API_KEY.length : 0,
+      openRouterKeyLength: OPENROUTER_API_KEY ? OPENROUTER_API_KEY.length : 0,
       nodeEnv: process.env.NODE_ENV
     });
 
@@ -358,7 +373,7 @@ async function handler(request) {
           
           try {
             const geminiModel = genAI.getGenerativeModel({ 
-              model: "gemini-1.5-pro-latest",
+              model: "gemini-pro",  // Используем стабильную версию
               systemInstruction: finalSystemPrompt
             });
             
@@ -420,7 +435,15 @@ ${SYSTEM_PROMPT ? 'Системный промпт загружен успешн
       }
     } catch (error) {
       console.error('AI API Error:', error);
-      answer = 'Извините, произошла техническая ошибка. Пожалуйста, позвоните нам по телефону +7 (996) 009-63-34 или напишите на neuroexpertai@gmail.com. Мы обязательно поможем!';
+      console.error('Error details:', {
+        message: error.message,
+        stack: error.stack,
+        model: model,
+        isValidGeminiKey,
+        isValidOpenRouterKey,
+        isValidAnthropicKey
+      });
+      answer = `Извините, произошла ошибка при обращении к модели ${model}. Детали: ${error.message}`;
       usedModel = 'error';
     }
 
