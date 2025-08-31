@@ -237,27 +237,28 @@ async function handler(request) {
     const isValidGeminiKey = GEMINI_API_KEY && 
                              !GEMINI_API_KEY.includes('your_') && 
                              !GEMINI_API_KEY.includes('here') &&
-                             !GEMINI_API_KEY.includes('key') &&
                              GEMINI_API_KEY.length > 30 &&
-                             GEMINI_API_KEY.startsWith('AI');
+                             (GEMINI_API_KEY.startsWith('AI') || GEMINI_API_KEY.startsWith('sk-'));
     const isValidAnthropicKey = ANTHROPIC_API_KEY && 
                                !ANTHROPIC_API_KEY.includes('your_') && 
                                !ANTHROPIC_API_KEY.includes('here') &&
-                               !ANTHROPIC_API_KEY.includes('key') &&
                                ANTHROPIC_API_KEY.length > 30;
     const isValidOpenRouterKey = OPENROUTER_API_KEY && 
                                 !OPENROUTER_API_KEY.includes('your_') && 
                                 !OPENROUTER_API_KEY.includes('here') &&
-                                !OPENROUTER_API_KEY.includes('key') &&
-                                OPENROUTER_API_KEY.length > 30;
+                                OPENROUTER_API_KEY.length > 30 &&
+                                OPENROUTER_API_KEY.startsWith('sk-');
     
     // ПРИНУДИТЕЛЬНЫЙ DEMO MODE для тестирования
-    console.log('Demo mode check:', { 
+    console.log('API Keys validation:', { 
       isValidGeminiKey, 
       isValidAnthropicKey, 
       isValidOpenRouterKey,
-      GEMINI_API_KEY: GEMINI_API_KEY?.substring(0, 10) + '...',
-      OPENROUTER_KEY: OPENROUTER_API_KEY?.substring(0, 10) + '...'
+      GEMINI_KEY_START: GEMINI_API_KEY?.substring(0, 10) + '...',
+      OPENROUTER_KEY_START: OPENROUTER_API_KEY?.substring(0, 10) + '...',
+      GEMINI_KEY_LENGTH: GEMINI_API_KEY?.length,
+      OPENROUTER_KEY_LENGTH: OPENROUTER_API_KEY?.length,
+      requestedModel: requestData.model || requestData.message?.model || 'not specified'
     });
     
     // DEMO MODE: если нет настоящих API ключей, показываем демо-ответ
@@ -316,15 +317,20 @@ async function handler(request) {
     
     try {
       // Выбираем модель на основе запроса пользователя
-      if (model === 'gpt-4' && isValidOpenRouterKey) {
-        // Используем GPT-4 через OpenRouter
-        console.log('Using GPT-4 via OpenRouter with system prompt');
-        console.log('OPENROUTER_API_KEY exists:', !!OPENROUTER_API_KEY);
-        console.log('OPENROUTER_API_KEY length:', OPENROUTER_API_KEY ? OPENROUTER_API_KEY.length : 0);
-        const gptResponse = await getOpenRouterResponse(question, history);
-        answer = gptResponse.text;
-        updatedHistory = gptResponse.updatedHistory;
-        usedModel = 'gpt-4';
+      if (model === 'gpt-4') {
+        if (isValidOpenRouterKey) {
+          // Используем GPT-4 через OpenRouter
+          console.log('Using GPT-4 via OpenRouter with system prompt');
+          console.log('OPENROUTER_API_KEY exists:', !!OPENROUTER_API_KEY);
+          console.log('OPENROUTER_API_KEY length:', OPENROUTER_API_KEY ? OPENROUTER_API_KEY.length : 0);
+          const gptResponse = await getOpenRouterResponse(question, history);
+          answer = gptResponse.text;
+          updatedHistory = gptResponse.updatedHistory;
+          usedModel = 'gpt-4';
+        } else {
+          console.log('GPT-4 requested but OpenRouter key is invalid');
+          throw new Error('OpenRouter API key is not valid');
+        }
       } else if (model === 'claude' && isValidAnthropicKey) {
         // Используем Claude с историей
         console.log('Using Claude with system prompt');
@@ -334,36 +340,41 @@ async function handler(request) {
         answer = claudeResponse.text;
         updatedHistory = claudeResponse.updatedHistory;
         usedModel = 'claude';
-      } else if (model === 'gemini' && genAI && isValidGeminiKey) {
-        // Выбираем системный промпт в зависимости от контекста
-        let finalSystemPrompt = SYSTEM_PROMPT;
-        
-        if (context === 'support' && systemPrompt) {
-          finalSystemPrompt = systemPrompt;
-          console.log('Using custom support system prompt');
-        } else {
-          console.log('Using default Gemini system prompt, length:', SYSTEM_PROMPT.length);
-        }
-        
-        console.log('Gemini API key exists:', !!GEMINI_API_KEY);
-        console.log('genAI initialized:', !!genAI);
-        console.log('Context:', context);
-        
-        try {
-          const geminiModel = genAI.getGenerativeModel({ 
-            model: "gemini-1.5-pro-latest",
-            systemInstruction: finalSystemPrompt
-          });
+      } else if (model === 'gemini') {
+        if (genAI && isValidGeminiKey) {
+          // Выбираем системный промпт в зависимости от контекста
+          let finalSystemPrompt = SYSTEM_PROMPT;
           
-          const chat = geminiModel.startChat({ history: history || [] });
-          const result = await chat.sendMessage(question);
-          answer = result.response.text();
-          updatedHistory = await chat.getHistory();
-          usedModel = 'gemini';
-          console.log('Gemini answer generated, length:', answer.length);
-        } catch (geminiError) {
-          console.error('Gemini API call failed:', geminiError);
-          throw geminiError;
+          if (context === 'support' && systemPrompt) {
+            finalSystemPrompt = systemPrompt;
+            console.log('Using custom support system prompt');
+          } else {
+            console.log('Using default Gemini system prompt, length:', SYSTEM_PROMPT.length);
+          }
+          
+          console.log('Gemini API key exists:', !!GEMINI_API_KEY);
+          console.log('genAI initialized:', !!genAI);
+          console.log('Context:', context);
+          
+          try {
+            const geminiModel = genAI.getGenerativeModel({ 
+              model: "gemini-1.5-pro-latest",
+              systemInstruction: finalSystemPrompt
+            });
+            
+            const chat = geminiModel.startChat({ history: history || [] });
+            const result = await chat.sendMessage(question);
+            answer = result.response.text();
+            updatedHistory = await chat.getHistory();
+            usedModel = 'gemini';
+            console.log('Gemini answer generated, length:', answer.length);
+          } catch (geminiError) {
+            console.error('Gemini API call failed:', geminiError);
+            throw geminiError;
+          }
+        } else {
+          console.log('Gemini requested but key is invalid or genAI not initialized');
+          throw new Error('Gemini API key is not valid or SDK not initialized');
         }
       } else if (isValidOpenRouterKey && model !== 'gemini' && model !== 'claude') {
         // Fallback на GPT-4 если другие модели недоступны
