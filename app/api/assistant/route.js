@@ -21,7 +21,7 @@ const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
-if (!GEMINI_API_KEY && !ANTHROPIC_API_KEY && !OPENROUTER_API_KEY) {
+if (!GEMINI_API_KEY && !ANTHROPIC_API_KEY && !OPENROUTER_API_KEY && !GROQ_API_KEY) {
   console.error('No AI API keys configured. Please check environment variables.');
 }
 
@@ -40,9 +40,11 @@ console.log('API Keys check:', {
   hasGeminiKey: !!GEMINI_API_KEY,
   hasAnthropicKey: !!ANTHROPIC_API_KEY,
   hasOpenRouterKey: !!OPENROUTER_API_KEY,
+  hasGroqKey: !!GROQ_API_KEY,
   genAIInitialized: !!genAI,
   geminiKeyLength: GEMINI_API_KEY ? GEMINI_API_KEY.length : 0,
-  openRouterKeyLength: OPENROUTER_API_KEY ? OPENROUTER_API_KEY.length : 0
+  openRouterKeyLength: OPENROUTER_API_KEY ? OPENROUTER_API_KEY.length : 0,
+  groqKeyLength: GROQ_API_KEY ? GROQ_API_KEY.length : 0
 });
 
 // Load system prompt for NeuroExpert v4.0 Enhanced (used as systemInstruction)
@@ -123,7 +125,7 @@ async function sendTelegramNotification(question, answer, model) {
 // Функция для взаимодействия с Groq API (Mixtral)
 async function getGroqResponse(prompt, history = []) {
   if (!GROQ_API_KEY) {
-    throw new Error('GROQ_API_KEY is not set');
+    throw new Error('GROQ_API_KEY не установлен. Добавьте ключ в переменные окружения Vercel.');
   }
 
   try {
@@ -402,15 +404,20 @@ async function handler(request) {
       // Выбираем модель на основе запроса пользователя
       if (model === 'mixtral' || model === 'gpt-4') {
         // Используем Groq для Mixtral (бесплатный и быстрый)
-        try {
-          console.log('Using Mixtral via Groq API');
-          const groqResponse = await getGroqResponse(question, history);
-          answer = groqResponse.text;
-          updatedHistory = groqResponse.updatedHistory;
-          usedModel = 'mixtral';
-        } catch (groqError) {
-          console.error('Groq API failed:', groqError);
-          throw groqError;
+        if (!GROQ_API_KEY) {
+          answer = `⚠️ Модель Mixtral требует API ключ Groq.\n\n📝 Как настроить:\n1. Получите бесплатный ключ на https://console.groq.com/keys\n2. Добавьте в Vercel: GROQ_API_KEY = ваш_ключ\n\n💡 Или используйте модель Gemini, которая уже работает!`;
+          usedModel = 'error';
+        } else {
+          try {
+            console.log('Using Mixtral via Groq API');
+            const groqResponse = await getGroqResponse(question, history);
+            answer = groqResponse.text;
+            updatedHistory = groqResponse.updatedHistory;
+            usedModel = 'mixtral';
+          } catch (groqError) {
+            console.error('Groq API failed:', groqError);
+            throw groqError;
+          }
         }
       } else if (model === 'gpt-4-old') {
         if (isValidOpenRouterKey) {
