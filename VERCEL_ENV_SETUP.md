@@ -18,18 +18,17 @@
 ### 3. OPENROUTER_API_KEY 
 - **Описание**: API ключ для GPT через OpenRouter
 - **Как получить**: https://openrouter.ai/keys
-- **Ваш новый ключ**: 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
 
 
-### 3. ANTHROPIC_API_KEY (опционально)
+### 4. ANTHROPIC_API_KEY (опционально)
 - **Описание**: API ключ для Claude AI
 - **Как получить**: https://console.anthropic.com/
 
-### 4. TELEGRAM_BOT_TOKEN (опционально)
+### 5. TELEGRAM_BOT_TOKEN (опционально)
 - **Описание**: Токен для Telegram уведомлений
 - **Как получить**: через @BotFather в Telegram
 
-### 5. TELEGRAM_CHAT_ID (опционально)
+### 6. TELEGRAM_CHAT_ID (опционально)
 - **Описание**: ID чата для уведомлений
 - **Как получить**: через @userinfobot в Telegram
 

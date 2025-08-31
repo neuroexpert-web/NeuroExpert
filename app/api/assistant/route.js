@@ -294,9 +294,9 @@ async function getOpenRouterResponse(prompt, history = []) {
       'X-Title': 'NeuroExpert'
     };
 
-    // Если ключ выглядит недействительным, используем тестовый
-    if (cleanKey.includes('323b347d5a4fe48c75b3c782a109cf042f74e81d31f51bca4245b6d55f32f8f4')) {
-      console.warn('⚠️ Используется тестовый ключ OpenRouter. Возможно, он недействителен.');
+    // Проверяем формат ключа
+    if (!cleanKey.startsWith('sk-or-v1-')) {
+      console.warn('⚠️ Неверный формат ключа OpenRouter');
       console.warn('📝 Создайте новый ключ на https://openrouter.ai/keys');
     }
 

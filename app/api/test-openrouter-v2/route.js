@@ -6,7 +6,7 @@ export async function GET() {
   if (!OPENROUTER_API_KEY) {
     return NextResponse.json({ 
       error: 'OPENROUTER_API_KEY не установлен',
-      hint: 'Добавьте ключ в Vercel: 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'
+      hint: 'Добавьте ключ в Vercel Environment Variables'
     }, { status: 500 });
   }
 
