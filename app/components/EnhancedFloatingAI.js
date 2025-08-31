@@ -429,7 +429,7 @@ export default function EnhancedFloatingAI() {
                 >
                   <option value="gemini">Gemini</option>
                   <option value="claude">Claude</option>
-                  <option value="gpt-4">GPT-4</option>
+                  <option value="mixtral">Mixtral</option>
                 </select>
               </div>
               

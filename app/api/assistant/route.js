@@ -19,6 +19,7 @@ const GEMINI_API_KEY = process.env.GOOGLE_GEMINI_API_KEY
   || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
 if (!GEMINI_API_KEY && !ANTHROPIC_API_KEY && !OPENROUTER_API_KEY) {
   console.error('No AI API keys configured. Please check environment variables.');
@@ -119,19 +120,69 @@ async function sendTelegramNotification(question, answer, model) {
   }
 }
 
+// Функция для взаимодействия с Groq API (Mixtral)
+async function getGroqResponse(prompt, history = []) {
+  if (!GROQ_API_KEY) {
+    throw new Error('GROQ_API_KEY is not set');
+  }
+
+  try {
+    const messages = history.length > 0 ? history : [];
+    
+    if (messages.length === 0 || messages[0].role !== 'system') {
+      messages.unshift({
+        role: 'system',
+        content: SYSTEM_PROMPT || 'You are a helpful AI assistant.'
+      });
+    }
+    
+    messages.push({
+      role: 'user',
+      content: prompt
+    });
+
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${GROQ_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: 'mixtral-8x7b-32768',
+        messages: messages,
+        temperature: 0.7,
+        max_tokens: 2048
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('Groq API error:', errorData);
+      throw new Error(`Groq API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    return {
+      text: data.choices[0].message.content,
+      updatedHistory: [...messages, {
+        role: 'assistant',
+        content: data.choices[0].message.content
+      }]
+    };
+  } catch (error) {
+    console.error('Groq API error:', error);
+    throw error;
+  }
+}
+
 // Функция для взаимодействия с OpenRouter API (GPT-4)
 async function getOpenRouterResponse(prompt, history = []) {
   if (!OPENROUTER_API_KEY) {
     throw new Error('OPENROUTER_API_KEY is not set');
   }
 
-  console.log('OpenRouter request:', {
-    keyLength: OPENROUTER_API_KEY.length,
-    keyPrefix: OPENROUTER_API_KEY.substring(0, 15),
-    keySuffix: OPENROUTER_API_KEY.substring(OPENROUTER_API_KEY.length - 5),
-    fullKey: OPENROUTER_API_KEY, // Временно для отладки
-    hasSpaces: OPENROUTER_API_KEY !== OPENROUTER_API_KEY.trim()
-  });
+  console.log('OpenRouter request debug');
 
   try {
     // Подготавливаем историю для OpenRouter
@@ -349,7 +400,19 @@ async function handler(request) {
     
     try {
       // Выбираем модель на основе запроса пользователя
-      if (model === 'gpt-4') {
+      if (model === 'mixtral' || model === 'gpt-4') {
+        // Используем Groq для Mixtral (бесплатный и быстрый)
+        try {
+          console.log('Using Mixtral via Groq API');
+          const groqResponse = await getGroqResponse(question, history);
+          answer = groqResponse.text;
+          updatedHistory = groqResponse.updatedHistory;
+          usedModel = 'mixtral';
+        } catch (groqError) {
+          console.error('Groq API failed:', groqError);
+          throw groqError;
+        }
+      } else if (model === 'gpt-4-old') {
         if (isValidOpenRouterKey) {
           // Используем GPT-4 через OpenRouter
           console.log('Using GPT-4 via OpenRouter with system prompt');

@@ -8,12 +8,17 @@
   1. Перейдите на https://makersuite.google.com/app/apikey
   2. Создайте новый API ключ
   3. Скопируйте ключ (начинается с "AI...")
-- **Тестовый ключ**: `AIzaSyAciD4RsxU2CxiPQ4g4jyefEoGq75Wv5uE`
 
-### 2. OPENROUTER_API_KEY
+
+### 2. GROQ_API_KEY
+- **Описание**: API ключ для Mixtral через Groq (быстрый и бесплатный)
+- **Как получить**: https://console.groq.com/keys
+
+
+### 3. OPENROUTER_API_KEY (опционально)
 - **Описание**: API ключ для GPT-4 через OpenRouter
 - **Как получить**: https://openrouter.ai/
-- **Тестовый ключ**: `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`
+
 
 ### 3. ANTHROPIC_API_KEY (опционально)
 - **Описание**: API ключ для Claude AI
