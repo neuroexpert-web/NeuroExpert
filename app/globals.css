@@ -3944,3 +3944,6 @@ textarea:focus {
   to { transform: rotate(360deg); }
 }
 
+/* Import Processes Styles */
+@import './components/ProcessesStyles.css';
+

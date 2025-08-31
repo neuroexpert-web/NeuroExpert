@@ -1305,7 +1305,7 @@ export default function Home() {
     </section>,
 
     // 4. Процессы - улучшенная с UX акцентом
-    <section key="processes" id="page-processes" className="full-page">
+    <section key="processes" id="page-processes" className="full-page scrollable-section">
       <div className="page-header">
         <h2>Управление бизнес-процессами</h2>
         <p>Контролируйте задачи, ресурсы и эффективность в одном месте</p>
@@ -1443,7 +1443,7 @@ export default function Home() {
         </aside>
 
         {/* Правая панель: Дашборд KPI и процессов */}
-        <div className="process-dashboard">
+        <div className="process-dashboard process-flow-area">
           <div className="process-metrics">
             <div className="metric-card glass-card">
               <div className="metric-header">
