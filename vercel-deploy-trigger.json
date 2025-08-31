@@ -1,14 +1,18 @@
 {
   "trigger": "force-redeploy",
-  "timestamp": "2025-01-31T16:30:00Z",
-  "reason": "Fixed Vercel deployment error - removed conflicting configuration",
+  "timestamp": "2025-01-31T17:45:00Z",
+  "reason": "Major updates: AI Assistant v5, PricingCalculatorV2, Processes page fix",
   "changes": [
-    "Simplified vercel.json to minimal Next.js configuration",
-    "Removed any potential conflicts with functions/builds properties",
-    "All API routes will be handled by Next.js automatically",
-    "Ready for clean deployment"
+    "AI Assistant v5.0 HUMAN - fullscreen chat, more personal communication",
+    "PricingCalculatorV2 - added website/app/e-commerce development services",
+    "Fixed Processes page scrolling with custom scrollbars",
+    "All changes tested and ready for production"
   ],
-  "version": "3.1.1",
-  "priority": "CRITICAL",
-  "fix": "VERCEL_CONFIG_CONFLICT_RESOLVED"
+  "version": "3.2.0",
+  "priority": "HIGH",
+  "features": [
+    "AI_ASSISTANT_V5_HUMAN",
+    "PRICING_CALCULATOR_V2",
+    "PROCESSES_PAGE_SCROLLING_FIX"
+  ]
 }
