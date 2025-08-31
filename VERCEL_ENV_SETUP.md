@@ -15,9 +15,10 @@
 - **Как получить**: https://console.groq.com/keys
 
 
-### 3. OPENROUTER_API_KEY (опционально)
-- **Описание**: API ключ для GPT-4 через OpenRouter
-- **Как получить**: https://openrouter.ai/
+### 3. OPENROUTER_API_KEY 
+- **Описание**: API ключ для GPT через OpenRouter
+- **Как получить**: https://openrouter.ai/keys
+- **Ваш новый ключ**: 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
 
 
 ### 3. ANTHROPIC_API_KEY (опционально)

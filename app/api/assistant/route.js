@@ -273,7 +273,7 @@ async function getOpenRouterResponse(prompt, history = []) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: 'openrouter/auto',  // Автоматический выбор доступной модели
+        model: 'openai/gpt-3.5-turbo',  // Доступная модель OpenRouter
         messages: messages,
         temperature: 0.7,
         max_tokens: 2048
@@ -476,7 +476,39 @@ async function handler(request) {
             throw groqError;
           }
         }
-      } else if (model === 'gpt-4-old') {
+      } else if (model === 'gpt-4') {
+        // Проверяем сначала OpenRouter ключ
+        if (OPENROUTER_API_KEY) {
+          try {
+            console.log('Using GPT-4 via OpenRouter');
+            const gptResponse = await getOpenRouterResponse(question, history);
+            answer = gptResponse.text;
+            updatedHistory = gptResponse.updatedHistory;
+            usedModel = 'gpt-4';
+          } catch (openRouterError) {
+            console.error('OpenRouter failed:', openRouterError);
+            // Пробуем OpenAI как fallback
+            if (OPENAI_API_KEY) {
+              console.log('Falling back to OpenAI');
+              const openAIResponse = await getOpenAIResponse(question, history);
+              answer = openAIResponse.text;
+              updatedHistory = openAIResponse.updatedHistory;
+              usedModel = 'gpt-4';
+            } else {
+              throw openRouterError;
+            }
+          }
+        } else if (OPENAI_API_KEY) {
+          console.log('Using GPT-4 via OpenAI directly');
+          const openAIResponse = await getOpenAIResponse(question, history);
+          answer = openAIResponse.text;
+          updatedHistory = openAIResponse.updatedHistory;
+          usedModel = 'gpt-4';
+        } else {
+          answer = `⚠️ Модель GPT-4 требует API ключ.\n\n📝 Добавьте в Vercel один из ключей:\n• OPENROUTER_API_KEY для OpenRouter\n• OPENAI_API_KEY для прямого доступа OpenAI\n\n💡 Используйте Gemini или Mixtral, которые уже доступны!`;
+          usedModel = 'error';
+        }
+      } else if (model === 'gpt-4-old-unused') {
         if (isValidOpenRouterKey) {
           // Используем GPT-4 через OpenRouter
           console.log('Using GPT-4 via OpenRouter with system prompt');
