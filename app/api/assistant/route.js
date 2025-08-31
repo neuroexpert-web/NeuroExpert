@@ -125,6 +125,12 @@ async function getOpenRouterResponse(prompt, history = []) {
     throw new Error('OPENROUTER_API_KEY is not set');
   }
 
+  console.log('OpenRouter request:', {
+    keyLength: OPENROUTER_API_KEY.length,
+    keyPrefix: OPENROUTER_API_KEY.substring(0, 15),
+    keySuffix: OPENROUTER_API_KEY.substring(OPENROUTER_API_KEY.length - 5)
+  });
+
   try {
     // Подготавливаем историю для OpenRouter
     const messages = history.length > 0 ? history : [];
@@ -148,9 +154,8 @@ async function getOpenRouterResponse(prompt, history = []) {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-        'HTTP-Referer': 'https://neuroexpert.io', // Required by OpenRouter
-        'X-Title': 'NeuroExpert AI Assistant',
-        'User-Agent': 'NeuroExpert/1.0'
+        'HTTP-Referer': process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000',
+        'X-Title': 'NeuroExpert AI Assistant'
       },
       body: JSON.stringify({
         model: 'mistralai/mistral-7b-instruct:free',  // Бесплатная модель OpenRouter
@@ -379,10 +384,26 @@ async function handler(request) {
           console.log('Context:', context);
           
           try {
-            const geminiModel = genAI.getGenerativeModel({ 
-              model: "gemini-1.0-pro",  // Правильное название модели Gemini Pro
-              systemInstruction: finalSystemPrompt
-            });
+            // Попробуем разные модели Gemini
+            let geminiModel;
+            const modelsToTry = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro'];
+            
+            for (const modelName of modelsToTry) {
+              try {
+                console.log(`Trying Gemini model: ${modelName}`);
+                geminiModel = genAI.getGenerativeModel({ 
+                  model: modelName,
+                  systemInstruction: finalSystemPrompt
+                });
+                console.log(`Successfully initialized model: ${modelName}`);
+                break;
+              } catch (e) {
+                console.error(`Failed to initialize ${modelName}:`, e.message);
+                if (modelName === modelsToTry[modelsToTry.length - 1]) {
+                  throw new Error(`All Gemini models failed. Last error: ${e.message}`);
+                }
+              }
+            }
             
             const chat = geminiModel.startChat({ history: history || [] });
             const result = await chat.sendMessage(question);
