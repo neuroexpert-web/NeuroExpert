@@ -1005,6 +1005,17 @@
     flex-direction: column;
     gap: 5px;
   }
+  
+  .model-selector {
+    width: 100%;
+  }
+  
+  .model-select {
+    width: 100%;
+    min-width: auto;
+    font-size: 14px;
+    padding: 8px 24px 8px 8px;
+  }
 }
 
 /* Анимации загрузки и активности */

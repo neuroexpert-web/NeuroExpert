@@ -216,9 +216,9 @@ export default function EnhancedFloatingAI() {
         avgResponseTime: Math.round((prev.avgResponseTime + responseTime) / 2)
       }));
 
-      if (data.success || data.reply) {
+      if (data.success || data.reply || data.response || data.answer) {
         setTimeout(() => {
-          typewriterEffect(data.response || data.reply, 'ai');
+          typewriterEffect(data.response || data.reply || data.answer, 'ai');
         }, 500);
       } else {
         const fallbackMessage = "🤔 Извините, сейчас у меня технические сложности. Но я уже думаю над вашим вопросом! Попробуйте переформулировать или задать вопрос иначе.";
@@ -280,9 +280,9 @@ export default function EnhancedFloatingAI() {
           avgResponseTime: Math.round((prev.avgResponseTime + responseTime) / 2)
         }));
 
-        if (data.success || data.reply) {
+        if (data.success || data.reply || data.response || data.answer) {
           setTimeout(() => {
-            typewriterEffect(data.response || data.reply, 'ai');
+            typewriterEffect(data.response || data.reply || data.answer, 'ai');
           }, 500);
         } else {
           const fallbackMessage = "🤔 Извините, сейчас у меня технические сложности. Но я уже думаю над вашим вопросом! Попробуйте переформулировать или задать вопрос иначе.";
