@@ -148,11 +148,12 @@ async function getOpenRouterResponse(prompt, history = []) {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-        'HTTP-Referer': 'https://neuroexpert.io',
-        'X-Title': 'NeuroExpert AI Assistant'
+        'HTTP-Referer': 'https://neuroexpert.io', // Required by OpenRouter
+        'X-Title': 'NeuroExpert AI Assistant',
+        'User-Agent': 'NeuroExpert/1.0'
       },
       body: JSON.stringify({
-        model: 'openai/gpt-3.5-turbo',  // Используем более доступную модель
+        model: 'mistralai/mistral-7b-instruct:free',  // Бесплатная модель OpenRouter
         messages: messages,
         temperature: 0.7,
         max_tokens: 2048
@@ -161,8 +162,14 @@ async function getOpenRouterResponse(prompt, history = []) {
 
     if (!response.ok) {
       const errorData = await response.text();
-      console.error('OpenRouter API error response:', errorData);
-      throw new Error(`OpenRouter API error: ${response.status}`);
+      console.error('OpenRouter API error:', {
+        status: response.status,
+        statusText: response.statusText,
+        errorBody: errorData,
+        keyLength: OPENROUTER_API_KEY?.length,
+        keyStart: OPENROUTER_API_KEY?.substring(0, 10)
+      });
+      throw new Error(`OpenRouter API error: ${response.status} - ${errorData}`);
     }
 
     const data = await response.json();
