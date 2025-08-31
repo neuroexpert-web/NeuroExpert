@@ -11,6 +11,31 @@
   margin-bottom: 40px; /* Больший отступ для последней карточки */
 }
 
+/* ВАЖНО: Переопределяем глобальные стили для страницы процессов */
+#page-processes.full-page {
+  overflow: visible !important;
+  height: auto !important;
+  min-height: 100vh !important;
+}
+
+/* Убеждаемся что контейнер не обрезает контент */
+#page-processes .processes-container {
+  overflow: visible !important;
+  height: auto !important;
+}
+
+/* Фикс для SwipeContainer когда показывается страница процессов */
+.swipe-container:has(#page-processes) {
+  overflow: visible !important;
+  height: auto !important;
+}
+
+/* Альтернативный селектор если :has не поддерживается */
+.swipe-container {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
 /* Базовые стили для полноэкранных секций */
 .full-page {
   width: 100%;
@@ -18,7 +43,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  overflow: hidden;
+  overflow: visible; /* Изменено с hidden на visible */
 }
 
 /* Дашборд процессов */
@@ -45,12 +70,21 @@
 
 /* Специальный класс для страницы процессов */
 #page-processes {
-  padding-bottom: 200px; /* Большой отступ для гарантии видимости всего контента */
+  padding-bottom: 300px; /* Очень большой отступ */
+  min-height: 100vh;
+}
+
+/* Добавляем псевдоэлемент для гарантии пространства */
+#page-processes::after {
+  content: '';
+  display: block;
+  height: 300px;
+  width: 100%;
 }
 
 /* Убеждаемся что последний элемент виден */
 #page-processes > *:last-child {
-  margin-bottom: 150px;
+  margin-bottom: 200px;
 }
 
 /* Контейнер процессов */
@@ -67,12 +101,14 @@
 
 /* Левая панель с задачами */
 .task-priorities {
-  height: 100%;
+  max-height: calc(100vh - 200px); /* Фиксированная максимальная высота */
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: rgba(139, 92, 246, 0.3) transparent;
+  position: sticky;
+  top: 20px;
 }
 
 .task-priorities::-webkit-scrollbar {
