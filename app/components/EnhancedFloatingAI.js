@@ -65,6 +65,19 @@ export default function EnhancedFloatingAI() {
     }
   }, [messages]);
 
+  // Обработчик события для открытия чата
+  useEffect(() => {
+    const handleOpenAIChat = () => {
+      setIsOpen(true);
+    };
+
+    window.addEventListener('openAIChat', handleOpenAIChat);
+    
+    return () => {
+      window.removeEventListener('openAIChat', handleOpenAIChat);
+    };
+  }, []);
+
   // Продвинутые быстрые действия
   const quickActions = [
     { 
@@ -441,6 +454,20 @@ export default function EnhancedFloatingAI() {
                 >
                   💡
                 </button>
+              </div>
+              
+              {/* Выбор модели */}
+              <div className="model-selector">
+                <select 
+                  value={selectedModel} 
+                  onChange={(e) => setSelectedModel(e.target.value)}
+                  className="model-select"
+                  title="Выберите AI модель"
+                >
+                  <option value="gemini">Gemini Pro</option>
+                  <option value="gpt-4">GPT-4</option>
+                  <option value="claude">Claude 3</option>
+                </select>
               </div>
               
               <button 
