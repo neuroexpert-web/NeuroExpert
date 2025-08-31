@@ -1,0 +1,270 @@
+.container {
+  background: linear-gradient(135deg, rgba(15, 15, 25, 0.95), rgba(25, 25, 40, 0.95));
+  border: 2px solid rgba(168, 85, 247, 0.3);
+  border-radius: 16px;
+  padding: 24px;
+  color: white;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.container::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%);
+  transform: translate(50%, 50%);
+  animation: rotate 30s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: translate(50%, 50%) rotate(0deg); }
+  to { transform: translate(50%, 50%) rotate(360deg); }
+}
+
+.header {
+  z-index: 1;
+}
+
+.mainStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.statCard {
+  background: rgba(30, 30, 45, 0.6);
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+}
+
+.statCard:hover {
+  background: rgba(30, 30, 45, 0.8);
+  transform: translateY(-2px);
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+.statIcon {
+  font-size: 24px;
+  filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.5));
+}
+
+.statInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.statValue {
+  font-size: 18px;
+  font-weight: 700;
+  color: #a855f7;
+}
+
+.statLabel {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+}
+
+.campaignsList {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  padding-right: 4px;
+  z-index: 1;
+}
+
+.campaignsList::-webkit-scrollbar {
+  width: 4px;
+}
+
+.campaignsList::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+}
+
+.campaignsList::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.3);
+  border-radius: 2px;
+}
+
+.sectionTitle {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.campaignCard {
+  background: rgba(30, 30, 45, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.3s ease;
+}
+
+.campaignCard:hover {
+  background: rgba(30, 30, 45, 0.6);
+  border-color: rgba(168, 85, 247, 0.3);
+  transform: translateX(4px);
+}
+
+.campaignHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.campaignInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.campaignName {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.campaignStatus {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  color: white;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.campaignDate {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.campaignStats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.statItemLabel {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statItemValue {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.progressBar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #a855f7, #d946ef);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.progressFill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1;
+}
+
+.createBtn {
+  background: linear-gradient(135deg, #a855f7, #9333ea);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.createBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+}
+
+.connectionStatus {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
