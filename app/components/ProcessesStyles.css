@@ -43,15 +43,26 @@
   scroll-behavior: smooth;
 }
 
+/* Специальный класс для страницы процессов */
+#page-processes {
+  padding-bottom: 200px; /* Большой отступ для гарантии видимости всего контента */
+}
+
+/* Убеждаемся что последний элемент виден */
+#page-processes > *:last-child {
+  margin-bottom: 150px;
+}
+
 /* Контейнер процессов */
 .processes-container {
   display: grid;
   grid-template-columns: minmax(300px, 400px) 1fr;
   gap: 30px;
   padding: 30px;
-  padding-bottom: 60px; /* Дополнительный отступ снизу */
+  padding-bottom: 150px; /* Увеличенный отступ снизу */
   min-height: calc(100vh - 120px); /* min-height вместо height */
   overflow: visible; /* Разрешаем видимость контента */
+  margin-bottom: 100px; /* Дополнительный margin для гарантии */
 }
 
 /* Левая панель с задачами */
@@ -83,12 +94,12 @@
 
 /* Основная область с процессами */
 .process-flow-area {
-  max-height: calc(100vh - 150px); /* Ограничиваем максимальную высоту */
-  overflow-y: auto;
+  height: auto; /* Авто высота вместо ограничения */
+  overflow-y: visible; /* Видимый overflow */
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   padding-right: 10px;
-  padding-bottom: 40px; /* Отступ снизу для последних элементов */
+  padding-bottom: 150px; /* Большой отступ снизу */
 }
 
 .process-flow-area::-webkit-scrollbar {
@@ -429,7 +440,7 @@
 /* AI Insights */
 .ai-insights {
   margin-top: 30px;
-  margin-bottom: 40px; /* Добавляем отступ снизу */
+  margin-bottom: 120px; /* Большой отступ снизу для последнего блока */
   padding: 25px;
   background: rgba(139, 92, 246, 0.1);
   border-radius: 16px;
