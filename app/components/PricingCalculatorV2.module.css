@@ -1,0 +1,325 @@
+/* Pricing Calculator V2 - Enhanced Styles */
+
+/* Service Type Selector */
+.service-type-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.type-btn {
+  padding: 30px;
+  background: rgba(26, 26, 46, 0.8);
+  border: 2px solid transparent;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.type-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+  border-color: rgba(0, 212, 255, 0.3);
+}
+
+.type-btn.active {
+  border-color: #00d4ff;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(153, 69, 255, 0.1));
+  box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+}
+
+.type-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 15px;
+}
+
+.type-label {
+  font-size: 1.5rem;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 10px;
+  color: white;
+}
+
+.type-desc {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Development Options */
+.development-options {
+  margin-bottom: 40px;
+}
+
+.dev-type-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.dev-type-card {
+  position: relative;
+  cursor: pointer;
+}
+
+.dev-type-card input {
+  position: absolute;
+  opacity: 0;
+}
+
+.dev-type-content {
+  padding: 30px;
+  background: rgba(26, 26, 46, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.dev-type-card:hover .dev-type-content {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+  border-color: rgba(0, 212, 255, 0.3);
+}
+
+.dev-type-card.selected .dev-type-content {
+  border-color: #00d4ff;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(153, 69, 255, 0.1));
+}
+
+.dev-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 15px;
+}
+
+.dev-type-content h4 {
+  margin: 0 0 10px 0;
+  color: white;
+  font-size: 1.3rem;
+}
+
+.dev-type-content p {
+  margin: 0 0 15px 0;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.dev-price {
+  font-size: 1.1rem;
+  color: #00d4ff;
+  font-weight: 600;
+}
+
+/* Complexity Options */
+.project-complexity,
+.design-level {
+  margin-bottom: 40px;
+}
+
+.complexity-options,
+.design-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.complexity-option,
+.design-option {
+  position: relative;
+  cursor: pointer;
+  padding: 20px;
+  background: rgba(26, 26, 46, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.complexity-option input,
+.design-option input {
+  position: absolute;
+  opacity: 0;
+}
+
+.complexity-option:hover,
+.design-option:hover {
+  border-color: rgba(0, 212, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.complexity-option.selected,
+.design-option.selected {
+  border-color: #00d4ff;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(153, 69, 255, 0.1));
+}
+
+.complexity-label,
+.design-label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 5px;
+  color: white;
+}
+
+.complexity-desc,
+.design-desc {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.design-multiplier {
+  display: block;
+  margin-top: 10px;
+  font-size: 1.2rem;
+  color: #ff6b35;
+  font-weight: bold;
+}
+
+/* Features Grid */
+.development-features {
+  margin-bottom: 40px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.feature-card {
+  position: relative;
+  cursor: pointer;
+  padding: 20px;
+  background: rgba(26, 26, 46, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.feature-card input {
+  position: absolute;
+  opacity: 0;
+}
+
+.feature-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0, 212, 255, 0.3);
+}
+
+.feature-card.selected {
+  border-color: #00ff88;
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.1));
+}
+
+.feature-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.feature-name {
+  font-size: 0.9rem;
+  display: block;
+  margin-bottom: 5px;
+  color: white;
+}
+
+.feature-price {
+  font-size: 0.85rem;
+  color: #00d4ff;
+  font-weight: 600;
+}
+
+/* Urgency Option */
+.urgency-option {
+  margin-bottom: 40px;
+}
+
+.urgency-card {
+  display: flex;
+  align-items: center;
+  padding: 25px;
+  background: rgba(26, 26, 46, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.urgency-card input {
+  position: absolute;
+  opacity: 0;
+}
+
+.urgency-card:hover {
+  border-color: #ffaa00;
+}
+
+.urgency-card.selected {
+  border-color: #ffaa00;
+  background: linear-gradient(135deg, rgba(255, 170, 0, 0.1), rgba(255, 107, 53, 0.1));
+}
+
+.urgency-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.urgency-icon {
+  font-size: 2.5rem;
+}
+
+.urgency-content h4 {
+  margin: 0 0 5px 0;
+  color: white;
+}
+
+.urgency-content p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Summary Line Enhancements */
+.summary-line.urgent {
+  color: #ffaa00;
+}
+
+.summary-line.delivery {
+  color: #00ff88;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .service-type-selector {
+    grid-template-columns: 1fr;
+  }
+  
+  .dev-type-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .complexity-options,
+  .design-options {
+    grid-template-columns: 1fr;
+  }
+  
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

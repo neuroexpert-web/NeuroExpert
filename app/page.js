@@ -115,7 +115,7 @@ const AboutAnimations = dynamic(() => import('./components/AboutAnimations'), {
 });
 
 // Динамические импорты для страницы калькулятора цен
-const PricingCalculator = dynamic(() => import('./components/PricingCalculator'), {
+const PricingCalculator = dynamic(() => import('./components/PricingCalculatorV2'), {
   ssr: false,
   loading: () => null
 });
