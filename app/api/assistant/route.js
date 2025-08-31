@@ -459,22 +459,37 @@ async function handler(request) {
     
     try {
       // Выбираем модель на основе запроса пользователя
-      if (model === 'mixtral') {
-        // Используем Groq для Mixtral (бесплатный и быстрый)
-        if (!GROQ_API_KEY) {
-          answer = `⚠️ Модель Mixtral требует API ключ Groq.\n\n📝 Как настроить:\n1. Получите бесплатный ключ на https://console.groq.com/keys\n2. Добавьте в Vercel: GROQ_API_KEY = ваш_ключ\n\n💡 Или используйте модель Gemini, которая уже работает!`;
-          usedModel = 'error';
-        } else {
+      if (model === 'gpt' || model === 'mixtral') {
+        // Используем OpenRouter для GPT (вместо Mixtral)
+        if (OPENROUTER_API_KEY) {
           try {
-            console.log('Using Mixtral via Groq API');
-            const groqResponse = await getGroqResponse(question, history);
-            answer = groqResponse.text;
-            updatedHistory = groqResponse.updatedHistory;
-            usedModel = 'mixtral';
-          } catch (groqError) {
-            console.error('Groq API failed:', groqError);
-            throw groqError;
+            console.log('Using GPT via OpenRouter (replacing Mixtral)');
+            const gptResponse = await getOpenRouterResponse(question, history);
+            answer = gptResponse.text;
+            updatedHistory = gptResponse.updatedHistory;
+            usedModel = 'gpt';
+          } catch (openRouterError) {
+            console.error('OpenRouter failed:', openRouterError);
+            // Пробуем OpenAI как fallback
+            if (OPENAI_API_KEY) {
+              console.log('Falling back to OpenAI');
+              const openAIResponse = await getOpenAIResponse(question, history);
+              answer = openAIResponse.text;
+              updatedHistory = openAIResponse.updatedHistory;
+              usedModel = 'gpt';
+            } else {
+              throw openRouterError;
+            }
           }
+        } else if (OPENAI_API_KEY) {
+          console.log('Using GPT via OpenAI directly');
+          const openAIResponse = await getOpenAIResponse(question, history);
+          answer = openAIResponse.text;
+          updatedHistory = openAIResponse.updatedHistory;
+          usedModel = 'gpt';
+        } else {
+          answer = `⚠️ Модель GPT требует API ключ.\n\n📝 Добавьте в Vercel:\n• OPENROUTER_API_KEY = ${OPENROUTER_API_KEY ? 'уже добавлен ✅' : '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'}\n\n💡 Или используйте модель Gemini, которая уже работает!`;
+          usedModel = 'error';
         }
       } else if (model === 'gpt-4') {
         // Проверяем сначала OpenRouter ключ
