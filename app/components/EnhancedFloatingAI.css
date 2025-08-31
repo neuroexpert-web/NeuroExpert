@@ -9,9 +9,13 @@
   --ai-warning: #ffaa00;
   --ai-neural: #8b5cf6;
   --ai-glow: rgba(0, 212, 255, 0.3);
+  --ai-hover: #252a3a;
+  --ai-error: #ff4444;
+  --ai-muted: #64748b;
   --ai-dark: #0a0a0f;
   --ai-card: #1a1a2e;
   --ai-border: rgba(255, 255, 255, 0.1);
+  --ai-text: #e7ecf3;
 }
 
 /* Кнопка запуска чата с AI аватаром */
@@ -456,12 +460,12 @@
 
 /* Заголовок чата */
 .enhanced-chat-header {
-  padding: 20px;
+  padding: 15px 20px;
   background: linear-gradient(135deg, var(--ai-card), var(--ai-dark));
   border-bottom: 1px solid var(--ai-border);
   display: flex;
   align-items: center;
-  gap: 15px;
+  justify-content: space-between;
   position: relative;
   overflow: hidden;
 }
@@ -482,18 +486,24 @@
   100% { left: 100%; }
 }
 
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
 .header-avatar {
   flex-shrink: 0;
 }
 
 .header-avatar .ai-avatar-container {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
 }
 
 .header-avatar .ai-avatar {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
 }
 
 .header-info {
@@ -628,6 +638,71 @@
   pointer-events: none;
   color: #8a2be2;
   font-size: 0.75rem;
+}
+
+/* Компактные стили для новой шапки */
+.model-selector-compact {
+  position: relative;
+}
+
+.model-select-compact {
+  background: var(--ai-card);
+  border: 1px solid var(--ai-border);
+  color: var(--ai-text);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 80px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23a0a7b4' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 28px;
+}
+
+.model-select-compact:hover {
+  background-color: var(--ai-hover);
+  border-color: var(--ai-primary);
+}
+
+.model-select-compact:focus {
+  outline: none;
+  border-color: var(--ai-primary);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+}
+
+/* Компактная кнопка закрытия */
+.close-btn-compact {
+  background: transparent;
+  border: 1px solid var(--ai-border);
+  color: var(--ai-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.close-btn-compact:hover {
+  background: var(--ai-hover);
+  border-color: var(--ai-error);
+  color: var(--ai-error);
+  transform: rotate(90deg);
+}
+
+.close-btn-compact:active {
+  transform: rotate(90deg) scale(0.95);
+}
+
+.close-btn-compact svg {
+  width: 16px;
+  height: 16px;
 }
 
 .close-btn {

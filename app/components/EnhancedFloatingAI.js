@@ -408,76 +408,41 @@ export default function EnhancedFloatingAI() {
         <div className="enhanced-ai-chat-container">
           {/* Заголовок с AI аватаром */}
           <div className="enhanced-chat-header">
-            <div className="header-avatar">
-              <AIAvatar isActive={true} personality={aiPersonality} />
-            </div>
-            <div className="header-info">
-              <h3 className="ai-name">Александр Нейронов</h3>
-              <p className="ai-title">AI-Помощник NeuroExpert v4.0</p>
-              <div className="ai-stats">
-                <span className="stat">
-                  <span className="stat-icon">💼</span>
-                  <span className="stat-value">{stats.successfulSolutions}+</span>
-                  <span className="stat-label">решений</span>
-                </span>
-                <span className="stat">
-                  <span className="stat-icon">⚡</span>
-                  <span className="stat-value">{stats.avgResponseTime}ms</span>
-                  <span className="stat-label">ответ</span>
-                </span>
-                <span className="stat">
-                  <span className="stat-icon">⭐</span>
-                  <span className="stat-value">{stats.satisfaction}%</span>
-                  <span className="stat-label">успех</span>
-                </span>
+            <div className="header-left">
+              <div className="header-avatar">
+                <AIAvatar isActive={true} personality={aiPersonality} />
+              </div>
+              <div className="header-info">
+                <h3 className="ai-name">Александр Нейронов</h3>
+                <p className="ai-title">AI-Помощник NeuroExpert v4.0</p>
               </div>
             </div>
+            
             <div className="header-controls">
-              {/* Переключатель персональности */}
-              <div className="personality-selector">
-                <button 
-                  className={`personality-btn ${aiPersonality === 'strategic' ? 'active' : ''}`}
-                  onClick={() => setAiPersonality('strategic')}
-                  title="Стратегический режим"
-                >
-                  🎯
-                </button>
-                <button 
-                  className={`personality-btn ${aiPersonality === 'technical' ? 'active' : ''}`}
-                  onClick={() => setAiPersonality('technical')}
-                  title="Технический режим"
-                >
-                  🔧
-                </button>
-                <button 
-                  className={`personality-btn ${aiPersonality === 'creative' ? 'active' : ''}`}
-                  onClick={() => setAiPersonality('creative')}
-                  title="Креативный режим"
-                >
-                  💡
-                </button>
-              </div>
-              
-              {/* Выбор модели */}
-              <div className="model-selector">
+              {/* Выбор модели - компактный */}
+              <div className="model-selector-compact">
                 <select 
                   value={selectedModel} 
                   onChange={(e) => setSelectedModel(e.target.value)}
-                  className="model-select"
+                  className="model-select-compact"
                   title="Выберите AI модель"
                 >
-                  <option value="gemini">Gemini Pro</option>
+                  <option value="gemini">Gemini</option>
+                  <option value="claude">Claude</option>
                   <option value="gpt-4">GPT-4</option>
-                  <option value="claude">Claude 3</option>
                 </select>
               </div>
               
+              {/* Кнопка закрытия */}
               <button 
-                className="close-btn"
+                className="close-btn-compact"
                 onClick={() => setIsOpen(false)}
                 aria-label="Закрыть чат"
+                title="Закрыть"
               >
-                ✕
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
               </button>
             </div>
           </div>
