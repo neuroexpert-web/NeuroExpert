@@ -20,6 +20,7 @@ const GEMINI_API_KEY = process.env.GOOGLE_GEMINI_API_KEY
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 if (!GEMINI_API_KEY && !ANTHROPIC_API_KEY && !OPENROUTER_API_KEY && !GROQ_API_KEY) {
   console.error('No AI API keys configured. Please check environment variables.');
@@ -119,6 +120,62 @@ async function sendTelegramNotification(question, answer, model) {
     }
   } catch (error) {
     console.error('Telegram notification error:', error);
+  }
+}
+
+// Функция для взаимодействия с OpenAI API (GPT-4)
+async function getOpenAIResponse(prompt, history = []) {
+  if (!OPENAI_API_KEY) {
+    throw new Error('OPENAI_API_KEY не установлен. Добавьте ключ в переменные окружения Vercel.');
+  }
+
+  try {
+    const messages = history.length > 0 ? history : [];
+    
+    if (messages.length === 0 || messages[0].role !== 'system') {
+      messages.unshift({
+        role: 'system',
+        content: SYSTEM_PROMPT || 'You are a helpful AI assistant.'
+      });
+    }
+    
+    messages.push({
+      role: 'user',
+      content: prompt
+    });
+
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: 'gpt-4-turbo-preview', // или gpt-4, gpt-3.5-turbo
+        messages: messages,
+        temperature: 0.7,
+        max_tokens: 2048
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('OpenAI API error:', errorData);
+      throw new Error(`OpenAI API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    return {
+      text: data.choices[0].message.content,
+      updatedHistory: [...messages, {
+        role: 'assistant',
+        content: data.choices[0].message.content
+      }]
+    };
+  } catch (error) {
+    console.error('OpenAI API error:', error);
+    throw error;
   }
 }
 
@@ -402,7 +459,7 @@ async function handler(request) {
     
     try {
       // Выбираем модель на основе запроса пользователя
-      if (model === 'mixtral' || model === 'gpt-4') {
+      if (model === 'mixtral') {
         // Используем Groq для Mixtral (бесплатный и быстрый)
         if (!GROQ_API_KEY) {
           answer = `⚠️ Модель Mixtral требует API ключ Groq.\n\n📝 Как настроить:\n1. Получите бесплатный ключ на https://console.groq.com/keys\n2. Добавьте в Vercel: GROQ_API_KEY = ваш_ключ\n\n💡 Или используйте модель Gemini, которая уже работает!`;
