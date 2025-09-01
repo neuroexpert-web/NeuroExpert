@@ -43,6 +43,12 @@ const FunnelChart = dynamic(() => import('./components/analytics/FunnelChart'), 
   loading: () => <div className="chart-loading">Загрузка графика...</div>
 });
 
+// Единая панель аналитики с реальными данными
+const UnifiedAnalyticsDashboard = dynamic(() => import('./components/analytics/UnifiedAnalyticsDashboard'), {
+  ssr: false,
+  loading: () => <div className="analytics-loading">Загрузка панели аналитики...</div>
+});
+
 // Динамические импорты для страницы аудитории
 const SegmentManager = dynamic(() => import('./components/SegmentManager'), {
   ssr: false,
@@ -850,6 +856,11 @@ export default function Home() {
         <RealtimeUpdates />
         <TooltipManager />
         <OnboardingTour />
+      </Suspense>
+      
+      {/* Единая панель аналитики с реальными данными */}
+      <Suspense fallback={<div>Загрузка аналитики...</div>}>
+        <UnifiedAnalyticsDashboard />
       </Suspense>
     </section>,
 

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import AnalyticsStatus from './AnalyticsStatus';
 
 // Динамические импорты для графиков
 const Chart = dynamic(() => import('react-chartjs-2').then(mod => mod.Line), { ssr: false });
@@ -30,9 +31,64 @@ export default function UnifiedAnalyticsDashboard() {
 
   const loadAnalyticsData = async () => {
     try {
-      // Здесь будут реальные API запросы к GA4, YM и другим сервисам
-      // Пока используем моковые данные для демонстрации
+      // Загружаем РЕАЛЬНЫЕ данные из нашего unified API
+      const response = await fetch(`/api/analytics/unified?dateRange=${timeRange}`);
+      const data = await response.json();
       
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      
+      // Используем реальные данные из API
+      setAnalyticsData({
+        realtime: data.realtime || {
+          users: 0,
+          pageviews: 0,
+          activeSessions: 0,
+          topPages: []
+        },
+        traffic: data.traffic || {
+          total: 0,
+          sources: []
+        },
+        conversions: {
+          total: data.conversions?.total || 0,
+          rate: data.conversions?.rate || 0,
+          revenue: data.conversions?.revenue || 0,
+          goals: data.conversions?.goals || [
+            { name: 'Регистрация', completed: 0, rate: 0 },
+            { name: 'Демо', completed: 0, rate: 0 },
+            { name: 'Оплата', completed: 0, rate: 0 }
+          ]
+        },
+        campaigns: data.campaigns || [],
+        behavior: data.behavior || {
+          bounceRate: 0,
+          avgDuration: 0,
+          pagesPerSession: 0,
+          deviceTypes: []
+        },
+        social: data.social || null,
+        seo: data.seo || null,
+        recommendations: data.recommendations || [],
+        isRealData: data.isRealData || false,
+        lastUpdated: data.lastUpdated || new Date().toISOString()
+      });
+      
+      setLoading(false);
+      
+      // Логируем для отладки
+      console.log('📊 Loaded analytics data:', {
+        isRealData: data.isRealData,
+        realtimeUsers: data.realtime?.users,
+        totalTraffic: data.traffic?.total,
+        lastUpdated: data.lastUpdated
+      });
+      
+    } catch (error) {
+      console.error('Error loading analytics:', error);
+      
+      // Если ошибка - показываем демо данные с предупреждением
       setAnalyticsData({
         realtime: {
           users: Math.floor(Math.random() * 100) + 50,
@@ -71,7 +127,9 @@ export default function UnifiedAnalyticsDashboard() {
             clicks: 2300,
             conversions: 89,
             revenue: 890000,
-            roi: 1878
+            roi: 1878,
+            cpc: 19.57,
+            ctr: 3.2
           },
           {
             name: 'Яндекс.Директ',
@@ -79,7 +137,9 @@ export default function UnifiedAnalyticsDashboard() {
             clicks: 1850,
             conversions: 72,
             revenue: 650000,
-            roi: 1931
+            roi: 1931,
+            cpc: 17.30,
+            ctr: 2.8
           },
           {
             name: 'Facebook Ads',
@@ -87,7 +147,9 @@ export default function UnifiedAnalyticsDashboard() {
             clicks: 3200,
             conversions: 45,
             revenue: 380000,
-            roi: 1420
+            roi: 1420,
+            cpc: 7.81,
+            ctr: 1.5
           },
           {
             name: 'VK Реклама',
@@ -95,24 +157,25 @@ export default function UnifiedAnalyticsDashboard() {
             clicks: 2100,
             conversions: 39,
             revenue: 290000,
-            roi: 1833
+            roi: 1833,
+            cpc: 7.14,
+            ctr: 2.1
           }
         ],
         behavior: {
           bounceRate: 42.5,
-          avgDuration: 185, // секунды
+          avgDuration: 185,
           pagesPerSession: 3.2,
           deviceTypes: [
             { type: 'Desktop', percentage: 58 },
             { type: 'Mobile', percentage: 37 },
             { type: 'Tablet', percentage: 5 }
           ]
-        }
+        },
+        isRealData: false,
+        error: 'Используются демо-данные. Настройте доступы к аналитике для реальных данных.'
       });
       
-      setLoading(false);
-    } catch (error) {
-      console.error('Error loading analytics:', error);
       setLoading(false);
     }
   };
@@ -176,7 +239,27 @@ export default function UnifiedAnalyticsDashboard() {
     <div className="unified-analytics-dashboard">
       {/* Заголовок и фильтры */}
       <div className="dashboard-header">
-        <h2>Единая панель аналитики</h2>
+        <div>
+          <h2>Единая панель аналитики</h2>
+          <div className="data-status">
+            {analyticsData.isRealData ? (
+              <span className="status-badge real">
+                <span className="status-dot"></span>
+                Реальные данные
+              </span>
+            ) : (
+              <span className="status-badge demo">
+                <span className="status-dot"></span>
+                Демо-режим
+              </span>
+            )}
+            {analyticsData.lastUpdated && (
+              <span className="last-updated">
+                Обновлено: {new Date(analyticsData.lastUpdated).toLocaleString('ru-RU')}
+              </span>
+            )}
+          </div>
+        </div>
         <div className="time-filter">
           <button 
             className={timeRange === 'today' ? 'active' : ''}
@@ -198,6 +281,24 @@ export default function UnifiedAnalyticsDashboard() {
           </button>
         </div>
       </div>
+
+      {/* Предупреждение если нет реальных данных */}
+      {analyticsData.error && (
+        <div className="analytics-warning">
+          <div className="warning-icon">⚠️</div>
+          <div className="warning-content">
+            <h4>Настройте доступ к аналитике</h4>
+            <p>{analyticsData.error}</p>
+            <p>Необходимо добавить в переменные окружения:</p>
+            <ul>
+              <li>Google Analytics: GA4_PROPERTY_ID, GOOGLE_CLIENT_EMAIL и др.</li>
+              <li>Яндекс.Метрика: YANDEX_METRIKA_TOKEN, YM_ID</li>
+              <li>Facebook Pixel: FB_PIXEL_ID</li>
+              <li>Google Ads: GOOGLE_ADS_ID, GOOGLE_ADS_CONVERSION_ID</li>
+            </ul>
+          </div>
+        </div>
+      )}
 
       {/* Реалтайм метрики */}
       <div className="realtime-section">
@@ -416,29 +517,51 @@ export default function UnifiedAnalyticsDashboard() {
       <div className="ai-recommendations">
         <h3>🤖 AI Рекомендации</h3>
         <div className="recommendations-list">
-          <div className="recommendation-item high">
-            <div className="rec-icon">🚨</div>
-            <div className="rec-content">
-              <h4>Увеличьте бюджет Google Ads</h4>
-              <p>ROI кампании 1878% - самый высокий. Увеличение бюджета на 30% может принести дополнительно 267K₽/мес</p>
-            </div>
-          </div>
-          <div className="recommendation-item medium">
-            <div className="rec-icon">⚠️</div>
-            <div className="rec-content">
-              <h4>Оптимизируйте мобильную версию</h4>
-              <p>37% трафика с мобильных, но конверсия ниже на 45%. Улучшение UX может увеличить доход на 150K₽/мес</p>
-            </div>
-          </div>
-          <div className="recommendation-item low">
-            <div className="rec-icon">💡</div>
-            <div className="rec-content">
-              <h4>Добавьте ретаргетинг в VK</h4>
-              <p>VK показывает хороший ROI. Ретаргетинг может увеличить конверсии на 20-30%</p>
-            </div>
-          </div>
+          {analyticsData.recommendations && analyticsData.recommendations.length > 0 ? (
+            analyticsData.recommendations.map((rec, index) => (
+              <div key={index} className={`recommendation-item ${rec.priority}`}>
+                <div className="rec-icon">
+                  {rec.priority === 'high' ? '🚨' : rec.priority === 'medium' ? '⚠️' : '💡'}
+                </div>
+                <div className="rec-content">
+                  <h4>{rec.title}</h4>
+                  <p>{rec.description}</p>
+                  {rec.impact && <p className="rec-impact">Ожидаемый эффект: {rec.impact}</p>}
+                </div>
+              </div>
+            ))
+          ) : (
+            <>
+              <div className="recommendation-item high">
+                <div className="rec-icon">🚨</div>
+                <div className="rec-content">
+                  <h4>Увеличьте бюджет Google Ads</h4>
+                  <p>ROI кампании 1878% - самый высокий. Увеличение бюджета на 30% может принести дополнительно 267K₽/мес</p>
+                </div>
+              </div>
+              <div className="recommendation-item medium">
+                <div className="rec-icon">⚠️</div>
+                <div className="rec-content">
+                  <h4>Оптимизируйте мобильную версию</h4>
+                  <p>37% трафика с мобильных, но конверсия ниже на 45%. Улучшение UX может увеличить доход на 150K₽/мес</p>
+                </div>
+              </div>
+              <div className="recommendation-item low">
+                <div className="rec-icon">💡</div>
+                <div className="rec-content">
+                  <h4>Добавьте ретаргетинг в VK</h4>
+                  <p>VK показывает хороший ROI. Ретаргетинг может увеличить конверсии на 20-30%</p>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
+
+      {/* Статус подключения аналитики */}
+      {!analyticsData.isRealData && (
+        <AnalyticsStatus />
+      )}
 
       <style jsx>{`
         .unified-analytics-dashboard {
@@ -457,6 +580,95 @@ export default function UnifiedAnalyticsDashboard() {
         .dashboard-header h2 {
           color: white;
           font-size: 2rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .data-status {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          margin-top: 0.5rem;
+        }
+
+        .status-badge {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.25rem 0.75rem;
+          border-radius: 20px;
+          font-size: 0.875rem;
+          font-weight: 500;
+        }
+
+        .status-badge.real {
+          background: rgba(16, 185, 129, 0.2);
+          color: #10b981;
+          border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-badge.demo {
+          background: rgba(245, 158, 11, 0.2);
+          color: #f59e0b;
+          border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .status-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: currentColor;
+          animation: pulse 2s ease-in-out infinite;
+        }
+
+        .last-updated {
+          color: rgba(255, 255, 255, 0.6);
+          font-size: 0.75rem;
+        }
+
+        .analytics-warning {
+          background: rgba(245, 158, 11, 0.1);
+          border: 1px solid rgba(245, 158, 11, 0.3);
+          border-radius: 12px;
+          padding: 1.5rem;
+          margin-bottom: 2rem;
+          display: flex;
+          gap: 1rem;
+        }
+
+        .warning-icon {
+          font-size: 2rem;
+          flex-shrink: 0;
+        }
+
+        .warning-content h4 {
+          color: #f59e0b;
+          margin-bottom: 0.5rem;
+        }
+
+        .warning-content p {
+          color: rgba(255, 255, 255, 0.8);
+          margin-bottom: 0.5rem;
+        }
+
+        .warning-content ul {
+          list-style: none;
+          padding: 0;
+          margin-top: 1rem;
+        }
+
+        .warning-content li {
+          color: rgba(255, 255, 255, 0.7);
+          padding: 0.25rem 0;
+          font-size: 0.875rem;
+          padding-left: 1rem;
+          position: relative;
+        }
+
+        .warning-content li:before {
+          content: '•';
+          position: absolute;
+          left: 0;
+          color: #f59e0b;
         }
 
         .time-filter {
