@@ -1,0 +1,36 @@
+{
+  "date": "2025-09-01T08:26:15.918Z",
+  "fileSizes": [
+    {
+      "path": "app/page.js",
+      "size": "0.19 MB",
+      "maxSize": "200 KB"
+    },
+    {
+      "path": "app/globals.css",
+      "size": "78.41 KB",
+      "maxSize": "100 KB"
+    },
+    {
+      "path": "package.json",
+      "size": "2.76 KB",
+      "maxSize": "10 KB"
+    },
+    {
+      "path": "app/layout.js",
+      "size": "10.14 KB",
+      "maxSize": "50 KB"
+    }
+  ],
+  "dynamicImports": 32,
+  "issues": [
+    "- app/page.js слишком большой (> 100KB)"
+  ],
+  "recommendations": [
+    "1. Использовать React.memo для тяжелых компонентов",
+    "2. Добавить lazy loading для изображений",
+    "3. Минифицировать CSS и JS файлы",
+    "4. Использовать Web Workers для тяжелых вычислений",
+    "5. Включить gzip компрессию на сервере"
+  ]
+}
