@@ -146,7 +146,7 @@ export default function PricingComparison() {
               <select name="role">
                 <option value="">Выберите роль</option>
                 <option value="ceo">CEO / Владелец</option>
-                <option value="cto">CTO / Технический директор</option>
+                <option value="cto">CTO / Технический управляющий</option>
                 <option value="marketing">Маркетинг</option>
                 <option value="sales">Продажи</option>
                 <option value="other">Другое</option>
