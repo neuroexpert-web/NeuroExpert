@@ -36,6 +36,23 @@
   position: relative;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
+  /* Важно: убираем padding-top по умолчанию */
+  padding-top: 0;
+}
+
+/* Специальный фикс для страницы аналитики */
+.pageWrapper:has(#analytics-dashboard) {
+  /* Добавляем внутренний контейнер для правильного скролла */
+  display: flex;
+  flex-direction: column;
+}
+
+.pageWrapper #analytics-dashboard {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Убираем лишний padding-top, он уже задан в глобальных стилях */
+  padding-top: 2rem !important;
 }
 
 /* Специальный фикс для страницы личного кабинета */
