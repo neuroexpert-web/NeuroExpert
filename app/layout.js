@@ -289,6 +289,20 @@ export default function RootLayout({ children }) {
             `
           }}
         />
+        {/* Analytics Integration */}
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            // Initialize analytics when DOM is ready
+            if (typeof window !== 'undefined') {
+              window.addEventListener('DOMContentLoaded', () => {
+                import('/app/lib/analytics/analytics-manager.js').then(({ initAnalytics }) => {
+                  initAnalytics();
+                }).catch(err => console.error('Analytics init error:', err));
+              });
+            }
+          `
+        }} />
+        
         {/* PWA Service Worker Registration */}
         <script dangerouslySetInnerHTML={{
           __html: `
