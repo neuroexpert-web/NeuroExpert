@@ -138,20 +138,27 @@ export default function ContactFormHandler() {
       }
     };
     
-    // Имитация отправки на сервер
+    // Отправка на сервер
     const sendToServer = async (data) => {
-      // Имитация задержки сети
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Здесь должна быть реальная отправка на сервер
-      console.log('Form data submitted:', data);
-      
-      // Можно добавить интеграцию с CRM через API
-      // await fetch('/api/contact', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(data)
-      // });
+      try {
+        const response = await fetch('/api/contact-form', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(result.error || 'Ошибка отправки формы');
+        }
+        
+        console.log('Form submitted successfully:', result);
+        return result;
+      } catch (error) {
+        console.error('Form submission error:', error);
+        throw error;
+      }
     };
     
     // Уведомления

@@ -1,27 +1,97 @@
 {
-  "name": "NeuroExpert",
+  "name": "NeuroExpert - AI платформа для бизнеса",
   "short_name": "NeuroExpert",
-  "description": "AI-платформа для автоматизации бизнеса",
+  "description": "Увеличьте прибыль на 40% за 3 месяца с помощью искусственного интеллекта",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0a0a0f",
-  "theme_color": "#8a2be2",
-  "orientation": "portrait-primary",
+  "background_color": "#0a0a1b",
+  "theme_color": "#8b5cf6",
+  "orientation": "portrait",
+  "categories": ["business", "productivity", "finance"],
+  "lang": "ru",
+  "dir": "ltr",
   "icons": [
     {
-      "src": "/icon-192x192.png",
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icon-512x512.png",
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     }
   ],
-  "categories": ["business", "productivity"],
-  "lang": "ru",
-  "dir": "ltr"
+  "screenshots": [
+    {
+      "src": "/screenshots/desktop-home.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "platform": "wide",
+      "label": "Главная страница NeuroExpert"
+    },
+    {
+      "src": "/screenshots/mobile-dashboard.png",
+      "sizes": "412x915",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "Личный кабинет на мобильном"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Аналитика",
+      "short_name": "Аналитика",
+      "description": "Открыть панель аналитики",
+      "url": "/?page=analytics",
+      "icons": [{ "src": "/icons/analytics.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "AI Ассистент",
+      "short_name": "AI Chat",
+      "description": "Открыть AI ассистента",
+      "url": "/?ai=open",
+      "icons": [{ "src": "/icons/ai-chat.png", "sizes": "96x96" }]
+    }
+  ],
+  "prefer_related_applications": false,
+  "related_applications": []
 }
