@@ -1768,6 +1768,25 @@ export default function Home() {
                 <path d="M5 12h14M12 5l7 7-7 7" strokeWidth="2" strokeLinecap="round"/>
               </svg>
             </button>
+            
+            <div className="solution-details" hidden>
+              <h4>Что входит в решение:</h4>
+              <ul>
+                <li>Интеллектуальная сегментация клиентской базы</li>
+                <li>Персонализация контента под каждый сегмент</li>
+                <li>Автоматизация email и SMS кампаний</li>
+                <li>A/B тестирование и оптимизация</li>
+                <li>Интеграция с соцсетями и мессенджерами</li>
+              </ul>
+              <div className="clients-row">
+                <span className="clients-label">Используют:</span>
+                <div className="client-logos">
+                  <span className="client-logo">🏪</span>
+                  <span className="client-logo">💊</span>
+                  <span className="client-logo">💻</span>
+                </div>
+              </div>
+            </div>
           </article>
 
           {/* Прогнозирование спроса */}
@@ -1807,6 +1826,25 @@ export default function Home() {
                 <path d="M5 12h14M12 5l7 7-7 7" strokeWidth="2" strokeLinecap="round"/>
               </svg>
             </button>
+            
+            <div className="solution-details" hidden>
+              <h4>Что входит в решение:</h4>
+              <ul>
+                <li>ML-модели прогнозирования на основе исторических данных</li>
+                <li>Учет сезонности, трендов и внешних факторов</li>
+                <li>Интеграция с системами учета и ERP</li>
+                <li>Автоматическое формирование заказов</li>
+                <li>Оптимизация логистических маршрутов</li>
+              </ul>
+              <div className="clients-row">
+                <span className="clients-label">Используют:</span>
+                <div className="client-logos">
+                  <span className="client-logo">🏭</span>
+                  <span className="client-logo">🚚</span>
+                  <span className="client-logo">🏪</span>
+                </div>
+              </div>
+            </div>
           </article>
 
           {/* Кредитный скоринг */}
@@ -1847,6 +1885,25 @@ export default function Home() {
                 <path d="M5 12h14M12 5l7 7-7 7" strokeWidth="2" strokeLinecap="round"/>
               </svg>
             </button>
+            
+            <div className="solution-details" hidden>
+              <h4>Что входит в решение:</h4>
+              <ul>
+                <li>Анализ 500+ параметров включая цифровой след</li>
+                <li>Мгновенная оценка платежеспособности</li>
+                <li>Интеграция с банковскими системами</li>
+                <li>Антифрод модули и проверка документов</li>
+                <li>Персонализированные кредитные предложения</li>
+              </ul>
+              <div className="clients-row">
+                <span className="clients-label">Используют:</span>
+                <div className="client-logos">
+                  <span className="client-logo">🏦</span>
+                  <span className="client-logo">💳</span>
+                  <span className="client-logo">📱</span>
+                </div>
+              </div>
+            </div>
           </article>
 
           {/* Мониторинг качества */}
@@ -1886,6 +1943,25 @@ export default function Home() {
                 <path d="M5 12h14M12 5l7 7-7 7" strokeWidth="2" strokeLinecap="round"/>
               </svg>
             </button>
+            
+            <div className="solution-details" hidden>
+              <h4>Что входит в решение:</h4>
+              <ul>
+                <li>Система компьютерного зрения для контроля качества</li>
+                <li>Обнаружение дефектов в реальном времени</li>
+                <li>Интеграция с производственными линиями</li>
+                <li>Автоматическая отбраковка и сортировка</li>
+                <li>Аналитика и отчеты по качеству продукции</li>
+              </ul>
+              <div className="clients-row">
+                <span className="clients-label">Используют:</span>
+                <div className="client-logos">
+                  <span className="client-logo">🏭</span>
+                  <span className="client-logo">⚙️</span>
+                  <span className="client-logo">🔧</span>
+                </div>
+              </div>
+            </div>
           </article>
 
           {/* Персонализация UX */}
@@ -1925,6 +2001,25 @@ export default function Home() {
                 <path d="M5 12h14M12 5l7 7-7 7" strokeWidth="2" strokeLinecap="round"/>
               </svg>
             </button>
+            
+            <div className="solution-details" hidden>
+              <h4>Что входит в решение:</h4>
+              <ul>
+                <li>Анализ поведения пользователей в реальном времени</li>
+                <li>Динамическая адаптация интерфейса</li>
+                <li>Персонализированные рекомендации контента</li>
+                <li>Умная навигация на основе предпочтений</li>
+                <li>Мультивариантное тестирование UX решений</li>
+              </ul>
+              <div className="clients-row">
+                <span className="clients-label">Используют:</span>
+                <div className="client-logos">
+                  <span className="client-logo">🛍️</span>
+                  <span className="client-logo">💻</span>
+                  <span className="client-logo">🏥</span>
+                </div>
+              </div>
+            </div>
           </article>
         </div>
 
