@@ -49,6 +49,12 @@ const UnifiedAnalyticsDashboard = dynamic(() => import('./components/analytics/U
   loading: () => <div className="analytics-loading">Загрузка панели аналитики...</div>
 });
 
+// Компонент тестирования формы
+const ContactFormTest = dynamic(() => import('./components/ContactFormTest'), {
+  ssr: false,
+  loading: () => null
+});
+
 // Динамические импорты для страницы аудитории
 const SegmentManager = dynamic(() => import('./components/SegmentManager'), {
   ssr: false,
@@ -3735,6 +3741,13 @@ export default function Home() {
         <ContactValidation />
         <ContactMap />
       </Suspense>
+      
+      {/* Тестирование формы обратной связи (только в dev режиме) */}
+      {process.env.NODE_ENV === 'development' && (
+        <Suspense fallback={null}>
+          <ContactFormTest />
+        </Suspense>
+      )}
     </section>,
 
     // 10. Визуальная Студия - unified real-time dashboard для мониторинга
