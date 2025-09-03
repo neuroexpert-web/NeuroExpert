@@ -32,14 +32,24 @@
 .filters-panel {
   display: flex;
   align-items: center;
+  gap: 1.5rem; /* Fallback значение */
   gap: var(--spacing-lg);
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: 1.5rem; /* Fallback значение */
+  margin-bottom: var(--spacing-lg);
+  padding: 1rem 1.5rem; /* Fallback значения */
   padding: var(--spacing-md) var(--spacing-lg);
+  background: rgba(20, 20, 50, 0.4); /* Fallback значение */
   background: var(--glass-bg);
+  backdrop-filter: blur(20px); /* Fallback значение */
   backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid rgba(255, 255, 255, 0.15); /* Fallback значение */
   border: 1px solid var(--glass-border);
   border-radius: 16px;
   flex-wrap: wrap;
+  min-height: 60px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 10;
 }
 
 .filter-group {
@@ -68,6 +78,9 @@
   background-repeat: no-repeat;
   background-position: right 0.5rem center;
   background-size: 1.2em;
+  min-width: 140px; /* Минимальная ширина */
+  height: 40px; /* Фиксированная высота */
+  box-sizing: border-box;
 }
 
 .filter-select:hover {
@@ -416,19 +429,52 @@
 }
 
 /* --- 9. АДАПТИВНОСТЬ --- */
-@media (max-width: 768px) {
+
+/* Планшеты */
+@media (max-width: 1024px) and (min-width: 769px) {
   .filters-panel {
-    padding: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    gap: var(--spacing-md);
   }
   
   .filter-group {
-    flex: 1 1 100%;
+    min-width: 140px;
+  }
+  
+  .refresh-button {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+}
+
+/* Мобильные устройства */
+@media (max-width: 768px) {
+  .filters-panel {
+    padding: var(--spacing-sm);
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+    min-height: auto;
+  }
+  
+  .filter-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .filter-group label {
+    min-width: 80px;
+  }
+  
+  .filter-select {
+    flex: 1;
+    margin-left: var(--spacing-sm);
   }
   
   .refresh-button {
     width: 100%;
     justify-content: center;
     margin-top: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
   }
   
   .chart-header {
@@ -452,6 +498,39 @@
   
   .rec-action-button {
     width: 100%;
+  }
+}
+
+/* Очень маленькие экраны */
+@media (max-width: 480px) {
+  .filters-panel {
+    margin: 0.5rem 0 !important;
+    padding: 0.5rem !important;
+    border-radius: 12px;
+  }
+  
+  .filter-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+    width: 100%;
+  }
+  
+  .filter-group label {
+    font-size: 0.8rem;
+    min-width: auto;
+  }
+  
+  .filter-select {
+    width: 100%;
+    margin-left: 0;
+    font-size: 0.8rem;
+    padding: 0.4rem 1.5rem 0.4rem 0.75rem !important;
+  }
+  
+  .refresh-button {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.75rem !important;
   }
 }
 

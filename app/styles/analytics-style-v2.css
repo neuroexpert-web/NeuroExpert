@@ -44,6 +44,16 @@
     padding: 0.5rem 1rem 2rem 1rem; /* Минимальный верхний отступ */
 }
 
+/* Исправление для панели фильтров */
+#analytics-dashboard .filters-panel {
+    position: relative;
+    z-index: 10;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+    width: 100%;
+    max-width: 100%;
+}
+
 #analytics-dashboard > * {
     max-width: 1400px;
     margin-left: auto;
@@ -452,21 +462,28 @@
 
 @media (max-width: 768px) {
     #analytics-dashboard {
-        padding: 0.25rem 1rem 1rem 1rem; /* Еще меньше отступы на мобильных */
+        padding: 0.25rem 0.75rem 1rem 0.75rem; /* Еще меньше отступы на мобильных */
+    }
+    
+    #analytics-dashboard .filters-panel {
+        margin-top: 0.25rem;
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+        border-radius: 12px;
     }
     
     .page-header {
         margin-top: 0.25rem;
-        margin-bottom: 1rem;
+        margin-bottom: 0.75rem; /* Уменьшил еще больше */
     }
     
     .page-header h2 {
-        font-size: 2rem;
+        font-size: 1.75rem; /* Уменьшил размер */
         margin-bottom: 0.25rem;
     }
     
     .page-header p {
-        font-size: 1rem;
+        font-size: 0.9rem; /* Уменьшил размер */
     }
     
     .kpi-cards {
