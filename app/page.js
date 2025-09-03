@@ -17,15 +17,7 @@ const RealtimeUpdates = dynamic(() => import('./components/RealtimeUpdates'), {
   loading: () => <div className="realtime-skeleton">⚡ Подготовка данных...</div>
 });
 
-const TooltipManager = dynamic(() => import('./components/TooltipManager'), {
-  ssr: false,
-  loading: () => null
-});
-
-const OnboardingTour = dynamic(() => import('./components/OnboardingTour'), {
-  ssr: false,
-  loading: () => null
-});
+// Убрали TooltipManager и OnboardingTour по запросу пользователя
 
 // Новые компоненты графиков
 const RevenueChart = dynamic(() => import('./components/analytics/RevenueChart'), {
@@ -539,14 +531,6 @@ export default function Home() {
                 </svg>
               </span>
               <span className="kpi-title">Выручка</span>
-              <button className="help-icon" aria-describedby="tooltip-revenue" tabIndex="0">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                </svg>
-              </button>
-              <div id="tooltip-revenue" className="tooltip" role="tooltip" hidden>
-                Общая выручка за выбранный период от всех каналов продаж. Включает все успешные транзакции.
-              </div>
             </div>
             <div className="kpi-value">₽ {(analyticsData.revenue / 1000).toFixed(1)}K</div>
             <div className="kpi-description">За последние 7 дней</div>
@@ -565,14 +549,6 @@ export default function Home() {
                 </svg>
               </span>
               <span className="kpi-title">Новые клиенты</span>
-              <button className="help-icon" aria-describedby="tooltip-clients" tabIndex="0">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                </svg>
-              </button>
-              <div id="tooltip-clients" className="tooltip" role="tooltip" hidden>
-                Количество новых уникальных пользователей, которые совершили первую покупку или регистрацию.
-              </div>
             </div>
             <div className="kpi-value">{analyticsData.clients}</div>
             <div className="kpi-description">Зарегистрировались за неделю</div>
@@ -591,14 +567,6 @@ export default function Home() {
                 </svg>
               </span>
               <span className="kpi-title">Удовлетворенность</span>
-              <button className="help-icon" aria-describedby="tooltip-satisfaction" tabIndex="0">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                </svg>
-              </button>
-              <div id="tooltip-satisfaction" className="tooltip" role="tooltip" hidden>
-                Средняя оценка клиентов на основе отзывов и NPS-опросов.
-              </div>
             </div>
             <div className="kpi-value">{analyticsData.satisfaction.toFixed(1)}/5</div>
             <div className="kpi-description">Средняя оценка клиентов</div>
@@ -617,14 +585,6 @@ export default function Home() {
                 </svg>
               </span>
               <span className="kpi-title">Конверсия</span>
-              <button className="help-icon" aria-describedby="tooltip-conversion" tabIndex="0">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                </svg>
-              </button>
-              <div id="tooltip-conversion" className="tooltip" role="tooltip" hidden>
-                Процент посетителей, совершивших целевое действие (покупка, регистрация, подписка).
-              </div>
             </div>
             <div className="kpi-value">{analyticsData.conversion.toFixed(2)}%</div>
             <div className="kpi-description">Из посетителей в клиенты</div>
@@ -848,8 +808,6 @@ export default function Home() {
       <Suspense fallback={null}>
         <AnalyticsCharts />
         <RealtimeUpdates />
-        <TooltipManager />
-        <OnboardingTour />
       </Suspense>
     </section>,
 
@@ -1035,14 +993,6 @@ export default function Home() {
               <div className="detail-card demographics-card glass-card">
                 <div className="card-header">
                   <h4>Демография</h4>
-                  <button className="help-icon" aria-describedby="demo-tooltip" tabIndex="0">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                    </svg>
-                  </button>
-                  <div id="demo-tooltip" className="tooltip" role="tooltip" hidden>
-                    Распределение клиентов по возрасту, полу и географии
-                  </div>
                 </div>
                 <div className="chart-wrapper">
                   <canvas id="loyalDemographicsChart"></canvas>
@@ -1112,14 +1062,6 @@ export default function Home() {
               <div className="detail-card ltv-card glass-card">
                 <div className="card-header">
                   <h4>Ценность клиента (LTV)</h4>
-                  <button className="help-icon" aria-describedby="ltv-tooltip" tabIndex="0">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                    </svg>
-                  </button>
-                  <div id="ltv-tooltip" className="tooltip" role="tooltip" hidden>
-                    Прогнозируемая прибыль от клиента за всё время сотрудничества
-                  </div>
                 </div>
                 <div className="ltv-content">
                   <div className="ltv-main">
@@ -2402,8 +2344,8 @@ export default function Home() {
           <div className="mission-content">
             <h3>Наша миссия</h3>
             <p className="mission-text">
-              Мы создаём простые и понятные AI-инструменты для малого бизнеса. 
-              NeuroExpert — это стартап, который делает современные технологии доступными для небольших компаний.
+              Мы — молодой стартап, основанный в 2024 году командой энтузиастов AI-технологий. 
+              Наша цель — сделать искусственный интеллект доступным для малого и среднего бизнеса в России.
             </p>
             <div className="mission-stats">
               <div className="stat-item">
@@ -2411,16 +2353,16 @@ export default function Home() {
                 <span className="stat-label">Год основания</span>
               </div>
               <div className="stat-item">
-                <span className="stat-value">25+</span>
-                <span className="stat-label">Первых клиентов</span>
+                <span className="stat-value">12</span>
+                <span className="stat-label">Активных проектов</span>
               </div>
               <div className="stat-item">
-                <span className="stat-value">4.3/5</span>
-                <span className="stat-label">Средняя оценка</span>
+                <span className="stat-value">4.8/5</span>
+                <span className="stat-label">Рейтинг клиентов</span>
               </div>
               <div className="stat-item">
-                <span className="stat-value">24/7</span>
-                <span className="stat-label">Поддержка</span>
+                <span className="stat-value">3 чел</span>
+                <span className="stat-label">Основная команда</span>
               </div>
             </div>
           </div>
@@ -2517,23 +2459,23 @@ export default function Home() {
         {/* Наша команда */}
         <div className="team-section">
           <h3>Наша команда</h3>
-          <p className="team-subtitle">Эксперты, объединенные страстью к технологиям и желанием менять мир к лучшему</p>
+          <p className="team-subtitle">Молодая команда разработчиков, увлеченная AI-технологиями и стартап-культурой</p>
           
           <div className="team-grid">
             <article className="team-member glass-card" data-member="ceo">
               <div className="member-avatar">
-                <img src="/api/placeholder/120/120" alt="Александр Петров" />
+                <img src="/api/placeholder/120/120" alt="Алексей Смирнов" />
                 <div className="member-badge">CEO</div>
               </div>
-              <h4>Александр Петров</h4>
+              <h4>Алексей Смирнов</h4>
               <p className="member-role">Основатель и CEO</p>
-              <p className="member-bio">15+ лет в IT, эксперт в области AI и бизнес-стратегии</p>
+              <p className="member-bio">3 года в разработке AI-решений, выпускник МФТИ по направлению "Искусственный интеллект"</p>
               <div className="member-skills">
-                <span className="skill-tag">AI Strategy</span>
-                <span className="skill-tag">Business Development</span>
-                <span className="skill-tag">Leadership</span>
+                <span className="skill-tag">Product Management</span>
+                <span className="skill-tag">AI Development</span>
+                <span className="skill-tag">Startup</span>
               </div>
-              <button className="member-details-btn" aria-label="Подробнее об Александре">
+              <button className="member-details-btn" aria-label="Подробнее об Алексее">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
                   <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
                 </svg>
@@ -2542,103 +2484,45 @@ export default function Home() {
 
             <article className="team-member glass-card" data-member="cto">
               <div className="member-avatar">
-                <img src="/api/placeholder/120/120" alt="Елена Иванова" />
+                <img src="/api/placeholder/120/120" alt="Дарья Козлова" />
                 <div className="member-badge">CTO</div>
               </div>
-              <h4>Елена Иванова</h4>
+              <h4>Дарья Козлова</h4>
               <p className="member-role">Технический директор</p>
-              <p className="member-bio">PhD в Machine Learning, автор 20+ научных публикаций</p>
+              <p className="member-bio">Fullstack разработчик, 4 года опыта в React/Next.js и Python/FastAPI</p>
               <div className="member-skills">
-                <span className="skill-tag">Machine Learning</span>
-                <span className="skill-tag">Neural Networks</span>
-                <span className="skill-tag">Python</span>
+                <span className="skill-tag">React/Next.js</span>
+                <span className="skill-tag">Python/FastAPI</span>
+                <span className="skill-tag">AI Integration</span>
               </div>
-              <button className="member-details-btn" aria-label="Подробнее о Елене">
+              <button className="member-details-btn" aria-label="Подробнее о Дарье">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
                   <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
                 </svg>
               </button>
             </article>
 
-            <article className="team-member glass-card" data-member="head-ai">
+            <article className="team-member glass-card" data-member="head-design">
               <div className="member-avatar">
-                <img src="/api/placeholder/120/120" alt="Михаил Соколов" />
-                <div className="member-badge">Head of AI</div>
+                <img src="/api/placeholder/120/120" alt="Екатерина Новикова" />
+                <div className="member-badge">Designer</div>
               </div>
-              <h4>Михаил Соколов</h4>
-              <p className="member-role">Руководитель AI-департамента</p>
-              <p className="member-bio">5+ лет разработки AI-решений для стартапов</p>
+              <h4>Екатерина Новикова</h4>
+              <p className="member-role">Lead UX/UI Designer</p>
+              <p className="member-bio">2 года в дизайне интерфейсов, специализация на AI-продуктах и стартапах</p>
               <div className="member-skills">
-                <span className="skill-tag">Deep Learning</span>
-                <span className="skill-tag">NLP</span>
-                <span className="skill-tag">Computer Vision</span>
-              </div>
-              <button className="member-details-btn" aria-label="Подробнее о Михаиле">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
-                  <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
-                </svg>
-              </button>
-            </article>
-
-            <article className="team-member glass-card" data-member="head-ux">
-              <div className="member-avatar">
-                <img src="/api/placeholder/120/120" alt="Анна Морозова" />
-                <div className="member-badge">Head of UX</div>
-              </div>
-              <h4>Анна Морозова</h4>
-              <p className="member-role">Руководитель UX/UI</p>
-              <p className="member-bio">Создала дизайн-системы для 50+ AI-продуктов</p>
-              <div className="member-skills">
-                <span className="skill-tag">UX Research</span>
-                <span className="skill-tag">Design Systems</span>
+                <span className="skill-tag">UI/UX Design</span>
                 <span className="skill-tag">Figma</span>
+                <span className="skill-tag">User Research</span>
               </div>
-              <button className="member-details-btn" aria-label="Подробнее об Анне">
+              <button className="member-details-btn" aria-label="Подробнее о Екатерине">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
                   <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
                 </svg>
               </button>
             </article>
 
-            <article className="team-member glass-card" data-member="head-data">
-              <div className="member-avatar">
-                <img src="/api/placeholder/120/120" alt="Дмитрий Волков" />
-                <div className="member-badge">Head of Data</div>
-              </div>
-              <h4>Дмитрий Волков</h4>
-              <p className="member-role">Руководитель Data Science</p>
-              <p className="member-bio">Эксперт в Big Data и предиктивной аналитике</p>
-              <div className="member-skills">
-                <span className="skill-tag">Big Data</span>
-                <span className="skill-tag">Analytics</span>
-                <span className="skill-tag">SQL/NoSQL</span>
-              </div>
-              <button className="member-details-btn" aria-label="Подробнее о Дмитрии">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
-                  <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
-                </svg>
-              </button>
-            </article>
-
-            <article className="team-member glass-card" data-member="head-security">
-              <div className="member-avatar">
-                <img src="/api/placeholder/120/120" alt="Ольга Белова" />
-                <div className="member-badge">CISO</div>
-              </div>
-              <h4>Ольга Белова</h4>
-              <p className="member-role">Директор по безопасности</p>
-              <p className="member-bio">Certified Ethical Hacker, 12+ лет в кибербезопасности</p>
-              <div className="member-skills">
-                <span className="skill-tag">Cybersecurity</span>
-                <span className="skill-tag">Compliance</span>
-                <span className="skill-tag">Risk Management</span>
-              </div>
-              <button className="member-details-btn" aria-label="Подробнее об Ольге">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
-                  <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
-                </svg>
-              </button>
-            </article>
+            {/* Убираем лишних членов команды для реалистичности стартапа */}
           </div>
 
           <div className="team-cta">
@@ -2652,38 +2536,18 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Достижения и награды */}
+        {/* Достижения и метрики */}
         <div className="achievements-section">
-          <h3>Наши достижения</h3>
+          <h3>Наши метрики</h3>
           <div className="achievements-grid">
-            <div className="achievement-card glass-card">
-              <div className="achievement-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" strokeWidth="2"/>
-                </svg>
-              </div>
-              <h4>AI Excellence Award 2023</h4>
-              <p>Лучшая платформа для бизнес-аналитики</p>
-            </div>
-
             <div className="achievement-card glass-card">
               <div className="achievement-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                   <path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" strokeWidth="2"/>
                 </svg>
               </div>
-              <h4>500+ клиентов</h4>
-              <p>Доверяют нам цифровую трансформацию</p>
-            </div>
-
-            <div className="achievement-card glass-card">
-              <div className="achievement-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" strokeWidth="2"/>
-                </svg>
-              </div>
-              <h4>ISO сертификация</h4>
-              <p>Международные стандарты качества</p>
+              <h4>12 активных клиентов</h4>
+              <p>Малый и средний бизнес доверяет нам</p>
             </div>
 
             <div className="achievement-card glass-card">
@@ -2692,18 +2556,8 @@ export default function Home() {
                   <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeWidth="2"/>
                 </svg>
               </div>
-              <h4>10M+ обработано запросов</h4>
-              <p>Ежедневно через нашу платформу</p>
-            </div>
-
-            <div className="achievement-card glass-card">
-              <div className="achievement-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
-                </svg>
-              </div>
-              <h4>30+ стран</h4>
-              <p>География наших клиентов</p>
+              <h4>2,500+ запросов</h4>
+              <p>Обработано нашим AI за месяц</p>
             </div>
 
             <div className="achievement-card glass-card">
@@ -2712,8 +2566,18 @@ export default function Home() {
                   <path d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2"/>
                 </svg>
               </div>
-              <h4>NPS 72</h4>
-              <p>Высокий уровень лояльности клиентов</p>
+              <h4>4.8/5 рейтинг</h4>
+              <p>Средняя оценка от клиентов</p>
+            </div>
+
+            <div className="achievement-card glass-card">
+              <div className="achievement-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" strokeWidth="2"/>
+                </svg>
+              </div>
+              <h4>6 месяцев разработки</h4>
+              <p>От идеи до готового продукта</p>
             </div>
           </div>
         </div>
@@ -2763,10 +2627,10 @@ export default function Home() {
                 <svg viewBox="0 0 24 24" fill="currentColor" className="quote-icon">
                   <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
                 </svg>
-                <p>"NeuroExpert помог нам увеличить конверсию на 25% за 3 месяца. Отличное решение для небольшого бизнеса."</p>
+                <p>"Ребята сделали для нас простой калькулятор ROI. Помог понять, куда вкладывать деньги в рекламу. Рекомендую!"</p>
                 <div className="testimonial-author">
-                  <strong>Иван Кузнецов</strong>
-                  <span>CEO, TechStart</span>
+                  <strong>Андрей Воронов</strong>
+                  <span>Директор, "Мебель Плюс"</span>
                 </div>
               </div>
             </article>
@@ -2776,10 +2640,23 @@ export default function Home() {
                 <svg viewBox="0 0 24 24" fill="currentColor" className="quote-icon">
                   <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
                 </svg>
-                <p>"AI-рекомендации платформы сэкономили нам тысячи рублей на оптимизации процессов. Хороший ROI!"</p>
+                <p>"Интегрировали их AI-чат на сайт. Клиенты довольны, заявок стало больше. Молодцы, что делают доступные решения."</p>
                 <div className="testimonial-author">
-                  <strong>Мария Федорова</strong>
-                  <span>CDO, RetailPro</span>
+                  <strong>Светлана Морозова</strong>
+                  <span>Маркетолог, "СтройКомфорт"</span>
+                </div>
+              </div>
+            </article>
+
+            <article className="testimonial-card glass-card">
+              <div className="testimonial-quote">
+                <svg viewBox="0 0 24 24" fill="currentColor" className="quote-icon">
+                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+                </svg>
+                <p>"Быстро внедрили аналитику для нашего интернет-магазина. Теперь видим, что работает, а что нет. Спасибо!"</p>
+                <div className="testimonial-author">
+                  <strong>Дмитрий Павлов</strong>
+                  <span>Владелец, "ТехноТорг"</span>
                 </div>
               </div>
             </article>
@@ -2788,8 +2665,8 @@ export default function Home() {
 
         {/* CTA секция */}
         <div className="about-cta glass-card">
-          <h3>Готовы начать трансформацию?</h3>
-          <p>Присоединяйтесь к десяткам компаний, которые уже используют силу AI для роста бизнеса</p>
+          <h3>Начнем работать вместе?</h3>
+          <p>Присоединяйтесь к нашим клиентам, которые уже тестируют возможности AI для своего бизнеса</p>
           <div className="cta-buttons">
             <button className="btn-demo">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
