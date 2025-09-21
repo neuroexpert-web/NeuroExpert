@@ -17,11 +17,6 @@ const RealtimeUpdates = dynamic(() => import('./components/RealtimeUpdates'), {
   loading: () => <div className="realtime-skeleton">⚡ Подготовка данных...</div>
 });
 
-const TooltipManager = dynamic(() => import('./components/TooltipManager'), {
-  ssr: false,
-  loading: () => null
-});
-
 const OnboardingTour = dynamic(() => import('./components/OnboardingTour'), {
   ssr: false,
   loading: () => null
@@ -713,15 +708,6 @@ export default function Home() {
           <div className="chart-card glass-card" id="chart-traffic">
             <div className="chart-header">
               <h4>Источники трафика</h4>
-              <button 
-                className="info-btn" 
-                aria-label="Подробнее об источниках"
-                onClick={() => handleChartInfo('traffic')}
-              >
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                </svg>
-              </button>
             </div>
             <div className="chart-wrapper">
               {TrafficChart && <TrafficChart darkMode={true} />}
@@ -889,7 +875,6 @@ export default function Home() {
       <Suspense fallback={null}>
         <AnalyticsCharts />
         <RealtimeUpdates />
-        <TooltipManager />
         <OnboardingTour />
       </Suspense>
     </section>,
