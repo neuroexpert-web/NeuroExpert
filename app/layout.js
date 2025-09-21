@@ -6,7 +6,15 @@ import './styles/neuroexpert-pro.css'
 import './styles/premium-design-system.css'
 import './styles/premium-glass-sections.css'
 import './styles/mobile-fixes.css'
+import './styles/analytics-improvements.css'
+import './styles/audience-improvements.css'
+import './styles/performance-widget.css'
+import './styles/analytics-layout-fix.css'
+import './styles/text-readability-fix.css'
+import './styles/dashboard-layout-fix.css'
+import './styles/mobile-analytics-fix.css'
 import Script from 'next/script'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 // Оптимизированная загрузка шрифтов
 const inter = Inter({ 
@@ -194,6 +202,7 @@ export default function RootLayout({ children }) {
           <div className="spinner"></div>
         </div>
         {children}
+        <SpeedInsights />
         
         {/* Google Analytics с отложенной загрузкой */}
         {process.env.NEXT_PUBLIC_GA_ID && (

@@ -1,0 +1,669 @@
+/* 
+ИСПРАВЛЕНИЯ ВЕРСТКИ ДЛЯ СТРАНИЦЫ АНАЛИТИКИ
+Решает проблемы с наложением блоков и читаемостью текста
+*/
+
+/* === ОСНОВНАЯ СТРУКТУРА === */
+#analytics-dashboard {
+  padding: 0 !important;
+  margin: 0 !important;
+  min-height: 100vh !important;
+  overflow-y: auto !important;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%) !important;
+}
+
+/* === ЗАГОЛОВОК СТРАНИЦЫ === */
+#analytics-dashboard .page-header {
+  padding: 40px 24px 24px 24px !important;
+  margin-bottom: 0 !important;
+  background: transparent !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+#analytics-dashboard .page-header h2 {
+  font-size: 32px !important;
+  font-weight: 700 !important;
+  color: #f8fafc !important;
+  margin: 0 0 12px 0 !important;
+  line-height: 1.2 !important;
+}
+
+#analytics-dashboard .page-header p {
+  font-size: 16px !important;
+  color: #cbd5e1 !important;
+  margin: 0 0 16px 0 !important;
+  line-height: 1.5 !important;
+}
+
+#analytics-dashboard .header-hint {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+  padding: 16px 20px !important;
+  background: rgba(99, 102, 241, 0.1) !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+  border-radius: 12px !important;
+  margin: 0 !important;
+}
+
+#analytics-dashboard .hint-icon {
+  font-size: 18px !important;
+  flex-shrink: 0 !important;
+  margin-top: 2px !important;
+}
+
+/* === ПАНЕЛЬ ФИЛЬТРОВ === */
+#analytics-dashboard .filters-panel {
+  margin: 24px 24px 32px 24px !important;
+  padding: 24px !important;
+  background: rgba(51, 65, 85, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(71, 85, 105, 0.8) !important;
+  border-radius: 16px !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+#analytics-dashboard .filters-intro {
+  margin-bottom: 20px !important;
+}
+
+#analytics-dashboard .filters-intro h3 {
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  color: #f8fafc !important;
+  margin: 0 0 8px 0 !important;
+}
+
+#analytics-dashboard .filter-group {
+  margin-bottom: 16px !important;
+}
+
+#analytics-dashboard .filter-group:last-of-type {
+  margin-bottom: 0 !important;
+}
+
+#analytics-dashboard .filter-group label {
+  display: block !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: #cbd5e1 !important;
+  margin-bottom: 8px !important;
+}
+
+#analytics-dashboard .filter-select {
+  width: 100% !important;
+  max-width: 300px !important;
+  padding: 12px 16px !important;
+  background: rgba(30, 41, 59, 0.8) !important;
+  border: 1px solid rgba(71, 85, 105, 0.8) !important;
+  border-radius: 8px !important;
+  color: #f8fafc !important;
+  font-size: 14px !important;
+}
+
+#analytics-dashboard .refresh-button {
+  margin-top: 16px !important;
+  padding: 12px 20px !important;
+  background: rgba(99, 102, 241, 0.2) !important;
+  border: 1px solid rgba(99, 102, 241, 0.3) !important;
+  border-radius: 8px !important;
+  color: #e2e8f0 !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+/* === СЕКЦИЯ KPI === */
+#analytics-dashboard .kpi-section {
+  margin: 0 24px 24px 24px !important;
+  padding: 20px !important;
+  text-align: center !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+#analytics-dashboard .kpi-section-title {
+  font-size: 28px !important;
+  font-weight: 700 !important;
+  color: #f8fafc !important;
+  margin: 0 0 12px 0 !important;
+  line-height: 1.3 !important;
+}
+
+#analytics-dashboard .kpi-section-description {
+  font-size: 16px !important;
+  color: #94a3b8 !important;
+  margin: 0 !important;
+  line-height: 1.5 !important;
+}
+
+/* === KPI КАРТОЧКИ === */
+#analytics-dashboard .kpi-cards {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+  gap: 20px !important;
+  margin: 0 24px 40px 24px !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+#analytics-dashboard .kpi-card {
+  padding: 24px !important;
+  background: rgba(51, 65, 85, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(71, 85, 105, 0.8) !important;
+  border-radius: 16px !important;
+  transition: all 0.2s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+#analytics-dashboard .kpi-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+  border-color: rgba(99, 102, 241, 0.5) !important;
+}
+
+#analytics-dashboard .kpi-header {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 16px !important;
+  margin-bottom: 16px !important;
+}
+
+#analytics-dashboard .kpi-icon {
+  font-size: 32px !important;
+  flex-shrink: 0 !important;
+  margin-top: 4px !important;
+}
+
+#analytics-dashboard .kpi-title-group {
+  flex: 1 !important;
+}
+
+#analytics-dashboard .kpi-title {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  color: #f8fafc !important;
+  margin: 0 0 4px 0 !important;
+  line-height: 1.3 !important;
+}
+
+#analytics-dashboard .kpi-subtitle {
+  font-size: 13px !important;
+  color: #94a3b8 !important;
+  margin: 0 !important;
+  line-height: 1.4 !important;
+}
+
+#analytics-dashboard .help-icon {
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 50% !important;
+  background: rgba(99, 102, 241, 0.2) !important;
+  border: 1px solid rgba(99, 102, 241, 0.3) !important;
+  color: #a5b4fc !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  font-size: 14px !important;
+  font-weight: bold !important;
+  flex-shrink: 0 !important;
+}
+
+#analytics-dashboard .kpi-value {
+  font-size: 36px !important;
+  font-weight: 800 !important;
+  color: #f8fafc !important;
+  margin: 0 0 8px 0 !important;
+  line-height: 1.1 !important;
+}
+
+#analytics-dashboard .kpi-description {
+  font-size: 14px !important;
+  color: #94a3b8 !important;
+  margin: 0 0 12px 0 !important;
+  line-height: 1.4 !important;
+}
+
+#analytics-dashboard .kpi-trend {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-bottom: 12px !important;
+  padding: 8px 12px !important;
+  border-radius: 8px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+
+#analytics-dashboard .kpi-trend.positive {
+  background: rgba(34, 197, 94, 0.1) !important;
+  color: #86efac !important;
+  border: 1px solid rgba(34, 197, 94, 0.2) !important;
+}
+
+#analytics-dashboard .kpi-trend.negative {
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #fca5a5 !important;
+  border: 1px solid rgba(239, 68, 68, 0.2) !important;
+}
+
+#analytics-dashboard .trend-icon {
+  font-size: 16px !important;
+}
+
+#analytics-dashboard .kpi-explanation {
+  margin-top: 12px !important;
+  padding: 12px 16px !important;
+  background: rgba(34, 197, 94, 0.1) !important;
+  border-left: 3px solid #22c55e !important;
+  border-radius: 0 8px 8px 0 !important;
+}
+
+#analytics-dashboard .explanation-text {
+  font-size: 13px !important;
+  color: #86efac !important;
+  font-weight: 500 !important;
+  margin: 0 !important;
+  line-height: 1.4 !important;
+}
+
+/* === СЕКЦИЯ ГРАФИКОВ === */
+#analytics-dashboard .charts-section {
+  margin: 0 24px 40px 24px !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+#analytics-dashboard .charts-intro {
+  margin-bottom: 32px !important;
+  text-align: center !important;
+}
+
+#analytics-dashboard .section-title {
+  font-size: 28px !important;
+  font-weight: 700 !important;
+  color: #f8fafc !important;
+  margin: 0 0 12px 0 !important;
+  line-height: 1.3 !important;
+}
+
+#analytics-dashboard .section-description {
+  font-size: 16px !important;
+  color: #94a3b8 !important;
+  margin: 0 !important;
+  line-height: 1.5 !important;
+}
+
+#analytics-dashboard .charts-container {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)) !important;
+  gap: 24px !important;
+  margin-bottom: 40px !important;
+}
+
+#analytics-dashboard .chart-card {
+  padding: 24px !important;
+  background: rgba(51, 65, 85, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(71, 85, 105, 0.8) !important;
+  border-radius: 16px !important;
+  transition: all 0.2s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+#analytics-dashboard .chart-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+  border-color: rgba(99, 102, 241, 0.5) !important;
+}
+
+#analytics-dashboard .chart-header {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  margin-bottom: 20px !important;
+  gap: 16px !important;
+}
+
+#analytics-dashboard .chart-title-group h4 {
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  color: #f8fafc !important;
+  margin: 0 0 6px 0 !important;
+  line-height: 1.3 !important;
+}
+
+#analytics-dashboard .chart-subtitle {
+  font-size: 14px !important;
+  color: #94a3b8 !important;
+  margin: 0 !important;
+  line-height: 1.4 !important;
+}
+
+#analytics-dashboard .chart-filters {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-wrap: wrap !important;
+}
+
+#analytics-dashboard .filter-label {
+  font-size: 12px !important;
+  color: #94a3b8 !important;
+  margin-right: 8px !important;
+  white-space: nowrap !important;
+}
+
+#analytics-dashboard .filter-btn {
+  padding: 8px 16px !important;
+  background: rgba(30, 41, 59, 0.8) !important;
+  border: 1px solid rgba(71, 85, 105, 0.8) !important;
+  border-radius: 8px !important;
+  color: #cbd5e1 !important;
+  font-size: 13px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  white-space: nowrap !important;
+}
+
+#analytics-dashboard .filter-btn:hover {
+  background: rgba(71, 85, 105, 0.8) !important;
+  border-color: rgba(99, 102, 241, 0.5) !important;
+}
+
+#analytics-dashboard .filter-btn.active {
+  background: rgba(99, 102, 241, 0.3) !important;
+  border-color: rgba(99, 102, 241, 0.6) !important;
+  color: #c7d2fe !important;
+}
+
+#analytics-dashboard .chart-hint {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+  margin-bottom: 20px !important;
+  padding: 12px 16px !important;
+  background: rgba(59, 130, 246, 0.1) !important;
+  border: 1px solid rgba(59, 130, 246, 0.2) !important;
+  border-radius: 8px !important;
+  font-size: 13px !important;
+  color: #93c5fd !important;
+  line-height: 1.4 !important;
+}
+
+#analytics-dashboard .chart-wrapper {
+  min-height: 300px !important;
+  position: relative !important;
+  background: rgba(15, 23, 42, 0.5) !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+}
+
+/* === ПАНЕЛЬ ИНСАЙТОВ === */
+#analytics-dashboard .traffic-insights-panel {
+  margin: 0 24px 40px 24px !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+#analytics-dashboard .insights-intro {
+  margin-bottom: 24px !important;
+  text-align: center !important;
+}
+
+#analytics-dashboard .insights-intro h4 {
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  color: #f8fafc !important;
+  margin: 0 0 8px 0 !important;
+  line-height: 1.3 !important;
+}
+
+#analytics-dashboard .insights-intro p {
+  font-size: 16px !important;
+  color: #94a3b8 !important;
+  margin: 0 !important;
+  line-height: 1.5 !important;
+}
+
+#analytics-dashboard .insights-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+  gap: 20px !important;
+}
+
+#analytics-dashboard .insight-card {
+  padding: 20px !important;
+  background: rgba(51, 65, 85, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(71, 85, 105, 0.8) !important;
+  transition: all 0.2s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+#analytics-dashboard .insight-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+}
+
+#analytics-dashboard .insight-card.success {
+  border-left: 4px solid #22c55e !important;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(51, 65, 85, 0.8) 100%) !important;
+}
+
+#analytics-dashboard .insight-card.growth {
+  border-left: 4px solid #3b82f6 !important;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(51, 65, 85, 0.8) 100%) !important;
+}
+
+#analytics-dashboard .insight-card.warning {
+  border-left: 4px solid #f59e0b !important;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(51, 65, 85, 0.8) 100%) !important;
+}
+
+#analytics-dashboard .insight-card.opportunity {
+  border-left: 4px solid #8b5cf6 !important;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(51, 65, 85, 0.8) 100%) !important;
+}
+
+#analytics-dashboard .insight-icon {
+  font-size: 24px !important;
+  margin-bottom: 12px !important;
+  display: block !important;
+}
+
+#analytics-dashboard .insight-card h5 {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #f8fafc !important;
+  margin: 0 0 8px 0 !important;
+  line-height: 1.3 !important;
+}
+
+#analytics-dashboard .insight-value {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: #f8fafc !important;
+  margin: 0 0 6px 0 !important;
+  line-height: 1.3 !important;
+}
+
+#analytics-dashboard .insight-detail {
+  font-size: 14px !important;
+  color: #94a3b8 !important;
+  margin: 0 0 16px 0 !important;
+  line-height: 1.4 !important;
+}
+
+#analytics-dashboard .insight-action {
+  padding: 12px 16px !important;
+  background: rgba(99, 102, 241, 0.1) !important;
+  border-radius: 8px !important;
+  margin-top: 16px !important;
+}
+
+#analytics-dashboard .action-text {
+  font-size: 13px !important;
+  color: #a5b4fc !important;
+  font-weight: 500 !important;
+  margin: 0 !important;
+  line-height: 1.4 !important;
+}
+
+/* === ВИДЖЕТ ПРОИЗВОДИТЕЛЬНОСТИ === */
+#analytics-dashboard .performance-widget {
+  margin: 0 24px 40px 24px !important;
+  padding: 24px !important;
+  background: rgba(51, 65, 85, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(71, 85, 105, 0.8) !important;
+  border-radius: 16px !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* === AI РЕКОМЕНДАЦИИ === */
+#analytics-dashboard .ai-recommendations {
+  margin: 0 24px 40px 24px !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* === АДАПТИВНОСТЬ === */
+@media (max-width: 1024px) {
+  #analytics-dashboard .kpi-cards {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
+    gap: 16px !important;
+  }
+  
+  #analytics-dashboard .charts-container {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+  
+  #analytics-dashboard .insights-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
+    gap: 16px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  #analytics-dashboard .page-header {
+    padding: 24px 16px 16px 16px !important;
+  }
+  
+  #analytics-dashboard .page-header h2 {
+    font-size: 24px !important;
+  }
+  
+  #analytics-dashboard .filters-panel,
+  #analytics-dashboard .kpi-section,
+  #analytics-dashboard .kpi-cards,
+  #analytics-dashboard .charts-section,
+  #analytics-dashboard .traffic-insights-panel,
+  #analytics-dashboard .performance-widget,
+  #analytics-dashboard .ai-recommendations {
+    margin-left: 16px !important;
+    margin-right: 16px !important;
+  }
+  
+  #analytics-dashboard .kpi-cards {
+    grid-template-columns: 1fr !important;
+  }
+  
+  #analytics-dashboard .insights-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  #analytics-dashboard .chart-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+  
+  #analytics-dashboard .chart-filters {
+    align-self: stretch !important;
+    justify-content: center !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #analytics-dashboard .page-header {
+    padding: 20px 12px 12px 12px !important;
+  }
+  
+  #analytics-dashboard .filters-panel,
+  #analytics-dashboard .kpi-section,
+  #analytics-dashboard .kpi-cards,
+  #analytics-dashboard .charts-section,
+  #analytics-dashboard .traffic-insights-panel,
+  #analytics-dashboard .performance-widget,
+  #analytics-dashboard .ai-recommendations {
+    margin-left: 12px !important;
+    margin-right: 12px !important;
+  }
+  
+  #analytics-dashboard .kpi-card,
+  #analytics-dashboard .chart-card,
+  #analytics-dashboard .insight-card,
+  #analytics-dashboard .performance-widget {
+    padding: 16px !important;
+  }
+  
+  #analytics-dashboard .kpi-value {
+    font-size: 28px !important;
+  }
+  
+  #analytics-dashboard .chart-wrapper {
+    min-height: 250px !important;
+  }
+}
+
+/* === ИСПРАВЛЕНИЕ Z-INDEX КОНФЛИКТОВ === */
+#analytics-dashboard .glass-card {
+  position: relative !important;
+  z-index: auto !important;
+}
+
+#analytics-dashboard .tooltip {
+  z-index: 1000 !important;
+  position: absolute !important;
+  background: rgba(15, 23, 42, 0.95) !important;
+  border: 1px solid rgba(71, 85, 105, 0.8) !important;
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+  font-size: 13px !important;
+  color: #e2e8f0 !important;
+  max-width: 300px !important;
+  line-height: 1.4 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* === ИСПРАВЛЕНИЕ СКРОЛЛА === */
+#analytics-dashboard {
+  scroll-padding-top: 20px !important;
+}
+
+/* === ПРИНУДИТЕЛЬНОЕ ИСПРАВЛЕНИЕ КОНФЛИКТОВ === */
+#analytics-dashboard * {
+  box-sizing: border-box !important;
+}
+
+#analytics-dashboard .full-page {
+  position: relative !important;
+  overflow: visible !important;
+}
+
+#analytics-dashboard .scrollable-section {
+  overflow-y: auto !important;
+  height: auto !important;
+  min-height: 100vh !important;
+}

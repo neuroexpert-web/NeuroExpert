@@ -103,23 +103,33 @@ async def get_current_active_user(current_user: User = Depends(get_current_user)
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
 
-# Database integration (заглушка - должна быть заменена на реальную БД)
+# Database integration
 async def get_user_from_db(username: str) -> Optional[UserInDB]:
     """
     Получить пользователя из базы данных
-    В production это должно быть подключение к реальной БД
     """
-    # TODO: Implement database query
-    # Example:
-    # async with database.session() as session:
-    #     result = await session.execute(
-    #         select(UserModel).where(UserModel.username == username)
-    #     )
-    #     user = result.scalar_one_or_none()
-    #     if user:
-    #         return UserInDB(**user.dict())
-    logger.warning(f"get_user_from_db called for username: {username} - Database integration pending")
-    return None
+    try:
+        from database import SessionLocal
+        from models import User as UserModel
+        from sqlalchemy import select
+        
+        async with SessionLocal() as session:
+            result = await session.execute(
+                select(UserModel).where(UserModel.username == username)
+            )
+            user = result.scalar_one_or_none()
+            if user:
+                return UserInDB(
+                    username=user.username,
+                    email=user.email,
+                    full_name=user.full_name,
+                    disabled=user.disabled,
+                    hashed_password=user.hashed_password
+                )
+            return None
+    except Exception as e:
+        logger.error(f"Database error in get_user_from_db: {e}")
+        return None
 
 async def authenticate_user(username: str, password: str) -> Optional[UserInDB]:
     """Аутентификация пользователя"""
@@ -132,31 +142,60 @@ async def authenticate_user(username: str, password: str) -> Optional[UserInDB]:
 
 async def create_user(username: str, password: str, email: str = None, full_name: str = None):
     """Создание нового пользователя в базе данных"""
-    # TODO: Implement database insertion
-    # Example:
-    # async with database.session() as session:
-    #     existing = await session.execute(
-    #         select(UserModel).where(UserModel.username == username)
-    #     )
-    #     if existing.scalar_one_or_none():
-    #         raise HTTPException(
-    #             status_code=status.HTTP_400_BAD_REQUEST,
-    #             detail="Username already registered"
-    #         )
-    #     
-    #     hashed_password = get_password_hash(password)
-    #     user = UserModel(
-    #         username=username,
-    #         email=email,
-    #         full_name=full_name,
-    #         hashed_password=hashed_password,
-    #         disabled=False
-    #     )
-    #     session.add(user)
-    #     await session.commit()
-    #     return User(**user.dict())
-    
-    raise NotImplementedError("Database integration pending")
+    try:
+        from database import SessionLocal
+        from models import User as UserModel
+        from sqlalchemy import select
+        
+        async with SessionLocal() as session:
+            # Проверяем, существует ли пользователь
+            existing = await session.execute(
+                select(UserModel).where(UserModel.username == username)
+            )
+            if existing.scalar_one_or_none():
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Username already registered"
+                )
+            
+            # Проверяем email если указан
+            if email:
+                existing_email = await session.execute(
+                    select(UserModel).where(UserModel.email == email)
+                )
+                if existing_email.scalar_one_or_none():
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail="Email already registered"
+                    )
+            
+            # Создаем нового пользователя
+            hashed_password = get_password_hash(password)
+            user = UserModel(
+                username=username,
+                email=email,
+                full_name=full_name,
+                hashed_password=hashed_password,
+                disabled=False
+            )
+            session.add(user)
+            await session.commit()
+            await session.refresh(user)
+            
+            return User(
+                username=user.username,
+                email=user.email,
+                full_name=user.full_name,
+                disabled=user.disabled
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Database error in create_user: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to create user"
+        )
 
 def check_rate_limit(identifier: str) -> None:
     """
