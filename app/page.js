@@ -17,11 +17,6 @@ const RealtimeUpdates = dynamic(() => import('./components/RealtimeUpdates'), {
   loading: () => <div className="realtime-skeleton">⚡ Подготовка данных...</div>
 });
 
-const TooltipManager = dynamic(() => import('./components/TooltipManager'), {
-  ssr: false,
-  loading: () => null
-});
-
 const OnboardingTour = dynamic(() => import('./components/OnboardingTour'), {
   ssr: false,
   loading: () => null
@@ -115,7 +110,12 @@ const AboutAnimations = dynamic(() => import('./components/AboutAnimations'), {
 });
 
 // Динамические импорты для страницы калькулятора цен
-const PricingCalculator = dynamic(() => import('./components/PricingCalculatorV2'), {
+const PricingCalculator = dynamic(() => import('./components/PricingCalculatorImproved'), {
+  ssr: false,
+  loading: () => null
+});
+
+const ROICalculator = dynamic(() => import('./components/ROICalculatorImproved'), {
   ssr: false,
   loading: () => null
 });
@@ -487,7 +487,7 @@ export default function Home() {
         <p>Ключевые показатели вашего бизнеса и персональные рекомендации от AI</p>
       </header>
       
-      {/* Панель фильтров */}
+      {/* Панель фильтров с индикатором автообновления */}
       <div className="filters-panel glass-card">
         <div className="filter-group">
           <label htmlFor="date-filter">Период:</label>
@@ -517,44 +517,70 @@ export default function Home() {
             <option value="vip">VIP</option>
           </select>
         </div>
-        <button 
-          className={`refresh-button ${refreshing ? 'refreshing' : ''}`}
-          onClick={handleRefreshData}
-          disabled={refreshing}
-          aria-label="Обновить данные"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={refreshing ? 'rotating' : ''}>
-            <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" strokeWidth="2" strokeLinecap="round"/>
-          </svg>
-          <span>{refreshing ? 'Обновление...' : 'Обновить'}</span>
-        </button>
+        <div className="refresh-group">
+          <button 
+            className={`refresh-button ${refreshing ? 'refreshing' : ''}`}
+            onClick={handleRefreshData}
+            disabled={refreshing}
+            aria-label="Обновить данные"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={refreshing ? 'rotating' : ''}>
+              <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+            <span>{refreshing ? 'Обновление...' : 'Обновить'}</span>
+          </button>
+          <div className="auto-refresh-indicator">
+            <span className="indicator-dot"></span>
+            <span className="indicator-text">Автообновление через 30 сек</span>
+          </div>
+        </div>
+        {/* Кнопки экспорта */}
+        <div className="export-buttons">
+          <button className="export-btn" aria-label="Экспорт в PDF">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" strokeWidth="2"/>
+              <path d="M14 2v6h6M12 18v-6M9 15l3 3 3-3" strokeWidth="2"/>
+            </svg>
+            <span>PDF</span>
+          </button>
+          <button className="export-btn" aria-label="Экспорт в Excel">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" strokeWidth="2"/>
+              <path d="M14 2v6h6M10 12h4M10 16h4" strokeWidth="2"/>
+            </svg>
+            <span>Excel</span>
+          </button>
+        </div>
       </div>
         {/* KPI карточки с пояснениями */}
         <div className="kpi-cards">
-          <div className="kpi-card glass-card" id="kpi-revenue">
+          <div className="kpi-card glass-card kpi-revenue" id="kpi-revenue">
             <div className="kpi-header">
-              <span className="kpi-icon">
+              <span className="kpi-icon revenue-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                   <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" strokeWidth="2" strokeLinecap="round"/>
                 </svg>
               </span>
               <span className="kpi-title">Выручка</span>
-              <button className="help-icon" aria-describedby="tooltip-revenue" tabIndex="0">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                </svg>
-              </button>
-              <div id="tooltip-revenue" className="tooltip" role="tooltip" hidden>
-                Общая выручка за выбранный период от всех каналов продаж. Включает все успешные транзакции.
-              </div>
             </div>
             <div className="kpi-value">₽ {(analyticsData.revenue / 1000).toFixed(1)}K</div>
             <div className="kpi-description">За последние 7 дней</div>
+            <div className="kpi-progress">
+              <div className="progress-bar">
+                <div className="progress-fill" style={{width: '72%'}}></div>
+              </div>
+              <span className="progress-text">72% от цели (₽ 500K)</span>
+            </div>
             <div className="kpi-trend positive">
               <span className="trend-icon">↑</span>
               <span>+5.2% по сравнению с прошлой неделей</span>
             </div>
             <div className="kpi-sparkline" id="revenue-sparkline"></div>
+            <button className="kpi-detail-btn" aria-label="Подробнее о выручке">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M9 18l6-6-6-6" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </button>
           </div>
 
           <div className="kpi-card glass-card" id="kpi-clients">
@@ -565,14 +591,6 @@ export default function Home() {
                 </svg>
               </span>
               <span className="kpi-title">Новые клиенты</span>
-              <button className="help-icon" aria-describedby="tooltip-clients" tabIndex="0">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                </svg>
-              </button>
-              <div id="tooltip-clients" className="tooltip" role="tooltip" hidden>
-                Количество новых уникальных пользователей, которые совершили первую покупку или регистрацию.
-              </div>
             </div>
             <div className="kpi-value">{analyticsData.clients}</div>
             <div className="kpi-description">Зарегистрировались за неделю</div>
@@ -591,14 +609,6 @@ export default function Home() {
                 </svg>
               </span>
               <span className="kpi-title">Удовлетворенность</span>
-              <button className="help-icon" aria-describedby="tooltip-satisfaction" tabIndex="0">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                </svg>
-              </button>
-              <div id="tooltip-satisfaction" className="tooltip" role="tooltip" hidden>
-                Средняя оценка клиентов на основе отзывов и NPS-опросов.
-              </div>
             </div>
             <div className="kpi-value">{analyticsData.satisfaction.toFixed(1)}/5</div>
             <div className="kpi-description">Средняя оценка клиентов</div>
@@ -617,14 +627,6 @@ export default function Home() {
                 </svg>
               </span>
               <span className="kpi-title">Конверсия</span>
-              <button className="help-icon" aria-describedby="tooltip-conversion" tabIndex="0">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                </svg>
-              </button>
-              <div id="tooltip-conversion" className="tooltip" role="tooltip" hidden>
-                Процент посетителей, совершивших целевое действие (покупка, регистрация, подписка).
-              </div>
             </div>
             <div className="kpi-value">{analyticsData.conversion.toFixed(2)}%</div>
             <div className="kpi-description">Из посетителей в клиенты</div>
@@ -633,6 +635,45 @@ export default function Home() {
               <span>Растёт (+0.5%)</span>
             </div>
             <div className="kpi-sparkline" id="conversion-sparkline"></div>
+          </div>
+        </div>
+        
+        {/* AI Рекомендации */}
+        <div className="ai-insights-section glass-card">
+          <div className="ai-insights-header">
+            <div className="ai-avatar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" strokeWidth="2"/>
+                <path d="M12 8v4M12 16h.01" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </div>
+            <h3>AI Рекомендации от управляющего</h3>
+          </div>
+          <div className="ai-insights-content">
+            <div className="insight-item priority-high">
+              <span className="insight-icon">⚡</span>
+              <div className="insight-text">
+                <h4>Срочно: Снижение удовлетворенности</h4>
+                <p>Оценка клиентов упала на 0.15 пункта. Рекомендую провести опрос и выявить причины. 78% негативных отзывов связаны со скоростью доставки.</p>
+                <button className="insight-action">Запустить опрос</button>
+              </div>
+            </div>
+            <div className="insight-item priority-medium">
+              <span className="insight-icon">📈</span>
+              <div className="insight-text">
+                <h4>Возможность роста</h4>
+                <p>Конверсия растет (+0.5%), но все еще ниже потенциала. Предлагаю A/B тест новой посадочной страницы.</p>
+                <button className="insight-action">Создать A/B тест</button>
+              </div>
+            </div>
+            <div className="insight-item priority-low">
+              <span className="insight-icon">💡</span>
+              <div className="insight-text">
+                <h4>Совет на будущее</h4>
+                <p>VIP-клиенты показывают рост активности. Стоит запустить персональные предложения для этого сегмента.</p>
+                <button className="insight-action">Настроить кампанию</button>
+              </div>
+            </div>
           </div>
         </div>
         
@@ -672,15 +713,6 @@ export default function Home() {
           <div className="chart-card glass-card" id="chart-traffic">
             <div className="chart-header">
               <h4>Источники трафика</h4>
-              <button 
-                className="info-btn" 
-                aria-label="Подробнее об источниках"
-                onClick={() => handleChartInfo('traffic')}
-              >
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                </svg>
-              </button>
             </div>
             <div className="chart-wrapper">
               {TrafficChart && <TrafficChart darkMode={true} />}
@@ -695,7 +727,6 @@ export default function Home() {
             <div className="chart-wrapper">
               {FunnelChart && <FunnelChart darkMode={true} />}
             </div>
-          </div>
           </div>
           
           {/* Информационная панель с метриками */}
@@ -728,6 +759,7 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
         </div>
 
         {/* AI рекомендации с пояснениями */}
@@ -848,7 +880,6 @@ export default function Home() {
       <Suspense fallback={null}>
         <AnalyticsCharts />
         <RealtimeUpdates />
-        <TooltipManager />
         <OnboardingTour />
       </Suspense>
     </section>,
@@ -865,11 +896,6 @@ export default function Home() {
         <div className="segment-selector-panel glass-card">
           <div className="panel-header">
             <h4>Сегменты клиентов</h4>
-            <button className="info-btn" aria-label="Подробнее о сегментации">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-              </svg>
-            </button>
           </div>
           <ul role="tablist" aria-label="Список сегментов клиентов">
             <li 
@@ -973,7 +999,7 @@ export default function Home() {
           <div className="total-stats">
             <div className="stat-item">
               <span className="stat-label">Всего клиентов:</span>
-              <span className="stat-value">73</span>
+              <span className="stat-value">12,873</span>
             </div>
             <div className="stat-item">
               <span className="stat-label">Активных за месяц:</span>
@@ -1035,14 +1061,6 @@ export default function Home() {
               <div className="detail-card demographics-card glass-card">
                 <div className="card-header">
                   <h4>Демография</h4>
-                  <button className="help-icon" aria-describedby="demo-tooltip" tabIndex="0">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                    </svg>
-                  </button>
-                  <div id="demo-tooltip" className="tooltip" role="tooltip" hidden>
-                    Распределение клиентов по возрасту, полу и географии
-                  </div>
                 </div>
                 <div className="chart-wrapper">
                   <canvas id="loyalDemographicsChart"></canvas>
@@ -1112,14 +1130,6 @@ export default function Home() {
               <div className="detail-card ltv-card glass-card">
                 <div className="card-header">
                   <h4>Ценность клиента (LTV)</h4>
-                  <button className="help-icon" aria-describedby="ltv-tooltip" tabIndex="0">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                    </svg>
-                  </button>
-                  <div id="ltv-tooltip" className="tooltip" role="tooltip" hidden>
-                    Прогнозируемая прибыль от клиента за всё время сотрудничества
-                  </div>
                 </div>
                 <div className="ltv-content">
                   <div className="ltv-main">
@@ -3018,218 +3028,10 @@ export default function Home() {
           </article>
         </div>
 
-        {/* Интерактивный калькулятор */}
-        <div className="pricing-calculator glass-card">
-          <h3>Рассчитайте окупаемость</h3>
-          <p className="calculator-subtitle">Узнайте точную стоимость и сроки окупаемости для вашего бизнеса</p>
-          
-          <form className="calculator-form">
-            {/* Выбор базового тарифа */}
-            <div className="form-group">
-              <label htmlFor="base-plan">Базовый тариф</label>
-              <div className="plan-selector">
-                <input type="radio" name="base-plan" id="plan-start" value="39900" defaultChecked />
-                <label htmlFor="plan-start" className="plan-option">
-                  <span className="plan-name">Старт</span>
-                  <span className="plan-price">39 900₽</span>
-                </label>
-                
-                <input type="radio" name="base-plan" id="plan-business" value="89900" />
-                <label htmlFor="plan-business" className="plan-option">
-                  <span className="plan-name">Бизнес</span>
-                  <span className="plan-price">89 900₽</span>
-                </label>
-                
-                <input type="radio" name="base-plan" id="plan-enterprise" value="199900" />
-                <label htmlFor="plan-enterprise" className="plan-option">
-                  <span className="plan-name">Enterprise</span>
-                  <span className="plan-price">199 900₽</span>
-                </label>
-              </div>
-            </div>
-
-            {/* Количество пользователей */}
-            <div className="form-group">
-              <label htmlFor="users-slider">
-                Количество пользователей
-                <span className="value-display" id="users-value">10</span>
-              </label>
-              <input 
-                type="range" 
-                id="users-slider" 
-                name="users" 
-                min="1" 
-                max="1000" 
-                value="10" 
-                className="custom-slider"
-                data-tooltip="Количество сотрудников, которые будут использовать платформу"
-              />
-              <div className="slider-labels">
-                <span>1</span>
-                <span>500</span>
-                <span>1000+</span>
-              </div>
-            </div>
-
-            {/* Объем данных */}
-            <div className="form-group">
-              <label htmlFor="data-slider">
-                Объем данных (ГБ)
-                <span className="value-display" id="data-value">100</span>
-              </label>
-              <input 
-                type="range" 
-                id="data-slider" 
-                name="data" 
-                min="10" 
-                max="10000" 
-                value="100" 
-                className="custom-slider"
-                data-tooltip="Объем хранилища для ваших данных и файлов"
-              />
-              <div className="slider-labels">
-                <span>10 ГБ</span>
-                <span>5 ТБ</span>
-                <span>10 ТБ</span>
-              </div>
-            </div>
-
-            {/* Количество интеграций */}
-            <div className="form-group">
-              <label htmlFor="integrations-slider">
-                Количество интеграций
-                <span className="value-display" id="integrations-value">5</span>
-              </label>
-              <input 
-                type="range" 
-                id="integrations-slider" 
-                name="integrations" 
-                min="0" 
-                max="50" 
-                value="5" 
-                className="custom-slider"
-                data-tooltip="Подключение внешних сервисов и API"
-              />
-              <div className="slider-labels">
-                <span>0</span>
-                <span>25</span>
-                <span>50+</span>
-              </div>
-            </div>
-
-            {/* Период использования */}
-            <div className="form-group">
-              <label>Период оплаты</label>
-              <div className="period-selector">
-                <input type="radio" name="period" id="period-month" value="1" defaultChecked />
-                <label htmlFor="period-month" className="period-option">
-                  <span className="period-name">Месяц</span>
-                  <span className="period-discount">0%</span>
-                </label>
-                
-                <input type="radio" name="period" id="period-quarter" value="3" />
-                <label htmlFor="period-quarter" className="period-option">
-                  <span className="period-name">Квартал</span>
-                  <span className="period-discount">-5%</span>
-                </label>
-                
-                <input type="radio" name="period" id="period-year" value="12" />
-                <label htmlFor="period-year" className="period-option">
-                  <span className="period-name">Год</span>
-                  <span className="period-discount">-15%</span>
-                </label>
-              </div>
-            </div>
-
-            {/* Дополнительные опции */}
-            <div className="form-group">
-              <label>Дополнительные опции</label>
-              <div className="options-grid">
-                <label className="option-checkbox">
-                  <input type="checkbox" name="option-support" value="10000" />
-                  <span className="option-box">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="24" height="24">
-                      <path d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" strokeWidth="2"/>
-                    </svg>
-                    <span className="option-name">Расширенная поддержка 24/7</span>
-                    <span className="option-price">+10 000₽/мес</span>
-                  </span>
-                </label>
-
-                <label className="option-checkbox">
-                  <input type="checkbox" name="option-api" value="15000" />
-                  <span className="option-box">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="24" height="24">
-                      <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" strokeWidth="2" strokeLinecap="round"/>
-                    </svg>
-                    <span className="option-name">Расширенный API</span>
-                    <span className="option-price">+15 000₽/мес</span>
-                  </span>
-                </label>
-
-                <label className="option-checkbox">
-                  <input type="checkbox" name="option-custom" value="25000" />
-                  <span className="option-box">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="24" height="24">
-                      <path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" strokeWidth="2"/>
-                    </svg>
-                    <span className="option-name">Кастомные интеграции</span>
-                    <span className="option-price">+25 000₽/мес</span>
-                  </span>
-                </label>
-
-                <label className="option-checkbox">
-                  <input type="checkbox" name="option-training" value="30000" />
-                  <span className="option-box">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="24" height="24">
-                      <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" strokeWidth="2"/>
-                    </svg>
-                    <span className="option-name">Обучение команды</span>
-                    <span className="option-price">+30 000₽ разово</span>
-                  </span>
-                </label>
-              </div>
-            </div>
-          </form>
-
-          {/* Итоговый расчет */}
-          <div className="calculator-result">
-            <div className="result-breakdown">
-              <div className="breakdown-item">
-                <span>Базовый тариф:</span>
-                <span id="base-cost">39 900₽</span>
-              </div>
-              <div className="breakdown-item">
-                <span>Дополнительные опции:</span>
-                <span id="options-cost">0₽</span>
-              </div>
-              <div className="breakdown-item discount-item">
-                <span>Скидка за период:</span>
-                <span id="discount-amount">0₽</span>
-              </div>
-            </div>
-            
-            <div className="total-price">
-              <span className="total-label">Итого в месяц:</span>
-              <span className="total-value" id="total-cost">39 900₽</span>
-            </div>
-            
-            <div className="calculator-actions">
-              <button className="btn-get-offer">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
-                  <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" strokeWidth="2"/>
-                </svg>
-                Получить индивидуальное предложение
-              </button>
-              <button className="btn-contact-sales">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
-                  <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" strokeWidth="2"/>
-                </svg>
-                Связаться с отделом продаж
-              </button>
-            </div>
-          </div>
-        </div>
+        {/* Интерактивный калькулятор окупаемости */}
+        <Suspense fallback={null}>
+          <ROICalculator />
+        </Suspense>
 
         {/* Сравнение тарифов */}
         <div className="pricing-comparison glass-card">

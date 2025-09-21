@@ -20,22 +20,25 @@
 
 /* --- 1. ОСНОВНАЯ СТРУКТУРА --- */
 #page-audience {
-  padding: 2rem;
+  padding: 2rem 3rem;
   height: 100vh;
   overflow: hidden;
+  width: 100%;
 }
 
 .audience-container {
   display: flex;
-  gap: var(--panel-gap);
+  gap: 2rem;
   height: calc(100% - 120px);
   margin-top: 2rem;
+  width: 100%;
+  max-width: 100%;
 }
 
 /* --- 2. ЛЕВАЯ ПАНЕЛЬ - СЕЛЕКТОР СЕГМЕНТОВ --- */
 .segment-selector-panel {
-  flex: 0 0 var(--panel-left-width);
-  padding: 1.5rem;
+  flex: 0 0 420px;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -88,9 +91,9 @@
 .segment-item {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  margin-bottom: 0.75rem;
+  gap: 1.25rem;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
   border-radius: 12px;
   cursor: pointer;
   transition: all var(--transition-smooth);
@@ -162,13 +165,13 @@
 
 .segment-name {
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 1.125rem;
   color: white;
 }
 
 .segment-count {
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .segment-percentage {
@@ -221,6 +224,8 @@
   flex: 1;
   overflow-y: auto;
   padding-right: 1rem;
+  width: 100%;
+  max-width: 100%;
 }
 
 .segment-content {
@@ -312,9 +317,16 @@
 /* Сетка деталей */
 .details-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
   margin-bottom: 2rem;
+  width: 100%;
+}
+
+@media (max-width: 1400px) {
+  .details-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .detail-card {

@@ -1207,32 +1207,6 @@ h3 {
 }
 
 /* Тултипы */
-.tooltip {
-  position: relative;
-}
-
-.tooltip::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 0.5rem 1rem;
-  background: var(--dark-bg-secondary);
-  color: var(--text-primary);
-  font-size: 0.875rem;
-  white-space: nowrap;
-  border-radius: 0.5rem;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s;
-  margin-bottom: 0.5rem;
-  z-index: 1000;
-}
-
-.tooltip:hover::after {
-  opacity: 1;
-}
 
 /* Утилитарные классы */
 .text-center { text-align: center; }
@@ -3629,6 +3603,7 @@ textarea:focus {
   background: rgba(255, 255, 255, 0.03);
   border-radius: 20px;
   border: 1px solid rgba(139, 92, 246, 0.2);
+  width: 100%;
 }
 
 .traffic-insights-panel h4 {
@@ -3946,4 +3921,471 @@ textarea:focus {
 
 /* Import Processes Styles */
 @import './components/ProcessesStyles.css';
+
+/* Analytics Page Improvements */
+.filters-panel {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  align-items: center;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  padding: 1.5rem;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.refresh-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.auto-refresh-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.indicator-dot {
+  width: 8px;
+  height: 8px;
+  background: #22c55e;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.2); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.export-buttons {
+  display: flex;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.export-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+}
+
+.export-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.export-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* KPI Card Improvements */
+.kpi-revenue {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.revenue-icon {
+  background: linear-gradient(135deg, #22c55e, #10b981) !important;
+  color: white !important;
+}
+
+.kpi-progress {
+  margin: 1rem 0;
+}
+
+.progress-bar {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #8b5cf6, #7c3aed);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.progress-text {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.kpi-detail-btn {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+}
+
+.kpi-detail-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  transform: translateX(2px);
+}
+
+.kpi-detail-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* AI Insights Section */
+.ai-insights-section {
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(99, 102, 241, 0.05) 100%);
+  border-color: rgba(139, 92, 246, 0.3);
+}
+
+.ai-insights-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.ai-avatar {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  border-radius: 12px;
+  color: white;
+}
+
+.ai-avatar svg {
+  width: 28px;
+  height: 28px;
+}
+
+.ai-insights-header h3 {
+  font-size: 1.5rem;
+  color: white;
+  margin: 0;
+}
+
+.ai-insights-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.insight-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.insight-item:hover {
+  transform: translateX(5px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.insight-icon {
+  font-size: 1.5rem;
+  min-width: 40px;
+  text-align: center;
+}
+
+.insight-text h4 {
+  font-size: 1.125rem;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.insight-text p {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.insight-action {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 8px;
+  color: #a78bfa;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.insight-action:hover {
+  background: rgba(139, 92, 246, 0.3);
+  border-color: rgba(139, 92, 246, 0.5);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.priority-high {
+  border-left: 4px solid #ef4444;
+}
+
+.priority-medium {
+  border-left: 4px solid #f59e0b;
+}
+
+.priority-low {
+  border-left: 4px solid #22c55e;
+}
+
+/* Refresh Button Styles */
+.refresh-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 12px;
+  color: white;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.refresh-button:hover:not(:disabled) {
+  background: rgba(139, 92, 246, 0.3);
+  border-color: rgba(139, 92, 246, 0.5);
+  transform: translateY(-2px);
+}
+
+.refresh-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.refresh-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Analytics Full Width Improvements */
+#analytics-dashboard {
+  max-width: 100%;
+  padding: 2rem;
+}
+
+#analytics-dashboard > * {
+  max-width: 100%;
+  width: 100%;
+}
+
+.charts-section {
+  width: 100%;
+  margin-top: 3rem;
+}
+
+.charts-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.chart-card {
+  width: 100%;
+  min-height: 400px;
+}
+
+/* Ensure filters panel doesn't break */
+.filters-panel .filter-select {
+  min-width: 140px;
+}
+
+.filters-panel .refresh-button {
+  padding: 0.75rem 1.25rem;
+  white-space: nowrap;
+}
+
+.auto-refresh-indicator {
+  white-space: nowrap;
+}
+
+/* Full width for sections */
+.kpi-cards {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.ai-insights-section {
+  width: 100%;
+}
+
+/* Large screens optimization */
+@media (min-width: 1400px) {
+  .charts-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .kpi-cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Medium screens */
+@media (max-width: 1200px) {
+  .charts-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .kpi-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Audience Page Improvements */
+#page-audience {
+  width: 100%;
+  max-width: 100%;
+}
+
+#page-audience .page-header {
+  margin-bottom: 2rem;
+}
+
+#page-audience .page-header h2 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+#page-audience .page-header p {
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Better spacing for content */
+.audience-container {
+  height: calc(100vh - 200px);
+}
+
+/* Remove any max-width constraints */
+.segment-details-panel > * {
+  max-width: 100%;
+}
+
+/* Mobile Optimizations for Analytics */
+@media (max-width: 768px) {
+  .filters-panel {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  
+  .filter-group label {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.7);
+    min-width: fit-content;
+  }
+  
+  .filter-select {
+    min-width: 150px;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: white;
+    font-size: 0.875rem;
+  }
+
+  .filter-select {
+    width: 100%;
+  }
+
+  .refresh-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .refresh-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .export-buttons {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .export-btn {
+    flex: 1;
+  }
+
+  .kpi-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .kpi-card {
+    min-height: auto;
+  }
+
+  .ai-insights-section {
+    padding: 1rem;
+  }
+
+  .ai-insights-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .insight-item {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .insight-action {
+    width: 100%;
+    justify-content: center;
+  }
+}
 
