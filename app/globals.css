@@ -1207,32 +1207,6 @@ h3 {
 }
 
 /* Тултипы */
-.tooltip {
-  position: relative;
-}
-
-.tooltip::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 0.5rem 1rem;
-  background: var(--dark-bg-secondary);
-  color: var(--text-primary);
-  font-size: 0.875rem;
-  white-space: nowrap;
-  border-radius: 0.5rem;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s;
-  margin-bottom: 0.5rem;
-  z-index: 1000;
-}
-
-.tooltip:hover::after {
-  opacity: 1;
-}
 
 /* Утилитарные классы */
 .text-center { text-align: center; }

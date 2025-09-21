@@ -562,14 +562,6 @@ export default function Home() {
                 </svg>
               </span>
               <span className="kpi-title">Выручка</span>
-              <button className="help-icon" aria-describedby="tooltip-revenue" tabIndex="0">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                </svg>
-              </button>
-              <div id="tooltip-revenue" className="tooltip" role="tooltip" hidden>
-                Общая выручка за выбранный период от всех каналов продаж. Включает все успешные транзакции.
-              </div>
             </div>
             <div className="kpi-value">₽ {(analyticsData.revenue / 1000).toFixed(1)}K</div>
             <div className="kpi-description">За последние 7 дней</div>
@@ -599,14 +591,6 @@ export default function Home() {
                 </svg>
               </span>
               <span className="kpi-title">Новые клиенты</span>
-              <button className="help-icon" aria-describedby="tooltip-clients" tabIndex="0">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                </svg>
-              </button>
-              <div id="tooltip-clients" className="tooltip" role="tooltip" hidden>
-                Количество новых уникальных пользователей, которые совершили первую покупку или регистрацию.
-              </div>
             </div>
             <div className="kpi-value">{analyticsData.clients}</div>
             <div className="kpi-description">Зарегистрировались за неделю</div>
@@ -625,14 +609,6 @@ export default function Home() {
                 </svg>
               </span>
               <span className="kpi-title">Удовлетворенность</span>
-              <button className="help-icon" aria-describedby="tooltip-satisfaction" tabIndex="0">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                </svg>
-              </button>
-              <div id="tooltip-satisfaction" className="tooltip" role="tooltip" hidden>
-                Средняя оценка клиентов на основе отзывов и NPS-опросов.
-              </div>
             </div>
             <div className="kpi-value">{analyticsData.satisfaction.toFixed(1)}/5</div>
             <div className="kpi-description">Средняя оценка клиентов</div>
@@ -651,14 +627,6 @@ export default function Home() {
                 </svg>
               </span>
               <span className="kpi-title">Конверсия</span>
-              <button className="help-icon" aria-describedby="tooltip-conversion" tabIndex="0">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                </svg>
-              </button>
-              <div id="tooltip-conversion" className="tooltip" role="tooltip" hidden>
-                Процент посетителей, совершивших целевое действие (покупка, регистрация, подписка).
-              </div>
             </div>
             <div className="kpi-value">{analyticsData.conversion.toFixed(2)}%</div>
             <div className="kpi-description">Из посетителей в клиенты</div>
