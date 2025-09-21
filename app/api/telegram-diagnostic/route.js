@@ -15,10 +15,9 @@ export async function POST(request) {
     // Тестируем отправку сообщения
     const telegramUrl = `https://api.telegram.org/bot${token}/sendMessage`;
     
-    console.log('Attempting to send to Telegram:', {
-      url: telegramUrl.replace(token, 'TOKEN_HIDDEN'),
-      chatId: chatId
-    });
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('Attempting to send to Telegram');
+    }
 
     const response = await fetch(telegramUrl, {
       method: 'POST',
@@ -31,7 +30,9 @@ export async function POST(request) {
 
     const result = await response.json();
     
-    console.log('Telegram API response:', result);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('Telegram API response received');
+    }
 
     if (result.ok) {
       return NextResponse.json({

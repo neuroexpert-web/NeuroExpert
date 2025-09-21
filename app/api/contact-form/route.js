@@ -30,27 +30,26 @@ async function handler(request) {
       timestamp: new Date().toISOString()
     });
     
-    // Log submission for debugging
-    console.log('New contact form submission:', {
-      name,
-      email,
-      phone,
-      message,
-      timestamp: new Date().toISOString(),
-      hasToken: !!process.env.TELEGRAM_BOT_TOKEN,
-      hasChatId: !!process.env.TELEGRAM_CHAT_ID
-    });
+    // Log submission for debugging (без утечек)
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('New contact form submission (sanitized):', {
+        name,
+        email,
+        phone,
+        messageLength: message?.length || 0,
+        timestamp: new Date().toISOString(),
+        hasToken: !!process.env.TELEGRAM_BOT_TOKEN,
+        hasChatId: !!process.env.TELEGRAM_CHAT_ID
+      });
+    }
     
     // Send notification to Telegram if configured
     if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
       try {
-        // Логирование для отладки
-        console.log('Attempting to send Telegram notification:', {
-          hasToken: !!process.env.TELEGRAM_BOT_TOKEN,
-          tokenLength: process.env.TELEGRAM_BOT_TOKEN?.length,
-          chatId: process.env.TELEGRAM_CHAT_ID,
-          chatIdType: typeof process.env.TELEGRAM_CHAT_ID
-        });
+        // Логирование для отладки (без длин/значений)
+        if (process.env.NODE_ENV !== 'production') {
+          console.log('Attempting to send Telegram notification: has token/chatId');
+        }
         
         const telegramMessage = `
 🔔 Новая заявка с сайта NeuroExpert
@@ -63,7 +62,9 @@ async function handler(request) {
         `;
         
         const telegramUrl = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`;
-        console.log('Telegram URL:', telegramUrl.replace(process.env.TELEGRAM_BOT_TOKEN, 'TOKEN_HIDDEN'));
+        if (process.env.NODE_ENV !== 'production') {
+          console.log('Telegram URL prepared');
+        }
         
         const response = await fetch(
           telegramUrl,

@@ -3,7 +3,14 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from alembic import context
 from models import Base
-from database import SQLALCHEMY_DATABASE_URL
+try:
+    # Prefer DATABASE_URL if provided (sync URL acceptable for offline config)
+    from os import getenv
+    SQLALCHEMY_DATABASE_URL = getenv('SQLALCHEMY_DATABASE_URL') or getenv('DATABASE_URL')
+    if not SQLALCHEMY_DATABASE_URL:
+        from database import SQLALCHEMY_DATABASE_URL  # fallback to async URL from module
+except Exception:
+    from database import SQLALCHEMY_DATABASE_URL
 
 config = context.config
 

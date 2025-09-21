@@ -7,10 +7,7 @@ export async function GET() {
   // Проверка наличия переменных
   const config = {
     hasToken: !!TELEGRAM_BOT_TOKEN,
-    tokenLength: TELEGRAM_BOT_TOKEN?.length || 0,
-    tokenPrefix: TELEGRAM_BOT_TOKEN?.substring(0, 10) + '...' || 'NOT SET',
     hasChatId: !!TELEGRAM_CHAT_ID,
-    chatId: TELEGRAM_CHAT_ID || 'NOT SET',
     environment: process.env.NODE_ENV || 'development'
   };
   

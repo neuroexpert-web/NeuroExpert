@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
-from backend.main import app
-from backend.auth import create_access_token
+from backend import app
+from auth import create_access_token
 import pytest
 
 client = TestClient(app)

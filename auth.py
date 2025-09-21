@@ -19,8 +19,12 @@ logger = logging.getLogger(__name__)
 
 # Настройки безопасности
 SECRET_KEY = os.getenv("SECRET_KEY")
+# В тестовой среде допускаем дефолтный ключ, чтобы unit-тесты запускались без .env
 if not SECRET_KEY:
-    raise ValueError("SECRET_KEY environment variable is not set. Please set it in your .env file")
+    if os.getenv("NODE_ENV") == "test":
+        SECRET_KEY = "test-secret-key-min-32-characters-xxxxxxxxxxxxxxxx"
+    else:
+        raise ValueError("SECRET_KEY environment variable is not set. Please set it in your .env file")
 
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))

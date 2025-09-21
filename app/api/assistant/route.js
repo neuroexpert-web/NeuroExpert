@@ -25,13 +25,14 @@ if (!GEMINI_API_KEY && !ANTHROPIC_API_KEY) {
 
 const genAI = GEMINI_API_KEY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null;
 
-// Debug logging
-console.log('API Keys check:', {
-  hasGeminiKey: !!GEMINI_API_KEY,
-  hasAnthropicKey: !!ANTHROPIC_API_KEY,
-  genAIInitialized: !!genAI,
-  geminiKeyLength: GEMINI_API_KEY ? GEMINI_API_KEY.length : 0
-});
+// Minimal debug logging (без утечек длин/префиксов)
+if (process.env.NODE_ENV !== 'production') {
+  console.log('Assistant API init:', {
+    hasGeminiKey: !!GEMINI_API_KEY,
+    hasAnthropicKey: !!ANTHROPIC_API_KEY,
+    genAIInitialized: !!genAI
+  });
+}
 
 // Load system prompt for NeuroExpert v4.0 Enhanced (used as systemInstruction)
 // This file contains the complete system prompt for the AI assistant
@@ -42,12 +43,12 @@ let SYSTEM_PROMPT = '';
 // Check if file exists
 try {
   if (fs.existsSync(PROMPT_PATH)) {
-    console.log('Prompt file exists at:', PROMPT_PATH);
     SYSTEM_PROMPT = fs.readFileSync(PROMPT_PATH, 'utf-8');
-    console.log('System prompt loaded successfully, length:', SYSTEM_PROMPT.length);
-    console.log('System prompt preview:', SYSTEM_PROMPT.substring(0, 200) + '...');
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('System prompt loaded');
+    }
   } else {
-    console.error('Prompt file does not exist at:', PROMPT_PATH);
+    console.error('Prompt file does not exist at default path');
     // Try alternative paths
     const altPaths = [
       path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v3_2.md'),
@@ -57,17 +58,13 @@ try {
     
     for (const altPath of altPaths) {
       if (fs.existsSync(altPath)) {
-        console.log('Found prompt file at alternative path:', altPath);
         SYSTEM_PROMPT = fs.readFileSync(altPath, 'utf-8');
         break;
       }
     }
   }
 } catch (e) {
-  console.error('Failed to load system prompt for assistant:', e);
-  console.error('Prompt path:', PROMPT_PATH);
-  console.error('Current working directory:', process.cwd());
-  console.error('Available files in utils:', fs.readdirSync(path.join(process.cwd(), 'app', 'utils')).join(', '));
+  console.error('Failed to load system prompt for assistant');
 }
 
 async function sendTelegramNotification(question, answer, model) {
@@ -181,8 +178,10 @@ async function handler(request) {
                                !ANTHROPIC_API_KEY.includes('key') &&
                                ANTHROPIC_API_KEY.length > 30;
     
-    // ПРИНУДИТЕЛЬНЫЙ DEMO MODE для тестирования
-    console.log('Demo mode check:', { isValidGeminiKey, isValidAnthropicKey, GEMINI_API_KEY: GEMINI_API_KEY?.substring(0, 10) + '...' });
+    // Лёгкая диагностика в dev
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('Demo mode check:', { isValidGeminiKey, isValidAnthropicKey });
+    }
     
     // DEMO MODE: если нет настоящих API ключей, показываем демо-ответ
     if (!isValidGeminiKey && !isValidAnthropicKey) {
@@ -221,15 +220,16 @@ async function handler(request) {
     const { question } = validationResult.sanitizedData;
     const { model = 'gemini', history = [] } = requestData;
     
-    // Debug logging
-    console.log('Assistant API called:', { 
-      model, 
-      questionLength: question?.length,
-      hasAnthropicKey: !!ANTHROPIC_API_KEY,
-      hasGeminiKey: !!GEMINI_API_KEY,
-      anthropicKeyLength: ANTHROPIC_API_KEY ? ANTHROPIC_API_KEY.length : 0,
-      nodeEnv: process.env.NODE_ENV
-    });
+    // Debug logging (без утечек)
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('Assistant API called:', { 
+        model, 
+        questionLength: question?.length,
+        hasAnthropicKey: !!ANTHROPIC_API_KEY,
+        hasGeminiKey: !!GEMINI_API_KEY,
+        nodeEnv: process.env.NODE_ENV
+      });
+    }
 
     // Создаём улучшенный промпт
     // const enhancedPrompt = createEnhancedPrompt(question, context);
@@ -244,7 +244,6 @@ async function handler(request) {
         // Используем Claude с историей
         console.log('Using Claude with system prompt');
         console.log('ANTHROPIC_API_KEY exists:', !!ANTHROPIC_API_KEY);
-        console.log('ANTHROPIC_API_KEY length:', ANTHROPIC_API_KEY ? ANTHROPIC_API_KEY.length : 0);
         const claudeResponse = await getClaudeResponse(question, history);
         answer = claudeResponse.text;
         updatedHistory = claudeResponse.updatedHistory;
@@ -255,14 +254,18 @@ async function handler(request) {
         
         if (context === 'support' && systemPrompt) {
           finalSystemPrompt = systemPrompt;
+        if (process.env.NODE_ENV !== 'production') {
           console.log('Using custom support system prompt');
+        }
         } else {
-          console.log('Using default Gemini system prompt, length:', SYSTEM_PROMPT.length);
+          if (process.env.NODE_ENV !== 'production') {
+            console.log('Using default Gemini system prompt');
+          }
         }
         
-        console.log('Gemini API key exists:', !!GEMINI_API_KEY);
-        console.log('genAI initialized:', !!genAI);
-        console.log('Context:', context);
+        if (process.env.NODE_ENV !== 'production') {
+          console.log('Gemini call context:', { hasKey: !!GEMINI_API_KEY, genAI: !!genAI, context });
+        }
         
         try {
           const geminiModel = genAI.getGenerativeModel({ 
@@ -275,45 +278,26 @@ async function handler(request) {
           answer = result.response.text();
           updatedHistory = await chat.getHistory();
           usedModel = 'gemini';
-          console.log('Gemini answer generated, length:', answer.length);
+          if (process.env.NODE_ENV !== 'production') {
+            console.log('Gemini answer generated');
+          }
         } catch (geminiError) {
           console.error('Gemini API call failed:', geminiError);
           throw geminiError;
         }
       } else if (isValidAnthropicKey && model !== 'gemini') {
         // Fallback на Claude если Gemini недоступен
-        console.log('Fallback to Claude (Gemini not available)');
+        if (process.env.NODE_ENV !== 'production') {
+          console.log('Fallback to Claude (Gemini not available)');
+        }
         const claudeResponse = await getClaudeResponse(question, history);
         answer = claudeResponse.text;
         updatedHistory = claudeResponse.updatedHistory;
         usedModel = 'claude';
       } else {
-        // Принудительно используем Gemini даже без API ключа (для тестирования)
-        console.log('Forcing Gemini usage for testing...');
-        try {
-          // Создаем временный API ключ для тестирования
-          const tempGenAI = new GoogleGenerativeAI('test-key-for-debugging');
-          const geminiModel = tempGenAI.getGenerativeModel({ 
-            model: "gemini-1.5-pro-latest",
-            systemInstruction: SYSTEM_PROMPT || 'Ты — Управляющий NeuroExpert v3.2. Начинай с вопроса о бизнес-цели.',
-          });
-          
-          const chat = geminiModel.startChat({ history: history || [] });
-          const result = await chat.sendMessage(question);
-          answer = result.response.text();
-          updatedHistory = await chat.getHistory();
-          usedModel = 'gemini-forced';
-          console.log('Forced Gemini answer generated, length:', answer.length);
-        } catch (error) {
-          console.error('Forced Gemini failed:', error);
-          // Fallback на базовый ответ по промпту
-          answer = `Здравствуйте. Я Управляющий NeuroExpert v3.2. 
-
-${SYSTEM_PROMPT ? 'Системный промпт загружен успешно.' : 'Системный промпт не загружен.'}
-
-Сформулируйте, пожалуйста, ключевую бизнес-цель, которую вы хотите достичь с помощью нашей платформы.${process.env.NODE_ENV !== 'production' ? `\n\n[Отладка: API ключ Gemini: ${!!GEMINI_API_KEY}, genAI: ${!!genAI}, промпт длина: ${SYSTEM_PROMPT.length}]` : ''}`;
-          usedModel = 'fallback-with-prompt';
-        }
+        // Безопасный fallback
+        answer = `Здравствуйте. Я Управляющий NeuroExpert. ${SYSTEM_PROMPT ? '' : 'Системный промпт не загружен.'}\n\nСформулируйте, пожалуйста, ключевую бизнес-цель.`;
+        usedModel = 'fallback';
       }
     } catch (error) {
       console.error('AI API Error:', error);
@@ -364,9 +348,21 @@ ${SYSTEM_PROMPT ? 'Системный промпт загружен успешн
 
 // Export the POST handler
 export async function POST(request) {
-  // Temporarily disabled rate limiting for deployment
-  // TODO: Fix rate limiter return type
-  return handler(request);
+  // Rate limiting
+  const rateDecision = await assistantRateLimit(request);
+  if (rateDecision instanceof Response) {
+    return rateDecision;
+  }
+
+  const response = await handler(request);
+
+  // Пробрасываем rate-limit заголовки, если они есть
+  if (rateDecision && rateDecision.headers && response && response.headers) {
+    try {
+      Object.entries(rateDecision.headers).forEach(([k, v]) => response.headers.set(k, v));
+    } catch {}
+  }
+  return response;
 }
 
 // Add GET method for testing prompt loading
@@ -393,13 +389,11 @@ export async function GET() {
       promptPath: PROMPT_PATH,
       currentWorkingDir: process.cwd(),
       promptLength: promptContent.length,
-      promptPreview: promptContent.substring(0, 500),
+      promptPreview: process.env.NODE_ENV !== 'production' ? promptContent.substring(0, 500) : undefined,
       error: error || null,
       env: {
         hasGeminiKey: !!process.env.GOOGLE_GEMINI_API_KEY,
-        geminiKeyLength: process.env.GOOGLE_GEMINI_API_KEY ? process.env.GOOGLE_GEMINI_API_KEY.length : 0,
         hasAnthropicKey: !!process.env.ANTHROPIC_API_KEY,
-        anthropicKeyLength: process.env.ANTHROPIC_API_KEY ? process.env.ANTHROPIC_API_KEY.length : 0,
         nodeEnv: process.env.NODE_ENV
       }
     });

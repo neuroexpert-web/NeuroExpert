@@ -4,10 +4,12 @@ const nextConfig = {
     appDir: true,
   },
   eslint: {
-    ignoreDuringBuilds: true,
+    // В продакшен-сборке не игнорируем ошибки
+    ignoreDuringBuilds: false,
   },
   typescript: {
-    ignoreBuildErrors: true,
+    // В продакшен-сборке не игнорируем ошибки типов
+    ignoreBuildErrors: false,
   },
   // Force rebuild on deployment
   env: {
