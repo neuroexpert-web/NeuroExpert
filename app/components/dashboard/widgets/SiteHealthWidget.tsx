@@ -26,7 +26,7 @@ export default function SiteHealthWidget({ filters, connectionStatus }: SiteHeal
       setMetrics(prev => ({
         ...prev,
         responseTime: Math.floor(Math.random() * 100) + 100,
-        errorRate: (Math.random() * 0.1).toFixed(2),
+        errorRate: Math.random() * 0.1,
         lastCheck: new Date().toLocaleTimeString('ru-RU')
       }));
     }, 30000);

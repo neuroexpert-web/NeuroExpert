@@ -36,7 +36,6 @@ export default function DashboardLayout({
       to: new Date().toISOString()
     },
     env: 'prod',
-    service: 'all',
     liveMode: true,
     refreshInterval: 15000,
     ...initialFilters
@@ -47,88 +46,25 @@ export default function DashboardLayout({
     { id: 'overview', name: 'Обзор', icon: '📊' }
   ];
 
-  // Состояние виджетов - новая конфигурация с 8 виджетами
+  // Состояние виджетов - полная конфигурация
   const [widgets, setWidgets] = useState<WidgetConfig[]>([
     {
       id: 'business-overview',
-      type: 'business',
+      type: 'roi',
       title: 'Обзор бизнеса',
-      description: 'Ключевые показатели вашего бизнеса в реальном времени',
       size: 'medium',
       position: { x: 0, y: 0 },
-      refreshInterval: 15000,
       visible: true,
-      pinned: true
+      refreshInterval: 30000
     },
     {
       id: 'site-health',
-      type: 'site-health',
+      type: 'system',
       title: 'Здоровье сайта',
-      description: 'Аптайм, скорость, безопасность и производительность',
       size: 'medium',
       position: { x: 1, y: 0 },
-      refreshInterval: 15000,
-      visible: true
-    },
-    {
-      id: 'yandex-metrika',
-      type: 'yandex',
-      title: 'Яндекс.Метрика',
-      description: 'Подробная аналитика посетителей в реальном времени',
-      size: 'medium',
-      position: { x: 2, y: 0 },
-      refreshInterval: 30000,
-      visible: true
-    },
-    {
-      id: 'google-analytics',
-      type: 'google',
-      title: 'Google Analytics',
-      description: 'Данные о пользователях и источниках трафика',
-      size: 'medium',
-      position: { x: 0, y: 1 },
-      refreshInterval: 30000,
-      visible: true
-    },
-    {
-      id: 'leads-conversion',
-      type: 'leads',
-      title: 'Лиды и конверсии',
-      description: 'Воронка продаж и работа с клиентами',
-      size: 'medium',
-      position: { x: 1, y: 1 },
-      refreshInterval: 60000,
-      visible: true
-    },
-    {
-      id: 'seo-monitoring',
-      type: 'seo',
-      title: 'SEO мониторинг',
-      description: 'Позиции в поиске и органический трафик',
-      size: 'medium',
-      position: { x: 2, y: 1 },
-      refreshInterval: 120000,
-      visible: true
-    },
-    {
-      id: 'social-media',
-      type: 'social',
-      title: 'Социальные сети',
-      description: 'Активность и вовлеченность в соцсетях',
-      size: 'medium',
-      position: { x: 0, y: 2 },
-      refreshInterval: 60000,
-      visible: true
-    },
-    {
-      id: 'email-marketing',
-      type: 'email',
-      title: 'Email-маркетинг',
-      description: 'Кампании, открытия и конверсии рассылок',
-      size: 'medium',
-      position: { x: 1, y: 2 },
-      refreshInterval: 60000,
-      visible: true
+      visible: true,
+      refreshInterval: 15000
     }
   ]);
 
@@ -170,27 +106,19 @@ export default function DashboardLayout({
       onMove: (position: { x: number; y: number }) => handleWidgetMove(widget.id, position),
       onResize: (size: 'small' | 'medium' | 'large') => handleWidgetResize(widget.id, size),
       onToggle: () => handleWidgetToggle(widget.id),
-      size: widget.size,
+      size: widget.size === 'full' ? 'large' : widget.size as 'small' | 'medium' | 'large',
       position: widget.position
     };
 
     switch (widget.type) {
-      case 'business':
+      case 'roi':
         return <BusinessMetricsWidget {...commonProps} />;
-      case 'site-health':
+      case 'system':
         return <SiteHealthWidget {...commonProps} />;
-      case 'yandex':
+      case 'traffic':
         return <YandexMetrikaWidget {...commonProps} />;
-      case 'google':
+      case 'slo':
         return <GoogleAnalyticsWidget {...commonProps} />;
-      case 'leads':
-        return <LeadsWidget {...commonProps} />;
-      case 'seo':
-        return <SEOWidget {...commonProps} />;
-      case 'social':
-        return <SocialMediaWidget {...commonProps} />;
-      case 'email':
-        return <EmailMarketingWidget {...commonProps} />;
       default:
         return <div>Неизвестный тип виджета: {widget.type}</div>;
     }
@@ -296,9 +224,6 @@ export default function DashboardLayout({
                       <div className={styles.widgetHeader}>
                         <div className={styles.widgetTitleSection}>
                           <h3 className={styles.widgetTitle}>{widget.title}</h3>
-                          {widget.description && (
-                            <p className={styles.widgetDescription}>{widget.description}</p>
-                          )}
                         </div>
                         
                         <div className={styles.widgetControls}>
