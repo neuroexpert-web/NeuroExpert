@@ -6,7 +6,7 @@
     height: 100vh;
     position: relative;
     background: var(--color-bg-primary, #02001A);
-    padding: 2rem;
+    padding: 2rem 3rem;
 }
 
 .scrollable-section {
@@ -35,9 +35,10 @@
     background: rgba(255, 255, 255, 0.3);
 }
 
-/* Центрирование контента внутри analytics-dashboard */
+/* Полная ширина для контента */
 #analytics-dashboard > * {
-    max-width: 1400px;
+    max-width: 100%;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
 }
@@ -179,16 +180,30 @@
 }
 
 /* --- 5. ГРАФИКИ --- */
+.charts-section {
+    width: 100%;
+    margin-top: 3rem;
+}
+
 .charts-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
     margin-bottom: 3rem;
     animation: fadeInUp 1s ease-out 0.2s both;
+    width: 100%;
 }
 
 .chart-card {
     min-height: 400px;
+    width: 100%;
+}
+
+/* Для больших экранов - 3 колонки */
+@media (min-width: 1600px) {
+    .charts-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 .chart-card h3 {
