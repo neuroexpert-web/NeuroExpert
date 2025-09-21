@@ -553,9 +553,11 @@ export const AnimatedCounter: React.FC<{
   );
 };
 
-export default {
+const PremiumUISystemComponents = {
   PremiumButton,
   PremiumCard,
   FloatingAIAssistant,
   AnimatedCounter
 };
+
+export default PremiumUISystemComponents;

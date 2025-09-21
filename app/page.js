@@ -7,7 +7,7 @@ import SwipeContainer from './components/SwipeContainer';
 import EnhancedFloatingAI from './components/EnhancedFloatingAI';
 
 // Динамические импорты для аналитики с улучшенной загрузкой
-const AnalyticsCharts = dynamic(() => import('./components/AnalyticsCharts'), {
+const AnalyticsCharts = dynamic(() => import('./components/AnalyticsChartsComponent'), {
   ssr: false,
   loading: () => <div className="analytics-skeleton">📊 Загрузка графиков...</div>
 });

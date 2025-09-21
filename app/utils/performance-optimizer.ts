@@ -108,19 +108,28 @@ class PerformanceOptimizer {
     return this.cacheWithStrategy(cacheKey, async () => {
       const startTime = performance.now();
       
-      // Dynamic import with error handling
-      const module = await import(
-        /* webpackChunkName: "[request]" */
-        `../components/${chunkName}`
-      ).catch(error => {
+      // Dynamic import with error handling - only for specific known chunks
+      let loadedModule;
+      try {
+        switch (chunkName) {
+          case 'AnalyticsChartsComponent':
+            loadedModule = await import('../components/AnalyticsChartsComponent');
+            break;
+          case 'RealTimeMonitoringDashboard':
+            loadedModule = await import('../components/RealTimeMonitoringDashboard');
+            break;
+          default:
+            throw new Error(`Unknown chunk: ${chunkName}`);
+        }
+      } catch (error) {
         console.error(`Failed to load chunk ${chunkName}:`, error);
         throw new Error(`Chunk loading failed: ${chunkName}`);
-      });
+      }
       
       const loadTime = performance.now() - startTime;
       this.recordMetric(`chunk_load_${chunkName}`, loadTime);
       
-      return module;
+      return loadedModule;
     }, {
       ttl: 1000 * 60 * 60, // 1 hour for chunks
       priority: 'high'
@@ -280,12 +289,15 @@ class PerformanceOptimizer {
 // Export singleton instance
 export const performanceOptimizer = PerformanceOptimizer.getInstance();
 
-// Utility hooks for React components
+// Utility hooks for React components (to be used in client components only)
 export function useOptimizedResource<T>(
   key: string,
   fetcher: () => Promise<T>,
   options?: Parameters<PerformanceOptimizer['cacheWithStrategy']>[2]
 ) {
+  // These hooks will only work in client components
+  const { useState, useEffect } = require('react');
+  
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -300,8 +312,10 @@ export function useOptimizedResource<T>(
   return { data, loading, error };
 }
 
-// Performance monitoring hook
+// Performance monitoring hook (to be used in client components only)
 export function usePerformanceMonitoring(componentName: string) {
+  const { useEffect } = require('react');
+  
   useEffect(() => {
     const startTime = performance.now();
     

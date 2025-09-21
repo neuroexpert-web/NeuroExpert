@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import SwipeContainer from './components/SwipeContainer';
 
 // Динамические импорты для аналитики
-const AnalyticsCharts = dynamic(() => import('./components/AnalyticsCharts'), {
+const AnalyticsCharts = dynamic(() => import('./components/AnalyticsChartsComponent'), {
   ssr: false,
   loading: () => null
 });
