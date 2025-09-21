@@ -117,7 +117,18 @@ async function handler(request) {
 
 // Export the POST handler
 export async function POST(request) {
-  // Temporarily disabled rate limiting for deployment
-  // TODO: Fix rate limiter return type
-  return handler(request);
+  // Apply rate limiting
+  const rateDecision = await apiRateLimit(request);
+  if (rateDecision instanceof Response) {
+    return rateDecision;
+  }
+
+  const response = await handler(request);
+
+  if (rateDecision && rateDecision.headers && response && response.headers) {
+    try {
+      Object.entries(rateDecision.headers).forEach(([k, v]) => response.headers.set(k, v));
+    } catch {}
+  }
+  return response;
 }

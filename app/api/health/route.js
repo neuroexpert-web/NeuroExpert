@@ -67,37 +67,24 @@ async function checkRedis() {
   };
 }
 
-// AI Service health check
+// AI Service health check (safe, without internal HTTP calls)
 async function checkAIService() {
   try {
-    const hasApiKey = !!process.env.GOOGLE_GEMINI_API_KEY;
-    
-    if (!hasApiKey) {
+    const hasGeminiKey = !!process.env.GOOGLE_GEMINI_API_KEY || !!process.env.GEMINI_API_KEY || !!process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+    const hasAnthropicKey = !!process.env.ANTHROPIC_API_KEY;
+
+    if (!hasGeminiKey && !hasAnthropicKey) {
       return {
         status: 'fail',
-        message: 'Gemini API key not configured',
+        message: 'No AI API keys configured',
         latency: 0
       };
     }
-    
-    // Test with a simple prompt
-    const start = Date.now();
-    const response = await fetch('/api/assistant', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question: 'test', model: 'gemini' })
-    });
-    
-    const latency = Date.now() - start;
-    
-    if (!response.ok) {
-      throw new Error(`AI service returned ${response.status}`);
-    }
-    
+
     return {
       status: 'pass',
-      message: 'AI service responding',
-      latency
+      message: hasGeminiKey ? 'Gemini configured' : 'Claude configured',
+      latency: 0
     };
   } catch (error) {
     logger.error('AI service health check failed', { error: error.message });
