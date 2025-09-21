@@ -487,7 +487,7 @@ export default function Home() {
         <p>Ключевые показатели вашего бизнеса и персональные рекомендации от AI</p>
       </header>
       
-      {/* Панель фильтров */}
+      {/* Панель фильтров с индикатором автообновления */}
       <div className="filters-panel glass-card">
         <div className="filter-group">
           <label htmlFor="date-filter">Период:</label>
@@ -517,23 +517,46 @@ export default function Home() {
             <option value="vip">VIP</option>
           </select>
         </div>
-        <button 
-          className={`refresh-button ${refreshing ? 'refreshing' : ''}`}
-          onClick={handleRefreshData}
-          disabled={refreshing}
-          aria-label="Обновить данные"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={refreshing ? 'rotating' : ''}>
-            <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" strokeWidth="2" strokeLinecap="round"/>
-          </svg>
-          <span>{refreshing ? 'Обновление...' : 'Обновить'}</span>
-        </button>
+        <div className="refresh-group">
+          <button 
+            className={`refresh-button ${refreshing ? 'refreshing' : ''}`}
+            onClick={handleRefreshData}
+            disabled={refreshing}
+            aria-label="Обновить данные"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={refreshing ? 'rotating' : ''}>
+              <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+            <span>{refreshing ? 'Обновление...' : 'Обновить'}</span>
+          </button>
+          <div className="auto-refresh-indicator">
+            <span className="indicator-dot"></span>
+            <span className="indicator-text">Автообновление через 30 сек</span>
+          </div>
+        </div>
+        {/* Кнопки экспорта */}
+        <div className="export-buttons">
+          <button className="export-btn" aria-label="Экспорт в PDF">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" strokeWidth="2"/>
+              <path d="M14 2v6h6M12 18v-6M9 15l3 3 3-3" strokeWidth="2"/>
+            </svg>
+            <span>PDF</span>
+          </button>
+          <button className="export-btn" aria-label="Экспорт в Excel">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" strokeWidth="2"/>
+              <path d="M14 2v6h6M10 12h4M10 16h4" strokeWidth="2"/>
+            </svg>
+            <span>Excel</span>
+          </button>
+        </div>
       </div>
         {/* KPI карточки с пояснениями */}
         <div className="kpi-cards">
-          <div className="kpi-card glass-card" id="kpi-revenue">
+          <div className="kpi-card glass-card kpi-revenue" id="kpi-revenue">
             <div className="kpi-header">
-              <span className="kpi-icon">
+              <span className="kpi-icon revenue-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                   <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" strokeWidth="2" strokeLinecap="round"/>
                 </svg>
@@ -550,11 +573,22 @@ export default function Home() {
             </div>
             <div className="kpi-value">₽ {(analyticsData.revenue / 1000).toFixed(1)}K</div>
             <div className="kpi-description">За последние 7 дней</div>
+            <div className="kpi-progress">
+              <div className="progress-bar">
+                <div className="progress-fill" style={{width: '72%'}}></div>
+              </div>
+              <span className="progress-text">72% от цели (₽ 500K)</span>
+            </div>
             <div className="kpi-trend positive">
               <span className="trend-icon">↑</span>
               <span>+5.2% по сравнению с прошлой неделей</span>
             </div>
             <div className="kpi-sparkline" id="revenue-sparkline"></div>
+            <button className="kpi-detail-btn" aria-label="Подробнее о выручке">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M9 18l6-6-6-6" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </button>
           </div>
 
           <div className="kpi-card glass-card" id="kpi-clients">
@@ -633,6 +667,45 @@ export default function Home() {
               <span>Растёт (+0.5%)</span>
             </div>
             <div className="kpi-sparkline" id="conversion-sparkline"></div>
+          </div>
+        </div>
+        
+        {/* AI Рекомендации */}
+        <div className="ai-insights-section glass-card">
+          <div className="ai-insights-header">
+            <div className="ai-avatar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" strokeWidth="2"/>
+                <path d="M12 8v4M12 16h.01" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </div>
+            <h3>AI Рекомендации от управляющего</h3>
+          </div>
+          <div className="ai-insights-content">
+            <div className="insight-item priority-high">
+              <span className="insight-icon">⚡</span>
+              <div className="insight-text">
+                <h4>Срочно: Снижение удовлетворенности</h4>
+                <p>Оценка клиентов упала на 0.15 пункта. Рекомендую провести опрос и выявить причины. 78% негативных отзывов связаны со скоростью доставки.</p>
+                <button className="insight-action">Запустить опрос</button>
+              </div>
+            </div>
+            <div className="insight-item priority-medium">
+              <span className="insight-icon">📈</span>
+              <div className="insight-text">
+                <h4>Возможность роста</h4>
+                <p>Конверсия растет (+0.5%), но все еще ниже потенциала. Предлагаю A/B тест новой посадочной страницы.</p>
+                <button className="insight-action">Создать A/B тест</button>
+              </div>
+            </div>
+            <div className="insight-item priority-low">
+              <span className="insight-icon">💡</span>
+              <div className="insight-text">
+                <h4>Совет на будущее</h4>
+                <p>VIP-клиенты показывают рост активности. Стоит запустить персональные предложения для этого сегмента.</p>
+                <button className="insight-action">Настроить кампанию</button>
+              </div>
+            </div>
           </div>
         </div>
         
