@@ -483,38 +483,45 @@ export default function Home() {
     // 2. Аналитика - улучшенная с живыми KPI и графиками
     <section key="analytics" id="analytics-dashboard" className="full-page scrollable-section">
       <header className="page-header">
-        <h2>Аналитика в реальном времени</h2>
-        <p>Ключевые показатели вашего бизнеса и персональные рекомендации от AI</p>
+        <h2>📊 Как дела у вашего бизнеса?</h2>
+        <p>Простые и понятные цифры о том, как растёт ваша компания. Все данные обновляются автоматически.</p>
+        <div className="header-hint">
+          <span className="hint-icon">💡</span>
+          <span>Здесь вы увидите самое важное: сколько зарабатываете, сколько новых клиентов и что можно улучшить</span>
+        </div>
       </header>
       
       {/* Панель фильтров */}
       <div className="filters-panel glass-card">
+        <div className="filters-intro">
+          <h3>🔍 Выберите, что хотите посмотреть:</h3>
+        </div>
         <div className="filter-group">
-          <label htmlFor="date-filter">Период:</label>
+          <label htmlFor="date-filter">📅 За какой период показать данные:</label>
           <select 
             id="date-filter" 
             className="filter-select"
             value={dataPeriod}
             onChange={handlePeriodChange}
           >
-            <option value="today">Сегодня</option>
-            <option value="week">Последние 7 дней</option>
-            <option value="month">Последние 30 дней</option>
-            <option value="quarter">Квартал</option>
+            <option value="today">Только сегодня</option>
+            <option value="week">За неделю (7 дней)</option>
+            <option value="month">За месяц (30 дней)</option>
+            <option value="quarter">За 3 месяца</option>
           </select>
         </div>
         <div className="filter-group">
-          <label htmlFor="segment-filter">Сегмент:</label>
+          <label htmlFor="segment-filter">👥 Каких клиентов показать:</label>
           <select 
             id="segment-filter" 
             className="filter-select"
             value={segmentFilter}
             onChange={handleSegmentFilterChange}
           >
-            <option value="all">Все клиенты</option>
-            <option value="new">Новые</option>
-            <option value="returning">Постоянные</option>
-            <option value="vip">VIP</option>
+            <option value="all">Всех клиентов</option>
+            <option value="new">Только новых клиентов</option>
+            <option value="returning">Постоянных клиентов</option>
+            <option value="vip">VIP клиентов</option>
           </select>
         </div>
         <button 
@@ -522,209 +529,261 @@ export default function Home() {
           onClick={handleRefreshData}
           disabled={refreshing}
           aria-label="Обновить данные"
+          title="Получить самые свежие данные"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={refreshing ? 'rotating' : ''}>
             <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" strokeWidth="2" strokeLinecap="round"/>
           </svg>
-          <span>{refreshing ? 'Обновление...' : 'Обновить'}</span>
+          <span>{refreshing ? 'Получаем свежие данные...' : '🔄 Обновить данные'}</span>
         </button>
       </div>
-        {/* KPI карточки с пояснениями */}
+        {/* Главные показатели бизнеса */}
+        <div className="kpi-section">
+          <h3 className="kpi-section-title">💰 Главные показатели вашего бизнеса</h3>
+          <p className="kpi-section-description">Самые важные цифры, которые показывают, как растёт ваша компания</p>
+        </div>
+        
         <div className="kpi-cards">
           <div className="kpi-card glass-card" id="kpi-revenue">
             <div className="kpi-header">
-              <span className="kpi-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" strokeWidth="2" strokeLinecap="round"/>
-                </svg>
-              </span>
-              <span className="kpi-title">Выручка</span>
-              <button className="help-icon" aria-describedby="tooltip-revenue" tabIndex="0">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                </svg>
+              <span className="kpi-icon">💰</span>
+              <div className="kpi-title-group">
+                <span className="kpi-title">Сколько заработали</span>
+                <span className="kpi-subtitle">Общий доход от продаж</span>
+              </div>
+              <button className="help-icon" aria-describedby="tooltip-revenue" tabIndex="0" title="Подробнее">
+                <span>?</span>
               </button>
               <div id="tooltip-revenue" className="tooltip" role="tooltip" hidden>
-                Общая выручка за выбранный период от всех каналов продаж. Включает все успешные транзакции.
+                <strong>Что это:</strong> Все деньги, которые вы получили от клиентов за выбранный период.<br/>
+                <strong>Почему важно:</strong> Показывает, растёт ли ваш бизнес и сколько денег приносят продажи.
               </div>
             </div>
             <div className="kpi-value">₽ {(analyticsData.revenue / 1000).toFixed(1)}K</div>
             <div className="kpi-description">За последние 7 дней</div>
             <div className="kpi-trend positive">
-              <span className="trend-icon">↑</span>
-              <span>+5.2% по сравнению с прошлой неделей</span>
+              <span className="trend-icon">📈</span>
+              <span>Отлично! На 5.2% больше, чем на прошлой неделе</span>
             </div>
-            <div className="kpi-sparkline" id="revenue-sparkline"></div>
+            <div className="kpi-explanation">
+              <span className="explanation-text">Это хороший результат! Ваши продажи растут.</span>
+            </div>
           </div>
 
           <div className="kpi-card glass-card" id="kpi-clients">
             <div className="kpi-header">
-              <span className="kpi-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" strokeWidth="2" strokeLinecap="round"/>
-                </svg>
-              </span>
-              <span className="kpi-title">Новые клиенты</span>
-              <button className="help-icon" aria-describedby="tooltip-clients" tabIndex="0">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                </svg>
+              <span className="kpi-icon">👥</span>
+              <div className="kpi-title-group">
+                <span className="kpi-title">Новых клиентов</span>
+                <span className="kpi-subtitle">Люди, которые впервые купили у вас</span>
+              </div>
+              <button className="help-icon" aria-describedby="tooltip-clients" tabIndex="0" title="Подробнее">
+                <span>?</span>
               </button>
               <div id="tooltip-clients" className="tooltip" role="tooltip" hidden>
-                Количество новых уникальных пользователей, которые совершили первую покупку или регистрацию.
+                <strong>Что это:</strong> Люди, которые впервые стали вашими клиентами - купили товар или услугу.<br/>
+                <strong>Почему важно:</strong> Новые клиенты = рост бизнеса. Чем больше новых клиентов, тем быстрее развивается компания.
               </div>
             </div>
             <div className="kpi-value">{analyticsData.clients}</div>
-            <div className="kpi-description">Зарегистрировались за неделю</div>
+            <div className="kpi-description">Новых клиентов за неделю</div>
             <div className="kpi-trend positive">
-              <span className="trend-icon">↑</span>
-              <span>+12% больше обычного</span>
+              <span className="trend-icon">🎉</span>
+              <span>Супер! На 12% больше, чем обычно</span>
             </div>
-            <div className="kpi-sparkline" id="clients-sparkline"></div>
+            <div className="kpi-explanation">
+              <span className="explanation-text">Отличная работа! К вам приходят новые клиенты.</span>
+            </div>
           </div>
 
           <div className="kpi-card glass-card" id="kpi-satisfaction">
             <div className="kpi-header">
-              <span className="kpi-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" strokeWidth="2" strokeLinecap="round"/>
-                </svg>
-              </span>
-              <span className="kpi-title">Удовлетворенность</span>
-              <button className="help-icon" aria-describedby="tooltip-satisfaction" tabIndex="0">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                </svg>
+              <span className="kpi-icon">⭐</span>
+              <div className="kpi-title-group">
+                <span className="kpi-title">Довольны ли клиенты</span>
+                <span className="kpi-subtitle">Средняя оценка от ваших клиентов</span>
+              </div>
+              <button className="help-icon" aria-describedby="tooltip-satisfaction" tabIndex="0" title="Подробнее">
+                <span>?</span>
               </button>
               <div id="tooltip-satisfaction" className="tooltip" role="tooltip" hidden>
-                Средняя оценка клиентов на основе отзывов и NPS-опросов.
+                <strong>Что это:</strong> Средняя оценка, которую ставят ваши клиенты (от 1 до 5 звёзд).<br/>
+                <strong>Почему важно:</strong> Довольные клиенты покупают снова и рекомендуют вас друзьям. Чем выше оценка, тем лучше.
               </div>
             </div>
-            <div className="kpi-value">{analyticsData.satisfaction.toFixed(1)}/5</div>
-            <div className="kpi-description">Средняя оценка клиентов</div>
+            <div className="kpi-value">{analyticsData.satisfaction.toFixed(1)}/5 ⭐</div>
+            <div className="kpi-description">Оценка ваших клиентов</div>
             <div className="kpi-trend negative">
-              <span className="trend-icon">↓</span>
-              <span>Небольшое снижение (-0.15)</span>
+              <span className="trend-icon">⚠️</span>
+              <span>Небольшое снижение (-0.15 балла)</span>
             </div>
-            <div className="kpi-sparkline" id="satisfaction-sparkline"></div>
+            <div className="kpi-explanation">
+              <span className="explanation-text">Стоит обратить внимание на качество обслуживания.</span>
+            </div>
           </div>
           
           <div className="kpi-card glass-card" id="kpi-conversion">
             <div className="kpi-header">
-              <span className="kpi-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M22 12h-4l-3 9L9 3l-3 9H2" strokeWidth="2" strokeLinecap="round"/>
-                </svg>
-              </span>
-              <span className="kpi-title">Конверсия</span>
-              <button className="help-icon" aria-describedby="tooltip-conversion" tabIndex="0">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                </svg>
+              <span className="kpi-icon">🎯</span>
+              <div className="kpi-title-group">
+                <span className="kpi-title">Сколько покупают</span>
+                <span className="kpi-subtitle">Из 100 посетителей становятся клиентами</span>
+              </div>
+              <button className="help-icon" aria-describedby="tooltip-conversion" tabIndex="0" title="Подробнее">
+                <span>?</span>
               </button>
               <div id="tooltip-conversion" className="tooltip" role="tooltip" hidden>
-                Процент посетителей, совершивших целевое действие (покупка, регистрация, подписка).
+                <strong>Что это:</strong> Показывает, сколько людей из тех, кто заходит на ваш сайт, реально что-то покупает.<br/>
+                <strong>Почему важно:</strong> Чем выше процент, тем лучше работает ваш сайт и продажи. Это показатель эффективности.
               </div>
             </div>
-            <div className="kpi-value">{analyticsData.conversion.toFixed(2)}%</div>
-            <div className="kpi-description">Из посетителей в клиенты</div>
+            <div className="kpi-value">{analyticsData.conversion.toFixed(1)}%</div>
+            <div className="kpi-description">Из 100 посетителей покупают {analyticsData.conversion.toFixed(0)} человек</div>
             <div className="kpi-trend positive">
-              <span className="trend-icon">↑</span>
-              <span>Растёт (+0.5%)</span>
+              <span className="trend-icon">📈</span>
+              <span>Растёт! Стало на 0.5% лучше</span>
             </div>
-            <div className="kpi-sparkline" id="conversion-sparkline"></div>
+            <div className="kpi-explanation">
+              <span className="explanation-text">Хорошо! Всё больше людей становятся клиентами.</span>
+            </div>
           </div>
         </div>
         
-        {/* Контейнер для графиков с заголовками */}
+        {/* Подробные графики */}
         <div className="charts-section">
-          <h3 className="section-title">Детальная аналитика</h3>
+          <div className="charts-intro">
+            <h3 className="section-title">📈 Подробные графики</h3>
+            <p className="section-description">Здесь вы можете увидеть, как изменялись показатели по дням и найти закономерности</p>
+          </div>
+          
           <div className="charts-container">
             <div className="chart-card glass-card" id="chart-revenue">
               <div className="chart-header">
-                <h4>Динамика выручки</h4>
+                <div className="chart-title-group">
+                  <h4>💰 Как менялся доход</h4>
+                  <p className="chart-subtitle">График показывает, сколько денег вы зарабатывали каждый день</p>
+                </div>
                 <div className="chart-filters">
+                  <span className="filter-label">Показать за:</span>
                   <button 
                     className={`filter-btn ${chartPeriod === '7d' ? 'active' : ''}`}
                     onClick={() => setChartPeriod('7d')}
+                    title="Показать последние 7 дней"
                   >
-                    7 дней
+                    Неделю
                   </button>
                   <button 
                     className={`filter-btn ${chartPeriod === '30d' ? 'active' : ''}`}
                     onClick={() => setChartPeriod('30d')}
+                    title="Показать последний месяц"
                   >
-                    30 дней
+                    Месяц
                   </button>
                   <button 
                     className={`filter-btn ${chartPeriod === '90d' ? 'active' : ''}`}
                     onClick={() => setChartPeriod('90d')}
+                    title="Показать последние 3 месяца"
                   >
-                    90 дней
+                    3 месяца
                   </button>
                 </div>
               </div>
               <div className="chart-wrapper">
+                <div className="chart-hint">
+                  <span className="hint-icon">💡</span>
+                  <span>Если график идёт вверх - продажи растут. Если вниз - стоит разобраться, что происходит.</span>
+                </div>
                 {RevenueChart && <RevenueChart period={chartPeriod} darkMode={true} />}
               </div>
             </div>
           
           <div className="chart-card glass-card" id="chart-traffic">
             <div className="chart-header">
-              <h4>Источники трафика</h4>
+              <div className="chart-title-group">
+                <h4>🌐 Откуда приходят клиенты</h4>
+                <p className="chart-subtitle">Показывает, из каких источников люди узнают о вас и приходят на сайт</p>
+              </div>
               <button 
                 className="info-btn" 
                 aria-label="Подробнее об источниках"
                 onClick={() => handleChartInfo('traffic')}
+                title="Узнать больше"
               >
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                </svg>
+                <span>?</span>
               </button>
             </div>
             <div className="chart-wrapper">
+              <div className="chart-hint">
+                <span className="hint-icon">💡</span>
+                <span>Это поможет понять, какая реклама работает лучше и куда стоит вкладывать деньги.</span>
+              </div>
               {TrafficChart && <TrafficChart darkMode={true} />}
             </div>
           </div>
           
           <div className="chart-card glass-card" id="chart-funnel">
             <div className="chart-header">
-              <h4>Воронка продаж</h4>
-              <span className="chart-subtitle">Путь клиента от первого касания до покупки</span>
+              <div className="chart-title-group">
+                <h4>🎯 Путь к покупке</h4>
+                <p className="chart-subtitle">Показывает, сколько людей на каждом этапе: увидели → заинтересовались → купили</p>
+              </div>
             </div>
             <div className="chart-wrapper">
+              <div className="chart-hint">
+                <span className="hint-icon">💡</span>
+                <span>Если много людей уходит на каком-то этапе - значит, там есть проблема, которую нужно решить.</span>
+              </div>
               {FunnelChart && <FunnelChart darkMode={true} />}
             </div>
           </div>
           </div>
           
-          {/* Информационная панель с метриками */}
+          {/* Полезные выводы для бизнеса */}
           <div className="traffic-insights-panel">
-            <h4>Ключевые инсайты по источникам трафика</h4>
+            <div className="insights-intro">
+              <h4>💡 Что это значит для вашего бизнеса</h4>
+              <p>Простые выводы из данных, которые помогут принять правильные решения</p>
+            </div>
+            
             <div className="insights-grid">
-              <div className="insight-card glass-card">
+              <div className="insight-card glass-card success">
                 <div className="insight-icon">🏆</div>
-                <h5>Лучший источник</h5>
+                <h5>Лучше всего работает</h5>
                 <p className="insight-value">Email рассылки</p>
-                <p className="insight-detail">Конверсия 8.3% • ROI 420%</p>
+                <p className="insight-detail">Из 100 писем 8 человек покупают</p>
+                <div className="insight-action">
+                  <span className="action-text">💡 Стоит отправлять больше писем</span>
+                </div>
               </div>
-              <div className="insight-card glass-card">
+              
+              <div className="insight-card glass-card growth">
                 <div className="insight-icon">📈</div>
-                <h5>Самый быстрый рост</h5>
-                <p className="insight-value">Instagram/VK/TG</p>
-                <p className="insight-detail">+23% за месяц • 150 новых</p>
+                <h5>Быстро растёт</h5>
+                <p className="insight-value">Социальные сети</p>
+                <p className="insight-detail">На 23% больше клиентов за месяц</p>
+                <div className="insight-action">
+                  <span className="action-text">💡 Развивайте соцсети активнее</span>
+                </div>
               </div>
-              <div className="insight-card glass-card">
+              
+              <div className="insight-card glass-card warning">
                 <div className="insight-icon">⚠️</div>
-                <h5>Требует внимания</h5>
+                <h5>Стоит проверить</h5>
                 <p className="insight-value">Яндекс.Директ</p>
-                <p className="insight-detail">-3% конверсия • Высокая цена</p>
+                <p className="insight-detail">Дорого стоит, мало покупают</p>
+                <div className="insight-action">
+                  <span className="action-text">💡 Пересмотрите настройки рекламы</span>
+                </div>
               </div>
-              <div className="insight-card glass-card">
-                <div className="insight-icon">💡</div>
-                <h5>Потенциал роста</h5>
+              
+              <div className="insight-card glass-card opportunity">
+                <div className="insight-icon">🚀</div>
+                <h5>Большой потенциал</h5>
                 <p className="insight-value">SEO оптимизация</p>
-                <p className="insight-detail">+40% трафика возможно</p>
+                <p className="insight-detail">Можно получить на 40% больше клиентов</p>
+                <div className="insight-action">
+                  <span className="action-text">💡 Улучшите позиции в поиске</span>
+                </div>
               </div>
             </div>
           </div>
