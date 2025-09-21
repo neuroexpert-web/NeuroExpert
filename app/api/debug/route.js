@@ -1,15 +1,20 @@
 import { NextResponse } from 'next/server';
 
-export async function GET() {
+const isProduction = process.env.NODE_ENV === 'production';
+const ADMIN_DEBUG_TOKEN = process.env.ADMIN_DEBUG_TOKEN || null;
+
+export async function GET(request) {
+  if (isProduction) {
+    const token = request.headers.get('x-admin-debug-token');
+    if (!ADMIN_DEBUG_TOKEN || !token || token !== ADMIN_DEBUG_TOKEN) {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    }
+  }
+
   return NextResponse.json({
     env: {
       hasAnthropicKey: !!process.env.ANTHROPIC_API_KEY,
-      anthropicKeyLength: process.env.ANTHROPIC_API_KEY ? process.env.ANTHROPIC_API_KEY.length : 0,
-      anthropicKeyStart: process.env.ANTHROPIC_API_KEY ? process.env.ANTHROPIC_API_KEY.substring(0, 10) + '...' : 'NOT SET',
-      
       hasGeminiKey: !!process.env.GOOGLE_GEMINI_API_KEY,
-      geminiKeyLength: process.env.GOOGLE_GEMINI_API_KEY ? process.env.GOOGLE_GEMINI_API_KEY.length : 0,
-      
       nodeEnv: process.env.NODE_ENV,
       vercelEnv: process.env.VERCEL_ENV,
     },
