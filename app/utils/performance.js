@@ -289,6 +289,38 @@ if (typeof window !== 'undefined') {
   window.addEventListener('unhandledrejection', (event) => {
     console.error('Performance: Unhandled promise rejection', event.reason);
   });
+
+  // Интеграция с Performance Insights
+  import('./performance-insights.js').then(({ performanceInsights, getPerformanceSummary }) => {
+    logger.info('Performance Insights integrated with existing monitoring');
+    
+    // Объединенный отчет каждые 5 минут
+    setInterval(() => {
+      const customMetrics = performanceMonitor.getMetrics();
+      const webVitalsReport = getPerformanceSummary();
+      
+      const combinedReport = {
+        timestamp: Date.now(),
+        customMetrics,
+        webVitals: webVitalsReport.coreWebVitals,
+        overallScore: webVitalsReport.overallScore,
+        recommendations: webVitalsReport.recommendations,
+        cacheStats: {
+          size: apiCache.size(),
+          hitRate: 'N/A' // Could be calculated if we track hits/misses
+        }
+      };
+      
+      console.log('🚀 Combined Performance Report', combinedReport);
+      
+      // Send to analytics if performance is poor
+      if (webVitalsReport.overallScore < 50) {
+        console.warn('⚠️ Performance needs attention!', webVitalsReport.recommendations);
+      }
+    }, 5 * 60 * 1000);
+  }).catch(error => {
+    logger.debug('Performance Insights not available', error);
+  });
 }
 
 export default {

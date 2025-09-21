@@ -1,0 +1,366 @@
+/* Performance Widget Styles */
+.performance-widget {
+  padding: 20px;
+  margin: 16px 0;
+  border-radius: 12px;
+  background: rgba(51, 65, 85, 0.8);
+  border: 1px solid rgba(71, 85, 105, 0.8);
+  backdrop-filter: blur(12px);
+}
+
+.performance-widget.loading,
+.performance-widget.error,
+.performance-widget.no-data {
+  text-align: center;
+  padding: 24px;
+}
+
+/* Widget Header */
+.widget-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 16px;
+}
+
+.header-content h4 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #f8fafc;
+  margin: 0 0 4px 0;
+}
+
+.widget-description {
+  font-size: 13px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.widget-stats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.data-count {
+  font-size: 12px;
+  color: #64748b;
+  background: rgba(71, 85, 105, 0.5);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.refresh-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: rgba(99, 102, 241, 0.2);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.2s ease;
+}
+
+.refresh-btn:hover {
+  background: rgba(99, 102, 241, 0.3);
+}
+
+/* Performance Metrics */
+.performance-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.metric-card {
+  padding: 16px;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.metric-card:hover {
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(99, 102, 241, 0.4);
+  transform: translateY(-1px);
+}
+
+.metric-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.metric-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.metric-info {
+  flex: 1;
+}
+
+.metric-name {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #f8fafc;
+  margin-bottom: 2px;
+}
+
+.metric-description {
+  font-size: 12px;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+.metric-value {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.metric-value .value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.metric-value .rating {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.metric-stats {
+  display: flex;
+  gap: 16px;
+  font-size: 11px;
+}
+
+.stat-item {
+  display: flex;
+  gap: 4px;
+}
+
+.stat-label {
+  color: #64748b;
+}
+
+.stat-value {
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* Slow Resources */
+.slow-resources {
+  margin-bottom: 20px;
+  padding: 16px;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 8px;
+}
+
+.slow-resources h5 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #f8fafc;
+  margin: 0 0 12px 0;
+}
+
+.resources-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.resource-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: rgba(30, 41, 59, 0.4);
+  border-radius: 6px;
+}
+
+.resource-name {
+  font-size: 12px;
+  color: #cbd5e1;
+  font-family: monospace;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.resource-duration {
+  font-size: 12px;
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+/* Performance Tips */
+.performance-tips {
+  padding: 16px;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  border-radius: 8px;
+}
+
+.performance-tips h5 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #f8fafc;
+  margin: 0 0 12px 0;
+}
+
+.tips-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tip-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+}
+
+.tip-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.tip-text {
+  font-size: 13px;
+  color: #86efac;
+  line-height: 1.4;
+}
+
+/* Loading State */
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: #94a3b8;
+}
+
+.loading-content .spinner {
+  width: 32px;
+  height: 32px;
+  border: 2px solid rgba(148, 163, 184, 0.2);
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Error State */
+.error-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #fca5a5;
+  font-size: 14px;
+}
+
+.error-icon {
+  font-size: 20px;
+}
+
+/* No Data State */
+.no-data-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.no-data-icon {
+  font-size: 32px;
+  opacity: 0.6;
+}
+
+.no-data-text {
+  text-align: center;
+  color: #94a3b8;
+}
+
+.no-data-text p {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+}
+
+.no-data-text small {
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .performance-widget {
+    padding: 16px;
+  }
+  
+  .widget-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .performance-metrics {
+    grid-template-columns: 1fr;
+  }
+  
+  .metric-value {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  
+  .metric-stats {
+    flex-direction: column;
+    gap: 4px;
+  }
+}
+
+/* Animations */
+@keyframes spin {
+  to { 
+    transform: rotate(360deg); 
+  }
+}
+
+.metric-card {
+  animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dark theme optimizations */
+@media (prefers-color-scheme: dark) {
+  .performance-widget {
+    background: rgba(15, 23, 42, 0.9);
+    border-color: rgba(30, 41, 59, 0.8);
+  }
+  
+  .metric-card {
+    background: rgba(15, 23, 42, 0.8);
+    border-color: rgba(30, 41, 59, 0.8);
+  }
+}

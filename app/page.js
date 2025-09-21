@@ -27,6 +27,11 @@ const OnboardingTour = dynamic(() => import('./components/OnboardingTour'), {
   loading: () => null
 });
 
+const PerformanceWidget = dynamic(() => import('./components/PerformanceWidget'), {
+  ssr: false,
+  loading: () => <div className="widget-skeleton">⚡ Загрузка данных производительности...</div>
+});
+
 // Новые компоненты графиков
 const RevenueChart = dynamic(() => import('./components/analytics/RevenueChart'), {
   ssr: false,
@@ -788,6 +793,11 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+        {/* Виджет производительности сайта */}
+        <Suspense fallback={<div className="widget-skeleton">Загрузка виджета производительности...</div>}>
+          <PerformanceWidget />
+        </Suspense>
 
         {/* AI рекомендации с пояснениями */}
         <section className="ai-recommendations">
