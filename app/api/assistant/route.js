@@ -5,12 +5,12 @@ import { validate, schemas } from '@/app/utils/validation';
 import fs from 'fs';
 import path from 'path';
 // import { 
-//   DIRECTOR_KNOWLEDGE_BASE, 
+//   MANAGER_KNOWLEDGE_BASE, 
 //   analyzeUserIntent,
 //   personalizeResponse,
 //   generateFollowUpQuestions,
 //   addEmotionalTone
-// } from '../../utils/ai-director-system';
+// } from '../../utils/ai-manager-system';
 
 // Поддерживаем несколько названий переменных среды для ключа Gemini,
 // чтобы избежать ошибки из-за опечаток в панели хостинга
