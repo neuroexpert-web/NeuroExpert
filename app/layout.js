@@ -7,6 +7,7 @@ import './styles/premium-design-system.css'
 import './styles/premium-glass-sections.css'
 import './styles/mobile-fixes.css'
 import './styles/analytics-improvements.css'
+import './styles/audience-improvements.css'
 import Script from 'next/script'
 
 // Оптимизированная загрузка шрифтов

@@ -915,19 +915,24 @@ export default function Home() {
     // 3. Аудитория - улучшенная с интерактивными сегментами
     <section key="audience" id="page-audience" className="full-page">
       <div className="page-header">
-        <h2>Портрет вашей аудитории</h2>
-        <p>Понимайте своих клиентов, чтобы предлагать им то, что действительно нужно</p>
+        <h2>👥 Кто ваши клиенты?</h2>
+        <p>Узнайте больше о людях, которые покупают у вас. Это поможет лучше их обслуживать и продавать больше.</p>
+        <div className="header-hint">
+          <span className="hint-icon">💡</span>
+          <span>Мы разделили всех клиентов на группы, чтобы вы понимали, кто покупает чаще, кто только начал, а кому нужно больше внимания</span>
+        </div>
       </div>
 
       <div className="audience-container">
-        {/* Левая панель: Выбор сегмента */}
+        {/* Левая панель: Выбор группы клиентов */}
         <div className="segment-selector-panel glass-card">
           <div className="panel-header">
-            <h4>Сегменты клиентов</h4>
-            <button className="info-btn" aria-label="Подробнее о сегментации">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-              </svg>
+            <div className="panel-title-group">
+              <h4>📋 Группы ваших клиентов</h4>
+              <p className="panel-subtitle">Выберите группу, чтобы узнать о ней подробнее</p>
+            </div>
+            <button className="info-btn" aria-label="Подробнее о группах клиентов" title="Узнать больше">
+              <span>?</span>
             </button>
           </div>
           <ul role="tablist" aria-label="Список сегментов клиентов">
@@ -947,10 +952,14 @@ export default function Home() {
                 </svg>
               </span>
               <div className="segment-info">
-                <span className="segment-name">Лояльные клиенты</span>
+                <span className="segment-name">❤️ Постоянные покупатели</span>
+                <span className="segment-description">Покупают регулярно и довольны</span>
                 <span className="segment-count">3,450 человек</span>
               </div>
-              <span className="segment-percentage">28%</span>
+              <div className="segment-stats">
+                <span className="segment-percentage">28%</span>
+                <span className="segment-trend">📈 Растёт</span>
+              </div>
             </li>
             <li 
               className={`segment-item ${activeSegment === 'new' ? 'active' : ''}`}
@@ -968,10 +977,14 @@ export default function Home() {
                 </svg>
               </span>
               <div className="segment-info">
-                <span className="segment-name">Новые пользователи</span>
+                <span className="segment-name">✨ Новички</span>
+                <span className="segment-description">Недавно стали клиентами</span>
                 <span className="segment-count">892 человека</span>
               </div>
-              <span className="segment-percentage">12%</span>
+              <div className="segment-stats">
+                <span className="segment-percentage">12%</span>
+                <span className="segment-trend">🎉 +23% за месяц</span>
+              </div>
             </li>
             <li 
               className={`segment-item ${activeSegment === 'vip' ? 'active' : ''}`}
@@ -989,10 +1002,14 @@ export default function Home() {
                 </svg>
               </span>
               <div className="segment-info">
-                <span className="segment-name">VIP-сегмент</span>
+                <span className="segment-name">💎 Самые ценные клиенты</span>
+                <span className="segment-description">Покупают дорого и часто</span>
                 <span className="segment-count">412 человек</span>
               </div>
-              <span className="segment-percentage">7%</span>
+              <div className="segment-stats">
+                <span className="segment-percentage">7%</span>
+                <span className="segment-trend">💰 60% дохода</span>
+              </div>
             </li>
             <li 
               className={`segment-item ${activeSegment === 'churn-risk' ? 'active' : ''}`}
@@ -1010,10 +1027,14 @@ export default function Home() {
                 </svg>
               </span>
               <div className="segment-info">
-                <span className="segment-name">На грани оттока</span>
+                <span className="segment-name">⚠️ Могут уйти</span>
+                <span className="segment-description">Давно не покупали, нужно внимание</span>
                 <span className="segment-count">1,289 человек</span>
               </div>
-              <span className="segment-percentage">21%</span>
+              <div className="segment-stats">
+                <span className="segment-percentage">21%</span>
+                <span className="segment-trend">📞 Требуют связи</span>
+              </div>
             </li>
             <li className="segment-item add-new" tabIndex={-1}>
               <span className="segment-icon add-icon">
@@ -1030,13 +1051,22 @@ export default function Home() {
           
           {/* Общая статистика */}
           <div className="total-stats">
-            <div className="stat-item">
-              <span className="stat-label">Всего клиентов:</span>
-              <span className="stat-value">73</span>
+            <div className="stats-intro">
+              <h4>📊 Общая картина</h4>
             </div>
             <div className="stat-item">
-              <span className="stat-label">Активных за месяц:</span>
-              <span className="stat-value">8,721</span>
+              <span className="stat-icon">👥</span>
+              <div className="stat-info">
+                <span className="stat-label">Всего у вас клиентов:</span>
+                <span className="stat-value">12,043 человека</span>
+              </div>
+            </div>
+            <div className="stat-item">
+              <span className="stat-icon">🛒</span>
+              <div className="stat-info">
+                <span className="stat-label">Покупали в этом месяце:</span>
+                <span className="stat-value">8,721 человек</span>
+              </div>
             </div>
           </div>
         </div>
@@ -1050,57 +1080,68 @@ export default function Home() {
             aria-hidden={activeSegment !== 'loyal'}
           >
             <div className="segment-header">
-              <div>
-                <h3>Лояльные клиенты</h3>
-                <p className="segment-description">Ваши самые ценные и постоянные покупатели</p>
+              <div className="segment-title-group">
+                <h3>❤️ Постоянные покупатели</h3>
+                <p className="segment-description">Это ваши лучшие клиенты! Они покупают регулярно, довольны сервисом и приносят стабильный доход.</p>
               </div>
               <div className="segment-badges">
-                <span className="badge badge-success">Активные</span>
-                <span className="badge badge-premium">Высокий LTV</span>
+                <span className="badge badge-success">✅ Активные</span>
+                <span className="badge badge-premium">💰 Приносят много денег</span>
               </div>
             </div>
             
             <div className="segment-stats-overview glass-card">
-              <div className="stat-card">
-                <span className="stat-icon">👥</span>
-                <div>
-                  <h4>3,450</h4>
-                  <p>пользователей</p>
-                </div>
+              <div className="stats-intro">
+                <h4>📊 Главные цифры этой группы</h4>
               </div>
-              <div className="stat-card">
-                <span className="stat-icon">📈</span>
-                <div>
-                  <h4>28%</h4>
-                  <p>от всей базы</p>
+              <div className="stats-grid">
+                <div className="stat-card">
+                  <span className="stat-icon">👥</span>
+                  <div className="stat-content">
+                    <h4>3,450</h4>
+                    <p>человек в группе</p>
+                    <span className="stat-hint">Это довольно много!</span>
+                  </div>
                 </div>
-              </div>
-              <div className="stat-card">
-                <span className="stat-icon">💰</span>
-                <div>
-                  <h4>₽45,900</h4>
-                  <p>средний LTV</p>
+                <div className="stat-card">
+                  <span className="stat-icon">📊</span>
+                  <div className="stat-content">
+                    <h4>28%</h4>
+                    <p>от всех ваших клиентов</p>
+                    <span className="stat-hint">Почти треть!</span>
+                  </div>
                 </div>
-              </div>
-              <div className="stat-card">
-                <span className="stat-icon">🔄</span>
-                <div>
-                  <h4>3.5</h4>
-                  <p>покупок в месяц</p>
+                <div className="stat-card">
+                  <span className="stat-icon">💰</span>
+                  <div className="stat-content">
+                    <h4>₽45,900</h4>
+                    <p>тратит один клиент за всё время</p>
+                    <span className="stat-hint">Очень хорошо!</span>
+                  </div>
+                </div>
+                <div className="stat-card">
+                  <span className="stat-icon">🛒</span>
+                  <div className="stat-content">
+                    <h4>3.5</h4>
+                    <p>покупки в месяц</p>
+                    <span className="stat-hint">Покупают часто</span>
+                  </div>
                 </div>
               </div>
             </div>
             <div className="details-grid">
               <div className="detail-card demographics-card glass-card">
                 <div className="card-header">
-                  <h4>Демография</h4>
-                  <button className="help-icon" aria-describedby="demo-tooltip" tabIndex="0">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                    </svg>
+                  <div className="card-title-group">
+                    <h4>👥 Кто эти люди</h4>
+                    <p className="card-subtitle">Возраст, пол и откуда они</p>
+                  </div>
+                  <button className="help-icon" aria-describedby="demo-tooltip" tabIndex="0" title="Подробнее">
+                    <span>?</span>
                   </button>
                   <div id="demo-tooltip" className="tooltip" role="tooltip" hidden>
-                    Распределение клиентов по возрасту, полу и географии
+                    <strong>Что это:</strong> Показывает, кто ваши постоянные клиенты - мужчины или женщины, сколько им лет, из каких городов.<br/>
+                    <strong>Зачем знать:</strong> Поможет лучше понять аудиторию и настроить рекламу.
                   </div>
                 </div>
                 <div className="chart-wrapper">
@@ -1366,34 +1407,50 @@ export default function Home() {
     // 4. Процессы - улучшенная с UX акцентом
     <section key="processes" id="page-processes" className="full-page scrollable-section">
       <div className="page-header">
-        <h2>Управление бизнес-процессами</h2>
-        <p>Контролируйте задачи, ресурсы и эффективность в одном месте</p>
+        <h2>⚡ Что делают ваши сотрудники?</h2>
+        <p>Следите за важными задачами, проектами и работой команды. Всё самое важное в одном месте.</p>
+        <div className="header-hint">
+          <span className="hint-icon">💡</span>
+          <span>Здесь вы увидите, какие задачи выполняются, что срочно требует внимания, и как работают разные отделы</span>
+        </div>
       </div>
 
       <div className="processes-container">
-        {/* Левая панель: Приоритетные задачи */}
+        {/* Левая панель: Важные задачи */}
         <aside className="task-priorities glass-card">
           <div className="panel-header">
-            <h3>Приоритетные задачи</h3>
+            <div className="panel-title-group">
+              <h3>🎯 Важные задачи</h3>
+              <p className="panel-subtitle">Что нужно сделать в первую очередь</p>
+            </div>
             <div className="task-filters">
-              <button className="filter-btn active" data-filter="all">Все</button>
-              <button className="filter-btn" data-filter="high">Высокий</button>
-              <button className="filter-btn" data-filter="today">Сегодня</button>
+              <button className="filter-btn active" data-filter="all">Все задачи</button>
+              <button className="filter-btn" data-filter="high">🔥 Срочно</button>
+              <button className="filter-btn" data-filter="today">📅 Сегодня</button>
             </div>
           </div>
           
           <div className="tasks-stats">
             <div className="stat-mini">
-              <span className="stat-value">12</span>
-              <span className="stat-label">активных</span>
+              <span className="stat-icon">⚡</span>
+              <div className="stat-info">
+                <span className="stat-value">12</span>
+                <span className="stat-label">активных задач</span>
+              </div>
             </div>
-            <div className="stat-mini">
-              <span className="stat-value">3</span>
-              <span className="stat-label">срочных</span>
+            <div className="stat-mini urgent">
+              <span className="stat-icon">🔥</span>
+              <div className="stat-info">
+                <span className="stat-value">3</span>
+                <span className="stat-label">срочных</span>
+              </div>
             </div>
-            <div className="stat-mini">
-              <span className="stat-value">85%</span>
-              <span className="stat-label">выполнено</span>
+            <div className="stat-mini success">
+              <span className="stat-icon">✅</span>
+              <div className="stat-info">
+                <span className="stat-value">85%</span>
+                <span className="stat-label">выполнено</span>
+              </div>
             </div>
           </div>
           
