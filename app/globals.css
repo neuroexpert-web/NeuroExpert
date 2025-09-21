@@ -4274,6 +4274,36 @@ textarea:focus {
   }
 }
 
+/* Audience Page Improvements */
+#page-audience {
+  width: 100%;
+  max-width: 100%;
+}
+
+#page-audience .page-header {
+  margin-bottom: 2rem;
+}
+
+#page-audience .page-header h2 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+#page-audience .page-header p {
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Better spacing for content */
+.audience-container {
+  height: calc(100vh - 200px);
+}
+
+/* Remove any max-width constraints */
+.segment-details-panel > * {
+  max-width: 100%;
+}
+
 /* Mobile Optimizations for Analytics */
 @media (max-width: 768px) {
   .filters-panel {

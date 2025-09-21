@@ -906,11 +906,6 @@ export default function Home() {
         <div className="segment-selector-panel glass-card">
           <div className="panel-header">
             <h4>Сегменты клиентов</h4>
-            <button className="info-btn" aria-label="Подробнее о сегментации">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-              </svg>
-            </button>
           </div>
           <ul role="tablist" aria-label="Список сегментов клиентов">
             <li 
@@ -1014,7 +1009,7 @@ export default function Home() {
           <div className="total-stats">
             <div className="stat-item">
               <span className="stat-label">Всего клиентов:</span>
-              <span className="stat-value">73</span>
+              <span className="stat-value">12,873</span>
             </div>
             <div className="stat-item">
               <span className="stat-label">Активных за месяц:</span>
@@ -1076,14 +1071,6 @@ export default function Home() {
               <div className="detail-card demographics-card glass-card">
                 <div className="card-header">
                   <h4>Демография</h4>
-                  <button className="help-icon" aria-describedby="demo-tooltip" tabIndex="0">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                    </svg>
-                  </button>
-                  <div id="demo-tooltip" className="tooltip" role="tooltip" hidden>
-                    Распределение клиентов по возрасту, полу и географии
-                  </div>
                 </div>
                 <div className="chart-wrapper">
                   <canvas id="loyalDemographicsChart"></canvas>
@@ -1153,14 +1140,6 @@ export default function Home() {
               <div className="detail-card ltv-card glass-card">
                 <div className="card-header">
                   <h4>Ценность клиента (LTV)</h4>
-                  <button className="help-icon" aria-describedby="ltv-tooltip" tabIndex="0">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                    </svg>
-                  </button>
-                  <div id="ltv-tooltip" className="tooltip" role="tooltip" hidden>
-                    Прогнозируемая прибыль от клиента за всё время сотрудничества
-                  </div>
                 </div>
                 <div className="ltv-content">
                   <div className="ltv-main">
