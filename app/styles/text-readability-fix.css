@@ -1,0 +1,332 @@
+/* 
+ИСПРАВЛЕНИЯ ЧИТАЕМОСТИ ТЕКСТА
+Улучшает контрастность, размеры шрифтов и читаемость
+*/
+
+/* === БАЗОВАЯ ТИПОГРАФИКА === */
+#analytics-dashboard {
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* === УЛУЧШЕННАЯ КОНТРАСТНОСТЬ ТЕКСТА === */
+#analytics-dashboard h1,
+#analytics-dashboard h2,
+#analytics-dashboard h3,
+#analytics-dashboard h4,
+#analytics-dashboard h5,
+#analytics-dashboard h6 {
+  color: #f8fafc !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.025em !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+#analytics-dashboard p {
+  color: #e2e8f0 !important;
+  line-height: 1.6 !important;
+  font-size: 15px !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+#analytics-dashboard .kpi-title {
+  color: #f1f5f9 !important;
+  font-weight: 600 !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+}
+
+#analytics-dashboard .kpi-subtitle {
+  color: #cbd5e1 !important;
+  font-weight: 400 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+#analytics-dashboard .kpi-description {
+  color: #cbd5e1 !important;
+  font-weight: 400 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* === УЛУЧШЕННЫЕ ЗНАЧЕНИЯ KPI === */
+#analytics-dashboard .kpi-value {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* === УЛУЧШЕННЫЕ ТРЕНДЫ === */
+#analytics-dashboard .kpi-trend {
+  background: rgba(0, 0, 0, 0.2) !important;
+  backdrop-filter: blur(8px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+#analytics-dashboard .kpi-trend.positive {
+  background: rgba(34, 197, 94, 0.15) !important;
+  border-color: rgba(34, 197, 94, 0.3) !important;
+  color: #bbf7d0 !important;
+}
+
+#analytics-dashboard .kpi-trend.negative {
+  background: rgba(239, 68, 68, 0.15) !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+  color: #fecaca !important;
+}
+
+#analytics-dashboard .explanation-text {
+  color: #bbf7d0 !important;
+  font-weight: 500 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* === УЛУЧШЕННЫЕ ПОДСКАЗКИ === */
+#analytics-dashboard .chart-hint {
+  background: rgba(59, 130, 246, 0.15) !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+  color: #bfdbfe !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+#analytics-dashboard .hint-icon {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1)) !important;
+}
+
+/* === УЛУЧШЕННЫЕ КАРТОЧКИ ИНСАЙТОВ === */
+#analytics-dashboard .insight-card h5 {
+  color: #f1f5f9 !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+}
+
+#analytics-dashboard .insight-value {
+  color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+}
+
+#analytics-dashboard .insight-detail {
+  color: #cbd5e1 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+#analytics-dashboard .action-text {
+  color: #c7d2fe !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* === УЛУЧШЕННЫЕ ФИЛЬТРЫ === */
+#analytics-dashboard .filter-group label {
+  color: #e2e8f0 !important;
+  font-weight: 500 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+#analytics-dashboard .filter-select {
+  color: #f8fafc !important;
+  background: rgba(15, 23, 42, 0.8) !important;
+  border: 1px solid rgba(71, 85, 105, 0.8) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+#analytics-dashboard .filter-select option {
+  background: #1e293b !important;
+  color: #f8fafc !important;
+}
+
+/* === УЛУЧШЕННЫЕ КНОПКИ === */
+#analytics-dashboard .refresh-button {
+  color: #f1f5f9 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+  background: rgba(99, 102, 241, 0.25) !important;
+  border: 1px solid rgba(99, 102, 241, 0.4) !important;
+}
+
+#analytics-dashboard .refresh-button:hover {
+  background: rgba(99, 102, 241, 0.35) !important;
+  border-color: rgba(99, 102, 241, 0.5) !important;
+  color: #ffffff !important;
+}
+
+#analytics-dashboard .filter-btn {
+  color: #e2e8f0 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+  background: rgba(30, 41, 59, 0.9) !important;
+  border: 1px solid rgba(71, 85, 105, 0.9) !important;
+}
+
+#analytics-dashboard .filter-btn:hover {
+  color: #f8fafc !important;
+  background: rgba(71, 85, 105, 0.9) !important;
+}
+
+#analytics-dashboard .filter-btn.active {
+  color: #ffffff !important;
+  background: rgba(99, 102, 241, 0.4) !important;
+  border-color: rgba(99, 102, 241, 0.6) !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* === УЛУЧШЕННЫЕ ТУЛТИПЫ === */
+#analytics-dashboard .tooltip {
+  background: rgba(15, 23, 42, 0.98) !important;
+  border: 1px solid rgba(71, 85, 105, 0.9) !important;
+  color: #f1f5f9 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+  backdrop-filter: blur(12px) !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5) !important;
+}
+
+#analytics-dashboard .tooltip strong {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+/* === УЛУЧШЕНИЕ ФОКУСА === */
+#analytics-dashboard .help-icon:focus,
+#analytics-dashboard .filter-select:focus,
+#analytics-dashboard .refresh-button:focus,
+#analytics-dashboard .filter-btn:focus {
+  outline: 2px solid rgba(99, 102, 241, 0.6) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2) !important;
+}
+
+/* === ИСПРАВЛЕНИЕ ПРОБЛЕМ С НАЛОЖЕНИЕМ === */
+#analytics-dashboard .page-header {
+  position: relative !important;
+  z-index: 10 !important;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, transparent 100%) !important;
+}
+
+#analytics-dashboard .filters-panel {
+  position: relative !important;
+  z-index: 9 !important;
+  clear: both !important;
+}
+
+#analytics-dashboard .kpi-section {
+  position: relative !important;
+  z-index: 8 !important;
+  clear: both !important;
+}
+
+#analytics-dashboard .kpi-cards {
+  position: relative !important;
+  z-index: 7 !important;
+  clear: both !important;
+}
+
+#analytics-dashboard .charts-section {
+  position: relative !important;
+  z-index: 6 !important;
+  clear: both !important;
+}
+
+#analytics-dashboard .traffic-insights-panel {
+  position: relative !important;
+  z-index: 5 !important;
+  clear: both !important;
+}
+
+#analytics-dashboard .performance-widget {
+  position: relative !important;
+  z-index: 4 !important;
+  clear: both !important;
+}
+
+#analytics-dashboard .ai-recommendations {
+  position: relative !important;
+  z-index: 3 !important;
+  clear: both !important;
+}
+
+/* === ПРИНУДИТЕЛЬНЫЕ ОТСТУПЫ === */
+#analytics-dashboard > * {
+  margin-bottom: 32px !important;
+}
+
+#analytics-dashboard > *:last-child {
+  margin-bottom: 60px !important;
+}
+
+/* === ИСПРАВЛЕНИЕ ПЕРЕПОЛНЕНИЯ === */
+#analytics-dashboard .glass-card {
+  overflow: visible !important;
+  word-wrap: break-word !important;
+  hyphens: auto !important;
+}
+
+#analytics-dashboard .chart-wrapper {
+  overflow: hidden !important;
+  border-radius: 12px !important;
+}
+
+/* === УЛУЧШЕНИЕ ЧИТАЕМОСТИ НА ТЕМНОМ ФОНЕ === */
+#analytics-dashboard {
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1a2e 25%, #16213e 50%, #1a1a2e 75%, #0a0e27 100%) !important;
+  background-attachment: fixed !important;
+}
+
+/* === ИСПРАВЛЕНИЕ ПРОБЛЕМ С МОБИЛЬНОЙ ВЕРСИЕЙ === */
+@media (max-width: 768px) {
+  #analytics-dashboard .page-header h2 {
+    font-size: 24px !important;
+    line-height: 1.3 !important;
+  }
+  
+  #analytics-dashboard .kpi-value {
+    font-size: 24px !important;
+  }
+  
+  #analytics-dashboard .chart-hint {
+    font-size: 12px !important;
+    padding: 10px 12px !important;
+  }
+  
+  #analytics-dashboard .insight-card {
+    margin-bottom: 16px !important;
+  }
+}
+
+/* === ИСПРАВЛЕНИЕ ПРОБЛЕМ С КОНТЕЙНЕРАМИ === */
+#analytics-dashboard .full-page {
+  padding-bottom: 60px !important;
+}
+
+/* === ПРИНУДИТЕЛЬНОЕ ИСПРАВЛЕНИЕ ПОЗИЦИОНИРОВАНИЯ === */
+#analytics-dashboard .glass-card {
+  position: relative !important;
+  transform: none !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+}
+
+/* === ИСПРАВЛЕНИЕ ПРОБЛЕМ С FLEX === */
+#analytics-dashboard .filters-panel {
+  display: block !important;
+}
+
+#analytics-dashboard .filter-group {
+  display: block !important;
+  margin-bottom: 16px !important;
+}
+
+#analytics-dashboard .filter-group:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* === ИСПРАВЛЕНИЕ СКРОЛЛА И ВЫСОТЫ === */
+#analytics-dashboard {
+  height: auto !important;
+  min-height: 100vh !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+#analytics-dashboard .scrollable-section {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}

@@ -1,0 +1,364 @@
+/* 
+МОБИЛЬНЫЕ ИСПРАВЛЕНИЯ ДЛЯ АНАЛИТИКИ
+Специальные стили для мобильных устройств
+*/
+
+/* === МОБИЛЬНАЯ ВЕРСИЯ === */
+@media (max-width: 768px) {
+  
+  /* Основной контейнер */
+  #analytics-dashboard {
+    padding: 0 !important;
+    background: #0f172a !important;
+  }
+  
+  /* Заголовок */
+  #analytics-dashboard .page-header {
+    padding: 20px 16px 16px 16px !important;
+    text-align: center !important;
+  }
+  
+  #analytics-dashboard .page-header h2 {
+    font-size: 22px !important;
+    margin-bottom: 8px !important;
+  }
+  
+  #analytics-dashboard .page-header p {
+    font-size: 14px !important;
+    margin-bottom: 12px !important;
+  }
+  
+  #analytics-dashboard .header-hint {
+    padding: 12px 16px !important;
+    font-size: 13px !important;
+    text-align: left !important;
+  }
+  
+  /* Фильтры */
+  #analytics-dashboard .filters-panel {
+    margin: 16px 16px 24px 16px !important;
+    padding: 16px !important;
+  }
+  
+  #analytics-dashboard .filters-intro h3 {
+    font-size: 16px !important;
+    margin-bottom: 12px !important;
+  }
+  
+  #analytics-dashboard .filter-group {
+    margin-bottom: 12px !important;
+  }
+  
+  #analytics-dashboard .filter-group label {
+    font-size: 13px !important;
+    margin-bottom: 6px !important;
+  }
+  
+  #analytics-dashboard .filter-select {
+    padding: 10px 12px !important;
+    font-size: 13px !important;
+  }
+  
+  #analytics-dashboard .refresh-button {
+    padding: 10px 16px !important;
+    font-size: 13px !important;
+  }
+  
+  /* KPI секция */
+  #analytics-dashboard .kpi-section {
+    margin: 0 16px 20px 16px !important;
+    padding: 16px !important;
+  }
+  
+  #analytics-dashboard .kpi-section-title {
+    font-size: 20px !important;
+    margin-bottom: 8px !important;
+  }
+  
+  #analytics-dashboard .kpi-section-description {
+    font-size: 14px !important;
+  }
+  
+  /* KPI карточки */
+  #analytics-dashboard .kpi-cards {
+    margin: 0 16px 32px 16px !important;
+    gap: 16px !important;
+  }
+  
+  #analytics-dashboard .kpi-card {
+    padding: 16px !important;
+    min-height: 160px !important;
+  }
+  
+  #analytics-dashboard .kpi-header {
+    gap: 12px !important;
+    margin-bottom: 12px !important;
+  }
+  
+  #analytics-dashboard .kpi-icon {
+    font-size: 24px !important;
+  }
+  
+  #analytics-dashboard .kpi-title {
+    font-size: 16px !important;
+  }
+  
+  #analytics-dashboard .kpi-subtitle {
+    font-size: 12px !important;
+  }
+  
+  #analytics-dashboard .kpi-value {
+    font-size: 24px !important;
+    margin: 12px 0 8px 0 !important;
+  }
+  
+  #analytics-dashboard .kpi-description {
+    font-size: 13px !important;
+    margin-bottom: 8px !important;
+  }
+  
+  #analytics-dashboard .kpi-trend {
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+  }
+  
+  #analytics-dashboard .kpi-explanation {
+    padding: 8px 12px !important;
+    margin-top: 8px !important;
+  }
+  
+  #analytics-dashboard .explanation-text {
+    font-size: 12px !important;
+  }
+  
+  /* Графики */
+  #analytics-dashboard .charts-section {
+    margin: 0 16px 32px 16px !important;
+  }
+  
+  #analytics-dashboard .charts-intro {
+    margin-bottom: 20px !important;
+  }
+  
+  #analytics-dashboard .section-title {
+    font-size: 20px !important;
+    margin-bottom: 8px !important;
+  }
+  
+  #analytics-dashboard .section-description {
+    font-size: 14px !important;
+  }
+  
+  #analytics-dashboard .charts-container {
+    gap: 20px !important;
+  }
+  
+  #analytics-dashboard .chart-card {
+    padding: 16px !important;
+    min-height: 320px !important;
+  }
+  
+  #analytics-dashboard .chart-header {
+    margin-bottom: 16px !important;
+    gap: 12px !important;
+  }
+  
+  #analytics-dashboard .chart-title-group h4 {
+    font-size: 16px !important;
+    margin-bottom: 4px !important;
+  }
+  
+  #analytics-dashboard .chart-subtitle {
+    font-size: 12px !important;
+  }
+  
+  #analytics-dashboard .chart-filters {
+    gap: 6px !important;
+  }
+  
+  #analytics-dashboard .filter-btn {
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+  }
+  
+  #analytics-dashboard .chart-hint {
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+    margin-bottom: 16px !important;
+  }
+  
+  #analytics-dashboard .chart-wrapper {
+    min-height: 200px !important;
+    padding: 12px !important;
+  }
+  
+  /* Инсайты */
+  #analytics-dashboard .traffic-insights-panel {
+    margin: 0 16px 32px 16px !important;
+  }
+  
+  #analytics-dashboard .insights-intro h4 {
+    font-size: 18px !important;
+    margin-bottom: 6px !important;
+  }
+  
+  #analytics-dashboard .insights-intro p {
+    font-size: 14px !important;
+  }
+  
+  #analytics-dashboard .insight-card {
+    padding: 16px !important;
+    min-height: 140px !important;
+  }
+  
+  #analytics-dashboard .insight-icon {
+    font-size: 20px !important;
+  }
+  
+  #analytics-dashboard .insight-card h5 {
+    font-size: 14px !important;
+    margin-bottom: 6px !important;
+  }
+  
+  #analytics-dashboard .insight-value {
+    font-size: 16px !important;
+    margin-bottom: 4px !important;
+  }
+  
+  #analytics-dashboard .insight-detail {
+    font-size: 12px !important;
+    margin-bottom: 12px !important;
+  }
+  
+  #analytics-dashboard .insight-action {
+    padding: 8px 12px !important;
+  }
+  
+  #analytics-dashboard .action-text {
+    font-size: 12px !important;
+  }
+  
+  /* Производительность */
+  #analytics-dashboard .performance-widget {
+    margin: 0 16px 32px 16px !important;
+    padding: 16px !important;
+  }
+  
+  #analytics-dashboard .widget-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+  
+  #analytics-dashboard .header-content h4 {
+    font-size: 16px !important;
+  }
+  
+  #analytics-dashboard .widget-description {
+    font-size: 13px !important;
+  }
+}
+
+/* === ОЧЕНЬ МАЛЕНЬКИЕ ЭКРАНЫ === */
+@media (max-width: 480px) {
+  #analytics-dashboard .page-header {
+    padding: 16px 12px 12px 12px !important;
+  }
+  
+  #analytics-dashboard .page-header h2 {
+    font-size: 20px !important;
+  }
+  
+  #analytics-dashboard .filters-panel,
+  #analytics-dashboard .kpi-section,
+  #analytics-dashboard .kpi-cards,
+  #analytics-dashboard .charts-section,
+  #analytics-dashboard .traffic-insights-panel,
+  #analytics-dashboard .performance-widget {
+    margin-left: 12px !important;
+    margin-right: 12px !important;
+  }
+  
+  #analytics-dashboard .kpi-card,
+  #analytics-dashboard .chart-card,
+  #analytics-dashboard .insight-card,
+  #analytics-dashboard .performance-widget {
+    padding: 12px !important;
+  }
+  
+  #analytics-dashboard .kpi-value {
+    font-size: 20px !important;
+  }
+  
+  #analytics-dashboard .chart-wrapper {
+    min-height: 180px !important;
+    padding: 8px !important;
+  }
+}
+
+/* === ИСПРАВЛЕНИЕ СПЕЦИФИЧЕСКИХ ПРОБЛЕМ === */
+
+/* Убираем абсолютное позиционирование */
+#analytics-dashboard .absolute {
+  position: relative !important;
+}
+
+/* Исправляем фиксированные элементы */
+#analytics-dashboard .fixed {
+  position: relative !important;
+}
+
+/* Убираем отрицательные margin */
+#analytics-dashboard * {
+  margin-top: 0 !important;
+}
+
+#analytics-dashboard *:not(:first-child) {
+  margin-top: inherit !important;
+}
+
+/* Исправляем overflow */
+#analytics-dashboard {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+/* Принудительно исправляем проблемы с наложением */
+#analytics-dashboard > section,
+#analytics-dashboard > div,
+#analytics-dashboard > main {
+  position: relative !important;
+  z-index: auto !important;
+  display: block !important;
+  clear: both !important;
+}
+
+/* Исправляем проблемы с float */
+#analytics-dashboard * {
+  float: none !important;
+}
+
+/* Безопасные отступы между секциями */
+#analytics-dashboard .page-header + * {
+  margin-top: 24px !important;
+}
+
+#analytics-dashboard .filters-panel + * {
+  margin-top: 32px !important;
+}
+
+#analytics-dashboard .kpi-cards + * {
+  margin-top: 40px !important;
+}
+
+#analytics-dashboard .charts-section + * {
+  margin-top: 48px !important;
+}
+
+#analytics-dashboard .traffic-insights-panel + * {
+  margin-top: 48px !important;
+}
+
+#analytics-dashboard .performance-section + * {
+  margin-top: 48px !important;
+}

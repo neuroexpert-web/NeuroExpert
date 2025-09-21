@@ -795,9 +795,11 @@ export default function Home() {
         </div>
 
         {/* Виджет производительности сайта */}
-        <Suspense fallback={<div className="widget-skeleton">Загрузка виджета производительности...</div>}>
-          <PerformanceWidget />
-        </Suspense>
+        <div className="performance-section">
+          <Suspense fallback={<div className="widget-skeleton">Загрузка виджета производительности...</div>}>
+            <PerformanceWidget />
+          </Suspense>
+        </div>
 
         {/* AI рекомендации с пояснениями */}
         <section className="ai-recommendations">
