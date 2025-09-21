@@ -115,7 +115,7 @@ const AboutAnimations = dynamic(() => import('./components/AboutAnimations'), {
 });
 
 // Динамические импорты для страницы калькулятора цен
-const PricingCalculator = dynamic(() => import('./components/PricingCalculator'), {
+const PricingCalculator = dynamic(() => import('./components/PricingCalculator.js'), {
   ssr: false,
   loading: () => null
 });
@@ -3282,7 +3282,9 @@ export default function Home() {
       
       {/* Компоненты для управления калькулятором */}
       <Suspense fallback={null}>
-        <PricingCalculator />
+        <div id="roi-calculator">
+          <PricingCalculator />
+        </div>
         <PricingComparison />
         <PricingTooltips />
       </Suspense>
