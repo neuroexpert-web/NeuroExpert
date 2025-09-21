@@ -723,7 +723,6 @@ export default function Home() {
               {FunnelChart && <FunnelChart darkMode={true} />}
             </div>
           </div>
-          </div>
           
           {/* Информационная панель с метриками */}
           <div className="traffic-insights-panel">
@@ -755,6 +754,7 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
         </div>
 
         {/* AI рекомендации с пояснениями */}

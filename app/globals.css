@@ -3603,6 +3603,7 @@ textarea:focus {
   background: rgba(255, 255, 255, 0.03);
   border-radius: 20px;
   border: 1px solid rgba(139, 92, 246, 0.2);
+  width: 100%;
 }
 
 .traffic-insights-panel h4 {
@@ -4219,6 +4220,7 @@ textarea:focus {
   grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
   width: 100%;
+  margin-bottom: 2rem;
 }
 
 .chart-card {
