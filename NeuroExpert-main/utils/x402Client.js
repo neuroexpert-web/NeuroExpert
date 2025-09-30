@@ -4,6 +4,7 @@
  */
 
 import { X402_CONFIG, getChainConfig, getTokenConfig, getTokenAddress } from '../lib/x402Config';
+import { signX402Payment, getTokenBalance, sendTokenTransaction } from './x402Payment';
 
 /**
  * Класс для работы с протоколом x402
@@ -57,6 +58,23 @@ export class X402Client {
     } catch (error) {
       console.error('Ошибка при инициации платежа:', error);
       throw error;
+    }
+  }
+
+  /**
+   * Подписание платежа через кошелек пользователя
+   * @param {object} paymentDetails - Детали платежа из initiatePayment
+   * @param {string} walletAddress - Адрес кошелька пользователя
+   * @returns {Promise<string>} Подписанный payload (base64)
+   */
+  async signPayment(paymentDetails, walletAddress) {
+    try {
+      // Используем ethers.js для реального подписания через EIP-712
+      const signedPayload = await signX402Payment(paymentDetails, walletAddress);
+      return signedPayload;
+    } catch (error) {
+      console.error('Ошибка при подписании платежа:', error);
+      throw new Error(`Не удалось подписать платеж: ${error.message}`);
     }
   }
 
@@ -215,6 +233,127 @@ export class X402Client {
   getExplorerUrl(txHash, chain = X402_CONFIG.defaultChain) {
     const chainConfig = getChainConfig(chain);
     return `${chainConfig.explorerUrl}/tx/${txHash}`;
+  }
+
+  /**
+   * Получение баланса токена пользователя
+   * @param {string} tokenSymbol - Символ токена
+   * @param {string} walletAddress - Адрес кошелька
+   * @param {string} chain - Название сети
+   * @returns {Promise<string>} Баланс в читаемом формате
+   */
+  async getTokenBalance(tokenSymbol, walletAddress, chain = X402_CONFIG.defaultChain) {
+    try {
+      return await getTokenBalance(tokenSymbol, walletAddress, chain);
+    } catch (error) {
+      console.error('Ошибка при получении баланса токена:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Прямая отправка токенов (fallback метод)
+   * Используется если x402 facilitator недоступен
+   * @param {string} tokenSymbol - Символ токена
+   * @param {string} recipientAddress - Адрес получателя
+   * @param {number} amount - Сумма в долларах
+   * @param {string} chain - Название сети
+   * @returns {Promise<object>} Результат транзакции
+   */
+  async sendTokenDirect(tokenSymbol, recipientAddress, amount, chain = X402_CONFIG.defaultChain) {
+    try {
+      return await sendTokenTransaction(tokenSymbol, recipientAddress, amount, chain);
+    } catch (error) {
+      console.error('Ошибка при прямой отправке токенов:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Полный цикл платежа: инициация → подписание → верификация → проведение
+   * @param {number} amount - Сумма в USD
+   * @param {string} walletAddress - Адрес кошелька пользователя
+   * @param {string} chain - Название блокчейн сети
+   * @param {string} token - Символ токена
+   * @returns {Promise<object>} Результат платежа
+   */
+  async executePayment(amount, walletAddress, chain = X402_CONFIG.defaultChain, token = X402_CONFIG.defaultToken) {
+    try {
+      // Шаг 1: Инициация платежа
+      console.log('Шаг 1: Инициация платежа...');
+      const paymentDetails = await this.initiatePayment(amount, chain, token);
+
+      // Шаг 2: Подписание через кошелек пользователя
+      console.log('Шаг 2: Подписание платежа через кошелек...');
+      const signedPayload = await this.signPayment(paymentDetails, walletAddress);
+
+      // Шаг 3: Верификация через facilitator
+      console.log('Шаг 3: Верификация платежа...');
+      const verificationResult = await this.verifyPayment(signedPayload);
+
+      if (!verificationResult.valid) {
+        throw new Error(`Платеж не прошел верификацию: ${verificationResult.reason}`);
+      }
+
+      // Шаг 4: Проведение транзакции
+      console.log('Шаг 4: Проведение транзакции в блокчейне...');
+      const settlementResult = await this.settlePayment(signedPayload);
+
+      return {
+        success: true,
+        txHash: settlementResult.txHash,
+        status: settlementResult.status,
+        blockNumber: settlementResult.blockNumber,
+        explorerUrl: this.getExplorerUrl(settlementResult.txHash, chain),
+        amount: amount,
+        chain: chain,
+        token: token
+      };
+    } catch (error) {
+      console.error('Ошибка при выполнении платежа:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Упрощенный метод платежа с автоматическим fallback
+   * Пытается использовать x402, при неудаче использует прямую отправку токенов
+   * @param {number} amount - Сумма в USD
+   * @param {string} walletAddress - Адрес кошелька пользователя
+   * @param {string} chain - Название блокчейн сети
+   * @param {string} token - Символ токена
+   * @returns {Promise<object>} Результат платежа
+   */
+  async executePaymentWithFallback(amount, walletAddress, chain = X402_CONFIG.defaultChain, token = X402_CONFIG.defaultToken) {
+    try {
+      // Сначала проверяем доступность facilitator
+      const isFacilitatorAvailable = await this.checkHealth();
+
+      if (isFacilitatorAvailable) {
+        // Используем x402 протокол
+        console.log('Используем x402 протокол для платежа');
+        return await this.executePayment(amount, walletAddress, chain, token);
+      } else {
+        // Fallback: прямая отправка токенов
+        console.log('Facilitator недоступен, используем прямую отправку токенов');
+        const result = await this.sendTokenDirect(token, this.recipientAddress, amount, chain);
+        
+        return {
+          success: result.success,
+          txHash: result.txHash,
+          status: result.status,
+          blockNumber: result.blockNumber,
+          explorerUrl: result.explorerUrl,
+          amount: amount,
+          chain: chain,
+          token: token,
+          method: 'direct' // Указываем что использовали прямой метод
+        };
+      }
+    } catch (error) {
+      console.error('Ошибка при выполнении платежа (с fallback):', error);
+      throw error;
+    }
   }
 }
 
