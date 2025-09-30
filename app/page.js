@@ -20,7 +20,13 @@ export default function Home() {
   const [currentSection, setCurrentSection] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  const sections = ['Главная', 'Агенты', 'Баланс', 'FAQ', 'Контакты'];
+  const sections = [
+    { name: 'Главная' },
+    { name: 'Агенты' },
+    { name: 'Баланс' },
+    { name: 'FAQ' },
+    { name: 'Контакты' }
+  ];
 
   const handleSectionChange = useCallback((index) => {
     setCurrentSection(index);
