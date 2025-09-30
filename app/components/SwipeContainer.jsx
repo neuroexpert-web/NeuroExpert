@@ -412,7 +412,7 @@ function ProgressIndicator({ total, current, sections, onDotClick }) {
               whileTap={{ scale: 0.95 }}
             >
               <span className={styles.navIcon}>{sectionIcons[index] || '📄'}</span>
-              <span className={styles.navLabel}>{section}</span>
+              <span className={styles.navLabel}>{section.name || `Section ${index + 1}`}</span>
             </motion.button>
           ))}
         </div>
