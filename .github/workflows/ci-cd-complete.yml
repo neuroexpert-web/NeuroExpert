@@ -166,7 +166,7 @@ jobs:
     
     steps:
     - name: Send Telegram notification
-      if: ${{ secrets.TELEGRAM_BOT_TOKEN != '' }}
+      continue-on-error: true
       run: |
         if [ "${{ needs.deploy-production.result }}" == "success" ]; then
           MESSAGE="✅ NeuroExpert deployed successfully to production!"
