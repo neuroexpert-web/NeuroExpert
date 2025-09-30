@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head><title>Quick AI Test</title></head>
+<body style="background: #111; color: white; font-family: Arial; padding: 20px;">
+    <h1>🤖 Quick AI Test</h1>
+    <button onclick="testAI()" style="background: #0066ff; color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-size: 16px;">Test AI Now</button>
+    <div id="result" style="margin-top: 20px; padding: 15px; background: #222; border-radius: 8px;"></div>
+    
+    <script>
+        async function testAI() {
+            const result = document.getElementById('result');
+            result.innerHTML = '⏳ Testing AI...';
+            
+            try {
+                const response = await fetch('/api/assistant', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    body: JSON.stringify({ message: 'Привет! Тест AI!' })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    result.innerHTML = `✅ <strong>AI работает!</strong><br><br>${data.response || JSON.stringify(data)}`;
+                } else {
+                    result.innerHTML = `❌ Error ${response.status}: ${await response.text()}`;
+                }
+            } catch (error) {
+                result.innerHTML = `❌ Network Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

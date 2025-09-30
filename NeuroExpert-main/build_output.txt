@@ -1,0 +1,67 @@
+
+> neuroexpert-app@3.0.0 build
+> next build
+
+  ▲ Next.js 14.2.32
+  - Experiments (use with caution):
+    · cpus
+    · turbo
+    · optimizeCss
+
+   Creating an optimized production build ...
+   Using tsconfig file: ./tsconfig.json
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+WARNING: Environment variables JWT_SECRET and ADMIN_PASSWORD_HASH must be set in production.
+Generate a secure ADMIN_PASSWORD_HASH via "npm run generate:password -- <password>" and
+place both values into your hosting provider dashboard or a local .env file.
+No AI API keys configured. Please check environment variables.
+   Generating static pages (0/26) ...
+No AI API keys configured. Please check environment variables.
+   Generating static pages (6/26) 
+   Generating static pages (12/26) 
+   Generating static pages (19/26) 
+Merging inline stylesheets into a single <style> tag skipped, no inline stylesheets to merge
+Time 32.954732
+Merging inline stylesheets into a single <style> tag skipped, no inline stylesheets to merge
+Time 33.366578
+ ✓ Generating static pages (26/26)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                            Size     First Load JS
+┌ ○ /                                  36.1 kB         310 kB
+├ ○ /_not-found                        188 B           274 kB
+├ ƒ /api/admin/auth                    0 B                0 B
+├ ƒ /api/ai-agent                      0 B                0 B
+├ ƒ /api/analytics/batch               0 B                0 B
+├ ƒ /api/analytics/track               0 B                0 B
+├ ƒ /api/assistant                     0 B                0 B
+├ ○ /api/assistant/test                0 B                0 B
+├ ○ /api/check-claude                  0 B                0 B
+├ ○ /api/claude-balance                0 B                0 B
+├ ƒ /api/contact-form                  0 B                0 B
+├ ○ /api/debug                         0 B                0 B
+├ ○ /api/debug-env                     0 B                0 B
+├ ƒ /api/health                        0 B                0 B
+├ ○ /api/simple-test                   0 B                0 B
+├ ƒ /api/telegram-diagnostic           0 B                0 B
+├ ƒ /api/telegram-notify               0 B                0 B
+├ ○ /api/telegram-test                 0 B                0 B
+├ ○ /api/test                          0 B                0 B
+├ ƒ /api/test-claude                   0 B                0 B
+├ ○ /api/test-gemini                   0 B                0 B
+├ ○ /test-ai-agents                    5.93 kB         280 kB
+├ ○ /test-workspace                    540 B           275 kB
+└ ○ /workspace-debug                   1.29 kB         276 kB
++ First Load JS shared by all          276 kB
+  ├ chunks/vendor-8a519a9dcc0fc997.js  271 kB
+  └ other shared chunks (total)        4.35 kB
+
+
+ƒ Middleware                           25.8 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

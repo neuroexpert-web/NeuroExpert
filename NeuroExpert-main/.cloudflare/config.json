@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "build": {
+    "command": "npm run build",
+    "directory": ".next",
+    "environment": {
+      "NODE_VERSION": "20"
+    }
+  }
+}

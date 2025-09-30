@@ -1,0 +1,489 @@
+/* Pricing Calculator - Polar Night Theme */
+
+.calculator {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0e1a 0%, #1a2138 50%, #2a3757 100%);
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Header */
+.header {
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, 
+    rgba(34, 211, 238, 0.05) 0%, 
+    rgba(168, 85, 247, 0.05) 100%);
+  border-bottom: 1px solid var(--glass-border);
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 900;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #00d4ff 0%, #a855f7 50%, #ff0080 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+  filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.3));
+}
+
+.titleIcon {
+  font-size: 2.5rem;
+  filter: none;
+  -webkit-text-fill-color: initial;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+/* Main Content */
+.mainContent {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 2rem;
+  padding: 2rem;
+  overflow: hidden;
+}
+
+/* Configurator Section */
+.configurator {
+  overflow-y: auto;
+  padding-right: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Scrollbar */
+.configurator::-webkit-scrollbar {
+  width: 10px;
+}
+
+.configurator::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.configurator::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.3);
+  border-radius: 5px;
+}
+
+.configurator::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 85, 247, 0.5);
+}
+
+/* Glass Card Effect */
+.glassCard {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow);
+}
+
+/* Sections */
+.section {
+  padding: 2rem;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem 0;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Parameters */
+.paramGroup {
+  margin-bottom: 2rem;
+}
+
+.paramGroup:last-child {
+  margin-bottom: 0;
+}
+
+.paramLabel {
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.radioGroup,
+.checkboxGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.radioLabel,
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.radioLabel:hover,
+.checkboxLabel:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--aurora-purple);
+}
+
+.radioLabel input,
+.checkboxLabel input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--aurora-purple);
+}
+
+/* Service Categories */
+.serviceCategory {
+  margin-bottom: 2rem;
+}
+
+.categoryTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--aurora-cyan);
+  margin-bottom: 1rem;
+}
+
+.serviceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.serviceCard {
+  position: relative;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.serviceCard:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--aurora-cyan);
+  transform: translateY(-2px);
+}
+
+.serviceCard.selected {
+  background: rgba(168, 85, 247, 0.1);
+  border-color: var(--aurora-purple);
+}
+
+.serviceName {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.servicePrice {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.checkmark {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 24px;
+  height: 24px;
+  background: var(--aurora-purple);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* Results Section */
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
+.results::-webkit-scrollbar {
+  width: 10px;
+}
+
+.results::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.results::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.3);
+  border-radius: 5px;
+}
+
+.resultCard {
+  padding: 2rem;
+}
+
+.resultTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 2rem 0;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.priceDisplay {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.priceLabel {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.priceValue {
+  font-size: 3rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--aurora-cyan) 0%, var(--aurora-purple) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.coefficients {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.coefficients h3 {
+  font-size: 1.1rem;
+  margin: 0 0 1rem 0;
+  color: var(--text-primary);
+}
+
+.coefficients ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.coefficients li {
+  padding: 0.5rem 0;
+  color: var(--text-secondary);
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ROI Section */
+.roiButton {
+  width: 100%;
+  padding: 1rem;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid var(--aurora-purple);
+  border-radius: 12px;
+  color: var(--aurora-purple);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.roiButton:hover {
+  background: rgba(168, 85, 247, 0.2);
+}
+
+.roiSection {
+  overflow: hidden;
+}
+
+.roiValue {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 1.5rem;
+  background: rgba(16, 185, 129, 0.1);
+  border-radius: 12px;
+}
+
+.roiLabel {
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.roiPercent {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--aurora-green);
+}
+
+.roiDescription {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+/* CTA Button */
+.ctaButton {
+  width: 100%;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, var(--aurora-cyan) 0%, var(--aurora-purple) 100%);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.ctaButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+}
+
+.ctaArrow {
+  font-size: 1.3rem;
+  transition: transform 0.3s ease;
+}
+
+.ctaButton:hover .ctaArrow {
+  transform: translateX(5px);
+}
+
+/* Recommendations */
+.recommendations {
+  padding: 1.5rem;
+}
+
+.recommendTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.recommendList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recommendList li {
+  padding: 0.75rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.recommendList li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--aurora-cyan);
+}
+
+/* Mobile Responsive */
+@media (max-width: 1200px) {
+  .mainContent {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .results {
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .calculator {
+    padding-top: 2rem;
+  }
+
+  .header {
+    padding: 1rem;
+    margin-top: 2rem;
+  }
+
+  .title {
+    font-size: 1.75rem;
+    font-weight: 700;
+  }
+
+  .titleIcon {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .mainContent {
+    padding: 1rem;
+  }
+
+  .section {
+    padding: 1.5rem;
+  }
+
+  .serviceGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .priceValue {
+    font-size: 2.5rem;
+  }
+
+  .radioGroup,
+  .checkboxGroup {
+    flex-direction: column;
+  }
+}

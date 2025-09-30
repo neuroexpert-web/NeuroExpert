@@ -1,0 +1,369 @@
+.chatContainer {
+  width: 100%;
+  max-width: 600px;
+  height: 700px;
+  margin: 0 auto;
+  background: #1a1a2e;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chatHeader {
+  background: linear-gradient(135deg, #2a2a4e 0%, #1a1a2e 100%);
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.chatHeader h3 {
+  margin: 0;
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+.status {
+  font-size: 0.85rem;
+  color: #00ff88;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.settingsButton {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #fff;
+  transition: transform 0.3s ease;
+}
+
+.settingsButton:hover {
+  transform: rotate(45deg);
+}
+
+.settings {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.settings h4 {
+  margin: 0 0 0.5rem 0;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.agentButtons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.agentButtons button {
+  padding: 0.4rem 0.8rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.85rem;
+}
+
+.agentButtons button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.agentButtons button.selected {
+  background: #00ff88;
+  color: #000;
+  border-color: #00ff88;
+}
+
+.messagesContainer {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+.messagesContainer::-webkit-scrollbar {
+  width: 6px;
+}
+
+.messagesContainer::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.messagesContainer::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message.user {
+  align-items: flex-end;
+}
+
+.message.assistant {
+  align-items: flex-start;
+}
+
+.messageContent {
+  max-width: 80%;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.user .messageContent {
+  background: linear-gradient(135deg, #00ff88 0%, #00ccff 100%);
+  color: #000;
+  border-bottom-right-radius: 4px;
+}
+
+.assistant .messageContent {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-bottom-left-radius: 4px;
+}
+
+.messageFooter {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.75rem;
+  color: #666;
+  padding: 0 0.5rem;
+}
+
+.timestamp {
+  color: #666;
+}
+
+.agentBadge {
+  background: rgba(0, 255, 136, 0.2);
+  color: #00ff88;
+  padding: 0.1rem 0.4rem;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+.qualityBadge {
+  font-weight: bold;
+  font-size: 0.7rem;
+}
+
+.typingIndicator {
+  display: flex;
+  gap: 0.3rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  width: fit-content;
+  margin-top: 0.5rem;
+}
+
+.typingIndicator span {
+  width: 8px;
+  height: 8px;
+  background: #00ff88;
+  border-radius: 50%;
+  animation: typing 1.4s infinite;
+}
+
+.typingIndicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typingIndicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing {
+  0%, 60%, 100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  30% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+.quickActions {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.quickActions::-webkit-scrollbar {
+  display: none;
+}
+
+.quickAction {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  font-size: 0.85rem;
+}
+
+.quickAction:hover:not(:disabled) {
+  background: rgba(0, 255, 136, 0.1);
+  border-color: #00ff88;
+  transform: translateY(-2px);
+}
+
+.quickAction:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.actionIcon {
+  font-size: 1.1rem;
+}
+
+.actionText {
+  font-size: 0.85rem;
+}
+
+.inputContainer {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  color: #fff;
+  resize: none;
+  outline: none;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  max-height: 100px;
+}
+
+.input:focus {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #00ff88;
+}
+
+.input:disabled {
+  opacity: 0.5;
+}
+
+.sendButton {
+  background: linear-gradient(135deg, #00ff88 0%, #00ccff 100%);
+  border: none;
+  border-radius: 12px;
+  padding: 0.75rem 1.25rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+}
+
+.sendButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(0, 255, 136, 0.4);
+}
+
+.sendButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.footer {
+  padding: 0.75rem;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.3);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+  .chatContainer {
+    height: 100vh;
+    max-width: 100%;
+    border-radius: 0;
+  }
+
+  .quickActions {
+    padding: 0.5rem;
+  }
+
+  .quickAction {
+    padding: 0.4rem 0.8rem;
+  }
+
+  .actionText {
+    display: none;
+  }
+
+  .messageContent {
+    max-width: 85%;
+  }
+}

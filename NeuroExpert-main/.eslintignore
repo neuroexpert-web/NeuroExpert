@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+.next/
+out/
+
+# Testing
+coverage/
+*.test.js
+*.test.ts
+*.test.tsx
+__tests__/
+
+# Build outputs
+build/
+dist/
+
+# Config files
+*.config.js
+*.config.ts
+
+# Temporary files
+*.backup.js
+*.disabled
+
+# Specific files with JSX pragma
+app/components/HeroSection.tsx
+app/components/JourneySection.tsx
+app/components/PricingSection.tsx
+app/components/WhyUsSection.tsx
+app/page.js
+app/page.new.js
+app/page.premium.js

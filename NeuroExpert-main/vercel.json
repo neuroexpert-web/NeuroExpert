@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ],
+  "functions": {
+    "app/api/**/*.ts": {
+      "runtime": "nodejs20.x"
+    }
+  },
+  "crons": [],
+  "env": {
+    "FORCE_CACHE_BUST": "2025-01-23-COMPLETE-REDEPLOY-v3.1.0",
+    "DEPLOYMENT_TRIGGER": "FORCE_REBUILD_ALL_COMPONENTS"
+  }
+}

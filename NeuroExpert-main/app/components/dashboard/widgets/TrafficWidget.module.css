@@ -1,0 +1,423 @@
+/* Traffic Widget Styles */
+
+.widget {
+  height: 100%;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ==========================================
+   LOADING & ERROR STATES
+   ========================================== */
+
+.loadingState,
+.errorState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #94a3b8;
+  text-align: center;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(148, 163, 184, 0.2);
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+.errorState {
+  color: #fca5a5;
+}
+
+.errorIcon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.retryButton {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ef4444;
+  border-radius: 6px;
+  background: rgba(239, 68, 68, 0.1);
+  color: #fca5a5;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.retryButton:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+/* ==========================================
+   MAIN METRICS
+   ========================================== */
+
+.mainMetrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+}
+
+.metricCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.metricCard:hover {
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(148, 163, 184, 0.2);
+  transform: translateY(-2px);
+}
+
+.metricIcon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.metricContent {
+  text-align: center;
+  flex: 1;
+}
+
+.metricValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-bottom: 0.25rem;
+}
+
+.metricLabel {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.liveIndicator {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.625rem;
+  color: #10b981;
+  font-weight: 600;
+}
+
+.liveDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  animation: pulse 2s infinite;
+}
+
+.trendBadge {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: white;
+}
+
+.trendBadge.positive {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.trendBadge.negative {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+/* ==========================================
+   SECTION TITLES
+   ========================================== */
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.sectionIcon {
+  font-size: 1.125rem;
+}
+
+/* ==========================================
+   TRAFFIC SOURCES
+   ========================================== */
+
+.trafficSources {
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.sourcesList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sourceItem {
+  padding: 0.75rem;
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.sourceHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.sourceName {
+  font-weight: 600;
+  color: #f8fafc;
+  font-size: 0.875rem;
+}
+
+.sourcePercent {
+  font-weight: 700;
+  color: #3b82f6;
+  font-size: 0.875rem;
+}
+
+.sourceBar {
+  height: 6px;
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.sourceProgress {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.sourceUsers {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+/* ==========================================
+   TOP PAGES
+   ========================================== */
+
+.topPages {
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.pagesList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pageItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  transition: all 0.2s ease;
+}
+
+.pageItem:hover {
+  background: rgba(15, 23, 42, 0.8);
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+.pageRank {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.pageInfo {
+  flex: 1;
+}
+
+.pagePath {
+  font-weight: 600;
+  color: #f8fafc;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.pageStats {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.pageConversion {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.pageChart {
+  width: 60px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+.sparkline {
+  display: flex;
+  align-items: flex-end;
+  gap: 1px;
+  height: 100%;
+}
+
+.sparkBar {
+  flex: 1;
+  background: #6b7280;
+  border-radius: 1px;
+  transition: all 0.2s ease;
+}
+
+/* ==========================================
+   ADDITIONAL METRICS
+   ========================================== */
+
+.additionalMetrics {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.additionalMetric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.additionalLabel {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  text-align: center;
+}
+
+.additionalValue {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+/* ==========================================
+   UPDATE STATUS
+   ========================================== */
+
+.updateStatus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.updateIcon {
+  font-size: 0.875rem;
+}
+
+.updateText {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+/* ==========================================
+   ANIMATIONS
+   ========================================== */
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (max-width: 768px) {
+  .mainMetrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .pageItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .pageChart {
+    width: 100%;
+  }
+  
+  .additionalMetrics {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .additionalMetric {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}

@@ -1,0 +1,367 @@
+/* Premium Visual Effects for NeuroExpert */
+
+/* ===== PREMIUM VARIABLES ===== */
+:root {
+  /* Premium Colors */
+  --premium-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --premium-gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --premium-gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --premium-gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  
+  /* Glass Effects */
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  --glass-blur: blur(12px);
+  
+  /* Glow Effects */
+  --glow-primary: 0 0 20px rgba(99, 102, 241, 0.5);
+  --glow-secondary: 0 0 20px rgba(245, 158, 11, 0.5);
+  --glow-accent: 0 0 20px rgba(16, 185, 129, 0.5);
+  
+  /* Premium Shadows */
+  --shadow-premium: 0 20px 60px -10px rgba(99, 102, 241, 0.3);
+  --shadow-hover: 0 30px 80px -15px rgba(99, 102, 241, 0.4);
+  --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  
+  /* Animation Curves */
+  --ease-premium: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== GLASS MORPHISM ===== */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  transition: all 0.3s var(--ease-premium);
+}
+
+.glass:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: var(--shadow-glass), var(--glow-primary);
+  transform: translateY(-2px);
+}
+
+/* ===== PREMIUM GRADIENT BACKGROUNDS ===== */
+.premium-bg {
+  position: relative;
+  background: var(--dark-bg);
+  overflow: hidden;
+}
+
+.premium-bg::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(99, 102, 241, 0.1) 0%,
+    transparent 70%
+  );
+  animation: pulse-glow 15s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.1); }
+}
+
+/* ===== PREMIUM BUTTONS ===== */
+.btn-premium {
+  position: relative;
+  padding: 14px 32px;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+  color: white;
+  background: var(--premium-gradient);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s var(--ease-premium);
+  box-shadow: var(--shadow-premium);
+}
+
+.btn-premium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-premium:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
+}
+
+.btn-premium:hover::before {
+  left: 100%;
+}
+
+.btn-premium:active {
+  transform: translateY(-1px);
+}
+
+/* ===== FLOATING ANIMATIONS ===== */
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.float-delayed {
+  animation: float 6s ease-in-out 3s infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+/* ===== PREMIUM CARDS ===== */
+.card-premium {
+  position: relative;
+  padding: 32px;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  overflow: hidden;
+  transition: all 0.4s var(--ease-premium);
+}
+
+.card-premium::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: var(--premium-gradient);
+  border-radius: 24px;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.4s ease;
+}
+
+.card-premium:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-hover);
+}
+
+.card-premium:hover::before {
+  opacity: 1;
+}
+
+/* ===== NEON TEXT EFFECTS ===== */
+.text-neon {
+  color: var(--primary);
+  text-shadow: 
+    0 0 10px currentColor,
+    0 0 20px currentColor,
+    0 0 30px currentColor,
+    0 0 40px currentColor;
+  animation: neon-pulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes neon-pulse {
+  from { opacity: 1; }
+  to { opacity: 0.8; }
+}
+
+/* ===== PREMIUM SCROLLBAR ===== */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+  border-radius: 10px;
+  border: 2px solid var(--dark-bg);
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--primary-light), var(--primary));
+  box-shadow: var(--glow-primary);
+}
+
+/* ===== SHIMMERING EFFECT ===== */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 70%
+  );
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%) translateY(-100%); }
+  100% { transform: translateX(100%) translateY(100%); }
+}
+
+/* ===== GRADIENT TEXT ===== */
+.gradient-text {
+  background: var(--premium-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  font-weight: 700;
+}
+
+/* ===== HOVER LIFT EFFECT ===== */
+.hover-lift {
+  transition: all 0.3s var(--ease-premium);
+  cursor: pointer;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== BREATHING ANIMATION ===== */
+.breathe {
+  animation: breathe 4s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.9; }
+}
+
+/* ===== PREMIUM BADGE ===== */
+.badge-premium {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: var(--premium-gradient);
+  color: white;
+  border-radius: 20px;
+  box-shadow: var(--shadow-md);
+  animation: badge-glow 2s ease-in-out infinite;
+}
+
+@keyframes badge-glow {
+  0%, 100% { box-shadow: var(--shadow-md), 0 0 10px rgba(99, 102, 241, 0.5); }
+  50% { box-shadow: var(--shadow-md), 0 0 20px rgba(99, 102, 241, 0.8); }
+}
+
+/* ===== LOADING SKELETON ===== */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.skeleton::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.05),
+    transparent
+  );
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  100% { left: 100%; }
+}
+
+/* ===== PREMIUM TOOLTIP ===== */
+.tooltip-premium {
+  position: relative;
+}
+
+.tooltip-premium::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  padding: 8px 16px;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  font-size: 14px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s var(--ease-premium);
+}
+
+.tooltip-premium:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-12px);
+}
+
+/* ===== PARALLAX LAYERS ===== */
+.parallax-container {
+  position: relative;
+  overflow: hidden;
+  perspective: 1000px;
+}
+
+.parallax-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform-style: preserve-3d;
+}
+
+.parallax-layer-1 {
+  transform: translateZ(-100px) scale(1.1);
+}
+
+.parallax-layer-2 {
+  transform: translateZ(-200px) scale(1.2);
+}
+
+.parallax-layer-3 {
+  transform: translateZ(-300px) scale(1.3);
+}

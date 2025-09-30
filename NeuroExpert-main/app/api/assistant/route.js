@@ -1,0 +1,406 @@
+import { NextResponse } from 'next/server';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import { assistantRateLimit } from '@/app/middleware/rateLimit';
+import { validate, schemas } from '@/app/utils/validation';
+import fs from 'fs';
+import path from 'path';
+// import { 
+//   DIRECTOR_KNOWLEDGE_BASE, 
+//   analyzeUserIntent,
+//   personalizeResponse,
+//   generateFollowUpQuestions,
+//   addEmotionalTone
+// } from '../../utils/ai-director-system';
+
+// Поддерживаем несколько названий переменных среды для ключа Gemini,
+// чтобы избежать ошибки из-за опечаток в панели хостинга
+const GEMINI_API_KEY = process.env.GOOGLE_GEMINI_API_KEY
+  || process.env.GEMINI_API_KEY
+  || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+
+if (!GEMINI_API_KEY && !ANTHROPIC_API_KEY) {
+  console.error('No AI API keys configured. Please check environment variables.');
+}
+
+const genAI = GEMINI_API_KEY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null;
+
+// Minimal debug logging (без утечек длин/префиксов)
+if (process.env.NODE_ENV !== 'production') {
+  console.log('Assistant API init:', {
+    hasGeminiKey: !!GEMINI_API_KEY,
+    hasAnthropicKey: !!ANTHROPIC_API_KEY,
+    genAIInitialized: !!genAI
+  });
+}
+
+// Load system prompt for NeuroExpert v4.0 Enhanced (used as systemInstruction)
+// This file contains the complete system prompt for the AI assistant
+// Vercel deployment trigger - updated at: ${new Date().toISOString()}
+const PROMPT_PATH = path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v4_enhanced.md');
+let SYSTEM_PROMPT = '';
+
+// Check if file exists
+try {
+  if (fs.existsSync(PROMPT_PATH)) {
+    SYSTEM_PROMPT = fs.readFileSync(PROMPT_PATH, 'utf-8');
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('System prompt loaded');
+    }
+  } else {
+    console.error('Prompt file does not exist at default path');
+    // Try alternative paths
+    const altPaths = [
+      path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v3_2.md'),
+      path.join(process.cwd(), 'neuroexpert_v3_2.md'),
+      path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v3_2.md')
+    ];
+    
+    for (const altPath of altPaths) {
+      if (fs.existsSync(altPath)) {
+        SYSTEM_PROMPT = fs.readFileSync(altPath, 'utf-8');
+        break;
+      }
+    }
+  }
+} catch (e) {
+  console.error('Failed to load system prompt for assistant');
+}
+
+async function sendTelegramNotification(question, answer, model) {
+  try {
+    if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.TELEGRAM_CHAT_ID) {
+      return;
+    }
+
+    const message = `
+🤖 <b>Новый диалог с AI управляющим</b>
+
+👤 <b>Вопрос:</b> ${question}
+
+🎯 <b>Ответ:</b> ${answer}
+
+📊 <b>Модель:</b> ${model}
+⏰ <b>Время:</b> ${new Date().toLocaleString('ru-RU')}
+    `;
+
+    const response = await fetch(
+      `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: process.env.TELEGRAM_CHAT_ID,
+          text: message,
+          parse_mode: 'HTML'
+        })
+      }
+    );
+
+    if (!response.ok) {
+      console.error('Failed to send Telegram notification');
+    }
+  } catch (error) {
+    console.error('Telegram notification error:', error);
+  }
+}
+
+// Функция для взаимодействия с Claude API (Anthropic)
+async function getClaudeResponse(prompt, history = []) {
+  if (!ANTHROPIC_API_KEY) {
+    throw new Error('ANTHROPIC_API_KEY is not set');
+  }
+
+  try {
+    // Подготавливаем историю для Claude
+    const messages = history.length > 0 ? history : [];
+    
+    // Добавляем текущее сообщение
+    messages.push({
+      role: 'user',
+      content: prompt
+    });
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: 'claude-3-haiku-20240307',
+        max_tokens: 2048,
+        system: SYSTEM_PROMPT, // Claude поддерживает system prompt напрямую!
+        messages: messages,
+        temperature: 0.7
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('Claude API error response:', errorData);
+      throw new Error(`Claude API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    // Возвращаем ответ и обновленную историю
+    return {
+      text: data.content[0].text,
+      updatedHistory: [...messages, {
+        role: 'assistant',
+        content: data.content[0].text
+      }]
+    };
+  } catch (error) {
+    console.error('Claude API error:', error);
+    throw error;
+  }
+}
+
+async function handler(request) {
+  const startTime = Date.now();
+  
+  try {
+    const requestData = await request.json();
+    
+    // Определяем валидность ключей в начале (строгая проверка)
+    const isValidGeminiKey = GEMINI_API_KEY && 
+                             !GEMINI_API_KEY.includes('your_') && 
+                             !GEMINI_API_KEY.includes('here') &&
+                             !GEMINI_API_KEY.includes('key') &&
+                             GEMINI_API_KEY.length > 30 &&
+                             GEMINI_API_KEY.startsWith('AI');
+    const isValidAnthropicKey = ANTHROPIC_API_KEY && 
+                               !ANTHROPIC_API_KEY.includes('your_') && 
+                               !ANTHROPIC_API_KEY.includes('here') &&
+                               !ANTHROPIC_API_KEY.includes('key') &&
+                               ANTHROPIC_API_KEY.length > 30;
+    
+    // Лёгкая диагностика в dev
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('Demo mode check:', { isValidGeminiKey, isValidAnthropicKey });
+    }
+    
+    // DEMO MODE: если нет настоящих API ключей, показываем демо-ответ
+    if (!isValidGeminiKey && !isValidAnthropicKey) {
+      const demoResponses = [
+        "🚀 Демо-режим NeuroExpert AI активен! Для полной функциональности добавьте API ключи в .env.local файл.\n\n✨ Ваш вопрос принят, но это демо-ответ. Настоящий AI поможет с:\n• Анализом бизнес-процессов\n• Автоматизацией задач\n• Повышением конверсии",
+        "🤖 Это тестовый ответ NeuroExpert AI! Настоящий AI проанализирует ваш бизнес и предложит конкретные решения.\n\n📋 Для активации:\n1. Получите бесплатный ключ: https://ai.google.dev/\n2. Добавьте в .env.local\n3. Перезапустите сервер",
+        "⚡ NeuroExpert AI готов помочь! (демо-режим)\n\nПосле настройки API ключей я смогу:\n• Проводить глубокий анализ вашего бизнеса\n• Предлагать персонализированные решения\n• Помогать с интеграцией AI-инструментов",
+        "🎯 Демо-ответ NeuroExpert v4.0!\n\nВаш запрос обработан в тестовом режиме. Полноценный AI поможет оптимизировать ваш бизнес с помощью современных технологий.\n\n🔧 Инструкции по настройке: /AI_SETUP_INSTRUCTIONS.md"
+      ];
+      
+      const randomResponse = demoResponses[Math.floor(Math.random() * demoResponses.length)];
+      
+      return NextResponse.json({
+        success: true,
+        response: randomResponse,
+        demo: true,
+        message: "API ключи не настроены. Это демо-режим."
+      });
+    }
+    
+    // Поддерживаем два формата: старый (userMessage) и новый (message)
+    const message = requestData.message || requestData.userMessage;
+    const context = requestData.context || 'general';
+    const systemPrompt = requestData.systemPrompt;
+    
+
+    
+    // Валидация входных данных
+    const validationResult = validate({ question: message }, schemas.apiRequest);
+    
+    if (!validationResult.isValid) {
+      const firstError = Object.values(validationResult.errors)[0];
+      return NextResponse.json({ error: firstError }, { status: 400 });
+    }
+    
+    const { question } = validationResult.sanitizedData;
+    const { model = 'gemini', history = [] } = requestData;
+    
+    // Debug logging (без утечек)
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('Assistant API called:', { 
+        model, 
+        questionLength: question?.length,
+        hasAnthropicKey: !!ANTHROPIC_API_KEY,
+        hasGeminiKey: !!GEMINI_API_KEY,
+        nodeEnv: process.env.NODE_ENV
+      });
+    }
+
+    // Создаём улучшенный промпт
+    // const enhancedPrompt = createEnhancedPrompt(question, context);
+    
+    let answer;
+    let usedModel = model;
+    let updatedHistory = history; // Initialize updatedHistory
+    
+    try {
+      // Выбираем модель на основе запроса пользователя
+      if (model === 'claude' && isValidAnthropicKey) {
+        // Используем Claude с историей
+        console.log('Using Claude with system prompt');
+        console.log('ANTHROPIC_API_KEY exists:', !!ANTHROPIC_API_KEY);
+        const claudeResponse = await getClaudeResponse(question, history);
+        answer = claudeResponse.text;
+        updatedHistory = claudeResponse.updatedHistory;
+        usedModel = 'claude';
+      } else if (model === 'gemini' && genAI && isValidGeminiKey) {
+        // Выбираем системный промпт в зависимости от контекста
+        let finalSystemPrompt = SYSTEM_PROMPT;
+        
+        if (context === 'support' && systemPrompt) {
+          finalSystemPrompt = systemPrompt;
+        if (process.env.NODE_ENV !== 'production') {
+          console.log('Using custom support system prompt');
+        }
+        } else {
+          if (process.env.NODE_ENV !== 'production') {
+            console.log('Using default Gemini system prompt');
+          }
+        }
+        
+        if (process.env.NODE_ENV !== 'production') {
+          console.log('Gemini call context:', { hasKey: !!GEMINI_API_KEY, genAI: !!genAI, context });
+        }
+        
+        try {
+          const geminiModel = genAI.getGenerativeModel({ 
+            model: "gemini-1.5-pro-latest",
+            systemInstruction: finalSystemPrompt
+          });
+          
+          const chat = geminiModel.startChat({ history: history || [] });
+          const result = await chat.sendMessage(question);
+          answer = result.response.text();
+          updatedHistory = await chat.getHistory();
+          usedModel = 'gemini';
+          if (process.env.NODE_ENV !== 'production') {
+            console.log('Gemini answer generated');
+          }
+        } catch (geminiError) {
+          console.error('Gemini API call failed:', geminiError);
+          throw geminiError;
+        }
+      } else if (isValidAnthropicKey && model !== 'gemini') {
+        // Fallback на Claude если Gemini недоступен
+        if (process.env.NODE_ENV !== 'production') {
+          console.log('Fallback to Claude (Gemini not available)');
+        }
+        const claudeResponse = await getClaudeResponse(question, history);
+        answer = claudeResponse.text;
+        updatedHistory = claudeResponse.updatedHistory;
+        usedModel = 'claude';
+      } else {
+        // Безопасный fallback
+        answer = `Здравствуйте. Я Управляющий NeuroExpert. ${SYSTEM_PROMPT ? '' : 'Системный промпт не загружен.'}\n\nСформулируйте, пожалуйста, ключевую бизнес-цель.`;
+        usedModel = 'fallback';
+      }
+    } catch (error) {
+      console.error('AI API Error:', error);
+      answer = 'Извините, произошла техническая ошибка. Пожалуйста, позвоните нам по телефону +7 (996) 009-63-34 или напишите на neuroexpertai@gmail.com. Мы обязательно поможем!';
+      usedModel = 'error';
+    }
+
+    // Персонализация и эмоциональный тон
+    // const personalized = personalizeResponse(answer, context);
+    // Определяем эмоцию: для pricing/timeline – excitement, trust – trust, иначе professional
+    // const primaryIntent = analyzeUserIntent(question)[0];
+    // const emotionMap = { pricing: 'excitement', timeline: 'excitement', trust: 'trust', services: 'professional' };
+    // const emotion = emotionMap[primaryIntent] || 'professional';
+    // const finalAnswer = addEmotionalTone(personalized, emotion);
+    const finalAnswer = answer;
+
+    const responseTime = Date.now() - startTime;
+
+    // Отправляем уведомление в Telegram
+    sendTelegramNotification(question, finalAnswer, usedModel).catch(console.error);
+
+    // Анализируем интент для follow-up
+    // const intent = analyzeUserIntent(question);
+    // const followUpQuestions = generateFollowUpQuestions(intent[0], context);
+
+    return NextResponse.json({
+      success: true,
+      response: finalAnswer, // Для совместимости с UI поддержки
+      reply: finalAnswer, // Изменено с 'answer' на 'reply' согласно чек-листу
+      model: usedModel,
+      context: context,
+      responseTime,
+      updated_history: updatedHistory || history,
+      timestamp: new Date().toISOString(),
+      // intent,
+      // followUpQuestions,
+      // emotion: 'professional' // Можно добавить анализ эмоций
+    });
+
+  } catch (error) {
+    console.error('Assistant API error:', error);
+    return NextResponse.json(
+      { error: 'Внутренняя ошибка сервера' },
+      { status: 500 }
+    );
+  }
+}
+
+// Export the POST handler
+export async function POST(request) {
+  // Rate limiting
+  const rateDecision = await assistantRateLimit(request);
+  if (rateDecision instanceof Response) {
+    return rateDecision;
+  }
+
+  const response = await handler(request);
+
+  // Пробрасываем rate-limit заголовки, если они есть
+  if (rateDecision && rateDecision.headers && response && response.headers) {
+    try {
+      Object.entries(rateDecision.headers).forEach(([k, v]) => response.headers.set(k, v));
+    } catch {}
+  }
+  return response;
+}
+
+// Add GET method for testing prompt loading
+export async function GET() {
+  try {
+    const PROMPT_PATH = path.join(process.cwd(), 'app', 'utils', 'prompts', 'neuroexpert_v4_enhanced.md');
+    
+    let fileExists = false;
+    let promptContent = '';
+    let error = null;
+    
+    try {
+      fileExists = fs.existsSync(PROMPT_PATH);
+      if (fileExists) {
+        promptContent = fs.readFileSync(PROMPT_PATH, 'utf-8');
+      }
+    } catch (e) {
+      error = e.message;
+    }
+    
+    return NextResponse.json({
+      success: true,
+      fileExists,
+      promptPath: PROMPT_PATH,
+      currentWorkingDir: process.cwd(),
+      promptLength: promptContent.length,
+      promptPreview: process.env.NODE_ENV !== 'production' ? promptContent.substring(0, 500) : undefined,
+      error: error || null,
+      env: {
+        hasGeminiKey: !!process.env.GOOGLE_GEMINI_API_KEY,
+        hasAnthropicKey: !!process.env.ANTHROPIC_API_KEY,
+        nodeEnv: process.env.NODE_ENV
+      }
+    });
+  } catch (error) {
+    return NextResponse.json({
+      success: false,
+      error: error.message
+    }, { status: 500 });
+  }
+}

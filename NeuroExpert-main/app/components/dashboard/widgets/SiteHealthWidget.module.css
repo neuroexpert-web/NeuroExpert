@@ -1,0 +1,52 @@
+.container {
+  background: rgba(15, 15, 25, 0.95);
+  border: 2px solid rgba(34, 197, 94, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+  color: white;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon {
+  font-size: 20px;
+}
+
+.title {
+  font-weight: 600;
+  color: #22c55e;
+}
+
+.metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: rgba(30, 30, 45, 0.8);
+  border-radius: 8px;
+}
+
+.label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.value {
+  font-size: 18px;
+  font-weight: 700;
+}

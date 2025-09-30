@@ -1,0 +1,488 @@
+/* --- СТИЛИ ДЛЯ ВТОРОЙ СТРАНИЦЫ: АНАЛИТИКА (УЛУЧШЕННАЯ) --- */
+
+/* --- 1. БАЗОВАЯ СТРУКТУРА --- */
+#analytics-dashboard {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    background: var(--color-bg-primary, #02001A);
+    padding: 2rem;
+}
+
+.scrollable-section {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
+}
+
+.scrollable-section::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollable-section::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.scrollable-section::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+.scrollable-section::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Центрирование контента внутри analytics-dashboard */
+#analytics-dashboard > * {
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* --- 2. ЗАГОЛОВОК СТРАНИЦЫ --- */
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    animation: fadeInDown 0.6s ease-out;
+}
+
+.page-header h2 {
+    font-size: 3rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.8) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.page-header p {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* --- 3. GLASS CARD СТИЛЬ --- */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 1.5rem;
+    transition: var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 3s infinite;
+}
+
+.glass-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* --- 4. KPI КАРТОЧКИ --- */
+.kpi-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.kpi-card {
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.kpi-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.kpi-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.kpi-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.kpi-title {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.kpi-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.9) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: countUp 1s ease-out;
+}
+
+.kpi-trend {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.kpi-trend.positive {
+    color: var(--color-positive);
+}
+
+.kpi-trend.negative {
+    color: var(--color-negative);
+}
+
+.trend-icon {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.kpi-sparkline {
+    height: 40px;
+    margin-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 0.5rem;
+}
+
+/* --- 5. ГРАФИКИ --- */
+.charts-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+    animation: fadeInUp 1s ease-out 0.2s both;
+}
+
+.chart-card {
+    min-height: 400px;
+}
+
+.chart-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.chart-wrapper {
+    height: 320px;
+    position: relative;
+}
+
+.chart-wrapper canvas {
+    max-height: 100%;
+}
+
+/* --- 6. AI РЕКОМЕНДАЦИИ --- */
+.ai-recommendations {
+    animation: fadeInUp 1.2s ease-out 0.4s both;
+}
+
+.ai-recommendations h3 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, var(--color-gradient-start), var(--color-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.recommendations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+.recommendation-card {
+    padding: 2rem;
+}
+
+.rec-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.rec-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+}
+
+.rec-icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+.rec-icon.idea {
+    background: rgba(59, 130, 246, 0.2);
+    color: #3b82f6;
+}
+
+.rec-icon.warning {
+    background: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+}
+
+.rec-icon.success {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+}
+
+.rec-priority {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.rec-priority.high {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--priority-high);
+}
+
+.rec-priority.medium {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--priority-medium);
+}
+
+.rec-priority.low {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--priority-low);
+}
+
+.recommendation-card h4 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+    color: #ffffff;
+}
+
+.recommendation-card p {
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.rec-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.rec-action-button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    font-size: 0.875rem;
+}
+
+.rec-action-button.primary {
+    background: linear-gradient(135deg, var(--color-gradient-start), var(--color-gradient-end));
+    color: white;
+}
+
+.rec-action-button.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(138, 43, 226, 0.3);
+}
+
+.rec-action-button.secondary {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.rec-action-button.secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* --- 7. ИНДИКАТОР СКРОЛЛА --- */
+.scroll-indicator {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.scroll-indicator span {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.scroll-icon {
+    margin-top: 0.5rem;
+    animation: bounceDown 2s infinite;
+}
+
+.scroll-icon svg {
+    width: 24px;
+    height: 24px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* --- 8. АНИМАЦИИ --- */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes countUp {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(200%);
+    }
+}
+
+@keyframes bounceDown {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(10px);
+    }
+    60% {
+        transform: translateY(5px);
+    }
+}
+
+/* --- 9. АДАПТИВНОСТЬ --- */
+@media (max-width: 1200px) {
+    .dashboard-content {
+        padding: 1.5rem;
+    }
+    
+    .charts-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-header h2 {
+        font-size: 2rem;
+    }
+    
+    .page-header p {
+        font-size: 1rem;
+    }
+    
+    .kpi-cards {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+    }
+    
+    .kpi-card {
+        min-height: 150px;
+        padding: 1rem;
+    }
+    
+    .kpi-value {
+        font-size: 1.75rem;
+    }
+    
+    .recommendations-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .rec-actions {
+        flex-direction: column;
+    }
+    
+    .rec-action-button {
+        width: 100%;
+    }
+    
+    .scroll-indicator {
+        bottom: 1rem;
+    }
+}
+
+/* --- 10. СКРЫТИЕ СКРОЛЛА ПРИ СВАЙПЕ --- */
+.swipe-active .scrollable-section {
+    overflow-y: hidden;
+}
+
+/* --- 11. ОПТИМИЗАЦИЯ ПРОИЗВОДИТЕЛЬНОСТИ --- */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

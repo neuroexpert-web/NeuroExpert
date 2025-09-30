@@ -1,0 +1,107 @@
+/* Глобальные стили и фон */
+body {
+    margin: 0;
+    background-color: #0A051A;
+    font-family: 'Inter', sans-serif;
+}
+
+.hero-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+#vanta-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 20px;
+}
+
+/* Типографика */
+.pre-header {
+    font-weight: 500;
+    font-size: 14px;
+    color: #A0A3B5;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+}
+
+.main-header {
+    font-weight: 700;
+    font-size: clamp(48px, 10vw, 80px);
+    margin: 0;
+    background: linear-gradient(90deg, #A855F7, #6366F1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.sub-header {
+    font-weight: 600;
+    font-size: clamp(24px, 5vw, 36px);
+    color: #60A5FA;
+    text-transform: uppercase;
+    margin-top: 24px;
+    margin-bottom: 16px;
+}
+
+.sub-header-caption {
+    display: block;
+}
+
+.description {
+    font-weight: 400;
+    font-size: clamp(16px, 3vw, 20px);
+    color: #D1D5DB;
+    max-width: 600px;
+    line-height: 1.6;
+    margin: 24px auto 40px auto;
+}
+
+/* Кнопка (CTA) */
+.cta-button {
+    display: inline-block;
+    padding: 18px 40px;
+    border-radius: 50px;
+    border: none;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #6366F1, #A855F7);
+    box-shadow: 0 10px 30px -5px rgba(168, 85, 247, 0.4);
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.cta-button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 15px 35px -5px rgba(168, 85, 247, 0.5);
+}
+
+/* Стили для анимации букв */
+.char {
+    position: relative;
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.char.visible {
+    opacity: 1;
+    transform: translateY(0);
+}

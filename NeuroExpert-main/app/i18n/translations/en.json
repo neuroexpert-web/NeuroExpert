@@ -1,0 +1,80 @@
+{
+  "common": {
+    "appName": "NeuroExpert",
+    "tagline": "AI Platform for Business Digitalization",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Try again",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "pricing": "Pricing",
+    "calculator": "ROI Calculator",
+    "contact": "Contact",
+    "login": "Login",
+    "dashboard": "Dashboard"
+  },
+  "hero": {
+    "title": "Business Digitalization with AI",
+    "subtitle": "Automate processes, increase profits and stay ahead of competitors",
+    "cta": {
+      "primary": "Get Started",
+      "secondary": "Learn More"
+    }
+  },
+  "calculator": {
+    "title": "ROI Calculator",
+    "subtitle": "Calculate your benefits from implementing our solutions",
+    "form": {
+      "businessSize": "Business Size",
+      "industry": "Industry",
+      "budget": "Digitalization Budget",
+      "calculate": "Calculate"
+    },
+    "results": {
+      "title": "Your Results",
+      "roi": "Return on Investment",
+      "savings": "Annual Savings",
+      "growth": "Revenue Growth",
+      "payback": "Payback Period"
+    }
+  },
+  "pricing": {
+    "title": "Choose Your Plan",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "savings": "Save {{percent}}%",
+    "currency": "$",
+    "cta": "Choose Plan"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "form": {
+      "name": "Your Name",
+      "email": "Email",
+      "phone": "Phone",
+      "company": "Company",
+      "message": "Message",
+      "submit": "Submit",
+      "submitting": "Submitting...",
+      "success": "Message sent successfully!",
+      "error": "Failed to send. Please try again later."
+    }
+  },
+  "footer": {
+    "copyright": "© {{year}} NeuroExpert. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "social": {
+      "telegram": "Telegram Channel",
+      "vk": "VK Group"
+    }
+  }
+}

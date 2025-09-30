@@ -1,0 +1,491 @@
+.swipeWrapper {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: visible;
+  background: var(--noir-900, #0a0e1a);
+}
+
+.swipeContainer {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  cursor: grab;
+  user-select: none;
+  touch-action: pan-y;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+}
+
+.swipeContainer:active {
+  cursor: grabbing;
+}
+
+.pageSlider {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: visible; /* Позволяет дочерним элементам управлять своим скроллом */
+}
+
+.pageWrapper {
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Индикатор прогресса с неоновыми эффектами */
+.progressContainer {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  width: auto;
+  max-width: 240px;
+  z-index: var(--z-modal, 100);
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 12px;
+  box-shadow: none;
+  transition: all 0.3s ease;
+}
+
+/* Кнопка сворачивания */
+.collapseButton {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  width: 24px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  color: #fff;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.collapseButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--aurora-purple);
+  transform: scale(1.1);
+}
+
+/* Свернутый индикатор */
+.collapsedIndicator {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+}
+
+.currentIcon {
+  font-size: 1.5rem;
+}
+
+.currentPage {
+  font-size: 0.9rem;
+  color: var(--aurora-cyan);
+  font-weight: 600;
+}
+
+/* Сетка навигации */
+.navigationGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.navItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: rgba(255, 255, 255, 1);
+  gap: 0.2rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.navItem:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--aurora-purple);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.navItemActive {
+  background: rgba(168, 85, 247, 0.2);
+  border-color: var(--aurora-purple);
+  color: #fff;
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+}
+
+.navIcon {
+  font-size: 1.2rem;
+  filter: saturate(1) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
+}
+
+.navItemActive .navIcon {
+  filter: saturate(1.5) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
+}
+
+.navLabel {
+  font-size: 0.6rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.1;
+  opacity: 0.9;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+.navItemActive .navLabel {
+  opacity: 1;
+}
+
+.progressBar {
+  position: relative;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm, 0.5rem);
+  overflow: hidden;
+  box-shadow: none;
+  margin-top: 0.5rem;
+}
+
+.progressFill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--gradient-neuro, linear-gradient(135deg, #00d4ff 0%, #a855f7 50%, #ff0080 100%));
+  border-radius: var(--radius-sm, 0.5rem);
+  box-shadow: var(--glow-blue, 0 0 20px rgba(0, 212, 255, 0.5));
+  transition: width 0.5s var(--ease-neural, cubic-bezier(0.23, 1, 0.32, 1));
+  position: relative;
+  overflow: hidden;
+}
+
+/* Анимированный неоновый эффект на прогрессе */
+.progressFill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  animation: electric-flow 2s linear infinite;
+}
+
+@keyframes electric-flow {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.sectionLabel {
+  text-align: center;
+  margin-top: var(--space-sm, 0.5rem);
+  font-size: 0.875rem;
+  color: var(--neon-cyan, #06ffa5);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  font-family: var(--font-cyber, 'Orbitron', monospace);
+  text-shadow: var(--glow-cyan, 0 0 20px rgba(6, 255, 165, 0.5));
+}
+
+/* Точки навигации с футуристичным дизайном - СКРЫТО */
+.dotsContainer {
+  display: none;
+}
+
+.dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--glass-bg, rgba(255, 255, 255, 0.05));
+  border: 2px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+  cursor: pointer;
+  transition: all 0.4s var(--ease-neural, cubic-bezier(0.23, 1, 0.32, 1));
+  position: relative;
+  overflow: hidden;
+}
+
+.dot::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: var(--neon-blue, #00d4ff);
+  transform: translate(-50%, -50%);
+  transition: all 0.3s var(--ease-electric, cubic-bezier(0.68, -0.55, 0.265, 1.55));
+}
+
+.dot:hover {
+  transform: scale(1.3);
+  border-color: var(--neon-blue, #00d4ff);
+  background: rgba(0, 212, 255, 0.1);
+  box-shadow: var(--glow-blue, 0 0 20px rgba(0, 212, 255, 0.5));
+}
+
+.dot:hover::before {
+  width: 8px;
+  height: 8px;
+}
+
+.activeDot {
+  background: var(--gradient-neuro, linear-gradient(135deg, #00d4ff 0%, #a855f7 50%, #ff0080 100%));
+  border-color: var(--neon-blue, #00d4ff);
+  transform: scale(1.2);
+  box-shadow: var(--glow-blue, 0 0 20px rgba(0, 212, 255, 0.5));
+  animation: cyber-glow 3s ease-in-out infinite;
+}
+
+.activeDot::before {
+  width: 6px;
+  height: 6px;
+  background: white;
+  opacity: 0.9;
+}
+
+/* Неоновый пульс для активной точки */
+.activeDot::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: inherit;
+  opacity: 0;
+  animation: neural-pulse 2s infinite;
+  z-index: -1;
+}
+
+@keyframes cyber-glow {
+  0%, 100% {
+    box-shadow: var(--glow-blue, 0 0 20px rgba(0, 212, 255, 0.5));
+  }
+  33% {
+    box-shadow: var(--glow-purple, 0 0 20px rgba(168, 85, 247, 0.5));
+  }
+  66% {
+    box-shadow: var(--glow-cyan, 0 0 20px rgba(6, 255, 165, 0.5));
+  }
+}
+
+@keyframes neural-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2.5);
+    opacity: 0;
+  }
+}
+
+/* Анимация появления точек */
+.dot {
+  animation: dotAppear 0.5s var(--ease-quantum, cubic-bezier(0.175, 0.885, 0.32, 1.275)) backwards;
+}
+
+.dot:nth-child(1) { animation-delay: 0.1s; }
+.dot:nth-child(2) { animation-delay: 0.2s; }
+.dot:nth-child(3) { animation-delay: 0.3s; }
+.dot:nth-child(4) { animation-delay: 0.4s; }
+.dot:nth-child(5) { animation-delay: 0.5s; }
+.dot:nth-child(6) { animation-delay: 0.6s; }
+.dot:nth-child(7) { animation-delay: 0.7s; }
+.dot:nth-child(8) { animation-delay: 0.8s; }
+
+@keyframes dotAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0) translateY(20px);
+  }
+  50% {
+    transform: scale(1.2) translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Эффект волны при клике */
+.dot::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid var(--neon-blue, #00d4ff);
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  transition: all 0.4s var(--ease-electric, cubic-bezier(0.68, -0.55, 0.265, 1.55));
+}
+
+.dot:active::after {
+  transform: translate(-50%, -50%) scale(2);
+  opacity: 0;
+  transition: all 0.6s ease;
+}
+
+/* Обертка для точки с тултипом */
+.dotWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Тултип с названием секции */
+.dotTooltip {
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  padding: var(--space-sm, 0.5rem) var(--space-md, 1rem);
+  background: var(--glass-bg, rgba(255, 255, 255, 0.05));
+  color: var(--neon-cyan, #06ffa5);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-cyber, 'Orbitron', monospace);
+  white-space: nowrap;
+  border-radius: var(--radius-sm, 0.5rem);
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s var(--ease-neural, cubic-bezier(0.23, 1, 0.32, 1));
+  backdrop-filter: var(--glass-blur, blur(20px));
+  box-shadow: var(--glass-shadow, 0 8px 32px rgba(0, 0, 0, 0.3));
+  text-shadow: var(--glow-cyan, 0 0 10px rgba(6, 255, 165, 0.3));
+}
+
+/* Стрелка тултипа */
+.dotTooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid var(--glass-bg, rgba(255, 255, 255, 0.05));
+}
+
+/* Показ тултипа при наведении */
+.dotWrapper:hover .dotTooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .progressContainer {
+    padding: var(--space-sm, 0.5rem) var(--space-md, 1rem);
+  }
+  
+  .dotsContainer {
+    bottom: var(--space-md, 1rem);
+    padding: var(--space-md, 1rem) var(--space-lg, 1.5rem);
+    gap: var(--space-sm, 0.5rem);
+  }
+  
+  .dot {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .dot::before {
+    width: 0;
+    height: 0;
+  }
+  
+  .activeDot::before {
+    width: 4px;
+    height: 4px;
+  }
+
+  .dotTooltip {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .dotsContainer {
+    bottom: var(--space-sm, 0.5rem);
+    padding: var(--space-sm, 0.5rem) var(--space-md, 1rem);
+  }
+  
+  .dot {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+/* Анимация для touch устройств */
+@media (hover: none) {
+  .swipeContainer {
+    cursor: default;
+  }
+  
+  .dot:hover {
+    transform: none;
+    border-color: var(--glass-border, rgba(255, 255, 255, 0.1));
+    background: var(--glass-bg, rgba(255, 255, 255, 0.05));
+    box-shadow: none;
+  }
+}
+
+/* Доступность */
+@media (prefers-reduced-motion: reduce) {
+  .progressFill,
+  .dot,
+  .activeDot,
+  .dotTooltip {
+    transition: none;
+    animation: none;
+  }
+  
+  .progressFill::after,
+  .activeDot::after {
+    animation: none;
+  }
+}

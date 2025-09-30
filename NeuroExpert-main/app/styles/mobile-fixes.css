@@ -1,0 +1,218 @@
+/* Mobile Fixes for Premium Glass Theme */
+
+/* Общие исправления для мобильных */
+@media (max-width: 768px) {
+  /* Фиксим отступы для основных секций */
+  section {
+    padding: 40px 16px !important;
+    overflow-x: hidden;
+  }
+  
+  /* Hero секция */
+  .premium-hero {
+    min-height: auto;
+    height: auto;
+    padding: 60px 16px 40px !important;
+  }
+  
+  /* Первый блок специфично */
+  section:first-of-type {
+    min-height: auto !important;
+    height: auto !important;
+    padding: 60px 16px 40px !important;
+  }
+  
+  /* Контейнеры */
+  .container {
+    padding: 0 16px !important;
+    max-width: 100% !important;
+  }
+  
+  /* Заголовки */
+  h1 {
+    font-size: clamp(2rem, 8vw, 3rem) !important;
+    word-break: break-word;
+    hyphens: auto;
+  }
+  
+  h2 {
+    font-size: clamp(1.5rem, 6vw, 2.5rem) !important;
+  }
+  
+  h3 {
+    font-size: clamp(1.25rem, 5vw, 2rem) !important;
+  }
+  
+  /* Параграфы */
+  p {
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+  }
+  
+  /* Кнопки */
+  button {
+    min-height: 48px;
+    font-size: 16px !important;
+    padding: 12px 24px !important;
+  }
+  
+  /* Стеклянные карточки */
+  .glass-card,
+  .premium-card {
+    margin: 16px 0;
+    padding: 20px 16px !important;
+  }
+  
+  /* Формы */
+  input, textarea, select {
+    font-size: 16px !important; /* Предотвращаем зум на iOS */
+    padding: 16px !important;
+    width: 100% !important;
+  }
+  
+  /* Модальные окна */
+  .modal, .dialog {
+    padding: 20px !important;
+    margin: 20px !important;
+    max-width: calc(100vw - 40px) !important;
+  }
+  
+  /* Навигация */
+  nav {
+    padding: 16px !important;
+  }
+  
+  /* Футер */
+  footer {
+    padding: 40px 16px !important;
+  }
+}
+
+/* Очень маленькие экраны */
+@media (max-width: 380px) {
+  section {
+    padding: 32px 12px !important;
+  }
+  
+  h1 {
+    font-size: 2rem !important;
+  }
+  
+  h2 {
+    font-size: 1.5rem !important;
+  }
+  
+  button {
+    font-size: 14px !important;
+    padding: 10px 20px !important;
+  }
+}
+
+/* Фиксы для iOS */
+@supports (-webkit-touch-callout: none) {
+  /* iOS Safari specific fixes */
+  input, textarea {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0;
+  }
+  
+  /* Фиксим высоту viewport на iOS */
+  .full-height {
+    min-height: -webkit-fill-available;
+  }
+}
+
+/* Ландшафтная ориентация на мобильных */
+@media (max-width: 768px) and (orientation: landscape) {
+  .premium-hero {
+    min-height: auto;
+    padding: 40px 32px !important;
+  }
+  
+  section {
+    padding: 32px !important;
+  }
+}
+
+/* Фиксы для стеклянного фона на мобильных */
+@media (max-width: 768px) {
+  .premium-glass-background {
+    position: fixed !important;
+  }
+  
+  .gradient-layer {
+    transform: none !important;
+  }
+  
+  .light-orb {
+    display: none; /* Отключаем орбы на мобильных для производительности */
+  }
+  
+  .premium-grid {
+    opacity: 0.3 !important;
+  }
+}
+
+/* Контактная форма - специальные фиксы */
+@media (max-width: 768px) {
+  .contact-section:not(.mobile-focused) {
+    padding: 40px 16px !important;
+    min-height: auto !important;
+  }
+  
+  .contact-section:not(.mobile-focused) .form-container {
+    padding: 24px 16px !important;
+    max-width: 100% !important;
+  }
+  
+  .contact-section:not(.mobile-focused) h2 {
+    font-size: 1.75rem !important;
+    margin-bottom: 16px !important;
+  }
+  
+  .contact-section:not(.mobile-focused) .form-field {
+    margin-bottom: 16px !important;
+  }
+  
+  .voice-btn {
+    right: 8px !important;
+  }
+}
+
+/* Фиксы для первого блока (Hero) */
+@media (max-width: 768px) {
+  /* Canvas нейронной сети */
+  canvas {
+    opacity: 0.3 !important; /* Уменьшаем яркость на мобильных */
+  }
+  
+  /* Градиентные анимации */
+  .gradient-orb {
+    display: none !important; /* Отключаем тяжелые анимации */
+  }
+  
+  /* Кнопки в Hero */
+  .hero-buttons {
+    width: 100%;
+    padding: 0 20px;
+  }
+  
+  .hero-buttons button {
+    width: 100% !important;
+    margin-bottom: 12px !important;
+  }
+}
+
+/* Безопасные зоны для iPhone X и новее */
+@supports (padding: max(0px)) {
+  .contact-section.mobile-focused {
+    padding-top: max(60px, env(safe-area-inset-top)) !important;
+    padding-bottom: max(20px, env(safe-area-inset-bottom)) !important;
+  }
+  
+  .premium-hero {
+    padding-top: max(60px, env(safe-area-inset-top)) !important;
+  }
+}

@@ -1,0 +1,188 @@
+/* Business Metrics Widget Styles */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+  background: rgba(15, 15, 25, 0.95);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(138, 43, 226, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+  color: white;
+  overflow: hidden;
+}
+
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 12px;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(138, 43, 226, 0.3);
+  border-top: 3px solid #8a2be2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  flex: 1;
+}
+
+.metricCard {
+  background: rgba(30, 30, 45, 0.8);
+  border: 1px solid rgba(138, 43, 226, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.3s ease;
+}
+
+.metricCard:hover {
+  background: rgba(30, 30, 45, 0.9);
+  border-color: rgba(138, 43, 226, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(138, 43, 226, 0.2);
+}
+
+.metricHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.metricIcon {
+  font-size: 18px;
+}
+
+.metricLabel {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+}
+
+.metricValue {
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.metricTrend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.metricTrend.up {
+  color: #22c55e;
+}
+
+.metricTrend.down {
+  color: #ef4444;
+}
+
+.trendIcon {
+  font-size: 14px;
+}
+
+.trendText {
+  font-weight: 600;
+}
+
+.recommendation {
+  background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(90, 27, 169, 0.05));
+  border: 1px solid rgba(138, 43, 226, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 8px;
+}
+
+.recommendationHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.aiIcon {
+  font-size: 16px;
+}
+
+.recommendationTitle {
+  font-size: 14px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #8a2be2, #bb6bd9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.recommendationText {
+  font-size: 13px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+.connectionStatus {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+  padding-top: 8px;
+  border-top: 1px solid rgba(138, 43, 226, 0.2);
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.statusDot.connected {
+  background: #22c55e;
+}
+
+.statusDot.connecting {
+  background: #f59e0b;
+}
+
+.statusDot.disconnected {
+  background: #ef4444;
+}
+
+.statusText {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.8);
+  }
+}

@@ -1,0 +1,5 @@
+# Redirect API routes to Next.js API
+/api/* /.netlify/functions/api/:splat 200
+
+# SPA fallback
+/* /index.html 200

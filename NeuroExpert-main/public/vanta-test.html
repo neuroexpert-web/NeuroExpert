@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vanta.js Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        #vanta-bg {
+            width: 100vw;
+            height: 100vh;
+            background: #0A051A;
+        }
+        .info {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-family: Arial, sans-serif;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div class="info">
+        <h2>Vanta.js Neural Network Test</h2>
+        <p id="status">Loading...</p>
+    </div>
+    <div id="vanta-bg"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.net.min.js"></script>
+    
+    <script>
+        const status = document.getElementById('status');
+        
+        // Check if libraries loaded
+        setTimeout(() => {
+            if (window.THREE) {
+                status.innerHTML += '<br>✅ Three.js loaded';
+            } else {
+                status.innerHTML += '<br>❌ Three.js NOT loaded';
+            }
+            
+            if (window.VANTA) {
+                status.innerHTML += '<br>✅ Vanta.js loaded';
+                
+                // Try to initialize
+                try {
+                    const vantaEffect = VANTA.NET({
+                        el: "#vanta-bg",
+                        mouseControls: true,
+                        touchControls: true,
+                        gyroControls: false,
+                        minHeight: 200.00,
+                        minWidth: 200.00,
+                        scale: 1.00,
+                        scaleMobile: 1.00,
+                        color: 0x6366f1,
+                        backgroundColor: 0x0a051a,
+                        points: 20.00,
+                        maxDistance: 25.00,
+                        spacing: 15.00
+                    });
+                    
+                    status.innerHTML += '<br>✅ Vanta NET initialized!';
+                } catch (error) {
+                    status.innerHTML += '<br>❌ Error: ' + error.message;
+                }
+            } else {
+                status.innerHTML += '<br>❌ Vanta.js NOT loaded';
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

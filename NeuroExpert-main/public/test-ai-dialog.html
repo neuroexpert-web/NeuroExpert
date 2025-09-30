@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔧 AI Dialog Test - NeuroExpert</title>
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #0a0a0f, #1a1a2e);
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .test-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .test-header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #00d4ff, #9945ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .test-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .test-section h3 {
+            color: #00d4ff;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .test-button {
+            background: linear-gradient(135deg, #00d4ff, #9945ff);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+            transition: transform 0.2s ease;
+        }
+
+        .test-button:hover {
+            transform: scale(1.05);
+        }
+
+        .test-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .result-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            min-height: 100px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .success {
+            border-color: #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .error {
+            border-color: #ff6b35;
+            background: rgba(255, 107, 53, 0.1);
+        }
+
+        .loading {
+            border-color: #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #00d4ff;
+            font-weight: bold;
+        }
+
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: white;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .input-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-online { background: #00ff88; }
+        .status-offline { background: #ff6b35; }
+        .status-loading { background: #00d4ff; animation: pulse 1s infinite; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>🔧 AI Dialog Test</h1>
+            <p>Диагностика работы Enhanced AI v4.0</p>
+        </div>
+
+        <!-- API Status -->
+        <div class="test-section">
+            <h3>📊 Статус API</h3>
+            <div id="api-status">
+                <span class="status-indicator status-loading" id="status-dot"></span>
+                <span id="status-text">Проверка подключения...</span>
+            </div>
+            <button class="test-button" onclick="checkAPIStatus()">🔍 Проверить API</button>
+            <div id="api-result" class="result-box loading">Загрузка...</div>
+        </div>
+
+        <!-- Simple Message Test -->
+        <div class="test-section">
+            <h3>💬 Тест простого сообщения</h3>
+            <div class="input-group">
+                <label>Введите тестовое сообщение:</label>
+                <input type="text" id="simple-message" value="Привет! Как дела?" placeholder="Ваше сообщение">
+            </div>
+            <button class="test-button" onclick="testSimpleMessage()" id="simple-btn">🚀 Отправить</button>
+            <div id="simple-result" class="result-box">Результат появится здесь...</div>
+        </div>
+
+        <!-- Quick Actions Test -->
+        <div class="test-section">
+            <h3>⚡ Тест быстрых действий</h3>
+            <p>Тестируем предустановленные prompts:</p>
+            <button class="test-button" onclick="testQuickAction('growth')">🚀 Рост прибыли</button>
+            <button class="test-button" onclick="testQuickAction('automation')">⚡ Автоматизация</button>
+            <button class="test-button" onclick="testQuickAction('analytics')">📊 Аналитика</button>
+            <div id="quick-result" class="result-box">Результат появится здесь...</div>
+        </div>
+
+        <!-- Custom Test -->
+        <div class="test-section">
+            <h3>🎛️ Кастомный тест</h3>
+            <div class="input-group">
+                <label>Сообщение:</label>
+                <textarea id="custom-message" placeholder="Введите ваше сообщение для тестирования...">Расскажи о возможностях NeuroExpert</textarea>
+            </div>
+            <div class="input-group">
+                <label>Контекст:</label>
+                <input type="text" id="custom-context" value="general" placeholder="general, support, etc.">
+            </div>
+            <div class="input-group">
+                <label>Модель:</label>
+                <input type="text" id="custom-model" value="gemini" placeholder="gemini, claude">
+            </div>
+            <button class="test-button" onclick="testCustomMessage()" id="custom-btn">🧪 Кастомный тест</button>
+            <div id="custom-result" class="result-box">Результат появится здесь...</div>
+        </div>
+    </div>
+
+    <script>
+        // Quick Actions data
+        const quickActions = {
+            'growth': {
+                prompt: 'Как увеличить прибыль моей компании на 40% с помощью AI?',
+                category: 'growth'
+            },
+            'automation': {
+                prompt: 'Какие процессы в моем бизнесе можно автоматизировать в первую очередь?',
+                category: 'automation'  
+            },
+            'analytics': {
+                prompt: 'Как настроить аналитику для принятия data-driven решений?',
+                category: 'analytics'
+            }
+        };
+
+        // API Status Check
+        async function checkAPIStatus() {
+            const statusDot = document.getElementById('status-dot');
+            const statusText = document.getElementById('status-text');
+            const result = document.getElementById('api-result');
+            
+            statusDot.className = 'status-indicator status-loading';
+            statusText.textContent = 'Проверка подключения...';
+            result.className = 'result-box loading';
+            result.textContent = 'Проверяем API endpoints...';
+
+            try {
+                // Test API endpoint
+                const response = await fetch('/api/assistant', {
+                    method: 'GET'
+                });
+
+                const data = await response.text();
+                
+                if (response.ok) {
+                    statusDot.className = 'status-indicator status-online';
+                    statusText.textContent = 'API доступен';
+                    result.className = 'result-box success';
+                    result.textContent = `✅ API Response (${response.status}):\n\n${data}`;
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${data}`);
+                }
+            } catch (error) {
+                statusDot.className = 'status-indicator status-offline';
+                statusText.textContent = 'API недоступен';
+                result.className = 'result-box error';
+                result.textContent = `❌ Ошибка:\n\n${error.message}`;
+            }
+        }
+
+        // Simple Message Test
+        async function testSimpleMessage() {
+            const message = document.getElementById('simple-message').value;
+            const result = document.getElementById('simple-result');
+            const btn = document.getElementById('simple-btn');
+            
+            if (!message.trim()) {
+                result.className = 'result-box error';
+                result.textContent = '❌ Введите сообщение!';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = '⏳ Отправка...';
+            result.className = 'result-box loading';
+            result.textContent = 'Отправляем сообщение в AI...';
+
+            try {
+                const response = await fetch('/api/assistant', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        context: 'general',
+                        model: 'gemini'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok && (data.success || data.response || data.reply)) {
+                    result.className = 'result-box success';
+                    result.textContent = `✅ AI Ответ:\n\n${data.response || data.reply || JSON.stringify(data, null, 2)}`;
+                } else {
+                    throw new Error(`API Error: ${JSON.stringify(data, null, 2)}`);
+                }
+            } catch (error) {
+                result.className = 'result-box error';
+                result.textContent = `❌ Ошибка:\n\n${error.message}`;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🚀 Отправить';
+            }
+        }
+
+        // Quick Action Test
+        async function testQuickAction(actionKey) {
+            const action = quickActions[actionKey];
+            const result = document.getElementById('quick-result');
+            
+            if (!action) {
+                result.className = 'result-box error';
+                result.textContent = `❌ Неизвестное действие: ${actionKey}`;
+                return;
+            }
+
+            result.className = 'result-box loading';
+            result.textContent = `⚡ Тестируем "${action.prompt}"...`;
+
+            try {
+                const response = await fetch('/api/assistant', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: action.prompt,
+                        context: 'general',
+                        model: 'gemini'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok && (data.success || data.response || data.reply)) {
+                    result.className = 'result-box success';
+                    result.textContent = `✅ Quick Action "${actionKey}":\n\nПромпт: ${action.prompt}\n\nОтвет AI:\n${data.response || data.reply || JSON.stringify(data, null, 2)}`;
+                } else {
+                    throw new Error(`API Error: ${JSON.stringify(data, null, 2)}`);
+                }
+            } catch (error) {
+                result.className = 'result-box error';
+                result.textContent = `❌ Ошибка Quick Action:\n\n${error.message}`;
+            }
+        }
+
+        // Custom Test
+        async function testCustomMessage() {
+            const message = document.getElementById('custom-message').value;
+            const context = document.getElementById('custom-context').value;
+            const model = document.getElementById('custom-model').value;
+            const result = document.getElementById('custom-result');
+            const btn = document.getElementById('custom-btn');
+
+            if (!message.trim()) {
+                result.className = 'result-box error';
+                result.textContent = '❌ Введите сообщение!';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = '⏳ Тестирование...';
+            result.className = 'result-box loading';
+            result.textContent = 'Выполняем кастомный тест...';
+
+            try {
+                const response = await fetch('/api/assistant', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        context: context,
+                        model: model
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok && (data.success || data.response || data.reply)) {
+                    result.className = 'result-box success';
+                    result.textContent = `✅ Кастомный тест успешен!\n\nПараметры:\n- Сообщение: ${message}\n- Контекст: ${context}\n- Модель: ${model}\n\nОтвет AI:\n${data.response || data.reply || JSON.stringify(data, null, 2)}`;
+                } else {
+                    throw new Error(`API Error: ${JSON.stringify(data, null, 2)}`);
+                }
+            } catch (error) {
+                result.className = 'result-box error';
+                result.textContent = `❌ Ошибка кастомного теста:\n\n${error.message}`;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🧪 Кастомный тест';
+            }
+        }
+
+        // Auto-check API status on load
+        window.addEventListener('load', () => {
+            checkAPIStatus();
+        });
+    </script>
+</body>
+</html>

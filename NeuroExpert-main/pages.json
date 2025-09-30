@@ -1,0 +1,14 @@
+{
+  "build": {
+    "command": "npm run build",
+    "output": ".next"
+  },
+  "deployment": {
+    "production": {
+      "branch": "main"
+    }
+  },
+  "env": {
+    "NODE_VERSION": "20"
+  }
+}

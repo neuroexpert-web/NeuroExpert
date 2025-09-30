@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест личного кабинета</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0f;
+            color: white;
+            overflow: hidden;
+        }
+        
+        .workspace-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .workspace-header {
+            height: 64px;
+            background: rgba(30, 30, 45, 0.6);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+        }
+        
+        .workspace-main {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+        
+        .workspace-sidebar {
+            width: 240px;
+            background: #12121a;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 16px 12px;
+        }
+        
+        .workspace-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #0a0a0f;
+        }
+        
+        .workspace-area {
+            flex: 1;
+            padding: 20px;
+            overflow: auto;
+        }
+        
+        .widget-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+        
+        .widget {
+            background: rgba(30, 30, 45, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .widget h3 {
+            margin-bottom: 16px;
+            color: white;
+        }
+        
+        .widget-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            margin: 8px 0;
+        }
+        
+        .workspace-statusbar {
+            height: 32px;
+            background: #12121a;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .test-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #8a2be2;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="workspace-container">
+        <div class="test-message">Тестовая страница личного кабинета работает!</div>
+        
+        <header class="workspace-header">
+            <div class="header-left">
+                <div class="logo-workspace">
+                    <span>NeuroExpert Cabinet</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <button>Профиль</button>
+            </div>
+        </header>
+        
+        <div class="workspace-main">
+            <nav class="workspace-sidebar">
+                <button style="width: 100%; padding: 10px; margin-bottom: 8px; background: rgba(138, 43, 226, 0.15); border: none; color: #8a2be2; border-radius: 8px; cursor: pointer;">Дашборд</button>
+                <button style="width: 100%; padding: 10px; margin-bottom: 8px; background: transparent; border: none; color: rgba(255, 255, 255, 0.7); border-radius: 8px; cursor: pointer;">Аналитика</button>
+                <button style="width: 100%; padding: 10px; margin-bottom: 8px; background: transparent; border: none; color: rgba(255, 255, 255, 0.7); border-radius: 8px; cursor: pointer;">Задачи</button>
+            </nav>
+            
+            <div class="workspace-content">
+                <div class="workspace-area">
+                    <h2 style="margin-bottom: 24px;">Главный дашборд</h2>
+                    <div class="widget-grid">
+                        <div class="widget">
+                            <h3>Выручка за месяц</h3>
+                            <div class="widget-value">₽12.4M</div>
+                            <div style="color: #10b981;">+24%</div>
+                        </div>
+                        <div class="widget">
+                            <h3>Активные клиенты</h3>
+                            <div class="widget-value">3,847</div>
+                            <div style="color: #10b981;">+12%</div>
+                        </div>
+                        <div class="widget">
+                            <h3>Конверсия</h3>
+                            <div class="widget-value">4.2%</div>
+                            <div style="color: #ef4444;">-5%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="workspace-statusbar">
+            <div>Готов к работе</div>
+            <div>CPU: 23% | RAM: 45%</div>
+        </div>
+    </div>
+</body>
+</html>
