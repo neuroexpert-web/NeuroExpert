@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
   eslint: {
     // В продакшен-сборке не игнорируем ошибки
     ignoreDuringBuilds: false,

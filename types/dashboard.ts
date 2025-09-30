@@ -28,6 +28,7 @@ export interface Filters {
   project?: string;
   version?: string;
   segment?: string[];
+  service?: string;
 }
 
 // ==========================================
@@ -301,8 +302,9 @@ export interface DashboardFilters extends Filters {
 
 export interface WidgetConfig {
   id: string;
-  type: 'slo' | 'traffic' | 'errors' | 'apm' | 'logs' | 'ux' | 'roi' | 'system';
+  type: 'slo' | 'traffic' | 'errors' | 'apm' | 'logs' | 'ux' | 'roi' | 'system' | 'business' | 'site-health' | 'yandex' | 'google' | 'leads' | 'seo' | 'social' | 'email';
   title: string;
+  description?: string;
   size: 'small' | 'medium' | 'large' | 'full';
   position: { x: number; y: number };
   refreshInterval: number;
