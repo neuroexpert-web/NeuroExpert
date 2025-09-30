@@ -55,19 +55,14 @@ export default function AgentList() {
   };
 
   const checkBalance = async (costPerHour) => {
-    try {
-      // TODO: Заменить на реальный API запрос к балансу
-      // const response = await fetch('/api/balance/get');
-      // const data = await response.json();
-      // return data.balance >= costPerHour;
-      
-      // Пока возвращаем true для демонстрации
-      // В production здесь должна быть реальная проверка
-      return true;
-    } catch (error) {
-      console.error('Ошибка проверки баланса:', error);
-      return false;
-    }
+    // TODO: Заменить на реальный API запрос к балансу
+    // const response = await fetch('/api/balance/get');
+    // const data = await response.json();
+    // return data.balance >= costPerHour;
+    
+    // Пока возвращаем true для демонстрации
+    // В production здесь должна быть реальная проверка
+    return true;
   };
 
   const handleToggleAgent = async (agentId) => {
