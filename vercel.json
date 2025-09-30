@@ -1,25 +1,7 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
-  ],
-  "functions": {
-    "app/api/**/*.ts": {
-      "runtime": "nodejs20.x"
-    }
-  },
-  "crons": [],
-  "env": {
-    "FORCE_CACHE_BUST": "2025-09-30-FIX-STRUCTURE-v3.2.0",
-    "DEPLOYMENT_TRIGGER": "FORCE_REBUILD_FIXED_STRUCTURE"
-  }
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "outputDirectory": ".next"
 }
