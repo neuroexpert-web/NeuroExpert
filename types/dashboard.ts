@@ -305,7 +305,7 @@ export interface WidgetConfig {
   type: 'slo' | 'traffic' | 'errors' | 'apm' | 'logs' | 'ux' | 'roi' | 'system' | 'business' | 'site-health' | 'yandex' | 'google' | 'leads' | 'seo' | 'social' | 'email';
   title: string;
   description?: string;
-  size: 'small' | 'medium' | 'large' | 'full';
+  size: 'small' | 'medium' | 'large';
   position: { x: number; y: number };
   refreshInterval: number;
   visible: boolean;
