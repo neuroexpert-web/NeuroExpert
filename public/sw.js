@@ -8,11 +8,8 @@ const RUNTIME_CACHE = `runtime-${CACHE_VERSION}`;
 // Критические ресурсы для offline работы
 const PRECACHE_URLS = [
   '/',
-  '/offline.html',
   '/manifest.json',
   '/favicon.ico',
-  '/fonts/inter-var.woff2',
-  '/styles/critical.css',
 ];
 
 // Стратегии кэширования
