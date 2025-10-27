@@ -1,0 +1,40 @@
+.wrapper {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  outline: none; /* remove default focus */
+}
+
+.wrapper:focus-visible {
+  outline: 2px solid var(--accent-500, #9f7aea);
+}
+
+.slider {
+  display: flex;
+  height: 100%;
+  user-select: none;
+  cursor: grab;
+}
+
+.slide {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+}
+
+.progressBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.progressThumb {
+  display: block;
+  height: 100%;
+  background: var(--accent-500, #9f7aea);
+  transition: transform 0.3s ease-out;
+}

@@ -3,30 +3,19 @@ import PremiumCard from './PremiumCard';
 
 export default function PremiumHero(): JSX.Element {
   const [isVisible, setIsVisible] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  // Статичный градиент «Polar Night» — глубокий тёмно-синий фон без анимации
 
   useEffect(() => {
+    // Только флаг для появления элементов, больше никаких слушателей мыши
     setIsVisible(true);
-    
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100
-      });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   return (
     <section className="premium-hero">
-      {/* Animated background gradient */}
+      {/* Статичный глубокий фон Polar Night */}
       <div 
         className="hero-gradient"
-        style={{
-          background: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(65, 54, 241, 0.15), transparent 50%)`
-        }}
       />
 
       <div className="hero-content">
@@ -105,8 +94,8 @@ export default function PremiumHero(): JSX.Element {
         .hero-gradient {
           position: absolute;
           inset: 0;
-          opacity: 0.6;
-          transition: all 0.3s ease;
+          background: radial-gradient(circle at 50% 50%, rgba(17, 24, 39, 0.6) 0%, rgba(10, 15, 27, 0.85) 60%, #050B14 100%);
+          opacity: 1;
           pointer-events: none;
         }
 
